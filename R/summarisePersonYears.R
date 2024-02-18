@@ -13,9 +13,9 @@
 #' @export
 #'
 summarisePersonDays  <- function(cdm,
-                                  ageGroup = NULL,
-                                  byYear = FALSE,
-                                  bySex = FALSE) {
+                                 ageGroup = NULL,
+                                 byYear = FALSE,
+                                 bySex = FALSE) {
   # check input
   checkmate::assertClass(cdm, "cdm_reference")
   checkmate::assertLogical(byYear, any.missing = FALSE, len = 1)
@@ -104,6 +104,9 @@ summarisePersonDays  <- function(cdm,
       "additional_level" = "overall"
     ) |>
     omopgenerics::newSummarisedResult()
+
+  # drop created tables
+  omopgenerics::dropTable(cdm = cdm, name = dplyr::starts_with(prefix))
 
   return(result)
 }
