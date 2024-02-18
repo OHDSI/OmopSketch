@@ -168,9 +168,9 @@ summaryFollowUp <- function(cohort, strata) {
         "count_number_subjects" = dplyr::n_distinct(.data$subject_id),
         "count_number_records" = dplyr::n(),
         "min_person_days" = min(.data$person_days, na.rm = TRUE),
-        "q25_person_days" = quantile(.data$person_days, probs = 0.25, na.rm = TRUE),
-        "median_person_days" = median(.data$person_days, na.rm = TRUE),
-        "q75_person_days" = quantile(.data$person_days, probs = 0.75, na.rm = TRUE),
+        "q25_person_days" = stats::quantile(.data$person_days, probs = 0.25, na.rm = TRUE),
+        "median_person_days" = stats::median(.data$person_days, na.rm = TRUE),
+        "q75_person_days" = stats::quantile(.data$person_days, probs = 0.75, na.rm = TRUE),
         "max_person_days" = max(.data$person_days, na.rm = TRUE),
         "total_person_days" = sum(.data$person_days, na.rm = TRUE),
         .groups = "drop"
