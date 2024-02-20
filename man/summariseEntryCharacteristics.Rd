@@ -5,10 +5,12 @@
 \title{Summarise characteristics of the individuals at the start of their
 observation period.}
 \usage{
-summariseEntryCharacteristics(cdm)
+summariseEntryCharacteristics(cdm, byYear = FALSE)
 }
 \arguments{
 \item{cdm}{A cdm_reference object.}
+
+\item{byYear}{Whether to stratify the reuslts by year.}
 }
 \description{
 Summarise characteristics of the individuals at the start of their
