@@ -12,4 +12,8 @@ tables <- dplyr::tribble(
   "death", "death_date", "death_date", "cause_concept_id", "cause_source_concept_id", "death_type_concept_id", "person_id"
 )
 
-usethis::use_data(tables, overwrite = TRUE, internal = TRUE)
+conceptTypes <- read.csv(here::here("data-raw", "conceptTypes.csv")) |>
+  dplyr::as_tibble() |>
+  dplyr::mutate(dplyr::across(dplyr::everything(), as.character))
+
+usethis::use_data(tables, conceptTypes, overwrite = TRUE, internal = TRUE)
