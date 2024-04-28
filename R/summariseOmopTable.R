@@ -5,37 +5,294 @@
 #' concepts.
 #'
 #' @param omopTable An omop_table object.
-#' @param byYear Whether to stratify the analysis by year.
+#' @param recordsPerPerson Estimates to summarise the number of records per
+#' person.
+#' @param inObservation Whether to include the percentage of records in
+#' observation.
+#' @param standardConcept Whether to summarise standard concept.
+#' @param sourceConcept Whether to summarise source concept.
+#' @param domainId Whether to summarise domain id of standard concept id.
+#' @param typeConcept Whether to summarise type concept id field.
+#'
+#' @return A summarised_result object with the summarised data.
 #'
 #' @export
 #'
-summariseOmopTable <- function(omopTable, byYear = FALSE) {
+summariseOmopTable <- function(omopTable,
+                               recordsPerPerson = c("mean", "sd", "median", "q25", "q75", "min", "max"),
+                               inObservation = TRUE,
+                               standardConcept = TRUE,
+                               sourceConcept = FALSE,
+                               domainId = TRUE,
+                               typeConcept = TRUE) {
   # initial checks
-  checkmate::assertClass(omopTable, "omop_table")
+  assertClass(omopTable, "omop_table")
+  omopTable |>
+    omopgenerics::tableName() |>
+    assertChoice(choices = tables$table_name)
+  estimates <- PatientProfiles::availableEstimates(
+    variableType = "numeric", fullQuantiles = TRUE
+  ) |>
+    dplyr::pull("estimate_name")
+  assertChoice(recordsPerPerson, choices = estimates, null = TRUE)
+  recordsPerPerson <- unique(recordsPerPerson)
+  assertLogical(inObservation, length = 1)
+  assertLogical(standardConcept, length = 1)
+  assertLogical(sourceConcept, length = 1)
+  assertLogical(domainId, length = 1)
+  assertLogical(typeConcept, length = 1)
 
   cdm <- omopgenerics::cdmReference(omopTable)
-  name <- omopgenerics::tableName(omopTable)
+  omopTable <- omopTable |> dplyr::ungroup()
 
-  date <- PatientProfiles::startDateColumn(name)
-  concept <- PatientProfiles::standardConceptIdColumn(name)
+  # counts summary
+  persons <- cdm[["person"]] |>
+    dplyr::ungroup() |>
+    dplyr::summarise("n" = as.integer(dplyr::n())) |>
+    dplyr::pull("n")
+  result <- omopTable |>
+    dplyr::summarise(
+      "number_records" = dplyr::n(),
+      "number_subjects" = dplyr::n_distinct(.data$person_id)
+    ) |>
+    dplyr::collect() |>
+    dplyr::mutate(dplyr::across(dplyr::everything(), as.integer)) |>
+    dplyr::mutate(
+      "subjects_percentage" = 100 * .data$number_subjects / .env$persons
+    ) |>
+    dplyr::mutate(dplyr::across(dplyr::everything(), as.character)) |>
+    tidyr::pivot_longer(
+      cols = dplyr::everything(),
+      names_to = "variable_name",
+      values_to = "estimate_value"
+    ) |>
+    dplyr::mutate(
+      "variable_level" = NA_character_,
+      "estimate_name" = dplyr::if_else(
+        grepl("number", .data$variable_name), "count", "percentage"
+      ),
+      "estimate_type" = dplyr::if_else(
+        grepl("number", .data$variable_name), "integer", "percentage"
+      )
+    )
 
-  # get functions
-  functions <- getFunctions(date = date, concept = concept)
+  # records per person
+  if (length(recordsPerPerson) > 0) {
+    cli::cli_inform("Summarising records per person")
+    suppressMessages(
+      result <- result |>
+        dplyr::union_all(
+          omopTable |>
+            dplyr::group_by(.data$person_id) |>
+            dplyr::summarise(
+              "records_per_person" = dplyr::n(), .groups = "drop"
+            ) |>
+            PatientProfiles::summariseResult(
+              variables = "records_per_person",
+              estimates = recordsPerPerson,
+              counts = FALSE
+            ) |>
+            dplyr::select(
+              "variable_name", "variable_level", "estimate_name",
+              "estimate_type", "estimate_value"
+            )
+        )
+    )
+  }
 
-  # prepare data
-  omopTable <- prepareTable(
-    omopTable = omopTable, date = date, concept = concept
-  )
+  # concept
+  if (inObservation | standardConcept | sourceConcept | domainId | typeConcept) {
+    cli::cli_inform("Summarising concepts")
+    # add variables
+    variables <- columnsVariables(
+      inObservation, standardConcept, sourceConcept, domainId, typeConcept
+    )
+    result <- result |>
+      dplyr::union_all(
+        omopTable |>
+          addVariables(variables) |>
+          dplyr::group_by(dplyr::across(dplyr::all_of(variables))) |>
+          dplyr::tally() |>
+          dplyr::collect() |>
+          dplyr::mutate("n" = as.integer(.data$n)) |>
+          summaryData(variables, cdm)
+      )
+  }
 
-  # summary
-  result <- summaryData(
-    omopTable = omopTable, functions = functions, byYear = byYear
-  )
-
-  # format result
-  result <- formatResult(result = result, cdm = cdm, name = name)
+  result <- result |>
+    dplyr::mutate(
+      "result_id" = 1L,
+      "cdm_name" = omopgenerics::cdmName(cdm),
+      "table_name" = omopgenerics::tableName(omopTable)
+    ) |>
+    visOmopResults::uniteGroup("table_name") |>
+    visOmopResults::uniteStrata() |>
+    visOmopResults::uniteAdditional() |>
+    omopgenerics::newSummarisedResult(settings = dplyr::tibble(
+      "result_id" = 1L,
+      "result_type" = "summarised_omop_table",
+      "package_name" = "OmopSketch",
+      "package_version" = as.character(utils::packageVersion("OmopSketch"))
+    ))
 
   return(result)
+}
+
+addVariables <- function(x,
+                         variables) {
+  name <- omopgenerics::tableName(x)
+  newNames <- c(
+    "person_id",
+    "id" = tableId(name),
+    "date" = startDate(name),
+    "standard" = standardConcept(name),
+    "source" = sourceConcept(name),
+    "type" = typeConcept(name)
+  )
+  cdm <- omopgenerics::cdmReference(x)
+
+  x <- x |>
+    dplyr::select(dplyr::all_of(newNames))
+
+  if (any(c("domain_id", "standard") %in% variables)) {
+    x <- x |>
+      dplyr::left_join(
+        cdm$concept |>
+          dplyr::select(
+            "standard" = "concept_id", "domain_id", "standard_concept"
+          ),
+        by = "standard"
+      )
+    if ("standard" %in% variables) {
+      x <- x |>
+        dplyr::mutate("standard" = dplyr::case_when(
+          .data$standard == 0 ~ "No matching concept",
+          .data$standard_concept == "S" ~ "Standard",
+          .data$standard_concept == "C" ~ "Classification",
+          .default = "Source"
+        ))
+    }
+  }
+
+  if ("source" %in% variables) {
+    x <- x |>
+      dplyr::left_join(
+        cdm$concept |>
+          dplyr::select(
+            "source" = "concept_id", "source_concept" = "standard_concept"
+          ),
+        by = "source"
+      ) |>
+        dplyr::mutate("source" = dplyr::case_when(
+          .data$source == 0 ~ "No matching concept",
+          .data$source_concept == "S" ~ "Standard",
+          .data$source_concept == "C" ~ "Classification",
+          .default = "Source"
+        ))
+  }
+
+  if ("in_observation" %in% variables) {
+    x <- x |>
+      dplyr::left_join(
+        x |>
+          dplyr::select("id", "person_id", "date") |>
+          dplyr::inner_join(
+            cdm[["observation_period"]] |>
+              dplyr::select(
+                "person_id",
+                "obs_start" = "observation_start_date",
+                "obs_end" = "observation_end_date"
+              ),
+            by = "person_id"
+          ) |>
+          dplyr::filter(
+            .data$date >= .data$obs_start & .data$date <= .data$obs_end
+          ) |>
+          dplyr::mutate("in_observation") |>
+          dplyr::select("id", "in_observation"),
+        by = "id"
+      )
+  }
+
+  x <- x |> dplyr::select(dplyr::all_of(variables))
+
+  return(x)
+}
+columnsVariables <- function(inObservation,
+                             standardConcept,
+                             sourceConcept,
+                             domainId,
+                             typeConcept) {
+  c("in_observation", "standard", "domain_id", "source", "type" )[c(
+    inObservation, standardConcept, domainId, sourceConcept, typeConcept
+  )]
+}
+summaryData <- function(x, variables) {
+  results <- list()
+
+  # in observation
+  if ("in_observation" %in% variables) {
+    results[["obs"]] <- x |>
+      dplyr::mutate("in_observation" = dplyr::if_else(
+        .data$in_observation == 1, "Yes", "No"
+      )) |>
+      formatResults("In observation", "in_observation")
+  }
+
+  # standard
+  if ("standard" %in% variables) {
+    results[["standard"]] <- x |> formatResults("Standard concept", "standard")
+  }
+
+  # source
+  if ("source" %in% variables) {
+    results[["source"]] <- x |> formatResults("Source concept", "source")
+  }
+
+  # domain
+  if ("domain_id" %in% variables) {
+    results[["domain"]] <- x |> formatResults("Domain", "domain_id")
+  }
+
+  # type
+  if ("type" %in% variables) {
+    namesTypes <- cdm[["concept"]] |>
+      dplyr::filter(.data$type_concept_id == "concept_class_id") |>
+      dplyr::select(
+        "variable_level" = "concept_id", "new_variable_level" = "concept_name"
+      ) |>
+      dplyr::collect()
+    results[["type"]] <- x |>
+      formatResults("Type concept id", "type") |>
+      dplyr::left_join(namesTypes, by = "variable_level") |>
+      dplyr::mutate("variable_level" = dplyr::if_else(
+        is.na(.data$new_variable_level),
+        .data$variable_level,
+        paste0(.data$new_variable_level, " (", .data$variable_level, ")")
+      )) |>
+      dplyr::select(-"new_variable_level")
+
+  }
+
+  results <- results |> dplyr::bind_rows()
+
+  return(results)
+}
+formatResults <- function(x, variableName, variableLevel) {
+  x |>
+    dplyr::group_by(dplyr::across(dplyr::all_of(variableLevel))) |>
+    dplyr::summarise("estimate_value" = sum(.data$n), .groups = "drop") |>
+    dplyr::mutate(
+      "variable_name" = .env$variableName,
+      "variable_level" = dplyr::all_of(variableLevel),
+      "estimate_name" = "count",
+      "estimate_type" = "integer",
+      "estimate_value" = as.character(.data$estimate_value)
+    ) |>
+    dplyr::select(
+      "variable_name", "variable_level", "estimate_name", "estimate_type",
+      "estimate_value"
+    )
 }
 
 getFunctions <- function(date, concept) {
