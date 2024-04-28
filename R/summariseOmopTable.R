@@ -55,6 +55,8 @@ getFunctions <- function(date, concept) {
   return(functions)
 }
 prepareTable <- function(omopTable, date, concept) {
+  cdm <- omopgenerics::cdmReference(omopTable)
+
   # domain_id
   if (concept != "cohort_definition_id") {
     omopTable <- omopTable |>
