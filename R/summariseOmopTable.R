@@ -278,7 +278,7 @@ summaryData <- function(x, variables, cdm, den) {
 
   # type
   if ("type" %in% variables) {
-    results[["type"]] <- x |>
+    xx <- x |>
       formatResults("Type concept id", "type", den) |>
       dplyr::left_join(
         conceptTypes |>
@@ -292,9 +292,31 @@ summaryData <- function(x, variables, cdm, den) {
         is.na(.data$new_variable_level),
         .data$variable_level,
         paste0(.data$new_variable_level, " (", .data$variable_level, ")")
-      )) |>
-      dplyr::select(-"new_variable_level")
-
+      ))
+    if (xx |>
+        dplyr::filter(is.na(.data$new_variable_level)) |>
+        dplyr::tally() |>
+        dplyr::pull() > 0) {
+      namesTypes <- cdm[["concept"]] |>
+        dplyr::filter(.data$domain_id == "Type Concept") |>
+        dplyr::select(
+          "variable_level" = "concept_id", "new_variable_level" = "concept_name"
+        ) |>
+        dplyr::collect() |>
+        dplyr::mutate(dplyr::across(dplyr::everything(), as.character))
+      xx <- xx |>
+        dplyr::select(-"new_variable_level") |>
+        dplyr::left_join(
+          namesTypes,
+          by = "variable_level"
+        ) |>
+        dplyr::mutate("variable_level" = dplyr::if_else(
+          is.na(.data$new_variable_level),
+          .data$variable_level,
+          paste0(.data$new_variable_level, " (", .data$variable_level, ")")
+        ))
+    }
+    results[["type"]] <- xx |> dplyr::select(-"new_variable_level")
   }
 
   results <- results |> dplyr::bind_rows()
