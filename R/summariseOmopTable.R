@@ -52,6 +52,7 @@ summariseOmopTable <- function(omopTable,
   omopTable <- omopTable |> dplyr::ungroup()
 
   # counts summary
+  cli::cli_inform("Summarising counts")
   persons <- cdm[["person"]] |>
     dplyr::ungroup() |>
     dplyr::summarise("n" = as.integer(dplyr::n())) |>
