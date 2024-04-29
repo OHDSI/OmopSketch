@@ -2,7 +2,6 @@
 
 export(summariseEntryCharacteristics)
 export(summariseOmopTable)
-export(summariseOmopTables)
 export(summarisePersonDays)
 export(suppress)
 importFrom(magrittr,"%>%")
