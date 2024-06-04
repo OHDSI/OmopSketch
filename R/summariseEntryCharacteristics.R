@@ -34,7 +34,7 @@ summariseEntryCharacteristics <- function(cdm, byYear = FALSE) {
     strata <- list()
   }
   result <- cohort |>
-    PatientProfiles::summariseCharacteristics(strata = strata) |>
+    CohortCharacteristics::summariseCharacteristics(strata = strata) |>
     dplyr::filter(.data$variable_name != "Prior observation") |>
     dplyr::mutate(
       "variable_name" = dplyr::if_else(

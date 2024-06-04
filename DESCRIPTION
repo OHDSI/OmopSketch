@@ -17,6 +17,7 @@ Imports:
     CDMConnector (>= 1.3.0),
     checkmate,
     cli,
+    CohortCharacteristics,
     dplyr,
     IncidencePrevalence (>= 0.7.0),
     lubridate,
@@ -28,3 +29,4 @@ Imports:
     visOmopResults
 Depends: 
     R (>= 2.10)
+URL: https://oxford-pharmacoepi.github.io/OmopSketch/
