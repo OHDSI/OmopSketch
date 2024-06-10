@@ -18,7 +18,7 @@ test_that("summariseOmopTable() works", {
     cdmName = dbName
   )
 
-  # Check all tables work
+  # Check all tables work ----
   expect_no_error(summariseOmopTable(cdm$observation_period))
   expect_no_error(summariseOmopTable(cdm$visit_occurrence))
   expect_no_error(summariseOmopTable(cdm$condition_occurrence))
@@ -28,4 +28,47 @@ test_that("summariseOmopTable() works", {
   expect_no_error(summariseOmopTable(cdm$measurement))
   expect_no_error(summariseOmopTable(cdm$observation))
   expect_error(summariseOmopTable(cdm$death))
+
+
+  # Check inputs ----
+  expect_true(summariseOmopTable(cdm$condition_occurrence,
+                                 recordsPerPerson = NULL) |>
+                dplyr::filter(variable_name %in% "records_per_person") |>
+                dplyr::tally() |>
+                dplyr::pull() == 0)
+  expect_true(summariseOmopTable(cdm$condition_occurrence,
+                                 inObservation = FALSE) |>
+                dplyr::filter(variable_name %in% "In observation") |>
+                dplyr::tally() |>
+                dplyr::pull() == 0)
+  expect_true(summariseOmopTable(cdm$condition_occurrence,
+                                 standardConcept = FALSE) |>
+                dplyr::filter(variable_name %in% "Standard concept") |>
+                dplyr::tally() |>
+                dplyr::pull() == 0)
+  expect_true(summariseOmopTable(cdm$condition_occurrence,
+                                 sourceVocabulary = FALSE) |>
+                dplyr::filter(variable_name %in% "Source vocabulary") |>
+                dplyr::tally() |>
+                dplyr::pull() == 0)
+  expect_true(summariseOmopTable(cdm$condition_occurrence,
+                                 domainId = FALSE) |>
+                dplyr::filter(variable_name %in% "Domain") |>
+                dplyr::tally() |>
+                dplyr::pull() == 0)
+  expect_true(summariseOmopTable(cdm$condition_occurrence,
+                                 typeConcept = FALSE) |>
+                dplyr::filter(variable_name %in% "Type concept id") |>
+                dplyr::tally() |>
+                dplyr::pull() == 0)
+  expect_true(summariseOmopTable(cdm$condition_occurrence,
+                                 recordsPerPerson = NULL,
+                                 inObservation = FALSE,
+                                 standardConcept = FALSE,
+                                 sourceVocabulary = FALSE,
+                                 domainId = FALSE,
+                                 typeConcept = FALSE) |>
+                dplyr::tally() |> dplyr::pull() == 3)
 })
+
+

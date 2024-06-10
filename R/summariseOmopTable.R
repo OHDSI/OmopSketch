@@ -47,9 +47,18 @@ summariseOmopTable <- function(omopTable,
   assertLogical(typeConcept, length = 1)
 
   if ("observation_period" == omopgenerics::tableName(omopTable)) {
-    standardConcept <- FALSE
-    sourceVocabulary   <- FALSE
-    domainId <- FALSE
+    if(standardConcept){
+      cli::cli_warn("standardConcept turned to FALSE, as omopTable provided is observation_period")
+      standardConcept <- FALSE
+    }
+    if(sourceVocabulary){
+      cli::cli_warn("sourceVocabulary turned to FALSE, as omopTable provided is observation_period")
+      sourceVocabulary <- FALSE
+    }
+    if(sourceVocabulary){
+      cli::cli_warn("domainId turned to FALSE, as omopTable provided is observation_period")
+      domainId <- FALSE
+    }
   }
 
   cdm <- omopgenerics::cdmReference(omopTable)
@@ -300,7 +309,7 @@ summaryData <- function(x, variables, cdm, denominator, result) {
 
   # source ----
   if ("source" %in% variables) {
-    results[["source"]] <- x |> formatResults("Source concept", "source", denominator, result)
+    results[["source"]] <- x |> formatResults("Source vocabulary", "source", denominator, result)
   }
 
   # domain ----
