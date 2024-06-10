@@ -160,7 +160,7 @@ addNumberRecords  <- function(result, omopTable){
 addSubjectsPercentage <- function(result, omopTable, people){
   result |>
     dplyr::add_row(
-      "variable_name"  = "subjects_percentage",
+      "variable_name"  = "number_subjects",
       "estimate_name"  = "percentage",
       "estimate_type"  = "percentage",
       "estimate_value" = as.character(

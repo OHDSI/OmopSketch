@@ -69,6 +69,10 @@ test_that("summariseOmopTable() works", {
                                  domainId = FALSE,
                                  typeConcept = FALSE) |>
                 dplyr::tally() |> dplyr::pull() == 3)
+
+  DBI::dbDisconnect(db)
 })
+
+
 
 
