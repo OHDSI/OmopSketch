@@ -55,7 +55,7 @@ summariseOmopTable <- function(omopTable,
       cli::cli_warn("sourceVocabulary turned to FALSE, as omopTable provided is observation_period")
       sourceVocabulary <- FALSE
     }
-    if(sourceVocabulary){
+    if(domainId){
       cli::cli_warn("domainId turned to FALSE, as omopTable provided is observation_period")
       domainId <- FALSE
     }

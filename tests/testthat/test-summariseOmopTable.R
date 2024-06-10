@@ -19,7 +19,7 @@ test_that("summariseOmopTable() works", {
   )
 
   # Check all tables work ----
-  expect_no_error(summariseOmopTable(cdm$observation_period))
+  expect_warning(summariseOmopTable(cdm$observation_period))
   expect_no_error(summariseOmopTable(cdm$visit_occurrence))
   expect_no_error(summariseOmopTable(cdm$condition_occurrence))
   expect_no_error(summariseOmopTable(cdm$drug_exposure))
