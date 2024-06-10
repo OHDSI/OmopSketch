@@ -4,3 +4,7 @@
 .httr-oauth
 .DS_Store
 docs
+
+extras/*
+Eunomia/*
+
