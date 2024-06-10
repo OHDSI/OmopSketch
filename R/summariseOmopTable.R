@@ -240,7 +240,7 @@ addVariables <- function(x, variables) {
         by = "source"
       ) |>
       dplyr::mutate(
-        vocabulary = dplyr::if_else(is.na(vocabulary), "No matching concept", vocabulary)
+        vocabulary = dplyr::if_else(is.na(.data$vocabulary), "No matching concept", .data$vocabulary)
       ) |>
       dplyr::rename("source_concept" = "source", "source" = "vocabulary")
   }

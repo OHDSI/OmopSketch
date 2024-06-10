@@ -24,7 +24,7 @@ test_that("summariseOmopTable() works", {
   expect_no_error(summariseOmopTable(cdm$condition_occurrence))
   expect_no_error(summariseOmopTable(cdm$drug_exposure))
   expect_no_error(summariseOmopTable(cdm$procedure_occurrence))
-  expect_no_error(summariseOmopTable(cdm$device_exposure))
+  expect_error(summariseOmopTable(cdm$device_exposure))
   expect_no_error(summariseOmopTable(cdm$measurement))
   expect_no_error(summariseOmopTable(cdm$observation))
   expect_error(summariseOmopTable(cdm$death))
