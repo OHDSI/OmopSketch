@@ -14,11 +14,29 @@ tableOmopTable <- function(summarisedOmopTable) {
   # Initial checks ----
   assertClass(summarisedOmopTable, "summarised_result")
 
+  if(summarisedOmopTable |> dplyr::tally() |> dplyr::pull("n") == 0){
+    cli::cli_warn("summarisedOmopTable is empty.")
+
+    return(
+      summarisedOmopTable |>
+      visOmopResults::splitGroup() |>
+      visOmopResults::formatHeader(header = "cdm_name") |>
+      dplyr::select(-c("estimate_type", "result_id",
+                       "additional_name", "additional_level",
+                       "strata_name", "strata_level")) |>
+      dplyr::rename(
+        "Variable" = "variable_name", "Level" = "variable_level",
+        "Estimate" = "estimate_name"
+      ) |>
+      gt::gt()
+    )
+  }
+
   t <- summarisedOmopTable |>
     dplyr::mutate(order = dplyr::case_when(
-      variable_name == "number_records"  ~ 1,
-      variable_name == "number_subjects" ~ 2,
-      variable_name == "records_per_person" ~ 3,
+      variable_name == "Number of subjects"  ~ 1,
+      variable_name == "Number of records" ~ 2,
+      variable_name == "Records per person" ~ 3,
       variable_name == "In observation" ~ 4,
       variable_name == "Standard concept" ~ 5,
       variable_name == "Source vocabulary" ~ 6,

@@ -120,6 +120,9 @@ summariseOmopTable <- function(omopTable,
 
   # Format output as a summarised result
   result <- result |>
+    dplyr::mutate(variable_name = dplyr::if_else(.data$variable_name == "number_records", "Number of records", .data$variable_name),
+                  variable_name = dplyr::if_else(.data$variable_name == "number_subjects", "Number of subjects", .data$variable_name),
+                  variable_name = dplyr::if_else(.data$variable_name == "records_per_person", "Records per person", .data$variable_name)) |>
     dplyr::mutate(
       "result_id" = 1L,
       "cdm_name" = omopgenerics::cdmName(cdm),

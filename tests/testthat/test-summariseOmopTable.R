@@ -98,6 +98,7 @@ test_that("tableOmopTable() works", {
   # Check that works ----
   expect_no_error(x <- tableOmopTable(summariseOmopTable(cdm$condition_occurrence)))
   expect_true(inherits(x,"gt_tbl"))
-
+  expect_warning(tableOmopTable(summariseOmopTable(cdm$death)))
+  expect_true(inherits(tableOmopTable(summariseOmopTable(cdm$death)),"gt_tbl"))
 })
 
