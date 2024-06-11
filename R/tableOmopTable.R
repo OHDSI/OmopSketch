@@ -1,7 +1,4 @@
-#' Summarise an omop_table from a cdm_reference object. You will obtain
-#' information related to the number of records, number of subjects, whether the
-#' records are in observation, number of present domains and number of present
-#' concepts.
+#' Create a gt table from a summarised omop_table.
 #'
 #' @param summarisedOmopTable A summarised_result object with the output from summariseOmopTable().
 #'
