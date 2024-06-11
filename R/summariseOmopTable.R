@@ -47,16 +47,22 @@ summariseOmopTable <- function(omopTable,
   assertLogical(typeConcept, length = 1)
 
   if ("observation_period" == omopgenerics::tableName(omopTable)) {
-    if(standardConcept & missing(standardConcept)){
-      cli::cli_warn("standardConcept turned to FALSE, as omopTable provided is observation_period")
+    if(standardConcept){
+      if(!missing(standardConcept)){
+        cli::cli_warn("standardConcept turned to FALSE, as omopTable provided is observation_period")
+      }
       standardConcept <- FALSE
     }
-    if(sourceVocabulary & missing(sourceVocabulary)){
-      cli::cli_warn("sourceVocabulary turned to FALSE, as omopTable provided is observation_period")
+    if(sourceVocabulary){
+      if(!missing(sourceVocabulary)){
+        cli::cli_warn("sourceVocabulary turned to FALSE, as omopTable provided is observation_period")
+      }
       sourceVocabulary <- FALSE
     }
-    if(domainId & missing(domainId)){
-      cli::cli_warn("domainId turned to FALSE, as omopTable provided is observation_period")
+    if(domainId){
+      if(!missing(domainId)){
+        cli::cli_warn("domainId turned to FALSE, as omopTable provided is observation_period")
+      }
       domainId <- FALSE
     }
   }
@@ -86,6 +92,12 @@ summariseOmopTable <- function(omopTable,
       addRecordsPerPerson(omopTable, recordsPerPerson, cdm)
   }
 
+  denominator <- result |>
+    dplyr::filter(.data$variable_name == "number_records") |>
+    dplyr::pull("estimate_value") |>
+    as.integer()
+
+
   # Summary concepts ----
   if (inObservation | standardConcept | sourceVocabulary | domainId | typeConcept) {
     cli::cli_inform(c("i" = "Summarising concepts"))
@@ -94,13 +106,8 @@ summariseOmopTable <- function(omopTable,
       inObservation, standardConcept, sourceVocabulary, domainId, typeConcept
     )
 
-    denominator <- result |>
-      dplyr::filter(.data$variable_name == "number_records") |>
-      dplyr::pull("estimate_value") |>
-      as.integer()
-
     result <- result |>
-      dplyr::full_join(
+      dplyr::bind_rows(
         omopTable |>
           addVariables(variables) |>
           dplyr::group_by(dplyr::across(dplyr::all_of(variables))) |>
@@ -176,14 +183,15 @@ addSubjectsPercentage <- function(result, omopTable, people){
         100* (omopTable |>
                 dplyr::summarise(x = dplyr::n_distinct(.data$person_id)) |>
                 dplyr::pull("x") |>
-                as.integer())) / .env$people
+                as.integer()) / .env$people
+      )
     )
 }
 
 addRecordsPerPerson <- function(result, omopTable, recordsPerPerson, cdm){
   suppressMessages(
     result |>
-      dplyr::bind(
+      dplyr::bind_rows(
         cdm[["person"]] |>
           dplyr::select("person_id") |>
           dplyr::left_join(

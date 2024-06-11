@@ -28,7 +28,7 @@ observation.}
 
 \item{standardConcept}{Whether to summarise standard concept.}
 
-\item{sourceVocabulary}{Whether to summarise source concept.}
+\item{sourceVocabulary}{Whether to summarise source vocabulary.}
 
 \item{domainId}{Whether to summarise domain id of standard concept id.}
 
