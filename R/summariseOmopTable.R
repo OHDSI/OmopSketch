@@ -10,7 +10,7 @@
 #' @param inObservation Whether to include the percentage of records in
 #' observation.
 #' @param standardConcept Whether to summarise standard concept.
-#' @param sourceVocabulary Whether to summarise source concept.
+#' @param sourceVocabulary Whether to summarise source vocabulary.
 #' @param domainId Whether to summarise domain id of standard concept id.
 #' @param typeConcept Whether to summarise type concept id field.
 #'
@@ -47,15 +47,15 @@ summariseOmopTable <- function(omopTable,
   assertLogical(typeConcept, length = 1)
 
   if ("observation_period" == omopgenerics::tableName(omopTable)) {
-    if(standardConcept){
+    if(standardConcept & missing(standardConcept)){
       cli::cli_warn("standardConcept turned to FALSE, as omopTable provided is observation_period")
       standardConcept <- FALSE
     }
-    if(sourceVocabulary){
+    if(sourceVocabulary & missing(sourceVocabulary)){
       cli::cli_warn("sourceVocabulary turned to FALSE, as omopTable provided is observation_period")
       sourceVocabulary <- FALSE
     }
-    if(domainId){
+    if(domainId & missing(domainId)){
       cli::cli_warn("domainId turned to FALSE, as omopTable provided is observation_period")
       domainId <- FALSE
     }
@@ -68,7 +68,8 @@ summariseOmopTable <- function(omopTable,
   result <- omopgenerics::emptySummarisedResult()
 
   if(omopTable |> dplyr::tally() |> dplyr::pull("n") == 0){
-    cli::cli_abort(paste0(omopgenerics::tableName(omopTable), " omop table is empty."))
+    cli::cli_warn(paste0(omopgenerics::tableName(omopTable), " omop table is empty. Returning an empty summarised omop table."))
+    return(result)
   }
 
   # Counts summary ----
@@ -115,8 +116,8 @@ summariseOmopTable <- function(omopTable,
     dplyr::mutate(
       "result_id" = 1L,
       "cdm_name" = omopgenerics::cdmName(cdm),
-      "group_name" = "overall",
-      "group_level" = "overall",
+      "group_name" = "omop_table",
+      "group_level" = omopgenerics::tableName(omopTable),
       "strata_name" = "overall",
       "strata_level" = "overall",
       "additional_name" = "overall",
@@ -135,8 +136,10 @@ summariseOmopTable <- function(omopTable,
 # Functions -----
 getNumberPeopleInCdm <- function(cdm){
   cdm[["person"]] |>
-    dplyr::pull("person_id") |>
-    dplyr::n_distinct()
+    dplyr::ungroup() |>
+    dplyr::summarise(x = dplyr::n_distinct(.data$person_id)) |>
+    dplyr::pull("x") |>
+    as.integer()
 }
 
 addNumberSubjects <- function(result, omopTable){
@@ -145,7 +148,12 @@ addNumberSubjects <- function(result, omopTable){
       "variable_name"  = "number_subjects",
       "estimate_name"  = "count",
       "estimate_type"  = "integer",
-      "estimate_value" = as.character(omopTable |> dplyr::pull(.data$person_id) |> dplyr::n_distinct())
+      "estimate_value" = as.character(
+        omopTable |>
+          dplyr::summarise(x = dplyr::n_distinct(.data$person_id)) |>
+          dplyr::pull("x") |>
+          as.integer()
+      )
     )
 }
 addNumberRecords  <- function(result, omopTable){
@@ -154,9 +162,10 @@ addNumberRecords  <- function(result, omopTable){
       "variable_name"  = "number_records",
       "estimate_name"  = "count",
       "estimate_type"  = "integer",
-      "estimate_value" = as.character(omopTable |> dplyr::tally() |> dplyr::pull(.data$n))
+      "estimate_value" = as.character(omopTable |> dplyr::tally() |> dplyr::pull("n"))
     )
 }
+
 addSubjectsPercentage <- function(result, omopTable, people){
   result |>
     dplyr::add_row(
@@ -164,15 +173,17 @@ addSubjectsPercentage <- function(result, omopTable, people){
       "estimate_name"  = "percentage",
       "estimate_type"  = "percentage",
       "estimate_value" = as.character(
-        100* (omopTable |> dplyr::pull(.data$person_id) |> dplyr::n_distinct()) / .env$people
-      )
+        100* (omopTable |>
+                dplyr::summarise(x = dplyr::n_distinct(.data$person_id)) |>
+                dplyr::pull("x") |>
+                as.integer())) / .env$people
     )
 }
 
 addRecordsPerPerson <- function(result, omopTable, recordsPerPerson, cdm){
   suppressMessages(
     result |>
-      dplyr::union_all(
+      dplyr::bind(
         cdm[["person"]] |>
           dplyr::select("person_id") |>
           dplyr::left_join(
