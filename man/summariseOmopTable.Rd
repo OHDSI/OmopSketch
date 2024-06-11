@@ -12,7 +12,7 @@ summariseOmopTable(
   recordsPerPerson = c("mean", "sd", "median", "q25", "q75", "min", "max"),
   inObservation = TRUE,
   standardConcept = TRUE,
-  sourceConcept = FALSE,
+  sourceVocabulary = FALSE,
   domainId = TRUE,
   typeConcept = TRUE
 )
@@ -28,7 +28,7 @@ observation.}
 
 \item{standardConcept}{Whether to summarise standard concept.}
 
-\item{sourceConcept}{Whether to summarise source concept.}
+\item{sourceVocabulary}{Whether to summarise source concept.}
 
 \item{domainId}{Whether to summarise domain id of standard concept id.}
 
