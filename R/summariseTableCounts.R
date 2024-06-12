@@ -16,6 +16,14 @@ summariseTableCounts<- function(omopTable, unit = "year", unitInterval = 1) {
   unitChecks(unit)
   unitIntervalChecks(unitInterval)
 
+  if(missing(unit)){
+    unit <- "year"
+  }
+
+  if(missing(unitInterval)){
+    unitInterval <- 1
+  }
+
   cdm <- omopgenerics::cdmReference(omopTable)
   omopTable <- omopTable |> dplyr::ungroup()
 

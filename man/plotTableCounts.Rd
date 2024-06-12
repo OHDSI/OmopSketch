@@ -7,14 +7,10 @@
 plotTableCounts(summarisedTableCounts)
 }
 \arguments{
-\item{omopTable}{A summarised_result object with the output from summariseOmopTable().}
-
-\item{unit}{Whether to stratify by "year" or by "month"}
-
-\item{unitInterval}{Number of years or months to be used}
+\item{summarisedTableCounts}{A summarised_result object with the output from summariseTableCounts().}
 }
 \value{
-A gt object with the summarised data.
+A ggplot showing the table counts
 }
 \description{
 Create a gt table from a summarised omop_table.
