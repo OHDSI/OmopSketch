@@ -19,9 +19,6 @@ test_that("summariseTableCounts() works", {
   )
 
   # Check inputs ----
-  summariseTableCounts(omopTable = cdm$observation_period,
-                       unit = "month",
-                       unitInterval = 1)
   expect_true(inherits(summariseTableCounts(omopTable = cdm$observation_period, unit = "month"),"summarised_result"))
   expect_true(inherits(summariseTableCounts(omopTable = cdm$observation_period, unitInterval = 5),"summarised_result"))
 
@@ -36,7 +33,6 @@ test_that("summariseTableCounts() works", {
   expect_warning(summariseTableCounts(cdm$death))
 
   # Check inputs ----
-
   expect_true(
     (summariseTableCounts(cdm$observation_period) |>
        dplyr::filter(strata_level == 1963) |>
@@ -64,7 +60,33 @@ test_that("summariseTableCounts() works", {
       dplyr::pull("n"))
   )
 
-  DBI::dbDisconnect(db)
+  expect_true(
+    (summariseTableCounts(cdm$condition_occurrence, unit = "month", unitInterval = 3) |>
+      dplyr::filter(strata_level %in% c("1984-01 to 1984-03")) |>
+      dplyr::pull("estimate_value") |>
+      as.numeric()) ==
+      (cdm$condition_occurrence |>
+         dplyr::ungroup() |>
+         dplyr::mutate(year = lubridate::year(condition_start_date)) |>
+         dplyr::mutate(month = lubridate::month(condition_start_date)) |>
+         dplyr::filter(year == 1984, month %in% c(1:3)) |>
+         dplyr::tally() |>
+         dplyr::pull("n"))
+  )
 
+  expect_true(
+    (summariseTableCounts(cdm$drug_exposure, unitInterval = 8) |>
+       dplyr::filter(strata_level == "1981 to 1988") |>
+       dplyr::pull("estimate_value") |>
+       as.numeric()) ==
+      (cdm$drug_exposure |>
+         dplyr::ungroup() |>
+         dplyr::mutate(year = lubridate::year(drug_exposure_start_date)) |>
+         dplyr::filter(year %in% c(1981:1988)) |>
+         dplyr::tally() |>
+         dplyr::pull("n"))
+  )
+
+  DBI::dbDisconnect(db)
   unlink(here::here("Eunomia"), recursive = TRUE)
 })

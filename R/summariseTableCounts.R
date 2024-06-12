@@ -75,7 +75,7 @@ summariseTableCounts<- function(omopTable, unit = "year", unitInterval = 1) {
       dplyr::ungroup()
   }
 
-  result <- result |>
+ result <- result |>
     dplyr::mutate(incidence_group = dplyr::if_else(rep(unitInterval, nrow(result)) == 1,
                                                    gsub(" to.*", "", .data$incidence_group),
                                                    .data$incidence_group)) |>
@@ -84,6 +84,9 @@ summariseTableCounts<- function(omopTable, unit = "year", unitInterval = 1) {
       "variable_name" = "incidence_records"
     ) |>
     visOmopResults::uniteStrata(cols = "incidence_group") |>
+   dplyr::mutate("strata_name" = dplyr::if_else(.data$strata_name == "incidence_group",
+                                                glue::glue("{unitInterval}_{unit}{if (unitInterval > 1) 's' else ''}"),
+                                                .data$strata_name)) |>
     dplyr::mutate(
       "result_id" = as.integer(1),
       "cdm_name" = omopgenerics::cdmName(omopgenerics::cdmReference(omopTable)),
