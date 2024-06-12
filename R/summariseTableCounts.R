@@ -25,7 +25,7 @@ summariseTableCounts<- function(omopTable, unit = "year", unitInterval = 1) {
   date   <- startDate(name)
 
   if(omopTable |> dplyr::tally() |> dplyr::pull("n") == 0){
-    cli::cli_warn(paste0(omopgenerics::tableName(omopTable), " omop table is empty. Returning an empty summarised omop table."))
+    cli::cli_warn(paste0(omopgenerics::tableName(omopTable), " omop table is empty. Returning an empty summarised result."))
     return(result)
   }
 
@@ -38,29 +38,47 @@ summariseTableCounts<- function(omopTable, unit = "year", unitInterval = 1) {
       filterInObservation(indexDate = date)
   }
 
-  startDate <- getOmopTableStartDate(omopTable, date)
-  endDate   <- getOmopTableEndDate(omopTable, date)
-
   # insert table and then left join
-  interval <- getIntervalTibble(omopTable, date, unit)
+  interval <- getIntervalTibble(omopTable, date, unit, unitInterval)
 
   # Insert interval table to the cdm ----
   cdm <- cdm |>
     omopgenerics::insertTable(name = "interval", table = interval)
 
   # Create summarised result
-  result <- omopTable |>
-    dplyr::rename("incidence_date" = dplyr::all_of(date)) %>%
-    dplyr::mutate("group" = !!CDMConnector::datepart("incidence_date", "year")) %>%
-    dplyr::mutate("month" = !!CDMConnector::datepart("incidence_date", "month")) |>
-    dplyr::mutate("group" = as.Date(paste0(.data$group,"-",.data$month,"-01"))) |>
-    dplyr::left_join(
-      cdm$interval, by = c("group")
-    ) |>
-    dplyr::select(-c("month","interval")) |>
-    dplyr::group_by(.data$incidence_group)  |>
-    dplyr::summarise("estimate_value" = dplyr::n(), .groups = "drop") |>
-    dplyr::collect() |>
+  if(unit == "year"){
+    result <- omopTable |>
+      dplyr::rename("incidence_date" = dplyr::all_of(date)) %>%
+      dplyr::mutate("group" = !!CDMConnector::datepart("incidence_date", "year")) |>
+      dplyr::left_join(
+        cdm$interval, by = c("group")
+      ) |>
+      dplyr::select(-c("interval")) |>
+      dplyr::group_by(.data$incidence_group)  |>
+      dplyr::summarise("estimate_value" = dplyr::n(), .groups = "drop") |>
+      dplyr::collect() |>
+      dplyr::ungroup()
+
+  }else if(unit == "month"){
+    result <- omopTable |>
+      dplyr::rename("incidence_date" = dplyr::all_of(date)) %>%
+      dplyr::mutate("group" = !!CDMConnector::datepart("incidence_date", "year")) %>%
+      dplyr::mutate("month" = !!CDMConnector::datepart("incidence_date", "month")) |>
+      dplyr::mutate("group" = as.Date(paste0(.data$group,"-",.data$month,"-01"))) |>
+      dplyr::left_join(
+        cdm$interval, by = c("group")
+      ) |>
+      dplyr::select(-c("month","interval")) |>
+      dplyr::group_by(.data$incidence_group)  |>
+      dplyr::summarise("estimate_value" = dplyr::n(), .groups = "drop") |>
+      dplyr::collect() |>
+      dplyr::ungroup()
+  }
+
+  result <- result |>
+    dplyr::mutate(incidence_group = dplyr::if_else(rep(unitInterval, nrow(result)) == 1,
+                                                   gsub(" to.*", "", .data$incidence_group),
+                                                   .data$incidence_group)) |>
     dplyr::mutate(
       "estimate_value" = as.character(.data$estimate_value),
       "variable_name" = "incidence_records"
@@ -89,10 +107,10 @@ omopTableChecks <- function(omopTable){
     assertChoice(choices = tables$table_name)
 }
 
-unitChecks <- function(units){
-  inherits(.env$unit, "character")
-  assertLength(.env$unit, 1)
-  if(!.env$unit %in% c("year","month")){
+unitChecks <- function(unit){
+  inherits(unit, "character")
+  assertLength(unit, 1)
+  if(!unit %in% c("year","month")){
     cli::cli_abort("units value is not valid. Valid options are year or month.")
   }
 }
@@ -144,14 +162,17 @@ getOmopTableEndDate   <- function(omopTable, date){
     dplyr::pull("endDate")
 }
 
-getIntervalTibble <- function(omopTable, date, unit){
+getIntervalTibble <- function(omopTable, date, unit, unitInterval){
+  startDate <- getOmopTableStartDate(omopTable, date)
+  endDate   <- getOmopTableEndDate(omopTable, date)
+
   if(unit == "year"){
     interval <- tibble::tibble(
       "group" = seq.Date(as.Date(startDate), as.Date(endDate), .env$unit)
     )
   }else if(unit == "month"){
     interval <- tibble::tibble(
-      "group" = seq.Date(as.Date(startDate), as.Date(endDate), .env$month)
+      "group" = seq.Date(as.Date(startDate), as.Date(endDate), .env$unit)
     )
   }
 
