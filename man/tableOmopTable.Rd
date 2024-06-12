@@ -2,10 +2,7 @@
 % Please edit documentation in R/tableOmopTable.R
 \name{tableOmopTable}
 \alias{tableOmopTable}
-\title{Summarise an omop_table from a cdm_reference object. You will obtain
-information related to the number of records, number of subjects, whether the
-records are in observation, number of present domains and number of present
-concepts.}
+\title{Create a gt table from a summarised omop_table.}
 \usage{
 tableOmopTable(summarisedOmopTable)
 }
@@ -16,8 +13,5 @@ tableOmopTable(summarisedOmopTable)
 A gt object with the summarised data.
 }
 \description{
-Summarise an omop_table from a cdm_reference object. You will obtain
-information related to the number of records, number of subjects, whether the
-records are in observation, number of present domains and number of present
-concepts.
+Create a gt table from a summarised omop_table.
 }
