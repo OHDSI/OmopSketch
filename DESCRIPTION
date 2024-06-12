@@ -22,6 +22,7 @@ Imports:
     cli,
     CohortCharacteristics,
     dplyr,
+    gt,
     IncidencePrevalence (>= 0.7.0),
     lubridate,
     magrittr,

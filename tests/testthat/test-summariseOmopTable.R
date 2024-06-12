@@ -19,15 +19,16 @@ test_that("summariseOmopTable() works", {
   )
 
   # Check all tables work ----
-  expect_warning(summariseOmopTable(cdm$observation_period))
+  expect_true(inherits(summariseOmopTable(cdm$observation_period),"summarised_result"))
+  expect_no_error(summariseOmopTable(cdm$observation_period))
   expect_no_error(summariseOmopTable(cdm$visit_occurrence))
   expect_no_error(summariseOmopTable(cdm$condition_occurrence))
   expect_no_error(summariseOmopTable(cdm$drug_exposure))
   expect_no_error(summariseOmopTable(cdm$procedure_occurrence))
-  expect_error(summariseOmopTable(cdm$device_exposure))
+  expect_warning(summariseOmopTable(cdm$device_exposure))
   expect_no_error(summariseOmopTable(cdm$measurement))
   expect_no_error(summariseOmopTable(cdm$observation))
-  expect_error(summariseOmopTable(cdm$death))
+  expect_warning(summariseOmopTable(cdm$death))
 
 
   # Check inputs ----
@@ -69,6 +70,35 @@ test_that("summariseOmopTable() works", {
                                  domainId = FALSE,
                                  typeConcept = FALSE) |>
                 dplyr::tally() |> dplyr::pull() == 3)
+
+
+  DBI::dbDisconnect(db)
 })
 
+
+test_that("tableOmopTable() works", {
+  # Load mock database ----
+  dbName <- "GiBleed"
+  pathEunomia <- here::here("Eunomia")
+  if (!dir.exists(pathEunomia)) {
+    dir.create(pathEunomia)
+  }
+  CDMConnector::downloadEunomiaData(datasetName = dbName, pathToData = pathEunomia)
+  Sys.setenv("EUNOMIA_DATA_FOLDER" = pathEunomia)
+
+  db <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
+
+  cdm <- CDMConnector::cdmFromCon(
+    con = db,
+    cdmSchema = "main",
+    writeSchema = "main",
+    cdmName = dbName
+  )
+
+  # Check that works ----
+  expect_no_error(x <- tableOmopTable(summariseOmopTable(cdm$condition_occurrence)))
+  expect_true(inherits(x,"gt_tbl"))
+  expect_warning(tableOmopTable(summariseOmopTable(cdm$death)))
+  expect_true(inherits(tableOmopTable(summariseOmopTable(cdm$death)),"gt_tbl"))
+})
 
