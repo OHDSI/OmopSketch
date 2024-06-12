@@ -105,3 +105,4 @@ test_that("tableOmopTable() works", {
   unlink(here::here("Eunomia"), recursive = TRUE)
 })
 
+

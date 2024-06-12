@@ -140,7 +140,7 @@ summariseOmopTable <- function(omopTable,
       "package_version" = as.character(utils::packageVersion("OmopSketch"))
     ))
 
-  return(result)
+return(result)
 }
 
 # Functions -----
