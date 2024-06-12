@@ -5,9 +5,9 @@ test_that("summariseTableCounts() works", {
   pathEunomia <- here::here("Eunomia")
   if (!dir.exists(pathEunomia)) {
     dir.create(pathEunomia)
-    CDMConnector::downloadEunomiaData(datasetName = dbName, pathToData = pathEunomia)
-    Sys.setenv("EUNOMIA_DATA_FOLDER" = pathEunomia)
   }
+  CDMConnector::downloadEunomiaData(datasetName = dbName, pathToData = pathEunomia)
+  Sys.setenv("EUNOMIA_DATA_FOLDER" = pathEunomia)
 
   db <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
 
@@ -65,4 +65,6 @@ test_that("summariseTableCounts() works", {
   )
 
   DBI::dbDisconnect(db)
+
+  unlink(here::here("Eunomia"), recursive = TRUE)
 })

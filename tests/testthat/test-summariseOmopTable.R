@@ -101,6 +101,7 @@ test_that("tableOmopTable() works", {
   expect_warning(tableOmopTable(summariseOmopTable(cdm$death)))
   expect_true(inherits(tableOmopTable(summariseOmopTable(cdm$death)),"gt_tbl"))
 
-  # DBI::dbDisconnect(db)
+  DBI::dbDisconnect(db)
+  unlink(here::here("Eunomia"), recursive = TRUE)
 })
 
