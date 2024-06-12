@@ -1,21 +1,9 @@
 test_that("summariseTableCounts() works", {
 
   # Load mock database ----
-  dbName <- "GiBleed"
-  pathEunomia <- here::here("Eunomia")
-  if (!dir.exists(pathEunomia)) {
-    dir.create(pathEunomia)
-  }
-  CDMConnector::downloadEunomiaData(datasetName = dbName, pathToData = pathEunomia)
-  Sys.setenv("EUNOMIA_DATA_FOLDER" = pathEunomia)
-
-  db <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
-
+  con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
   cdm <- CDMConnector::cdmFromCon(
-    con = db,
-    cdmSchema = "main",
-    writeSchema = "main",
-    cdmName = dbName
+    con = con, cdmSchema = "main", writeSchema = "main"
   )
 
   # Check inputs ----
@@ -87,6 +75,4 @@ test_that("summariseTableCounts() works", {
          dplyr::pull("n"))
   )
 
-  DBI::dbDisconnect(db)
-  unlink(here::here("Eunomia"), recursive = TRUE)
 })

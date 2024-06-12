@@ -1,21 +1,9 @@
 test_that("summariseOmopTable() works", {
 
   # Load mock database ----
-  dbName <- "GiBleed"
-  pathEunomia <- here::here("Eunomia")
-  if (!dir.exists(pathEunomia)) {
-    dir.create(pathEunomia)
-  }
-  CDMConnector::downloadEunomiaData(datasetName = dbName, pathToData = pathEunomia)
-  Sys.setenv("EUNOMIA_DATA_FOLDER" = pathEunomia)
-
-  db <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
-
+  con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
   cdm <- CDMConnector::cdmFromCon(
-    con = db,
-    cdmSchema = "main",
-    writeSchema = "main",
-    cdmName = dbName
+    con = con, cdmSchema = "main", writeSchema = "main"
   )
 
   # Check all tables work ----
@@ -70,29 +58,14 @@ test_that("summariseOmopTable() works", {
                                  domainId = FALSE,
                                  typeConcept = FALSE) |>
                 dplyr::tally() |> dplyr::pull() == 3)
-
-
-  DBI::dbDisconnect(db)
 })
 
 
 test_that("tableOmopTable() works", {
   # Load mock database ----
-  dbName <- "GiBleed"
-  pathEunomia <- here::here("Eunomia")
-  if (!dir.exists(pathEunomia)) {
-    dir.create(pathEunomia)
-  }
-  CDMConnector::downloadEunomiaData(datasetName = dbName, pathToData = pathEunomia)
-  Sys.setenv("EUNOMIA_DATA_FOLDER" = pathEunomia)
-
-  db <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
-
+  con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
   cdm <- CDMConnector::cdmFromCon(
-    con = db,
-    cdmSchema = "main",
-    writeSchema = "main",
-    cdmName = dbName
+    con = con, cdmSchema = "main", writeSchema = "main"
   )
 
   # Check that works ----
@@ -101,8 +74,6 @@ test_that("tableOmopTable() works", {
   expect_warning(tableOmopTable(summariseOmopTable(cdm$death)))
   expect_true(inherits(tableOmopTable(summariseOmopTable(cdm$death)),"gt_tbl"))
 
-  DBI::dbDisconnect(db)
-  unlink(here::here("Eunomia"), recursive = TRUE)
 })
 
 
