@@ -10,12 +10,8 @@
 #'
 summariseObservationPeriod <- function(observationPeriod, unit = "year", unitInterval = 1){
 
-  observationPeriod <- cdm$observation_period
-  unit <- "month"
-  unitInterval <- 2
-
   # Check input ----
-  omopTableChecks(observationPeriod)
+  assertClass(observationPeriod, "omop_table")
 
   x <- omopgenerics::tableName(observationPeriod)
   if (x != "observation_period") {
@@ -33,16 +29,11 @@ summariseObservationPeriod <- function(observationPeriod, unit = "year", unitInt
   observationPeriod <- observationPeriod |>
     dplyr::ungroup()
 
+  if(missing(unit)){unit <- "year"}
+  if(missing(unitInterval)){unitInterval <- 1}
+
   unitChecks(unit)
   unitIntervalChecks(unitInterval)
-
-  if(missing(unit)){
-    unit <- "year"
-  }
-
-  if(missing(unitInterval)){
-    unitInterval <- 1
-  }
 
   cdm <- omopgenerics::cdmReference(observationPeriod)
 
@@ -108,8 +99,8 @@ summariseObservationPeriod <- function(observationPeriod, unit = "year", unitInt
     omopgenerics::newSummarisedResult()
 
   omopgenerics::dropTable(cdm = cdm, name = "interval")
+  return(result)
 }
-
 
 countRecords <- function(observationPeriod, cdm, start_date_name, end_date_name, unit){
   tablePrefix <- omopgenerics::tmpPrefix()
@@ -119,22 +110,22 @@ countRecords <- function(observationPeriod, cdm, start_date_name, end_date_name,
       dplyr::mutate("start" = !!CDMConnector::datepart(start_date_name,"year")) %>%
       dplyr::mutate("end"   = !!CDMConnector::datepart(end_date_name,"year")) |>
       dplyr::group_by(.data$start, .data$end) |>
-      dplyr::summarise(n = dplyr::n(), .groups = "drop") |>
+      dplyr::summarise(n = dplyr::n()) |>
       dplyr::mutate(dplyr::across(dplyr::everything(), as.integer)) |>
       dplyr::compute(
         name = omopgenerics::uniqueTableName(tablePrefix), temporary = FALSE
       )
 
-    x <- x |>
-      dplyr::cross_join(cdm[["interval"]]) |>
-      dplyr::filter(.data$start <= .data$start_interval & .data$end >= .data$end_interval) |>
-      dplyr::group_by(.data$interval) |>
-      dplyr::summarise(n = sum(.data$n, na.rm = TRUE)) |>
-      dplyr::right_join(
-        cdm$interval |>
-          dplyr::select(-c("group", "unit", "start_interval","end_interval")) |>
-          dplyr::distinct(), by = "interval"
-      ) |>
+    x <- cdm[["interval"]] |>
+      dplyr::select("incidence_group", "start_interval", "end_interval") |>
+      dplyr::distinct() |>
+      dplyr::mutate(start_interval = as.numeric(.data$start_interval)) |>
+      dplyr::mutate(end_interval = as.numeric(.data$end_interval)) |>
+      dplyr::cross_join(x) |>
+      dplyr::filter((.data$start < .data$start_interval & .data$end >= .data$start_interval) |
+                      (.data$start >= .data$start_interval & .data$start <= .data$end_interval)) |>
+      dplyr::group_by(incidence_group) |>
+      dplyr::summarise(n = sum(n, na.rm = TRUE)) |>
       dplyr::select("estimate_value" = "n", "group" = "incidence_group") |>
       dplyr::collect()
 
@@ -151,34 +142,26 @@ countRecords <- function(observationPeriod, cdm, start_date_name, end_date_name,
         name = omopgenerics::uniqueTableName(tablePrefix), temporary = FALSE
       )
 
-    cdm[["interval"]] <- cdm[["interval"]] |>
+    x <- cdm[["interval"]] |>
       dplyr::mutate(start_interval = as.Date(paste0(.data$start_interval,"-01"))) |>
       dplyr::mutate(end_interval   = as.Date(paste0(.data$end_interval,"-01"))) %>%
       dplyr::mutate("start_year_interval" = !!CDMConnector::datepart("start_interval","year")) %>%
       dplyr::mutate("end_year_interval"   = !!CDMConnector::datepart("end_interval","year")) %>%
       dplyr::mutate("start_month_interval" = !!CDMConnector::datepart("start_interval","month")) %>%
-      dplyr::mutate("end_month_interval"   = !!CDMConnector::datepart("end_interval","month"))
-
-
-    x <- x |>
-      dplyr::cross_join(cdm[["interval"]]) |>
-      dplyr::filter(.data$start_year <= .data$start_year_interval,
-                    .data$start_month <= .data$start_month_interval,
-                    .data$end_year >= .data$end_year_interval,
-                    .data$end_year >= .data$end_month_interval) |>
-      dplyr::group_by(.data$interval) |>
-      dplyr::summarise(n = sum(.data$n, na.rm = TRUE)) |>
-      dplyr::right_join(
-        cdm$interval |>
-          dplyr::select(-c("group", "unit", "start_interval","end_interval")) |>
-          dplyr::distinct(), by = "interval"
+      dplyr::mutate("end_month_interval"   = !!CDMConnector::datepart("end_interval","month")) |>
+      dplyr::select("incidence_group", "start_year_interval", "start_month_interval",
+                    "end_year_interval", "end_month_interval") |>
+      dplyr::distinct() |>
+      dplyr::cross_join(x) |>
+      dplyr::filter(
+        (.data$start_year < .data$start_year_interval & .data$start_month < .data$start_month_interval & .data$end_year >= .data$start_year_interval & .data$end_month >= .data$start_month_interval) |
+          (.data$start_year >= .data$start_year_interval & .data$start_month >= .data$start_month_interval & .data$start_year <= .data$end_year_interval & .data$start_month <= .data$end_month_interval)
       ) |>
+      dplyr::group_by(.data$incidence_group) |>
+      dplyr::summarise(n = sum(.data$n, na.rm = TRUE)) |>
       dplyr::select("estimate_value" = "n", "group" = "incidence_group") |>
       dplyr::collect()
   }
-
-
-
 
   omopgenerics::dropTable(cdm = cdm, name = c(dplyr::starts_with(tablePrefix)))
 
