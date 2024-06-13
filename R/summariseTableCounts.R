@@ -28,7 +28,6 @@ summariseTableCounts<- function(omopTable, unit = "year", unitInterval = 1) {
   omopTable <- omopTable |> dplyr::ungroup()
 
   name   <- omopgenerics::tableName(omopTable)
-  people <- getNumberPeopleInCdm(cdm)
   result <- omopgenerics::emptySummarisedResult()
   date   <- startDate(name)
 
@@ -46,10 +45,10 @@ summariseTableCounts<- function(omopTable, unit = "year", unitInterval = 1) {
       filterInObservation(indexDate = date)
   }
 
-  # insert table and then left join
-  interval <- getIntervalTibble(omopTable, date, unit, unitInterval)
+  # interval sequence ----
+  interval <- getIntervalTibble(omopTable, date, date, unit, unitInterval)
 
-  # Insert interval table to the cdm ----
+    # Insert interval table to the cdm ----
   cdm <- cdm |>
     omopgenerics::insertTable(name = "interval", table = interval)
 
@@ -107,6 +106,9 @@ summariseTableCounts<- function(omopTable, unit = "year", unitInterval = 1) {
       "additional_level" = "overall"
     ) |>
     omopgenerics::newSummarisedResult()
+
+ omopgenerics::dropTable(cdm = cdm, name = dplyr::starts_with("interval"))
+
 
   return(result)
 }
@@ -173,21 +175,13 @@ getOmopTableEndDate   <- function(omopTable, date){
     dplyr::pull("endDate")
 }
 
-getIntervalTibble <- function(omopTable, date, unit, unitInterval){
-  startDate <- getOmopTableStartDate(omopTable, date)
-  endDate   <- getOmopTableEndDate(omopTable, date)
+getIntervalTibble <- function(omopTable, start_date_name, end_date_name, unit, unitInterval){
+  startDate <- getOmopTableStartDate(omopTable, start_date_name)
+  endDate   <- getOmopTableEndDate(omopTable, end_date_name)
 
-  if(unit == "year"){
-    interval <- tibble::tibble(
-      "group" = seq.Date(as.Date(startDate), as.Date(endDate), .env$unit)
-    )
-  }else if(unit == "month"){
-    interval <- tibble::tibble(
-      "group" = seq.Date(as.Date(startDate), as.Date(endDate), .env$unit)
-    )
-  }
-
-  interval <- interval |>
+  tibble::tibble(
+    "group" = seq.Date(as.Date(startDate), as.Date(endDate), .env$unit)
+  ) |>
     dplyr::rowwise() |>
     dplyr::mutate("interval" = max(which(
       .data$group >= seq.Date(from = startDate, to = endDate, by = paste(.env$unitInterval, .env$unit))
