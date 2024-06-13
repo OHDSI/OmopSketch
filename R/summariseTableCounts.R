@@ -2,9 +2,9 @@
 #'
 #' @param omopTable A summarised_result object with the output from summariseOmopTable().
 #' @param unit Whether to stratify by "year" or by "month"
-#' @param unitInterval Number of years or months to be used
+#' @param unitInterval Number of years or months to stratify with
 #'
-#' @return A gt object with the summarised data.
+#' @return A summarised_result object with the summarised data.
 #'
 #' @importFrom rlang :=
 #' @export
@@ -107,7 +107,7 @@ summariseTableCounts<- function(omopTable, unit = "year", unitInterval = 1) {
     ) |>
     omopgenerics::newSummarisedResult()
 
- omopgenerics::dropTable(cdm = cdm, name = dplyr::starts_with("interval"))
+ omopgenerics::dropTable(cdm = cdm, name = "interval")
 
 
   return(result)

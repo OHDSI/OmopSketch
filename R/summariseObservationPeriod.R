@@ -1,8 +1,10 @@
 #' Create a gt table from a summarised omop_table.
 #'
-#' @param summarisedOmopTable A summarised_result object with the output from summariseOmopTable().
+#' @param observationPeriod observation_period omop table
+#' @param unit Whether to stratify by "year" or by "month"
+#' @param unitInterval Number of years or months to stratify with
 #'
-#' @return A gt object with the summarised data.
+#' @return A summarised_result object with the summarised data.
 #'
 #' @export
 #'
@@ -10,7 +12,7 @@ summariseObservationPeriod <- function(observationPeriod, unit = "year", unitInt
 
   observationPeriod <- cdm$observation_period
   unit <- "month"
-  unitInterval <- 1
+  unitInterval <- 2
 
   # Check input ----
   omopTableChecks(observationPeriod)
@@ -82,7 +84,7 @@ summariseObservationPeriod <- function(observationPeriod, unit = "year", unitInt
                                                  .data$strata_name)) |>
     dplyr::mutate(
       "result_id" = as.integer(1),
-      "cdm_name" = omopgenerics::cdmName(omopgenerics::cdmReference(omopTable)),
+      "cdm_name" = omopgenerics::cdmName(omopgenerics::cdmReference(observationPeriod)),
       "group_name"  = "omop_table",
       "group_level" = name,
       "variable_level" = NA_character_,
@@ -99,11 +101,13 @@ summariseObservationPeriod <- function(observationPeriod, unit = "year", unitInt
       dplyr::row_number() == 2, "percentage", .data$estimate_type
     )) |>
     dplyr::mutate(estimate_value = dplyr::if_else(
-      estimate_type == "percentage", as.character(as.numeric(.data$estimate_value)/denominator*100), .data$estimate_value
+      .data$estimate_type == "percentage", as.character(as.numeric(.data$estimate_value)/denominator*100), .data$estimate_value
     )) |>
     dplyr::mutate(estimate_name = dplyr::if_else(
-      estimate_type == "percentage", "percentage", .data$estimate_name)) |>
+      .data$estimate_type == "percentage", "percentage", .data$estimate_name)) |>
     omopgenerics::newSummarisedResult()
+
+  omopgenerics::dropTable(cdm = cdm, name = "interval")
 }
 
 
@@ -148,8 +152,8 @@ countRecords <- function(observationPeriod, cdm, start_date_name, end_date_name,
       )
 
     cdm[["interval"]] <- cdm[["interval"]] |>
-      dplyr::mutate(start_interval = as.Date(paste0(start_interval,"-01"))) |>
-      dplyr::mutate(end_interval   = as.Date(paste0(end_interval,"-01"))) %>%
+      dplyr::mutate(start_interval = as.Date(paste0(.data$start_interval,"-01"))) |>
+      dplyr::mutate(end_interval   = as.Date(paste0(.data$end_interval,"-01"))) %>%
       dplyr::mutate("start_year_interval" = !!CDMConnector::datepart("start_interval","year")) %>%
       dplyr::mutate("end_year_interval"   = !!CDMConnector::datepart("end_interval","year")) %>%
       dplyr::mutate("start_month_interval" = !!CDMConnector::datepart("start_interval","month")) %>%

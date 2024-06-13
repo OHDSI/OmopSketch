@@ -2,6 +2,7 @@
 
 export(plotTableCounts)
 export(summariseEntryCharacteristics)
+export(summariseObservationPeriod)
 export(summariseOmopTable)
 export(summarisePersonDays)
 export(summariseTableCounts)
