@@ -124,8 +124,8 @@ countRecords <- function(observationPeriod, cdm, start_date_name, end_date_name,
       dplyr::cross_join(x) |>
       dplyr::filter((.data$start < .data$start_interval & .data$end >= .data$start_interval) |
                       (.data$start >= .data$start_interval & .data$start <= .data$end_interval)) |>
-      dplyr::group_by(incidence_group) |>
-      dplyr::summarise(n = sum(n, na.rm = TRUE)) |>
+      dplyr::group_by(.data$incidence_group) |>
+      dplyr::summarise(n = sum(.data$n, na.rm = TRUE)) |>
       dplyr::select("estimate_value" = "n", "group" = "incidence_group") |>
       dplyr::collect()
 
