@@ -49,47 +49,24 @@ summariseTableCounts<- function(omopTable, unit = "year", unitInterval = 1) {
     omopgenerics::insertTable(name = "interval", table = interval)
 
   # Create summarised result
-  if(unit == "year"){
-    result <- omopTable |>
-      dplyr::rename("incidence_date" = dplyr::all_of(date)) %>%
-      dplyr::mutate("group" = !!CDMConnector::datepart("incidence_date", "year")) |>
-      dplyr::left_join(
-        cdm$interval, by = c("group")
-      ) |>
-      dplyr::select(-c("interval")) |>
-      dplyr::group_by(.data$incidence_group)  |>
-      dplyr::summarise("estimate_value" = dplyr::n(), .groups = "drop") |>
-      dplyr::collect() |>
-      dplyr::ungroup()
-
-  }else if(unit == "month"){
-    result <- omopTable |>
-      dplyr::rename("incidence_date" = dplyr::all_of(date)) %>%
-      dplyr::mutate("group" = !!CDMConnector::datepart("incidence_date", "year")) %>%
-      dplyr::mutate("month" = !!CDMConnector::datepart("incidence_date", "month")) |>
-      dplyr::mutate("group" = as.Date(paste0(.data$group,"-",.data$month,"-01"))) |>
-      dplyr::left_join(
-        cdm$interval, by = c("group")
-      ) |>
-      dplyr::select(-c("month","interval")) |>
-      dplyr::group_by(.data$incidence_group)  |>
-      dplyr::summarise("estimate_value" = dplyr::n(), .groups = "drop") |>
-      dplyr::collect() |>
-      dplyr::ungroup()
-  }
+  result <- cdm$interval |>
+    dplyr::cross_join(
+      omopTable |>
+        dplyr::rename("incidence_date" = dplyr::all_of(date))) |>
+    dplyr::filter(.data$incidence_date >= .data$interval_start_date &
+                    .data$incidence_date <= .data$interval_end_date) |>
+    dplyr::group_by(.data$interval_group)  |>
+    dplyr::summarise("estimate_value" = dplyr::n(), .groups = "drop") |>
+    dplyr::collect() |>
+    dplyr::ungroup()
 
   result <- result |>
-    dplyr::mutate(incidence_group = dplyr::if_else(rep(unitInterval, nrow(result)) == 1,
-                                                   gsub(" to.*", "", .data$incidence_group),
-                                                   .data$incidence_group)) |>
     dplyr::mutate(
       "estimate_value" = as.character(.data$estimate_value),
-      "variable_name" = "incidence_records"
+      "variable_name" = "incidence_records",
     ) |>
-    visOmopResults::uniteStrata(cols = "incidence_group") |>
-    dplyr::mutate("strata_name" = dplyr::if_else(.data$strata_name == "incidence_group",
-                                                 glue::glue("{unitInterval}_{unit}{if (unitInterval > 1) 's' else ''}"),
-                                                 .data$strata_name)) |>
+    dplyr::rename("time_interval" = "interval_group") |>
+    visOmopResults::uniteStrata(cols = "time_interval") |>
     dplyr::mutate(
       "result_id" = as.integer(1),
       "cdm_name" = omopgenerics::cdmName(omopgenerics::cdmReference(omopTable)),
@@ -101,7 +78,14 @@ summariseTableCounts<- function(omopTable, unit = "year", unitInterval = 1) {
       "additional_name" = "overall",
       "additional_level" = "overall"
     ) |>
-    omopgenerics::newSummarisedResult()
+    omopgenerics::newSummarisedResult(settings = dplyr::tibble(
+      "result_id" = 1L,
+      "result_type" = "summarised_table_counts",
+      "package_name" = "OmopSketch",
+      "package_version" = as.character(utils::packageVersion("OmopSketch")),
+      "unit" = .env$unit,
+      "unitInterval" = .env$unitInterval
+    ))
 
   omopgenerics::dropTable(cdm = cdm, name = "interval")
 
@@ -185,18 +169,19 @@ getIntervalTibble <- function(omopTable, start_date_name, end_date_name, unit, u
     dplyr::ungroup() |>
     dplyr::group_by(.data$interval) |>
     dplyr::mutate(
-      "incidence_group" = paste0(min(.data$group)," to ",max(.data$group))
+      "interval_start_date" = min(.data$group),
+      "interval_end_date"   = dplyr::if_else(.env$unit == "year",
+                                             min(.data$group)+lubridate::years(.env$unitInterval)-1,
+                                             min(.data$group)+months(.env$unitInterval)-1)
+    ) |>
+    dplyr::mutate(
+      "interval_start_date" = as.Date(.data$interval_start_date),
+      "interval_end_date" = as.Date(.data$interval_end_date)
+    ) |>
+    dplyr::mutate(
+      "interval_group" = paste(.data$interval_start_date,"to",.data$interval_end_date)
     ) |>
     dplyr::ungroup() |>
-    dplyr::mutate("unit" = .env$unit) |>
-    dplyr::mutate("incidence_group" = dplyr::if_else(
-      .data$unit == "year",
-      gsub("-01","",as.character(.data$incidence_group)),
-      gsub("-01$","",gsub("-01 "," ",as.character(.data$incidence_group))))
-    ) |>
-    dplyr::mutate("group" = dplyr::if_else(
-      .data$unit == "year",
-      gsub("-01","",as.character(.data$group)),
-      as.character(.data$group)
-    ))
+    dplyr::select("interval_start_date", "interval_end_date", "interval_group") |>
+    dplyr::distinct()
 }

@@ -23,7 +23,7 @@ test_that("summariseTableCounts() works", {
   # Check inputs ----
   expect_true(
     (summariseTableCounts(cdm$observation_period) |>
-       dplyr::filter(strata_level == 1963) |>
+       dplyr::filter(strata_level == "1963-01-01 to 1963-12-31") |>
        dplyr::pull("estimate_value") |>
        as.numeric()) ==
       (cdm$observation_period |>
@@ -36,7 +36,7 @@ test_that("summariseTableCounts() works", {
 
   expect_true(
   summariseTableCounts(cdm$condition_occurrence, unit = "month") |>
-    dplyr::filter(strata_level == "1961-02") |>
+    dplyr::filter(strata_level == "1961-02-01 to 1961-02-28") |>
     dplyr::pull("estimate_value") |>
     as.numeric() ==
   (cdm$condition_occurrence |>
@@ -50,7 +50,7 @@ test_that("summariseTableCounts() works", {
 
   expect_true(
     (summariseTableCounts(cdm$condition_occurrence, unit = "month", unitInterval = 3) |>
-      dplyr::filter(strata_level %in% c("1984-01 to 1984-03")) |>
+      dplyr::filter(strata_level %in% c("1984-01-01 to 1984-03-31")) |>
       dplyr::pull("estimate_value") |>
       as.numeric()) ==
       (cdm$condition_occurrence |>
@@ -64,7 +64,7 @@ test_that("summariseTableCounts() works", {
 
   expect_true(
     (summariseTableCounts(cdm$drug_exposure, unitInterval = 8) |>
-       dplyr::filter(strata_level == "1981 to 1988") |>
+       dplyr::filter(strata_level == "1981-01-01 to 1988-12-31") |>
        dplyr::pull("estimate_value") |>
        as.numeric()) ==
       (cdm$drug_exposure |>

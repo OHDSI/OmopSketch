@@ -23,7 +23,6 @@ Imports:
     CohortCharacteristics,
     dplyr,
     ggplot2,
-    glue,
     gt,
     IncidencePrevalence (>= 0.7.0),
     lubridate,

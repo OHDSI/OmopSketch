@@ -42,9 +42,7 @@ summariseObservationPeriod <- function(observationPeriod, unit = "year", unitInt
   start_date_name <- startDate(name)
   end_date_name   <- endDate(name)
 
-  interval <- getIntervalTibble(observationPeriod, start_date_name, end_date_name, unit, unitInterval) |>
-    dplyr::mutate("start_interval" = gsub(" to.*","",.data$incidence_group)) |>
-    dplyr::mutate("end_interval"   = gsub(".* to ","",.data$incidence_group))
+  interval <- getIntervalTibble(observationPeriod, start_date_name, end_date_name, unit, unitInterval)
 
   # Insert interval table to the cdm ----
   cdm <- cdm |>
@@ -62,17 +60,11 @@ summariseObservationPeriod <- function(observationPeriod, unit = "year", unitInt
     countRecords(cdm, start_date_name, end_date_name, unit)
 
   result <- result |>
-    dplyr::mutate(group = dplyr::if_else(rep(unitInterval, nrow(result)) == 1,
-                                         gsub(" to.*", "", .data$group),
-                                         .data$group)) |>
     dplyr::mutate(
       "estimate_value" = as.character(.data$estimate_value),
       "variable_name" = "overlap_records"
     ) |>
-    visOmopResults::uniteStrata(cols = "group") |>
-    dplyr::mutate("strata_name" = dplyr::if_else(.data$strata_name == "group",
-                                                 glue::glue("{unitInterval}_{unit}{if (unitInterval > 1) 's' else ''}"),
-                                                 .data$strata_name)) |>
+    visOmopResults::uniteStrata(cols = "time_interval") |>
     dplyr::mutate(
       "result_id" = as.integer(1),
       "cdm_name" = omopgenerics::cdmName(omopgenerics::cdmReference(observationPeriod)),
@@ -96,7 +88,14 @@ summariseObservationPeriod <- function(observationPeriod, unit = "year", unitInt
     )) |>
     dplyr::mutate(estimate_name = dplyr::if_else(
       .data$estimate_type == "percentage", "percentage", .data$estimate_name)) |>
-    omopgenerics::newSummarisedResult()
+    omopgenerics::newSummarisedResult(settings = dplyr::tibble(
+      "result_id" = 1L,
+      "result_type" = "summarised_observation_period",
+      "package_name" = "OmopSketch",
+      "package_version" = as.character(utils::packageVersion("OmopSketch")),
+      "unit" = .env$unit,
+      "unitInterval" = .env$unitInterval
+    ))
 
   omopgenerics::dropTable(cdm = cdm, name = "interval")
   return(result)
@@ -105,63 +104,23 @@ summariseObservationPeriod <- function(observationPeriod, unit = "year", unitInt
 countRecords <- function(observationPeriod, cdm, start_date_name, end_date_name, unit){
   tablePrefix <- omopgenerics::tmpPrefix()
 
-  if(unit == "year"){
-    x <- observationPeriod %>%
-      dplyr::mutate("start" = !!CDMConnector::datepart(start_date_name,"year")) %>%
-      dplyr::mutate("end"   = !!CDMConnector::datepart(end_date_name,"year")) |>
-      dplyr::group_by(.data$start, .data$end) |>
-      dplyr::summarise(n = dplyr::n()) |>
-      dplyr::mutate(dplyr::across(dplyr::everything(), as.integer)) |>
-      dplyr::compute(
-        name = omopgenerics::uniqueTableName(tablePrefix), temporary = FALSE
-      )
+  x <- observationPeriod %>%
+    dplyr::mutate("start" = lubridate::floor_date(.data[[start_date_name]], unit = "month")) |>
+    dplyr::mutate("end"   = lubridate::floor_date(.data[[end_date_name]], unit = "month")) |>
+    dplyr::group_by(.data$start, .data$end) |>
+    dplyr::summarise(n = dplyr::n()) |>
+    dplyr::compute(
+      name = omopgenerics::uniqueTableName(tablePrefix), temporary = FALSE
+    )
 
-    x <- cdm[["interval"]] |>
-      dplyr::select("incidence_group", "start_interval", "end_interval") |>
-      dplyr::distinct() |>
-      dplyr::mutate(start_interval = as.numeric(.data$start_interval)) |>
-      dplyr::mutate(end_interval = as.numeric(.data$end_interval)) |>
-      dplyr::cross_join(x) |>
-      dplyr::filter((.data$start < .data$start_interval & .data$end >= .data$start_interval) |
-                      (.data$start >= .data$start_interval & .data$start <= .data$end_interval)) |>
-      dplyr::group_by(.data$incidence_group) |>
-      dplyr::summarise(n = sum(.data$n, na.rm = TRUE)) |>
-      dplyr::select("estimate_value" = "n", "group" = "incidence_group") |>
-      dplyr::collect()
-
-  }else if(unit == "month"){
-    x <- observationPeriod %>%
-      dplyr::mutate("start_year" = !!CDMConnector::datepart(start_date_name,"year")) %>%
-      dplyr::mutate("end_year"   = !!CDMConnector::datepart(end_date_name,"year")) %>%
-      dplyr::mutate("start_month" = !!CDMConnector::datepart(start_date_name,"month")) %>%
-      dplyr::mutate("end_month"   = !!CDMConnector::datepart(end_date_name,"month")) |>
-      dplyr::group_by(.data$start_year, .data$start_month, .data$end_year, .data$end_month) |>
-      dplyr::summarise(n = dplyr::n(), .groups = "drop") |>
-      dplyr::mutate(dplyr::across(dplyr::everything(), as.integer)) |>
-      dplyr::compute(
-        name = omopgenerics::uniqueTableName(tablePrefix), temporary = FALSE
-      )
-
-    x <- cdm[["interval"]] |>
-      dplyr::mutate(start_interval = as.Date(paste0(.data$start_interval,"-01"))) |>
-      dplyr::mutate(end_interval   = as.Date(paste0(.data$end_interval,"-01"))) %>%
-      dplyr::mutate("start_year_interval" = !!CDMConnector::datepart("start_interval","year")) %>%
-      dplyr::mutate("end_year_interval"   = !!CDMConnector::datepart("end_interval","year")) %>%
-      dplyr::mutate("start_month_interval" = !!CDMConnector::datepart("start_interval","month")) %>%
-      dplyr::mutate("end_month_interval"   = !!CDMConnector::datepart("end_interval","month")) |>
-      dplyr::select("incidence_group", "start_year_interval", "start_month_interval",
-                    "end_year_interval", "end_month_interval") |>
-      dplyr::distinct() |>
-      dplyr::cross_join(x) |>
-      dplyr::filter(
-        (.data$start_year < .data$start_year_interval & .data$start_month < .data$start_month_interval & .data$end_year >= .data$start_year_interval & .data$end_month >= .data$start_month_interval) |
-          (.data$start_year >= .data$start_year_interval & .data$start_month >= .data$start_month_interval & .data$start_year <= .data$end_year_interval & .data$start_month <= .data$end_month_interval)
-      ) |>
-      dplyr::group_by(.data$incidence_group) |>
-      dplyr::summarise(n = sum(.data$n, na.rm = TRUE)) |>
-      dplyr::select("estimate_value" = "n", "group" = "incidence_group") |>
-      dplyr::collect()
-  }
+  x <- cdm[["interval"]] |>
+    dplyr::cross_join(x) |>
+    dplyr::filter((.data$start < .data$interval_start_date & .data$end >= .data$interval_start_date) |
+                    (.data$start >= .data$interval_start_date & .data$start <= .data$interval_end_date)) |>
+    dplyr::group_by(.data$interval_group) |>
+    dplyr::summarise(n = sum(.data$n, na.rm = TRUE)) |>
+    dplyr::select("estimate_value" = "n", "time_interval" = "interval_group") |>
+    dplyr::collect()
 
   omopgenerics::dropTable(cdm = cdm, name = c(dplyr::starts_with(tablePrefix)))
 
