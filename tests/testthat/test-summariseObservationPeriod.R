@@ -88,4 +88,10 @@ test_that("check summariseObservationPeriod works", {
     dplyr::pull("n")
   expect_equal(x,y)
 
+
+  # summariseObservationPeriodPlot plot ----
+  x <- summariseObservationPeriod(cdm$observation_period, unit = "year", unitInterval = 8)
+  expect_true(inherits(plotObservationPeriod(x),"ggplot"))
+  x <-  x |> dplyr::filter(result_id == -1)
+  expect_warning(plotObservationPeriod(x))
 })

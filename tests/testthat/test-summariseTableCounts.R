@@ -75,9 +75,8 @@ test_that("summariseTableCounts() works", {
          dplyr::pull("n"))
   )
 
-  # summariseTableCounts plot
+  # summariseTableCounts plot ----
   expect_true(inherits(plotTableCounts(summariseTableCounts(cdm$drug_exposure, unitInterval = 8)),"ggplot"))
   expect_warning(inherits(plotTableCounts(summariseTableCounts(cdm$death, unitInterval = 8)),"ggplot"))
   expect_true(inherits(plotTableCounts(summariseTableCounts(cdm$death, unitInterval = 8)),"ggplot"))
-
 })
