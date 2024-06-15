@@ -21,7 +21,7 @@ plotTableCounts <- function(summarisedTableCounts) {
   # Plot ----
   summarisedTableCounts |>
     dplyr::mutate(count = as.numeric(.data$estimate_value),
-                  time = .data$strata_level) |>
+                  time = as.Date(.data$variable_level)) |>
     visOmopResults::splitGroup() |>
     ggplot2::ggplot(ggplot2::aes(x = .data$time, y = .data$count, group = .data$omop_table, color = .data$omop_table)) +
     ggplot2::geom_point() +

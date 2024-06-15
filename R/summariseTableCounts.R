@@ -72,7 +72,7 @@ summariseTableCounts<- function(omopTable, unit = "year", unitInterval = 1) {
       "cdm_name" = omopgenerics::cdmName(omopgenerics::cdmReference(omopTable)),
       "group_name"  = "omop_table",
       "group_level" = name,
-      "variable_level" = NA_character_,
+      "variable_level" = gsub(" to.*","",strata_level),
       "estimate_name" = "count",
       "estimate_type" = "integer",
       "additional_name" = "overall",

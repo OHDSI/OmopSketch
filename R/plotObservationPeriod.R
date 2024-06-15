@@ -22,7 +22,7 @@ plotObservationPeriod <- function(summarisedObservationPeriod){
   summarisedObservationPeriod |>
     dplyr::filter(.data$estimate_name == "count") |>
     dplyr::mutate(individuals_in_observation = as.numeric(.data$estimate_value),
-                  time = .data$strata_level) |>
+                  time = as.Data(.data$variable_level)) |>
     ggplot2::ggplot(ggplot2::aes(x = .data$time, y = .data$individuals_in_observation, group = .data$cdm_name, color = .data$cdm_name)) +
     ggplot2::geom_point() +
     ggplot2::geom_line() +
