@@ -23,6 +23,8 @@ Imports:
     cli,
     CohortCharacteristics,
     dplyr,
+    ggplot2,
+    glue,
     gt,
     IncidencePrevalence (>= 0.7.0),
     lubridate,
@@ -30,6 +32,7 @@ Imports:
     omopgenerics (>= 0.0.3),
     PatientProfiles,
     rlang,
+    tibble,
     tidyr,
     visOmopResults
 Depends: 
