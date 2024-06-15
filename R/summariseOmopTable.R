@@ -279,24 +279,22 @@ addVariables <- function(x, variables) {
     x <- x |>
       dplyr::left_join(
         x |>
-          dplyr::select("id", "person_id", "start_date", "end_date") |>
-          dplyr::inner_join(
-            cdm[["observation_period"]] |>
-              dplyr::select(
-                "person_id",
-                "obs_start" = "observation_period_start_date",
-                "obs_end" = "observation_period_end_date"
-              ),
-            by = "person_id"
-          ) |>
+        dplyr::left_join(
+          cdm[["observation_period"]] |>
+            dplyr::select("person_id",
+                          "obs_start" = "observation_period_start_date",
+                          "obs_end" = "observation_period_end_date"),
+          by = "person_id"
+        ) |>
           dplyr::filter(
             .data$start_date >= .data$obs_start &
               .data$end_date <= .data$obs_end
           ) |>
           dplyr::mutate("in_observation" = 1L) |>
-          dplyr::select("id", "in_observation"),
-        by = "id"
-      ) |> dplyr::distinct()
+          dplyr::select("in_observation", "id", "person_id"),
+        by = c("id", "person_id")
+      ) |>
+      dplyr::distinct()
   }
 
   x <- x |> dplyr::select(dplyr::all_of(variables))
