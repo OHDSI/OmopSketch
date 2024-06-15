@@ -97,7 +97,6 @@ summariseOmopTable <- function(omopTable,
     dplyr::pull("estimate_value") |>
     as.integer()
 
-
   # Summary concepts ----
   if (inObservation | standardConcept | sourceVocabulary | domainId | typeConcept) {
     cli::cli_inform(c("i" = "Summarising concepts"))
@@ -292,14 +291,12 @@ addVariables <- function(x, variables) {
           ) |>
           dplyr::filter(
             .data$start_date >= .data$obs_start &
-              .data$start_date <= .data$obs_end &
-              .data$end_date >= .data$obs_start &
               .data$end_date <= .data$obs_end
           ) |>
           dplyr::mutate("in_observation" = 1L) |>
           dplyr::select("id", "in_observation"),
         by = "id"
-      )
+      ) |> dplyr::distinct()
   }
 
   x <- x |> dplyr::select(dplyr::all_of(variables))
