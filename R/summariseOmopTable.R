@@ -297,7 +297,9 @@ addVariables <- function(x, variables) {
       dplyr::distinct()
   }
 
-  x <- x |> dplyr::select(dplyr::all_of(variables))
+  x <- x |>
+    dplyr::select(dplyr::all_of(variables)) |>
+    dplyr::mutate(across(everything(), ~as.character(.)))
 
   return(x)
 }
