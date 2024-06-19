@@ -3,13 +3,14 @@
 #' @param omopTable A summarised_result object with the output from summariseOmopTable().
 #' @param unit Whether to stratify by "year" or by "month"
 #' @param unitInterval Number of years or months to stratify with
+#' @param ageGroup A list of age groups to stratify results by.
 #'
 #' @return A summarised_result object with the summarised data.
 #'
 #' @importFrom rlang :=
 #' @export
 #'
-summariseRecordCounts <- function(omopTable, unit = "year", unitInterval = 1) {
+summariseRecordCounts <- function(omopTable, unit = "year", unitInterval = 1, ageGroup = NULL) {
 
   # Initial checks ----
   checkOmopTable(omopTable)
@@ -19,6 +20,7 @@ summariseRecordCounts <- function(omopTable, unit = "year", unitInterval = 1) {
 
   checkUnit(unit)
   checkUnitInterval(unitInterval)
+  checkAgeGroup(ageGroup)
 
   cdm <- omopgenerics::cdmReference(omopTable)
   omopTable <- omopTable |> dplyr::ungroup()
@@ -32,9 +34,15 @@ summariseRecordCounts <- function(omopTable, unit = "year", unitInterval = 1) {
     return(result)
   }
 
+  # Create strata variable ----
+  strata <- dplyr::if_else(is.null(ageGroup), NA, "age_group")
+  if(is.na(strata)){strata <- NULL}
+
   # Incidence counts ----
   omopTable <- omopTable |>
-    dplyr::select(dplyr::all_of(date), "person_id")
+    dplyr::select(dplyr::all_of(date), "person_id") |>
+    PatientProfiles::addAgeQuery(indexDate = date, ageGroup = ageGroup) |>
+    dplyr::select(-c("age"))
 
   if (name != "observation_period") {
     omopTable <- omopTable |>
@@ -52,31 +60,46 @@ summariseRecordCounts <- function(omopTable, unit = "year", unitInterval = 1) {
   result <- cdm$interval |>
     dplyr::cross_join(
       omopTable |>
-        dplyr::rename("incidence_date" = dplyr::all_of(date))) |>
+        dplyr::rename("incidence_date" = dplyr::all_of(date))
+      ) |>
     dplyr::filter(.data$incidence_date >= .data$interval_start_date &
                     .data$incidence_date <= .data$interval_end_date) |>
-    dplyr::group_by(.data$interval_group)  |>
+    dplyr::group_by(.data$interval_group, dplyr::across(dplyr::all_of(strata))) |>
     dplyr::summarise("estimate_value" = dplyr::n(), .groups = "drop") |>
     dplyr::collect() |>
     dplyr::ungroup()
+
+  if(!is.null(strata)){
+    result <- result |>
+      rbind(
+        result |>
+          dplyr::group_by(.data$interval_group) |>
+          dplyr::summarise(estimate_value = sum(.data$estimate_value), .groups = "drop") |>
+          dplyr::mutate(age_group = "overall")
+      ) |>
+      dplyr::rename() |>
+      dplyr::mutate()
+  }else{
+    result <- result |>
+      dplyr::mutate("age_group" = "overall")
+  }
 
   result <- result |>
     dplyr::mutate(
       "estimate_value" = as.character(.data$estimate_value),
       "variable_name" = "incidence_records",
     ) |>
-    dplyr::rename("time_interval" = "interval_group") |>
-    visOmopResults::uniteStrata(cols = "time_interval") |>
+    dplyr::rename("variable_level" = "interval_group") |>
+    visOmopResults::uniteStrata(cols = "age_group") |>
     dplyr::mutate(
       "result_id" = as.integer(1),
       "cdm_name" = omopgenerics::cdmName(omopgenerics::cdmReference(omopTable)),
       "group_name"  = "omop_table",
       "group_level" = name,
-      "variable_level" = gsub(" to.*","",.data$strata_level),
       "estimate_name" = "count",
       "estimate_type" = "integer",
-      "additional_name" = "overall",
-      "additional_level" = "overall"
+      "additional_name" = "time_interval",
+      "additional_level" = gsub(" to.*","",.data$variable_level)
     ) |>
     omopgenerics::newSummarisedResult(settings = dplyr::tibble(
       "result_id" = 1L,
@@ -93,7 +116,7 @@ summariseRecordCounts <- function(omopTable, unit = "year", unitInterval = 1) {
 }
 
 
-filterInObservation <- function(x, indexDate) {
+filterInObservation <- function(x, indexDate){
   cdm <- omopgenerics::cdmReference(x)
   id <- c("person_id", "subject_id")
   id <- id[id %in% colnames(x)]

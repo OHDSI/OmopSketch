@@ -4,7 +4,12 @@
 \alias{summariseRecordCounts}
 \title{Create a gt table from a summarised omop_table.}
 \usage{
-summariseRecordCounts(omopTable, unit = "year", unitInterval = 1)
+summariseRecordCounts(
+  omopTable,
+  unit = "year",
+  unitInterval = 1,
+  ageGroup = NULL
+)
 }
 \arguments{
 \item{omopTable}{A summarised_result object with the output from summariseOmopTable().}
@@ -12,6 +17,8 @@ summariseRecordCounts(omopTable, unit = "year", unitInterval = 1)
 \item{unit}{Whether to stratify by "year" or by "month"}
 
 \item{unitInterval}{Number of years or months to stratify with}
+
+\item{ageGroup}{}
 }
 \value{
 A summarised_result object with the summarised data.
