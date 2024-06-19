@@ -10,6 +10,7 @@
 
 The goal of OmopSketch is to provide context to your OMOP-mapped database.
 
+
 ## Installation
 
 You can install the development version of OmopSketch from
