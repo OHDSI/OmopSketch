@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# OmopSketch  <img src="man/figures/OmopSketch_Hexsticker2.png" align="right" height="139"/>
+# OmopSketch  <img src="man/figures/omopSketch_Hexsticker2.png" align="right" height="139"/>
 
 <!-- badges: start -->
 <!-- badges: end -->
