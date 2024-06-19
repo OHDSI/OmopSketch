@@ -29,7 +29,8 @@ plotObservationPeriod <- function(summarisedObservationPeriod){
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust=1)) +
     ggplot2::xlab("Time interval") +
     ggplot2::ylab("Individuals in observation") +
-    ggplot2::labs(color = "CDM table")
+    ggplot2::labs(color = "CDM table") +
+    ggplot2::theme_bw()
 
 }
 
