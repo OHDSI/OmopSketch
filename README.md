@@ -4,7 +4,6 @@
 # OmopSketch  <img src="man/figures/omopSketch_Hexsticker2.png" align="right" height="210"/>
 
 <!-- badges: start -->
-<!-- badges: end -->
 
 [![R-CMD-check](https://github.com/oxford-pharmacoepi/OmopSketch/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/oxford-pharmacoepi/OmopSketch/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
