@@ -9,7 +9,7 @@
 #' @importFrom rlang :=
 #' @export
 #'
-summariseTableCounts<- function(omopTable, unit = "year", unitInterval = 1) {
+summariseRecordCounts <- function(omopTable, unit = "year", unitInterval = 1) {
 
   # Initial checks ----
   omopTableChecks(omopTable)

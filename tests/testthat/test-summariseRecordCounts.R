@@ -1,4 +1,4 @@
-test_that("summariseTableCounts() works", {
+test_that("summariseRecordCounts() works", {
 
   # Load mock database ----
   con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
@@ -7,22 +7,22 @@ test_that("summariseTableCounts() works", {
   )
 
   # Check inputs ----
-  expect_true(inherits(summariseTableCounts(omopTable = cdm$observation_period, unit = "month"),"summarised_result"))
-  expect_true(inherits(summariseTableCounts(omopTable = cdm$observation_period, unitInterval = 5),"summarised_result"))
+  expect_true(inherits(summariseRecordCounts(omopTable = cdm$observation_period, unit = "month"),"summarised_result"))
+  expect_true(inherits(summariseRecordCounts(omopTable = cdm$observation_period, unitInterval = 5),"summarised_result"))
 
-  expect_no_error(summariseTableCounts(cdm$observation_period))
-  expect_no_error(summariseTableCounts(cdm$visit_occurrence))
-  expect_no_error(summariseTableCounts(cdm$condition_occurrence))
-  expect_no_error(summariseTableCounts(cdm$drug_exposure))
-  expect_no_error(summariseTableCounts(cdm$procedure_occurrence))
-  expect_warning(summariseTableCounts(cdm$device_exposure))
-  expect_no_error(summariseTableCounts(cdm$measurement))
-  expect_no_error(summariseTableCounts(cdm$observation))
-  expect_warning(summariseTableCounts(cdm$death))
+  expect_no_error(summariseRecordCounts(cdm$observation_period))
+  expect_no_error(summariseRecordCounts(cdm$visit_occurrence))
+  expect_no_error(summariseRecordCounts(cdm$condition_occurrence))
+  expect_no_error(summariseRecordCounts(cdm$drug_exposure))
+  expect_no_error(summariseRecordCounts(cdm$procedure_occurrence))
+  expect_warning(summariseRecordCounts(cdm$device_exposure))
+  expect_no_error(summariseRecordCounts(cdm$measurement))
+  expect_no_error(summariseRecordCounts(cdm$observation))
+  expect_warning(summariseRecordCounts(cdm$death))
 
   # Check inputs ----
   expect_true(
-    (summariseTableCounts(cdm$observation_period) |>
+    (summariseRecordCounts(cdm$observation_period) |>
        dplyr::filter(strata_level == "1963-01-01 to 1963-12-31") |>
        dplyr::pull("estimate_value") |>
        as.numeric()) ==
@@ -35,7 +35,7 @@ test_that("summariseTableCounts() works", {
   )
 
   expect_true(
-  summariseTableCounts(cdm$condition_occurrence, unit = "month") |>
+  summariseRecordCounts(cdm$condition_occurrence, unit = "month") |>
     dplyr::filter(strata_level == "1961-02-01 to 1961-02-28") |>
     dplyr::pull("estimate_value") |>
     as.numeric() ==
@@ -49,7 +49,7 @@ test_that("summariseTableCounts() works", {
   )
 
   expect_true(
-    (summariseTableCounts(cdm$condition_occurrence, unit = "month", unitInterval = 3) |>
+    (summariseRecordCounts(cdm$condition_occurrence, unit = "month", unitInterval = 3) |>
       dplyr::filter(strata_level %in% c("1984-01-01 to 1984-03-31")) |>
       dplyr::pull("estimate_value") |>
       as.numeric()) ==
@@ -63,7 +63,7 @@ test_that("summariseTableCounts() works", {
   )
 
   expect_true(
-    (summariseTableCounts(cdm$drug_exposure, unitInterval = 8) |>
+    (summariseRecordCounts(cdm$drug_exposure, unitInterval = 8) |>
        dplyr::filter(strata_level == "1981-01-01 to 1988-12-31") |>
        dplyr::pull("estimate_value") |>
        as.numeric()) ==
@@ -75,8 +75,8 @@ test_that("summariseTableCounts() works", {
          dplyr::pull("n"))
   )
 
-  # summariseTableCounts plot ----
-  expect_true(inherits(plotTableCounts(summariseTableCounts(cdm$drug_exposure, unitInterval = 8)),"ggplot"))
-  expect_warning(inherits(plotTableCounts(summariseTableCounts(cdm$death, unitInterval = 8)),"ggplot"))
-  expect_true(inherits(plotTableCounts(summariseTableCounts(cdm$death, unitInterval = 8)),"ggplot"))
+  # summariseRecordCounts plot ----
+  expect_true(inherits(plotTableCounts(summariseRecordCounts(cdm$drug_exposure, unitInterval = 8)),"ggplot"))
+  expect_warning(inherits(plotTableCounts(summariseRecordCounts(cdm$death, unitInterval = 8)),"ggplot"))
+  expect_true(inherits(plotTableCounts(summariseRecordCounts(cdm$death, unitInterval = 8)),"ggplot"))
 })
