@@ -12,13 +12,13 @@
 summariseRecordCounts <- function(omopTable, unit = "year", unitInterval = 1) {
 
   # Initial checks ----
-  omopTableChecks(omopTable)
+  checkOmopTable(omopTable)
 
   if(missing(unit)){unit <- "year"}
   if(missing(unitInterval)){unitInterval <- 1}
 
-  unitChecks(unit)
-  unitIntervalChecks(unitInterval)
+  checkUnit(unit)
+  checkUnitInterval(unitInterval)
 
   cdm <- omopgenerics::cdmReference(omopTable)
   omopTable <- omopTable |> dplyr::ungroup()
@@ -72,7 +72,7 @@ summariseRecordCounts <- function(omopTable, unit = "year", unitInterval = 1) {
       "cdm_name" = omopgenerics::cdmName(omopgenerics::cdmReference(omopTable)),
       "group_name"  = "omop_table",
       "group_level" = name,
-      "variable_level" = gsub(" to.*","",strata_level),
+      "variable_level" = gsub(" to.*","",.data$strata_level),
       "estimate_name" = "count",
       "estimate_type" = "integer",
       "additional_name" = "overall",
@@ -92,31 +92,6 @@ summariseRecordCounts <- function(omopTable, unit = "year", unitInterval = 1) {
   return(result)
 }
 
-omopTableChecks <- function(omopTable){
-  assertClass(omopTable, "omop_table")
-  omopTable |>
-    omopgenerics::tableName() |>
-    assertChoice(choices = tables$table_name)
-}
-
-unitChecks <- function(unit){
-  inherits(unit, "character")
-  assertLength(unit, 1)
-  if(!unit %in% c("year","month")){
-    cli::cli_abort("units value is not valid. Valid options are year or month.")
-  }
-}
-
-unitIntervalChecks <- function(unitInterval){
-  inherits(unitInterval, c("numeric", "integer"))
-  assertLength(unitInterval, 1)
-  if(unitInterval < 1){
-    cli::cli_abort("unitInterval input has to be equal or greater than 1.")
-  }
-  if(!(unitInterval%%1 == 0)){
-    cli::cli_abort("unitInterval has to be an integer.")
-  }
-}
 
 filterInObservation <- function(x, indexDate) {
   cdm <- omopgenerics::cdmReference(x)
