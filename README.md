@@ -1,9 +1,10 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# OmopSketch
+# OmopSketch  <img src="man/figures/OmopSketch_Hexsticker2.png" align="right" height="139"/>
 
 <!-- badges: start -->
+<!-- badges: end -->
 
 [![R-CMD-check](https://github.com/oxford-pharmacoepi/OmopSketch/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/oxford-pharmacoepi/OmopSketch/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
