@@ -6,17 +6,30 @@
 \alias{OmopSketch-package}
 \title{OmopSketch: What the Package Does (One Line, Title Case)}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 What the package does (one paragraph).
 }
 \seealso{
 Useful links:
 \itemize{
   \item \url{https://oxford-pharmacoepi.github.io/OmopSketch/}
+  \item Report bugs at \url{https://github.com/oxford-pharmacoepi/OmopSketch/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: First Last \email{first.last@example.com} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
+\strong{Maintainer}: Marta Alcalde-Herraiz \email{marta.alcaldeherraiz@ndorms.ox.ac.uk} (\href{https://orcid.org/0009-0002-4405-1814}{ORCID})
+
+Authors:
+\itemize{
+  \item Marti Catala \email{marti.catalasabate@ndorms.ox.ac.uk} (\href{https://orcid.org/0000-0003-3308-9905}{ORCID})
+}
+
+Other contributors:
+\itemize{
+  \item Yuchen Guo \email{yuchen.guo@ndorms.ox.ac.uk} (\href{https://orcid.org/0000-0002-0847-4855}{ORCID}) [contributor]
+}
 
 }
 \keyword{internal}
