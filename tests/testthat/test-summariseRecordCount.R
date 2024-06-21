@@ -76,9 +76,9 @@ test_that("summariseRecordCount() works", {
   )
 
   # summariseRecordCount plot ----
-  expect_true(inherits(plotTableCounts(summariseRecordCount(cdm$drug_exposure, unitInterval = 8)),"ggplot"))
-  expect_warning(inherits(plotTableCounts(summariseRecordCount(cdm$death, unitInterval = 8)),"ggplot"))
-  expect_true(inherits(plotTableCounts(summariseRecordCount(cdm$death, unitInterval = 8)),"ggplot"))
+  expect_true(inherits(plotRecordCount(summariseRecordCount(cdm$drug_exposure, unitInterval = 8)),"ggplot"))
+  expect_warning(inherits(plotRecordCount(summariseRecordCount(cdm$death, unitInterval = 8)),"ggplot"))
+  expect_true(inherits(plotRecordCount(summariseRecordCount(cdm$death, unitInterval = 8)),"ggplot"))
 })
 
 test_that("summariseOmopTable() ageGroup argument works", {
