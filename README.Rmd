@@ -13,29 +13,51 @@ knitr::opts_chunk$set(
 )
 ```
 
-# OmopSketch
+# OmopSketch <a href="https://oxford-pharmacoepi.github.io/OmopSketch/"><img src="man/figures/logo.png" align="right" height="138" alt="OmopSketch website" /></a>
 
 <!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/oxford-pharmacoepi/OmopSketch/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/oxford-pharmacoepi/OmopSketch/actions/workflows/R-CMD-check.yaml)
-  <!-- badges: end -->
+[![CRAN status](https://www.r-pkg.org/badges/version/OmopSketch)](https://CRAN.R-project.org/package=OmopSketch)
+[![Codecov test coverage](https://codecov.io/gh/oxford-pharmacoepi/OmopSketch/branch/main/graph/badge.svg)](https://app.codecov.io/gh/oxford-pharmacoepi/OmopSketch?branch=main)
+<!-- badges: end -->
 
-The goal of OmopSketch is to ...
+### WARNING: this package is under-development
+
+The goal of OmopSketch is to characterise and visualise an OMOP CDM instance to asses if it meets the necessary criteria to answer a specific clinical question and conduct a certain study.
 
 ## Installation
 
 You can install the development version of OmopSketch from [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("oxford-pharmacoepi/OmopSketch")
+# install.packages("remotes")
+remotes::install_github("oxford-pharmacoepi/OmopSketch")
 ```
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+Let's create a cdm, for this example we will use eunomia:
 
-```{r example}
-library(OmopSketch)
-## basic example code
+```{r, message=TRUE}
+library(duckdb)
+library(CDMConnector)
+library(dplyr)
+con <- dbConnect(duckdb(), eunomia_dir())
+cdm <- cdmFromCon(con = con, cdmSchema = "main", writeSchema = "main")
+cdm
 ```
 
+We can characterise the drug_exposure table:
+
+```{r}
+library(OmopSketch)
+result <- summariseOmopTable()
+result |> glimpse()
+```
+
+We can create a visualisation of this table:
+
+```{r}
+tableOmopTable(result)
+```
