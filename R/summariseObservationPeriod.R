@@ -32,8 +32,8 @@ summariseObservationPeriod <- function(observationPeriod, unit = "year", unitInt
   if(missing(unit)){unit <- "year"}
   if(missing(unitInterval)){unitInterval <- 1}
 
-  unitChecks(unit)
-  unitIntervalChecks(unitInterval)
+  checkUnit(unit)
+  checkUnitInterval(unitInterval)
 
   cdm <- omopgenerics::cdmReference(observationPeriod)
 
@@ -70,7 +70,7 @@ summariseObservationPeriod <- function(observationPeriod, unit = "year", unitInt
       "cdm_name" = omopgenerics::cdmName(omopgenerics::cdmReference(observationPeriod)),
       "group_name"  = "omop_table",
       "group_level" = name,
-      "variable_level" = gsub(" to.*","",strata_level),
+      "variable_level" = gsub(" to.*","",.data$strata_level),
       "estimate_name" = "count",
       "estimate_type" = "integer",
       "additional_name" = "overall",

@@ -76,4 +76,3 @@ test_that("tableOmopTable() works", {
 
 })
 
-

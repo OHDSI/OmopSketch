@@ -3,22 +3,24 @@
 #' @param omopTable A summarised_result object with the output from summariseOmopTable().
 #' @param unit Whether to stratify by "year" or by "month"
 #' @param unitInterval Number of years or months to stratify with
+#' @param ageGroup A list of age groups to stratify results by.
 #'
 #' @return A summarised_result object with the summarised data.
 #'
 #' @importFrom rlang :=
 #' @export
 #'
-summariseTableCounts<- function(omopTable, unit = "year", unitInterval = 1) {
+summariseRecordCount <- function(omopTable, unit = "year", unitInterval = 1, ageGroup = NULL) {
 
   # Initial checks ----
-  omopTableChecks(omopTable)
+  checkOmopTable(omopTable)
 
   if(missing(unit)){unit <- "year"}
   if(missing(unitInterval)){unitInterval <- 1}
 
-  unitChecks(unit)
-  unitIntervalChecks(unitInterval)
+  checkUnit(unit)
+  checkUnitInterval(unitInterval)
+  checkAgeGroup(ageGroup)
 
   cdm <- omopgenerics::cdmReference(omopTable)
   omopTable <- omopTable |> dplyr::ungroup()
@@ -32,9 +34,15 @@ summariseTableCounts<- function(omopTable, unit = "year", unitInterval = 1) {
     return(result)
   }
 
+  # Create strata variable ----
+  strata <- dplyr::if_else(is.null(ageGroup), NA, "age_group")
+  if(is.na(strata)){strata <- NULL}
+
   # Incidence counts ----
   omopTable <- omopTable |>
-    dplyr::select(dplyr::all_of(date), "person_id")
+    dplyr::select(dplyr::all_of(date), "person_id") |>
+    PatientProfiles::addAgeQuery(indexDate = date, ageGroup = ageGroup) |>
+    dplyr::select(-c("age"))
 
   if (name != "observation_period") {
     omopTable <- omopTable |>
@@ -52,31 +60,46 @@ summariseTableCounts<- function(omopTable, unit = "year", unitInterval = 1) {
   result <- cdm$interval |>
     dplyr::cross_join(
       omopTable |>
-        dplyr::rename("incidence_date" = dplyr::all_of(date))) |>
+        dplyr::rename("incidence_date" = dplyr::all_of(date))
+      ) |>
     dplyr::filter(.data$incidence_date >= .data$interval_start_date &
                     .data$incidence_date <= .data$interval_end_date) |>
-    dplyr::group_by(.data$interval_group)  |>
+    dplyr::group_by(.data$interval_group, dplyr::across(dplyr::all_of(strata))) |>
     dplyr::summarise("estimate_value" = dplyr::n(), .groups = "drop") |>
     dplyr::collect() |>
     dplyr::ungroup()
+
+  if(!is.null(strata)){
+    result <- result |>
+      rbind(
+        result |>
+          dplyr::group_by(.data$interval_group) |>
+          dplyr::summarise(estimate_value = sum(.data$estimate_value), .groups = "drop") |>
+          dplyr::mutate(age_group = "overall")
+      ) |>
+      dplyr::rename() |>
+      dplyr::mutate()
+  }else{
+    result <- result |>
+      dplyr::mutate("age_group" = "overall")
+  }
 
   result <- result |>
     dplyr::mutate(
       "estimate_value" = as.character(.data$estimate_value),
       "variable_name" = "incidence_records",
     ) |>
-    dplyr::rename("time_interval" = "interval_group") |>
-    visOmopResults::uniteStrata(cols = "time_interval") |>
+    dplyr::rename("variable_level" = "interval_group") |>
+    visOmopResults::uniteStrata(cols = "age_group") |>
     dplyr::mutate(
       "result_id" = as.integer(1),
       "cdm_name" = omopgenerics::cdmName(omopgenerics::cdmReference(omopTable)),
       "group_name"  = "omop_table",
       "group_level" = name,
-      "variable_level" = gsub(" to.*","",strata_level),
       "estimate_name" = "count",
       "estimate_type" = "integer",
-      "additional_name" = "overall",
-      "additional_level" = "overall"
+      "additional_name" = "time_interval",
+      "additional_level" = gsub(" to.*","",.data$variable_level)
     ) |>
     omopgenerics::newSummarisedResult(settings = dplyr::tibble(
       "result_id" = 1L,
@@ -92,33 +115,8 @@ summariseTableCounts<- function(omopTable, unit = "year", unitInterval = 1) {
   return(result)
 }
 
-omopTableChecks <- function(omopTable){
-  assertClass(omopTable, "omop_table")
-  omopTable |>
-    omopgenerics::tableName() |>
-    assertChoice(choices = tables$table_name)
-}
 
-unitChecks <- function(unit){
-  inherits(unit, "character")
-  assertLength(unit, 1)
-  if(!unit %in% c("year","month")){
-    cli::cli_abort("units value is not valid. Valid options are year or month.")
-  }
-}
-
-unitIntervalChecks <- function(unitInterval){
-  inherits(unitInterval, c("numeric", "integer"))
-  assertLength(unitInterval, 1)
-  if(unitInterval < 1){
-    cli::cli_abort("unitInterval input has to be equal or greater than 1.")
-  }
-  if(!(unitInterval%%1 == 0)){
-    cli::cli_abort("unitInterval has to be an integer.")
-  }
-}
-
-filterInObservation <- function(x, indexDate) {
+filterInObservation <- function(x, indexDate){
   cdm <- omopgenerics::cdmReference(x)
   id <- c("person_id", "subject_id")
   id <- id[id %in% colnames(x)]

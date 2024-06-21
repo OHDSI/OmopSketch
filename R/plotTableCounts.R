@@ -30,5 +30,6 @@ plotTableCounts <- function(summarisedTableCounts) {
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust=1)) +
     ggplot2::xlab("Time") +
     ggplot2::ylab("Counts") +
-    ggplot2::labs(color = "Omop table")
+    ggplot2::labs(color = "Omop table") +
+    ggplot2::theme_bw()
 }
