@@ -47,14 +47,16 @@ summariseRecordCount <- function(omopTable, unit = "year", unitInterval = 1, age
 
   if(FALSE %in% c(names(ageGroup) == "overall")){
     omopTable <- omopTable |>
-      PatientProfiles::addAgeQuery(indexDate = date, ageGroup = ageGroup) |>
+      PatientProfiles::addAgeQuery(indexDate = date, ageGroup = ageGroup, missingAgeGroupValue = "unknown") |>
+      dplyr::mutate(age_group = dplyr::if_else(is.na(.data$age_group), "unknown", .data$age_group)) |>
       dplyr::select(-tidyselect::any_of(c("age")))
   }else{
     omopTable <- omopTable |> dplyr::mutate(age_group = "overall")
   }
 
   if(sex){
-    omopTable <- omopTable |> PatientProfiles::addSexQuery()
+    omopTable <- omopTable |> PatientProfiles::addSexQuery() |>
+      dplyr::mutate(sex = dplyr::if_else(is.na(.data$sex), "unknown", .data$sex))
   }else{
     omopTable <- omopTable |> dplyr::mutate(sex = "overall")
   }
@@ -182,7 +184,7 @@ createOverallGroup <- function(result, ageGroup, sex, strata){
       rbind(
         result |>
           dplyr::group_by(.data$interval_group) |>
-          dplyr::summarise(estimate_value = sum(.data$estimate_value), .groups = "drop") |>
+          dplyr::summarise(estimate_value = sum(.data$estimate_value, na.rm = TRUE), .groups = "drop") |>
           dplyr::mutate(age_group = "overall", sex = "overall")
       ) |>
       dplyr::rename()
@@ -192,7 +194,7 @@ createOverallGroup <- function(result, ageGroup, sex, strata){
       rbind(
         result |>
           dplyr::group_by(.data$interval_group, .data$sex) |>
-          dplyr::summarise(estimate_value = sum(.data$estimate_value), .groups = "drop") |>
+          dplyr::summarise(estimate_value = sum(.data$estimate_value, na.rm = TRUE), .groups = "drop") |>
           dplyr::mutate(age_group = "overall")
       )
 
@@ -201,7 +203,7 @@ createOverallGroup <- function(result, ageGroup, sex, strata){
       rbind(
         result |>
           dplyr::group_by(.data$interval_group, .data$age_group) |>
-          dplyr::summarise(estimate_value = sum(.data$estimate_value), .groups = "drop") |>
+          dplyr::summarise(estimate_value = sum(.data$estimate_value, na.rm = TRUE), .groups = "drop") |>
           dplyr::mutate(sex = "overall")
       )
   }else if(!sex & !ageStrata){ # If no stratification
@@ -211,7 +213,7 @@ createOverallGroup <- function(result, ageGroup, sex, strata){
       rbind(
         result |>
           dplyr::group_by(.data$interval_group, .data$sex) |>
-          dplyr::summarise(estimate_value = sum(.data$estimate_value), .groups = "drop") |>
+          dplyr::summarise(estimate_value = sum(.data$estimate_value, na.rm = TRUE), .groups = "drop") |>
           dplyr::mutate(age_group = "overall")
       )
   }else if(sex & !ageStrata){ # If only sex stratification
@@ -219,7 +221,7 @@ createOverallGroup <- function(result, ageGroup, sex, strata){
       rbind(
         result |>
           dplyr::group_by(.data$interval_group, .data$age_group) |>
-          dplyr::summarise(estimate_value = sum(.data$estimate_value), .groups = "drop") |>
+          dplyr::summarise(estimate_value = sum(.data$estimate_value, na.rm = TRUE), .groups = "drop") |>
           dplyr::mutate(sex = "overall")
       )
   }
