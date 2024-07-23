@@ -2,27 +2,30 @@
 % Please edit documentation in R/summariseRecordCount.R
 \name{summariseRecordCount}
 \alias{summariseRecordCount}
-\title{Create a gt table from a summarised omop_table.}
+\title{Create a summarise result object to summarise record counts for different time intervals.}
 \usage{
 summariseRecordCount(
   omopTable,
   unit = "year",
   unitInterval = 1,
-  ageGroup = NULL
+  ageGroup = NULL,
+  sex = FALSE
 )
 }
 \arguments{
 \item{omopTable}{An omop table from a cdm object.}
 
-\item{unit}{Whether to stratify by "year" or by "month"}
+\item{unit}{Whether to stratify by "year" or by "month".}
 
-\item{unitInterval}{Number of years or months to stratify with}
+\item{unitInterval}{Number of years or months to stratify with.}
 
 \item{ageGroup}{A list of age groups to stratify results by.}
+
+\item{sex}{Whether to stratify by sex (TRUE) or not (FALSE).}
 }
 \value{
 A summarised_result object with the summarised data.
 }
 \description{
-Create a gt table from a summarised omop_table.
+Create a summarise result object to summarise record counts for different time intervals.
 }

@@ -51,7 +51,6 @@ checkUnitInterval <- function(unitInterval){
   }
 }
 
-
 #' @noRd
 checkCategory <- function(category, overlap = FALSE, type = "numeric") {
   checkmate::assertList(
@@ -119,3 +118,4 @@ checkCategory <- function(category, overlap = FALSE, type = "numeric") {
 
   invisible(result)
 }
+
