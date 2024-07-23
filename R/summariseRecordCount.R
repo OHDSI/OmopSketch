@@ -1,6 +1,6 @@
 #' Create a gt table from a summarised omop_table.
 #'
-#' @param omopTable A summarised_result object with the output from summariseOmopTable().
+#' @param omopTable An omop table from a cdm object.
 #' @param unit Whether to stratify by "year" or by "month"
 #' @param unitInterval Number of years or months to stratify with
 #' @param ageGroup A list of age groups to stratify results by.
@@ -11,108 +11,117 @@
 #' @export
 #'
 summariseRecordCount <- function(omopTable, unit = "year", unitInterval = 1, ageGroup = NULL) {
-
-  # Initial checks ----
-  checkOmopTable(omopTable)
-
-  if(missing(unit)){unit <- "year"}
-  if(missing(unitInterval)){unitInterval <- 1}
-
-  checkUnit(unit)
-  checkUnitInterval(unitInterval)
-  checkAgeGroup(ageGroup)
-
-  cdm <- omopgenerics::cdmReference(omopTable)
-  omopTable <- omopTable |> dplyr::ungroup()
-
-  name   <- omopgenerics::tableName(omopTable)
-  result <- omopgenerics::emptySummarisedResult()
-  date   <- startDate(name)
-
-  if(omopTable |> dplyr::tally() |> dplyr::pull("n") == 0){
-    cli::cli_warn(paste0(omopgenerics::tableName(omopTable), " omop table is empty. Returning an empty summarised result."))
-    return(result)
-  }
-
-  # Create strata variable ----
-  strata <- dplyr::if_else(is.null(ageGroup), NA, "age_group")
-  if(is.na(strata)){strata <- NULL}
-
-  # Incidence counts ----
-  omopTable <- omopTable |>
-    dplyr::select(dplyr::all_of(date), "person_id") |>
-    PatientProfiles::addAgeQuery(indexDate = date, ageGroup = ageGroup) |>
-    dplyr::select(-c("age"))
-
-  if (name != "observation_period") {
-    omopTable <- omopTable |>
-      filterInObservation(indexDate = date)
-  }
-
-  # interval sequence ----
-  interval <- getIntervalTibble(omopTable, date, date, unit, unitInterval)
-
-  # Insert interval table to the cdm ----
-  cdm <- cdm |>
-    omopgenerics::insertTable(name = "interval", table = interval)
-
-  # Create summarised result
-  result <- cdm$interval |>
-    dplyr::cross_join(
-      omopTable |>
-        dplyr::rename("incidence_date" = dplyr::all_of(date))
-      ) |>
-    dplyr::filter(.data$incidence_date >= .data$interval_start_date &
-                    .data$incidence_date <= .data$interval_end_date) |>
-    dplyr::group_by(.data$interval_group, dplyr::across(dplyr::all_of(strata))) |>
-    dplyr::summarise("estimate_value" = dplyr::n(), .groups = "drop") |>
-    dplyr::collect() |>
-    dplyr::ungroup()
-
-  if(!is.null(strata)){
-    result <- result |>
-      rbind(
-        result |>
-          dplyr::group_by(.data$interval_group) |>
-          dplyr::summarise(estimate_value = sum(.data$estimate_value), .groups = "drop") |>
-          dplyr::mutate(age_group = "overall")
-      ) |>
-      dplyr::rename() |>
-      dplyr::mutate()
-  }else{
-    result <- result |>
-      dplyr::mutate("age_group" = "overall")
-  }
-
-  result <- result |>
-    dplyr::mutate(
-      "estimate_value" = as.character(.data$estimate_value),
-      "variable_name" = "incidence_records",
-    ) |>
-    dplyr::rename("variable_level" = "interval_group") |>
-    visOmopResults::uniteStrata(cols = "age_group") |>
-    dplyr::mutate(
-      "result_id" = as.integer(1),
-      "cdm_name" = omopgenerics::cdmName(omopgenerics::cdmReference(omopTable)),
-      "group_name"  = "omop_table",
-      "group_level" = name,
-      "estimate_name" = "count",
-      "estimate_type" = "integer",
-      "additional_name" = "time_interval",
-      "additional_level" = gsub(" to.*","",.data$variable_level)
-    ) |>
-    omopgenerics::newSummarisedResult(settings = dplyr::tibble(
-      "result_id" = 1L,
-      "result_type" = "summarised_table_counts",
-      "package_name" = "OmopSketch",
-      "package_version" = as.character(utils::packageVersion("OmopSketch")),
-      "unit" = .env$unit,
-      "unitInterval" = .env$unitInterval
-    ))
-
-  omopgenerics::dropTable(cdm = cdm, name = "interval")
-
-  return(result)
+#
+#   # Initial checks ----
+#   checkOmopTable(omopTable)
+#
+#   if(missing(unit)){unit <- "year"}
+#   if(missing(unitInterval)){unitInterval <- 1}
+#
+#   checkUnit(unit)
+#   checkUnitInterval(unitInterval)
+#   checkAgeGroup(ageGroup)
+#
+#   cdm <- omopgenerics::cdmReference(omopTable)
+#   omopTable <- omopTable |> dplyr::ungroup()
+#
+#   name   <- omopgenerics::tableName(omopTable)
+#   result <- omopgenerics::emptySummarisedResult()
+#   date   <- startDate(name)
+#
+#   if(omopTable |> dplyr::tally() |> dplyr::pull("n") == 0){
+#     cli::cli_warn(paste0(omopgenerics::tableName(omopTable), " omop table is empty. Returning an empty summarised result."))
+#     return(result)
+#   }
+#
+#   # Create strata variable ----
+#   strata <- dplyr::if_else(is.null(ageGroup), NA, "age_group")
+#   if(is.na(strata)){strata <- NULL}
+#
+#   # Incidence counts ----
+#   omopTable <- omopTable |>
+#     dplyr::select(dplyr::all_of(date), "person_id") |>
+#     PatientProfiles::addAgeQuery(indexDate = date, ageGroup = ageGroup) |>
+#     dplyr::select(-tidyselect::any_of(c("age")))
+#
+#   if (name != "observation_period") {
+#     omopTable <- omopTable |>
+#       filterInObservation(indexDate = date)
+#   }
+#
+#   # interval sequence ----
+#   interval <- getIntervalTibble(omopTable = omopTable,
+#                                 start_date_name = date,
+#                                 end_date_name   = date,
+#                                 unit = unit,
+#                                 unitInterval = unitInterval)
+#
+#   # Insert interval table to the cdm ----
+#   cdm <- cdm |>
+#     omopgenerics::insertTable(name = "interval", table = interval)
+#
+#   # Create summarised result ----
+#   splitIncidenceBetweenIntervals <- function(cdm, omopTable, date){
+#
+#     result <- cdm$interval |>
+#       dplyr::cross_join(
+#         omopTable |>
+#           dplyr::rename("incidence_date" = dplyr::all_of(date))
+#       ) |>
+#       dplyr::filter(.data$incidence_date >= .data$interval_start_date &
+#                       .data$incidence_date <= .data$interval_end_date) |>
+#       dplyr::group_by(.data$interval_group, dplyr::across(dplyr::any_of(strata))) |>
+#       dplyr::summarise("estimate_value" = dplyr::n(), .groups = "drop") |>
+#       dplyr::collect() |>
+#       dplyr::ungroup()
+#
+#   }
+#
+#
+#   if(!is.null(strata)){
+#     result <- result |>
+#       rbind(
+#         result |>
+#           dplyr::group_by(.data$interval_group) |>
+#           dplyr::summarise(estimate_value = sum(.data$estimate_value), .groups = "drop") |>
+#           dplyr::mutate(age_group = "overall")
+#       ) |>
+#       dplyr::rename() |>
+#       dplyr::mutate()
+#   }else{
+#     result <- result |>
+#       dplyr::mutate("age_group" = "overall")
+#   }
+#
+#   result <- result |>
+#     dplyr::mutate(
+#       "estimate_value" = as.character(.data$estimate_value),
+#       "variable_name" = "incidence_records",
+#     ) |>
+#     dplyr::rename("variable_level" = "interval_group") |>
+#     visOmopResults::uniteStrata(cols = "age_group") |>
+#     dplyr::mutate(
+#       "result_id" = as.integer(1),
+#       "cdm_name" = omopgenerics::cdmName(omopgenerics::cdmReference(omopTable)),
+#       "group_name"  = "omop_table",
+#       "group_level" = name,
+#       "estimate_name" = "count",
+#       "estimate_type" = "integer",
+#       "additional_name" = "time_interval",
+#       "additional_level" = gsub(" to.*","",.data$variable_level)
+#     ) |>
+#     omopgenerics::newSummarisedResult(settings = dplyr::tibble(
+#       "result_id" = 1L,
+#       "result_type" = "summarised_table_counts",
+#       "package_name" = "OmopSketch",
+#       "package_version" = as.character(utils::packageVersion("OmopSketch")),
+#       "unit" = .env$unit,
+#       "unitInterval" = .env$unitInterval
+#     ))
+#
+#   omopgenerics::dropTable(cdm = cdm, name = "interval")
+#
+#   return(result)
 }
 
 

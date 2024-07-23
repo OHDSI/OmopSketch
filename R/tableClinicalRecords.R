@@ -1,6 +1,6 @@
 #' Create a gt table from a summarised omop_table.
 #'
-#' @param summarisedClinicalRecords A summarised_result object with the output from summariseOmopTable().
+#' @param summarisedClinicalRecords A summarised_result object with the output from summariseClinicalRecords().
 #'
 #' @return A gt object with the summarised data.
 #'
@@ -50,7 +50,7 @@ tableClinicalRecords <- function(summarisedClinicalRecords) {
         "median [IQR]" = "<median> [<q25> - <q75>]",
         "mean (sd)" = "<mean> (<sd>)"
       ),
-      keepNotFormatted = FALSE
+      keepNotFormatted = TRUE
     ) |>
     suppressMessages() |>
     visOmopResults::formatHeader(header = "cdm_name") |>

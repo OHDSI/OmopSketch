@@ -73,6 +73,5 @@ test_that("tableClinicalRecords() works", {
   expect_true(inherits(x,"gt_tbl"))
   expect_warning(tableClinicalRecords(summariseClinicalRecords(cdm$death)))
   expect_true(inherits(tableClinicalRecords(summariseClinicalRecords(cdm$death)),"gt_tbl"))
-
 })
 

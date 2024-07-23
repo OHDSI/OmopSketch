@@ -52,12 +52,12 @@ We can characterise the drug_exposure table:
 
 ```{r}
 library(OmopSketch)
-result <- summariseOmopTable(cdm$drug_exposure)
+result <- summariseClinicalRecords(cdm$drug_exposure)
 result |> glimpse()
 ```
 
 We can create a visualisation of this table:
 
 ```{r}
-tableOmopTable(result)
+tableClinicalRecords(result)
 ```

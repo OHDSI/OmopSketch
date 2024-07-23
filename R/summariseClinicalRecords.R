@@ -18,7 +18,7 @@
 #'
 #' @export
 #'
-summariseClinicalTables <- function(omopTable,
+summariseClinicalRecords <- function(omopTable,
                                recordsPerPerson = c("mean", "sd", "median", "q25", "q75", "min", "max"),
                                inObservation = TRUE,
                                standardConcept = TRUE,
