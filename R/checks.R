@@ -51,7 +51,6 @@ checkUnitInterval <- function(unitInterval){
   }
 }
 
-
 #' @noRd
 checkCategory <- function(category, overlap = FALSE, type = "numeric") {
   checkmate::assertList(
@@ -118,4 +117,11 @@ checkCategory <- function(category, overlap = FALSE, type = "numeric") {
   }
 
   invisible(result)
+}
+
+
+checkFacetBy <- function(summarisedRecordCount, facet_by){
+  if(!facet_by %in% colnames(summarisedRecordCount) & !is.null(facet_by)){
+    cli::cli_abort("facet_by argument has to be one of the columns from the summarisedRecordCount object.")
+  }
 }
