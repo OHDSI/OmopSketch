@@ -27,7 +27,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Create a gt table from a summarised omop_table.</h1>
-      <small class="dont-index">Source: <a href="https://github.com/oxford-pharmacoepi/OmopSketch/blob/main/R/plotTableCounts.R" class="external-link"><code>R/plotTableCounts.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/oxford-pharmacoepi/OmopSketch/blob/main/R/plotRecordCount.R" class="external-link"><code>R/plotRecordCount.R</code></a></small>
       <div class="d-none name"><code>plotRecordCount.Rd</code></div>
     </div>
 
@@ -37,7 +37,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plotRecordCount</span><span class="op">(</span><span class="va">summarisedRecordCount</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plotRecordCount</span><span class="op">(</span><span class="va">summarisedRecordCount</span>, facet <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -46,6 +46,12 @@
 
 <dl><dt id="arg-summarisedrecordcount">summarisedRecordCount<a class="anchor" aria-label="anchor" href="#arg-summarisedrecordcount"></a></dt>
 <dd><p>A summarised_result object with the output from summariseTableCounts().</p></dd>
+
+
+<dt id="arg-facet">facet<a class="anchor" aria-label="anchor" href="#arg-facet"></a></dt>
+<dd><p>columns in data to facet. If the facet position wants to be specified, use the formula class for the input
+(e.g., strata ~ group_level + cdm_name). Variables before "~" will be facet by on horizontal axis, whereas those after "~" on vertical axis.
+Only the following columns are allowed to be facet by: "cdm_name", "group_level", "strata_level".</p></dd>
 
 </dl></div>
     <div class="section level2">
