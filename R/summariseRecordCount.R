@@ -18,11 +18,13 @@ summariseRecordCount <- function(omopTable, unit = "year", unitInterval = 1, age
 
   if(missing(unit)){unit <- "year"}
   if(missing(unitInterval)){unitInterval <- 1}
-  if(missing(ageGroup) | is.null(ageGroup)){ageGroup <- list("overall" = c(0, Inf))}
+  if(missing(ageGroup) | is.null(ageGroup)){ageGroup <- NULL}
 
   checkUnit(unit)
   checkUnitInterval(unitInterval)
   checkAgeGroup(ageGroup)
+
+  assertLogical(sex, length = 1)
 
   if(omopTable |> dplyr::tally() |> dplyr::pull("n") == 0){
     cli::cli_warn(paste0(omopgenerics::tableName(omopTable), " omop table is empty. Returning an empty summarised result."))
@@ -46,21 +48,7 @@ summariseRecordCount <- function(omopTable, unit = "year", unitInterval = 1, age
     dplyr::select(dplyr::all_of(date), "person_id")
 
   # Use add demographic query -> when both are true (age = FALSE)
-  if(FALSE %in% c(names(ageGroup) == "overall")){
-    omopTable <- omopTable |>
-      PatientProfiles::addAgeQuery(indexDate = date, ageGroup = ageGroup, missingAgeGroupValue = "unknown") |>
-      dplyr::mutate(age_group = dplyr::if_else(is.na(.data$age_group), "unknown", .data$age_group)) |> # To remove: https://github.com/darwin-eu-dev/PatientProfiles/issues/677
-      dplyr::select(-dplyr::any_of(c("age")))
-  }else{
-    omopTable <- omopTable |> dplyr::mutate(age_group = "overall")
-  }
-
-  if(sex){
-    omopTable <- omopTable |> PatientProfiles::addSexQuery(missingSexValue = "unknown") |>
-      dplyr::mutate(sex = dplyr::if_else(is.na(.data$sex), "unknown", .data$sex)) # To remove: https://github.com/darwin-eu-dev/PatientProfiles/issues/677
-  }else{
-    omopTable <- omopTable |> dplyr::mutate(sex = "overall")
-  }
+  omopTable <- addDemographicsToOmopTable(omopTable, date, ageGroup, sex)
 
   if(name != "observation_period") {
     omopTable <- omopTable |>
@@ -85,12 +73,29 @@ summariseRecordCount <- function(omopTable, unit = "year", unitInterval = 1, age
   result <- createOverallGroup(result, ageGroup, sex, strata)
 
   # Create summarised result ----
-  result <- createSummarisedResult(result, omopTable, name, unit, unitInterval)
+  result <- createSummarisedResultRecordCount(result, omopTable, name, unit, unitInterval)
   omopgenerics::dropTable(cdm = cdm, name = "interval")
 
   return(result)
 }
 
+addDemographicsToOmopTable <- function(omopTable, date, ageGroup, sex){
+  suppressWarnings(omopTable |>
+                     dplyr::mutate(sex = "overall") |>
+                     dplyr::mutate(age_group = "overall") |>
+                     PatientProfiles::addDemographicsQuery(indexDate = date,
+                                                           age = FALSE,
+                                                           ageGroup = ageGroup,
+                                                           missingAgeGroupValue = "unknown",
+                                                           sex = sex,
+                                                           missingSexValue = "unknown",
+                                                           priorObservation = FALSE,
+                                                           futureObservation = FALSE,
+                                                           dateOfBirth = FALSE) |>
+                     dplyr::mutate(age_group = dplyr::if_else(is.na(.data$age_group), "unknown", .data$age_group)) |> # To remove: https://github.com/darwin-eu-dev/PatientProfiles/issues/677
+                     dplyr::mutate(sex = dplyr::if_else(is.na(.data$sex), "unknown", .data$sex))) # To remove: https://github.com/darwin-eu-dev/PatientProfiles/issues/677
+
+}
 
 filterInObservation <- function(x, indexDate){
   cdm <- omopgenerics::cdmReference(x)
@@ -158,7 +163,7 @@ getIntervalTibble <- function(omopTable, start_date_name, end_date_name, unit, u
     ) |>
     dplyr::ungroup() |>
     dplyr::mutate("my" = paste0(lubridate::month(.data$group),"-",lubridate::year(.data$group))) |>
-    dplyr::select("interval_group", "my") |>
+    dplyr::select("interval_group", "my", "interval_start_date","interval_end_date") |>
     dplyr::distinct()
 }
 
@@ -230,7 +235,7 @@ createOverallGroup <- function(result, ageGroup, sex, strata){
   return(result)
 }
 
-createSummarisedResult <- function(result, omopTable, name, unit, unitInterval){
+createSummarisedResultRecordCount <- function(result, omopTable, name, unit, unitInterval){
   result <- result |>
     dplyr::mutate(
       "estimate_value" = as.character(.data$estimate_value),

@@ -82,7 +82,7 @@ test_that("plotRecordCount() works", {
   cdm <- CDMConnector::cdmFromCon(
     con = con, cdmSchema = "main", writeSchema = "main"
   )
-  expect_true(inherits(plotRecordCount(summariseRecordCount(cdm$drug_exposure, unitInterval = 8)),"ggplot"))
+  expect_warning(inherits(plotRecordCount(summariseRecordCount(cdm$drug_exposure, unitInterval = 8)),"ggplot"))
   # expect_warning(inherits(plotRecordCount(summariseRecordCount(cdm$death, unitInterval = 8)),"ggplot"))
 })
 
@@ -201,8 +201,8 @@ test_that("summariseRecordCount() sex argument works", {
 
 
 
-# omopTable <- cdm$condition_occurrence
+# omopTable <- cdm$observation_period
 # ageGroup  <- NULL #list("<=20" = c(0,20), "21 to 40" = c(21,40), "41 to 60" = c(41,60), ">60" = c(61, Inf))
 # unit <- "year"
 # unitInterval <- 10
-# sex <- FALSE #TRUE
+# sex <- TRUE
