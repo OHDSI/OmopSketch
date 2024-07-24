@@ -1,21 +1,21 @@
 #' Create a gt table from a summarised omop_table.
 #'
-#' @param summarisedOmopTable A summarised_result object with the output from summariseOmopTable().
+#' @param summarisedClinicalRecords A summarised_result object with the output from summariseClinicalRecords().
 #'
 #' @return A gt object with the summarised data.
 #'
 #' @export
 #'
-tableOmopTable <- function(summarisedOmopTable) {
+tableClinicalRecords <- function(summarisedClinicalRecords) {
 
   # Initial checks ----
-  assertClass(summarisedOmopTable, "summarised_result")
+  assertClass(summarisedClinicalRecords, "summarised_result")
 
-  if(summarisedOmopTable |> dplyr::tally() |> dplyr::pull("n") == 0){
-    cli::cli_warn("summarisedOmopTable is empty.")
+  if(summarisedClinicalRecords |> dplyr::tally() |> dplyr::pull("n") == 0){
+    cli::cli_warn("summarisedClinicalRecords is empty.")
 
     return(
-      summarisedOmopTable |>
+      summarisedClinicalRecords |>
       visOmopResults::splitGroup() |>
       visOmopResults::formatHeader(header = "cdm_name") |>
       dplyr::select(-c("estimate_type", "result_id",
@@ -29,7 +29,7 @@ tableOmopTable <- function(summarisedOmopTable) {
     )
   }
 
-  t <- summarisedOmopTable |>
+  t <- summarisedClinicalRecords |>
     dplyr::mutate(order = dplyr::case_when(
       variable_name == "Number of subjects"  ~ 1,
       variable_name == "Number of records" ~ 2,
@@ -50,7 +50,7 @@ tableOmopTable <- function(summarisedOmopTable) {
         "median [IQR]" = "<median> [<q25> - <q75>]",
         "mean (sd)" = "<mean> (<sd>)"
       ),
-      keepNotFormatted = FALSE
+      keepNotFormatted = TRUE
     ) |>
     suppressMessages() |>
     visOmopResults::formatHeader(header = "cdm_name") |>

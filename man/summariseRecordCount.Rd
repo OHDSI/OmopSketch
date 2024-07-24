@@ -12,7 +12,7 @@ summariseRecordCount(
 )
 }
 \arguments{
-\item{omopTable}{A summarised_result object with the output from summariseOmopTable().}
+\item{omopTable}{An omop table from a cdm object.}
 
 \item{unit}{Whether to stratify by "year" or by "month"}
 
