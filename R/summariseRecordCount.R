@@ -1,4 +1,4 @@
-#' Create a summarise result object to summarise record counts for different time intervals.
+#' Create a summarise result object to summarise record counts for different time intervals. Only records that fall within the observation period are counted.
 #'
 #' @param omopTable An omop table from a cdm object.
 #' @param unit Whether to stratify by "year" or by "month".
@@ -45,18 +45,19 @@ summariseRecordCount <- function(omopTable, unit = "year", unitInterval = 1, age
   omopTable <- omopTable |>
     dplyr::select(dplyr::all_of(date), "person_id")
 
+  # Use add demographic query -> when both are true (age = FALSE)
   if(FALSE %in% c(names(ageGroup) == "overall")){
     omopTable <- omopTable |>
       PatientProfiles::addAgeQuery(indexDate = date, ageGroup = ageGroup, missingAgeGroupValue = "unknown") |>
-      dplyr::mutate(age_group = dplyr::if_else(is.na(.data$age_group), "unknown", .data$age_group)) |>
-      dplyr::select(-tidyselect::any_of(c("age")))
+      dplyr::mutate(age_group = dplyr::if_else(is.na(.data$age_group), "unknown", .data$age_group)) |> # To remove: https://github.com/darwin-eu-dev/PatientProfiles/issues/677
+      dplyr::select(-dplyr::any_of(c("age")))
   }else{
     omopTable <- omopTable |> dplyr::mutate(age_group = "overall")
   }
 
   if(sex){
-    omopTable <- omopTable |> PatientProfiles::addSexQuery() |>
-      dplyr::mutate(sex = dplyr::if_else(is.na(.data$sex), "unknown", .data$sex))
+    omopTable <- omopTable |> PatientProfiles::addSexQuery(missingSexValue = "unknown") |>
+      dplyr::mutate(sex = dplyr::if_else(is.na(.data$sex), "unknown", .data$sex)) # To remove: https://github.com/darwin-eu-dev/PatientProfiles/issues/677
   }else{
     omopTable <- omopTable |> dplyr::mutate(sex = "overall")
   }
@@ -108,7 +109,8 @@ filterInObservation <- function(x, indexDate){
     ) |>
     dplyr::filter(
       .data[[indexDate]] >= .data$start & .data[[indexDate]] <= .data$end
-    )
+    ) |>
+    dplyr::select(-c("start","end"))
 }
 
 getOmopTableStartDate <- function(omopTable, date){
@@ -132,7 +134,7 @@ getIntervalTibble <- function(omopTable, start_date_name, end_date_name, unit, u
   endDate   <- getOmopTableEndDate(omopTable, end_date_name)
 
   tibble::tibble(
-    "group" = seq.Date(as.Date(startDate), as.Date(endDate), .env$unit)
+    "group" = seq.Date(as.Date(startDate), as.Date(endDate), "month")
   ) |>
     dplyr::rowwise() |>
     dplyr::mutate("interval" = max(which(
@@ -155,24 +157,28 @@ getIntervalTibble <- function(omopTable, start_date_name, end_date_name, unit, u
       "interval_group" = paste(.data$interval_start_date,"to",.data$interval_end_date)
     ) |>
     dplyr::ungroup() |>
-    dplyr::select("interval_start_date", "interval_end_date", "interval_group") |>
+    dplyr::mutate("my" = paste0(lubridate::month(.data$group),"-",lubridate::year(.data$group))) |>
+    dplyr::select("interval_group", "my") |>
     dplyr::distinct()
 }
 
 splitIncidenceBetweenIntervals <- function(cdm, omopTable, date, strata){
-  result <- cdm$interval |>
-    dplyr::cross_join(
-      omopTable |>
-        dplyr::rename("incidence_date" = dplyr::all_of(date))
-    ) |>
-    dplyr::filter(.data$incidence_date >= .data$interval_start_date &
-                    .data$incidence_date <= .data$interval_end_date) |>
-    dplyr::group_by(.data$interval_group, dplyr::across(dplyr::any_of(strata))) |>
-    dplyr::summarise("estimate_value" = dplyr::n(), .groups = "drop") |>
-    dplyr::collect() |>
-    dplyr::ungroup()
 
-  return(result)
+  cdm$interval |>
+    dplyr::inner_join(
+      omopTable |>
+        dplyr::rename("incidence_date" = dplyr::all_of(.env$date)) |>
+        dplyr::mutate("my" = paste0(lubridate::month(.data$incidence_date),"-",lubridate::year(.data$incidence_date))) |>
+        dplyr::group_by(.data$age_group,.data$sex,.data$my) |>
+        dplyr::summarise(n = dplyr::n()) |>
+        dplyr::ungroup(),
+      by = "my"
+    ) |>
+    dplyr::select(-c("my")) |>
+    dplyr::group_by(.data$interval_group, dplyr::across(dplyr::any_of(strata))) |>
+    dplyr::summarise("estimate_value" = sum(.data$n, na.rm = TRUE), .groups = "drop") |>
+    dplyr::collect() |>
+    dplyr::arrange(.data$interval_group)
 }
 
 createOverallGroup <- function(result, ageGroup, sex, strata){
@@ -187,19 +193,14 @@ createOverallGroup <- function(result, ageGroup, sex, strata){
           dplyr::summarise(estimate_value = sum(.data$estimate_value, na.rm = TRUE), .groups = "drop") |>
           dplyr::mutate(age_group = "overall", sex = "overall")
       ) |>
-      dplyr::rename()
-
     # Create ageGroup = overall for each sex group
-    result <- result |>
       rbind(
         result |>
           dplyr::group_by(.data$interval_group, .data$sex) |>
           dplyr::summarise(estimate_value = sum(.data$estimate_value, na.rm = TRUE), .groups = "drop") |>
           dplyr::mutate(age_group = "overall")
-      )
-
+      ) |>
     # Create sex group = overall for each ageGroup
-    result <- result |>
       rbind(
         result |>
           dplyr::group_by(.data$interval_group, .data$age_group) |>

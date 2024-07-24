@@ -2,7 +2,7 @@
 % Please edit documentation in R/summariseRecordCount.R
 \name{summariseRecordCount}
 \alias{summariseRecordCount}
-\title{Create a summarise result object to summarise record counts for different time intervals.}
+\title{Create a summarise result object to summarise record counts for different time intervals. Only records that fall within the observation period are counted.}
 \usage{
 summariseRecordCount(
   omopTable,
@@ -27,5 +27,5 @@ summariseRecordCount(
 A summarised_result object with the summarised data.
 }
 \description{
-Create a summarise result object to summarise record counts for different time intervals.
+Create a summarise result object to summarise record counts for different time intervals. Only records that fall within the observation period are counted.
 }
