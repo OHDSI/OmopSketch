@@ -36,6 +36,7 @@ Imports:
     omopgenerics (>= 0.0.3),
     PatientProfiles,
     rlang,
+    stringr,
     tibble,
     tidyr,
     visOmopResults
