@@ -26,6 +26,7 @@ Imports:
     CDMConnector (>= 1.3.0),
     checkmate,
     cli,
+    clock,
     CohortCharacteristics,
     dplyr,
     ggplot2,
@@ -39,8 +40,7 @@ Imports:
     stringr,
     tibble,
     tidyr,
-    visOmopResults,
-    clock
+    visOmopResults
 Depends: 
     R (>= 2.10)
 URL: https://oxford-pharmacoepi.github.io/OmopSketch/

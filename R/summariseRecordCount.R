@@ -122,7 +122,7 @@ getOmopTableStartDate <- function(omopTable, date){
   omopTable |>
     dplyr::summarise("startDate" = min(.data[[date]], na.rm = TRUE)) |>
     dplyr::collect() |>
-    dplyr::mutate("startDate" = as.Date(paste0(lubridate::year(startDate),"-01-01"))) |>
+    dplyr::mutate("startDate" = as.Date(paste0(clock::get_year(startDate),"-01-01"))) |>
     dplyr::pull("startDate")
 }
 
@@ -130,7 +130,7 @@ getOmopTableEndDate   <- function(omopTable, date){
   omopTable |>
     dplyr::summarise("endDate" = max(.data[[date]], na.rm = TRUE)) |>
     dplyr::collect() |>
-    dplyr::mutate("endDate" = as.Date(paste0(lubridate::year(endDate),"-12-31"))) |>
+    dplyr::mutate("endDate" = as.Date(paste0(clock::get_year(endDate),"-12-31"))) |>
     dplyr::pull("endDate")
 }
 
@@ -162,7 +162,7 @@ getIntervalTibble <- function(omopTable, start_date_name, end_date_name, unit, u
       "interval_group" = paste(.data$interval_start_date,"to",.data$interval_end_date)
     ) |>
     dplyr::ungroup() |>
-    dplyr::mutate("my" = paste0(lubridate::month(.data$group),"-",lubridate::year(.data$group))) |>
+    dplyr::mutate("my" = paste0(clock::get_month(.data$group),"-",clock::get_year(.data$group))) |>
     dplyr::select("interval_group", "my", "interval_start_date","interval_end_date") |>
     dplyr::distinct()
 }
@@ -173,7 +173,7 @@ splitIncidenceBetweenIntervals <- function(cdm, omopTable, date, strata){
     dplyr::inner_join(
       omopTable |>
         dplyr::rename("incidence_date" = dplyr::all_of(.env$date)) |>
-        dplyr::mutate("my" = paste0(lubridate::month(.data$incidence_date),"-",lubridate::year(.data$incidence_date))) |>
+        dplyr::mutate("my" = paste0(clock::get_month(.data$incidence_date),"-",clock::get_year(.data$incidence_date))) |>
         dplyr::group_by(.data$age_group,.data$sex,.data$my) |>
         dplyr::summarise(n = dplyr::n()) |>
         dplyr::ungroup(),

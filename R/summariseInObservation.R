@@ -113,7 +113,7 @@ countRecords <- function(observationPeriod, cdm, start_date_name, end_date_name,
 
   x <- observationPeriod %>%
     dplyr::mutate("start" = as.Date(paste0(clock::get_year(.data[[start_date_name]]),"/",clock::get_month(.data[[start_date_name]]),"/01"))) |>
-    dplyr::mutate("end"   = as.Date(paste0(clock::get_year(.data[[start_end_name]]),"/",clock::get_month(.data[[start_end_name]]),"/01"))) |>
+    dplyr::mutate("end"   = as.Date(paste0(clock::get_year(.data[[end_date_name]]),"/",clock::get_month(.data[[end_date_name]]),"/01"))) |>
     dplyr::group_by(.data$start, .data$end, .data$sex) |>
     dplyr::summarise(n = dplyr::n()) |>
     dplyr::compute(
