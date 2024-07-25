@@ -39,7 +39,8 @@ Imports:
     stringr,
     tibble,
     tidyr,
-    visOmopResults
+    visOmopResults,
+    clock
 Depends: 
     R (>= 2.10)
 URL: https://oxford-pharmacoepi.github.io/OmopSketch/

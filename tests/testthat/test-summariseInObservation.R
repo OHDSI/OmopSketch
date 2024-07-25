@@ -131,12 +131,12 @@ test_that("check sex argument works", {
 
 })
 # Load mock database ----
-# con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
-# cdm <- CDMConnector::cdmFromCon(
-#   con = con, cdmSchema = "main", writeSchema = "main"
-# )
-#
-# observationPeriod <- cdm$observation_period
-# unit <- "year"
-# unitInterval <- 2
-# sex <- FALSE
+con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
+cdm <- CDMConnector::cdmFromCon(
+  con = con, cdmSchema = "main", writeSchema = "main"
+)
+
+observationPeriod <- cdm$observation_period
+unit <- "year"
+unitInterval <- 2
+sex <- FALSE

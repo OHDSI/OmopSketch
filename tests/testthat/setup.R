@@ -1,6 +1,7 @@
 on_cran <- function() {
   !interactive() && !isTRUE(as.logical(Sys.getenv("NOT_CRAN", "false")))
 }
+
 if (!on_cran()) {
   withr::local_envvar(
     R_USER_CACHE_DIR = tempfile(),
@@ -9,3 +10,5 @@ if (!on_cran()) {
   )
   CDMConnector::downloadEunomiaData(overwrite = TRUE)
 }
+
+
