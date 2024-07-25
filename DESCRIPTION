@@ -32,7 +32,6 @@ Imports:
     ggplot2,
     gt,
     IncidencePrevalence (>= 0.7.0),
-    lubridate,
     magrittr,
     omopgenerics (>= 0.0.3),
     PatientProfiles,

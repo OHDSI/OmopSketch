@@ -81,7 +81,7 @@ getIntervalTibbleForObservation <- function(omopTable, start_date_name, end_date
   endDate   <- getOmopTableEndDate(omopTable, end_date_name)
 
   tibble::tibble(
-    "group" = seq.Date(as.Date(startDate), as.Date(endDate), .env$unit)
+    "group" = seq.Date(startDate, endDate, .env$unit)
   ) |>
     dplyr::rowwise() |>
     dplyr::mutate("interval" = max(which(
@@ -93,8 +93,8 @@ getIntervalTibbleForObservation <- function(omopTable, start_date_name, end_date
     dplyr::mutate(
       "interval_start_date" = min(.data$group),
       "interval_end_date"   = dplyr::if_else(.env$unit == "year",
-                                             min(.data$group)+lubridate::years(.env$unitInterval)-1,
-                                             min(.data$group)+months(.env$unitInterval)-1)
+                                             clock::add_years(min(.data$group),.env$unitInterval)-1,
+                                             clock::add_months(min(.data$group),.env$unitInterval)-1)
     ) |>
     dplyr::mutate(
       "interval_start_date" = as.Date(.data$interval_start_date),
