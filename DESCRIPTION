@@ -28,6 +28,7 @@ Imports:
     cli,
     clock,
     CohortCharacteristics,
+    CohortConstructor,
     dplyr,
     ggplot2,
     gt,

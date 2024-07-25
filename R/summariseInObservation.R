@@ -3,13 +3,14 @@
 #' @param observationPeriod observation_period omop table.
 #' @param unit Whether to stratify by "year" or by "month".
 #' @param unitInterval Number of years or months to stratify with.
+#' @param ageGroup A list of age groups to stratify results by.
 #' @param sex Whether to stratify by sex (TRUE) or not (FALSE).
 #'
 #' @return A summarised_result object with the summarised data.
 #'
 #' @export
 #'
-summariseInObservation <- function(observationPeriod, unit = "year", unitInterval = 1, sex = FALSE){
+summariseInObservation <- function(observationPeriod, unit = "year", unitInterval = 1, ageGroup = NULL, sex = FALSE){
 
   # Initial checks ----
   assertClass(observationPeriod, "omop_table")
@@ -27,22 +28,19 @@ summariseInObservation <- function(observationPeriod, unit = "year", unitInterva
     return(omopgenerics::emptySummarisedResult())
   }
 
+  checkAgeGroup(ageGroup)
+
   if(missing(unit)){unit <- "year"}
   if(missing(unitInterval)){unitInterval <- 1}
+  if(missing(ageGroup) | is.null(ageGroup)){ageGroup <- list("overall" = c(0,Inf))}else{ageGroup <- append(ageGroup, list("overall" = c(0, Inf)))}
 
   checkUnit(unit)
   checkUnitInterval(unitInterval)
   assertLogical(sex, length = 1)
 
   # Create initial variables ----
-  observationPeriod <- observationPeriod |>
-    dplyr::ungroup()
-
   cdm <- omopgenerics::cdmReference(observationPeriod)
-
-  # Add strata variables ----
-  strata <- c("age_group", "sex")
-  observationPeriod <- addDemographicsToOmopTable(observationPeriod, date = "observation_period_start_date", ageGroup = NULL, sex)
+  observationPeriod <- addStrataVariables(cdm, ageGroup, sex)
 
   # Observation period ----
   name <- "observation_period"
@@ -60,6 +58,9 @@ summariseInObservation <- function(observationPeriod, unit = "year", unitInterva
 
   # Count records ----
   result <- observationPeriod |> countRecords(cdm, start_date_name, end_date_name, unit)
+
+  # Add category sex overall
+  result <- addSexOverall(result, sex)
 
   # Create summarisedResult
   result <- createSummarisedResultObservationPeriod(result, observationPeriod, name, denominator, unit, unitInterval)
@@ -114,7 +115,7 @@ countRecords <- function(observationPeriod, cdm, start_date_name, end_date_name,
   x <- observationPeriod %>%
     dplyr::mutate("start" = as.Date(paste0(clock::get_year(.data[[start_date_name]]),"/",clock::get_month(.data[[start_date_name]]),"/01"))) |>
     dplyr::mutate("end"   = as.Date(paste0(clock::get_year(.data[[end_date_name]]),"/",clock::get_month(.data[[end_date_name]]),"/01"))) |>
-    dplyr::group_by(.data$start, .data$end, .data$sex) |>
+    dplyr::group_by(.data$start, .data$end, .data$sex, .data$age_group) |>
     dplyr::summarise(n = dplyr::n()) |>
     dplyr::compute(
       name = omopgenerics::uniqueTableName(tablePrefix), temporary = FALSE
@@ -124,9 +125,9 @@ countRecords <- function(observationPeriod, cdm, start_date_name, end_date_name,
     dplyr::cross_join(x) |>
     dplyr::filter((.data$start < .data$interval_start_date & .data$end >= .data$interval_start_date) |
                     (.data$start >= .data$interval_start_date & .data$start <= .data$interval_end_date)) |>
-    dplyr::group_by(.data$interval_group, .data$sex) |>
+    dplyr::group_by(.data$interval_group, .data$sex, .data$age_group) |>
     dplyr::summarise(n = sum(.data$n, na.rm = TRUE), .groups = "drop") |>
-    dplyr::select("estimate_value" = "n", "sex", "time_interval" = "interval_group") |>
+    dplyr::select("estimate_value" = "n", "sex", "age_group", "time_interval" = "interval_group") |>
     dplyr::collect() |>
     dplyr::arrange(.data$time_interval)
 
@@ -142,7 +143,7 @@ createSummarisedResultObservationPeriod <- function(result, observationPeriod, n
       "variable_name" = "overlap_records"
     ) |>
     dplyr::rename("variable_level" = "time_interval") |>
-    visOmopResults::uniteStrata(cols = c("sex")) |>
+    visOmopResults::uniteStrata(cols = c("sex", "age_group")) |>
     dplyr::mutate(
       "result_id" = as.integer(1),
       "cdm_name" = omopgenerics::cdmName(omopgenerics::cdmReference(observationPeriod)),
@@ -169,5 +170,63 @@ createSummarisedResultObservationPeriod <- function(result, observationPeriod, n
       "unitInterval" = .env$unitInterval
     ))
 
+  return(result)
+}
+
+addStrataVariables <- function(cdm, ageGroup, sex){
+  cdm$omop_table <- suppressMessages(
+    cdm |>
+      CohortConstructor::demographicsCohort(name = "omop_table",
+                                            sex = NULL,
+                                            ageRange = ageGroup,
+                                            minPriorObservation = NULL,
+                                            minFutureObservation = NULL)
+  )
+
+  age_tibble <- dplyr::tibble(
+    "age_range" = gsub(",","_",gsub("\\)","",gsub("c\\(","",gsub(" ","",ageGroup)))),
+    "age_group" = names(ageGroup)
+  )
+
+  tablePrefix <-  omopgenerics::tmpPrefix()
+
+  settings <- cdm$omop_table |>
+    CDMConnector::settings() |>
+    dplyr::inner_join(age_tibble, by = "age_range") |>
+    dplyr::select("cohort_definition_id","age_group")
+
+  cdm <- cdm |>
+    omopgenerics::insertTable(name = tablePrefix, table = settings)
+
+  observationPeriod <- cdm$omop_table |>
+    dplyr::inner_join(cdm[[tablePrefix]], by = "cohort_definition_id") |>
+    dplyr::rename("observation_period_start_date" = "cohort_start_date",
+                  "observation_period_end_date"   = "cohort_end_date",
+                  "person_id" = "subject_id") |>
+    dplyr::select(-c("cohort_definition_id")) |>
+    dplyr::inner_join(
+      cdm[["person"]] |> dplyr::select("person_id"), by = "person_id"
+    ) |>
+    dplyr::compute(name = "observationPeriod", temporary = FALSE)
+
+  if(sex){
+    observationPeriod <- observationPeriod |> PatientProfiles::addSexQuery()
+  }else{
+    observationPeriod <- observationPeriod |> dplyr::mutate(sex = "overall")
+  }
+
+  CDMConnector::dropTable(cdm, name = tablePrefix)
+  return(observationPeriod)
+}
+
+addSexOverall <- function(result, sex){
+  if(sex){
+    result <- result |> rbind(
+      result |>
+        dplyr::group_by(.data$age_group, .data$time_interval) |>
+        dplyr::summarise(estimate_value = sum(.data$estimate_value, na.rm = TRUE), .groups = "drop") |>
+        dplyr::mutate(sex = "overall")
+    )
+  }
   return(result)
 }
