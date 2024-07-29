@@ -9,3 +9,26 @@ if (!on_cran()) {
   )
   CDMConnector::downloadEunomiaData(overwrite = TRUE)
 }
+connection <- function(type = Sys.getenv("DB_TO_TEST", "duckdb")) {
+  switch(
+    type,
+    "duckdb" = DBI::dbConnect(duckdb::duckdb(), ":memory:")
+  )
+}
+schema <- function(type = Sys.getenv("DB_TO_TEST", "duckdb")) {
+  switch(
+    type,
+    "duckdb" = c(schema = "main", prefix = "os_")
+  )
+}
+cdmEunomia <- function() {
+  con <- connection()
+  schema <- schema()
+  conDuck <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
+  cdmDuck <- CDMConnector::cdmFromCon(
+    con = conDuck, cdmSchema = "main", writeSchema = "main"
+  )
+  cdm <- CDMConnector::copyCdmTo(con = con, cdm = cdmDuck, schema = schema)
+  CDMConnector::cdmDisconnect(cdm = cdmDuck)
+  return(cdm)
+}

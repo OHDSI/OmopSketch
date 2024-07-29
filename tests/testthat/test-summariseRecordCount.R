@@ -1,10 +1,7 @@
 test_that("summariseRecordCount() works", {
 
   # Load mock database ----
-  con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
-  cdm <- CDMConnector::cdmFromCon(
-    con = con, cdmSchema = "main", writeSchema = "main"
-  )
+  cdm <- cdmEunomia()
 
   # Check inputs ----
   expect_true(inherits(summariseRecordCount(omopTable = cdm$observation_period, unit = "month"),"summarised_result"))
@@ -74,24 +71,26 @@ test_that("summariseRecordCount() works", {
          dplyr::tally() |>
          dplyr::pull("n"))
   )
+
+  PatientProfiles::mockDisconnect(cdm = cdm)
 })
 
 test_that("plotRecordCount() works", {
   # Load mock database ----
-  con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
-  cdm <- CDMConnector::cdmFromCon(
-    con = con, cdmSchema = "main", writeSchema = "main"
-  )
-  expect_true(inherits(plotRecordCount(summariseRecordCount(cdm$drug_exposure, unitInterval = 8)),"ggplot"))
+  cdm <- cdmEunomia()
+
+  p <- summariseRecordCount(cdm$drug_exposure, unitInterval = 8) |>
+    plotRecordCount()
+
+  expect_true(inherits(p,"ggplot"))
   # expect_warning(inherits(plotRecordCount(summariseRecordCount(cdm$death, unitInterval = 8)),"ggplot"))
+
+  PatientProfiles::mockDisconnect(cdm = cdm)
 })
 
 test_that("summariseRecordCount() ageGroup argument works", {
   # Load mock database ----
-  con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
-  cdm <- CDMConnector::cdmFromCon(
-    con = con, cdmSchema = "main", writeSchema = "main"
-  )
+  cdm <- cdmEunomia()
 
   # Check that works ----
   expect_no_error(t <- summariseRecordCount(cdm$condition_occurrence, ageGroup = list(">=65" = c(65, Inf), "<65" = c(0,64))))
@@ -140,15 +139,13 @@ test_that("summariseRecordCount() ageGroup argument works", {
     dplyr::pull(n)
   expect_equal(x,y)
 
+  PatientProfiles::mockDisconnect(cdm = cdm)
 })
 
 
 test_that("summariseRecordCount() sex argument works", {
   # Load mock database ----
-  con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
-  cdm <- CDMConnector::cdmFromCon(
-    con = con, cdmSchema = "main", writeSchema = "main"
-  )
+  cdm <- cdmEunomia()
 
   # Check that works ----
   expect_no_error(t <- summariseRecordCount(cdm$condition_occurrence, sex = TRUE))
@@ -197,6 +194,8 @@ test_that("summariseRecordCount() sex argument works", {
     dplyr::pull(n) |>
     as.character()
   expect_equal(x,y)
+
+  PatientProfiles::mockDisconnect(cdm = cdm)
 })
 
 
