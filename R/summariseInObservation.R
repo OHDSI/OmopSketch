@@ -140,7 +140,7 @@ createSummarisedResultObservationPeriod <- function(result, observationPeriod, n
   result <- result |>
     dplyr::mutate(
       "estimate_value" = as.character(.data$estimate_value),
-      "variable_name" = "overlap_records"
+      "variable_name" = "number_of_subjects" # number_person_days
     ) |>
     dplyr::rename("variable_level" = "time_interval") |>
     visOmopResults::uniteStrata(cols = c("sex", "age_group")) |>

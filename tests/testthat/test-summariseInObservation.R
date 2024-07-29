@@ -103,9 +103,9 @@ test_that("plotInObservation works",{
 
   # summariseInObservationPlot plot ----
   x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 8)
-  expect_true(inherits(plotObservationPeriod(x),"ggplot"))
+  expect_true(inherits(plotInObservation(x),"ggplot"))
   x <-  x |> dplyr::filter(result_id == -1)
-  expect_warning(plotObservationPeriod(x))
+  expect_warning(plotInObservation(x))
 })
 
 test_that("check sex argument works", {
@@ -115,6 +115,24 @@ test_that("check sex argument works", {
     con = con, cdmSchema = "main", writeSchema = "main"
   )
 
+  # Check overall
+  x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 8, sex = TRUE) |>
+    dplyr::filter(strata_level %in% c("Male","Female"), variable_level == "1908-01-01 to 1915-12-31", estimate_name == "count") |>
+    dplyr::pull(estimate_value) |> as.numeric() |> sum()
+  y <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 8, sex = TRUE) |>
+    dplyr::filter(strata_level %in% c("overall"), variable_level == "1908-01-01 to 1915-12-31", estimate_name == "count") |>
+    dplyr::pull(estimate_value) |> as.numeric()
+  expect_equal(x,y)
+
+  y <- cdm$observation_period |>
+    dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
+    dplyr::filter(observation_period_start_date < as.Date("1908-01-01") & observation_period_end_date >= as.Date("1908-01-01") |
+                    (observation_period_start_date >= as.Date("1908-01-01") & observation_period_start_date <= as.Date("1915-12-31"))) |>
+    dplyr::tally() |>
+    dplyr::pull()
+  expect_equal(x,y)
+
+  # Check a random group
   x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 8, sex = TRUE) |>
     dplyr::filter(strata_level == "Male", variable_level == "1908-01-01 to 1915-12-31", estimate_name == "count") |>
     dplyr::pull(estimate_value) |> as.numeric()
@@ -127,7 +145,6 @@ test_that("check sex argument works", {
     dplyr::tally() |>
     dplyr::pull()
   expect_equal(x,y)
-
 
   x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 8, sex = TRUE) |>
     dplyr::filter(strata_level == "Male", variable_level == "1908-01-01 to 1915-12-31", estimate_name == "percentage") |>
@@ -146,39 +163,38 @@ test_that("check sex argument works", {
 
 test_that("check ageGroup argument works", {
   # Load mock database ----
-  # con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
-  # cdm <- CDMConnector::cdmFromCon(
-  #   con = con, cdmSchema = "main", writeSchema = "main"
-  # )
-  #
-  # x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 10, ageGroup = list("<=20" = c(0,20), ">20" = c(21,Inf))) |>
-  #   dplyr::filter(strata_level == "<=20", variable_level == "1928-01-01 to 1937-12-31", estimate_name == "count") |>
-  #   dplyr::pull(estimate_value) |> as.numeric()
-  # y <- cdm$observation_period |>
-  #   dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
-  #   dplyr::filter(observation_period_start_date < as.Date("1908-01-01") & observation_period_end_date >= as.Date("1908-01-01") |
-  #                   (observation_period_start_date >= as.Date("1908-01-01") & observation_period_start_date <= as.Date("1915-12-31"))) |>
-  #   dplyr::mutate("start" = as.Date("1928-01-01"), "end" = as.Date("1937-12-31")) |>
-  #   PatientProfiles::addAgeQuery(indexDate = "start", ageName = "age_start") %>%
-  #   dplyr::mutate(age_end = age_start+10) |>
-  #   dplyr::filter((age_end <= 20 & age_end >= 0) | (age_start >= 0 & age_start <= 20)) |>
-  #   dplyr::tally() |>
-  #   dplyr::pull()
-  # expect_equal(x,y)
-  #
-  #
-  # x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 8, sex = TRUE) |>
-  #   dplyr::filter(strata_level == "Male", variable_level == "1908-01-01 to 1915-12-31", estimate_name == "percentage") |>
-  #   dplyr::pull(estimate_value) |> as.numeric()
-  # y <- (cdm$observation_period |>
-  #         dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
-  #         PatientProfiles::addSexQuery() |>
-  #         dplyr::filter(sex == "Male") |>
-  #         dplyr::filter(observation_period_start_date < as.Date("1908-01-01") & observation_period_end_date >= as.Date("1908-01-01") |
-  #                         (observation_period_start_date >= as.Date("1908-01-01") & observation_period_start_date <= as.Date("1915-12-31"))) |>
-  #         dplyr::tally() |>
-  #         dplyr::pull())/(cdm[["person"]] |> dplyr::tally() |> dplyr::pull())*100
-  # expect_equal(x,y)
+  con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
+  cdm <- CDMConnector::cdmFromCon(
+    con = con, cdmSchema = "main", writeSchema = "main"
+  )
+
+  x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 10, ageGroup = list("<=20" = c(0,20), ">20" = c(21,Inf))) |>
+    dplyr::filter(variable_level == "1928-01-01 to 1937-12-31", estimate_name == "count", strata_level == "<=20") |>
+    dplyr::pull(estimate_value) |> as.numeric()
+  y <- cdm$observation_period |>
+    dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
+    dplyr::filter(observation_period_start_date < as.Date("1928-01-01") & observation_period_end_date >= as.Date("1928-01-01") |
+                    (observation_period_start_date >= as.Date("1928-01-01") & observation_period_start_date <= as.Date("1937-12-31"))) |>
+    dplyr::mutate("start" = as.Date("1928-01-01"), "end" = as.Date("1937-12-31")) |>
+    PatientProfiles::addAgeQuery(indexDate = "start", ageName = "age_start") %>%
+    dplyr::mutate(age_end = age_start+10) |>
+    dplyr::filter((age_end <= 20 & age_end >= 0) | (age_start >= 0 & age_start <= 20)) |>
+    dplyr::tally() |>
+    dplyr::pull()
+  expect_equal(x,y)
+
+  x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 8, sex = TRUE) |>
+    dplyr::filter(strata_level == "Male", variable_level == "1908-01-01 to 1915-12-31", estimate_name == "percentage") |>
+    dplyr::pull(estimate_value) |> as.numeric()
+  y <- (cdm$observation_period |>
+          dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
+          PatientProfiles::addSexQuery() |>
+          dplyr::filter(sex == "Male") |>
+          dplyr::filter(observation_period_start_date < as.Date("1908-01-01") & observation_period_end_date >= as.Date("1908-01-01") |
+                          (observation_period_start_date >= as.Date("1908-01-01") & observation_period_start_date <= as.Date("1915-12-31"))) |>
+          dplyr::tally() |>
+          dplyr::pull())/(cdm[["person"]] |> dplyr::tally() |> dplyr::pull())*100
+  expect_equal(x,y)
 
 })
 
@@ -193,4 +209,5 @@ test_that("check ageGroup argument works", {
 # unitInterval <- 2
 # sex <- NULL
 # ageGroup <- list("<= 10" = c(0,10), ">10" = c(11,Inf))
+
 
