@@ -80,7 +80,6 @@ plotRecordCount <- function(summarisedRecordCount, facet = NULL){
     ggplot2::theme_bw()
 }
 
-
 facetFunction <- function(facet, summarisedRecordCount) {
   if (!is.null(facet)) {
     checkmate::assertTRUE(inherits(facet, c("formula", "character")))
