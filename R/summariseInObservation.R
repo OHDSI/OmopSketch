@@ -3,6 +3,7 @@
 #' @param observationPeriod observation_period omop table.
 #' @param unit Whether to stratify by "year" or by "month".
 #' @param unitInterval Number of years or months to stratify with.
+#' @param output Output format. It can be either the number of records ("records") that are in observation in the specific interval of time, the number of person-days ("person-days"), or both ("all).
 #' @param ageGroup A list of age groups to stratify results by.
 #' @param sex Whether to stratify by sex (TRUE) or not (FALSE).
 #'
@@ -10,7 +11,7 @@
 #'
 #' @export
 #'
-summariseInObservation <- function(observationPeriod, unit = "year", unitInterval = 1, ageGroup = NULL, sex = FALSE){
+summariseInObservation <- function(observationPeriod, unit = "year", unitInterval = 1, output = "records", ageGroup = NULL, sex = FALSE){
 
   # Initial checks ----
   assertClass(observationPeriod, "omop_table")
