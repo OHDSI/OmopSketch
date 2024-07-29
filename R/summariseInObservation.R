@@ -90,7 +90,7 @@ getDenominator <- function(cdm, output){
 
     tibble::tibble(
       "denominator" = y,
-      "variable_name" = "records")
+      "variable_name" = "person-days")
 
   }else if(output == "all"){
     y <- cdm[["observation_period"]] |>

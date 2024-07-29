@@ -10,6 +10,6 @@
 #' @export
 #'
 plotInObservation <- function(summarisedInObservation, facet = NULL){
-  plotRecordCount(summarisedInObservation, facet = NULL)
-
+  internalPlot(summarisedResult = summarisedInObservation,
+               facet = facet)
 }
