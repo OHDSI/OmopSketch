@@ -38,6 +38,7 @@ summariseInObservation <- function(observationPeriod, unit = "year", unitInterva
   checkUnit(unit)
   checkUnitInterval(unitInterval)
   assertLogical(sex, length = 1)
+  checkOutput(output)
 
   # Create initial variables ----
   cdm <- omopgenerics::cdmReference(observationPeriod)
@@ -147,81 +148,53 @@ getIntervalTibbleForObservation <- function(omopTable, start_date_name, end_date
 countRecords <- function(observationPeriod, cdm, start_date_name, end_date_name, unit, output){
   tablePrefix <- omopgenerics::tmpPrefix()
 
-  if(output == "person-days"){
-    x <- observationPeriod |>
-      dplyr::mutate("start" = as.Date(paste0(clock::get_year(.data[[start_date_name]]),"/",clock::get_month(.data[[start_date_name]]),"/01"))) |>
-      dplyr::mutate("end"   = as.Date(paste0(clock::get_year(.data[[end_date_name]]),"/",clock::get_month(.data[[end_date_name]]),"/01"))) %>%
-      dplyr::mutate(estimate_value = !!CDMConnector::datediff("observation_period_start_date","observation_period_end_date", interval = "day")) |>
-      dplyr::group_by(.data$start, .data$end, .data$sex, .data$age_group) |>
-      dplyr::summarise(estimate_value = sum(.data$estimate_value, na.rm = TRUE)) |>
-      dplyr::mutate(variable_name = .env$output) |>
-      dplyr::compute(
-        name = omopgenerics::uniqueTableName(tablePrefix), temporary = FALSE
-      )
-
+  if(output == "person-days" | output == "all"){
     x <- cdm[["interval"]] |>
-      dplyr::cross_join(x) |>
-      dplyr::filter((.data$start < .data$interval_start_date & .data$end >= .data$interval_start_date) |
-                      (.data$start >= .data$interval_start_date & .data$start <= .data$interval_end_date))
-
-    }else if(output == "records"){
-    x <- observationPeriod %>%
-      dplyr::mutate("start" = as.Date(paste0(clock::get_year(.data[[start_date_name]]),"/",clock::get_month(.data[[start_date_name]]),"/01"))) |>
-      dplyr::mutate("end"   = as.Date(paste0(clock::get_year(.data[[end_date_name]]),"/",clock::get_month(.data[[end_date_name]]),"/01"))) |>
-      dplyr::group_by(.data$start, .data$end, .data$sex, .data$age_group) |>
-      dplyr::summarise(estimate_value = dplyr::n()) |>
-      dplyr::mutate(variable_name = .env$output) |>
-      dplyr::compute(
-        name = omopgenerics::uniqueTableName(tablePrefix), temporary = FALSE
-      )
-
-    x <- cdm[["interval"]] |>
-      dplyr::cross_join(x) |>
-      dplyr::filter((.data$start < .data$interval_start_date & .data$end >= .data$interval_start_date) |
-                      (.data$start >= .data$interval_start_date & .data$start <= .data$interval_end_date))
-
-  }else if(output == "all"){
-    x1 <- observationPeriod %>%
-      dplyr::mutate("start" = as.Date(paste0(clock::get_year(.data[[start_date_name]]),"/",clock::get_month(.data[[start_date_name]]),"/01"))) |>
-      dplyr::mutate("end"   = as.Date(paste0(clock::get_year(.data[[end_date_name]]),"/",clock::get_month(.data[[end_date_name]]),"/01"))) %>%
-      dplyr::mutate(n = !!CDMConnector::datediff("observation_period_start_date","observation_period_end_date", interval = "day")) |>
-      dplyr::group_by(.data$start, .data$end, .data$sex, .data$age_group)
-
-    x <- x1 |>
-      dplyr::summarise(n1 = dplyr::n()) |>
-      dplyr::mutate(variable_name1 = "records") |>
-      dplyr::inner_join(
-        x1 |>
-          dplyr::summarise(n2 = sum(.data$n, na.rm = TRUE)) |>
-          dplyr::mutate(variable_name2 = "person-days"),
-        by = c("start","end","sex","age_group")
+      dplyr::cross_join(
+        observationPeriod |>
+          dplyr::rename("start_date" = "observation_period_start_date",
+                        "end_date"   = "observation_period_end_date")
       ) |>
-      dplyr::compute(
-        name = omopgenerics::uniqueTableName(tablePrefix), temporary = FALSE
-      )
+      dplyr::filter((.data$start_date < .data$interval_start_date & .data$end_date >= .data$interval_start_date) |
+                      (.data$start_date >= .data$interval_start_date & .data$start_date <= .data$interval_end_date)) %>%
+      dplyr::mutate(start_date = pmax(.data$interval_start_date, .data$start_date, na.rm = TRUE)) |>
+      dplyr::mutate(end_date   = pmin(.data$interval_end_date, .data$end_date, na.rm = TRUE)) |>
+      dplyr::compute(temporary = FALSE, name = tablePrefix)
 
-    x <- cdm[["interval"]] |>
-      dplyr::cross_join(x) |>
-      dplyr::filter((.data$start < .data$interval_start_date & .data$end >= .data$interval_start_date) |
-                      (.data$start >= .data$interval_start_date & .data$start <= .data$interval_end_date))
-
-    x <- x |>
-      dplyr::select(-c("n2","variable_name2")) |>
-      dplyr::rename("estimate_value" = "n1", "variable_name" = "variable_name1") |>
-      dplyr::union_all(
-        x |>
-          dplyr::select(-c("n1","variable_name1")) |>
-          dplyr::rename("estimate_value" = "n2", "variable_name" = "variable_name2")
-      )
+    personDays <- x %>%
+      dplyr::mutate(estimate_value = !!CDMConnector::datediff("start_date","end_date", interval = "day")) |>
+      dplyr::group_by(.data$interval_group, .data$sex, .data$age_group) |>
+      dplyr::summarise(estimate_value = sum(.data$estimate_value, na.rm = TRUE), .groups = "drop") |>
+      dplyr::mutate(variable_name = "person-days") |>
+      dplyr::collect()
+  }else{
+    personDays <- createEmptyIntervalTable()
   }
 
+if(output == "records" | output == "all"){
+    x <- observationPeriod |>
+      dplyr::mutate("start_date" = as.Date(paste0(clock::get_year(.data[[start_date_name]]),"/",clock::get_month(.data[[start_date_name]]),"/01"))) |>
+      dplyr::mutate("end_date"   = as.Date(paste0(clock::get_year(.data[[end_date_name]]),"/",clock::get_month(.data[[end_date_name]]),"/01"))) |>
+      dplyr::group_by(.data$start_date, .data$end_date, .data$age_group, .data$sex) |>
+      dplyr::summarise(estimate_value = dplyr::n(), .groups = "drop") |>
+      dplyr::compute(temporary = FALSE, name = tablePrefix)
 
-  x <- x |>
-    dplyr::group_by(.data$interval_group, .data$sex, .data$age_group, .data$variable_name) |>
-    dplyr::summarise(estimate_value = sum(.data$estimate_value, na.rm = TRUE), .groups = "drop") |>
-    dplyr::select("estimate_value", "sex", "age_group", "time_interval" = "interval_group", "variable_name") |>
-    dplyr::collect() |>
-    dplyr::arrange(.data$time_interval)
+    records <- cdm[["interval"]] |>
+      dplyr::cross_join(x) |>
+      dplyr::filter((.data$start_date < .data$interval_start_date & .data$end_date >= .data$interval_start_date) |
+                      (.data$start_date >= .data$interval_start_date & .data$start_date <= .data$interval_end_date)) |>
+      dplyr::group_by(.data$interval_group, .data$age_group, .data$sex) |>
+      dplyr::summarise(estimate_value = sum(.data$estimate_value, na.rm = TRUE), .groups = "drop") |>
+      dplyr::mutate(variable_name = "records") |>
+      dplyr::collect()
+  }else{
+    records <- createEmptyIntervalTable()
+  }
+
+  x <- personDays |>
+    rbind(records) |>
+    dplyr::arrange(.data$interval_group) |>
+    dplyr::rename("time_interval" = "interval_group")
 
   omopgenerics::dropTable(cdm = cdm, name = c(dplyr::starts_with(tablePrefix)))
 
@@ -320,4 +293,13 @@ addSexOverall <- function(result, sex){
     )
   }
   return(result)
+}
+
+createEmptyIntervalTable <- function(){
+  tibble::tibble(
+    "interval_group" = as.character(),
+    "sex" = as.character(),
+    "age_group" = as.character(),
+    "estimate_value" = as.double()
+  )
 }

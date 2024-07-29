@@ -1,7 +1,7 @@
 #' @noRd
-internalPlot <- function(summarisedResult, facet = NULL){
+internalPlot <- function(summarisedResult, facet = NULL, call = parent.frame()){
   # Initial checks ----
-  assertClass(summarisedResult, "summarised_result")
+  assertClass(summarisedResult, "summarised_result", call = call)
 
   if(summarisedResult |> dplyr::tally() |> dplyr::pull("n") == 0){
     cli::cli_warn("summarisedOmopTable is empty.")
@@ -15,7 +15,7 @@ internalPlot <- function(summarisedResult, facet = NULL){
     dplyr::filter(.data$estimate_name == "count")
 
   if(summarisedResult |> dplyr::select("variable_name") |> dplyr::distinct() |> dplyr::pull("variable_name") |> length() > 1){
-    cli::cli_abort("The summarised result can only contain one type of variable_name. Please, filter variable_name.")
+    cli::cli_abort("The summarised result can only contain one type of variable_name. Please, filter variable_name.", call = call)
   }
 
   # Determine color variables ----

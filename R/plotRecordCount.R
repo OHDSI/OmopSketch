@@ -11,6 +11,5 @@
 #'
 plotRecordCount <- function(summarisedRecordCount, facet = NULL){
   internalPlot(summarisedResult = summarisedRecordCount,
-               facet = facet) +
-    ggplot2::ylab("Counts")
+               facet = facet)
 }
