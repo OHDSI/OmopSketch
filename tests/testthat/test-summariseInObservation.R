@@ -198,16 +198,57 @@ test_that("check ageGroup argument works", {
 
 })
 
-# # Load mock database ----
-# con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
-# cdm <- CDMConnector::cdmFromCon(
-#   con = con, cdmSchema = "main", writeSchema = "main"
-# )
+
+
+test_that("check output argument works", {
+  # Load mock database ----
+  con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
+  cdm <- CDMConnector::cdmFromCon(
+    con = con, cdmSchema = "main", writeSchema = "main"
+  )
+
+  # check value
+  x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 7, output = "all", ageGroup = NULL, sex = FALSE) |>
+    dplyr::filter(variable_name == "person-days", variable_level == "1964-01-01 to 1970-12-31", estimate_type == "integer") |>
+    dplyr::pull("estimate_value") |> as.numeric()
+  y <- cdm$observation_period |>
+    dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
+    dplyr::filter(observation_period_start_date < as.Date("1964-01-01") & observation_period_end_date >= as.Date("1964-01-01") |
+                    (observation_period_start_date >= as.Date("1964-01-01") & observation_period_start_date <= as.Date("1970-12-31"))) |>
+    dplyr::mutate("start" = as.Date("1964-01-01"), "end" = as.Date("1970-12-31")) %>%
+    dplyr::mutate(days = !!CDMConnector::datediff("observation_period_start_date","observation_period_end_date", interval = "day")) |>
+    dplyr::summarise(n = sum(days, na.rm = TRUE)) |> dplyr::pull("n")
+  expect_equal(x,y)
+
+  # Check percentage
+  den <- cdm$observation_period |>
+    dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
+    dplyr::mutate(days = !!CDMConnector::datediff("observation_period_start_date","observation_period_end_date", interval = "day")) |>
+    dplyr::summarise(n = sum(days, na.rm = TRUE)) |> dplyr::pull("n")
+  x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 7, output = "all", ageGroup = NULL, sex = FALSE) |>
+    dplyr::filter(variable_name == "person-days", variable_level == "1964-01-01 to 1970-12-31", estimate_type == "percentage") |>
+    dplyr::pull("estimate_value") |> as.numeric()
+  y <- cdm$observation_period |>
+    dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
+    dplyr::filter(observation_period_start_date < as.Date("1964-01-01") & observation_period_end_date >= as.Date("1964-01-01") |
+                    (observation_period_start_date >= as.Date("1964-01-01") & observation_period_start_date <= as.Date("1970-12-31"))) |>
+    dplyr::mutate("start" = as.Date("1964-01-01"), "end" = as.Date("1970-12-31")) %>%
+    dplyr::mutate(days = !!CDMConnector::datediff("observation_period_start_date","observation_period_end_date", interval = "day")) |>
+    dplyr::summarise(n = sum(days, na.rm = TRUE)) |> dplyr::pull("n")/den*100
+  expect_equal(x,y)
+
+
+
+})
+
+
+# summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 1, output = "all", ageGroup = NULL, sex = FALSE)
 #
 # observationPeriod <- cdm$observation_period
 # unit <- "year"
-# unitInterval <- 2
-# sex <- NULL
-# ageGroup <- list("<= 10" = c(0,10), ">10" = c(11,Inf))
+# unitInterval <- 7
+# sex <- FALSE
+# ageGroup <- NULL #list("<= 10" = c(0,10), ">10" = c(11,Inf))
+# output <- "all"
 
 

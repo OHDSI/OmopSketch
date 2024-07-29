@@ -8,6 +8,7 @@ summariseInObservation(
   observationPeriod,
   unit = "year",
   unitInterval = 1,
+  output = "records",
   ageGroup = NULL,
   sex = FALSE
 )
@@ -18,6 +19,8 @@ summariseInObservation(
 \item{unit}{Whether to stratify by "year" or by "month".}
 
 \item{unitInterval}{Number of years or months to stratify with.}
+
+\item{output}{Output format. It can be either the number of records ("records") that are in observation in the specific interval of time, the number of person-days ("person-days"), or both ("all).}
 
 \item{ageGroup}{A list of age groups to stratify results by.}
 
