@@ -6,7 +6,7 @@ if (!on_cran()) {
     R_USER_CACHE_DIR = tempfile(),
     .local_envir = testthat::teardown_env(),
     EUNOMIA_DATA_FOLDER = Sys.getenv("EUNOMIA_DATA_FOLDER", unset = tempfile()),
-    DB_TO_TEST = "postgres"
+    DB_TO_TEST = "postgres" # Write which db you want to use
   )
   CDMConnector::downloadEunomiaData(overwrite = TRUE)
 }
