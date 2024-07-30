@@ -1,10 +1,7 @@
 test_that("summariseClinicalRecords() works", {
 
   # Load mock database ----
-  con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
-  cdm <- CDMConnector::cdmFromCon(
-    con = con, cdmSchema = "main", writeSchema = "main"
-  )
+  cdm <- cdmEunomia()
 
   # Check all tables work ----
   expect_true(inherits(summariseClinicalRecords(cdm$observation_period),"summarised_result"))
@@ -58,20 +55,19 @@ test_that("summariseClinicalRecords() works", {
                                  domainId = FALSE,
                                  typeConcept = FALSE) |>
                 dplyr::tally() |> dplyr::pull() == 3)
-})
 
+  PatientProfiles::mockDisconnect(cdm = cdm)
+})
 
 test_that("tableClinicalRecords() works", {
   # Load mock database ----
-  con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
-  cdm <- CDMConnector::cdmFromCon(
-    con = con, cdmSchema = "main", writeSchema = "main"
-  )
+  cdm <- cdmEunomia()
 
   # Check that works ----
   expect_no_error(x <- tableClinicalRecords(summariseClinicalRecords(cdm$condition_occurrence)))
   expect_true(inherits(x,"gt_tbl"))
   expect_warning(t <- summariseClinicalRecords(cdm$death))
   expect_warning(inherits(tableClinicalRecords(t),"gt_tbl"))
-})
 
+  PatientProfiles::mockDisconnect(cdm = cdm)
+})

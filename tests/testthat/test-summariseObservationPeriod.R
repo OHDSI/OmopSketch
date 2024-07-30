@@ -1,10 +1,7 @@
 test_that("check summariseObservationPeriod works", {
-#
-#   # Load mock database ----
-#   con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
-#   cdm <- CDMConnector::cdmFromCon(
-#     con = con, cdmSchema = "main", writeSchema = "main"
-#   )
+  # Load mock database ----
+  cdm <- cdmEunomia()
+
 #
 #   # Check all tables work ----
 #   expect_true(inherits(summariseObservationPeriod(cdm$observation_period),"summarised_result"))
@@ -94,4 +91,6 @@ test_that("check summariseObservationPeriod works", {
 #   expect_true(inherits(plotObservationPeriod(x),"ggplot"))
 #   x <-  x |> dplyr::filter(result_id == -1)
 #   expect_warning(plotObservationPeriod(x))
+
+  PatientProfiles::mockDisconnect(cdm = cdm)
 })
