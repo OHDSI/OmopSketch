@@ -85,7 +85,7 @@ getDenominator <- function(cdm, output){
     y <- cdm[["observation_period"]] |>
       dplyr::ungroup() |>
       dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
-      dplyr::mutate(n = !!CDMConnector::datediff("observation_period_start_date", "observation_period_end_date",interval = "day")) |>
+      dplyr::mutate(n = !!CDMConnector::datediff("observation_period_start_date", "observation_period_end_date",interval = "day")+1) |>
       dplyr::summarise("n" = sum(.data$n, na.rm = TRUE)) |>
       dplyr::pull("n")
 
@@ -97,7 +97,7 @@ getDenominator <- function(cdm, output){
     y <- cdm[["observation_period"]] |>
       dplyr::ungroup() |>
       dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
-      dplyr::mutate(n = !!CDMConnector::datediff("observation_period_start_date", "observation_period_end_date",interval = "day")) |>
+      dplyr::mutate(n = !!CDMConnector::datediff("observation_period_start_date", "observation_period_end_date",interval = "day")+1) |>
       dplyr::summarise("n" = sum(.data$n, na.rm = TRUE)) |>
       dplyr::pull("n")
 
@@ -152,8 +152,9 @@ countRecords <- function(observationPeriod, cdm, start_date_name, end_date_name,
     x <- cdm[["interval"]] |>
       dplyr::cross_join(
         observationPeriod |>
-          dplyr::rename("start_date" = "observation_period_start_date",
-                        "end_date"   = "observation_period_end_date")
+          dplyr::select("start_date" = "observation_period_start_date",
+                        "end_date"   = "observation_period_end_date",
+                        "age_group", "sex","person_id")
       ) |>
       dplyr::filter((.data$start_date < .data$interval_start_date & .data$end_date >= .data$interval_start_date) |
                       (.data$start_date >= .data$interval_start_date & .data$start_date <= .data$interval_end_date)) %>%
@@ -162,7 +163,7 @@ countRecords <- function(observationPeriod, cdm, start_date_name, end_date_name,
       dplyr::compute(temporary = FALSE, name = tablePrefix)
 
     personDays <- x %>%
-      dplyr::mutate(estimate_value = !!CDMConnector::datediff("start_date","end_date", interval = "day")) |>
+      dplyr::mutate(estimate_value = !!CDMConnector::datediff("start_date","end_date", interval = "day")+1) |>
       dplyr::group_by(.data$interval_group, .data$sex, .data$age_group) |>
       dplyr::summarise(estimate_value = sum(.data$estimate_value, na.rm = TRUE), .groups = "drop") |>
       dplyr::mutate(variable_name = "person-days") |>

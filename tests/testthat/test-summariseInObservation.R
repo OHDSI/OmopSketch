@@ -206,8 +206,6 @@ test_that("check ageGroup argument works", {
 
 })
 
-
-
 test_that("check output argument works", {
   # Load mock database ----
   con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
@@ -226,14 +224,14 @@ test_that("check output argument works", {
     dplyr::mutate("start_date" = as.Date("1964-01-01"), "end_date" = as.Date("1970-12-31")) %>%
     dplyr::mutate("start_date" = pmax(start_date, observation_period_start_date, na.rm = TRUE),
                   "end_date"   = pmin(end_date, observation_period_end_date, na.rm = TRUE)) %>%
-    dplyr::mutate(days = !!CDMConnector::datediff("start_date","end_date", interval = "day")) |>
+    dplyr::mutate(days = !!CDMConnector::datediff("start_date","end_date", interval = "day")+1) |>
     dplyr::summarise(n = sum(days, na.rm = TRUE)) |> dplyr::pull("n")
   expect_equal(x,y)
 
   # Check percentage
   den <- cdm$observation_period |>
     dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
-    dplyr::mutate(days = !!CDMConnector::datediff("observation_period_start_date","observation_period_end_date", interval = "day")) |>
+    dplyr::mutate(days = !!CDMConnector::datediff("observation_period_start_date","observation_period_end_date", interval = "day")+1) |>
     dplyr::summarise(n = sum(days, na.rm = TRUE)) |> dplyr::pull("n")
   x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 7, output = "all", ageGroup = NULL, sex = FALSE) |>
     dplyr::filter(variable_name == "person-days", variable_level == "1964-01-01 to 1970-12-31", estimate_type == "percentage") |>
@@ -245,40 +243,40 @@ test_that("check output argument works", {
     dplyr::mutate("start_date" = as.Date("1964-01-01"), "end_date" = as.Date("1970-12-31")) %>%
     dplyr::mutate("start_date" = pmax(start_date, observation_period_start_date, na.rm = TRUE),
                   "end_date"   = pmin(end_date, observation_period_end_date, na.rm = TRUE)) %>%
-    dplyr::mutate(days = !!CDMConnector::datediff("start_date","end_date", interval = "day")) |>
+    dplyr::mutate(days = !!CDMConnector::datediff("start_date","end_date", interval = "day")+1) |>
     dplyr::summarise(n = sum(days, na.rm = TRUE)) |> dplyr::pull("n")/den*100
   expect_equal(x,y)
 
-  # # Check sex stratified
-  # x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 7, output = "person-days", sex = TRUE) |>
-  #   dplyr::filter(variable_name == "person-days", variable_level == "1964-01-01 to 1970-12-31", estimate_type == "integer") |>
-  #   dplyr::filter(strata_level == "overall") |> dplyr::pull("estimate_value") |> as.numeric()
-  # y <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 7, output = "person-days", sex = TRUE) |>
-  #   dplyr::filter(variable_name == "person-days", variable_level == "1964-01-01 to 1970-12-31", estimate_type == "integer") |>
-  #   dplyr::filter(strata_level != "overall") |> dplyr::pull("estimate_value") |> as.numeric() |> sum()
-  # expect_equal(x,y)
-  #
-  # # Check age stratified
-  # x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 7, output = "person-days", ageGroup = list("<=20" = c(0,20), ">20" = c(21,Inf))) |>
-  #   dplyr::filter(variable_name == "person-days", variable_level == "1964-01-01 to 1970-12-31", estimate_type == "integer") |>
-  #   dplyr::filter(strata_level == "overall") |> dplyr::pull("estimate_value") |> as.numeric()
-  # y <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 7, output = "person-days", sex = TRUE) |>
-  #   dplyr::filter(variable_name == "person-days", variable_level == "1964-01-01 to 1970-12-31", estimate_type == "integer") |>
-  #   dplyr::filter(strata_level != "overall") |> dplyr::pull("estimate_value") |> as.numeric() |> sum()
-  # expect_equal(x,y)
+  # Check sex stratified
+  x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 7, output = "person-days", sex = TRUE) |>
+    dplyr::filter(variable_name == "person-days", variable_level == "1964-01-01 to 1970-12-31", estimate_type == "integer") |>
+    dplyr::filter(strata_level == "overall") |> dplyr::pull("estimate_value") |> as.numeric()
+  y <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 7, output = "person-days", sex = TRUE) |>
+    dplyr::filter(variable_name == "person-days", variable_level == "1964-01-01 to 1970-12-31", estimate_type == "integer") |>
+    dplyr::filter(strata_level != "overall") |> dplyr::pull("estimate_value") |> as.numeric() |> sum()
+  expect_equal(x,y)
+
+  # Check age stratified
+  x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 7, output = "person-days", ageGroup = list("<=20" = c(0,20), ">20" = c(21,Inf))) |>
+    dplyr::filter(variable_name == "person-days", variable_level == "1964-01-01 to 1970-12-31", estimate_type == "integer") |>
+    dplyr::filter(strata_level == "overall") |> dplyr::pull("estimate_value") |> as.numeric()
+  y <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 7, output = "person-days", sex = TRUE) |>
+    dplyr::filter(variable_name == "person-days", variable_level == "1964-01-01 to 1970-12-31", estimate_type == "integer") |>
+    dplyr::filter(strata_level != "overall") |> dplyr::pull("estimate_value") |> as.numeric() |> sum()
+  expect_equal(x,y)
 
 
 })
 
-# con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
-# cdm <- CDMConnector::cdmFromCon(
-#   con = con, cdmSchema = "main", writeSchema = "main"
-# )
-# observationPeriod <- cdm$observation_period
-# unit <- "year"
-# unitInterval <- 7
-# sex <- TRUE
-# ageGroup <- list("<= 20" = c(0,20), ">20" = c(21,Inf))
-# output <- "person-days"
+con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
+cdm <- CDMConnector::cdmFromCon(
+  con = con, cdmSchema = "main", writeSchema = "main"
+)
+observationPeriod <- cdm$observation_period
+unit <- "year"
+unitInterval <- 7
+sex <- FALSE
+ageGroup <- list("<= 20" = c(0,20), ">20" = c(21,Inf))
+output <- "person-days"
 
 
