@@ -89,6 +89,7 @@ test_that("check summariseInObservation works", {
     dplyr::tally() |>
     dplyr::pull("n") |> as.numeric()
   expect_equal(x,y)
+  PatientProfiles::mockDisconnect(cdm = cdm)
 })
 
 test_that("plotInObservation works",{
@@ -108,6 +109,7 @@ test_that("plotInObservation works",{
 
   x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 1, output = "records", ageGroup = NULL, sex = FALSE)
   expect_true(inherits(plotInObservation(x),"ggplot"))
+  PatientProfiles::mockDisconnect(cdm = cdm)
 })
 
 test_that("check sex argument works", {
@@ -157,6 +159,7 @@ test_that("check sex argument works", {
           dplyr::tally() |>
           dplyr::pull())/(cdm[["person"]] |> dplyr::tally() |> dplyr::pull() |> as.numeric())*100
   expect_equal(x,y)
+  PatientProfiles::mockDisconnect(cdm = cdm)
 
 })
 
@@ -192,6 +195,7 @@ test_that("check ageGroup argument works", {
           dplyr::pull())/(cdm[["person"]] |> dplyr::tally() |> dplyr::pull() |> as.numeric())*100
   expect_equal(x,y)
 
+  PatientProfiles::mockDisconnect(cdm = cdm)
 })
 
 test_that("check output argument works", {
@@ -250,18 +254,8 @@ test_that("check output argument works", {
     dplyr::filter(strata_level != "overall") |> dplyr::pull("estimate_value") |> as.numeric() |> sum()
   expect_equal(x,y)
 
-
+  PatientProfiles::mockDisconnect(cdm = cdm)
 })
 
-# con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
-# cdm <- CDMConnector::cdmFromCon(
-#   con = con, cdmSchema = "main", writeSchema = "main"
-# )
-# observationPeriod <- cdm$observation_period
-# unit <- "year"
-# unitInterval <- 1
-# sex <- FALSE
-# ageGroup <- NULL #list("<= 20" = c(0,20), ">20" = c(21,Inf))
-# output <- "records"
 
 

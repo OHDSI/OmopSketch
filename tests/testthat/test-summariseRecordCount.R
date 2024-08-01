@@ -201,8 +201,4 @@ test_that("summariseRecordCount() sex argument works", {
 
 
 
-# omopTable <- cdm$observation_period
-# ageGroup  <- NULL #list("<=20" = c(0,20), "21 to 40" = c(21,40), "41 to 60" = c(41,60), ">60" = c(61, Inf))
-# unit <- "month"
-# unitInterval <- 5
-# sex <- TRUE
+

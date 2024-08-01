@@ -39,7 +39,7 @@ cdmEunomia <- function() {
   cdmDuck <- CDMConnector::cdmFromCon(
     con = conDuck, cdmSchema = "main", writeSchema = "main"
   )
-  cdm <- CDMConnector::copyCdmTo(con = con, cdm = cdmDuck, schema = schema, overwrite = TRUE)
+  cdm <- CDMConnector::copyCdmTo(con = con, cdm = cdmDuck, schema = schema)
   CDMConnector::cdmDisconnect(cdm = cdmDuck)
   return(cdm)
 }
