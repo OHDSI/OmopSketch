@@ -31,28 +31,28 @@ checkOmopTable <- function(omopTable){
 }
 
 #' @noRd
-checkUnit <- function(unit){
+checkUnit <- function(unit,call = parent.frame()){
   inherits(unit, "character")
   assertLength(unit, 1)
   if(!unit %in% c("year","month")){
-    cli::cli_abort("units value is not valid. Valid options are year or month.")
+    cli::cli_abort("units value is not valid. Valid options are year or month.", call = call)
   }
 }
 
 #' @noRd
-checkUnitInterval <- function(unitInterval){
+checkUnitInterval <- function(unitInterval, call = parent.frame()){
   inherits(unitInterval, c("numeric", "integer"))
   assertLength(unitInterval, 1)
   if(unitInterval < 1){
-    cli::cli_abort("unitInterval input has to be equal or greater than 1.")
+    cli::cli_abort("unitInterval input has to be equal or greater than 1.", call = call)
   }
   if(!(unitInterval%%1 == 0)){
-    cli::cli_abort("unitInterval has to be an integer.")
+    cli::cli_abort("unitInterval has to be an integer.", call = call)
   }
 }
 
 #' @noRd
-checkCategory <- function(category, overlap = FALSE, type = "numeric") {
+checkCategory <- function(category, overlap = FALSE, type = "numeric", call = parent.frame()) {
   checkmate::assertList(
     category,
     types = type, any.missing = FALSE, unique = TRUE,
@@ -84,11 +84,11 @@ checkCategory <- function(category, overlap = FALSE, type = "numeric") {
     x[1] <= x[2]
   }))
   if (!(all(checkLower))) {
-    cli::cli_abort("Lower bound should be equal or smaller than upper bound")
+    cli::cli_abort("Lower bound should be equal or smaller than upper bound", call = call)
   }
 
   # built tibble
-  result <- lapply(category, function(x) {
+  result <- lapply(category, function(x, call = parent.frame()) {
     dplyr::tibble(lower_bound = x[1], upper_bound = x[2])
   }) |>
     dplyr::bind_rows() |>
@@ -111,7 +111,7 @@ checkCategory <- function(category, overlap = FALSE, type = "numeric") {
       lower <- result$lower_bound[2:nrow(result)]
       upper <- result$upper_bound[1:(nrow(result) - 1)]
       if (!all(lower > upper)) {
-        cli::cli_abort("There can not be overlap between categories")
+        cli::cli_abort("There can not be overlap between categories", call = call)
       }
     }
   }
@@ -120,8 +120,15 @@ checkCategory <- function(category, overlap = FALSE, type = "numeric") {
 }
 
 
-checkFacetBy <- function(summarisedRecordCount, facet_by){
+checkFacetBy <- function(summarisedRecordCount, facet_by, call = parent.frame()){
   if(!facet_by %in% colnames(summarisedRecordCount) & !is.null(facet_by)){
-    cli::cli_abort("facet_by argument has to be one of the columns from the summarisedRecordCount object.")
+    cli::cli_abort("facet_by argument has to be one of the columns from the summarisedRecordCount object.", call = call)
   }
 }
+
+checkOutput <- function(output, call = parent.frame()){
+  if(!output %in% c("person-days","all","records")){
+    cli::cli_abort("output argument is not valid. It must be either `person-days`, `records`, or `all`.")
+  }
+}
+
