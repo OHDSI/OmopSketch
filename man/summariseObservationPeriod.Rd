@@ -2,20 +2,21 @@
 % Please edit documentation in R/summariseObservationPeriod.R
 \name{summariseObservationPeriod}
 \alias{summariseObservationPeriod}
-\title{Create a gt table from a summarised omop_table.}
+\title{Summarise the observation period table getting some overall statistics in a
+summarised_result object.}
 \usage{
-summariseObservationPeriod(observationPeriod, unit = "year", unitInterval = 1)
+summariseObservationPeriod(observationPeriod, density = FALSE)
 }
 \arguments{
 \item{observationPeriod}{observation_period omop table}
 
-\item{unit}{Whether to stratify by "year" or by "month"}
-
-\item{unitInterval}{Number of years or months to stratify with}
+\item{density}{Whether to export density data for time between observation
+periods.}
 }
 \value{
 A summarised_result object with the summarised data.
 }
 \description{
-Create a gt table from a summarised omop_table.
+Summarise the observation period table getting some overall statistics in a
+summarised_result object.
 }
