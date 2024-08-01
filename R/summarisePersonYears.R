@@ -119,7 +119,7 @@ strataByYear <- function(cohort, bySex) {
     ) |>
     dplyr::collect() |>
     dplyr::mutate(
-      min = lubridate::year(.data$min), max = lubridate::year(.data$max)
+      min = clock::get_year(.data$min), max = clock::get_year(.data$max)
     )
   years <- seq(years$min, years$max, by = 1)
   result <- list()
