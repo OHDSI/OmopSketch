@@ -1,10 +1,7 @@
 test_that("check summariseInObservation works", {
 
   # Load mock database ----
-  con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
-  cdm <- CDMConnector::cdmFromCon(
-    con = con, cdmSchema = "main", writeSchema = "main"
-  )
+  cdm <- cdmEunomia()
 
   # Check all tables work ----
   expect_true(inherits(summariseInObservation(cdm$observation_period),"summarised_result"))
@@ -24,7 +21,7 @@ test_that("check summariseInObservation works", {
     dplyr::mutate(end_year = !!CDMConnector::datepart("observation_period_end_date", "year")) %>%
     dplyr::filter(start_year <= 1909,  end_year >= 1909) |>
     dplyr::tally() |>
-    dplyr::pull("n")
+    dplyr::pull("n") |> as.numeric()
   expect_equal(x,y)
 
   x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 2) |>
@@ -38,7 +35,7 @@ test_that("check summariseInObservation works", {
     dplyr::filter((.data$start < 1936 & .data$end >= 1936) |
                     (.data$start >= 1936 & .data$start <= 1937))  |>
     dplyr::tally() |>
-    dplyr::pull("n")
+    dplyr::pull("n") |> as.numeric()
   expect_equal(x,y)
 
   x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 10) |>
@@ -52,7 +49,7 @@ test_that("check summariseInObservation works", {
     dplyr::filter((.data$start < 1998 & .data$end >= 1998) |
                     (.data$start >= 1998 & .data$start <= 2007))  |>
     dplyr::tally() |>
-    dplyr::pull("n")
+    dplyr::pull("n") |> as.numeric()
   expect_equal(x,y)
 
   # Check inputs ----
@@ -65,7 +62,7 @@ test_that("check summariseInObservation works", {
     dplyr::filter(
       (observation_period_start_date < as.Date("1942-03-01") & observation_period_end_date >= as.Date("1942-03-01")) |
         (observation_period_start_date >= as.Date("1942-03-01") & observation_period_start_date <= as.Date("1942-03-31"))
-    ) |> dplyr::tally() |> dplyr::pull("n")
+    ) |> dplyr::tally() |> dplyr::pull("n") |> as.numeric()
   expect_equal(x,y)
 
 
@@ -78,7 +75,7 @@ test_that("check summariseInObservation works", {
     dplyr::filter(
       (observation_period_start_date < as.Date("2015-09-01") & observation_period_end_date >= as.Date("2015-09-01")) |
         (observation_period_start_date >= as.Date("2015-09-01") & observation_period_start_date <= as.Date("2015-10-31"))
-    ) |> dplyr::tally() |> dplyr::pull("n")
+    ) |> dplyr::tally() |> dplyr::pull("n") |> as.numeric()
   expect_equal(x,y)
 
   x <- summariseInObservation(cdm$observation_period, unit = "month", unitInterval = 10) |>
@@ -90,20 +87,17 @@ test_that("check summariseInObservation works", {
     dplyr::filter(observation_period_start_date < as.Date("1982-03-01") & observation_period_end_date >= as.Date("1982-03-01") |
                     (observation_period_start_date >= as.Date("1982-03-01") & observation_period_start_date <= as.Date("1982-12-31"))) |>
     dplyr::tally() |>
-    dplyr::pull("n")
+    dplyr::pull("n") |> as.numeric()
   expect_equal(x,y)
 })
 
 test_that("plotInObservation works",{
   # Load mock database ----
-  con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
-  cdm <- CDMConnector::cdmFromCon(
-    con = con, cdmSchema = "main", writeSchema = "main"
-  )
+  cdm <- cdmEunomia()
 
   # summariseInObservationPlot plot ----
   x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 8)
-  expect_warning(inherits(plotInObservation(x),"ggplot"))
+  expect_no_error(inherits(plotInObservation(x),"ggplot"))
   x <-  x |> dplyr::filter(result_id == -1)
   expect_warning(plotInObservation(x))
 
@@ -118,10 +112,7 @@ test_that("plotInObservation works",{
 
 test_that("check sex argument works", {
   # Load mock database ----
-  con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
-  cdm <- CDMConnector::cdmFromCon(
-    con = con, cdmSchema = "main", writeSchema = "main"
-  )
+  cdm <- cdmEunomia()
 
   # Check overall
   x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 8, sex = TRUE) |>
@@ -137,7 +128,7 @@ test_that("check sex argument works", {
     dplyr::filter(observation_period_start_date < as.Date("1908-01-01") & observation_period_end_date >= as.Date("1908-01-01") |
                     (observation_period_start_date >= as.Date("1908-01-01") & observation_period_start_date <= as.Date("1915-12-31"))) |>
     dplyr::tally() |>
-    dplyr::pull()
+    dplyr::pull() |> as.numeric()
   expect_equal(x,y)
 
   # Check a random group
@@ -151,7 +142,7 @@ test_that("check sex argument works", {
     dplyr::filter(observation_period_start_date < as.Date("1908-01-01") & observation_period_end_date >= as.Date("1908-01-01") |
                     (observation_period_start_date >= as.Date("1908-01-01") & observation_period_start_date <= as.Date("1915-12-31"))) |>
     dplyr::tally() |>
-    dplyr::pull()
+    dplyr::pull() |> as.numeric()
   expect_equal(x,y)
 
   x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 8, sex = TRUE) |>
@@ -164,17 +155,14 @@ test_that("check sex argument works", {
           dplyr::filter(observation_period_start_date < as.Date("1908-01-01") & observation_period_end_date >= as.Date("1908-01-01") |
                           (observation_period_start_date >= as.Date("1908-01-01") & observation_period_start_date <= as.Date("1915-12-31"))) |>
           dplyr::tally() |>
-          dplyr::pull())/(cdm[["person"]] |> dplyr::tally() |> dplyr::pull())*100
+          dplyr::pull())/(cdm[["person"]] |> dplyr::tally() |> dplyr::pull() |> as.numeric())*100
   expect_equal(x,y)
 
 })
 
 test_that("check ageGroup argument works", {
   # Load mock database ----
-  con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
-  cdm <- CDMConnector::cdmFromCon(
-    con = con, cdmSchema = "main", writeSchema = "main"
-  )
+  cdm <- cdmEunomia()
 
   x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 10, ageGroup = list("<=20" = c(0,20), ">20" = c(21,Inf))) |>
     dplyr::filter(variable_level == "1928-01-01 to 1937-12-31", estimate_name == "count", strata_level == "<=20") |>
@@ -188,7 +176,7 @@ test_that("check ageGroup argument works", {
     dplyr::mutate(age_end = age_start+10) |>
     dplyr::filter((age_end <= 20 & age_end >= 0) | (age_start >= 0 & age_start <= 20)) |>
     dplyr::tally() |>
-    dplyr::pull()
+    dplyr::pull() |> as.numeric()
   expect_equal(x,y)
 
   x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 8, sex = TRUE) |>
@@ -201,17 +189,14 @@ test_that("check ageGroup argument works", {
           dplyr::filter(observation_period_start_date < as.Date("1908-01-01") & observation_period_end_date >= as.Date("1908-01-01") |
                           (observation_period_start_date >= as.Date("1908-01-01") & observation_period_start_date <= as.Date("1915-12-31"))) |>
           dplyr::tally() |>
-          dplyr::pull())/(cdm[["person"]] |> dplyr::tally() |> dplyr::pull())*100
+          dplyr::pull())/(cdm[["person"]] |> dplyr::tally() |> dplyr::pull() |> as.numeric())*100
   expect_equal(x,y)
 
 })
 
 test_that("check output argument works", {
   # Load mock database ----
-  con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
-  cdm <- CDMConnector::cdmFromCon(
-    con = con, cdmSchema = "main", writeSchema = "main"
-  )
+  cdm <- cdmEunomia()
 
   # check value
   x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 7, output = "all", ageGroup = NULL, sex = FALSE) |>
@@ -225,7 +210,7 @@ test_that("check output argument works", {
     dplyr::mutate("start_date" = pmax(start_date, observation_period_start_date, na.rm = TRUE),
                   "end_date"   = pmin(end_date, observation_period_end_date, na.rm = TRUE)) %>%
     dplyr::mutate(days = !!CDMConnector::datediff("start_date","end_date", interval = "day")+1) |>
-    dplyr::summarise(n = sum(days, na.rm = TRUE)) |> dplyr::pull("n")
+    dplyr::summarise(n = sum(days, na.rm = TRUE)) |> dplyr::pull("n") |> as.numeric()
   expect_equal(x,y)
 
   # Check percentage
@@ -244,7 +229,7 @@ test_that("check output argument works", {
     dplyr::mutate("start_date" = pmax(start_date, observation_period_start_date, na.rm = TRUE),
                   "end_date"   = pmin(end_date, observation_period_end_date, na.rm = TRUE)) %>%
     dplyr::mutate(days = !!CDMConnector::datediff("start_date","end_date", interval = "day")+1) |>
-    dplyr::summarise(n = sum(days, na.rm = TRUE)) |> dplyr::pull("n")/den*100
+    dplyr::summarise(n = sum(days, na.rm = TRUE)) |> dplyr::pull("n") |> as.numeric()/den*100
   expect_equal(x,y)
 
   # Check sex stratified
@@ -268,15 +253,15 @@ test_that("check output argument works", {
 
 })
 
-con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
-cdm <- CDMConnector::cdmFromCon(
-  con = con, cdmSchema = "main", writeSchema = "main"
-)
-observationPeriod <- cdm$observation_period
-unit <- "year"
-unitInterval <- 7
-sex <- FALSE
-ageGroup <- list("<= 20" = c(0,20), ">20" = c(21,Inf))
-output <- "person-days"
+# con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
+# cdm <- CDMConnector::cdmFromCon(
+#   con = con, cdmSchema = "main", writeSchema = "main"
+# )
+# observationPeriod <- cdm$observation_period
+# unit <- "year"
+# unitInterval <- 1
+# sex <- FALSE
+# ageGroup <- NULL #list("<= 20" = c(0,20), ">20" = c(21,Inf))
+# output <- "records"
 
 

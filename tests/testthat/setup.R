@@ -6,8 +6,7 @@ if (!on_cran()) {
   withr::local_envvar(
     R_USER_CACHE_DIR = tempfile(),
     .local_envir = testthat::teardown_env(),
-    EUNOMIA_DATA_FOLDER = Sys.getenv("EUNOMIA_DATA_FOLDER", unset = tempfile()),
-    DB_TO_TEST = "postgres" #"duckdb"/"postgres" # Write which db you want to use
+    EUNOMIA_DATA_FOLDER = Sys.getenv("EUNOMIA_DATA_FOLDER", unset = tempfile())
   )
   CDMConnector::downloadEunomiaData(overwrite = TRUE)
 }
@@ -15,15 +14,24 @@ if (!on_cran()) {
 connection <- function(type = Sys.getenv("DB_TO_TEST", "duckdb")) {
   switch(
     type,
-    "duckdb" = DBI::dbConnect(duckdb::duckdb(), ":memory:")
+    "duckdb" = DBI::dbConnect(duckdb::duckdb(), ":memory:"),
+    "postgres" = DBI::dbConnect(RPostgres::Postgres(),
+                                dbname = Sys.getenv("server_dbi"),
+                                port = Sys.getenv("port"),
+                                host = Sys.getenv("host"),
+                                user = Sys.getenv("user"),
+                                password = Sys.getenv("password"))
   )
 }
+
 schema <- function(type = Sys.getenv("DB_TO_TEST", "duckdb")) {
   switch(
     type,
-    "duckdb" = c(schema = "main", prefix = "os_")
+    "duckdb" = c(schema = "main", prefix = "os_"),
+    "postgres" = c(schema = "results", prefix = "os_")
   )
 }
+
 cdmEunomia <- function() {
   con <- connection()
   schema <- schema()
@@ -31,7 +39,7 @@ cdmEunomia <- function() {
   cdmDuck <- CDMConnector::cdmFromCon(
     con = conDuck, cdmSchema = "main", writeSchema = "main"
   )
-  cdm <- CDMConnector::copyCdmTo(con = con, cdm = cdmDuck, schema = schema)
+  cdm <- CDMConnector::copyCdmTo(con = con, cdm = cdmDuck, schema = schema, overwrite = TRUE)
   CDMConnector::cdmDisconnect(cdm = cdmDuck)
   return(cdm)
 }
