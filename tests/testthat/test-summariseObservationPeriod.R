@@ -30,6 +30,52 @@ test_that("check summariseObservationPeriod works", {
   cdm <- CDMConnector::copyCdmTo(
     con = connection(), cdm = cdm, schema = schema())
 
+  # simple run
+  expect_no_error(resAll <- summariseObservationPeriod(cdm$observation_period))
+
+  # counts
+  expect_identical(resAll$estimate_value[resAll$variable_name == "number records"], "8")
+  x <- dplyr::tibble(
+    strata_level = c("overall", "1st", "2nd", "3rd"),
+    variable_name = "number subjects",
+    estimate_value = c("4", "4", "3", "1"))
+  expect_identical(nrow(x), resAll |> dplyr::inner_join(x, by = colnames(x)) |> nrow())
+
+  # only one exposure per individual
+  cdm$observation_period <- cdm$observation_period |>
+    dplyr::group_by(person_id) |>
+    dplyr::filter(observation_period_id == min(observation_period_id, na.rm = TRUE)) |>
+    dplyr::ungroup() |>
+    dplyr::compute(name = "observation_period", temporary = FALSE)
+
+  expect_no_error(resOne <- summariseObservationPeriod(cdm$observation_period))
+
+  # counts
+  expect_identical(resOne$estimate_value[resOne$variable_name == "number records"], "4")
+  x <- dplyr::tibble(
+    strata_level = c("overall", "1st"),
+    variable_name = "number subjects",
+    estimate_value = c("4", "4"))
+  expect_identical(nrow(x), resOne |> dplyr::inner_join(x, by = colnames(x)) |> nrow())
+
+  # empty observation period
+  cdm$observation_period <- cdm$observation_period |>
+    dplyr::filter(person_id == 0) |>
+    dplyr::compute(name = "observation_period", temporary = FALSE)
+
+  expect_no_error(resEmpty <- summariseObservationPeriod(cdm$observation_period))
+  expect_true(nrow(resEmpty) == 2)
+  expect_identical(unique(resEmpty$estimate_value), "0")
+
+  # table works
+  # expect_no_error(tableObservationPeriod(resAll))
+  # expect_no_error(tableObservationPeriod(resOne))
+  # expect_no_error(tableObservationPeriod(resEmpty))
+
+  # plot works
+  # expect_no_error(plotObservationPeriod(resAll))
+  # expect_no_error(plotObservationPeriod(resOne))
+  # expect_no_error(plotObservationPeriod(resEmpty))
 
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
