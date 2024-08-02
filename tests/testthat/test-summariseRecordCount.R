@@ -131,13 +131,13 @@ test_that("summariseRecordCount() ageGroup argument works", {
     dplyr::select("strata_level", "variable_level", "estimate_value") |>
     dplyr::filter(strata_level == "<=20" & variable_level == "1920-01-01 to 1920-12-31") |>
     dplyr::summarise(n = sum(as.numeric(estimate_value))) |>
-    dplyr::pull(n)
+    dplyr::pull("n")
   y <- cdm$condition_occurrence |>
     PatientProfiles::addAgeQuery(indexDate = "condition_start_date", ageGroup = list("<=20" = c(0,20))) |>
     dplyr::filter(age_group == "<=20") |>
     dplyr::filter(clock::get_year(condition_start_date) == "1920") |>
     dplyr::summarise(n = dplyr::n()) |>
-    dplyr::pull(n)
+    dplyr::pull("n") |> as.numeric()
   expect_equal(x,y)
 
   PatientProfiles::mockDisconnect(cdm = cdm)
@@ -201,8 +201,4 @@ test_that("summariseRecordCount() sex argument works", {
 
 
 
-# omopTable <- cdm$observation_period
-# ageGroup  <- NULL #list("<=20" = c(0,20), "21 to 40" = c(21,40), "41 to 60" = c(41,60), ">60" = c(61, Inf))
-# unit <- "month"
-# unitInterval <- 5
-# sex <- TRUE
+
