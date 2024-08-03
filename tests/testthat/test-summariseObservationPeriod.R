@@ -165,9 +165,9 @@ test_that("check summariseObservationPeriod works", {
   expect_identical(removeSettings(resEmpty), removeSettings(resEmptyD))
 
   # table works
-  # expect_no_error(tableObservationPeriod(resAll))
-  # expect_no_error(tableObservationPeriod(resOne))
-  # expect_no_error(tableObservationPeriod(resEmpty))
+  expect_no_error(tableObservationPeriod(resAll))
+  expect_no_error(tableObservationPeriod(resOne))
+  expect_no_error(tableObservationPeriod(resEmpty))
 
   # plot works
   # expect_no_error(plotObservationPeriod(resAll))
