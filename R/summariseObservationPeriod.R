@@ -358,7 +358,9 @@ plotObservationPeriod <- function(result,
       dplyr::filter(.data$observation_period_ordinal != "overall")
     p <- ggplot2::ggplot(
       data = result,
-      mapping = ggplot2::aes(x = x, y = count, colour = colour, fill = colour)
+      mapping = ggplot2::aes(
+        x = .data$x, y = .data$count, colour = .data$colour,
+        fill = .data$colour)
     ) +
       ggplot2::geom_col() +
       ggplot2::xlab("Observation period")
@@ -366,8 +368,8 @@ plotObservationPeriod <- function(result,
     p <- ggplot2::ggplot(
       data = result,
       mapping = ggplot2::aes(
-        x = x, ymin = min, lower = q25, middle = median, upper = q75,
-        ymax = max, colour = colour)
+        x = .data$x, ymin = .data$min, lower = .data$q25, middle = .data$median,
+        upper = .data$q75, ymax = .data$max, colour = .data$colour)
     ) +
       ggplot2::geom_boxplot(stat = "identity") +
       ggplot2::xlab("Observation period") +
@@ -375,7 +377,8 @@ plotObservationPeriod <- function(result,
   } else {
     p <- ggplot2::ggplot(
       data = result,
-      mapping = ggplot2::aes(x = x, y = y, colour = colour, group = colour)
+      mapping = ggplot2::aes(
+        x = .data$x, y = .data$y, colour = .data$colour, group = .data$colour)
     ) +
       ggplot2::geom_line() +
       ggplot2::xlab("Time (days)") +
@@ -416,7 +419,7 @@ needEstimates <- function(plotType) {
     dplyr::pull("estimate_name")
 }
 uniteVariable <- function(res, cols, colname, def) {
-  if (length(colour) > 0) {
+  if (length(cols) > 0) {
     res <- res |>
       tidyr::unite(
         col = !!colname, dplyr::all_of(cols), sep = " - ", remove = FALSE)
