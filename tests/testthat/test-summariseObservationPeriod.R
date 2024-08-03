@@ -170,9 +170,9 @@ test_that("check summariseObservationPeriod works", {
   expect_no_error(tableObservationPeriod(resEmpty))
 
   # plot works
-  # expect_no_error(plotObservationPeriod(resAll))
-  # expect_no_error(plotObservationPeriod(resOne))
-  # expect_no_error(plotObservationPeriod(resEmpty))
+  expect_no_error(plotObservationPeriod(resAll))
+  expect_no_error(plotObservationPeriod(resOne))
+  #expect_no_error(plotObservationPeriod(resEmpty))
 
   PatientProfiles::mockDisconnect(cdm = cdm)
 })

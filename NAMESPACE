@@ -2,6 +2,7 @@
 
 export(exportSummarisedResult)
 export(plotInObservation)
+export(plotObservationPeriod)
 export(plotRecordCount)
 export(settings)
 export(summariseClinicalRecords)

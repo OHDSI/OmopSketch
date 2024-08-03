@@ -283,3 +283,145 @@ tableObservationPeriod <- function(result,
       .options = list(keepNotFormatted = FALSE)
     )
 }
+
+#' Create a plot from the output of summariseObservationPeriod().
+#'
+#' @param result A summarised_result object.
+#' @param variableName The variable to plot it can be: "number subjects",
+#' "records per person", "duration" or "days to next observation period".
+#' @param plotType The plot type, it can be: "barplor", "boxplot" or
+#' "density".
+#' @param facet Elements to facet by, it can be "cdm_name",
+#' "observation_period_ordinal", both or none.
+#' @param colour Elements to color by, it can be "cdm_name",
+#' "observation_period_ordinal", both or none.
+#'
+#' @return A ggplot2 object.
+#' @export
+#'
+plotObservationPeriod <- function(result,
+                                  variableName = "number subjects",
+                                  plotType = "barplot",
+                                  facet = "cdm_name",
+                                  colour = "observation_period_ordinal") {
+  # initial checks
+  omopgenerics::assertClass(result, class = "summarised_result")
+  result <- result |>
+    visOmopResults::filterSettings(
+      .data$result_type == "summarise_observation_period")
+  if (nrow(result) == 0) {
+    "No results found for `result_type` == 'summarise_observation_period'" |>
+      cli::cli_abort()
+  }
+  variableNames <- availablePlotObservationPeriod() |>
+    dplyr::pull("variable_name") |>
+    unique()
+  omopgenerics::assertChoice(variableName, variableNames, length = 1)
+  plotTypes <- availablePlotObservationPeriod() |>
+    dplyr::filter(.data$variable_name == .env$variableName) |>
+    dplyr::pull("plot_type")
+  omopgenerics::assertChoice(plotType, plotTypes, length = 1)
+  optFacetColour <- c("cdm_name", "observation_period_ordinal")
+  omopgenerics::assertChoice(facet, optFacetColour, unique = TRUE, null = TRUE)
+  omopgenerics::assertChoice(colour, optFacetColour, unique = TRUE, null = TRUE)
+
+  neededEstimates <- needEstimates(plotType)
+  result <- result |>
+    dplyr::filter(
+      .data$variable_name == .env$variableName,
+      .data$estimate_name %in% .env$neededEstimates)
+  allEstimates <- result$estimate_name |> unique()
+  missingEstimates <- neededEstimates[!neededEstimates %in% allEstimates]
+  if (length(missingEstimates)) {
+    cli::cli_warn("estimates not found: {missingEstimates}.")
+  }
+
+  result <- result |>
+    visOmopResults::pivotEstimates() |>
+    visOmopResults::splitAll() |>
+    dplyr::select(-c("result_id", "variable_name", "variable_level"))
+
+  for (me in missingEstimates) {
+    result <- result |> dplyr::mutate(!!me := NA_real_)
+  }
+
+  result <- result |>
+    uniteVariable(cols = colour, colname = "colour", def = NA_character_)
+
+  if (plotType != "density") {
+    x <- optFacetColour[!optFacetColour %in% facet]
+    result <- result |> uniteVariable(cols = x, colname = "x", def = "all")
+  }
+
+  if (plotType == "barplot") {
+    result <- result |>
+      dplyr::filter(.data$observation_period_ordinal != "overall")
+    p <- ggplot2::ggplot(
+      data = result,
+      mapping = ggplot2::aes(x = x, y = count, colour = colour, fill = colour)
+    ) +
+      ggplot2::geom_col() +
+      ggplot2::xlab("Observation period")
+  } else if (plotType == "boxplot") {
+    p <- ggplot2::ggplot(
+      data = result,
+      mapping = ggplot2::aes(
+        x = x, ymin = min, lower = q25, middle = median, upper = q75,
+        ymax = max, colour = colour)
+    ) +
+      ggplot2::geom_boxplot(stat = "identity") +
+      ggplot2::xlab("Observation period") +
+      ggplot2::ylab(stringr::str_to_sentence(variableName))
+  } else {
+    p <- ggplot2::ggplot(
+      data = result,
+      mapping = ggplot2::aes(x = x, y = y, colour = colour, group = colour)
+    ) +
+      ggplot2::geom_line() +
+      ggplot2::xlab("Time (days)") +
+      ggplot2::ylab(stringr::str_to_sentence(variableName))
+  }
+
+  p <- p +
+    ggplot2::facet_wrap(facet)
+
+  return(p)
+}
+
+availablePlotObservationPeriod <- function() {
+  dplyr::tribble(
+    ~variable_name, ~plot_type,
+    "number subjects", "barplot",
+    "records per person", "density",
+    "records per person", "boxplot",
+    "duration", "density",
+    "duration", "boxplot",
+    "days to next observation period", "density",
+    "days to next observation period", "boxplot",
+  )
+}
+needEstimates <- function(plotType) {
+  dplyr::tribble(
+    ~plot_type, ~estimate_name,
+    "barplot", "count",
+    "density", "x",
+    "density", "y",
+    "boxplot", "median",
+    "boxplot", "q25",
+    "boxplot", "q75",
+    "boxplot", "min",
+    "boxplot", "max"
+  ) |>
+    dplyr::filter(.data$plot_type == .env$plotType) |>
+    dplyr::pull("estimate_name")
+}
+uniteVariable <- function(res, cols, colname, def) {
+  if (length(colour) > 0) {
+    res <- res |>
+      tidyr::unite(
+        col = !!colname, dplyr::all_of(cols), sep = " - ", remove = FALSE)
+  } else {
+    res <- res |> dplyr::mutate(!!colname := !!def)
+  }
+  return(res)
+}
