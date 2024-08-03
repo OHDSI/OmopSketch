@@ -28,7 +28,7 @@ Summarise the observation period table getting some overall statistics in a
 summarised_result object.
 }
 \examples{
-\donttest{
+\dontrun{
 library(CDMConnector)
 library(duckdb)
 
