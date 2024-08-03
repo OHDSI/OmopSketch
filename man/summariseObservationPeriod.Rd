@@ -5,10 +5,17 @@
 \title{Summarise the observation period table getting some overall statistics in a
 summarised_result object.}
 \usage{
-summariseObservationPeriod(observationPeriod, density = FALSE)
+summariseObservationPeriod(
+  observationPeriod,
+  estimates = c("mean", "sd", "min", "q05", "q25", "median", "q75", "q95", "max"),
+  density = FALSE
+)
 }
 \arguments{
-\item{observationPeriod}{observation_period omop table}
+\item{observationPeriod}{observation_period omop table.}
+
+\item{estimates}{Estimates to summarise the variables of interest (
+\verb{records per person}, \code{duration} and \verb{days to next observation period}).}
 
 \item{density}{Whether to export density data for time between observation
 periods.}
@@ -19,4 +26,19 @@ A summarised_result object with the summarised data.
 \description{
 Summarise the observation period table getting some overall statistics in a
 summarised_result object.
+}
+\examples{
+\donttest{
+library(CDMConnector)
+library(duckdb)
+
+con <- dbConnect(duckdb(), eunomiaDir())
+cdm <- cdmFromCon(con = con, cdmSchema = "main", writeSchema = "main")
+
+result <- summariseObservationPeriod(cdm$observation_period)
+
+result |>
+  dplyr::glimpse()
+}
+
 }
