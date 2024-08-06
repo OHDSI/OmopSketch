@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotRecordCount.R
 \name{plotRecordCount}
 \alias{plotRecordCount}
-\title{Create a gt table from a summarised omop_table.}
+\title{Create a ggplot of the records' count trend.}
 \usage{
 plotRecordCount(summarisedRecordCount, facet = NULL)
 }
@@ -17,7 +17,7 @@ Only the following columns are allowed to be facet by: "cdm_name", "group_level"
 A ggplot showing the table counts
 }
 \description{
-Create a gt table from a summarised omop_table.
+Create a ggplot of the records' count trend.
 }
 \examples{
 \donttest{
@@ -28,6 +28,9 @@ library(duckdb)
 library(OmopSketch)
 
 # Connect to Eunomia database
+if (Sys.getenv("EUNOMIA_DATA_FOLDER") == "") Sys.setenv("EUNOMIA_DATA_FOLDER" = tempdir())
+if (!dir.exists(Sys.getenv("EUNOMIA_DATA_FOLDER"))) dir.create(Sys.getenv("EUNOMIA_DATA_FOLDER"))
+if (!eunomia_is_available()) downloadEunomiaData()
 con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
 cdm <- CDMConnector::cdmFromCon(
 con = con, cdmSchema = "main", writeSchema = "main"

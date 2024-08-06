@@ -25,9 +25,12 @@
 #'library(OmopSketch)
 #'
 #'# Connect to Eunomia database
+#'if (Sys.getenv("EUNOMIA_DATA_FOLDER") == "") Sys.setenv("EUNOMIA_DATA_FOLDER" = tempdir())
+#'if (!dir.exists(Sys.getenv("EUNOMIA_DATA_FOLDER"))) dir.create(Sys.getenv("EUNOMIA_DATA_FOLDER"))
+#'if (!eunomia_is_available()) downloadEunomiaData()
 #'con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
 #'cdm <- CDMConnector::cdmFromCon(
-#'  con = con, cdmSchema = "main", writeSchema = "main"
+#' con = con, cdmSchema = "main", writeSchema = "main"
 #')
 #'
 #'# Run summarise clinical tables
