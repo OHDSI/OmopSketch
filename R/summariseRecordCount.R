@@ -2,7 +2,7 @@
 #'
 #' @param omopTable An omop table from a cdm object.
 #' @param unit Whether to stratify by "year" or by "month".
-#' @param unitInterval Number of years or months to include within the same interval.
+#' @param unitInterval An integer. Number of years or months to include within the same interval.
 #' @param ageGroup A list of age groups to stratify results by.
 #' @param sex Boolean variable. Whether to stratify by sex (TRUE) or not (FALSE).
 #'

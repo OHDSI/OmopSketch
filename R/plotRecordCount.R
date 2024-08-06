@@ -2,7 +2,7 @@
 #'
 #' @param summarisedRecordCount Output from summariseRecordCount().
 #' @param facet columns in data to facet. If the facet position wants to be specified, use the formula class for the input
-#' (e.g., strata ~ group_level + cdm_name). Variables before "~" will be facet by on horizontal axis, whereas those after "~" on vertical axis.
+#' (e.g., strata_level ~ group_level + cdm_name). Variables before "~" will be facet by on horizontal axis, whereas those after "~" on vertical axis.
 #' Only the following columns are allowed to be facet by: "cdm_name", "group_level", "strata_level".
 #'
 #' @return A ggplot showing the table counts
@@ -18,9 +18,9 @@
 #'
 #'# Connect to Eunomia database
 #'con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
-#'cdm <- CDMConnector::cdmFromCon(
-#'  con = con, cdmSchema = "main", writeSchema = "main"
-#')
+# cdm <- CDMConnector::cdmFromCon(
+#  con = con, cdmSchema = "main", writeSchema = "main"
+# )
 #'
 #'# Run summarise clinical tables
 #'summarisedResult <- summariseRecordCount(omopTable = cdm$condition_occurrence,
@@ -28,7 +28,7 @@
 #'                                       unitInterval = 10,
 #'                                       ageGroup = list("<=20" = c(0,20), ">20" = c(21, Inf)),
 #'                                       sex = TRUE)
-#'plotRecordCount(summarisedResult, facet = strata ~ .)
+#'plotRecordCount(summarisedResult, facet = strata_level ~ .)
 #'}
 plotRecordCount <- function(summarisedRecordCount, facet = NULL){
   internalPlot(summarisedResult = summarisedRecordCount,

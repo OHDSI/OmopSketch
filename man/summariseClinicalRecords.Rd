@@ -2,7 +2,7 @@
 % Please edit documentation in R/summariseClinicalRecords.R
 \name{summariseClinicalRecords}
 \alias{summariseClinicalRecords}
-\title{Summarise an omop_table from a cdm_reference object. You will obtain
+\title{Summarise an omop table from a cdm object. You will obtain
 information related to the number of records, number of subjects, whether the
 records are in observation, number of present domains and number of present
 concepts.}
@@ -18,28 +18,52 @@ summariseClinicalRecords(
 )
 }
 \arguments{
-\item{omopTable}{An omop_table object.}
+\item{omopTable}{An omop_table object derived from a cdm object.}
 
-\item{recordsPerPerson}{Estimates to summarise the number of records per
-person.}
+\item{recordsPerPerson}{Generates summary statistics for the number of records per person. Set to NULL if no summary statistics are required.}
 
-\item{inObservation}{Whether to include the percentage of records in
+\item{inObservation}{Boolean variable. Whether to include the percentage of records in
 observation.}
 
-\item{standardConcept}{Whether to summarise standard concept.}
+\item{standardConcept}{Boolean variable. Whether to summarise standard concept information.}
 
-\item{sourceVocabulary}{Whether to summarise source vocabulary.}
+\item{sourceVocabulary}{Boolean variable.  Whether to summarise source vocabulary information.}
 
-\item{domainId}{Whether to summarise domain id of standard concept id.}
+\item{domainId}{Boolean variable. Whether to summarise domain id of standard concept id information.}
 
-\item{typeConcept}{Whether to summarise type concept id field.}
+\item{typeConcept}{Boolean variable. Whether to summarise type concept id field information.}
 }
 \value{
-A summarised_result object with the summarised data.
+A summarised_result object.
 }
 \description{
-Summarise an omop_table from a cdm_reference object. You will obtain
+Summarise an omop table from a cdm object. You will obtain
 information related to the number of records, number of subjects, whether the
 records are in observation, number of present domains and number of present
 concepts.
+}
+\examples{
+\donttest{
+library(dplyr)
+library(CDMConnector)
+library(DBI)
+library(duckdb)
+library(OmopSketch)
+
+# Connect to Eunomia database
+con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
+cdm <- CDMConnector::cdmFromCon(
+ con = con, cdmSchema = "main", writeSchema = "main"
+)
+
+# Run summarise clinical tables
+summarisedResult <- summariseClinicalRecords(omopTable = cdm$condition_occurrence,
+                                            recordsPerPerson = c("mean", "sd"),
+                                            inObservation = TRUE,
+                                            standardConcept = TRUE,
+                                            sourceVocabulary = TRUE,
+                                            domainId = TRUE,
+                                            typeConcept = TRUE)
+summarisedResult |> print()
+}
 }
