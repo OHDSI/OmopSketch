@@ -10,7 +10,28 @@
 #'
 #' @importFrom rlang :=
 #' @export
+#' @examples
+#' \donttest{
+#'library(dplyr)
+#'library(CDMConnector)
+#'library(DBI)
+#'library(duckdb)
+#'library(OmopSketch)
 #'
+#'# Connect to Eunomia database
+#'con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
+#'cdm <- CDMConnector::cdmFromCon(
+#'  con = con, cdmSchema = "main", writeSchema = "main"
+#')
+#'
+#'# Run summarise clinical tables
+#'summarisedResult <- summariseRecordCount(omopTable = cdm$condition_occurrence,
+#'                                       unit = "year",
+#'                                       unitInterval = 10,
+#'                                       ageGroup = list("<=20" = c(0,20), ">20" = c(21, Inf)),
+#'                                       sex = TRUE)
+#'summarisedResult |> print()
+#'}
 summariseRecordCount <- function(omopTable, unit = "year", unitInterval = 1, ageGroup = NULL, sex = FALSE) {
 
   # Initial checks ----
