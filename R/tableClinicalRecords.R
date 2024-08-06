@@ -1,6 +1,6 @@
 #' Create a gt table from a summarised omop_table.
 #'
-#' @param summarisedClinicalRecords A summarised_result object with the output from summariseClinicalRecords().
+#' @param summarisedClinicalRecords Output from summariseClinicalRecords().
 #'
 #' @return A gt object with the summarised data.
 #'

@@ -1,12 +1,12 @@
-#' Create a summarise result object to summarise record counts for different time intervals. Only records that fall within the observation period are counted.
+#' Create a summarise result object to summarise record counts of an omop_table using a specific time interval. Only records that fall within the observation period are counted.
 #'
 #' @param omopTable An omop table from a cdm object.
 #' @param unit Whether to stratify by "year" or by "month".
-#' @param unitInterval Number of years or months to stratify with.
+#' @param unitInterval Number of years or months to include within the same interval.
 #' @param ageGroup A list of age groups to stratify results by.
-#' @param sex Whether to stratify by sex (TRUE) or not (FALSE).
+#' @param sex Boolean variable. Whether to stratify by sex (TRUE) or not (FALSE).
 #'
-#' @return A summarised_result object with the summarised data.
+#' @return A summarised_result object..
 #'
 #' @importFrom rlang :=
 #' @export
