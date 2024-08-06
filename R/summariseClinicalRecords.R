@@ -39,6 +39,7 @@
 #'                                             domainId = TRUE,
 #'                                             typeConcept = TRUE)
 #'summarisedResult |> print()
+#'PatientProfiles::mockDisconnect(cdm = cdm)
 #'}
 summariseClinicalRecords <- function(omopTable,
                                recordsPerPerson = c("mean", "sd", "median", "q25", "q75", "min", "max"),

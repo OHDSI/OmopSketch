@@ -65,5 +65,6 @@ summarisedResult <- summariseClinicalRecords(omopTable = cdm$condition_occurrenc
                                             domainId = TRUE,
                                             typeConcept = TRUE)
 summarisedResult |> print()
+PatientProfiles::mockDisconnect(cdm = cdm)
 }
 }

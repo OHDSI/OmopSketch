@@ -137,3 +137,10 @@ summariseRecordCount(cdm$drug_exposure,
                      unitInterval = 18, 
                      sex = TRUE) |> 
     plotRecordCount(facet = group_level ~ strata_level)
+```
+
+
+Finally, disconnect from the cdm
+```{r, warning=FALSE}
+  PatientProfiles::mockDisconnect(cdm = cdm)
+```
