@@ -19,6 +19,7 @@ Suggests:
     duckdb,
     here,
     knitr,
+    remotes,
     rmarkdown,
     RPostgres,
     testthat (>= 3.0.0),
