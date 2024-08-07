@@ -42,55 +42,63 @@ summariseObservationPeriod <- function(observationPeriod,
     dplyr::pull("estimate_name")
   omopgenerics::assertChoice(estimates, opts, unique = TRUE)
 
-  # prepare
-  obs <- observationPeriod |>
-    dplyr::select(
-      "person_id",
-      "obs_start" = "observation_period_start_date",
-      "obs_end" = "observation_period_end_date") |>
-    dplyr::group_by(.data$person_id) |>
-    dplyr::arrange(.data$obs_start) |>
-    dplyr::mutate("next_start" = dplyr::lead(.data$obs_start)) %>%
-    dplyr::mutate(
-      "duration" = as.integer(!!CDMConnector::datediff("obs_start", "obs_end")) + 1L,
-      "next_obs" = as.integer(!!CDMConnector::datediff("obs_end", "next_start")),
-      "id" = as.integer(dplyr::row_number())
-    ) |>
-    dplyr::ungroup() |>
-    dplyr::select("person_id", "id", "duration", "next_obs") |>
-    dplyr::collect()
+  if (observationPeriod |> dplyr::ungroup() |> dplyr::tally() |> dplyr::pull() == 0) {
+    obsSr <- observationPeriod |>
+      PatientProfiles::summariseResult(
+        variables = NULL, estimates = NULL, counts = TRUE)
+  } else {
+    # prepare
+    obs <- observationPeriod |>
+      dplyr::select(
+        "person_id",
+        "obs_start" = "observation_period_start_date",
+        "obs_end" = "observation_period_end_date") |>
+      dplyr::group_by(.data$person_id) |>
+      dplyr::arrange(.data$obs_start) |>
+      dplyr::mutate("next_start" = dplyr::lead(.data$obs_start)) %>%
+      dplyr::mutate(
+        "duration" = as.integer(!!CDMConnector::datediff("obs_start", "obs_end")) + 1L,
+        "next_obs" = as.integer(!!CDMConnector::datediff("obs_end", "next_start")),
+        "id" = as.integer(dplyr::row_number())
+      ) |>
+      dplyr::ungroup() |>
+      dplyr::select("person_id", "id", "duration", "next_obs") |>
+      dplyr::collect()
 
-  obsSr <- obs |>
-    PatientProfiles::summariseResult(
-      strata = "id",
-      variables = c("duration", "next_obs"),
-      estimates = estimates
-    ) |>
-    suppressMessages() |>
-    dplyr::union_all(
-      obs |>
-        dplyr::group_by(.data$person_id) |>
-        dplyr::tally(name = "n") |>
-        PatientProfiles::summariseResult(
-          variables = c("n"),
-          estimates = estimates,
-          counts = F
-        ) |>
-        suppressMessages()
-    ) |>
-    dplyr::filter(
-      .data$variable_name != "number records" | .data$strata_level == "overall") |>
-    addOrdinalLevels() |>
-    arrangeSr(estimates) |>
-    dplyr::union_all(
-      obs |>
-        densitySummary(density) |>
-        dplyr::mutate(
-          result_id = 1L, cdm_name = "unknown", group_name = "overall",
-          group_level = "overall", estimate_type = "numeric",
-          additional_name = "overall", additional_level = "overall"
-        )
-    ) |>
+    obsSr <- obs |>
+      PatientProfiles::summariseResult(
+        strata = "id",
+        variables = c("duration", "next_obs"),
+        estimates = estimates
+      ) |>
+      suppressMessages() |>
+      dplyr::union_all(
+        obs |>
+          dplyr::group_by(.data$person_id) |>
+          dplyr::tally(name = "n") |>
+          PatientProfiles::summariseResult(
+            variables = c("n"),
+            estimates = estimates,
+            counts = F
+          ) |>
+          suppressMessages()
+      ) |>
+      dplyr::filter(
+        .data$variable_name != "number records" | .data$strata_level == "overall") |>
+      addOrdinalLevels() |>
+      arrangeSr(estimates) |>
+      dplyr::union_all(
+        obs |>
+          densitySummary(density) |>
+          dplyr::mutate(
+            result_id = 1L, cdm_name = "unknown", group_name = "overall",
+            group_level = "overall", estimate_type = "numeric",
+            additional_name = "overall", additional_level = "overall"
+          )
+      )
+  }
+
+  obsSr <- obsSr |>
     dplyr::mutate(
       "cdm_name" = omopgenerics::cdmName(cdm),
       "strata_name" = dplyr::if_else(
@@ -222,28 +230,26 @@ formatDensity <- function(x) {
   nPoints <- 512
   nDigits <- ceiling(log(nPoints)/log(10))
   x <- x[!is.na(x)]
-  if (length(x) < 2) {
-    res <- dplyr::tibble(
-      variable_level = character(),
-      estimate_name = character(),
-      estimate_value = character()
-    )
+  if (length(x) == 1) {
+    den <- stats::density(x, bw = 0.5)
+  } else if (length(x) == 0) {
+    den <- list(x = NA, y = NA)
   } else {
-    den <- stats::density(x)
-    lev <- paste0(
-      "density_", stringr::str_pad(seq_along(den$x), nDigits, pad = "0"))
-    res <- dplyr::tibble(
-      variable_level = lev,
-      estimate_name = "x",
-      estimate_value = as.character(den$x)
-    ) |>
-      dplyr::union_all(dplyr::tibble(
-        variable_level = lev,
-        estimate_name = "y",
-        estimate_value = as.character(den$y)
-      )) |>
-      dplyr::arrange(.data$variable_level, .data$estimate_name)
+    den <- stats::density(x, n = nPoints)
   }
+  lev <- paste0(
+    "density_", stringr::str_pad(seq_len(nPoints), nDigits, pad = "0"))
+  res <- dplyr::tibble(
+    variable_level = lev,
+    estimate_name = "x",
+    estimate_value = as.character(den$x)
+  ) |>
+    dplyr::union_all(dplyr::tibble(
+      variable_level = lev,
+      estimate_name = "y",
+      estimate_value = as.character(den$y)
+    )) |>
+    dplyr::arrange(.data$variable_level, .data$estimate_name)
   return(res)
 }
 
@@ -289,21 +295,32 @@ tableObservationPeriod <- function(result,
 #' @param result A summarised_result object.
 #' @param variableName The variable to plot it can be: "number subjects",
 #' "records per person", "duration" or "days to next observation period".
-#' @param plotType The plot type, it can be: "barplor", "boxplot" or
-#' "density".
+#' @param plotType The plot type, it can be: "barplot", "boxplot" or
+#' "densityplot".
 #' @param facet Elements to facet by, it can be "cdm_name",
-#' "observation_period_ordinal", both or none.
-#' @param colour Elements to color by, it can be "cdm_name",
 #' "observation_period_ordinal", both or none.
 #'
 #' @return A ggplot2 object.
 #' @export
 #'
+#' @examples
+#' \dontrun{
+#' library(CDMConnector)
+#' library(duckdb)
+#'
+#' con <- dbConnect(duckdb(), eunomiaDir())
+#' cdm <- cdmFromCon(con = con, cdmSchema = "main", writeSchema = "main")
+#'
+#' result <- summariseObservationPeriod(cdm$observation_period)
+#'
+#' result |>
+#'   plotObservationPeriod()
+#' }
+#'
 plotObservationPeriod <- function(result,
                                   variableName = "number subjects",
                                   plotType = "barplot",
-                                  facet = "cdm_name",
-                                  colour = "observation_period_ordinal") {
+                                  facet = "cdm_name") {
   # initial checks
   omopgenerics::assertClass(result, class = "summarised_result")
   result <- result |>
@@ -313,6 +330,10 @@ plotObservationPeriod <- function(result,
     "No results found for `result_type` == 'summarise_observation_period'" |>
       cli::cli_abort()
   }
+  if (result$estimate_value[result$variable_name == "number records"] == "0") {
+    cli::cli_warn("Obsevation period table was empty.")
+    return(ggplot2::ggplot())
+  }
   variableNames <- availablePlotObservationPeriod() |>
     dplyr::pull("variable_name") |>
     unique()
@@ -321,9 +342,14 @@ plotObservationPeriod <- function(result,
     dplyr::filter(.data$variable_name == .env$variableName) |>
     dplyr::pull("plot_type")
   omopgenerics::assertChoice(plotType, plotTypes, length = 1)
-  optFacetColour <- c("cdm_name", "observation_period_ordinal")
+  optFacetColour <- availablePlotObservationPeriod() |>
+    dplyr::filter(.data$variable_name == .env$variableName,
+                  .data$plot_type == .env$plotType) |>
+    dplyr::pull("facet") |>
+    strsplit(split = "+", fixed = TRUE) |>
+    unlist()
   omopgenerics::assertChoice(facet, optFacetColour, unique = TRUE, null = TRUE)
-  omopgenerics::assertChoice(colour, optFacetColour, unique = TRUE, null = TRUE)
+  colour <- optFacetColour[!optFacetColour %in% facet]
 
   neededEstimates <- needEstimates(plotType)
   result <- result |>
@@ -333,24 +359,22 @@ plotObservationPeriod <- function(result,
   allEstimates <- result$estimate_name |> unique()
   missingEstimates <- neededEstimates[!neededEstimates %in% allEstimates]
   if (length(missingEstimates)) {
-    cli::cli_warn("estimates not found: {missingEstimates}.")
+    if (plotType == "desnityplot") {
+      cli::cli_abort("No density estimates found, please use: summariseObservationPeriod(density = TRUE).")
+    } else {
+      cli::cli_abort("estimates not found: {missingEstimates}.")
+    }
   }
 
   result <- result |>
     visOmopResults::pivotEstimates() |>
     visOmopResults::splitAll() |>
-    dplyr::select(-c("result_id", "variable_name", "variable_level"))
+    dplyr::select(-c("result_id", "variable_name", "variable_level")) |>
+    uniteVariable(cols = colour, colname = "colour", def = "")
 
-  for (me in missingEstimates) {
-    result <- result |> dplyr::mutate(!!me := NA_real_)
-  }
-
-  result <- result |>
-    uniteVariable(cols = colour, colname = "colour", def = NA_character_)
-
-  if (plotType != "density") {
-    x <- optFacetColour[!optFacetColour %in% facet]
-    result <- result |> uniteVariable(cols = x, colname = "x", def = "all")
+  if (plotType != "densityplot") {
+    result <- result |>
+      dplyr::mutate("x" = .data$colour)
   }
 
   if (plotType == "barplot") {
@@ -381,34 +405,36 @@ plotObservationPeriod <- function(result,
         x = .data$x, y = .data$y, colour = .data$colour, group = .data$colour)
     ) +
       ggplot2::geom_line() +
-      ggplot2::xlab("Time (days)") +
-      ggplot2::ylab(stringr::str_to_sentence(variableName))
+      ggplot2::ylab("") +
+      ggplot2::xlab(paste0(stringr::str_to_sentence(variableName), " (days)"))
   }
 
-  p <- p +
-    ggplot2::facet_wrap(facet)
+  if (!is.null(facet)) {
+    p <- p +
+      ggplot2::facet_wrap(facet)
+  }
 
   return(p)
 }
 
 availablePlotObservationPeriod <- function() {
   dplyr::tribble(
-    ~variable_name, ~plot_type,
-    "number subjects", "barplot",
-    "records per person", "density",
-    "records per person", "boxplot",
-    "duration", "density",
-    "duration", "boxplot",
-    "days to next observation period", "density",
-    "days to next observation period", "boxplot",
+    ~variable_name, ~plot_type, ~facet,
+    "number subjects", "barplot", "cdm_name+observation_period_ordinal",
+    "records per person", "densityplot", "cdm_name",
+    "records per person", "boxplot", "cdm_name",
+    "duration", "densityplot", "cdm_name+observation_period_ordinal",
+    "duration", "boxplot", "cdm_name+observation_period_ordinal",
+    "days to next observation period", "densityplot", "cdm_name+observation_period_ordinal",
+    "days to next observation period", "boxplot", "cdm_name+observation_period_ordinal",
   )
 }
 needEstimates <- function(plotType) {
   dplyr::tribble(
     ~plot_type, ~estimate_name,
     "barplot", "count",
-    "density", "x",
-    "density", "y",
+    "densityplot", "x",
+    "densityplot", "y",
     "boxplot", "median",
     "boxplot", "q25",
     "boxplot", "q75",

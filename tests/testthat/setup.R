@@ -1,8 +1,8 @@
-on_cran <- function() {
-  !interactive() && !isTRUE(as.logical(Sys.getenv("NOT_CRAN", "false")))
+on_github <- function() {
+  !interactive() && !identical(Sys.getenv("NOT_CRAN"), "false")
 }
 
-if (!on_cran()) {
+if (on_github()) {
   withr::local_envvar(
     R_USER_CACHE_DIR = tempfile(),
     .local_envir = testthat::teardown_env(),
@@ -43,4 +43,3 @@ cdmEunomia <- function() {
   CDMConnector::cdmDisconnect(cdm = cdmDuck)
   return(cdm)
 }
-

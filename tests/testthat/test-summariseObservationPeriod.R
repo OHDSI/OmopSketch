@@ -128,8 +128,8 @@ test_that("check summariseObservationPeriod works", {
           min(as.numeric(estimate_value[estimate_name == "x"]))
       )/(nPoints - 1)
     )
-  expect_identical(xx$n |> unique(), as.integer(nPoints*2))
-  expect_identical(xx$area |> round(2) |> unique(), 1)
+  expect_identical(xx$n |> unique() , as.integer(nPoints*2))
+  expect_identical(xx$area[xx$strata_level != "3"] |> round(2) |> unique(), 1)
 
   # only one exposure per individual
   cdm$observation_period <- cdm$observation_period |>
@@ -172,7 +172,7 @@ test_that("check summariseObservationPeriod works", {
   # plot works
   expect_no_error(plotObservationPeriod(resAll))
   expect_no_error(plotObservationPeriod(resOne))
-  #expect_no_error(plotObservationPeriod(resEmpty))
+  expect_no_error(plotObservationPeriod(resEmpty))
 
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
