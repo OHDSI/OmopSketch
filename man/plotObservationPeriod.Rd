@@ -8,8 +8,7 @@ plotObservationPeriod(
   result,
   variableName = "number subjects",
   plotType = "barplot",
-  facet = "cdm_name",
-  colour = "observation_period_ordinal"
+  facet = "cdm_name"
 )
 }
 \arguments{
@@ -18,13 +17,10 @@ plotObservationPeriod(
 \item{variableName}{The variable to plot it can be: "number subjects",
 "records per person", "duration" or "days to next observation period".}
 
-\item{plotType}{The plot type, it can be: "barplor", "boxplot" or
-"density".}
+\item{plotType}{The plot type, it can be: "barplot", "boxplot" or
+"densityplot".}
 
 \item{facet}{Elements to facet by, it can be "cdm_name",
-"observation_period_ordinal", both or none.}
-
-\item{colour}{Elements to color by, it can be "cdm_name",
 "observation_period_ordinal", both or none.}
 }
 \value{
@@ -32,4 +28,19 @@ A ggplot2 object.
 }
 \description{
 Create a plot from the output of summariseObservationPeriod().
+}
+\examples{
+\dontrun{
+library(CDMConnector)
+library(duckdb)
+
+con <- dbConnect(duckdb(), eunomiaDir())
+cdm <- cdmFromCon(con = con, cdmSchema = "main", writeSchema = "main")
+
+result <- summariseObservationPeriod(cdm$observation_period)
+
+result |>
+  plotObservationPeriod()
+}
+
 }
