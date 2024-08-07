@@ -174,5 +174,102 @@ test_that("check summariseObservationPeriod works", {
   expect_no_error(plotObservationPeriod(resOne))
   expect_no_error(plotObservationPeriod(resEmpty))
 
+  # check all plots combinations
+  expect_no_error(
+    resAll |>
+      plotObservationPeriod(
+        variableName = "number subjects", plotType = "barplot")
+  )
+  expect_error(
+    resAll |>
+      plotObservationPeriod(
+        variableName = "number subjects", plotType = "boxplot")
+  )
+  expect_error(
+    resAll |>
+      plotObservationPeriod(
+        variableName = "number subjects", plotType = "densityplot")
+  )
+  expect_error(
+    resAll |>
+      plotObservationPeriod(
+        variableName = "number subjects", plotType = "random")
+  )
+  expect_error(
+    resAll |>
+      plotObservationPeriod(
+        variableName = "duration", plotType = "barplot")
+  )
+  expect_no_error(
+    resAll |>
+      plotObservationPeriod(
+        variableName = "duration", plotType = "boxplot")
+  )
+  expect_error(
+    resAll |>
+      plotObservationPeriod(
+        variableName = "duration", plotType = "densityplot")
+  )
+  expect_no_error(
+    resAllD |>
+      plotObservationPeriod(
+        variableName = "duration", plotType = "densityplot")
+  )
+  expect_error(
+    resAll |>
+      plotObservationPeriod(
+        variableName = "duration", plotType = "random")
+  )
+  expect_error(
+    resAll |>
+      plotObservationPeriod(
+        variableName = "records per person", plotType = "barplot")
+  )
+  expect_no_error(
+    resAll |>
+      plotObservationPeriod(
+        variableName = "records per person", plotType = "boxplot")
+  )
+  expect_error(
+    resAll |>
+      plotObservationPeriod(
+        variableName = "records per person", plotType = "densityplot")
+  )
+  expect_no_error(
+    resAllD |>
+      plotObservationPeriod(
+        variableName = "records per person", plotType = "densityplot")
+  )
+  expect_error(
+    resAll |>
+      plotObservationPeriod(
+        variableName = "records per person", plotType = "random")
+  )
+  expect_error(
+    resAll |>
+      plotObservationPeriod(
+        variableName = "days to next observation period", plotType = "barplot")
+  )
+  expect_no_error(
+    resAll |>
+      plotObservationPeriod(
+        variableName = "days to next observation period", plotType = "boxplot")
+  )
+  expect_error(
+    resAll |>
+      plotObservationPeriod(
+        variableName = "days to next observation period", plotType = "densityplot")
+  )
+  expect_no_error(
+    resAllD |>
+      plotObservationPeriod(
+        variableName = "days to next observation period", plotType = "densityplot")
+  )
+  expect_error(
+    resAll |>
+      plotObservationPeriod(
+        variableName = "days to next observation period", plotType = "random")
+  )
+
   PatientProfiles::mockDisconnect(cdm = cdm)
 })

@@ -1,7 +1,7 @@
+
 on_github <- function() {
   !interactive() && !identical(Sys.getenv("NOT_CRAN"), "false")
 }
-
 if (on_github()) {
   withr::local_envvar(
     R_USER_CACHE_DIR = tempfile(),
@@ -10,7 +10,6 @@ if (on_github()) {
   )
   CDMConnector::downloadEunomiaData(overwrite = TRUE)
 }
-
 connection <- function(type = Sys.getenv("DB_TO_TEST", "duckdb")) {
   switch(
     type,
@@ -23,7 +22,6 @@ connection <- function(type = Sys.getenv("DB_TO_TEST", "duckdb")) {
                                 password = Sys.getenv("password"))
   )
 }
-
 schema <- function(type = Sys.getenv("DB_TO_TEST", "duckdb")) {
   switch(
     type,
@@ -31,7 +29,6 @@ schema <- function(type = Sys.getenv("DB_TO_TEST", "duckdb")) {
     "postgres" = c(schema = "results", prefix = "os_")
   )
 }
-
 cdmEunomia <- function() {
   con <- connection()
   schema <- schema()
