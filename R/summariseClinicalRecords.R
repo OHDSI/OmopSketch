@@ -1,23 +1,49 @@
 
-#' Summarise an omop_table from a cdm_reference object. You will obtain
+#' Summarise an omop table from a cdm object. You will obtain
 #' information related to the number of records, number of subjects, whether the
 #' records are in observation, number of present domains and number of present
 #' concepts.
 #'
-#' @param omopTable An omop_table object.
-#' @param recordsPerPerson Estimates to summarise the number of records per
-#' person.
-#' @param inObservation Whether to include the percentage of records in
+#' @param omopTable An omop_table object derived from a cdm object.
+#' @param recordsPerPerson Generates summary statistics for the number of records per person. Set to NULL if no summary statistics are required.
+#' @param inObservation Boolean variable. Whether to include the percentage of records in
 #' observation.
-#' @param standardConcept Whether to summarise standard concept.
-#' @param sourceVocabulary Whether to summarise source vocabulary.
-#' @param domainId Whether to summarise domain id of standard concept id.
-#' @param typeConcept Whether to summarise type concept id field.
+#' @param standardConcept Boolean variable. Whether to summarise standard concept information.
+#' @param sourceVocabulary Boolean variable.  Whether to summarise source vocabulary information.
+#' @param domainId  Boolean variable. Whether to summarise domain id of standard concept id information.
+#' @param typeConcept  Boolean variable. Whether to summarise type concept id field information.
 #'
-#' @return A summarised_result object with the summarised data.
+#' @return A summarised_result object.
 #'
 #' @export
+#' @examples
+#' \donttest{
+#'library(dplyr)
+#'library(CDMConnector)
+#'library(DBI)
+#'library(duckdb)
+#'library(OmopSketch)
 #'
+#'# Connect to Eunomia database
+#'if (Sys.getenv("EUNOMIA_DATA_FOLDER") == "") Sys.setenv("EUNOMIA_DATA_FOLDER" = tempdir())
+#'if (!dir.exists(Sys.getenv("EUNOMIA_DATA_FOLDER"))) dir.create(Sys.getenv("EUNOMIA_DATA_FOLDER"))
+#'if (!eunomia_is_available()) downloadEunomiaData()
+#'con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
+#'cdm <- CDMConnector::cdmFromCon(
+#' con = con, cdmSchema = "main", writeSchema = "main"
+#')
+#'
+#'# Run summarise clinical tables
+#'summarisedResult <- summariseClinicalRecords(omopTable = cdm$condition_occurrence,
+#'                                             recordsPerPerson = c("mean", "sd"),
+#'                                             inObservation = TRUE,
+#'                                             standardConcept = TRUE,
+#'                                             sourceVocabulary = TRUE,
+#'                                             domainId = TRUE,
+#'                                             typeConcept = TRUE)
+#'summarisedResult |> print()
+#'PatientProfiles::mockDisconnect(cdm = cdm)
+#'}
 summariseClinicalRecords <- function(omopTable,
                                recordsPerPerson = c("mean", "sd", "median", "q25", "q75", "min", "max"),
                                inObservation = TRUE,

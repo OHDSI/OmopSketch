@@ -1,16 +1,40 @@
-#' Create a summarise result object to summarise record counts for different time intervals. Only records that fall within the observation period are counted.
+#' Create a summarise result object to summarise record counts of an omop_table using a specific time interval. Only records that fall within the observation period are counted.
 #'
 #' @param omopTable An omop table from a cdm object.
 #' @param unit Whether to stratify by "year" or by "month".
-#' @param unitInterval Number of years or months to stratify with.
+#' @param unitInterval An integer. Number of years or months to include within the same interval.
 #' @param ageGroup A list of age groups to stratify results by.
-#' @param sex Whether to stratify by sex (TRUE) or not (FALSE).
+#' @param sex Boolean variable. Whether to stratify by sex (TRUE) or not (FALSE).
 #'
-#' @return A summarised_result object with the summarised data.
+#' @return A summarised_result object..
 #'
 #' @importFrom rlang :=
 #' @export
+#' @examples
+#' \donttest{
+#'library(dplyr)
+#'library(CDMConnector)
+#'library(DBI)
+#'library(duckdb)
+#'library(OmopSketch)
 #'
+#'# Connect to Eunomia database
+#'if (Sys.getenv("EUNOMIA_DATA_FOLDER") == "") Sys.setenv("EUNOMIA_DATA_FOLDER" = tempdir())
+#'if (!dir.exists(Sys.getenv("EUNOMIA_DATA_FOLDER"))) dir.create(Sys.getenv("EUNOMIA_DATA_FOLDER"))
+#'if (!eunomia_is_available()) downloadEunomiaData()
+#'con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
+#'cdm <- CDMConnector::cdmFromCon(
+#' con = con, cdmSchema = "main", writeSchema = "main"
+#')
+#'
+#'# Run summarise clinical tables
+#'summarisedResult <- summariseRecordCount(omopTable = cdm$condition_occurrence,
+#'                                       unit = "year",
+#'                                       unitInterval = 10,
+#'                                       ageGroup = list("<=20" = c(0,20), ">20" = c(21, Inf)),
+#'                                       sex = TRUE)
+#'summarisedResult |> print()
+#'}
 summariseRecordCount <- function(omopTable, unit = "year", unitInterval = 1, ageGroup = NULL, sex = FALSE) {
 
   # Initial checks ----

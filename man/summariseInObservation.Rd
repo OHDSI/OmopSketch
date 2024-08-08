@@ -2,7 +2,7 @@
 % Please edit documentation in R/summariseInObservation.R
 \name{summariseInObservation}
 \alias{summariseInObservation}
-\title{Create a summarised result with the number of people in observation during a specific interval of time}
+\title{Create a summarised result with the number of people in observation during a specific interval of time.}
 \usage{
 summariseInObservation(
   observationPeriod,
@@ -18,17 +18,17 @@ summariseInObservation(
 
 \item{unit}{Whether to stratify by "year" or by "month".}
 
-\item{unitInterval}{Number of years or months to stratify with.}
+\item{unitInterval}{Number of years or months to include within the time interval.}
 
-\item{output}{Output format. It can be either the number of records ("records") that are in observation in the specific interval of time, the number of person-days ("person-days"), or both ("all).}
+\item{output}{Output format. It can be either the number of records ("records") that are in observation in the specific interval of time, the number of person-days ("person-days"), or both ("all").}
 
 \item{ageGroup}{A list of age groups to stratify results by.}
 
-\item{sex}{Whether to stratify by sex (TRUE) or not (FALSE).}
+\item{sex}{Boolean variable. Whether to stratify by sex (TRUE) or not (FALSE).}
 }
 \value{
-A summarised_result object with the summarised data.
+A summarised_result object.
 }
 \description{
-Create a summarised result with the number of people in observation during a specific interval of time
+Create a summarised result with the number of people in observation during a specific interval of time.
 }
