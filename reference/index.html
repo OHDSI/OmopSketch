@@ -16,6 +16,10 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/A-summarise_clinical_tables_records.html">Summarise clinical tables records</a></li>
+  </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/oxford-pharmacoepi/OmopSketch/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -51,13 +55,13 @@
           <code><a href="plotRecordCount.html">plotRecordCount()</a></code>
 
         </dt>
-        <dd>Create a gt table from a summarised omop_table.</dd>
+        <dd>Create a ggplot of the records' count trend.</dd>
       </dl><dl><dt>
 
           <code><a href="summariseClinicalRecords.html">summariseClinicalRecords()</a></code>
 
         </dt>
-        <dd>Summarise an omop_table from a cdm_reference object. You will obtain information related to the number of records, number of subjects, whether the records are in observation, number of present domains and number of present concepts.</dd>
+        <dd>Summarise an omop table from a cdm object. You will obtain information related to the number of records, number of subjects, whether the records are in observation, number of present domains and number of present concepts.</dd>
       </dl><dl><dt>
 
           <code><a href="summariseEntryCharacteristics.html">summariseEntryCharacteristics()</a></code>
@@ -69,7 +73,7 @@
           <code><a href="summariseInObservation.html">summariseInObservation()</a></code>
 
         </dt>
-        <dd>Create a summarised result with the number of people in observation during a specific interval of time</dd>
+        <dd>Create a summarised result with the number of people in observation during a specific interval of time.</dd>
       </dl><dl><dt>
 
           <code><a href="summarisePersonDays.html">summarisePersonDays()</a></code>
@@ -81,7 +85,7 @@
           <code><a href="summariseRecordCount.html">summariseRecordCount()</a></code>
 
         </dt>
-        <dd>Create a summarise result object to summarise record counts for different time intervals. Only records that fall within the observation period are counted.</dd>
+        <dd>Create a summarise result object to summarise record counts of an omop_table using a specific time interval. Only records that fall within the observation period are counted.</dd>
       </dl><dl><dt>
 
           <code><a href="tableClinicalRecords.html">tableClinicalRecords()</a></code>
