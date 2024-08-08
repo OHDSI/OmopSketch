@@ -37,7 +37,7 @@ remotes::install_github("oxford-pharmacoepi/OmopSketch")
 
 ## Example
 
-Let's create a cdm, for this example we will use eunomia:
+Let's create a cdm, for this example we will use Eunomia:
 
 ```{r, message=TRUE}
 library(duckdb)
@@ -48,16 +48,22 @@ cdm <- cdmFromCon(con = con, cdmSchema = "main", writeSchema = "main")
 cdm
 ```
 
-We can characterise the drug_exposure table:
+Let's first characterise the the drug_exposure omop table:
 
 ```{r}
 library(OmopSketch)
-result <- summariseClinicalRecords(cdm$drug_exposure)
-result |> glimpse()
+
+summariseClinicalRecords(cdm$drug_exposure) |>
+  tableClinicalRecords()
 ```
 
-We can create a visualisation of this table:
+We can also characterise the its records' trend:
 
 ```{r}
-tableClinicalRecords(result)
+library(OmopSketch)
+
+summariseRecordCount(cdm$drug_exposure) |>
+  plotRecordCount()
+
+  PatientProfiles::mockDisconnect(cdm = cdm)
 ```

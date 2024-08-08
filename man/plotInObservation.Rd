@@ -7,10 +7,10 @@
 plotInObservation(summarisedInObservation, facet = NULL)
 }
 \arguments{
-\item{summarisedInObservation}{A summarised_result object with the output from summariseInObservation().}
+\item{summarisedInObservation}{Output from summariseInObservation().}
 
 \item{facet}{columns in data to facet. If the facet position wants to be specified, use the formula class for the input
-(e.g., strata ~ group_level + cdm_name). Variables before "~" will be facet by on horizontal axis, whereas those after "~" on vertical axis.
+(e.g., strata_level ~ group_level + cdm_name). Variables before "~" will be facet by on horizontal axis, whereas those after "~" on vertical axis.
 Only the following columns are allowed to be facet by: "cdm_name", "group_level", "strata_level".}
 }
 \value{

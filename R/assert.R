@@ -332,6 +332,7 @@ assertClass <- function(x,
   }
   invisible(x)
 }
+
 assertLength <- function(x, length, errorMessage, call) {
   if (!is.null(length) && base::length(x) != length) {
     cli::cli_abort(errorMessage, call = call)

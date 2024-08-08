@@ -18,6 +18,9 @@ Suggests:
     DBI,
     duckdb,
     here,
+    knitr,
+    remotes,
+    rmarkdown,
     RPostgres,
     testthat (>= 3.0.0),
     withr
@@ -48,3 +51,4 @@ URL: https://oxford-pharmacoepi.github.io/OmopSketch/
 BugReports: https://github.com/oxford-pharmacoepi/OmopSketch/issues
 Remotes:
     darwin-eu-dev/omopgenerics
+VignetteBuilder: knitr

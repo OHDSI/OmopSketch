@@ -1,11 +1,37 @@
 #' Create a gt table from a summarised omop_table.
 #'
-#' @param summarisedClinicalRecords A summarised_result object with the output from summariseClinicalRecords().
+#' @param summarisedClinicalRecords Output from summariseClinicalRecords().
 #'
 #' @return A gt object with the summarised data.
 #'
 #' @export
+#' @examples
+#' \donttest{
+#'library(dplyr)
+#'library(CDMConnector)
+#'library(DBI)
+#'library(duckdb)
+#'library(OmopSketch)
 #'
+#'# Connect to Eunomia database
+#'if (Sys.getenv("EUNOMIA_DATA_FOLDER") == "") Sys.setenv("EUNOMIA_DATA_FOLDER" = tempdir())
+#'if (!dir.exists(Sys.getenv("EUNOMIA_DATA_FOLDER"))) dir.create(Sys.getenv("EUNOMIA_DATA_FOLDER"))
+#'if (!eunomia_is_available()) downloadEunomiaData()
+#'con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
+#'cdm <- CDMConnector::cdmFromCon(
+#' con = con, cdmSchema = "main", writeSchema = "main"
+#')
+#'
+#'# Run summarise clinical tables
+#'summarisedResult <- summariseClinicalRecords(omopTable = cdm$condition_occurrence,
+#'                                             recordsPerPerson = c("mean", "sd"),
+#'                                             inObservation = TRUE,
+#'                                             standardConcept = TRUE,
+#'                                             sourceVocabulary = TRUE,
+#'                                             domainId = TRUE,
+#'                                             typeConcept = TRUE)
+#'tableClinicalRecords(summarisedResult)
+#'}
 tableClinicalRecords <- function(summarisedClinicalRecords) {
 
   # Initial checks ----
