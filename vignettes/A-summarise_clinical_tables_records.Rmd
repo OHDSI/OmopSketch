@@ -58,7 +58,7 @@ Let's now use `summariseClinicalTables()`from the OmopSketch package to help us 
 
 ```{r, warning=FALSE}
 # Connect to Eunomia database
-summarisedResult <- summariseClinicalRecords(cdm$condition_occurrence)
+summarisedResult <- summariseClinicalRecords(cdm, "condition_occurrence")
 
 summarisedResult |> print()
 ```
@@ -67,7 +67,7 @@ Notice that the output is in the summarised result format.
 
 We can use the arguments to specify which statistics we want to perform. For example, use the argument `recordsPerPerson` to indicate which estimants you are interested in regarding the number of records per person. 
 ```{r, warning=FALSE}
-summarisedResult <- summariseClinicalRecords(cdm$condition_occurrence,
+summarisedResult <- summariseClinicalRecords(cdm, "condition_occurrence",
                                              recordsPerPerson =  c("mean", "sd", "q05", "q95"))
 
 summarisedResult |> 
@@ -78,7 +78,7 @@ summarisedResult |>
 You can further specify if you want to include the number of records in observation (`inObservation = TRUE`), the number of concepts mapped (`standardConcept = TRUE`), which types of source vocabulary does the table contain (`sourceVocabulary = TRUE`), which types of domain does the vocabulary have (`domainId = TRUE`) or the concept's type (`typeConcept = TRUE`).
 
 ```{r, warning=FALSE}
-summarisedResult <- summariseClinicalRecords(cdm$condition_occurrence,
+summarisedResult <- summariseClinicalRecords(cdm, "condition_occurrence",
                                              recordsPerPerson =  c("mean", "sd", "q05", "q95"),
                                              inObservation = TRUE,
                                              standardConcept = TRUE,
@@ -94,7 +94,7 @@ summarisedResult |>
 ## Tidy the summarised object
 `tableClinicalRecords()` will help you to tidy the previous results and create a gt table.
 ```{r, warning=FALSE}
-summarisedResult <- summariseClinicalRecords(cdm$condition_occurrence,
+summarisedResult <- summariseClinicalRecords(cdm, "condition_occurrence",
                                              recordsPerPerson =  c("mean", "sd", "q05", "q95"),
                                              inObservation = TRUE,
                                              standardConcept = TRUE,
