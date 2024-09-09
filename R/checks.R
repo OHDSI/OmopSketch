@@ -132,3 +132,41 @@ checkOutput <- function(output, call = parent.frame()){
   }
 }
 
+#' @noRd
+checkStudyPeriod <- function(cdm, studyPeriod) {
+  if (!isTRUE(inherits(cdm, "cdm_reference"))) {
+    cli::cli_abort("cdm must be a cdm_reference object.")
+  }
+  studyPeriod <- as.character(studyPeriod)
+  assertCharacter(studyPeriod, length = 2, na = TRUE)
+  observationRange <- cdm$observation_period |>
+    dplyr::summarise(minobs = min(.data$observation_period_start_date),
+                     maxobs = max(.data$observation_period_end_date))
+
+  if(is.na(studyPeriod[1])){
+    studyPeriod[1] <- observationRange |>
+      dplyr::pull("minobs") |>
+      as.character()
+  } else {
+    if(observationRange |>
+       dplyr::pull("minobs") > studyPeriod[1]) {
+      cli::cli_alert(paste0("The observation period in the cdm starts in ",observationRange |>
+                              dplyr::pull("minobs")))
+    }
+  }
+
+  if(is.na(studyPeriod[2])){
+    studyPeriod[2] <- observationRange |>
+      dplyr::pull("maxobs") |>
+      as.character()
+  } else {
+    if(observationRange |>
+       dplyr::pull("maxobs") < studyPeriod[2]) {
+      cli::cli_alert(paste0("The observation period in the cdm ends in ",observationRange |>
+                              dplyr::pull("maxobs")))
+    }
+  }
+
+  return(studyPeriod |> as.Date())
+}
+
