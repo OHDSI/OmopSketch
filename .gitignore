@@ -9,3 +9,5 @@ extras/*
 Eunomia/*
 
 inst/doc
+/doc/
+/Meta/
