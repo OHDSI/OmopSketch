@@ -2,15 +2,6 @@
 #'
 #' @param cdm A cdm reference object
 #' @return A summarised result object
-#' @examples
-#' # example code
-#'
-#' cdm <- cdmEunomia()
-#'
-#' snapshot <- summariseOmopSnapshot(cdm)
-#'
-#' omopgenerics::settings(snapshot)
-#'
 #' @export
 
 summariseOmopSnapshot <- function(cdm) {

@@ -15,13 +15,3 @@ A summarised result object
 \description{
 Summarise OMOP database and create snapshot
 }
-\examples{
-# example code
-
-cdm <- cdmEunomia()
-
-snapshot <- summariseOmopSnapshot(cdm)
-
-omopgenerics::settings(snapshot)
-
-}
