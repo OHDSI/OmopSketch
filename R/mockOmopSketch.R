@@ -18,6 +18,7 @@ mockOmopSketch <- function(con = NULL,
                            numberIndividuals = 100){
 
   if (is.null(con)) {
+    # TO BE REMOVED WHEN WE SUPPORT LOCAL CDMs
     rlang::check_installed("duckdb")
     con <- duckdb::dbConnect(duckdb::duckdb(), ":memory:")
   }
@@ -26,6 +27,7 @@ mockOmopSketch <- function(con = NULL,
     cli::cli_abort(c("!" = "`con` must be a DBI connection"))
   }
   if (is.null(writeSchema) & inherits(con, "duckdb_connection")) {
+    # TO BE REMOVED WHEN WE SUPPORT LOCAL CDMs
     writeSchema <- "main"
   }
 
@@ -43,6 +45,7 @@ mockOmopSketch <- function(con = NULL,
   # Create device exposure table - empty (Eunomia also has it empty)
   cdm <- omopgenerics::emptyOmopTable(cdm, "device_exposure")
 
+  # TO BE REMOVE WHEN omock::mockVisitOccurrence works
   # Create visit_occurrence table
   cdm <- omopgenerics::emptyOmopTable(cdm, "visit_occurrence")
   cdm$visit_occurrence <- cdm$visit_occurrence |>
@@ -72,6 +75,7 @@ mockOmopSketch <- function(con = NULL,
 
     )
 
+  # WHEN WE SUPORT LOCAL CDMs WE WILL HAVE TO ACCOUNT FOR THAT HERE
   cdm <- CDMConnector::copy_cdm_to(con = con, cdm = cdm, schema = writeSchema)
 
   return(cdm)
