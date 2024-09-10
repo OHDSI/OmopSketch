@@ -36,7 +36,7 @@ Imports:
     dplyr,
     ggplot2,
     gt,
-    omock,
+    omock (>= 0.2.0),
     magrittr,
     omopgenerics (>= 0.0.3),
     PatientProfiles,
@@ -49,6 +49,7 @@ Depends:
     R (>= 2.10)
 URL: https://oxford-pharmacoepi.github.io/OmopSketch/
 BugReports: https://github.com/oxford-pharmacoepi/OmopSketch/issues
-Remotes:
-    darwin-eu-dev/omopgenerics
+Remotes: 
+    darwin-eu-dev/omopgenerics,
+    OHDSI/omock
 VignetteBuilder: knitr
