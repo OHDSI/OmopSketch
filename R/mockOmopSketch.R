@@ -37,8 +37,7 @@ mockOmopSketch <- function(con = NULL,
     omock::mockDeath() |>
     omock::mockDrugExposure() |>
     omock::mockMeasurement() |>
-    omock::mockObservation() |>
-    omock::mockProcedureOccurrence()
+    omock::mockObservation()
 
   # Create device exposure table - empty (Eunomia also has it empty)
   cdm <- omopgenerics::emptyOmopTable(cdm, "device_exposure")
