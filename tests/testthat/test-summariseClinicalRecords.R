@@ -71,3 +71,14 @@ test_that("tableClinicalRecords() works", {
 
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
+
+cdm <- mockOmopSketch()
+omopTable <- cdm$condition_occurrence
+recordsPerPerson = c("mean", "sd", "median", "q25", "q75", "min", "max")
+inObservation = TRUE
+standardConcept = TRUE
+sourceVocabulary = FALSE
+domainId = TRUE
+typeConcept = TRUE
+sex = FALSE
+

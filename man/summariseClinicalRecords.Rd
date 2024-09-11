@@ -14,7 +14,8 @@ summariseClinicalRecords(
   standardConcept = TRUE,
   sourceVocabulary = FALSE,
   domainId = TRUE,
-  typeConcept = TRUE
+  typeConcept = TRUE,
+  sex = FALSE
 )
 }
 \arguments{
