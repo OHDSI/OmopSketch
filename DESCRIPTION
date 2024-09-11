@@ -21,7 +21,6 @@ Suggests:
     knitr,
     remotes,
     rmarkdown,
-    omock,
     odbc,
     RPostgres,
     testthat (>= 3.0.0),
