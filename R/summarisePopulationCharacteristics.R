@@ -33,43 +33,54 @@
 #'                                                           )
 #'summarisedPopulation |> print()
 #'PatientProfiles::mockDisconnect(cdm = cdm)
+#' # Change to mock data whenever possible
 #'}
 summarisePopulationCharacteristics <- function(cdm,
                                                studyPeriod = c(NA, NA),
                                                sex = FALSE,
                                                ageGroup = NULL) {
 
-  studyPeriod <- checkStudyPeriod(cdm, studyPeriod)
-  assertLogical(sex, length = 1)
+  omopgenerics::validateCdmArgument(cdm)
+  studyPeriod <- validateStudyPeriod(cdm, studyPeriod)
+  omopgenerics::assertLogical(sex, length = 1)
   checkAgeGroup(ageGroup)
 
-  cohort <- CohortConstructor::demographicsCohort(cdm = cdm, name = "summarised_population") |>
+  cohort <- CohortConstructor::demographicsCohort(cdm = cdm,
+                                                  name = omopgenerics::uniqueTableName()) |>
     CohortConstructor::trimToDateRange(dateRange = studyPeriod) |>
     PatientProfiles::addAge(indexDate = "cohort_end_date",
                             ageName = "age_at_end")
 
-  if(sex && !is.null(ageGroup)) {
+  cohort <- cohort |>
+    PatientProfiles::addDemographics(ageGroup = ageGroup, sex = sex,
+                                     priorObservation = F,
+                                     futureObservation = F,
+                                     age = F)
+  if(!is.null(ageGroup)) {
     cohort <- cohort |>
-      PatientProfiles::addDemographics(ageGroup = ageGroup,
-                                       age = FALSE,
-                                       priorObservation = FALSE,
-                                       futureObservation = FALSE)
-     strata <- list("sex", "age_group", c("sex", "age_group"))
-  } else if(sex && is.null(ageGroup)) {
-    cohort <- cohort |>
-      PatientProfiles::addSex()
-    strata <- list("sex")
-  } else if(!sex && !is.null(ageGroup)) {
-    cohort <- cohort |>
-      PatientProfiles::addAge(ageGroup = ageGroup)
-    strata <- list("age_group")
-  } else {
-    strata <- list()
-  }
+    dplyr::rename("age_group_at_start" = "age_group")
+    }
+
+  strata <- switch(
+    paste(is.null(ageGroup), sex),
+    "TRUE TRUE" = list("sex"),
+    "TRUE FALSE" = list(),
+    "FALSE TRUE" = list("age_group_at_start", "sex", c("age_group_at_start", "sex")),
+    "FALSE FALSE" = list("age_group_at_start")
+  )
 
   summarisedCohort <- cohort |>
     CohortCharacteristics::summariseCharacteristics(strata = strata,
-                                                    otherVariables = "age_at_end")
+                                                    otherVariables = "age_at_end") |>
+    omopgenerics::newSummarisedResult(
+      settings = dplyr::tibble(
+      "result_id" = 1L,
+      "package_name" = "OmopSketch",
+      "package_version" = as.character(utils::packageVersion(
+        "OmopSketch"
+      )),
+      "result_type" = "summarised_population_characteristics"
+    ))
 
   return(summarisedCohort)
 }

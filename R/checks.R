@@ -133,15 +133,24 @@ checkOutput <- function(output, call = parent.frame()){
 }
 
 #' @noRd
-checkStudyPeriod <- function(cdm, studyPeriod) {
-  if (!isTRUE(inherits(cdm, "cdm_reference"))) {
-    cli::cli_abort("cdm must be a cdm_reference object.")
+validateStudyPeriod <- function(cdm, studyPeriod) {
+  # First date checks
+  if(!is.na(studyPeriod[1]) & !is.na(studyPeriod[2]) & studyPeriod[1] > studyPeriod[2]) {
+    cli::cli_abort("The studyPeriod ends at a date earlier than the start provided.")
   }
+  if(!is.na(studyPeriod[1]) & is.na(as.Date(studyPeriod[1], format="%d/%m/%Y")) && is.na(as.Date(studyPeriod[1], format="%Y-%m-%d"))) {
+    cli::cli_abort("Please ensure that dates provided are in the correct format.")
+  }
+  if(!is.na(studyPeriod[2]) & is.na(as.Date(studyPeriod[2], format="%d/%m/%Y")) && is.na(as.Date(studyPeriod[2], format="%Y-%m-%d"))) {
+    cli::cli_abort("Please ensure that dates provided are in the correct format.")
+  }
+
   studyPeriod <- as.character(studyPeriod)
-  assertCharacter(studyPeriod, length = 2, na = TRUE)
+  omopgenerics::assertCharacter(studyPeriod, length = 2, na = TRUE)
   observationRange <- cdm$observation_period |>
     dplyr::summarise(minobs = min(.data$observation_period_start_date),
-                     maxobs = max(.data$observation_period_end_date))
+                     maxobs = max(.data$observation_period_end_date)) |>
+    dplyr::collect()
 
   if(is.na(studyPeriod[1])){
     studyPeriod[1] <- observationRange |>
@@ -152,6 +161,9 @@ checkStudyPeriod <- function(cdm, studyPeriod) {
        dplyr::pull("minobs") > studyPeriod[1]) {
       cli::cli_alert(paste0("The observation period in the cdm starts in ",observationRange |>
                               dplyr::pull("minobs")))
+    }
+    if(studyPeriod[1] < "1800-01-01") {
+      cli::cli_alert(paste0("The observation period in the cdm starts at a very early date."))
     }
   }
 
@@ -164,6 +176,9 @@ checkStudyPeriod <- function(cdm, studyPeriod) {
        dplyr::pull("maxobs") < studyPeriod[2]) {
       cli::cli_alert(paste0("The observation period in the cdm ends in ",observationRange |>
                               dplyr::pull("maxobs")))
+    }
+    if(studyPeriod[2] > clock::date_today(zone = "GMT")) {
+      cli::cli_alert(paste0("The observation period in the cdm ends after current date."))
     }
   }
 

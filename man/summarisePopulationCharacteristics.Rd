@@ -51,5 +51,6 @@ summarisedPopulation <- summarisePopulationCharacteristics(cdm = cdm,
                                                           )
 summarisedPopulation |> print()
 PatientProfiles::mockDisconnect(cdm = cdm)
+# Change to mock data whenever possible
 }
 }
