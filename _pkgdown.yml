@@ -3,8 +3,10 @@ template:
   bootstrap: 5
 
 reference:
-- subtitle: Snapshot Functions
-  desc: Under-development
+- subtitle: Snapshots
+  desc: Create snapshots of OMOP databases
+- contents:
+  - summariseOmopSnapshot
 - subtitle: Clinical Tables
   desc: Summarise and plot tables in the OMOP Common Data Model
 - contents:
@@ -26,3 +28,7 @@ reference:
   desc: Summarise characteristics of the individuals in the OMOP Common Data Model
 - contents:
   - summariseEntryCharacteristics
+- subtitle: Mock Database
+  desc: Create a mock database to test the OmopSketch package
+- contents:
+  - mockOmopSketch
