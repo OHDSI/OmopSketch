@@ -33,6 +33,8 @@ observation.}
 \item{domainId}{Boolean variable. Whether to summarise domain id of standard concept id information.}
 
 \item{typeConcept}{Boolean variable. Whether to summarise type concept id field information.}
+
+\item{sex}{Boolean variable. Whether to stratify by sex (TRUE) or not (FALSE)}
 }
 \value{
 A summarised_result object.

@@ -12,6 +12,7 @@
 #' @param sourceVocabulary Boolean variable.  Whether to summarise source vocabulary information.
 #' @param domainId  Boolean variable. Whether to summarise domain id of standard concept id information.
 #' @param typeConcept  Boolean variable. Whether to summarise type concept id field information.
+#' @param sex Boolean variable. Whether to stratify by sex (TRUE) or not (FALSE)
 #'
 #' @return A summarised_result object.
 #'
@@ -121,16 +122,17 @@ summariseClinicalRecords <- function(omopTable,
       addRecordsPerPerson(omopTable, recordsPerPerson, cdm)
   }
 
-  denominator <- getDenominator(result)
+  denominator <- getPercentageDenominator(result)
 
   # Summary concepts ----
   if (inObservation | standardConcept | sourceVocabulary | domainId | typeConcept) {
-    x <- sub(", ([^,]+)$", ", and \\1", gsub('_',' ', paste(variables, collapse = ", ")))
-    cli::cli_inform(c("i" = "Summarising {x} information"))
 
     variables <- columnsVariables(
       inObservation, standardConcept, sourceVocabulary, domainId, typeConcept
     )
+
+    x <- sub(", ([^,]+)$", ", and \\1", gsub('_',' ', paste(variables, collapse = ", ")))
+    cli::cli_inform(c("i" = "Summarising {x} information"))
 
     x <- omopTable |>
       addVariables(variables) |>
@@ -237,7 +239,7 @@ addSubjectsPercentage <- function(result, omopTable, people){
   result |>
     dplyr::add_row(
       result |>
-        dplyr::filter(variable_name == "number_subjects") |>
+        dplyr::filter(.data$variable_name == "number_subjects") |>
         dplyr::inner_join(
           people,
           by = "strata_level"
@@ -251,7 +253,7 @@ addSubjectsPercentage <- function(result, omopTable, people){
 addRecordsPerPerson <- function(result, omopTable, recordsPerPerson, cdm){
 
   strataName <- result$strata_name |> unique()
-  strataName <- dplyr::if_else(length(strataName) > 1, strataName[strataName != "overall"], "overall")
+  if(length(strataName) > 1){strataName <- strataName[strataName != "overall"]}
 
   suppressMessages(
     result |>
@@ -283,7 +285,7 @@ addRecordsPerPerson <- function(result, omopTable, recordsPerPerson, cdm){
   )
 }
 
-getDenominator <- function(result){
+getPercentageDenominator <- function(result){
   result |>
     dplyr::filter(.data$variable_name == "number_records") |>
     dplyr::select("strata_name", "strata_level", "estimate_value")
@@ -391,7 +393,7 @@ addVariablesInfo <- function(omopTable, variables){
     x <- x |>
       rbind(
         x |>
-          dplyr::summarise(n = sum(n, na.rm = TRUE), .by = all_of(variables)) |>
+          dplyr::summarise(n = sum(.data$n, na.rm = TRUE), .by = dplyr::all_of(variables)) |>
           dplyr::collect() |>
           dplyr::mutate(strata_level = "overall", strata_name = "overall")
       )

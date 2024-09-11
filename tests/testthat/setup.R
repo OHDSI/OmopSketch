@@ -43,3 +43,4 @@ cdmEunomia <- function() {
   CDMConnector::cdmDisconnect(cdm = cdmDuck)
   return(cdm)
 }
+
