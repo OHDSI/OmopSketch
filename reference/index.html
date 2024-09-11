@@ -34,9 +34,125 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+
+      <h3 id="snapshots">Snapshots<a class="anchor" aria-label="anchor" href="#snapshots"></a></h3>
+      <div class="section-desc"><p>Create snapshots of OMOP databases</p></div>
 
 
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="summariseOmopSnapshot.html">summariseOmopSnapshot()</a></code>
+
+        </dt>
+        <dd>Summarise OMOP database and create snapshot</dd>
+      </dl></div><div class="section level2">
+
+      <h3 id="clinical-tables">Clinical Tables<a class="anchor" aria-label="anchor" href="#clinical-tables"></a></h3>
+      <div class="section-desc"><p>Summarise and plot tables in the OMOP Common Data Model</p></div>
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="summariseClinicalRecords.html">summariseClinicalRecords()</a></code>
+
+        </dt>
+        <dd>Summarise an omop table from a cdm object. You will obtain information related to the number of records, number of subjects, whether the records are in observation, number of present domains and number of present concepts.</dd>
+      </dl><dl><dt>
+
+          <code><a href="tableClinicalRecords.html">tableClinicalRecords()</a></code>
+
+        </dt>
+        <dd>Create a gt table from a summarised omop_table.</dd>
+      </dl><dl><dt>
+
+          <code><a href="summariseRecordCount.html">summariseRecordCount()</a></code>
+
+        </dt>
+        <dd>Create a summarise result object to summarise record counts of an omop_table using a specific time interval. Only records that fall within the observation period are counted.</dd>
+      </dl><dl><dt>
+
+          <code><a href="plotRecordCount.html">plotRecordCount()</a></code>
+
+        </dt>
+        <dd>Create a ggplot of the records' count trend.</dd>
+      </dl></div><div class="section level2">
+
+      <h3 id="observation-periods">Observation Periods<a class="anchor" aria-label="anchor" href="#observation-periods"></a></h3>
+      <div class="section-desc"><p>Summarise and plot the observation period table in the OMOP Common Data Model</p></div>
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="summariseObservationPeriod.html">summariseObservationPeriod()</a></code>
+
+        </dt>
+        <dd>Summarise the observation period table getting some overall statistics in a summarised_result object.</dd>
+      </dl><dl><dt>
+
+          <code><a href="plotObservationPeriod.html">plotObservationPeriod()</a></code>
+
+        </dt>
+        <dd>Create a plot from the output of summariseObservationPeriod().</dd>
+      </dl><dl><dt>
+
+          <code><a href="summariseInObservation.html">summariseInObservation()</a></code>
+
+        </dt>
+        <dd>Create a summarised result with the number of people in observation during a specific interval of time.</dd>
+      </dl><dl><dt>
+
+          <code><a href="tableObservationPeriod.html">tableObservationPeriod()</a></code>
+
+        </dt>
+        <dd>Create a table from the output of summariseObservationPeriod().</dd>
+      </dl><dl><dt>
+
+          <code><a href="plotInObservation.html">plotInObservation()</a></code>
+
+        </dt>
+        <dd>Create a gt table from a summarised omop_table.</dd>
+      </dl></div><div class="section level2">
+
+      <h3 id="counts">Counts<a class="anchor" aria-label="anchor" href="#counts"></a></h3>
+      <div class="section-desc"><p>Under-development</p></div>
+
+
+    </div><div class="section level2">
+
+      <h3 id="individual-characteristics">Individual Characteristics<a class="anchor" aria-label="anchor" href="#individual-characteristics"></a></h3>
+      <div class="section-desc"><p>Summarise characteristics of the individuals in the OMOP Common Data Model</p></div>
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="summariseEntryCharacteristics.html">summariseEntryCharacteristics()</a></code>
+
+        </dt>
+        <dd>Summarise characteristics of the individuals at the start of their observation period.</dd>
+      </dl></div><div class="section level2">
+
+      <h3 id="mock-database">Mock Database<a class="anchor" aria-label="anchor" href="#mock-database"></a></h3>
+      <div class="section-desc"><p>Create a mock database to test the OmopSketch package</p></div>
 
 
     </div><div class="section level2">
@@ -50,74 +166,9 @@
 
         </dt>
         <dd>It creates a mock database for testing OmopSketch package</dd>
-      </dl><dl><dt>
-
-          <code><a href="plotInObservation.html">plotInObservation()</a></code>
-
-        </dt>
-        <dd>Create a gt table from a summarised omop_table.</dd>
-      </dl><dl><dt>
-
-          <code><a href="plotObservationPeriod.html">plotObservationPeriod()</a></code>
-
-        </dt>
-        <dd>Create a plot from the output of summariseObservationPeriod().</dd>
-      </dl><dl><dt>
-
-          <code><a href="plotRecordCount.html">plotRecordCount()</a></code>
-
-        </dt>
-        <dd>Create a ggplot of the records' count trend.</dd>
-      </dl><dl><dt>
-
-          <code><a href="summariseClinicalRecords.html">summariseClinicalRecords()</a></code>
-
-        </dt>
-        <dd>Summarise an omop table from a cdm object. You will obtain information related to the number of records, number of subjects, whether the records are in observation, number of present domains and number of present concepts.</dd>
-      </dl><dl><dt>
-
-          <code><a href="summariseEntryCharacteristics.html">summariseEntryCharacteristics()</a></code>
-
-        </dt>
-        <dd>Summarise characteristics of the individuals at the start of their observation period.</dd>
-      </dl><dl><dt>
-
-          <code><a href="summariseInObservation.html">summariseInObservation()</a></code>
-
-        </dt>
-        <dd>Create a summarised result with the number of people in observation during a specific interval of time.</dd>
-      </dl><dl><dt>
-
-          <code><a href="summariseObservationPeriod.html">summariseObservationPeriod()</a></code>
-
-        </dt>
-        <dd>Summarise the observation period table getting some overall statistics in a summarised_result object.</dd>
-      </dl><dl><dt>
-
-          <code><a href="summariseOmopSnapshot.html">summariseOmopSnapshot()</a></code>
-
-        </dt>
-        <dd>Summarise OMOP database and create snapshot</dd>
-      </dl><dl><dt>
-
-          <code><a href="summariseRecordCount.html">summariseRecordCount()</a></code>
-
-        </dt>
-        <dd>Create a summarise result object to summarise record counts of an omop_table using a specific time interval. Only records that fall within the observation period are counted.</dd>
-      </dl><dl><dt>
-
-          <code><a href="tableClinicalRecords.html">tableClinicalRecords()</a></code>
-
-        </dt>
-        <dd>Create a gt table from a summarised omop_table.</dd>
-      </dl><dl><dt>
-
-          <code><a href="tableObservationPeriod.html">tableObservationPeriod()</a></code>
-
-        </dt>
-        <dd>Create a table from the output of summariseObservationPeriod().</dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
