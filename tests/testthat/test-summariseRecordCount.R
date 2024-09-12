@@ -85,12 +85,12 @@ test_that("plotRecordCount() works", {
   cdm <- cdmEunomia()
 
   p <- summariseRecordCount(cdm, "drug_exposure", unitInterval = 8) |>
-    plotRecordCounts()
+    plotRecordCount()
 
   expect_true(inherits(p,"ggplot"))
 
   p2 <- summariseRecordCount(cdm, c("condition_occurrence","drug_exposure"), unitInterval = 8) |>
-    plotRecordCounts(facet = "group_level")
+    plotRecordCount(facet = "group_level")
 
   expect_true(inherits(p2,"ggplot"))
 
