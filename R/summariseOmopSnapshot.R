@@ -2,19 +2,6 @@
 #' @param cdm A cdm reference object
 #' @return A summarised result object
 #' @export
-#' @examples
-#' \donttest{
-#'library(dplyr)
-#'library(OmopSketch)
-#'
-#'# Connect to Eunomia database
-#'
-#'cdm <- mockOmopSketch(numberIndividuals = 1000)
-#'
-#'# Run OMOP database snapshot
-#'
-#'snapshot <- summariseOmopSnapshot(cdm)
-#'}
 
 summariseOmopSnapshot <- function(cdm) {
   summaryTable <- summary(cdm)
