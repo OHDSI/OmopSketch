@@ -10,8 +10,36 @@
 #' @export
 #'
 plotInObservation <- function(result,
+                              variable,
                               facet = NULL){
 
-  internalPlot(summarisedResult = summarisedInObservation,
+  result <- cdmEunomia()$observation_period |>
+    summariseInObservation(output = "all")
+  omopgenerics::validateResultArguemnt(result)
+  omopgenerics::assertCharacter(facet, null = TRUE)
+  result <- result |>
+    visOmopResults::filterSettings(
+      .data$result_type == "summarised_observation_period")
+  if (nrow(result) == 0) {
+    cli::cli_abort(c("!" = "No records found with result_type == summarised_observation_period"))
+  }
+  # check variable
+  result <-
+
+  result <- result |>
+    dplyr::mutate(variable_level = as.Date(stringr::str_extract(
+      .data$variable_level, "^[^ to]+")))
+  visOmopResults::plotScatter(
+    result = result,
+    x = "variable_level",
+    y = "count",
+    line = TRUE,
+    point = TRUE,
+    ribbon = FALSE,
+    ymin = NULL,
+    ymax = NULL,
+    facet = NULL
+  )
+  internalPlot(summarisedResult = result,
                facet = facet)
 }
