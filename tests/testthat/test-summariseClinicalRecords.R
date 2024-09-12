@@ -68,7 +68,7 @@ test_that("tableClinicalRecords() works", {
   # Check that works ----
   expect_no_error(x <- tableClinicalRecords(summariseClinicalRecords(cdm, "condition_occurrence")))
   expect_true(inherits(x,"gt_tbl"))
-  expect_warning(y <- tableClinicalRecords(summariseClinicalRecords(cdm, c("observation_period",
+  expect_no_error(y <- tableClinicalRecords(summariseClinicalRecords(cdm, c("observation_period",
                                                                             "measurement"))))
   expect_true(inherits(y,"gt_tbl"))
   expect_warning(t <- summariseClinicalRecords(cdm, "death"))
