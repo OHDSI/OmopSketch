@@ -134,6 +134,9 @@ checkOutput <- function(output, call = parent.frame()){
 
 #' @noRd
 validateStudyPeriod <- function(cdm, studyPeriod) {
+  if(is.null(studyPeriod)) {
+    studyPeriod <- c(NA,NA)
+  }
   # First date checks
   if(!is.na(studyPeriod[1]) & !is.na(studyPeriod[2]) & studyPeriod[1] > studyPeriod[2]) {
     cli::cli_abort("The studyPeriod ends at a date earlier than the start provided.")
@@ -148,8 +151,8 @@ validateStudyPeriod <- function(cdm, studyPeriod) {
   studyPeriod <- as.character(studyPeriod)
   omopgenerics::assertCharacter(studyPeriod, length = 2, na = TRUE)
   observationRange <- cdm$observation_period |>
-    dplyr::summarise(minobs = min(.data$observation_period_start_date),
-                     maxobs = max(.data$observation_period_end_date)) |>
+    dplyr::summarise(minobs = min(.data$observation_period_start_date, na.rm = TRUE),
+                     maxobs = max(.data$observation_period_end_date, na.rm = TRUE)) |>
     dplyr::collect()
 
   if(is.na(studyPeriod[1])){

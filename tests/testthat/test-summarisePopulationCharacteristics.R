@@ -28,6 +28,12 @@ test_that("summarisePopulationCharacteristics() works", {
                 dplyr::pull() !=
                 0)
 
+  expect_warning(summarisedPopulationEqual <- summarisePopulationCharacteristics(
+    cdm = cdm,
+    studyPeriod = NULL)
+  )
+  expect_equal(summarisedPopulation, summarisedPopulationEqual)
+
   # Add date range
   expect_warning(summarisedPopulation <- summarisePopulationCharacteristics(
     cdm = cdm,
@@ -146,7 +152,6 @@ test_that("summarisePopulationCharacteristics() expected errors", {
   expect_error(summarisePopulationCharacteristics(cdm, studyPeriod = c(NA, "1990-51-01")))
   expect_error(summarisePopulationCharacteristics(cdm, studyPeriod = c("1990-01-01")))
   expect_error(summarisePopulationCharacteristics(cdm, studyPeriod = c("01/31/1990", "2000-01-01")))
-  expect_error(summarisePopulationCharacteristics(cdm, studyPeriod = NULL))
   expect_error(summarisePopulationCharacteristics(cdm, studyPeriod = NULL, sex = "Female"))
   expect_error(summarisePopulationCharacteristics(cdm, studyPeriod = NULL, ageGroup = c(0,20,40)))
 

@@ -43,7 +43,7 @@ summarisePopulationCharacteristics <- function(cdm,
   omopgenerics::validateCdmArgument(cdm)
   studyPeriod <- validateStudyPeriod(cdm, studyPeriod)
   omopgenerics::assertLogical(sex, length = 1)
-  checkAgeGroup(ageGroup)
+  omopgenerics::validateAgeGroupArgument(ageGroup)
 
   cohort <- CohortConstructor::demographicsCohort(cdm = cdm,
                                                   name = omopgenerics::uniqueTableName()) |>
