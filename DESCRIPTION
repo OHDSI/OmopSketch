@@ -40,10 +40,12 @@ Imports:
     magrittr,
     omopgenerics (>= 0.0.3),
     PatientProfiles,
+    purrr,
     rlang,
     stringr,
     tibble,
     tidyr,
+    tidyselect,
     visOmopResults
 Depends: 
     R (>= 2.10)
