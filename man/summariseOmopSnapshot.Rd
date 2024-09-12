@@ -15,3 +15,19 @@ A summarised result object
 \description{
 Summarise OMOP database and create snapshot
 }
+\examples{
+# example code
+\donttest{
+library(dplyr)
+library(CDMConnector)
+library(DBI)
+library(duckdb)
+library(OmopSketch)
+
+cdm <- mockOmopSketch(numberIndividuals = 1000,
+writeSchema = NULL,
+con = NULL)
+
+summariseOmopSnapshot(cdm)
+}
+}

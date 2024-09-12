@@ -3,6 +3,21 @@
 #' @param cdm A cdm reference object
 #' @return A summarised result object
 #' @export
+#' @examples
+#' # example code
+#' \donttest{
+#'library(dplyr)
+#'library(CDMConnector)
+#'library(DBI)
+#'library(duckdb)
+#'library(OmopSketch)
+#'
+#'cdm <- mockOmopSketch(numberIndividuals = 1000,
+#' writeSchema = NULL,
+#' con = NULL)
+#'
+#' summariseOmopSnapshot(cdm)
+#' }
 
 summariseOmopSnapshot <- function(cdm) {
 
