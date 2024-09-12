@@ -12,6 +12,7 @@
 #' @param sourceVocabulary Boolean variable.  Whether to summarise source vocabulary information.
 #' @param domainId  Boolean variable. Whether to summarise domain id of standard concept id information.
 #' @param typeConcept  Boolean variable. Whether to summarise type concept id field information.
+#' @param ageGroup A list of age groups to stratify results by.
 #' @param sex Boolean variable. Whether to stratify by sex (TRUE) or not (FALSE)
 #'
 #' @return A summarised_result object.
@@ -52,6 +53,7 @@ summariseClinicalRecords <- function(omopTable,
                                sourceVocabulary = FALSE,
                                domainId = TRUE,
                                typeConcept = TRUE,
+                               ageGroup = NULL,
                                sex = FALSE) {
 
   # Initial checks ----
