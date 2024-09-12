@@ -2,3 +2,33 @@ url: https://oxford-pharmacoepi.github.io/OmopSketch/
 template:
   bootstrap: 5
 
+reference:
+- subtitle: Snapshots
+  desc: Create snapshots of OMOP databases
+- contents:
+  - summariseOmopSnapshot
+- subtitle: Clinical Tables
+  desc: Summarise and plot tables in the OMOP Common Data Model
+- contents:
+  - summariseClinicalRecords
+  - tableClinicalRecords
+  - summariseRecordCount
+  - plotRecordCount
+- subtitle: Observation Periods
+  desc: Summarise and plot the observation period table in the OMOP Common Data Model
+- contents:
+  - summariseObservationPeriod
+  - plotObservationPeriod
+  - summariseInObservation
+  - tableObservationPeriod
+  - plotInObservation
+- subtitle: Counts
+  desc: Under-development
+- subtitle: Individual Characteristics
+  desc: Summarise characteristics of the individuals in the OMOP Common Data Model
+- contents:
+  - summariseEntryCharacteristics
+- subtitle: Mock Database
+  desc: Create a mock database to test the OmopSketch package
+- contents:
+  - mockOmopSketch

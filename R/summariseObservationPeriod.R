@@ -359,7 +359,7 @@ plotObservationPeriod <- function(result,
   allEstimates <- result$estimate_name |> unique()
   missingEstimates <- neededEstimates[!neededEstimates %in% allEstimates]
   if (length(missingEstimates)) {
-    if (plotType == "desnityplot") {
+    if (plotType == "densityplot") {
       cli::cli_abort("No density estimates found, please use: summariseObservationPeriod(density = TRUE).")
     } else {
       cli::cli_abort("estimates not found: {missingEstimates}.")

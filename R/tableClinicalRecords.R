@@ -67,7 +67,7 @@ tableClinicalRecords <- function(summarisedClinicalRecords) {
       variable_name == "Domain" ~ 7,
       variable_name == "Type concept id" ~ 8
     )) |>
-    dplyr::arrange(order) |>
+    dplyr::arrange(order, dplyr::desc(as.numeric(.data$estimate_value))) |>
     visOmopResults::splitGroup() |>
     visOmopResults::formatEstimateValue() |>
     visOmopResults::formatEstimateName(
