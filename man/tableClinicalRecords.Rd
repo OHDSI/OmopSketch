@@ -34,7 +34,7 @@ con = con, cdmSchema = "main", writeSchema = "main"
 
 # Run summarise clinical tables
 summarisedResult <- summariseClinicalRecords(cdm = cdm,
-                                            tableNames = "condition_occurrence",
+                                            omopTableName = "condition_occurrence",
                                             recordsPerPerson = c("mean", "sd"),
                                             inObservation = TRUE,
                                             standardConcept = TRUE,

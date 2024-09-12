@@ -9,7 +9,7 @@ concepts.}
 \usage{
 summariseClinicalRecords(
   cdm,
-  tableNames,
+  omopTableName,
   recordsPerPerson = c("mean", "sd", "median", "q25", "q75", "min", "max"),
   inObservation = TRUE,
   standardConcept = TRUE,
@@ -21,7 +21,7 @@ summariseClinicalRecords(
 \arguments{
 \item{cdm}{A cdm object.}
 
-\item{tableNames}{A character vector of the names of the tables to summarise in the cdm object.}
+\item{omopTableName}{A character vector of the names of the tables to summarise in the cdm object.}
 
 \item{recordsPerPerson}{Generates summary statistics for the number of records per person. Set to NULL if no summary statistics are required.}
 
@@ -64,7 +64,7 @@ con = con, cdmSchema = "main", writeSchema = "main"
 
 # Run summarise clinical tables
 summarisedResult <- summariseClinicalRecords(cdm = cdm,
-                                            tableNames = "condition_occurrence",
+                                            omopTableName = "condition_occurrence",
                                             recordsPerPerson = c("mean", "sd"),
                                             inObservation = TRUE,
                                             standardConcept = TRUE,

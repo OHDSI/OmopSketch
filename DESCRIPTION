@@ -40,6 +40,7 @@ Imports:
     magrittr,
     omopgenerics (>= 0.0.3),
     PatientProfiles,
+    purrr,
     rlang,
     stringr,
     tibble,

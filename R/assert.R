@@ -389,20 +389,3 @@ errorNull <- function(null) {
   }
   return(str)
 }
-
-assertCdm <- function(cdm, tables = NULL) {
-  if (!isTRUE(inherits(cdm, "cdm_reference"))) {
-    cli::cli_abort("cdm a cdm_reference object.")
-  }
-  if (!is.null(tables)) {
-    tables <- tables[!(tables %in% names(cdm))]
-    if (length(tables) > 0) {
-      cli::cli_abort(paste0(
-        "tables: ",
-        paste0(tables, collapse = ", "),
-        " are not present in the cdm object"
-      ))
-    }
-  }
-  invisible(NULL)
-}
