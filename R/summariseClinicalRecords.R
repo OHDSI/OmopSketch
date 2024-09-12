@@ -57,7 +57,7 @@ summariseClinicalRecords <- function(cdm,
   # Initial checks ----
   omopgenerics::validateCdmArgument(cdm)
   omopTableName |>
-    omopgenerics::assertChoice(choices = tables$table_name)
+    omopgenerics::assertChoice(choices = omopgenerics::omopTables())
 
   estimates <- PatientProfiles::availableEstimates(
     variableType = "numeric", fullQuantiles = TRUE) |>
@@ -74,7 +74,7 @@ summariseClinicalRecords <- function(cdm,
 
   result <- purrr::map(omopTableName,
                        function(x) {
-                         if(cdm[[x]] |> dplyr::tally() |> dplyr::pull("n") == 0) {
+                         if(omopgenerics::isTableEmpty(cdm[[x]])) {
                            cli::cli_warn(paste0(x, " omop table is empty. Returning an empty summarised omop table."))
                            return(omopgenerics::emptySummarisedResult())
                          }
@@ -105,19 +105,19 @@ summariseClinicalRecord <- function(omopTableName, cdm, recordsPerPerson,
   if ("observation_period" == omopTableName) {
     if(standardConcept){
       if(!missing(standardConcept)){
-        cli::cli_warn("standardConcept turned to FALSE, as observation_period is in omopTableName", call = call)
+        cli::cli_alert("standardConcept turned to FALSE, as observation_period is in omopTableName", call = call)
       }
       standardConcept <- FALSE
     }
     if(sourceVocabulary){
       if(!missing(sourceVocabulary)){
-        cli::cli_warn("sourceVocabulary turned to FALSE, as observation_period is in omopTableName", call = call)
+        cli::cli_alert("sourceVocabulary turned to FALSE, as observation_period is in omopTableName", call = call)
       }
       sourceVocabulary <- FALSE
     }
     if(domainId){
       if(!missing(domainId)){
-        cli::cli_warn("domainId turned to FALSE, as observation_period is in omopTableName", call = call)
+        cli::cli_alert("domainId turned to FALSE, as observation_period is in omopTableName", call = call)
       }
       domainId <- FALSE
     }
