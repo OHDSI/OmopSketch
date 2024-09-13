@@ -1,4 +1,3 @@
-
 #' Summarise the observation period table getting some overall statistics in a
 #' summarised_result object.
 #'
