@@ -23,7 +23,9 @@ reference:
   - tableObservationPeriod
   - plotInObservation
 - subtitle: Counts
-  desc: Under-development
+  desc: Summarise concept code use in the OMOP Common Data Model
+- contents:
+  - summariseConceptCounts
 - subtitle: Individual Characteristics
   desc: Summarise characteristics of the individuals in the OMOP Common Data Model
 - contents:

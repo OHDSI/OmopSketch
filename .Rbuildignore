@@ -9,3 +9,5 @@
 ^pkgdown$
 ^codecov\.yml$
 ^Extras
+^doc$
+^Meta$
