@@ -42,7 +42,7 @@ summariseInObservation <- function(observationPeriod, unit = "year", unitInterva
 
   # Create initial variables ----
   cdm <- omopgenerics::cdmReference(observationPeriod)
-  observationPeriod <- addStrataVariables(cdm, ageGroup, sex)
+  observationPeriod <- addStrataVariablesToPeopleInObservation(cdm, ageGroup, sex)
 
   # Observation period ----
   name <- "observation_period"
@@ -238,15 +238,15 @@ createSummarisedResultObservationPeriod <- function(result, observationPeriod, n
   return(result)
 }
 
-addStrataVariables <- function(cdm, ageGroup, sex){
-  cdm$omop_table <- suppressMessages(
+addStrataVariablesToPeopleInObservation <- function(cdm, ageGroup, sex){
+  cdm$omop_table <- suppressWarnings(suppressMessages(
     cdm |>
       CohortConstructor::demographicsCohort(name = "omop_table",
                                             sex = NULL,
                                             ageRange = ageGroup,
                                             minPriorObservation = NULL,
                                             minFutureObservation = NULL)
-  )
+  ))
 
   age_tibble <- dplyr::tibble(
     "age_range" = gsub(",","_",gsub("\\)","",gsub("c\\(","",gsub(" ","",ageGroup)))),

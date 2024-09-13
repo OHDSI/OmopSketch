@@ -116,9 +116,7 @@ addDemographicsToOmopTable <- function(omopTable, date, ageGroup, sex){
                                                            priorObservation = FALSE,
                                                            futureObservation = FALSE,
                                                            dateOfBirth = FALSE) |>
-                     dplyr::mutate(age_group = dplyr::if_else(is.na(.data$age_group), "unknown", .data$age_group)) |> # To remove: https://github.com/darwin-eu-dev/PatientProfiles/issues/677
-                     dplyr::mutate(sex = dplyr::if_else(is.na(.data$sex), "unknown", .data$sex))) # To remove: https://github.com/darwin-eu-dev/PatientProfiles/issues/677
-
+                     dplyr::filter(.data$age_group != "unknown", .data$sex != "unknown"))
 }
 
 filterInObservation <- function(x, indexDate){

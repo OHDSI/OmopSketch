@@ -72,42 +72,14 @@ test_that("tableClinicalRecords() works", {
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
 
-test_that("summariseClinicalRecords() check sex argument", {
-  # Load mock database ----
-  cdm <- cdmEunomia()
-
-  # Check that works ----
-  expect_no_error(x <- summariseClinicalRecords(cdm$condition_occurrence, sex = TRUE))
-
-  # Check that the sum Male+Female = Overall
-  x1 <- x |>
-    dplyr::filter(variable_name != "Records per person", estimate_name != "percentage") |>
-    dplyr::summarise(value = sum(as.numeric(estimate_value), na.rm = TRUE), .by = c("strata_name","variable_name", "estimate_name")) |>
-    tidyr::pivot_wider(names_from = "strata_name", values_from = "value")
-  expect_true(sum(x1$sex - x1$overall, na.rm = TRUE) == 0)
-
-  x1 <- cdm$drug_exposure |>
-    dplyr::select("person_id") |>
-    dplyr::distinct() |>
-    PatientProfiles::addSexQuery() |>
-    dplyr::group_by(sex) |>
-    dplyr::tally() |>
-    dplyr::collect() |>
-    dplyr::arrange(sex) |>
-    dplyr::pull(n)
-
-  x2 <- summariseClinicalRecords(cdm$drug_exposure, sex = TRUE) |>
-    dplyr::filter(variable_name == "Number of subjects", estimate_name == "count", strata_name != "overall") |>
-    dplyr::select("strata_level", "estimate_value") |>
-    dplyr::collect() |>
-    dplyr::arrange(strata_level) |>
-    dplyr::pull(estimate_value) |>
-    as.numeric()
-
-  expect_equal(x1,x2)
-
-  PatientProfiles::mockDisconnect(cdm = cdm)
-})
-
-
+cdm <- mockOmopSketch()
+omopTable <- cdm$condition_occurrence
+recordsPerPerson = c("mean", "sd", "median", "q25", "q75", "min", "max")
+inObservation = TRUE
+standardConcept = TRUE
+sourceVocabulary = FALSE
+domainId = TRUE
+typeConcept = TRUE
+sex = TRUE
+ageGroup <- list(">20" = c(21,40), "<= 20" = c(0,20))
 

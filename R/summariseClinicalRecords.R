@@ -12,7 +12,7 @@
 #' @param sourceVocabulary Boolean variable.  Whether to summarise source vocabulary information.
 #' @param domainId  Boolean variable. Whether to summarise domain id of standard concept id information.
 #' @param typeConcept  Boolean variable. Whether to summarise type concept id field information.
-#' @param ageGroup A list of age groups to stratify results by.
+#' @param ageGroup A list of age groups to stratify results by. TO SPECIFY WHEN'S THE INDEX DATE.
 #' @param sex Boolean variable. Whether to stratify by sex (TRUE) or not (FALSE)
 #'
 #' @return A summarised_result object.
@@ -59,6 +59,8 @@ summariseClinicalRecords <- function(omopTable,
   # Initial checks ----
   assertClass(omopTable, "omop_table")
 
+  checkAgeGroup(ageGroup)
+
   omopTable |>
     omopgenerics::tableName() |>
     assertChoice(choices = tables$table_name)
@@ -100,9 +102,9 @@ summariseClinicalRecords <- function(omopTable,
   cdm <- omopgenerics::cdmReference(omopTable)
   omopTable <- omopTable |> dplyr::ungroup()
 
-  omopTable <- addStrataVariable(omopTable, sex)
+  omopTable <- addStrataVariableToOmopTable(omopTable, sex, ageGroup)
 
-  people <- getNumberPeopleInCdm(cdm, sex)
+  people <- getNumberPeopleInCdm(cdm, sex, ageGroup)
   result <- omopgenerics::emptySummarisedResult()
 
   if(omopTable |> dplyr::tally() |> dplyr::pull("n") == 0){
@@ -171,42 +173,64 @@ return(result)
 }
 
 # Functions -----
-addStrataVariable <- function(omopTable, sex){
-  if(sex){
-    omopTable <- omopTable |>
-      PatientProfiles::addSexQuery(sexName = "strata_level",
-                                   missingSexValue = "unknown") |>
-      dplyr::mutate("strata_name" = "sex")
-  }else{
-    omopTable <- omopTable |>
-      dplyr::mutate(strata_level = "overall") |>
-      dplyr::mutate(strata_name  = "overall")
-  }
+addStrataVariableToOmopTable <- function(omopTable, sex, ageGroup){
+  if(is.null(ageGroup)){age <- FALSE}else{age <- TRUE}
+  date <- startDate(omopgenerics::tableName(omopTable))
 
+  omopTable <- addDemographicsToOmopTable(omopTable, date, ageGroup, sex) |>
+    dplyr::mutate(
+      strata_name = dplyr::case_when(
+        .env$sex & .env$age  ~ "sex &&& age",
+        .env$sex & !.env$age ~ "sex",
+        !.env$sex & .env$age ~ "age",
+        .default = "overall")
+    ) |>
+    dplyr::mutate(strata_level = paste(.data$age_group, "&&&", .data$sex)) |>
+    dplyr::mutate(strata_level = stringr::str_replace(.data$strata_level,pattern = " &&& overall",replacement = "")) |>
+    dplyr::mutate(strata_level = stringr::str_replace(.data$strata_level,pattern = "overall &&& ",replacement = "")) |>
+    dplyr::select(- c("sex", "age_group"))
   return(omopTable)
 }
 
-getNumberPeopleInCdm <- function(cdm, sex){
-  if(sex){
-  p <- cdm[["person"]] |>
-      dplyr::ungroup() |>
-      dplyr::summarise(n = dplyr::n_distinct(.data$person_id), .by = "gender_concept_id") |>
-      dplyr::collect() |>
-      dplyr::mutate(sex = dplyr::case_when(
-        gender_concept_id == 8532 ~ "Female",
-        gender_concept_id == 8507 ~ "Male",
-        .default = "Unknown")
-      ) |>
-      dplyr::select("strata_level" = "sex", "n")
+getNumberPeopleInCdm <- function(cdm, sex, ageGroup){
 
-   p <- rbind(p, c("overall", sum(p$n, na.rm = TRUE)))
-  }else{
-   p <- cdm[["person"]] |>
-      dplyr::ungroup() |>
-      dplyr::summarise("n" = dplyr::n_distinct(.data$person_id)) |>
-      dplyr::collect() |>
-      dplyr::mutate(strata_level = "overall")
+  if(is.null(ageGroup)){age <- FALSE}else{age <- TRUE}
+  if(missing(ageGroup) | is.null(ageGroup)){ageGroup <- list("overall" = c(0,Inf))}else{ageGroup <- append(ageGroup, list("overall" = c(0,Inf)))}
+
+  p <- addStrataVariablesToPeopleInObservation(cdm, ageGroup, sex) |>
+    dplyr::select("age_group","sex") |>
+    dplyr::group_by(age_group, sex) |>
+    dplyr::tally() |>
+    dplyr::collect()
+
+  if(sex && age){
+    p <- p |>
+      rbind(
+        p |>
+          dplyr::filter(.data$age_group == "overall") |>
+          dplyr::summarise(n = sum(.data$n, na.rm = TRUE)) |>
+          dplyr::mutate(sex = "overall", age_group = "overall")
+      ) |>
+      rbind(
+        p |>
+          dplyr::filter(.data$age_group != "overall") |>
+          dplyr::summarise(n = sum(.data$n, na.rm = TRUE), .by = age_group) |>
+          dplyr::mutate(sex = "overall")
+      )
   }
+
+  p <- p |>
+    dplyr::mutate(
+      strata_name = dplyr::case_when(
+        .env$sex & .env$age  ~ "sex &&& age",
+        .env$sex & !.env$age ~ "sex",
+        !.env$sex & .env$age ~ "age",
+        .default = "overall")
+    ) |>
+    dplyr::mutate(strata_level = paste(.data$sex, "&&&", .data$age_group)) |>
+    dplyr::select(- c("sex", "age_group")) |>
+    dplyr::mutate(strata_level = gsub("overall &&& ","",strata_level),
+                  strata_level = gsub(" &&& overall","",strata_level))
 
   return(p)
 }
@@ -242,9 +266,9 @@ addSubjectsPercentage <- function(result, omopTable, people){
     dplyr::add_row(
       result |>
         dplyr::filter(.data$variable_name == "number_subjects") |>
-        dplyr::inner_join(
+        dplyr::left_join(
           people,
-          by = "strata_level"
+          by = c("strata_name", "strata_level")
         ) |>
         dplyr::mutate(estimate_value = as.character(100*as.numeric(.data$estimate_value)/as.numeric(.data$n))) |>
         dplyr::select(-"n") |>
@@ -254,10 +278,9 @@ addSubjectsPercentage <- function(result, omopTable, people){
 
 addRecordsPerPerson <- function(result, omopTable, recordsPerPerson, cdm){
 
-  strataName <- result$strata_name |> unique()
+  strataName <- gsub(" &&& ", " and ", result$strata_name |> unique())
   if(length(strataName) > 1){strataName <- strataName[strataName != "overall"]}
 
-  suppressMessages(
     result |>
       dplyr::bind_rows(
         cdm[["person"]] |>
@@ -276,15 +299,29 @@ addRecordsPerPerson <- function(result, omopTable, recordsPerPerson, cdm){
             0L,
             .data$records_per_person
           )) |>
+          dplyr::mutate("strata_level" = dplyr::if_else(
+            is.na(.data$strata_level),
+            "other",
+            .data$strata_level
+          )) |>
+          dplyr::mutate("strata_name" = dplyr::if_else(
+            is.na(.data$strata_name),
+            "other",
+            .data$strata_name
+          )) |>
+          dplyr::mutate(strata_level = stringr::str_replace(.data$strata_level," &&& "," and ")) |>
+          dplyr::mutate(strata_name  = stringr::str_replace(.data$strata_name, " &&& "," and ")) |>
           tidyr::pivot_wider(names_from = "strata_name", values_from = "strata_level") |>
           PatientProfiles::summariseResult(
             variables = "records_per_person",
             estimates = recordsPerPerson,
             counts = FALSE,
             strata = strataName
-          )
+          ) |>
+          dplyr::mutate(strata_level = stringr::str_replace(.data$strata_level," and "," &&& ")) |>
+          dplyr::mutate(strata_name  = stringr::str_replace(.data$strata_name, " and "," &&& "))
       )
-  )
+
 }
 
 getPercentageDenominator <- function(result){
