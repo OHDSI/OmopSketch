@@ -127,7 +127,7 @@ summariseClinicalRecord <- function(omopTableName, cdm, recordsPerPerson,
   result <- omopgenerics::emptySummarisedResult()
 
   # Counts summary ----
-  cli::cli_inform(c("i" = "Summarising counts"))
+  cli::cli_inform(c("i" = "Summarising table counts"))
   result <- result |>
     addNumberSubjects(omopTable) |>
     addNumberRecords(omopTable) |>
@@ -147,11 +147,14 @@ summariseClinicalRecord <- function(omopTableName, cdm, recordsPerPerson,
 
   # Summary concepts ----
   if (inObservation | standardConcept | sourceVocabulary | domainId | typeConcept) {
-    cli::cli_inform(c("i" = "Summarising concepts"))
+    x <- sub(", ([^,]+)$", ", and \\1", gsub('_',' ', paste(variables, collapse = ", ")))
+    cli::cli_inform(c("i" = "Summarising {x} information"))
 
     variables <- columnsVariables(
       inObservation, standardConcept, sourceVocabulary, domainId, typeConcept
     )
+
+
 
     result <- result |>
       dplyr::bind_rows(
