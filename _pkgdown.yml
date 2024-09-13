@@ -28,6 +28,7 @@ reference:
   desc: Summarise characteristics of the individuals in the OMOP Common Data Model
 - contents:
   - summariseEntryCharacteristics
+  - summarisePopulationCharacteristics
 - subtitle: Mock Database
   desc: Create a mock database to test the OmopSketch package
 - contents:
