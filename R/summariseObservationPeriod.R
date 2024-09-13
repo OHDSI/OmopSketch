@@ -5,8 +5,6 @@
 #' @param observationPeriod observation_period omop table.
 #' @param estimates Estimates to summarise the variables of interest (
 #' `records per person`, `duration` and `days to next observation period`).
-#' @param density Whether to export density data for time between observation
-#' periods.
 #'
 #' @return A summarised_result object with the summarised data.
 #'
@@ -29,20 +27,18 @@
 summariseObservationPeriod <- function(observationPeriod,
                                        estimates = c(
                                          "mean", "sd", "min", "q05", "q25",
-                                         "median", "q75", "q95", "max"),
-                                       density = FALSE){
+                                         "median", "q75", "q95", "max", "density")){
   # input checks
   omopgenerics::assertClass(observationPeriod, class = "omop_table")
   omopgenerics::assertTrue(
     omopgenerics::tableName(observationPeriod) == "observation_period")
   cdm <- omopgenerics::cdmReference(observationPeriod)
-  omopgenerics::assertLogical(density, length = 1)
   opts <- PatientProfiles::availableEstimates(
     variableType = "numeric", fullQuantiles = TRUE) |>
     dplyr::pull("estimate_name")
   omopgenerics::assertChoice(estimates, opts, unique = TRUE)
 
-  if (observationPeriod |> dplyr::ungroup() |> dplyr::tally() |> dplyr::pull() == 0) {
+  if (omopgenerics::isTableEmpty(observationPeriod)) {
     obsSr <- observationPeriod |>
       PatientProfiles::summariseResult(
         variables = NULL, estimates = NULL, counts = TRUE)
@@ -69,27 +65,32 @@ summariseObservationPeriod <- function(observationPeriod,
       PatientProfiles::summariseResult(
         strata = "id",
         variables = c("duration", "next_obs"),
-        estimates = estimates
+        estimates = estimates[estimates != "density"]
       ) |>
-      suppressMessages() |>
-      dplyr::union_all(
-        obs |>
-          dplyr::group_by(.data$person_id) |>
-          dplyr::tally(name = "n") |>
-          PatientProfiles::summariseResult(
-            variables = c("n"),
-            estimates = estimates,
-            counts = F
-          ) |>
-          suppressMessages()
-      ) |>
+      suppressMessages()
+
+    if(length(estimates[estimates != "density"]) != 0) {
+      obsSr <- obsSr |>
+        dplyr::union_all(
+          obs |>
+            dplyr::group_by(.data$person_id) |>
+            dplyr::tally(name = "n") |>
+            PatientProfiles::summariseResult(
+              variables = c("n"),
+              estimates = estimates[estimates != "density"],
+              counts = F
+            ) |>
+            suppressMessages()
+        )
+    }
+    obsSr <- obsSr |>
       dplyr::filter(
         .data$variable_name != "number records" | .data$strata_level == "overall") |>
       addOrdinalLevels() |>
       arrangeSr(estimates) |>
       dplyr::union_all(
         obs |>
-          densitySummary(density) |>
+          densitySummary("density" %in% estimates) |>
           dplyr::mutate(
             result_id = 1L, cdm_name = "unknown", group_name = "overall",
             group_level = "overall", estimate_type = "numeric",
@@ -114,8 +115,7 @@ summariseObservationPeriod <- function(observationPeriod,
       "result_id" = 1L,
       "result_type" = "summarise_observation_period",
       "package_name" = "OmopSketch",
-      "package_version" = as.character(utils::packageVersion("OmopSketch")),
-      "density" = density
+      "package_version" = as.character(utils::packageVersion("OmopSketch"))
     ))
   return(obsSr)
 }
@@ -360,7 +360,7 @@ plotObservationPeriod <- function(result,
   missingEstimates <- neededEstimates[!neededEstimates %in% allEstimates]
   if (length(missingEstimates)) {
     if (plotType == "densityplot") {
-      cli::cli_abort("No density estimates found, please use: summariseObservationPeriod(density = TRUE).")
+      cli::cli_abort("No density estimates found, please use: summariseObservationPeriod(estimates = 'density').")
     } else {
       cli::cli_abort("estimates not found: {missingEstimates}.")
     }

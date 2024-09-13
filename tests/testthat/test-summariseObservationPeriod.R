@@ -40,18 +40,18 @@ test_that("check summariseObservationPeriod works", {
   # simple run
   expect_no_error(resAll <- summariseObservationPeriod(cdm$observation_period))
   expect_no_error(
-    resAllD <- summariseObservationPeriod(cdm$observation_period, density = TRUE))
+    resAllD <- summariseObservationPeriod(cdm$observation_period, estimates = "density"))
   expect_no_error(
-    resAllN <- summariseObservationPeriod(cdm$observation_period, density = FALSE))
-
-  expect_identical(resAll, resAllN)
-  expect_identical(
-    resAll |> removeSettings(),
-    resAllD |> dplyr::filter(is.na(variable_level)) |> removeSettings()
+    resAllN <- summariseObservationPeriod(cdm$observation_period,
+                                          estimates = c(
+                                            "mean", "sd", "min", "q05", "q25",
+                                            "median", "q75", "q95", "max")))
+  expect_equal(
+    resAllD |> dplyr::filter(!is.na(variable_level)) |>
+      dplyr::mutate(estimate_value = as.numeric(estimate_value)) |> removeSettings(),
+    resAll |> dplyr::filter(!is.na(variable_level)) |>
+      dplyr::mutate(estimate_value = as.numeric(estimate_value)) |> removeSettings()
   )
-  expect_identical(settings(resAll)$density, FALSE)
-  expect_identical(settings(resAllN)$density, FALSE)
-  expect_identical(settings(resAllD)$density, TRUE)
 
   # test estimates
   expect_no_error(
@@ -103,7 +103,7 @@ test_that("check summariseObservationPeriod works", {
   )
 
   # duration - density
-  xx <- resAllD |>
+  xx <- resAll |>
     dplyr::filter(variable_name == "duration", !is.na(variable_level)) |>
     dplyr::group_by(strata_level) |>
     dplyr::summarise(
@@ -117,7 +117,7 @@ test_that("check summariseObservationPeriod works", {
   expect_identical(xx$area |> round(2) |> unique(), 1)
 
   # days to next observation period - density
-  xx <- resAllD |>
+  xx <- resAll |>
     dplyr::filter(variable_name == "days to next observation period",
                   !is.na(variable_level)) |>
     dplyr::group_by(strata_level) |>
@@ -139,8 +139,6 @@ test_that("check summariseObservationPeriod works", {
     dplyr::compute(name = "observation_period", temporary = FALSE)
 
   expect_no_error(resOne <- summariseObservationPeriod(cdm$observation_period))
-  expect_no_error(
-    resOneD <- summariseObservationPeriod(cdm$observation_period, density = TRUE))
 
   # counts
   expect_identical(resOne$estimate_value[resOne$variable_name == "number records"], "4")
@@ -156,13 +154,8 @@ test_that("check summariseObservationPeriod works", {
     dplyr::compute(name = "observation_period", temporary = FALSE)
 
   expect_no_error(resEmpty <- summariseObservationPeriod(cdm$observation_period))
-  expect_no_error(
-    resEmptyD <- summariseObservationPeriod(cdm$observation_period, density = TRUE))
   expect_true(nrow(resEmpty) == 2)
   expect_identical(unique(resEmpty$estimate_value), "0")
-
-  expect_false(identical(resEmpty, resEmptyD))
-  expect_identical(removeSettings(resEmpty), removeSettings(resEmptyD))
 
   # table works
   expect_no_error(tableObservationPeriod(resAll))
@@ -172,7 +165,7 @@ test_that("check summariseObservationPeriod works", {
   # plot works
   expect_no_error(plotObservationPeriod(resAll))
   expect_no_error(plotObservationPeriod(resOne))
-  expect_no_error(plotObservationPeriod(resEmpty))
+  expect_warning(plotObservationPeriod(resEmpty))
 
   # check all plots combinations
   expect_no_error(
@@ -206,7 +199,7 @@ test_that("check summariseObservationPeriod works", {
         variableName = "duration", plotType = "boxplot")
   )
   expect_error(
-    resAll |>
+    resAllN |>
       plotObservationPeriod(
         variableName = "duration", plotType = "densityplot")
   )
@@ -231,7 +224,7 @@ test_that("check summariseObservationPeriod works", {
         variableName = "records per person", plotType = "boxplot")
   )
   expect_error(
-    resAll |>
+    resAllN |>
       plotObservationPeriod(
         variableName = "records per person", plotType = "densityplot")
   )
@@ -256,7 +249,7 @@ test_that("check summariseObservationPeriod works", {
         variableName = "days to next observation period", plotType = "boxplot")
   )
   expect_error(
-    resAll |>
+    resAllN |>
       plotObservationPeriod(
         variableName = "days to next observation period", plotType = "densityplot")
   )
