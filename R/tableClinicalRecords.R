@@ -36,7 +36,7 @@
 tableClinicalRecords <- function(summarisedClinicalRecords) {
 
   # Initial checks ----
-  assertClass(summarisedClinicalRecords, "summarised_result")
+  omopgenerics::assertClass(summarisedClinicalRecords, "summarised_result")
 
   if(summarisedClinicalRecords |> dplyr::tally() |> dplyr::pull("n") == 0){
     cli::cli_warn("summarisedClinicalRecords is empty.")

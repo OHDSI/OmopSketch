@@ -9,7 +9,7 @@
 #'
 summariseEntryCharacteristics <- function(cdm, byYear = FALSE) {
   # initial checks
-  checkmate::assertClass(cdm, "cdm_reference")
+  omopgenerics::assertClass(cdm, "cdm_reference")
 
   cohort <- cdm$observation_period |>
     dplyr::group_by(.data$person_id) |>
