@@ -6,10 +6,6 @@
 #' @examples
 #' # example code
 #' \donttest{
-#'library(dplyr)
-#'library(CDMConnector)
-#'library(DBI)
-#'library(duckdb)
 #'library(OmopSketch)
 #'
 #'cdm <- mockOmopSketch(numberIndividuals = 1000,
