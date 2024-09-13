@@ -99,6 +99,7 @@ summariseClinicalRecord <- function(omopTableName, cdm, recordsPerPerson,
                                     sourceVocabulary, domainId, typeConcept,
                                     call = parent.frame(3)) {
 
+  # Initial checks
   omopgenerics::assertClass(cdm[[omopTableName]], "omop_table", call = call)
   omopTable <- cdm[[omopTableName]] |> dplyr::ungroup()
 
