@@ -37,11 +37,12 @@ con = con, cdmSchema = "main", writeSchema = "main"
 )
 
 # Run summarise clinical tables
-summarisedResult <- summariseRecordCount(omopTable = cdm$condition_occurrence,
-                                      unit = "year",
-                                      unitInterval = 10,
-                                      ageGroup = list("<=20" = c(0,20), ">20" = c(21, Inf)),
-                                      sex = TRUE)
+summarisedResult <- summariseRecordCount(cdm = cdm,
+                                         omopTableName = "condition_occurrence",
+                                         unit = "year",
+                                         unitInterval = 10,
+                                         ageGroup = list("<=20" = c(0,20), ">20" = c(21, Inf)),
+                                         sex = TRUE)
 plotRecordCount(summarisedResult, facet = strata_level ~ .)
 PatientProfiles::mockDisconnect(cdm = cdm)
 }

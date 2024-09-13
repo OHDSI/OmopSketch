@@ -5,7 +5,8 @@
 \title{Create a summarise result object to summarise record counts of an omop_table using a specific time interval. Only records that fall within the observation period are counted.}
 \usage{
 summariseRecordCount(
-  omopTable,
+  cdm,
+  omopTableName,
   unit = "year",
   unitInterval = 1,
   ageGroup = NULL,
@@ -13,7 +14,9 @@ summariseRecordCount(
 )
 }
 \arguments{
-\item{omopTable}{An omop table from a cdm object.}
+\item{cdm}{A cdm object.}
+
+\item{omopTableName}{A character vector of omop tables from the cdm.}
 
 \item{unit}{Whether to stratify by "year" or by "month".}
 
@@ -24,7 +27,7 @@ summariseRecordCount(
 \item{sex}{Boolean variable. Whether to stratify by sex (TRUE) or not (FALSE).}
 }
 \value{
-A summarised_result object..
+A summarised_result object.
 }
 \description{
 Create a summarise result object to summarise record counts of an omop_table using a specific time interval. Only records that fall within the observation period are counted.
@@ -47,11 +50,12 @@ con = con, cdmSchema = "main", writeSchema = "main"
 )
 
 # Run summarise clinical tables
-summarisedResult <- summariseRecordCount(omopTable = cdm$condition_occurrence,
-                                      unit = "year",
-                                      unitInterval = 10,
-                                      ageGroup = list("<=20" = c(0,20), ">20" = c(21, Inf)),
-                                      sex = TRUE)
+summarisedResult <- summariseRecordCount(cdm = cdm,
+                                         omopTableName = "condition_occurrence",
+                                         unit = "year",
+                                         unitInterval = 10,
+                                         ageGroup = list("<=20" = c(0,20), ">20" = c(21, Inf)),
+                                         sex = TRUE)
 summarisedResult |> print()
 }
 }
