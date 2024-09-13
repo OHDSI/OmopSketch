@@ -115,8 +115,8 @@ test_that("summarisePopulationCharacteristics() works", {
 test_that("summarisePopulationCharacteristics() works", {
   # Load mock database ----
   cdm <- omock::mockCdmReference() |>
-    omock::mockPerson() |>
-    omock::mockObservationPeriod() |>
+    omock::mockPerson(seed = 1L) |>
+    omock::mockObservationPeriod(seed = 1L) |>
     copyCdm()
 
   # Add sex and age group strata
@@ -132,6 +132,7 @@ test_that("summarisePopulationCharacteristics() works", {
                     dplyr::pull() |>
                     sort() ==
                     c("age_group_at_start", "age_group_at_start &&& sex", "overall", "sex")))
+
   expect_true(all(summarisedPopulation |>
                     dplyr::filter(variable_name == "Number records") |>
                     dplyr::arrange(strata_name, strata_level) |>
@@ -141,7 +142,6 @@ test_that("summarisePopulationCharacteristics() works", {
 
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
-
 
 test_that("summarisePopulationCharacteristics() expected errors", {
   # Load mock database ----
@@ -157,4 +157,3 @@ test_that("summarisePopulationCharacteristics() expected errors", {
 
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
-
