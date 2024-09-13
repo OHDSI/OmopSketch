@@ -18,8 +18,6 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-library(remotes)
-install_github("oxford-pharmacoepi/OmopSketch")
 
 library(CDMConnector)
 if (Sys.getenv("EUNOMIA_DATA_FOLDER") == "") Sys.setenv("EUNOMIA_DATA_FOLDER" = tempdir())
@@ -58,7 +56,7 @@ Let's now use `summariseClinicalTables()`from the OmopSketch package to help us 
 
 ```{r, warning=FALSE}
 # Connect to Eunomia database
-summarisedResult <- summariseClinicalRecords(cdm$condition_occurrence)
+summarisedResult <- summariseClinicalRecords(cdm, "condition_occurrence")
 
 summarisedResult |> print()
 ```
@@ -67,7 +65,7 @@ Notice that the output is in the summarised result format.
 
 We can use the arguments to specify which statistics we want to perform. For example, use the argument `recordsPerPerson` to indicate which estimants you are interested in regarding the number of records per person. 
 ```{r, warning=FALSE}
-summarisedResult <- summariseClinicalRecords(cdm$condition_occurrence,
+summarisedResult <- summariseClinicalRecords(cdm, "condition_occurrence",
                                              recordsPerPerson =  c("mean", "sd", "q05", "q95"))
 
 summarisedResult |> 
@@ -78,7 +76,7 @@ summarisedResult |>
 You can further specify if you want to include the number of records in observation (`inObservation = TRUE`), the number of concepts mapped (`standardConcept = TRUE`), which types of source vocabulary does the table contain (`sourceVocabulary = TRUE`), which types of domain does the vocabulary have (`domainId = TRUE`) or the concept's type (`typeConcept = TRUE`).
 
 ```{r, warning=FALSE}
-summarisedResult <- summariseClinicalRecords(cdm$condition_occurrence,
+summarisedResult <- summariseClinicalRecords(cdm, "condition_occurrence",
                                              recordsPerPerson =  c("mean", "sd", "q05", "q95"),
                                              inObservation = TRUE,
                                              standardConcept = TRUE,
@@ -94,7 +92,7 @@ summarisedResult |>
 ## Tidy the summarised object
 `tableClinicalRecords()` will help you to tidy the previous results and create a gt table.
 ```{r, warning=FALSE}
-summarisedResult <- summariseClinicalRecords(cdm$condition_occurrence,
+summarisedResult <- summariseClinicalRecords(cdm, "condition_occurrence",
                                              recordsPerPerson =  c("mean", "sd", "q05", "q95"),
                                              inObservation = TRUE,
                                              standardConcept = TRUE,
@@ -110,7 +108,7 @@ summarisedResult |>
 OmopSketch can also help you to summarise the trend of the records of an omop table. See the example below, where we use `summariseRecordCount()` to count the number of records within each year, and then, we use `plotRecordCount()` to create a ggplot with the trend.
 
 ```{r, warning=FALSE}
-summarisedResult <- summariseRecordCount(cdm$drug_exposure, unit = "year", unitInterval = 1)
+summarisedResult <- summariseRecordCount(cdm, "drug_exposure", unit = "year", unitInterval = 1)
 
 summarisedResult |> print()
 
@@ -120,27 +118,27 @@ summarisedResult |> plotRecordCount()
 Note that you can adjust the time interval period using the `unit` argument, which can be set to either "year" or "month", and the `unitInterval` argument, which must be an integer specifying the number of years or months which to count the records. See the example below, where it shows the number of records every 18 months:
 
 ```{r, warning=FALSE}
-summariseRecordCount(cdm$drug_exposure, unit = "month", unitInterval = 18) |> 
+summariseRecordCount(cdm, "drug_exposure", unit = "month", unitInterval = 18) |> 
   plotRecordCount()
 ```
 
 We can further stratify our counts by sex (setting argument `sex = TRUE`) or by age (providing an age group). Notice that in both cases, the function will automatically create a group called *overall* with all the sex groups and all the age groups.
 ```{r, warning=FALSE}
-summariseRecordCount(cdm$drug_exposure,
-                     unit = "month", 
-                     unitInterval = 18, 
-                     sex = TRUE, 
-                     ageGroup = list("20-29" = c(20,29),
+summariseRecordCount(cdm, "drug_exposure",
+                      unit = "month", 
+                      unitInterval = 18, 
+                      sex = TRUE, 
+                      ageGroup = list("20-29" = c(20,29),
                                      "30-39" = c(30,39))) |> 
   plotRecordCount()
 ```
 
 By default, `plotRecordCount()` does not apply faceting to any variables. However, you can use the `facet` argument to indicate which columns of the summarised result (either *group_level*, *strata_level* or *variable_level*) you want to facet by. If no variables are specified, different colours will be used instead.
 ```{r, warning=FALSE}
-summariseRecordCount(cdm$drug_exposure,
-                     unit = "month", 
-                     unitInterval = 18, 
-                     sex = TRUE) |> 
+summariseRecordCount(cdm, "drug_exposure",
+                      unit = "month", 
+                      unitInterval = 18, 
+                      sex = TRUE) |> 
     plotRecordCount(facet = group_level ~ strata_level)
 ```
 

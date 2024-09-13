@@ -23,7 +23,8 @@
 #')
 #'
 #'# Run summarise clinical tables
-#'summarisedResult <- summariseClinicalRecords(omopTable = cdm$condition_occurrence,
+#'summarisedResult <- summariseClinicalRecords(cdm = cdm,
+#'                                             omopTableName = "condition_occurrence",
 #'                                             recordsPerPerson = c("mean", "sd"),
 #'                                             inObservation = TRUE,
 #'                                             standardConcept = TRUE,
