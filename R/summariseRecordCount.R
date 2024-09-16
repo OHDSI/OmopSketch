@@ -80,11 +80,7 @@ summariseRecordCountInternal <- function(omopTableName, cdm, unit, unitInterval,
   omopTable <- cdm[[omopTableName]] |> dplyr::ungroup()
 
   # Create initial variables ----
-  if((cdm[[omopTableName]] |> dplyr::select("person_id") |> dplyr::anti_join(cdm[["person"]], by = "person_id") |> dplyr::tally() |> dplyr::pull("n")) != 0){
-    cli::cli_warn("There are person_id in the {omopTableName} that are not found in the person table. These person_id are removed from the analysis.")
-    omopTable <- omopTable |>
-      dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id")
-  }
+  omopTable <- filterPersonId(omopTable)
 
   result <- omopgenerics::emptySummarisedResult()
   date   <- startDate(omopTableName)
@@ -125,6 +121,20 @@ summariseRecordCountInternal <- function(omopTableName, cdm, unit, unitInterval,
   omopgenerics::dropTable(cdm = cdm, name = "interval")
 
   return(result)
+}
+
+filterPersonId <- function(omopTable){
+
+  cdm <- omopgenerics::cdmReference(omopTable)
+
+  if((omopTable |> dplyr::select("person_id") |> dplyr::anti_join(cdm[["person"]], by = "person_id") |> dplyr::tally() |> dplyr::pull("n")) != 0){
+    cli::cli_warn("There are person_id in the {omopTableName} that are not found in the person table. These person_id are removed from the analysis.")
+
+    omopTable <- omopTable |>
+      dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id")
+  }
+
+  return(omopTable)
 }
 
 addStrataToOmopTable <- function(omopTable, date, ageGroup, sex){

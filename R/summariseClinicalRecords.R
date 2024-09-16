@@ -112,7 +112,9 @@ summariseClinicalRecord <- function(omopTableName, cdm, recordsPerPerson,
   date <- startDate(omopgenerics::tableName(cdm[[omopTableName]]))
 
   omopTable <- cdm[[omopTableName]] |>
-    dplyr::ungroup() |>
+    dplyr::ungroup()
+
+  omopTable <- filterPersonId(omopTable) |>
     addStrataToOmopTable(date, ageGroup, sex)
 
   if ("observation_period" == omopTableName) {
