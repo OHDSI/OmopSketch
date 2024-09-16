@@ -56,7 +56,7 @@ summariseRecordCount <- function(cdm, omopTableName, unit = "year",
   result <- purrr::map(omopTableName,
                        function(x) {
                          checkOmopTable(cdm[[x]])
-                         if(cdm[[x]] |> dplyr::tally() |> dplyr::pull("n") == 0) {
+                         if(omopgenerics::isTableEmpty(cdm[[x]])) {
                            cli::cli_warn(paste0(x, " omop table is empty. Returning an empty summarised omop table."))
                            return(omopgenerics::emptySummarisedResult())
                          }

@@ -1,33 +1,9 @@
 #' @noRd
-checkAgeGroup <- function(ageGroup, overlap = FALSE) {
-  checkmate::assertList(ageGroup, min.len = 1, null.ok = TRUE)
-  if (!is.null(ageGroup)) {
-    if (is.numeric(ageGroup[[1]])) {
-      ageGroup <- list("age_group" = ageGroup)
-    }
-    for (k in seq_along(ageGroup)) {
-      invisible(checkCategory(ageGroup[[k]], overlap))
-      if (any(ageGroup[[k]] |> unlist() |> unique() < 0)) {
-        cli::cli_abort("ageGroup can't contain negative values")
-      }
-    }
-    if (is.null(names(ageGroup))) {
-      names(ageGroup) <- paste0("age_group_", 1:length(ageGroup))
-    }
-    if ("" %in% names(ageGroup)) {
-      id <- which(names(ageGroup) == "")
-      names(ageGroup)[id] <- paste0("age_group_", id)
-    }
-  }
-  return(invisible(ageGroup))
-}
-
-#' @noRd
 checkOmopTable <- function(omopTable){
-  assertClass(omopTable, "omop_table")
+  omopgenerics::assertClass(omopTable, "omop_table")
   omopTable |>
     omopgenerics::tableName() |>
-    assertChoice(choices = tables$table_name)
+    omopgenerics::assertChoice(choices = tables$table_name)
 }
 
 #' @noRd
@@ -53,7 +29,7 @@ checkUnitInterval <- function(unitInterval, call = parent.frame()){
 
 #' @noRd
 checkCategory <- function(category, overlap = FALSE, type = "numeric", call = parent.frame()) {
-  checkmate::assertList(
+  omopgenerics::assertList(
     category,
     types = type, any.missing = FALSE, unique = TRUE,
     min.len = 1
