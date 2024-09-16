@@ -68,9 +68,9 @@ test_that("summariseClinicalRecords() sex and ageGroup argument work", {
 
   # Check all tables work ----
   expect_true(inherits(summariseClinicalRecords(cdm, "observation_period", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))),"summarised_result"))
-  expect_no_error(op <- summariseClinicalRecords(cdm, "observation_period", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf))))
+  expect_no_error(op <- summariseClinicalRecords(cdm, "observation_period", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
   expect_no_error(vo <- summariseClinicalRecords(cdm, "visit_occurrence", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
-  expect_no_error(summariseClinicalRecords(cdm, "condition_occurrence", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
+  expect_no_error(summariseClinicalRecords(cdm, "condition_occurrence", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf))))
   expect_no_error(summariseClinicalRecords(cdm, "drug_exposure", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
   expect_no_error(summariseClinicalRecords(cdm, "procedure_occurrence", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
   expect_warning(summariseClinicalRecords(cdm, "device_exposure", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
@@ -171,7 +171,7 @@ test_that("summariseClinicalRecords() sex and ageGroup argument work", {
   expect_true(records |> dplyr::filter(strata_level == "young &&& Female") |> dplyr::pull(estimate_value) == "2")
 
 
-  # Check num subjects
+  # Check stats
   records <- result |>
     dplyr::filter(variable_name == "records_per_person")
   expect_true(records |> dplyr::filter(strata_name == "overall", estimate_name == "mean") |> dplyr::pull(estimate_value) == "1.8")
