@@ -1,0 +1,7 @@
+tablePopulationCharacteristics <- function(summarisedPopulationCharacteristics){
+
+
+
+
+
+}
