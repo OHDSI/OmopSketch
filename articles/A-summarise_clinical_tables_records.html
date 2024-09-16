@@ -136,9 +136,9 @@ tables of the cdm (i.e., <strong>condition_occurrence</strong>).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Connect to Eunomia database</span></span>
 <span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseClinicalRecords.html">summariseClinicalRecords</a></span><span class="op">(</span><span class="va">cdm</span>, <span class="st">"condition_occurrence"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising counts</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising table counts</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising concepts</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising in observation, standard, domain id, and type information</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 20 × 13</span></span></span>
@@ -175,9 +175,9 @@ records per person.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseClinicalRecords.html">summariseClinicalRecords</a></span><span class="op">(</span><span class="va">cdm</span>, <span class="st">"condition_occurrence"</span>,</span>
 <span>                                             recordsPerPerson <span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span>, <span class="st">"sd"</span>, <span class="st">"q05"</span>, <span class="st">"q95"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising counts</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising table counts</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising concepts</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising in observation, standard, domain id, and type information</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">variable_name</span> <span class="op">==</span> <span class="st">"Records per person"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -204,9 +204,9 @@ vocabulary have (<code>domainId = TRUE</code>) or the concept’s type
 <span>                                             sourceVocabulary <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                                             domainId <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                                             typeConcept <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising counts</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising table counts</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising concepts</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising in observation, standard, domain id, source, and type information</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">variable_name</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -229,9 +229,9 @@ previous results and create a gt table.</p>
 <span>                                             sourceVocabulary <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                                             domainId <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                                             typeConcept <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising counts</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising table counts</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising concepts</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising in observation, standard, domain id, source, and type information</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/tableClinicalRecords.html">tableClinicalRecords</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
