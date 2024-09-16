@@ -7,7 +7,7 @@ test_that("summariseRecordCount() works", {
   expect_true(inherits(summariseRecordCount(cdm, "observation_period", unit = "month"),"summarised_result"))
   expect_true(inherits(summariseRecordCount(cdm, "observation_period", unitInterval = 5),"summarised_result"))
 
-  expect_no_error(summariseRecordCount(cdm, "observation_period"))
+  expect_warning(summariseRecordCount(cdm, "observation_period"))
   expect_no_error(summariseRecordCount(cdm, "visit_occurrence"))
   expect_no_error(co <- summariseRecordCount(cdm, "condition_occurrence"))
   expect_no_error(summariseRecordCount(cdm, "drug_exposure"))
@@ -195,7 +195,7 @@ test_that("summariseRecordCount() sex argument works", {
     dplyr::pull("estimate_value")
   expect_equal(x,y)
 
-  expect_no_error(t <- summariseRecordCount(cdm, "observation_period", sex = TRUE))
+  expect_warning(t <- summariseRecordCount(cdm, "observation_period", sex = TRUE))
   x <- t |>
     dplyr::select("strata_level", "variable_level", "estimate_value") |>
     dplyr::filter(strata_level != "overall") |>
