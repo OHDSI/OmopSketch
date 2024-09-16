@@ -53,5 +53,6 @@ URL: https://oxford-pharmacoepi.github.io/OmopSketch/
 BugReports: https://github.com/oxford-pharmacoepi/OmopSketch/issues
 Remotes: 
     darwin-eu-dev/omopgenerics,
-    OHDSI/omock
+    OHDSI/omock,
+    darwin-eu/visOmopResults
 VignetteBuilder: knitr
