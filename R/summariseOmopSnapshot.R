@@ -8,7 +8,7 @@
 #' \donttest{
 #'library(OmopSketch)
 #'
-#'cdm <- mockOmopSketch(numberIndividuals = 1000)
+#' cdm <- mockOmopSketch(numberIndividuals = 1000)
 #'
 #' summariseOmopSnapshot(cdm)
 #' }
