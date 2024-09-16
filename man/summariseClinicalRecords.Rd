@@ -8,7 +8,8 @@ records are in observation, number of present domains and number of present
 concepts.}
 \usage{
 summariseClinicalRecords(
-  omopTable,
+  cdm,
+  omopTableName,
   recordsPerPerson = c("mean", "sd", "median", "q25", "q75", "min", "max"),
   inObservation = TRUE,
   standardConcept = TRUE,
@@ -18,7 +19,9 @@ summariseClinicalRecords(
 )
 }
 \arguments{
-\item{omopTable}{An omop_table object derived from a cdm object.}
+\item{cdm}{A cdm object.}
+
+\item{omopTableName}{A character vector of the names of the tables to summarise in the cdm object.}
 
 \item{recordsPerPerson}{Generates summary statistics for the number of records per person. Set to NULL if no summary statistics are required.}
 
@@ -60,7 +63,8 @@ con = con, cdmSchema = "main", writeSchema = "main"
 )
 
 # Run summarise clinical tables
-summarisedResult <- summariseClinicalRecords(omopTable = cdm$condition_occurrence,
+summarisedResult <- summariseClinicalRecords(cdm = cdm,
+                                            omopTableName = "condition_occurrence",
                                             recordsPerPerson = c("mean", "sd"),
                                             inObservation = TRUE,
                                             standardConcept = TRUE,

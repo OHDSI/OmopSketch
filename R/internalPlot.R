@@ -1,7 +1,7 @@
 #' @noRd
 internalPlot <- function(summarisedResult, facet = NULL, call = parent.frame()){
   # Initial checks ----
-  assertClass(summarisedResult, "summarised_result", call = call)
+  omopgenerics::assertClass(summarisedResult, "summarised_result", call = call)
 
   if(summarisedResult |> dplyr::tally() |> dplyr::pull("n") == 0){
     cli::cli_warn("summarisedOmopTable is empty.")
@@ -75,7 +75,7 @@ internalPlot <- function(summarisedResult, facet = NULL, call = parent.frame()){
 
 facetFunction <- function(facet, summarisedResult) {
   if (!is.null(facet)) {
-    checkmate::assertTRUE(inherits(facet, c("formula", "character")))
+    omopgenerics::assertTrue(inherits(facet, c("formula", "character")))
 
     if (inherits(facet, "formula")) {
       facet <- Reduce(paste, deparse(facet))

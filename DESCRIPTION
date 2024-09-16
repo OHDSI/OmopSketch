@@ -21,6 +21,7 @@ Suggests:
     knitr,
     remotes,
     rmarkdown,
+    odbc,
     RPostgres,
     testthat (>= 3.0.0),
     withr
@@ -28,7 +29,6 @@ Config/testthat/edition: 3
 Config/testthat/parallel: true
 Imports: 
     CDMConnector (>= 1.3.0),
-    checkmate,
     cli,
     clock,
     CohortCharacteristics,
@@ -40,10 +40,12 @@ Imports:
     magrittr,
     omopgenerics (>= 0.0.3),
     PatientProfiles,
+    purrr,
     rlang,
     stringr,
     tibble,
     tidyr,
+    tidyselect,
     visOmopResults
 Depends: 
     R (>= 2.10)

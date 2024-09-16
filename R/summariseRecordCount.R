@@ -1,12 +1,13 @@
 #' Create a summarise result object to summarise record counts of an omop_table using a specific time interval. Only records that fall within the observation period are counted.
 #'
-#' @param omopTable An omop table from a cdm object.
+#' @param cdm A cdm object.
+#' @param omopTableName A character vector of omop tables from the cdm.
 #' @param unit Whether to stratify by "year" or by "month".
 #' @param unitInterval An integer. Number of years or months to include within the same interval.
 #' @param ageGroup A list of age groups to stratify results by.
 #' @param sex Boolean variable. Whether to stratify by sex (TRUE) or not (FALSE).
 #'
-#' @return A summarised_result object..
+#' @return A summarised_result object.
 #'
 #' @importFrom rlang :=
 #' @export
@@ -28,17 +29,20 @@
 #')
 #'
 #'# Run summarise clinical tables
-#'summarisedResult <- summariseRecordCount(omopTable = cdm$condition_occurrence,
-#'                                       unit = "year",
-#'                                       unitInterval = 10,
-#'                                       ageGroup = list("<=20" = c(0,20), ">20" = c(21, Inf)),
-#'                                       sex = TRUE)
+#'summarisedResult <- summariseRecordCount(cdm = cdm,
+#'                                          omopTableName = "condition_occurrence",
+#'                                          unit = "year",
+#'                                          unitInterval = 10,
+#'                                          ageGroup = list("<=20" = c(0,20), ">20" = c(21, Inf)),
+#'                                          sex = TRUE)
 #'summarisedResult |> print()
 #'}
-summariseRecordCount <- function(omopTable, unit = "year", unitInterval = 1, ageGroup = NULL, sex = FALSE) {
+summariseRecordCount <- function(cdm, omopTableName, unit = "year",
+                                 unitInterval = 1, ageGroup = NULL, sex = FALSE) {
 
   # Initial checks ----
-  checkOmopTable(omopTable)
+  omopgenerics::validateCdmArgument(cdm)
+  omopgenerics::assertCharacter(omopTableName)
 
   if(missing(unit)){unit <- "year"}
   if(missing(unitInterval)){unitInterval <- 1}
@@ -46,23 +50,38 @@ summariseRecordCount <- function(omopTable, unit = "year", unitInterval = 1, age
 
   checkUnit(unit)
   checkUnitInterval(unitInterval)
-  checkAgeGroup(ageGroup)
+  omopgenerics::validateAgeGroupArgument(ageGroup)
+  omopgenerics::assertLogical(sex, length = 1)
 
-  assertLogical(sex, length = 1)
+  result <- purrr::map(omopTableName,
+                       function(x) {
+                         checkOmopTable(cdm[[x]])
+                         if(omopgenerics::isTableEmpty(cdm[[x]])) {
+                           cli::cli_warn(paste0(x, " omop table is empty. Returning an empty summarised omop table."))
+                           return(omopgenerics::emptySummarisedResult())
+                         }
+                         summariseRecordCountInternal(x,
+                                                      cdm = cdm,
+                                                      unit = unit,
+                                                      unitInterval = unitInterval,
+                                                      ageGroup = ageGroup,
+                                                     sex = sex)
+                       }
+  ) |>
+    dplyr::bind_rows()
 
-  if(omopTable |> dplyr::tally() |> dplyr::pull("n") == 0){
-    cli::cli_warn(paste0(omopgenerics::tableName(omopTable), " omop table is empty. Returning an empty summarised result."))
+  return(result)
+}
 
-    return(omopgenerics::emptySummarisedResult())
-  }
+#' @noRd
+summariseRecordCountInternal <- function(omopTableName, cdm, unit, unitInterval,
+                                         ageGroup, sex) {
 
   # Create initial variables ----
-  cdm <- omopgenerics::cdmReference(omopTable)
-  omopTable <- omopTable |> dplyr::ungroup()
+  omopTable <- cdm[[omopTableName]] |> dplyr::ungroup()
 
-  name   <- omopgenerics::tableName(omopTable)
   result <- omopgenerics::emptySummarisedResult()
-  date   <- startDate(name)
+  date   <- startDate(omopTableName)
 
   # Create strata variable ----
   strata <- c("age_group","sex")
@@ -74,7 +93,7 @@ summariseRecordCount <- function(omopTable, unit = "year", unitInterval = 1, age
   # Use add demographic query -> when both are true (age = FALSE)
   omopTable <- addDemographicsToOmopTable(omopTable, date, ageGroup, sex)
 
-  if(name != "observation_period") {
+  if(omopTableName != "observation_period") {
     omopTable <- omopTable |>
       filterInObservation(indexDate = date)
   }
@@ -97,7 +116,7 @@ summariseRecordCount <- function(omopTable, unit = "year", unitInterval = 1, age
   result <- createOverallGroup(result, ageGroup, sex, strata)
 
   # Create summarised result ----
-  result <- createSummarisedResultRecordCount(result, omopTable, name, unit, unitInterval)
+  result <- createSummarisedResultRecordCount(result, omopTable, omopTableName, unit, unitInterval)
   omopgenerics::dropTable(cdm = cdm, name = "interval")
 
   return(result)
@@ -144,18 +163,18 @@ filterInObservation <- function(x, indexDate){
 
 getOmopTableStartDate <- function(omopTable, date){
   omopTable |>
-    dplyr::summarise("startDate" = min(.data[[date]], na.rm = TRUE)) |>
+    dplyr::summarise("start_date" = min(.data[[date]], na.rm = TRUE)) |>
     dplyr::collect() |>
-    dplyr::mutate("startDate" = as.Date(paste0(clock::get_year(startDate),"-01-01"))) |>
-    dplyr::pull("startDate")
+    dplyr::mutate("start_date" = as.Date(paste0(clock::get_year(.data$start_date),"-01-01"))) |>
+    dplyr::pull("start_date")
 }
 
 getOmopTableEndDate   <- function(omopTable, date){
   omopTable |>
-    dplyr::summarise("endDate" = max(.data[[date]], na.rm = TRUE)) |>
+    dplyr::summarise("end_date" = max(.data[[date]], na.rm = TRUE)) |>
     dplyr::collect() |>
-    dplyr::mutate("endDate" = as.Date(paste0(clock::get_year(endDate),"-12-31"))) |>
-    dplyr::pull("endDate")
+    dplyr::mutate("end_date" = as.Date(paste0(clock::get_year(.data$end_date),"-12-31"))) |>
+    dplyr::pull("end_date")
 }
 
 getIntervalTibble <- function(omopTable, start_date_name, end_date_name, unit, unitInterval){

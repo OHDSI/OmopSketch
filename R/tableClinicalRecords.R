@@ -23,7 +23,8 @@
 #')
 #'
 #'# Run summarise clinical tables
-#'summarisedResult <- summariseClinicalRecords(omopTable = cdm$condition_occurrence,
+#'summarisedResult <- summariseClinicalRecords(cdm = cdm,
+#'                                             omopTableName = "condition_occurrence",
 #'                                             recordsPerPerson = c("mean", "sd"),
 #'                                             inObservation = TRUE,
 #'                                             standardConcept = TRUE,
@@ -35,7 +36,7 @@
 tableClinicalRecords <- function(summarisedClinicalRecords) {
 
   # Initial checks ----
-  assertClass(summarisedClinicalRecords, "summarised_result")
+  omopgenerics::assertClass(summarisedClinicalRecords, "summarised_result")
 
   if(summarisedClinicalRecords |> dplyr::tally() |> dplyr::pull("n") == 0){
     cli::cli_warn("summarisedClinicalRecords is empty.")

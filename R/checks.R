@@ -1,33 +1,9 @@
 #' @noRd
-checkAgeGroup <- function(ageGroup, overlap = FALSE) {
-  checkmate::assertList(ageGroup, min.len = 1, null.ok = TRUE)
-  if (!is.null(ageGroup)) {
-    if (is.numeric(ageGroup[[1]])) {
-      ageGroup <- list("age_group" = ageGroup)
-    }
-    for (k in seq_along(ageGroup)) {
-      invisible(checkCategory(ageGroup[[k]], overlap))
-      if (any(ageGroup[[k]] |> unlist() |> unique() < 0)) {
-        cli::cli_abort("ageGroup can't contain negative values")
-      }
-    }
-    if (is.null(names(ageGroup))) {
-      names(ageGroup) <- paste0("age_group_", 1:length(ageGroup))
-    }
-    if ("" %in% names(ageGroup)) {
-      id <- which(names(ageGroup) == "")
-      names(ageGroup)[id] <- paste0("age_group_", id)
-    }
-  }
-  return(invisible(ageGroup))
-}
-
-#' @noRd
 checkOmopTable <- function(omopTable){
-  assertClass(omopTable, "omop_table")
+  omopgenerics::assertClass(omopTable, "omop_table")
   omopTable |>
     omopgenerics::tableName() |>
-    assertChoice(choices = tables$table_name)
+    omopgenerics::assertChoice(choices = tables$table_name)
 }
 
 #' @noRd
@@ -53,7 +29,7 @@ checkUnitInterval <- function(unitInterval, call = parent.frame()){
 
 #' @noRd
 checkCategory <- function(category, overlap = FALSE, type = "numeric", call = parent.frame()) {
-  checkmate::assertList(
+  omopgenerics::assertList(
     category,
     types = type, any.missing = FALSE, unique = TRUE,
     min.len = 1
@@ -130,5 +106,61 @@ checkOutput <- function(output, call = parent.frame()){
   if(!output %in% c("person-days","all","records")){
     cli::cli_abort("output argument is not valid. It must be either `person-days`, `records`, or `all`.")
   }
+}
+
+#' @noRd
+validateStudyPeriod <- function(cdm, studyPeriod) {
+  if(is.null(studyPeriod)) {
+    studyPeriod <- c(NA,NA)
+  }
+  # First date checks
+  if(!is.na(studyPeriod[1]) & !is.na(studyPeriod[2]) & studyPeriod[1] > studyPeriod[2]) {
+    cli::cli_abort("The studyPeriod ends at a date earlier than the start provided.")
+  }
+  if(!is.na(studyPeriod[1]) & is.na(as.Date(studyPeriod[1], format="%d/%m/%Y")) && is.na(as.Date(studyPeriod[1], format="%Y-%m-%d"))) {
+    cli::cli_abort("Please ensure that dates provided are in the correct format.")
+  }
+  if(!is.na(studyPeriod[2]) & is.na(as.Date(studyPeriod[2], format="%d/%m/%Y")) && is.na(as.Date(studyPeriod[2], format="%Y-%m-%d"))) {
+    cli::cli_abort("Please ensure that dates provided are in the correct format.")
+  }
+
+  studyPeriod <- as.character(studyPeriod)
+  omopgenerics::assertCharacter(studyPeriod, length = 2, na = TRUE)
+  observationRange <- cdm$observation_period |>
+    dplyr::summarise(minobs = min(.data$observation_period_start_date, na.rm = TRUE),
+                     maxobs = max(.data$observation_period_end_date, na.rm = TRUE)) |>
+    dplyr::collect()
+
+  if(is.na(studyPeriod[1])){
+    studyPeriod[1] <- observationRange |>
+      dplyr::pull("minobs") |>
+      as.character()
+  } else {
+    if(observationRange |>
+       dplyr::pull("minobs") > studyPeriod[1]) {
+      cli::cli_alert(paste0("The observation period in the cdm starts in ",observationRange |>
+                              dplyr::pull("minobs")))
+    }
+    if(studyPeriod[1] < "1800-01-01") {
+      cli::cli_alert(paste0("The observation period in the cdm starts at a very early date."))
+    }
+  }
+
+  if(is.na(studyPeriod[2])){
+    studyPeriod[2] <- observationRange |>
+      dplyr::pull("maxobs") |>
+      as.character()
+  } else {
+    if(observationRange |>
+       dplyr::pull("maxobs") < studyPeriod[2]) {
+      cli::cli_alert(paste0("The observation period in the cdm ends in ",observationRange |>
+                              dplyr::pull("maxobs")))
+    }
+    if(studyPeriod[2] > clock::date_today(zone = "GMT")) {
+      cli::cli_alert(paste0("The observation period in the cdm ends after current date."))
+    }
+  }
+
+  return(studyPeriod |> as.Date())
 }
 

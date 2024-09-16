@@ -14,7 +14,7 @@
 summariseInObservation <- function(observationPeriod, unit = "year", unitInterval = 1, output = "records", ageGroup = NULL, sex = FALSE){
 
   # Initial checks ----
-  assertClass(observationPeriod, "omop_table")
+  omopgenerics::assertClass(observationPeriod, "omop_table")
 
   x <- omopgenerics::tableName(observationPeriod)
   if (x != "observation_period") {
@@ -24,12 +24,12 @@ summariseInObservation <- function(observationPeriod, unit = "year", unitInterva
     )
   }
 
-  if(observationPeriod |> dplyr::tally() |> dplyr::pull("n") == 0){
+  if(omopgenerics::isTableEmpty(observationPeriod)){
     cli::cli_warn("observation_period table is empty. Returning an empty summarised result.")
     return(omopgenerics::emptySummarisedResult())
   }
 
-  checkAgeGroup(ageGroup)
+  omopgenerics::validateAgeGroupArgument(ageGroup)
 
   if(missing(unit)){unit <- "year"}
   if(missing(unitInterval)){unitInterval <- 1}
@@ -37,7 +37,7 @@ summariseInObservation <- function(observationPeriod, unit = "year", unitInterva
 
   checkUnit(unit)
   checkUnitInterval(unitInterval)
-  assertLogical(sex, length = 1)
+  omopgenerics::assertLogical(sex, length = 1)
   checkOutput(output)
 
   # Create initial variables ----

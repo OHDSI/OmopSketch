@@ -4,7 +4,8 @@
 #' records are in observation, number of present domains and number of present
 #' concepts.
 #'
-#' @param omopTable An omop_table object derived from a cdm object.
+#' @param cdm A cdm object.
+#' @param omopTableName A character vector of the names of the tables to summarise in the cdm object.
 #' @param recordsPerPerson Generates summary statistics for the number of records per person. Set to NULL if no summary statistics are required.
 #' @param inObservation Boolean variable. Whether to include the percentage of records in
 #' observation.
@@ -34,7 +35,8 @@
 #')
 #'
 #'# Run summarise clinical tables
-#'summarisedResult <- summariseClinicalRecords(omopTable = cdm$condition_occurrence,
+#'summarisedResult <- summariseClinicalRecords(cdm = cdm,
+#'                                             omopTableName = "condition_occurrence",
 #'                                             recordsPerPerson = c("mean", "sd"),
 #'                                             inObservation = TRUE,
 #'                                             standardConcept = TRUE,
@@ -44,68 +46,89 @@
 #'summarisedResult |> print()
 #'PatientProfiles::mockDisconnect(cdm = cdm)
 #'}
-summariseClinicalRecords <- function(omopTable,
-                               recordsPerPerson = c("mean", "sd", "median", "q25", "q75", "min", "max"),
-                               inObservation = TRUE,
-                               standardConcept = TRUE,
-                               sourceVocabulary = FALSE,
-                               domainId = TRUE,
-                               typeConcept = TRUE) {
-
+summariseClinicalRecords <- function(cdm,
+                                     omopTableName,
+                                     recordsPerPerson = c("mean", "sd", "median", "q25", "q75", "min", "max"),
+                                     inObservation = TRUE,
+                                     standardConcept = TRUE,
+                                     sourceVocabulary = FALSE,
+                                     domainId = TRUE,
+                                     typeConcept = TRUE) {
   # Initial checks ----
-  assertClass(omopTable, "omop_table")
-
-  omopTable |>
-    omopgenerics::tableName() |>
-    assertChoice(choices = tables$table_name)
+  omopgenerics::validateCdmArgument(cdm)
+  omopTableName |>
+    omopgenerics::assertChoice(choices = omopgenerics::omopTables())
 
   estimates <- PatientProfiles::availableEstimates(
     variableType = "numeric", fullQuantiles = TRUE) |>
     dplyr::pull("estimate_name")
-  assertChoice(recordsPerPerson, choices = estimates, null = TRUE)
+  omopgenerics::assertChoice(recordsPerPerson, choices = estimates, null = TRUE)
 
   recordsPerPerson <- unique(recordsPerPerson)
 
-  assertLogical(inObservation, length = 1)
-  assertLogical(standardConcept, length = 1)
-  assertLogical(sourceVocabulary, length = 1)
-  assertLogical(domainId, length = 1)
-  assertLogical(typeConcept, length = 1)
+  omopgenerics::assertLogical(inObservation, length = 1)
+  omopgenerics::assertLogical(standardConcept, length = 1)
+  omopgenerics::assertLogical(sourceVocabulary, length = 1)
+  omopgenerics::assertLogical(domainId, length = 1)
+  omopgenerics::assertLogical(typeConcept, length = 1)
 
-  if ("observation_period" == omopgenerics::tableName(omopTable)) {
+  result <- purrr::map(omopTableName,
+                       function(x) {
+                         if(omopgenerics::isTableEmpty(cdm[[x]])) {
+                           cli::cli_warn(paste0(x, " omop table is empty. Returning an empty summarised omop table."))
+                           return(omopgenerics::emptySummarisedResult())
+                         }
+                         summariseClinicalRecord(x,
+                                                 cdm = cdm,
+                                                 recordsPerPerson = recordsPerPerson,
+                                                 inObservation = inObservation,
+                                                 standardConcept = standardConcept,
+                                                 sourceVocabulary = sourceVocabulary,
+                                                 domainId = domainId,
+                                                 typeConcept = typeConcept)
+                       }
+                       ) |>
+    dplyr::bind_rows()
+
+  return(result)
+}
+
+#' @noRd
+summariseClinicalRecord <- function(omopTableName, cdm, recordsPerPerson,
+                                    inObservation, standardConcept,
+                                    sourceVocabulary, domainId, typeConcept,
+                                    call = parent.frame(3)) {
+
+  # Initial checks
+  omopgenerics::assertClass(cdm[[omopTableName]], "omop_table", call = call)
+  omopTable <- cdm[[omopTableName]] |> dplyr::ungroup()
+
+  if ("observation_period" == omopTableName) {
     if(standardConcept){
       if(!missing(standardConcept)){
-        cli::cli_warn("standardConcept turned to FALSE, as omopTable provided is observation_period")
+        cli::cli_inform("standardConcept turned to FALSE, as observation_period is in omopTableName", call = call)
       }
       standardConcept <- FALSE
     }
     if(sourceVocabulary){
       if(!missing(sourceVocabulary)){
-        cli::cli_warn("sourceVocabulary turned to FALSE, as omopTable provided is observation_period")
+        cli::cli_inform("sourceVocabulary turned to FALSE, as observation_period is in omopTableName", call = call)
       }
       sourceVocabulary <- FALSE
     }
     if(domainId){
       if(!missing(domainId)){
-        cli::cli_warn("domainId turned to FALSE, as omopTable provided is observation_period")
+        cli::cli_inform("domainId turned to FALSE, as observation_period is in omopTableName", call = call)
       }
       domainId <- FALSE
     }
   }
 
-  cdm <- omopgenerics::cdmReference(omopTable)
-  omopTable <- omopTable |> dplyr::ungroup()
-
   people <- getNumberPeopleInCdm(cdm)
   result <- omopgenerics::emptySummarisedResult()
 
-  if(omopTable |> dplyr::tally() |> dplyr::pull("n") == 0){
-    cli::cli_warn(paste0(omopgenerics::tableName(omopTable), " omop table is empty. Returning an empty summarised omop table."))
-    return(result)
-  }
-
   # Counts summary ----
-  cli::cli_inform(c("i" = "Summarising counts"))
+  cli::cli_inform(c("i" = "Summarising table counts"))
   result <- result |>
     addNumberSubjects(omopTable) |>
     addNumberRecords(omopTable) |>
@@ -125,11 +148,13 @@ summariseClinicalRecords <- function(omopTable,
 
   # Summary concepts ----
   if (inObservation | standardConcept | sourceVocabulary | domainId | typeConcept) {
-    cli::cli_inform(c("i" = "Summarising concepts"))
 
     variables <- columnsVariables(
       inObservation, standardConcept, sourceVocabulary, domainId, typeConcept
     )
+
+    x <- sub(", ([^,]+)$", ", and \\1", gsub('_',' ', paste(variables, collapse = ", ")))
+    cli::cli_inform(c("i" = "Summarising {x} information"))
 
     result <- result |>
       dplyr::bind_rows(
