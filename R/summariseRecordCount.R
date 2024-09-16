@@ -126,6 +126,7 @@ summariseRecordCountInternal <- function(omopTableName, cdm, unit, unitInterval,
 filterPersonId <- function(omopTable){
 
   cdm <- omopgenerics::cdmReference(omopTable)
+  omopTableName <- omopgenerics::tableName(omopTable)
 
   if((omopTable |> dplyr::select("person_id") |> dplyr::anti_join(cdm[["person"]], by = "person_id") |> dplyr::tally() |> dplyr::pull("n")) != 0){
     cli::cli_warn("There are person_id in the {omopTableName} that are not found in the person table. These person_id are removed from the analysis.")
