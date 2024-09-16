@@ -46,12 +46,13 @@ Imports:
     tibble,
     tidyr,
     tidyselect,
-    visOmopResults
+    visOmopResults (>= 0.3.0.900)
 Depends: 
     R (>= 2.10)
 URL: https://oxford-pharmacoepi.github.io/OmopSketch/
 BugReports: https://github.com/oxford-pharmacoepi/OmopSketch/issues
 Remotes: 
     darwin-eu-dev/omopgenerics,
+    darwin-eu-dev/visOmopResults,
     OHDSI/omock
 VignetteBuilder: knitr
