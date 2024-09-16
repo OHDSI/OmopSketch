@@ -153,7 +153,7 @@ summariseClinicalRecord <- function(omopTableName, cdm, recordsPerPerson,
   if(!is.null(recordsPerPerson)){
     cli::cli_inform(c("i" = "Summarising records per person"))
     result <- result |>
-      addRecordsPerPerson(omopTable, recordsPerPerson, cdm, peopleStrata)
+      addRecordsPerPerson(omopTable, recordsPerPerson, cdm, peopleStrata, strata)
   }
 
   denominator <- result |>
@@ -213,7 +213,7 @@ getStrataList <- function(sex, ageGroup){
   }
 
   if(!is.null(ageGroup) && sex){
-    strata <- append(strata, list(c("age,group","sex")))
+    strata <- append(strata, list(c("age_group","sex")))
   }
 
   return(strata)
@@ -267,7 +267,7 @@ addSubjectsPercentage <- function(result, omopTable, people, strata){
 
 }
 
-addRecordsPerPerson <- function(result, omopTable, recordsPerPerson, cdm, peopleStrata){
+addRecordsPerPerson <- function(result, omopTable, recordsPerPerson, cdm, peopleStrata, strata){
 
     result |>
     rbind(
@@ -287,7 +287,10 @@ addRecordsPerPerson <- function(result, omopTable, recordsPerPerson, cdm, people
           0L,
           .data$records_per_person
         )) |>
+        dplyr::distinct() |>
         PatientProfiles::summariseResult(
+          strata = strata,
+          includeOverallStrata = TRUE,
           variables = "records_per_person",
           estimates = recordsPerPerson,
           counts = FALSE
