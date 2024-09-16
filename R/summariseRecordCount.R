@@ -91,7 +91,7 @@ summariseRecordCountInternal <- function(omopTableName, cdm, unit, unitInterval,
     dplyr::select(dplyr::all_of(date), "person_id")
 
   # Use add demographic query -> when both are true (age = FALSE)
-  omopTable <- addDemographicsToOmopTable(omopTable, date, ageGroup, sex)
+  omopTable <- addStrataToOmopTable(omopTable, date, ageGroup, sex)
 
   if(omopTableName != "observation_period") {
     omopTable <- omopTable |>
@@ -122,7 +122,7 @@ summariseRecordCountInternal <- function(omopTableName, cdm, unit, unitInterval,
   return(result)
 }
 
-addDemographicsToOmopTable <- function(omopTable, date, ageGroup, sex){
+addStrataToOmopTable <- function(omopTable, date, ageGroup, sex){
   suppressWarnings(omopTable |>
                      dplyr::mutate(sex = "overall") |>
                      dplyr::mutate(age_group = "overall") |>

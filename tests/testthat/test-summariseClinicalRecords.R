@@ -61,6 +61,7 @@ test_that("summariseClinicalRecords() works", {
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
 
+
 test_that("tableClinicalRecords() works", {
   # Load mock database ----
   cdm <- cdmEunomia()
@@ -76,3 +77,5 @@ test_that("tableClinicalRecords() works", {
 
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
+
+
