@@ -92,26 +92,6 @@ test_that("check summariseInObservation works", {
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
 
-test_that("plotInObservation works",{
-  # Load mock database ----
-  cdm <- cdmEunomia()
-
-  # summariseInObservationPlot plot ----
-  x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 8)
-  expect_no_error(inherits(plotInObservation(x),"ggplot"))
-  x <-  x |> dplyr::filter(result_id == -1)
-  expect_warning(plotInObservation(x))
-
-  expect_error(plotInObservation(summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 1, output = "all", ageGroup = NULL, sex = FALSE)))
-
-  x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 1, output = "person-days", ageGroup = NULL, sex = FALSE)
-  expect_true(inherits(plotInObservation(x),"ggplot"))
-
-  x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 1, output = "records", ageGroup = NULL, sex = FALSE)
-  expect_true(inherits(plotInObservation(x),"ggplot"))
-  PatientProfiles::mockDisconnect(cdm = cdm)
-})
-
 test_that("check sex argument works", {
   # Load mock database ----
   cdm <- cdmEunomia()

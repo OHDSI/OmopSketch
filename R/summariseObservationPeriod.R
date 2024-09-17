@@ -282,8 +282,8 @@ tableObservationPeriod <- function(result,
         "median [Q25 - Q75]" = "<median> [<q25> - <q75>]"),
       header = "cdm_name",
       split = c("group", "additional"),
-      groupColumn = "strata_level",
-      excludeColumns = c(
+      groupColumn = visOmopResults::strataColumns(result),
+      hide = c(
         "result_id", "estimate_type", "strata_name", "variable_level"),
       type = type,
       .options = list(keepNotFormatted = FALSE)
