@@ -107,6 +107,8 @@ summariseClinicalRecord <- function(omopTableName, cdm, recordsPerPerson,
                                     sourceVocabulary, domainId, typeConcept,
                                     sex, ageGroup, call = parent.frame(3)) {
 
+   tablePrefix <-  omopgenerics::tmpPrefix()
+
   # Initial checks
   omopgenerics::assertClass(cdm[[omopTableName]], "omop_table", call = call)
   date <- startDate(omopgenerics::tableName(cdm[[omopTableName]]))
@@ -140,7 +142,7 @@ summariseClinicalRecord <- function(omopTableName, cdm, recordsPerPerson,
 
   strata <- getStrataList(sex, ageGroup)
 
-  peopleStrata <- suppressWarnings(addStrataToPeopleInObservation(cdm, ageGroup, sex))
+  peopleStrata <- suppressWarnings(addStrataToPeopleInObservation(cdm, ageGroup, sex, tablePrefix))
 
   people <- getNumberPeopleInCdm(cdm, strata, peopleStrata)
   result <- omopgenerics::emptySummarisedResult()
@@ -197,6 +199,8 @@ summariseClinicalRecord <- function(omopTableName, cdm, recordsPerPerson,
       "package_name" = "OmopSketch",
       "package_version" = as.character(utils::packageVersion("OmopSketch"))
     ))
+
+  CDMConnector::dropTable(cdm, name = dplyr::starts_with(tablePrefix))
 
 return(result)
 }

@@ -13,6 +13,8 @@
 #'
 summariseInObservation <- function(observationPeriod, unit = "year", unitInterval = 1, output = "records", ageGroup = NULL, sex = FALSE){
 
+  tablePrefix <-  omopgenerics::tmpPrefix()
+
   # Initial checks ----
   omopgenerics::assertClass(observationPeriod, "omop_table")
 
@@ -42,7 +44,7 @@ summariseInObservation <- function(observationPeriod, unit = "year", unitInterva
 
   # Create initial variables ----
   cdm <- omopgenerics::cdmReference(observationPeriod)
-  observationPeriod <- addStrataToPeopleInObservation(cdm, ageGroup, sex)
+  observationPeriod <- addStrataToPeopleInObservation(cdm, ageGroup, sex, tablePrefix)
 
   # Observation period ----
   name <- "observation_period"
@@ -68,7 +70,7 @@ summariseInObservation <- function(observationPeriod, unit = "year", unitInterva
   # Create summarisedResult
   result <- createSummarisedResultObservationPeriod(result, observationPeriod, name, denominator, unit, unitInterval)
 
-  omopgenerics::dropTable(cdm = cdm, name = "interval")
+  CDMConnector::dropTable(cdm, name = dplyr::starts_with(tablePrefix))
   return(result)
 }
 
@@ -238,41 +240,39 @@ createSummarisedResultObservationPeriod <- function(result, observationPeriod, n
   return(result)
 }
 
-addStrataToPeopleInObservation <- function(cdm, ageGroup, sex){
-  cdm$demographics_table <- suppressWarnings(suppressMessages(
+addStrataToPeopleInObservation <- function(cdm, ageGroup, sex, tablePrefix){
+   demographics_table <- suppressWarnings(suppressMessages(
     cdm |>
-      CohortConstructor::demographicsCohort(name = "demographics_table",
+      CohortConstructor::demographicsCohort(name = paste0(tablePrefix, "demographics_table"),
                                             sex = NULL,
                                             ageRange = ageGroup,
                                             minPriorObservation = NULL,
                                             minFutureObservation = NULL)
   ))
 
-  tablePrefix <-  omopgenerics::tmpPrefix()
-
   if(is.null(ageGroup)){
-    demographics <- cdm$demographics_table |>
+    demographics <- demographics_table |>
       dplyr::rename("observation_period_start_date" = "cohort_start_date",
                     "observation_period_end_date"   = "cohort_end_date",
                     "person_id" = "subject_id") |>
       dplyr::select(-c("cohort_definition_id")) |>
       dplyr::mutate("age_group" = "overall") |>
-      dplyr::compute(temporary = FALSE, name = "demographics")
+      dplyr::compute(temporary = FALSE, name = paste0(tablePrefix, "demographics"))
   }else{
     age_tibble <- dplyr::tibble(
       "age_range" = gsub(",","_",gsub("\\)","",gsub("c\\(","",gsub(" ","",ageGroup)))),
       "age_group" = names(ageGroup)
     )
 
-    settings <- cdm$demographics_table |>
+    settings <- demographics_table |>
       CDMConnector::settings() |>
       dplyr::inner_join(age_tibble, by = "age_range") |>
       dplyr::select("cohort_definition_id","age_group")
 
     cdm <- cdm |>
-      omopgenerics::insertTable(name = tablePrefix, table = settings)
+      omopgenerics::insertTable(name = paste0(tablePrefix, "settings"), table = settings)
 
-    demographics <- cdm$demographics_table |>
+    demographics <- demographics_table |>
       dplyr::inner_join(cdm[[tablePrefix]], by = "cohort_definition_id") |>
       dplyr::rename("observation_period_start_date" = "cohort_start_date",
                     "observation_period_end_date"   = "cohort_end_date",
@@ -281,7 +281,7 @@ addStrataToPeopleInObservation <- function(cdm, ageGroup, sex){
       dplyr::inner_join(
         cdm[["person"]] |> dplyr::select("person_id"), by = "person_id"
       ) |>
-      dplyr::compute(name = "demographics", temporary = FALSE)
+      dplyr::compute(name = paste0(tablePrefix, "demographics"), temporary = FALSE)
   }
 
 
@@ -290,8 +290,6 @@ addStrataToPeopleInObservation <- function(cdm, ageGroup, sex){
   }else{
     demographics <- demographics |> dplyr::mutate(sex = "overall")
   }
-
-  CDMConnector::dropTable(cdm, name = c(tablePrefix, "demographics"))
 
   return(demographics)
 }
