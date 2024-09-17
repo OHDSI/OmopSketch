@@ -273,7 +273,7 @@ addStrataToPeopleInObservation <- function(cdm, ageGroup, sex, tablePrefix){
       omopgenerics::insertTable(name = paste0(tablePrefix, "settings"), table = settings)
 
     demographics <- demographics_table |>
-      dplyr::inner_join(cdm[[tablePrefix]], by = "cohort_definition_id") |>
+      dplyr::inner_join(cdm[[paste0(tablePrefix,"settings")]], by = "cohort_definition_id") |>
       dplyr::rename("observation_period_start_date" = "cohort_start_date",
                     "observation_period_end_date"   = "cohort_end_date",
                     "person_id" = "subject_id") |>
