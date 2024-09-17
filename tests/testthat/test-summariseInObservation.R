@@ -183,7 +183,7 @@ test_that("check output argument works", {
   cdm <- cdmEunomia()
 
   # check value
-  x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 7, output = "all", ageGroup = NULL, sex = FALSE) |>
+  x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 7, output = c("records","person-days"), ageGroup = NULL, sex = FALSE) |>
     dplyr::filter(variable_name == "person-days", variable_level == "1964-01-01 to 1970-12-31", estimate_type == "integer") |>
     dplyr::pull("estimate_value") |> as.numeric()
   y <- cdm$observation_period |>
@@ -202,7 +202,7 @@ test_that("check output argument works", {
     dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
     dplyr::mutate(days = !!CDMConnector::datediff("observation_period_start_date","observation_period_end_date", interval = "day")+1) |>
     dplyr::summarise(n = sum(days, na.rm = TRUE)) |> dplyr::pull("n")
-  x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 7, output = "all", ageGroup = NULL, sex = FALSE) |>
+  x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 7, output = c("records","person-days"), ageGroup = NULL, sex = FALSE) |>
     dplyr::filter(variable_name == "person-days", variable_level == "1964-01-01 to 1970-12-31", estimate_type == "percentage") |>
     dplyr::pull("estimate_value") |> as.numeric()
   y <- cdm$observation_period |>
