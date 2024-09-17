@@ -39,7 +39,7 @@ plotInObservation <- function(result,
     dplyr::mutate(variable_level = as.Date(stringr::str_extract(
       .data$variable_level, "^[^ to]+"))) |>
     dplyr::filter(.data$estimate_name == "count") |>
-    visOmopResults::visScatterplot(
+    visOmopResults::scatterPlot(
       x = "variable_level",
       y = "count",
       line = TRUE,
