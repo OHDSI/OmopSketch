@@ -24,9 +24,9 @@ plotInObservation <- function(result,
   # subset to results of interest
   result <- result |>
     visOmopResults::filterSettings(
-      .data$result_type == "summarised_observation_period")
+      .data$result_type == "summarise_observation_period")
   if (nrow(result) == 0) {
-    cli::cli_abort(c("!" = "No records found with result_type == summarised_observation_period"))
+    cli::cli_abort(c("!" = "No records found with result_type == summarise_observation_period"))
   }
 
   # check only one variable is contained
