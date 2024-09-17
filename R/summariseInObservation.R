@@ -251,13 +251,13 @@ addStrataToPeopleInObservation <- function(cdm, ageGroup, sex){
   tablePrefix <-  omopgenerics::tmpPrefix()
 
   if(is.null(ageGroup)){
-    demographicsTable <- cdm$demographics_table |>
+    demographics <- cdm$demographics_table |>
       dplyr::rename("observation_period_start_date" = "cohort_start_date",
                     "observation_period_end_date"   = "cohort_end_date",
                     "person_id" = "subject_id") |>
       dplyr::select(-c("cohort_definition_id")) |>
       dplyr::mutate("age_group" = "overall") |>
-      dplyr::compute(temporary = FALSE, name = "demographicsTable")
+      dplyr::compute(temporary = FALSE, name = "demographics")
   }else{
     age_tibble <- dplyr::tibble(
       "age_range" = gsub(",","_",gsub("\\)","",gsub("c\\(","",gsub(" ","",ageGroup)))),
@@ -272,7 +272,7 @@ addStrataToPeopleInObservation <- function(cdm, ageGroup, sex){
     cdm <- cdm |>
       omopgenerics::insertTable(name = tablePrefix, table = settings)
 
-    demographicsTable <- cdm$demographics_table |>
+    demographics <- cdm$demographics_table |>
       dplyr::inner_join(cdm[[tablePrefix]], by = "cohort_definition_id") |>
       dplyr::rename("observation_period_start_date" = "cohort_start_date",
                     "observation_period_end_date"   = "cohort_end_date",
@@ -281,19 +281,19 @@ addStrataToPeopleInObservation <- function(cdm, ageGroup, sex){
       dplyr::inner_join(
         cdm[["person"]] |> dplyr::select("person_id"), by = "person_id"
       ) |>
-      dplyr::compute(name = "demographicsTable", temporary = FALSE)
+      dplyr::compute(name = "demographics", temporary = FALSE)
   }
 
 
   if(sex){
-    demographicsTable <- demographicsTable |> PatientProfiles::addSexQuery()
+    demographics <- demographics |> PatientProfiles::addSexQuery()
   }else{
-    demographicsTable <- demographicsTable |> dplyr::mutate(sex = "overall")
+    demographics <- demographics |> dplyr::mutate(sex = "overall")
   }
 
-  CDMConnector::dropTable(cdm, name = c(tablePrefix, "demographcis_table"))
+  CDMConnector::dropTable(cdm, name = c(tablePrefix, "demographics"))
 
-  return(demographicsTable)
+  return(demographics)
 }
 
 addSexOverall <- function(result, sex){
