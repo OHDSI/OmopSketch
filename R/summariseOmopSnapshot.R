@@ -1,8 +1,11 @@
 #' Summarise OMOP database and create snapshot
 #'
 #' @param cdm A cdm reference object
+#'
 #' @return A summarised result object
+#'
 #' @export
+#'
 #' @examples
 #' # example code
 #' \donttest{
