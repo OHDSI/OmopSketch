@@ -103,8 +103,10 @@ checkFacetBy <- function(summarisedRecordCount, facet_by, call = parent.frame())
 }
 
 checkOutput <- function(output, call = parent.frame()){
-  if(!output %in% c("person-days","all","records")){
-    cli::cli_abort("output argument is not valid. It must be either `person-days`, `records`, or `all`.")
+  for(i in output){
+    if(!i %in% c("person-days","subjects")){
+      cli::cli_abort("output argument is not valid. It must be either `person-days`, `subjects`, or c(`subjects`,`person-days`).")
+    }
   }
 }
 

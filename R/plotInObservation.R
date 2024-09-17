@@ -52,7 +52,7 @@ plotInObservation <- function(result,
       group = c("cdm_name", "omop_table", visOmopResults::strataColumns(result))
     ) +
     ggplot2::labs(
-      y = variable,
+      y = gsub("_", " ", stringr::str_to_sentence(variable)),
       x = "Date"
     )
 }
