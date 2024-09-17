@@ -17,7 +17,9 @@ summariseOmopSnapshot <- function(cdm) {
 
   omopgenerics::validateCdmArgument(cdm)
 
-  summaryTable <- summary(cdm) |>
+  summaryTable <- summary(cdm)
+
+  summaryTable <- summaryTable |>
     internalTibble() |>
     omopgenerics::newSummarisedResult(settings = dplyr::tibble(
       result_id = unique(summaryTable$result_id),

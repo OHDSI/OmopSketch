@@ -27,13 +27,13 @@ tableOmopSnapshot <- function(result){
     return(
       result |>
         visOmopResults::splitGroup() |>
-        dplyr::select("Variable" = "variable_name", "cdm_name") |>
+        dplyr::select("Estimate" = "estimate_name", "cdm_name") |>
         gt::gt()
     )
   }
 
   result <- result |>
-    visOmopResults::filterSettings(result_type == "summarise_omop_snapshot") |>
+    visOmopResults::filterSettings(.data$result_type == "summarise_omop_snapshot") |>
     dplyr::mutate(variable_name = gsub("_", " ", stringr::str_to_sentence(.data$variable_name)),
                   estimate_name = gsub("_", " ", stringr::str_to_sentence(.data$estimate_name))) |>
     visOmopResults::visOmopTable(
