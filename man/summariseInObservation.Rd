@@ -8,7 +8,7 @@ summariseInObservation(
   observationPeriod,
   unit = "year",
   unitInterval = 1,
-  output = "subjects",
+  output = "records",
   ageGroup = NULL,
   sex = FALSE
 )
@@ -20,7 +20,7 @@ summariseInObservation(
 
 \item{unitInterval}{Number of years or months to include within the time interval.}
 
-\item{output}{Output format. It can be either the number of subjects ("subjects") that are in observation in the specific interval of time, the number of person-days ("person-days"), or both c("subjects", "person-days).}
+\item{output}{Output format. It can be either the number of records ("records") that are in observation in the specific interval of time, the number of person-days ("person-days"), or both ("all").}
 
 \item{ageGroup}{A list of age groups to stratify results by.}
 
