@@ -2,11 +2,14 @@ Package: OmopSketch
 Title: What the Package Does (One Line, Title Case)
 Version: 0.0.0.9000
 Authors@R: c(
-    person("Marta", "Alcalde-Herraiz", , "marta.alcaldeherraiz@ndorms.ox.ac.uk", 
+    person("Marta", "Alcalde-Herraiz", email = "marta.alcaldeherraiz@ndorms.ox.ac.uk", 
     role = c("aut", "cre"), comment = c(ORCID = "0009-0002-4405-1814")),
+    person("Kim", "Lopez-Guell", email = "kim.lopez@spc.ox.ac.uk", role = c("aut"),
+    comment = c(ORCID = "0000-0002-8462-8668")),
+    person("Elin", "Rowlands", email = "elin.rowlands@ndorms.ox.ac.uk", role = c("aut")),  
     person("Yuchen", "Guo", email = "yuchen.guo@ndorms.ox.ac.uk", 
     role = c("ctb"), comment = c(ORCID = "0000-0002-0847-4855")),
-    person("Marti", "Catala", , "marti.catalasabate@ndorms.ox.ac.uk", 
+    person("Marti", "Catala", email = "marti.catalasabate@ndorms.ox.ac.uk", 
     role = c("aut"), comment = c(ORCID = "0000-0003-3308-9905")))
 Maintainer: Marta Alcalde-Herraiz <marta.alcaldeherraiz@ndorms.ox.ac.uk>
 Description: What the package does (one paragraph).
@@ -53,6 +56,6 @@ URL: https://oxford-pharmacoepi.github.io/OmopSketch/
 BugReports: https://github.com/oxford-pharmacoepi/OmopSketch/issues
 Remotes: 
     darwin-eu-dev/omopgenerics,
-    darwin-eu-dev/visOmopResults,
-    OHDSI/omock
+    OHDSI/omock,
+    darwin-eu/visOmopResults
 VignetteBuilder: knitr

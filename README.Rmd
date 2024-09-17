@@ -37,33 +37,71 @@ remotes::install_github("oxford-pharmacoepi/OmopSketch")
 
 ## Example
 
-Let's create a cdm, for this example we will use Eunomia:
+Let's start by creating a cdm object using the Eunomia mock dataset:
 
 ```{r, message=TRUE}
 library(duckdb)
 library(CDMConnector)
 library(dplyr)
+library(OmopSketch)
 con <- dbConnect(duckdb(), eunomia_dir())
 cdm <- cdmFromCon(con = con, cdmSchema = "main", writeSchema = "main")
 cdm
 ```
+### Snapshot
+We first create a snapshot of our database. This will allow us to track when the analysis has been conducted and capture details about the CDM version or the data release.
+```{r}
+summariseOmopSnapshot(cdm)
+# ADD TABLE OMOP SNAPSHOT
+```
 
-Let's first characterise the the drug_exposure omop table:
+
+### Characterise the clinical tables
+Once we have collected the snapshot information, we can start characteristing the clinical tables of the CDM. By using `summariseClinicalRecords()` and `tableClinicalRecords()`, we can easily visualise the main characteristics of specific clinical tables. 
 
 ```{r}
-library(OmopSketch)
-
-summariseClinicalRecords(cdm$drug_exposure) |>
+summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
   tableClinicalRecords()
 ```
 
-We can also characterise the its records' trend:
+We can also explore trends in the clinical table records over time.
 
 ```{r}
-library(OmopSketch)
-
-summariseRecordCount(cdm$drug_exposure) |>
-  plotRecordCount()
-
-  PatientProfiles::mockDisconnect(cdm = cdm)
+summariseRecordCount(cdm, c("condition_occurrence", "drug_exposure")) |>
+  plotRecordCount(facet = "group_level")
 ```
+### Characterise the observation period
+After visualising the main characteristics of our clinical tables, we can explore the observation period details. OmopSketch provides several functions to have an overwied of the dataset study period.
+
+Using `summariseInObservation()` and `plotInObservation()`, we can gather information on the number of records per year.
+
+```{r}
+summariseInObservation(cdm$observation_period, output = "records") |>
+  plotInObservation()
+```
+You can also visualise and explore the characteristics of the observation period per each individual in the database using `summariseObservationPeriod()`. 
+```{r}
+summariseObservationPeriod(cdm$observation_period) |>
+  tableObservationPeriod()
+```
+
+Or if visualisation is prefered, you can easily build a histogram to explore how many participants have more than one observation period.
+```{r}
+summariseObservationPeriod(cdm$observation_period) |>
+  plotObservationPeriod()
+```
+
+### Characterise the concepts
+OmopSketch also provides functions to explore some of (or all) the concepts in the dataset.
+```{r}
+acetaminophen <- c(1125315,  1127433, 40229134, 40231925, 40162522, 19133768,  1127078)
+summariseConceptCounts(cdm, conceptId = list("acetaminophen" = acetaminophen))
+```
+
+### Characterise the population
+Finally, OmopSketch can also help us to characterise the population at the start and end of the observation period.
+```{r}
+summarisePopulationCharacteristics(cdm)
+```
+As seen, OmopSketch offers multiple functionalities to provide a general overview of a database. Additionally, it includes more tools and arguments that allow for deeper exploration, helping to assess the database's suitability for specific research studies. For further information, please refer to the vignettes.
+
