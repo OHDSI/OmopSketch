@@ -106,19 +106,19 @@ summariseClinicalRecord <- function(omopTableName, cdm, recordsPerPerson,
   if ("observation_period" == omopTableName) {
     if(standardConcept){
       if(!missing(standardConcept)){
-        cli::cli_inform("standardConcept turned to FALSE, as observation_period is in omopTableName", call = call)
+        cli::cli_inform("standardConcept turned to FALSE for observation_period OMOP table", call = call)
       }
       standardConcept <- FALSE
     }
     if(sourceVocabulary){
       if(!missing(sourceVocabulary)){
-        cli::cli_inform("sourceVocabulary turned to FALSE, as observation_period is in omopTableName", call = call)
+        cli::cli_inform("sourceVocabulary turned to FALSE for observation_period OMOP table", call = call)
       }
       sourceVocabulary <- FALSE
     }
     if(domainId){
       if(!missing(domainId)){
-        cli::cli_inform("domainId turned to FALSE, as observation_period is in omopTableName", call = call)
+        cli::cli_inform("domainId turned to FALSE for observation_period OMOP table", call = call)
       }
       domainId <- FALSE
     }
