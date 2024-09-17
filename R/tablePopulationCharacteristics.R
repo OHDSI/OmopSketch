@@ -58,5 +58,4 @@ tablePopulationCharacteristics <- function(result){
       groupColumn = visOmopResults::strataColumns(result))
 
   return(result)
-
 }
