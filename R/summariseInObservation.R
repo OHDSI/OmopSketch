@@ -3,7 +3,7 @@
 #' @param observationPeriod observation_period omop table.
 #' @param unit Whether to stratify by "year" or by "month".
 #' @param unitInterval Number of years or months to include within the time interval.
-#' @param output Output format. It can be either the number of records ("records") that are in observation in the specific interval of time, the number of person-days ("person-days"), or both ("all").
+#' @param output Output format. It can be either the number of subjects ("subjects") that are in observation in the specific interval of time, the number of person-days ("person-days"), or both c("subjects", "person-days).
 #' @param ageGroup A list of age groups to stratify results by.
 #' @param sex Boolean variable. Whether to stratify by sex (TRUE) or not (FALSE).
 #'
@@ -11,7 +11,12 @@
 #'
 #' @export
 #'
-summariseInObservation <- function(observationPeriod, unit = "year", unitInterval = 1, output = "records", ageGroup = NULL, sex = FALSE){
+summariseInObservation <- function(observationPeriod,
+                                   unit = "year",
+                                   unitInterval = 1,
+                                   output = "subjects",
+                                   ageGroup = NULL,
+                                   sex = FALSE){
 
   # Initial checks ----
   omopgenerics::assertClass(observationPeriod, "omop_table")
@@ -39,6 +44,7 @@ summariseInObservation <- function(observationPeriod, unit = "year", unitInterva
   checkUnitInterval(unitInterval)
   omopgenerics::assertLogical(sex, length = 1)
   checkOutput(output)
+  if(length(output) > 1){output <- "all"}
 
   # Create initial variables ----
   cdm <- omopgenerics::cdmReference(observationPeriod)
@@ -73,14 +79,14 @@ summariseInObservation <- function(observationPeriod, unit = "year", unitInterva
 }
 
 getDenominator <- function(cdm, output){
-  if(output == "records"){
+  if(output == "subjects"){
     tibble::tibble(
       "denominator" = c(cdm[["person"]] |>
                           dplyr::ungroup() |>
                           dplyr::select("person_id") |>
                           dplyr::summarise("n" = dplyr::n()) |>
                           dplyr::pull("n")),
-      "variable_name" = "records")
+      "variable_name" = "number_subjects")
   }else if(output == "person-days"){
     y <- cdm[["observation_period"]] |>
       dplyr::ungroup() |>
@@ -109,7 +115,7 @@ getDenominator <- function(cdm, output){
                           dplyr::pull("n"),
                         y
                         ),
-      "variable_name" = c("records","person-days"))
+      "variable_name" = c("number_subjects","person-days"))
   }
 }
 
