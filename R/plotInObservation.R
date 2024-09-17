@@ -10,7 +10,11 @@
 #' @return A ggplot showing the table counts
 #'
 #' @export
-#'
+#' @examples
+#' \donttest{
+#' library(dplyr)
+#' library(OmopSketch)
+#' }
 plotInObservation <- function(result,
                               facet = NULL,
                               colour = NULL) {

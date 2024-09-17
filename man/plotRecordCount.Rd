@@ -4,10 +4,10 @@
 \alias{plotRecordCount}
 \title{Create a ggplot of the records' count trend.}
 \usage{
-plotRecordCount(summarisedRecordCount, facet = NULL)
+plotRecordCount(result, facet = NULL)
 }
 \arguments{
-\item{summarisedRecordCount}{Output from summariseRecordCount().}
+\item{result}{Output from summariseRecordCount().}
 
 \item{facet}{columns in data to facet. If the facet position wants to be specified, use the formula class for the input
 (e.g., strata_level ~ group_level + cdm_name). Variables before "~" will be facet by on horizontal axis, whereas those after "~" on vertical axis.

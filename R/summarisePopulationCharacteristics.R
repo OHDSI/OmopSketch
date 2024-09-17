@@ -11,29 +11,20 @@
 #' @examples
 #' \donttest{
 #'library(dplyr)
-#'library(CDMConnector)
-#'library(DBI)
-#'library(duckdb)
 #'library(OmopSketch)
 #'
-#'# Connect to Eunomia database
-#'if (Sys.getenv("EUNOMIA_DATA_FOLDER") == "") Sys.setenv("EUNOMIA_DATA_FOLDER" = tempdir())
-#'if (!dir.exists(Sys.getenv("EUNOMIA_DATA_FOLDER"))) dir.create(Sys.getenv("EUNOMIA_DATA_FOLDER"))
-#'if (!eunomia_is_available()) downloadEunomiaData()
-#'con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
-#'cdm <- CDMConnector::cdmFromCon(
-#' con = con, cdmSchema = "main", writeSchema = "main"
-#')
+#' # Connect to a mock database
+#' cdm <- mockOmopSketch()
 #'
-#'# Run summarise clinical tables
-#'summarisedPopulation <- summarisePopulationCharacteristics(cdm = cdm,
+#'# Run summarise population characteristics
+#' summarisedPopulation <- summarisePopulationCharacteristics(cdm = cdm,
 #'                                                           studyPeriod = c("2010-01-01",NA),
 #'                                                           sex = TRUE,
 #'                                                           ageGroup = NULL
 #'                                                           )
-#'summarisedPopulation |> print()
-#'PatientProfiles::mockDisconnect(cdm = cdm)
-#' # Change to mock data whenever possible
+#' summarisedPopulation |> print()
+#' PatientProfiles::mockDisconnect(cdm = cdm)
+#'
 #'}
 summarisePopulationCharacteristics <- function(cdm,
                                                studyPeriod = c(NA, NA),
@@ -72,6 +63,11 @@ summarisePopulationCharacteristics <- function(cdm,
   summarisedCohort <- cohort |>
     CohortCharacteristics::summariseCharacteristics(strata = strata,
                                                     otherVariables = "age_at_end") |>
+    dplyr::mutate(variable_name = dplyr::if_else(.data$variable_name == "Age", "Age at start", .data$variable_name)) |>
+    dplyr::mutate(variable_name = factor(.data$variable_name,
+                                         levels = c("Number records", "Number subjects", "Cohort start date", "Cohort end date",
+                                                    "Age at start", "Age at end", "Sex", "Prior observation", "Future observation"))) |>
+    dplyr::arrange(.data$variable_name) |>
     omopgenerics::newSummarisedResult(
       settings = dplyr::tibble(
       "result_id" = 1L,
@@ -79,7 +75,7 @@ summarisePopulationCharacteristics <- function(cdm,
       "package_version" = as.character(utils::packageVersion(
         "OmopSketch"
       )),
-      "result_type" = "summarised_population_characteristics"
+      "result_type" = "summarise_population_characteristics"
     ))
 
   return(summarisedCohort)

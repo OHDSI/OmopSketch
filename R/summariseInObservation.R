@@ -228,7 +228,7 @@ createSummarisedResultObservationPeriod <- function(result, observationPeriod, n
     dplyr::mutate(estimate_name = dplyr::if_else(.data$estimate_type == "percentage", "percentage", .data$estimate_name)) |>
     omopgenerics::newSummarisedResult(settings = dplyr::tibble(
       "result_id" = 1L,
-      "result_type" = "summarised_observation_period",
+      "result_type" = "summarise_in_observation",
       "package_name" = "OmopSketch",
       "package_version" = as.character(utils::packageVersion("OmopSketch")),
       "unit" = .env$unit,

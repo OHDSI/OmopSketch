@@ -298,7 +298,7 @@ createSummarisedResultRecordCount <- function(result, omopTable, name, unit, uni
     ) |>
     omopgenerics::newSummarisedResult(settings = dplyr::tibble(
       "result_id" = 1L,
-      "result_type" = "summarised_table_counts",
+      "result_type" = "summarise_table_counts",
       "package_name" = "OmopSketch",
       "package_version" = as.character(utils::packageVersion("OmopSketch")),
       "unit" = .env$unit,

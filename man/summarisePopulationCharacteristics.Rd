@@ -29,21 +29,12 @@ Summarise the characteristics of the base population of a cdm object.
 \examples{
 \donttest{
 library(dplyr)
-library(CDMConnector)
-library(DBI)
-library(duckdb)
 library(OmopSketch)
 
-# Connect to Eunomia database
-if (Sys.getenv("EUNOMIA_DATA_FOLDER") == "") Sys.setenv("EUNOMIA_DATA_FOLDER" = tempdir())
-if (!dir.exists(Sys.getenv("EUNOMIA_DATA_FOLDER"))) dir.create(Sys.getenv("EUNOMIA_DATA_FOLDER"))
-if (!eunomia_is_available()) downloadEunomiaData()
-con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
-cdm <- CDMConnector::cdmFromCon(
-con = con, cdmSchema = "main", writeSchema = "main"
-)
+# Connect to a mock database
+cdm <- mockOmopSketch()
 
-# Run summarise clinical tables
+# Run summarise population characteristics
 summarisedPopulation <- summarisePopulationCharacteristics(cdm = cdm,
                                                           studyPeriod = c("2010-01-01",NA),
                                                           sex = TRUE,
@@ -51,6 +42,6 @@ summarisedPopulation <- summarisePopulationCharacteristics(cdm = cdm,
                                                           )
 summarisedPopulation |> print()
 PatientProfiles::mockDisconnect(cdm = cdm)
-# Change to mock data whenever possible
+
 }
 }
