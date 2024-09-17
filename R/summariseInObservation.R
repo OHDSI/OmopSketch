@@ -86,7 +86,7 @@ getDenominator <- function(cdm, output){
                           dplyr::select("person_id") |>
                           dplyr::summarise("n" = dplyr::n()) |>
                           dplyr::pull("n")),
-      "variable_name" = "Number records")
+      "variable_name" = "Number records in observation")
   }else if(output == "person-days"){
     y <- cdm[["observation_period"]] |>
       dplyr::ungroup() |>
@@ -115,7 +115,7 @@ getDenominator <- function(cdm, output){
                           dplyr::pull("n"),
                         y
                         ),
-      "variable_name" = c("Number records","Number person-days"))
+      "variable_name" = c("Number records in observation","Number person-days"))
   }
 }
 
@@ -192,7 +192,7 @@ if(output == "records" | output == "all"){
                       (.data$start_date >= .data$interval_start_date & .data$start_date <= .data$interval_end_date)) |>
       dplyr::group_by(.data$interval_group, .data$age_group, .data$sex) |>
       dplyr::summarise(estimate_value = sum(.data$estimate_value, na.rm = TRUE), .groups = "drop") |>
-      dplyr::mutate(variable_name = "Number records") |>
+      dplyr::mutate(variable_name = "Number records in observation") |>
       dplyr::collect()
   }else{
     records <- createEmptyIntervalTable()
