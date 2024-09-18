@@ -32,3 +32,24 @@ A summarised_result object.
 \description{
 Create a summarised result with the number of people in observation during a specific interval of time.
 }
+\examples{
+\dontrun{
+library(OmopSketch)
+library(dplyr)
+
+cdm <- mockOmopSketch()
+
+result <- summariseInObservation(cdm$observation_period,
+                    unit = "month",
+                    unitInterval = 6,
+                    output = c("person-days","records"),
+                    ageGroup = list("<=60" = c(0,60), ">60" = c(61, Inf)),
+                    sex = TRUE)
+
+result |>
+  dplyr::glimpse()
+
+PatientProfiles::mockDisconnect(cdm)
+}
+
+}

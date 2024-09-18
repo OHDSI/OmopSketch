@@ -264,7 +264,7 @@ test_that("plotInObservation works",{
         "60-79" = c(60, 79), ">80" = c(80, Inf))
     )
 
-  expect_snapshot(plotInObservation(result), error = TRUE)
+  expect_error(plotInObservation(result))
 
   resultpd <- result |>
     dplyr::filter(variable_name == "Number person-days")

@@ -13,8 +13,10 @@
 #' cdm <- mockOmopSketch(numberIndividuals = 1000)
 #'
 #' cdm |>
-#' summariseOmopSnapshot() |>
-#' tableOmopSnapshot()
+#'   summariseOmopSnapshot() |>
+#'   tableOmopSnapshot()
+#'
+#' PatientProfiles::mockDisconnect(cdm)
 #'}
 tableOmopSnapshot <- function(result){
 

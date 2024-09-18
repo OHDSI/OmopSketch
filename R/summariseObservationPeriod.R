@@ -14,16 +14,17 @@
 #'
 #' @examples
 #' \dontrun{
-#' library(CDMConnector)
-#' library(duckdb)
+#' library(OmopSketch)
+#' library(dplyr)
 #'
-#' con <- dbConnect(duckdb(), eunomiaDir())
-#' cdm <- cdmFromCon(con = con, cdmSchema = "main", writeSchema = "main")
+#' cdm <- mockOmopSketch()
 #'
 #' result <- summariseObservationPeriod(cdm$observation_period)
 #'
 #' result |>
 #'   dplyr::glimpse()
+#'
+#' PatientProfiles::mockDisconnect(cdm)
 #' }
 #'
 summariseObservationPeriod <- function(observationPeriod,
@@ -49,6 +50,7 @@ summariseObservationPeriod <- function(observationPeriod,
   } else {
     # prepare
     obs <- observationPeriod |>
+      filterPersonId() |>
       dplyr::select(
         "person_id",
         "obs_start" = "observation_period_start_date",

@@ -14,7 +14,7 @@
 #'library(dplyr)
 #'library(OmopSketch)
 #'
-#'# Connect to Eunomia database
+#'# Connect to a mock dabatase
 #'cdm <- mockOmopSketch()
 #'
 #'# Run summarise clinical tables
