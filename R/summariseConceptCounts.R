@@ -40,10 +40,6 @@ summariseConceptCounts <- function(cdm,
                                    ageGroup = NULL){
 
   omopgenerics::validateCdmArgument(cdm)
-  omopgenerics::assertList(conceptId, null = TRUE)
-  if(!is.null(conceptId) && length(names(conceptId)) != length(conceptId)){
-    cli::cli_abort("conceptId must be a named list")
-  }
 
   # Get all concepts in concept table if conceptId is NULL
   if(is.null(conceptId)) {
@@ -55,29 +51,6 @@ summariseConceptCounts <- function(cdm,
       tibble::deframe()
   }
 
-  getAllCodeUse <- function() {
-    codeUse <- list()
-    cli::cli_progress_bar("Getting use of codes", total = length(conceptId))
-    for(i in 1:length(conceptId)) {
-      cli::cli_alert_info("Getting use of codes from {names(conceptId)[i]}")
-      codeUse[[i]] <- getCodeUse(conceptId[i],
-                                 cdm = cdm,
-                                 cohortTable = NULL,
-                                 cohortId = NULL,
-                                 timing = "any",
-                                 countBy = countBy,
-                                 concept = concept,
-                                 year = year,
-                                 sex = sex,
-                                 ageGroup = ageGroup)
-      Sys.sleep(i/length(conceptId))
-      cli::cli_progress_update()
-    }
-    codeUse <- codeUse |>
-      dplyr::bind_rows()
-    cli::cli_progress_done()
-    return(codeUse)
-  }
   codeUse <- getAllCodeUse()
 
   if(nrow(codeUse) > 0) {
@@ -98,6 +71,30 @@ summariseConceptCounts <- function(cdm,
     codeUse <- omopgenerics::emptySummarisedResult()
   }
 
+  return(codeUse)
+}
+
+getAllCodeUse <- function() {
+  codeUse <- list()
+  cli::cli_progress_bar("Getting use of codes", total = length(conceptId))
+  for(i in 1:length(conceptId)) {
+    cli::cli_alert_info("Getting use of codes from {names(conceptId)[i]}")
+    codeUse[[i]] <- getCodeUse(conceptId[i],
+                               cdm = cdm,
+                               cohortTable = NULL,
+                               cohortId = NULL,
+                               timing = "any",
+                               countBy = countBy,
+                               concept = concept,
+                               year = year,
+                               sex = sex,
+                               ageGroup = ageGroup)
+    Sys.sleep(i/length(conceptId))
+    cli::cli_progress_update()
+  }
+  codeUse <- codeUse |>
+    dplyr::bind_rows()
+  cli::cli_progress_done()
   return(codeUse)
 }
 
@@ -122,6 +119,8 @@ getCodeUse <- function(x,
   omopgenerics::assertLogical(year)
   omopgenerics::assertLogical(sex)
   omopgenerics::validateAgeGroupArgument(ageGroup)
+  omopgenerics::assertList(conceptId, null = TRUE, named =  TRUE)
+  checkCountBy(countBy)
 
   tableCodelist <- paste0(omopgenerics::uniqueTableName(),
                           omopgenerics::uniqueId())

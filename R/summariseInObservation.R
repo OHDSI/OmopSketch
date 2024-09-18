@@ -22,30 +22,19 @@ summariseInObservation <- function(observationPeriod,
 
   # Initial checks ----
   omopgenerics::assertClass(observationPeriod, "omop_table")
-
-  x <- omopgenerics::tableName(observationPeriod)
-  if (x != "observation_period") {
-    cli::cli_abort(
-      "Table name ({x}) is not observation_period, please provide a valid
-      observation_period table"
-    )
-  }
+  omopgenerics::assertTrue(omopgenerics::tableName(observationPeriod) == "observation_period")
 
   if(omopgenerics::isTableEmpty(observationPeriod)){
     cli::cli_warn("observation_period table is empty. Returning an empty summarised result.")
     return(omopgenerics::emptySummarisedResult())
   }
 
-  omopgenerics::validateAgeGroupArgument(ageGroup)
-
-  if(missing(unit)){unit <- "year"}
-  if(missing(unitInterval)){unitInterval <- 1}
-  if(missing(ageGroup) | is.null(ageGroup)){ageGroup <- list("overall" = c(0,Inf))}else{ageGroup <- append(ageGroup, list("overall" = c(0, Inf)))}
-
   checkUnit(unit)
-  checkUnitInterval(unitInterval)
-  omopgenerics::assertLogical(sex, length = 1)
+  omopgenerics::assertNumeric(unitInterval, length = 1, min = 1)
   checkOutput(output)
+  omopgenerics::validateAgeGroupArgument(ageGroup)
+  omopgenerics::assertLogical(sex, length = 1)
+
   if(length(output) > 1){output <- "all"}
 
   # Create initial variables ----
