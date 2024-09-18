@@ -13,6 +13,8 @@
 #' @param sourceVocabulary Boolean variable.  Whether to summarise source vocabulary information.
 #' @param domainId  Boolean variable. Whether to summarise domain id of standard concept id information.
 #' @param typeConcept  Boolean variable. Whether to summarise type concept id field information.
+#' @param ageGroup A list of age groups to stratify results by.
+#' @param sex Boolean variable. Whether to stratify by sex (TRUE) or not (FALSE).
 #'
 #' @return A summarised_result object.
 #'
@@ -53,7 +55,9 @@ summariseClinicalRecords <- function(cdm,
                                      standardConcept = TRUE,
                                      sourceVocabulary = FALSE,
                                      domainId = TRUE,
-                                     typeConcept = TRUE) {
+                                     typeConcept = TRUE,
+                                     sex = FALSE,
+                                     ageGroup = NULL) {
   # Initial checks ----
   omopgenerics::validateCdmArgument(cdm)
   omopTableName |>
@@ -71,6 +75,8 @@ summariseClinicalRecords <- function(cdm,
   omopgenerics::assertLogical(sourceVocabulary, length = 1)
   omopgenerics::assertLogical(domainId, length = 1)
   omopgenerics::assertLogical(typeConcept, length = 1)
+  omopgenerics::assertLogical(sex, length = 1)
+  omopgenerics::validateAgeGroupArgument(ageGroup)
 
   result <- purrr::map(omopTableName,
                        function(x) {
@@ -85,7 +91,9 @@ summariseClinicalRecords <- function(cdm,
                                                  standardConcept = standardConcept,
                                                  sourceVocabulary = sourceVocabulary,
                                                  domainId = domainId,
-                                                 typeConcept = typeConcept)
+                                                 typeConcept = typeConcept,
+                                                 sex = sex,
+                                                 ageGroup = ageGroup)
                        }
                        ) |>
     dplyr::bind_rows()
@@ -97,16 +105,24 @@ summariseClinicalRecords <- function(cdm,
 summariseClinicalRecord <- function(omopTableName, cdm, recordsPerPerson,
                                     inObservation, standardConcept,
                                     sourceVocabulary, domainId, typeConcept,
-                                    call = parent.frame(3)) {
+                                    sex, ageGroup, call = parent.frame(3)) {
+
+   tablePrefix <-  omopgenerics::tmpPrefix()
 
   # Initial checks
   omopgenerics::assertClass(cdm[[omopTableName]], "omop_table", call = call)
-  omopTable <- cdm[[omopTableName]] |> dplyr::ungroup()
+  date <- startDate(omopgenerics::tableName(cdm[[omopTableName]]))
+
+  omopTable <- cdm[[omopTableName]] |>
+    dplyr::ungroup()
+
+  omopTable <- filterPersonId(omopTable) |>
+    addStrataToOmopTable(date, ageGroup, sex)
 
   if ("observation_period" == omopTableName) {
     if(standardConcept){
       if(!missing(standardConcept)){
-        cli::cli_inform("standardConcept turned to FALSE, as observation_period is in omopTableName", call = call)
+        cli::cli_inform("standardConcept turned to FALSE for observation_period omop table", call = call)
       }
       standardConcept <- FALSE
     }
@@ -124,27 +140,29 @@ summariseClinicalRecord <- function(omopTableName, cdm, recordsPerPerson,
     }
   }
 
-  people <- getNumberPeopleInCdm(cdm)
+  strata <- getStrataList(sex, ageGroup)
+
+  peopleStrata <- suppressWarnings(addStrataToPeopleInObservation(cdm, ageGroup, sex, tablePrefix))
+
+  people <- getNumberPeopleInCdm(cdm, strata, peopleStrata)
   result <- omopgenerics::emptySummarisedResult()
 
   # Counts summary ----
   cli::cli_inform(c("i" = "Summarising table counts"))
   result <- result |>
-    addNumberSubjects(omopTable) |>
-    addNumberRecords(omopTable) |>
-    addSubjectsPercentage(omopTable, people)
+    addCounts(strata, omopTable) |>
+    addSubjectsPercentage(omopTable, people, strata)
 
   # Records per person summary ----
   if(!is.null(recordsPerPerson)){
     cli::cli_inform(c("i" = "Summarising records per person"))
     result <- result |>
-      addRecordsPerPerson(omopTable, recordsPerPerson, cdm)
+      addRecordsPerPerson(omopTable, recordsPerPerson, cdm, peopleStrata, strata)
   }
 
   denominator <- result |>
-    dplyr::filter(.data$variable_name == "number_records") |>
-    dplyr::pull("estimate_value") |>
-    as.integer()
+    dplyr::filter(.data$variable_name == "number records") |>
+    dplyr::collect("strata_name", "strata_level", "estimate_value")
 
   # Summary concepts ----
   if (inObservation | standardConcept | sourceVocabulary | domainId | typeConcept) {
@@ -153,14 +171,13 @@ summariseClinicalRecord <- function(omopTableName, cdm, recordsPerPerson,
       inObservation, standardConcept, sourceVocabulary, domainId, typeConcept
     )
 
-    x <- sub(", ([^,]+)$", ", and \\1", gsub('_',' ', paste(variables, collapse = ", ")))
-    cli::cli_inform(c("i" = "Summarising {x} information"))
+    cli::cli_inform(c("i" = "Summarising {variables} information"))
 
     result <- result |>
       dplyr::bind_rows(
         omopTable |>
           addVariables(variables) |>
-          dplyr::group_by(dplyr::across(dplyr::all_of(variables))) |>
+          dplyr::group_by(dplyr::across(dplyr::all_of(variables)), .data$age_group, .data$sex) |>
           dplyr::tally() |>
           dplyr::collect() |>
           dplyr::mutate("n" = as.integer(.data$n)) |>
@@ -170,104 +187,121 @@ summariseClinicalRecord <- function(omopTableName, cdm, recordsPerPerson,
 
   # Format output as a summarised result
   result <- result |>
-    dplyr::mutate(variable_name = dplyr::if_else(.data$variable_name == "number_records", "Number of records", .data$variable_name),
-                  variable_name = dplyr::if_else(.data$variable_name == "number_subjects", "Number of subjects", .data$variable_name),
-                  variable_name = dplyr::if_else(.data$variable_name == "records_per_person", "Records per person", .data$variable_name)) |>
+    tidyr::fill(.data$result_id, .data$cdm_name, .data$group_name, .data$group_level,
+                .data$additional_name, .data$additional_level, .direction = "downup") |>
     dplyr::mutate(
-      "result_id" = 1L,
-      "cdm_name" = omopgenerics::cdmName(cdm),
       "group_name" = "omop_table",
-      "group_level" = omopgenerics::tableName(omopTable),
-      "strata_name" = "overall",
-      "strata_level" = "overall",
-      "additional_name" = "overall",
-      "additional_level" = "overall"
+      "group_level" = omopgenerics::tableName(omopTable)
     ) |>
     omopgenerics::newSummarisedResult(settings = dplyr::tibble(
       "result_id" = 1L,
-      "result_type" = "summarised_omop_table",
+      "result_type" = "summarised_clinical_records",
       "package_name" = "OmopSketch",
       "package_version" = as.character(utils::packageVersion("OmopSketch"))
     ))
+
+  CDMConnector::dropTable(cdm, name = dplyr::starts_with(tablePrefix))
 
 return(result)
 }
 
 # Functions -----
-getNumberPeopleInCdm <- function(cdm){
-  cdm[["person"]] |>
-    dplyr::ungroup() |>
-    dplyr::summarise(x = dplyr::n_distinct(.data$person_id)) |>
-    dplyr::pull("x") |>
-    as.integer()
+getStrataList <- function(sex, ageGroup){
+
+  strata <- list()
+
+  if(!is.null(ageGroup)){
+    strata <- append(strata, list("age_group"))
+  }
+
+  if(sex){
+    strata <- append(strata, list("sex"))
+  }
+
+  if(!is.null(ageGroup) && sex){
+    strata <- append(strata, list(c("age_group","sex")))
+  }
+
+  return(strata)
 }
 
-addNumberSubjects <- function(result, omopTable){
-  result |>
-    dplyr::add_row(
-      "variable_name"  = "number_subjects",
-      "estimate_name"  = "count",
-      "estimate_type"  = "integer",
-      "estimate_value" = as.character(
-        omopTable |>
-          dplyr::summarise(x = dplyr::n_distinct(.data$person_id)) |>
-          dplyr::pull("x") |>
-          as.integer()
-      )
-    )
-}
-addNumberRecords  <- function(result, omopTable){
-  result |>
-    dplyr::add_row(
-      "variable_name"  = "number_records",
-      "estimate_name"  = "count",
-      "estimate_type"  = "integer",
-      "estimate_value" = as.character(omopTable |> dplyr::tally() |> dplyr::pull("n"))
-    )
+getNumberPeopleInCdm <- function(cdm, strata, peopleStrata){
+
+  peopleStrata |>
+    dplyr::select(-c("observation_period_start_date","observation_period_end_date")) |>
+    PatientProfiles::summariseResult(strata = strata,
+                                     includeOverallStrata = TRUE,
+                                     counts = TRUE,
+                                     estimates = c("max")) |>
+    suppressMessages()
 }
 
-addSubjectsPercentage <- function(result, omopTable, people){
+addCounts <- function(result, strata, omopTable){
+
+  date <- startDate(omopgenerics::tableName(omopTable))
+
   result |>
-    dplyr::add_row(
-      "variable_name"  = "number_subjects",
-      "estimate_name"  = "percentage",
-      "estimate_type"  = "percentage",
-      "estimate_value" = as.character(
-        100* (omopTable |>
-                dplyr::summarise(x = dplyr::n_distinct(.data$person_id)) |>
-                dplyr::pull("x") |>
-                as.integer()) / .env$people
-      )
+    rbind(
+      omopTable |>
+        dplyr::select("person_id", dplyr::any_of(c("age_group","sex"))) |>
+        PatientProfiles::summariseResult(strata = strata,
+                                         includeOverallStrata = TRUE,
+                                         counts = TRUE,
+                                         estimates = c("max"))
     )
+
 }
 
-addRecordsPerPerson <- function(result, omopTable, recordsPerPerson, cdm){
-  suppressMessages(
+addSubjectsPercentage <- function(result, omopTable, people, strata){
+
+  result |>
+    rbind(
+      result |>
+        dplyr::filter(.data$variable_name == "number subjects") |>
+        dplyr::rename("omop_table" = "estimate_value") |>
+        dplyr::inner_join(
+          people |> dplyr::rename("people" = "estimate_value"),
+          by = c("result_id","cdm_name","group_name","group_level","strata_name",
+                 "strata_level","variable_name","variable_level","estimate_name",
+                 "estimate_type","additional_name","additional_level")
+        ) |>
+        dplyr::mutate("estimate_value" = as.numeric(.data$omop_table)/as.numeric(.data$people)*100) |>
+        dplyr::select(-c("omop_table", "people")) |>
+        dplyr::mutate("estimate_name" = "percentage",
+                      "estimate_type" = "percentage")
+    )
+
+}
+
+addRecordsPerPerson <- function(result, omopTable, recordsPerPerson, cdm, peopleStrata, strata){
+
     result |>
-      dplyr::bind_rows(
-        cdm[["person"]] |>
-          dplyr::select("person_id") |>
-          dplyr::left_join(
-            omopTable |>
-              dplyr::group_by(.data$person_id) |>
-              dplyr::summarise(
-                "records_per_person" = as.integer(dplyr::n()),
-                .groups = "drop"
-              ),
-            by = "person_id"
-          ) |>
-          dplyr::mutate("records_per_person" = dplyr::if_else(
-            is.na(.data$records_per_person),
-            0L,
-            .data$records_per_person
-          )) |>
-          PatientProfiles::summariseResult(
-            variables = "records_per_person",
-            estimates = recordsPerPerson,
-            counts = FALSE
-          )
-      )
-  )
+    rbind(
+      peopleStrata |>
+        dplyr::select("person_id", dplyr::any_of(c("sex", "age_group"))) |>
+        dplyr::left_join(
+          omopTable |>
+            dplyr::group_by(.data$person_id, dplyr::across(dplyr::any_of(c("age_group","sex")))) |>
+            dplyr::summarise(
+              "records_per_person" = as.integer(dplyr::n()),
+              .groups = "drop"
+            ),
+          by = c("person_id", "age_group", "sex")
+        ) |>
+        dplyr::mutate("records_per_person" = dplyr::if_else(
+          is.na(.data$records_per_person),
+          0L,
+          .data$records_per_person
+        )) |>
+        dplyr::distinct() |>
+        PatientProfiles::summariseResult(
+          strata = strata,
+          includeOverallStrata = TRUE,
+          variables = "records_per_person",
+          estimates = recordsPerPerson,
+          counts = FALSE
+        )
+    )
 }
 
 addVariables <- function(x, variables) {
@@ -288,7 +322,7 @@ addVariables <- function(x, variables) {
   cdm <- omopgenerics::cdmReference(x)
 
   x <- x |>
-    dplyr::select(dplyr::all_of(newNames))
+    dplyr::select(dplyr::all_of(newNames), "age_group", "sex")
 
   # Domain and standard ----
   if (any(c("domain_id", "standard") %in% variables)) {
@@ -349,16 +383,18 @@ addVariables <- function(x, variables) {
   }
 
   x <- x |>
-    dplyr::select(dplyr::all_of(variables)) |>
+    dplyr::select(dplyr::all_of(variables), "age_group", "sex") |>
     dplyr::mutate(dplyr::across(dplyr::everything(), ~as.character(.)))
 
   return(x)
 }
+
 columnsVariables <- function(inObservation, standardConcept, sourceVocabulary, domainId, typeConcept) {
   c("in_observation", "standard", "domain_id", "source", "type" )[c(
     inObservation, standardConcept, domainId, sourceVocabulary, typeConcept
   )]
 }
+
 summaryData <- function(x, variables, cdm, denominator, result) {
   results <- list()
 
@@ -430,15 +466,36 @@ summaryData <- function(x, variables, cdm, denominator, result) {
     results[["type"]] <- xx |> dplyr::select(-"new_variable_level")
   }
 
-  results <- results |> dplyr::bind_rows()
+  results <- results |>
+    dplyr::bind_rows()
 
   return(results)
 }
+
 formatResults <- function(x, variableName, variableLevel, denominator, result) {
+
+  denominator <- denominator |>
+    dplyr::select("strata_name", "strata_level", "denominator" = "estimate_value") |>
+    visOmopResults::splitStrata()
+
+  if(!"age_group" %in% colnames(denominator)){
+    denominator <- denominator |>
+      dplyr::mutate("age_group" = "overall")
+  }
+
+  if(!"sex" %in% colnames(denominator)){
+    denominator <- denominator |>
+      dplyr::mutate("sex" = "overall")
+  }
+
   x |>
-    dplyr::group_by(dplyr::across(dplyr::all_of(variableLevel))) |>
+    dplyr::group_by(dplyr::across(dplyr::all_of(c(variableLevel,"age_group","sex")))) |>
     dplyr::summarise("count" = sum(.data$n), .groups = "drop") |>
-    dplyr::mutate("percentage" = 100 * .data$count / .env$denominator) |>
+    dplyr::inner_join(
+      denominator,
+      by = c("age_group","sex")
+    ) |>
+    dplyr::mutate("percentage" = 100 * .data$count / as.numeric(.data$denominator)) |>
     dplyr::mutate(dplyr::across(dplyr::everything(), as.character)) |>
     tidyr::pivot_longer(
       cols = c("count", "percentage"),
@@ -452,9 +509,10 @@ formatResults <- function(x, variableName, variableLevel, denominator, result) {
         .data$estimate_name == "count", "integer", "percentage"
       )
     ) |>
+    visOmopResults::uniteStrata(cols = c("age_group","sex")) |>
     dplyr::select(
-      "variable_name", "variable_level", "estimate_name", "estimate_type",
-      "estimate_value"
+      "strata_name", "strata_level", "variable_name", "variable_level",
+      "estimate_name", "estimate_type", "estimate_value"
     ) |>
     dplyr::ungroup()
 }
