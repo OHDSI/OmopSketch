@@ -94,11 +94,11 @@ test_that("plotRecordCount() works", {
   expect_true(inherits(p,"ggplot"))
 
   p2 <- summariseRecordCount(cdm, c("condition_occurrence","drug_exposure"), unitInterval = 8) |>
-    plotRecordCount(facet = "group_level")
+    plotRecordCount(facet = "omop_table")
 
   expect_true(inherits(p2,"ggplot"))
 
-  expect_warning(inherits(plotRecordCount(summariseRecordCount(cdm, "death", unitInterval = 8)),"ggplot"))
+  expect_error(inherits(plotRecordCount(summariseRecordCount(cdm, "death", unitInterval = 8)),"ggplot"))
 
   PatientProfiles::mockDisconnect(cdm = cdm)
 })

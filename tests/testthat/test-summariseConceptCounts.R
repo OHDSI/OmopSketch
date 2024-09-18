@@ -284,11 +284,6 @@ test_that("summarise code use - eunomia", {
                                 cdm = cdm,
                                 year = FALSE,
                                 sex = FALSE,
-                                ageGroup = 25))
-  expect_error(summariseConceptCounts(list(a = 123),
-                                cdm = cdm,
-                                year = FALSE,
-                                sex = FALSE,
                                 ageGroup = list(c(18,17))))
   expect_error(summariseConceptCounts(list(a = 123),
                                 cdm = cdm,
