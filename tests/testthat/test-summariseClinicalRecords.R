@@ -15,6 +15,9 @@ test_that("summariseClinicalRecords() works", {
   expect_no_error(summariseClinicalRecords(cdm, "observation"))
   expect_warning(summariseClinicalRecords(cdm, "death"))
 
+  #Check result type
+  checkResultType(op, "summarise_clinical_records")
+
   expect_no_error(all <- summariseClinicalRecords(cdm, c("observation_period", "visit_occurrence", "measurement")))
   expect_equal(
     dplyr::bind_rows(op, vo,m) |>

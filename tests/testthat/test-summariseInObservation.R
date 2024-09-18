@@ -255,6 +255,9 @@ test_that("plotInObservation works",{
   x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 1, output = "records", ageGroup = NULL, sex = FALSE)
   expect_true(inherits(plotInObservation(x),"ggplot"))
 
+  # Check result type
+  checkResultType(x, "summarise_in_observation")
+
   result <- cdm$observation_period |>
     summariseInObservation(
       output = c("person-days", "records"),

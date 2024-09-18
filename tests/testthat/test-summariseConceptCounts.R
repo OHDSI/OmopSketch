@@ -16,6 +16,9 @@ test_that("summarise code use - eunomia", {
   endNames <- CDMConnector::listSourceTables(cdm)
   expect_true(length(setdiff(endNames, startNames)) == 0)
 
+  #Check result type
+  checkResultType(results, "summarise_concept_counts")
+
   # min cell counts:
   expect_true(
     all(is.na(
