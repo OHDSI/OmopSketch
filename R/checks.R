@@ -128,10 +128,10 @@ validateStudyPeriod <- function(cdm, studyPeriod, call = parent.frame()) {
     if(observationRange |>
        dplyr::pull("minobs") > studyPeriod[1]) {
       cli::cli_alert(paste0("The observation period in the cdm starts in ",observationRange |>
-                              dplyr::pull("minobs")), call = call)
+                              dplyr::pull("minobs")))
     }
     if(studyPeriod[1] < "1800-01-01") {
-      cli::cli_alert(paste0("The observation period in the cdm starts at a very early date."), call = call)
+      cli::cli_alert(paste0("The observation period in the cdm starts at a very early date."))
     }
   }
 
@@ -143,10 +143,10 @@ validateStudyPeriod <- function(cdm, studyPeriod, call = parent.frame()) {
     if(observationRange |>
        dplyr::pull("maxobs") < studyPeriod[2]) {
       cli::cli_alert(paste0("The observation period in the cdm ends in ",observationRange |>
-                              dplyr::pull("maxobs")), call = call)
+                              dplyr::pull("maxobs")))
     }
     if(studyPeriod[2] > clock::date_today(zone = "GMT")) {
-      cli::cli_alert(paste0("The observation period in the cdm ends after current date."), call = call)
+      cli::cli_alert(paste0("The observation period in the cdm ends after current date."))
     }
   }
 
