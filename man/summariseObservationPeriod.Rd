@@ -29,16 +29,17 @@ summarised_result object.
 }
 \examples{
 \dontrun{
-library(CDMConnector)
-library(duckdb)
+library(OmopSketch)
+library(dplyr)
 
-con <- dbConnect(duckdb(), eunomiaDir())
-cdm <- cdmFromCon(con = con, cdmSchema = "main", writeSchema = "main")
+cdm <- mockOmopSketch()
 
 result <- summariseObservationPeriod(cdm$observation_period)
 
 result |>
   dplyr::glimpse()
+
+PatientProfiles::mockDisconnect(cdm)
 }
 
 }

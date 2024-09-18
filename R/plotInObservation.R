@@ -11,9 +11,23 @@
 #'
 #' @export
 #' @examples
-#' \donttest{
-#' library(dplyr)
+#'
+#' \dontrun{
 #' library(OmopSketch)
+#' library(dplyr)
+#'
+#' cdm <- mockOmopSketch()
+#'
+#' result <- summariseInObservation(cdm$observation_period,
+#'                     unit = "month",
+#'                     unitInterval = 6,
+#'                     output = c("person-days","records"),
+#'                     ageGroup = list("<=60" = c(0,60), ">60" = c(61, Inf)),
+#'                     sex = TRUE)
+#'
+#' plotInObservation(result)
+#'
+#' PatientProfiles::mockDisconnect(cdm)
 #' }
 plotInObservation <- function(result,
                               facet = NULL,
