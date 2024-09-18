@@ -71,7 +71,18 @@
 <span class="r-in"><span><span class="fu">mockOmopSketch</span><span class="op">(</span>numberIndividuals <span class="op">=</span> <span class="fl">1000</span>,</span></span>
 <span class="r-in"><span>               writeSchema <span class="op">=</span> <span class="cn">NULL</span>,</span></span>
 <span class="r-in"><span>               con <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in omopgenerics::omopColumns(tableName, onlyRequired = FALSE):</span> unused argument (onlyRequired = FALSE)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: method with signature ‘DBIConnection#Id’ chosen for function ‘dbExistsTable’,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>  target signature ‘duckdb_connection#Id’.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>  "duckdb_connection#ANY" would also be valid</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;"># OMOP CDM reference (duckdb) of mockOmopSketch</span> <span style="color: #00BBBB;">─────────────────────────────</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> • <span style="font-weight: bold;">omop tables:</span> person, observation_period, cdm_source, concept, vocabulary,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> concept_relationship, concept_synonym, concept_ancestor, drug_strength,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> condition_occurrence, death, drug_exposure, measurement, observation,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> procedure_occurrence, device_exposure, visit_occurrence</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> • <span style="font-weight: bold;">cohort tables:</span> -</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> • <span style="font-weight: bold;">achilles tables:</span> -</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> • <span style="font-weight: bold;">other tables:</span> -</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
