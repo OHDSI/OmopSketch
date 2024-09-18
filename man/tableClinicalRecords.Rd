@@ -4,10 +4,10 @@
 \alias{tableClinicalRecords}
 \title{Create a gt table from a summarised omop_table.}
 \usage{
-tableClinicalRecords(summarisedClinicalRecords)
+tableClinicalRecords(result)
 }
 \arguments{
-\item{summarisedClinicalRecords}{Output from summariseClinicalRecords().}
+\item{result}{Output from summariseClinicalRecords().}
 }
 \value{
 A gt object with the summarised data.

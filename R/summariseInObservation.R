@@ -11,7 +11,12 @@
 #'
 #' @export
 #'
-summariseInObservation <- function(observationPeriod, unit = "year", unitInterval = 1, output = "records", ageGroup = NULL, sex = FALSE){
+summariseInObservation <- function(observationPeriod,
+                                   unit = "year",
+                                   unitInterval = 1,
+                                   output = "records",
+                                   ageGroup = NULL,
+                                   sex = FALSE){
 
   tablePrefix <-  omopgenerics::tmpPrefix()
 
@@ -41,6 +46,7 @@ summariseInObservation <- function(observationPeriod, unit = "year", unitInterva
   checkUnitInterval(unitInterval)
   omopgenerics::assertLogical(sex, length = 1)
   checkOutput(output)
+  if(length(output) > 1){output <- "all"}
 
   # Create initial variables ----
   cdm <- omopgenerics::cdmReference(observationPeriod)
@@ -230,7 +236,7 @@ createSummarisedResultObservationPeriod <- function(result, observationPeriod, n
     dplyr::mutate(estimate_name = dplyr::if_else(.data$estimate_type == "percentage", "percentage", .data$estimate_name)) |>
     omopgenerics::newSummarisedResult(settings = dplyr::tibble(
       "result_id" = 1L,
-      "result_type" = "summarised_observation_period",
+      "result_type" = "summarise_in_observation",
       "package_name" = "OmopSketch",
       "package_version" = as.character(utils::packageVersion("OmopSketch")),
       "unit" = .env$unit,

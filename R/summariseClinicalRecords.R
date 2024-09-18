@@ -195,7 +195,7 @@ summariseClinicalRecord <- function(omopTableName, cdm, recordsPerPerson,
     ) |>
     omopgenerics::newSummarisedResult(settings = dplyr::tibble(
       "result_id" = 1L,
-      "result_type" = "summarised_clinical_records",
+      "result_type" = "summarise_clinical_records",
       "package_name" = "OmopSketch",
       "package_version" = as.character(utils::packageVersion("OmopSketch"))
     ))

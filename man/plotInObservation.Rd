@@ -21,3 +21,9 @@ A ggplot showing the table counts
 \description{
 Create a gt table from a summarised omop_table.
 }
+\examples{
+\donttest{
+library(dplyr)
+library(OmopSketch)
+}
+}
