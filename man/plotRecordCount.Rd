@@ -23,10 +23,7 @@ Create a ggplot of the records' count trend.
 }
 \examples{
 \donttest{
-library(dplyr)
-library(OmopSketch)
-
-# Connect to Eunomia database
+# Connect to a mock dabatase
 cdm <- mockOmopSketch()
 
 # Run summarise clinical tables

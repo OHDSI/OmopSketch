@@ -9,7 +9,7 @@
 #'
 tableObservationPeriod <- function(result,
                                    type = "gt") {
-  omopgenerics::assertClass(result, class = "summarised_result")
+  omopgenerics::validateResultArgument(result)
 
   result <- result |>
     visOmopResults::filterSettings(
@@ -23,7 +23,7 @@ tableObservationPeriod <- function(result,
   result |>
     dplyr::filter(is.na(.data$variable_level)) |>
     visOmopResults::visOmopTable(
-      formatEstimateName = c(
+      estimateName = c(
         "N" = "<count>",
         "mean (sd)" = "<mean> (<sd>)",
         "median [Q25 - Q75]" = "<median> [<q25> - <q75>]"),
