@@ -65,7 +65,7 @@ summariseRecordCount <- function(cdm, omopTableName, unit = "year",
                                                       unit = unit,
                                                       unitInterval = unitInterval,
                                                       ageGroup = ageGroup,
-                                                     sex = sex)
+                                                      sex = sex)
                        }
   ) |>
     dplyr::bind_rows()
@@ -77,8 +77,10 @@ summariseRecordCount <- function(cdm, omopTableName, unit = "year",
 summariseRecordCountInternal <- function(omopTableName, cdm, unit, unitInterval,
                                          ageGroup, sex) {
 
-  # Create initial variables ----
   omopTable <- cdm[[omopTableName]] |> dplyr::ungroup()
+
+  # Create initial variables ----
+  omopTable <- filterPersonId(omopTable)
 
   result <- omopgenerics::emptySummarisedResult()
   date   <- startDate(omopTableName)
@@ -90,8 +92,7 @@ summariseRecordCountInternal <- function(omopTableName, cdm, unit, unitInterval,
   omopTable <- omopTable |>
     dplyr::select(dplyr::all_of(date), "person_id")
 
-  # Use add demographic query -> when both are true (age = FALSE)
-  omopTable <- addDemographicsToOmopTable(omopTable, date, ageGroup, sex)
+  omopTable <- addStrataToOmopTable(omopTable, date, ageGroup, sex)
 
   if(omopTableName != "observation_period") {
     omopTable <- omopTable |>
@@ -122,7 +123,22 @@ summariseRecordCountInternal <- function(omopTableName, cdm, unit, unitInterval,
   return(result)
 }
 
-addDemographicsToOmopTable <- function(omopTable, date, ageGroup, sex){
+filterPersonId <- function(omopTable){
+
+  cdm <- omopgenerics::cdmReference(omopTable)
+  omopTableName <- omopgenerics::tableName(omopTable)
+
+  if((omopTable |> dplyr::select("person_id") |> dplyr::anti_join(cdm[["person"]], by = "person_id") |> utils::head(1) |> dplyr::tally() |> dplyr::pull("n")) != 0){
+    cli::cli_warn("There are person_id in the {omopTableName} that are not found in the person table. These person_id are removed from the analysis.")
+
+    omopTable <- omopTable |>
+      dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id")
+  }
+
+  return(omopTable)
+}
+
+addStrataToOmopTable <- function(omopTable, date, ageGroup, sex){
   suppressWarnings(omopTable |>
                      dplyr::mutate(sex = "overall") |>
                      dplyr::mutate(age_group = "overall") |>
@@ -134,9 +150,7 @@ addDemographicsToOmopTable <- function(omopTable, date, ageGroup, sex){
                                                            missingSexValue = "unknown",
                                                            priorObservation = FALSE,
                                                            futureObservation = FALSE,
-                                                           dateOfBirth = FALSE) |>
-                     dplyr::mutate(age_group = dplyr::if_else(is.na(.data$age_group), "unknown", .data$age_group)) |> # To remove: https://github.com/darwin-eu-dev/PatientProfiles/issues/677
-                     dplyr::mutate(sex = dplyr::if_else(is.na(.data$sex), "unknown", .data$sex))) # To remove: https://github.com/darwin-eu-dev/PatientProfiles/issues/677
+                                                           dateOfBirth = FALSE))
 
 }
 

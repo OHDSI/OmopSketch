@@ -61,6 +61,126 @@ test_that("summariseClinicalRecords() works", {
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
 
+test_that("summariseClinicalRecords() sex and ageGroup argument work", {
+
+  # Load mock database ----
+  cdm <- cdmEunomia()
+
+  # Check all tables work ----
+  expect_true(inherits(summariseClinicalRecords(cdm, "observation_period", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))),"summarised_result"))
+  expect_no_error(op <- summariseClinicalRecords(cdm, "observation_period", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
+  expect_no_error(vo <- summariseClinicalRecords(cdm, "visit_occurrence", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
+  expect_no_error(summariseClinicalRecords(cdm, "condition_occurrence", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf))))
+  expect_no_error(summariseClinicalRecords(cdm, "drug_exposure", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
+  expect_no_error(summariseClinicalRecords(cdm, "procedure_occurrence", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
+  expect_warning(summariseClinicalRecords(cdm, "device_exposure", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
+  expect_no_error(m <- summariseClinicalRecords(cdm, "measurement", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
+  expect_no_error(summariseClinicalRecords(cdm, "observation", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
+  expect_warning(summariseClinicalRecords(cdm, "death", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
+
+  expect_no_error(all <- summariseClinicalRecords(cdm,
+                                                  c("observation_period", "visit_occurrence", "measurement"),
+                                                  sex = TRUE,
+                                                  ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
+  expect_equal(dplyr::bind_rows(op,vo,m), all)
+
+  # Check sex and age group---
+  x <- summariseClinicalRecords(cdm, "condition_occurrence", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))) |>
+    dplyr::filter(variable_name == "number subjects", estimate_name == "count",
+                  strata_name == "sex" | strata_name == "overall") |>
+    dplyr::select("strata_name", "strata_level", "estimate_value") |>
+    dplyr::mutate(group = dplyr::if_else(strata_name == "overall",1, 2)) |>
+    dplyr::summarise(n = sum(as.numeric(estimate_value), na.rm = TRUE), .by = group)
+
+  expect_equal(x$n[[1]], x$n[[2]])
+
+  x <- summariseClinicalRecords(cdm, "condition_occurrence", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))) |>
+    dplyr::filter(variable_name == "number records", estimate_name == "count",
+                  strata_name == "sex" | strata_name == "overall") |>
+    dplyr::select("strata_name", "strata_level", "estimate_value") |>
+    dplyr::mutate(group = dplyr::if_else(strata_name == "overall",1, 2)) |>
+    dplyr::summarise(n = sum(as.numeric(estimate_value), na.rm = TRUE), .by = group)
+
+  expect_equal(x$n[[1]], x$n[[2]])
+
+  x <- summariseClinicalRecords(cdm, "condition_occurrence", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))) |>
+    dplyr::filter(variable_name == "number records", estimate_name == "count",
+                  strata_name == "age_group" | strata_name == "overall") |>
+    dplyr::select("strata_name", "strata_level", "estimate_value") |>
+    dplyr::mutate(group = dplyr::if_else(strata_name == "overall",1, 2)) |>
+    dplyr::summarise(n = sum(as.numeric(estimate_value), na.rm = TRUE), .by = group)
+
+  expect_equal(x$n[[1]], x$n[[2]])
+
+  PatientProfiles::mockDisconnect(cdm = cdm)
+
+  # Check statistics
+  cdm <- omopgenerics::cdmFromTables(
+    tables = list(
+      person = dplyr::tibble(
+        person_id = as.integer(1:5),
+        gender_concept_id = c(8507L, 8532L, 8532L, 8507L, 8507L),
+        year_of_birth = c(2010L, 2010L, 2011L, 2012L, 2013L),
+        month_of_birth = 1L,
+        day_of_birth = 1L,
+        race_concept_id = 0L,
+        ethnicity_concept_id = 0L
+      ),
+      observation_period = dplyr::tibble(
+        observation_period_id = as.integer(1:9),
+        person_id = c(1, 1, 1, 2, 2, 3, 3, 4, 5) |> as.integer(),
+        observation_period_start_date = as.Date(c(
+          "2020-03-01", "2020-03-25", "2020-04-25", "2020-08-10",
+          "2020-03-10", "2020-03-01", "2020-04-10", "2020-03-10",
+          "2020-03-10"
+        )),
+        observation_period_end_date = as.Date(c(
+          "2020-03-20", "2020-03-30", "2020-08-15", "2020-12-31",
+          "2020-03-27", "2020-03-09", "2020-05-08", "2020-12-10",
+          "2020-03-10"
+        )),
+        period_type_concept_id = 0L
+      )
+    ),
+    cdmName = "mock data"
+  )
+
+  cdm <- CDMConnector::copyCdmTo(
+    con = connection(), cdm = cdm, schema = schema())
+
+  result <- summariseClinicalRecords(cdm, "observation_period",
+                           inObservation = FALSE,
+                           standardConcept = FALSE,
+                           sourceVocabulary = FALSE,
+                           domainId = FALSE,
+                           typeConcept = FALSE,
+                           sex = TRUE,
+                           ageGroup = list("old" = c(10, Inf), "young" = c(0, 9)))
+
+  # Check num records
+  records <- result |>
+    dplyr::filter(variable_name == "number records", estimate_name == "count")
+  expect_true(records |> dplyr::filter(strata_name == "overall") |> dplyr::pull(estimate_value) == "9")
+  expect_true(records |> dplyr::filter(strata_level == "old") |> dplyr::pull(estimate_value) == "5")
+  expect_true(records |> dplyr::filter(strata_level == "young") |> dplyr::pull(estimate_value) == "4")
+  expect_true(records |> dplyr::filter(strata_level == "Male") |> dplyr::pull(estimate_value) == "5")
+  expect_true(records |> dplyr::filter(strata_level == "Female") |> dplyr::pull(estimate_value) == "4")
+  expect_true(records |> dplyr::filter(strata_level == "old &&& Male") |> dplyr::pull(estimate_value) == "3")
+  expect_true(records |> dplyr::filter(strata_level == "old &&& Female") |> dplyr::pull(estimate_value) == "2")
+  expect_true(records |> dplyr::filter(strata_level == "young &&& Male") |> dplyr::pull(estimate_value) == "2")
+  expect_true(records |> dplyr::filter(strata_level == "young &&& Female") |> dplyr::pull(estimate_value) == "2")
+
+
+  # Check stats
+  records <- result |>
+    dplyr::filter(variable_name == "records_per_person")
+  expect_true(records |> dplyr::filter(strata_name == "overall", estimate_name == "mean") |> dplyr::pull(estimate_value) == "1.8")
+  expect_true(records |> dplyr::filter(strata_level == "old &&& Male", estimate_name == "median") |> dplyr::pull(estimate_value) == "3")
+
+  PatientProfiles::mockDisconnect(cdm = cdm)
+})
+
+
 test_that("tableClinicalRecords() works", {
   # Load mock database ----
   cdm <- cdmEunomia()
@@ -76,3 +196,5 @@ test_that("tableClinicalRecords() works", {
 
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
+
+

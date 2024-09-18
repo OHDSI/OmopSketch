@@ -15,7 +15,9 @@ summariseClinicalRecords(
   standardConcept = TRUE,
   sourceVocabulary = FALSE,
   domainId = TRUE,
-  typeConcept = TRUE
+  typeConcept = TRUE,
+  sex = FALSE,
+  ageGroup = NULL
 )
 }
 \arguments{
@@ -35,6 +37,10 @@ observation.}
 \item{domainId}{Boolean variable. Whether to summarise domain id of standard concept id information.}
 
 \item{typeConcept}{Boolean variable. Whether to summarise type concept id field information.}
+
+\item{sex}{Boolean variable. Whether to stratify by sex (TRUE) or not (FALSE).}
+
+\item{ageGroup}{A list of age groups to stratify results by.}
 }
 \value{
 A summarised_result object.
