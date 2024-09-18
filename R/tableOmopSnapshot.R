@@ -19,7 +19,7 @@
 tableOmopSnapshot <- function(result){
 
   # Initial checks ----
-  omopgenerics::validateResultArguemnt(result)
+  omopgenerics::validateResultArgument(result)
 
   if(result |> dplyr::tally() |> dplyr::pull("n") == 0){
     cli::cli_warn("result is empty.")
