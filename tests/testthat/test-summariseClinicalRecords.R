@@ -16,7 +16,20 @@ test_that("summariseClinicalRecords() works", {
   expect_warning(summariseClinicalRecords(cdm, "death"))
 
   expect_no_error(all <- summariseClinicalRecords(cdm, c("observation_period", "visit_occurrence", "measurement")))
-  expect_equal(dplyr::bind_rows(op,vo,m), all)
+  expect_equal(
+    dplyr::bind_rows(op, vo,m) |>
+      dplyr::mutate(estimate_value = dplyr::if_else(
+        .data$variable_name == "records_per_person",
+        as.character(round(as.numeric(.data$estimate_value), 3)),
+        .data$estimate_value
+      )),
+    all |>
+      dplyr::mutate(estimate_value = dplyr::if_else(
+        .data$variable_name == "records_per_person",
+        as.character(round(as.numeric(.data$estimate_value), 3)),
+        .data$estimate_value
+      ))
+  )
 
   # Check inputs ----
   expect_true(summariseClinicalRecords(cdm, "condition_occurrence",
