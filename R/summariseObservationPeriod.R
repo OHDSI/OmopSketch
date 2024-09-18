@@ -49,6 +49,7 @@ summariseObservationPeriod <- function(observationPeriod,
   } else {
     # prepare
     obs <- observationPeriod |>
+      filterPersonId() |>
       dplyr::select(
         "person_id",
         "obs_start" = "observation_period_start_date",
