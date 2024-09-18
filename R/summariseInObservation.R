@@ -13,6 +13,8 @@
 #'
 summariseInObservation <- function(observationPeriod, unit = "year", unitInterval = 1, output = "records", ageGroup = NULL, sex = FALSE){
 
+  tablePrefix <-  omopgenerics::tmpPrefix()
+
   # Initial checks ----
   omopgenerics::assertClass(observationPeriod, "omop_table")
 
@@ -42,7 +44,7 @@ summariseInObservation <- function(observationPeriod, unit = "year", unitInterva
 
   # Create initial variables ----
   cdm <- omopgenerics::cdmReference(observationPeriod)
-  observationPeriod <- addStrataVariables(cdm, ageGroup, sex)
+  observationPeriod <- addStrataToPeopleInObservation(cdm, ageGroup, sex, tablePrefix)
 
   # Observation period ----
   name <- "observation_period"
@@ -68,7 +70,7 @@ summariseInObservation <- function(observationPeriod, unit = "year", unitInterva
   # Create summarisedResult
   result <- createSummarisedResultObservationPeriod(result, observationPeriod, name, denominator, unit, unitInterval)
 
-  omopgenerics::dropTable(cdm = cdm, name = "interval")
+  CDMConnector::dropTable(cdm, name = dplyr::starts_with(tablePrefix))
   return(result)
 }
 
@@ -238,50 +240,58 @@ createSummarisedResultObservationPeriod <- function(result, observationPeriod, n
   return(result)
 }
 
-addStrataVariables <- function(cdm, ageGroup, sex){
-  cdm$omop_table <- suppressMessages(
+addStrataToPeopleInObservation <- function(cdm, ageGroup, sex, tablePrefix){
+   demographics_table <- suppressWarnings(suppressMessages(
     cdm |>
-      CohortConstructor::demographicsCohort(name = "omop_table",
+      CohortConstructor::demographicsCohort(name = paste0(tablePrefix, "demographics_table"),
                                             sex = NULL,
                                             ageRange = ageGroup,
                                             minPriorObservation = NULL,
                                             minFutureObservation = NULL)
-  )
+  ))
 
-  age_tibble <- dplyr::tibble(
-    "age_range" = gsub(",","_",gsub("\\)","",gsub("c\\(","",gsub(" ","",ageGroup)))),
-    "age_group" = names(ageGroup)
-  )
-
-  tablePrefix <-  omopgenerics::tmpPrefix()
-
-  settings <- cdm$omop_table |>
-    CDMConnector::settings() |>
-    dplyr::inner_join(age_tibble, by = "age_range") |>
-    dplyr::select("cohort_definition_id","age_group")
-
-  cdm <- cdm |>
-    omopgenerics::insertTable(name = tablePrefix, table = settings)
-
-  observationPeriod <- cdm$omop_table |>
-    dplyr::inner_join(cdm[[tablePrefix]], by = "cohort_definition_id") |>
-    dplyr::rename("observation_period_start_date" = "cohort_start_date",
-                  "observation_period_end_date"   = "cohort_end_date",
-                  "person_id" = "subject_id") |>
-    dplyr::select(-c("cohort_definition_id")) |>
-    dplyr::inner_join(
-      cdm[["person"]] |> dplyr::select("person_id"), by = "person_id"
-    ) |>
-    dplyr::compute(name = "observationPeriod", temporary = FALSE)
-
-  if(sex){
-    observationPeriod <- observationPeriod |> PatientProfiles::addSexQuery()
+  if(is.null(ageGroup)){
+    demographics <- demographics_table |>
+      dplyr::rename("observation_period_start_date" = "cohort_start_date",
+                    "observation_period_end_date"   = "cohort_end_date",
+                    "person_id" = "subject_id") |>
+      dplyr::select(-c("cohort_definition_id")) |>
+      dplyr::mutate("age_group" = "overall") |>
+      dplyr::compute(temporary = FALSE, name = paste0(tablePrefix, "demographics"))
   }else{
-    observationPeriod <- observationPeriod |> dplyr::mutate(sex = "overall")
+    age_tibble <- dplyr::tibble(
+      "age_range" = gsub(",","_",gsub("\\)","",gsub("c\\(","",gsub(" ","",ageGroup)))),
+      "age_group" = names(ageGroup)
+    )
+
+    settings <- demographics_table |>
+      CDMConnector::settings() |>
+      dplyr::inner_join(age_tibble, by = "age_range") |>
+      dplyr::select("cohort_definition_id","age_group")
+
+    cdm <- cdm |>
+      omopgenerics::insertTable(name = paste0(tablePrefix, "settings"), table = settings)
+
+    demographics <- demographics_table |>
+      dplyr::inner_join(cdm[[paste0(tablePrefix,"settings")]], by = "cohort_definition_id") |>
+      dplyr::rename("observation_period_start_date" = "cohort_start_date",
+                    "observation_period_end_date"   = "cohort_end_date",
+                    "person_id" = "subject_id") |>
+      dplyr::select(-c("cohort_definition_id")) |>
+      dplyr::inner_join(
+        cdm[["person"]] |> dplyr::select("person_id"), by = "person_id"
+      ) |>
+      dplyr::compute(name = paste0(tablePrefix, "demographics"), temporary = FALSE)
   }
 
-  CDMConnector::dropTable(cdm, name = tablePrefix)
-  return(observationPeriod)
+
+  if(sex){
+    demographics <- demographics |> PatientProfiles::addSexQuery()
+  }else{
+    demographics <- demographics |> dplyr::mutate(sex = "overall")
+  }
+
+  return(demographics)
 }
 
 addSexOverall <- function(result, sex){
