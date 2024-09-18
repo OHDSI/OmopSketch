@@ -40,7 +40,7 @@ plotRecordCount <- function(result,
                             facet = NULL,
                             colour = NULL){
   # initial checks
-  omopgenerics::validateResultArguemnt(result)
+  omopgenerics::validateResultArgument(result)
 
   # subset to results of interest
   result <- result |>
@@ -55,7 +55,7 @@ plotRecordCount <- function(result,
     dplyr::mutate(variable_level = as.Date(stringr::str_extract(
       .data$variable_level, "^[^ to]+"))) |>
     dplyr::filter(.data$estimate_name == "count") |>
-    visOmopResults::visScatterplot(
+    visOmopResults::scatterPlot(
       x = "variable_level",
       y = "count",
       line = TRUE,
