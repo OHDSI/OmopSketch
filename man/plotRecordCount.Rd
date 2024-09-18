@@ -23,9 +23,6 @@ Create a ggplot of the records' count trend.
 }
 \examples{
 \donttest{
-library(dplyr)
-library(OmopSketch)
-
 # Connect to a mock dabatase
 cdm <- mockOmopSketch()
 

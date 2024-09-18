@@ -11,10 +11,7 @@
 #' @export
 #' @examples
 #' \donttest{
-#'library(dplyr)
-#'library(OmopSketch)
-#'
-#'# Connect to a mock dabatase
+#' # Connect to a mock dabatase
 #'cdm <- mockOmopSketch()
 #'
 #'# Run summarise clinical tables
