@@ -17,6 +17,8 @@ mockOmopSketch <- function(con = NULL,
                            writeSchema = NULL,
                            numberIndividuals = 100){
 
+  omopgenerics::assertNumeric(numberIndividuals, min = 1, length = 1)
+
   if (is.null(con)) {
     # TO BE REMOVED WHEN WE SUPPORT LOCAL CDMs
     rlang::check_installed("duckdb")

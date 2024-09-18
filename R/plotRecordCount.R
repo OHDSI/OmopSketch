@@ -12,9 +12,6 @@
 #' @examples
 #' \donttest{
 #'library(dplyr)
-#'library(CDMConnector)
-#'library(DBI)
-#'library(duckdb)
 #'library(OmopSketch)
 #'
 #'# Connect to a mock dabatase
@@ -35,6 +32,7 @@ plotRecordCount <- function(result,
                             colour = NULL){
   # initial checks
   omopgenerics::validateResultArgument(result)
+  validateFacet(facet) # To remove when there's a version in omopgenerics
 
   # subset to results of interest
   result <- result |>

@@ -34,19 +34,14 @@ summariseRecordCount <- function(cdm, omopTableName, unit = "year",
   # Initial checks ----
   omopgenerics::validateCdmArgument(cdm)
   omopgenerics::assertCharacter(omopTableName)
-
-  if(missing(unit)){unit <- "year"}
-  if(missing(unitInterval)){unitInterval <- 1}
-  if(missing(ageGroup) | is.null(ageGroup)){ageGroup <- NULL}
-
   checkUnit(unit)
-  checkUnitInterval(unitInterval)
+  omopgenerics::assertNumeric(unitInterval, length = 1, min = 1)
   omopgenerics::validateAgeGroupArgument(ageGroup)
   omopgenerics::assertLogical(sex, length = 1)
 
   result <- purrr::map(omopTableName,
                        function(x) {
-                         checkOmopTable(cdm[[x]])
+                         omopgenerics::assertClass(cdm[[x]], "omop_table", call = parent.frame())
                          if(omopgenerics::isTableEmpty(cdm[[x]])) {
                            cli::cli_warn(paste0(x, " omop table is empty. Returning an empty summarised omop table."))
                            return(omopgenerics::emptySummarisedResult())

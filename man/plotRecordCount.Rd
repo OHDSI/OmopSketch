@@ -24,19 +24,10 @@ Create a ggplot of the records' count trend.
 \examples{
 \donttest{
 library(dplyr)
-library(CDMConnector)
-library(DBI)
-library(duckdb)
 library(OmopSketch)
 
 # Connect to Eunomia database
-if (Sys.getenv("EUNOMIA_DATA_FOLDER") == "") Sys.setenv("EUNOMIA_DATA_FOLDER" = tempdir())
-if (!dir.exists(Sys.getenv("EUNOMIA_DATA_FOLDER"))) dir.create(Sys.getenv("EUNOMIA_DATA_FOLDER"))
-if (!eunomia_is_available()) downloadEunomiaData()
-con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
-cdm <- CDMConnector::cdmFromCon(
-con = con, cdmSchema = "main", writeSchema = "main"
-)
+cdm <- mockOmopSketch()
 
 # Run summarise clinical tables
 summarisedResult <- summariseRecordCount(cdm = cdm,

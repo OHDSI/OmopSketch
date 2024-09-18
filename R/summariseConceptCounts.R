@@ -40,7 +40,9 @@ summariseConceptCounts <- function(cdm,
                                    ageGroup = NULL){
 
   omopgenerics::validateCdmArgument(cdm)
-  omopgenerics::assertList(conceptId, null = TRUE)
+  omopgenerics::assertList(conceptId, null = TRUE, named = TRUE)
+  checkCountBy(countBy)
+
   if(!is.null(conceptId) && length(names(conceptId)) != length(conceptId)){
     cli::cli_abort("conceptId must be a named list")
   }

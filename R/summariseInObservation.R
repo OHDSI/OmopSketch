@@ -42,31 +42,21 @@ summariseInObservation <- function(observationPeriod,
 
   # Initial checks ----
   omopgenerics::assertClass(observationPeriod, "omop_table")
-
-  x <- omopgenerics::tableName(observationPeriod)
-  if (x != "observation_period") {
-    cli::cli_abort(
-      "Table name ({x}) is not observation_period, please provide a valid
-      observation_period table"
-    )
-  }
+  omopgenerics::assertTrue(omopgenerics::tableName(observationPeriod) == "observation_period")
 
   if(omopgenerics::isTableEmpty(observationPeriod)){
     cli::cli_warn("observation_period table is empty. Returning an empty summarised result.")
     return(omopgenerics::emptySummarisedResult())
   }
 
-  omopgenerics::validateAgeGroupArgument(ageGroup)
-
-  if(missing(unit)){unit <- "year"}
-  if(missing(unitInterval)){unitInterval <- 1}
-  if(missing(ageGroup) | is.null(ageGroup)){ageGroup <- list("overall" = c(0,Inf))}else{ageGroup <- append(ageGroup, list("overall" = c(0, Inf)))}
-
   checkUnit(unit)
-  checkUnitInterval(unitInterval)
-  omopgenerics::assertLogical(sex, length = 1)
+  omopgenerics::assertNumeric(unitInterval, length = 1, min = 1)
   checkOutput(output)
+  omopgenerics::validateAgeGroupArgument(ageGroup)
+  omopgenerics::assertLogical(sex, length = 1)
+
   if(length(output) > 1){output <- "all"}
+  if(missing(ageGroup) | is.null(ageGroup)){ageGroup <- list("overall" = c(0,Inf))}else{ageGroup <- append(ageGroup, list("overall" = c(0, Inf)))}
 
   # Create initial variables ----
   cdm <- omopgenerics::cdmReference(observationPeriod)
@@ -81,14 +71,14 @@ summariseInObservation <- function(observationPeriod,
 
   # Insert interval table to the cdm ----
   cdm <- cdm |>
-    omopgenerics::insertTable(name = "interval", table = interval)
+    omopgenerics::insertTable(name = paste0(tablePrefix,"interval"), table = interval)
 
   # Calculate denominator ----
   denominator <- cdm |> getDenominator(output)
 
   # Count records ----
   result <- observationPeriod |>
-    countRecords(cdm, start_date_name, end_date_name, unit, output)
+    countRecords(cdm, start_date_name, end_date_name, unit, output, tablePrefix)
 
   # Add category sex overall
   result <- addSexOverall(result, sex)
@@ -173,11 +163,10 @@ getIntervalTibbleForObservation <- function(omopTable, start_date_name, end_date
     dplyr::distinct()
 }
 
-countRecords <- function(observationPeriod, cdm, start_date_name, end_date_name, unit, output){
-  tablePrefix <- omopgenerics::tmpPrefix()
+countRecords <- function(observationPeriod, cdm, start_date_name, end_date_name, unit, output, tablePrefix){
 
   if(output == "person-days" | output == "all"){
-    x <- cdm[["interval"]] |>
+    x <- cdm[[paste0(tablePrefix, "interval")]] |>
       dplyr::cross_join(
         observationPeriod |>
           dplyr::select("start_date" = "observation_period_start_date",
@@ -208,7 +197,7 @@ if(output == "records" | output == "all"){
       dplyr::summarise(estimate_value = dplyr::n(), .groups = "drop") |>
       dplyr::compute(temporary = FALSE, name = tablePrefix)
 
-    records <- cdm[["interval"]] |>
+    records <- cdm[[paste0(tablePrefix, "interval")]] |>
       dplyr::cross_join(x) |>
       dplyr::filter((.data$start_date < .data$interval_start_date & .data$end_date >= .data$interval_start_date) |
                       (.data$start_date >= .data$interval_start_date & .data$start_date <= .data$interval_end_date)) |>
