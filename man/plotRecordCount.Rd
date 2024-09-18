@@ -45,7 +45,7 @@ summarisedResult <- summariseRecordCount(cdm = cdm,
                                          unitInterval = 10,
                                          ageGroup = list("<=20" = c(0,20), ">20" = c(21, Inf)),
                                          sex = TRUE)
-plotRecordCount(summarisedResult, facet = strata_level ~ .)
+plotRecordCount(summarisedResult, facet = sex + age_group ~ .)
 PatientProfiles::mockDisconnect(cdm = cdm)
 }
 }
