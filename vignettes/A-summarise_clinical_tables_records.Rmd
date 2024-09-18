@@ -139,7 +139,7 @@ summariseRecordCount(cdm, "drug_exposure",
                       unit = "month", 
                       unitInterval = 18, 
                       sex = TRUE) |> 
-    plotRecordCount(facet = group_level ~ strata_level)
+    plotRecordCount(facet = omop_table ~ sex)
 ```
 
 
