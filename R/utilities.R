@@ -42,3 +42,14 @@ collapseStr <- function(x, sep) {
   len <- length(x)
   paste0(paste0(x[-len], collapse = ", "), " ", sep, " ", x[len])
 }
+asCharacterFacet <- function(facet) {
+  if (rlang::is_formula(facet)) {
+    facet <- as.character(facet)
+    facet <- facet[-1]
+    facet <- facet |>
+      stringr::str_split(pattern = stringr::fixed(" + ")) |>
+      unlist()
+    facet <- facet[facet != "."]
+  }
+  return(facet)
+}

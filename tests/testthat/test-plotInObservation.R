@@ -22,7 +22,7 @@ test_that("plotInObservation works",{
       sex = TRUE,
       ageGroup = list(
         "0-19" = c(0, 19), "20-39" = c(20, 39), "40-59" = c(40, 59),
-        "60-79" = c(60, 79), ">80" = c(80, Inf))
+        "60-79" = c(60, 79), "80 or above" = c(80, Inf))
     )
 
   expect_snapshot(plotInObservation(result), error = TRUE)
@@ -30,7 +30,7 @@ test_that("plotInObservation works",{
   resultpd <- result |>
     dplyr::filter(variable_name == "Number person-days")
 
-  expect_no_error(plotInObservation(resultpd))
+  expect_warning(plotInObservation(resultpd))
   expect_no_error(
     resultpd |>
       visOmopResults::filterStrata(sex != "overall", age_group != "overall") |>
@@ -46,9 +46,9 @@ test_that("plotInObservation works",{
   )
 
   resultr <- result |>
-    dplyr::filter(variable_name == "records")
+    dplyr::filter(variable_name == "Number records in observation")
 
-  expect_no_error(plotInObservation(resultr))
+  expect_warning(plotInObservation(resultr))
   expect_no_error(
     resultr |>
       visOmopResults::filterStrata(sex != "overall", age_group != "overall") |>

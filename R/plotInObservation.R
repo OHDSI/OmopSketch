@@ -54,7 +54,7 @@ plotInObservation <- function(result,
   }
 
   # warn
-  warnFacetColour(result, list(facet = facet, colour = colour, "variable_level"))
+  warnFacetColour(result, list(facet = asCharacterFacet(facet), colour = colour, "variable_level"))
 
   # plot
   result |>
