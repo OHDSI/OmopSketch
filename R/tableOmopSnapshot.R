@@ -13,8 +13,10 @@
 #' cdm <- mockOmopSketch(numberIndividuals = 1000)
 #'
 #' cdm |>
-#' summariseOmopSnapshot() |>
-#' tableOmopSnapshot()
+#'   summariseOmopSnapshot() |>
+#'   tableOmopSnapshot()
+#'
+#' PatientProfiles::mockDisconnect(cdm)
 #'}
 tableOmopSnapshot <- function(result){
 
@@ -38,9 +40,9 @@ tableOmopSnapshot <- function(result){
                   estimate_name = gsub("_", " ", stringr::str_to_sentence(.data$estimate_name))) |>
     visOmopResults::visOmopTable(
       hide = c("variable_level"),
-      formatEstimateName = c("N" = "<Count>"),
+      estimateName = c("N" = "<Count>"),
       header = c("cdm_name"),
-      renameColumns = c("Database name" = "cdm_name", "Estimate" = "estimate_name"),
+      rename = c("Database name" = "cdm_name", "Estimate" = "estimate_name"),
       groupColumn = "variable_name"
     )
 

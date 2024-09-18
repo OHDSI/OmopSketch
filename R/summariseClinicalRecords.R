@@ -27,14 +27,8 @@
 #'library(duckdb)
 #'library(OmopSketch)
 #'
-#'# Connect to Eunomia database
-#'if (Sys.getenv("EUNOMIA_DATA_FOLDER") == "") Sys.setenv("EUNOMIA_DATA_FOLDER" = tempdir())
-#'if (!dir.exists(Sys.getenv("EUNOMIA_DATA_FOLDER"))) dir.create(Sys.getenv("EUNOMIA_DATA_FOLDER"))
-#'if (!eunomia_is_available()) downloadEunomiaData()
-#'con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
-#'cdm <- CDMConnector::cdmFromCon(
-#' con = con, cdmSchema = "main", writeSchema = "main"
-#')
+#'# Connect to a mock database
+#'cdm <- mockOmopSketch()
 #'
 #'# Run summarise clinical tables
 #'summarisedResult <- summariseClinicalRecords(cdm = cdm,
@@ -95,7 +89,7 @@ summariseClinicalRecords <- function(cdm,
                                                  sex = sex,
                                                  ageGroup = ageGroup)
                        }
-                       ) |>
+  ) |>
     dplyr::bind_rows()
 
   return(result)
@@ -107,10 +101,11 @@ summariseClinicalRecord <- function(omopTableName, cdm, recordsPerPerson,
                                     sourceVocabulary, domainId, typeConcept,
                                     sex, ageGroup, call = parent.frame(3)) {
 
-   tablePrefix <-  omopgenerics::tmpPrefix()
+  tablePrefix <-  omopgenerics::tmpPrefix()
 
   # Initial checks
   omopgenerics::assertClass(cdm[[omopTableName]], "omop_table", call = call)
+
   date <- startDate(omopgenerics::tableName(cdm[[omopTableName]]))
 
   omopTable <- cdm[[omopTableName]] |>
@@ -195,14 +190,14 @@ summariseClinicalRecord <- function(omopTableName, cdm, recordsPerPerson,
     ) |>
     omopgenerics::newSummarisedResult(settings = dplyr::tibble(
       "result_id" = 1L,
-      "result_type" = "summarised_clinical_records",
+      "result_type" = "summarise_clinical_records",
       "package_name" = "OmopSketch",
       "package_version" = as.character(utils::packageVersion("OmopSketch"))
     ))
 
   CDMConnector::dropTable(cdm, name = dplyr::starts_with(tablePrefix))
 
-return(result)
+  return(result)
 }
 
 # Functions -----
@@ -275,7 +270,7 @@ addSubjectsPercentage <- function(result, omopTable, people, strata){
 
 addRecordsPerPerson <- function(result, omopTable, recordsPerPerson, cdm, peopleStrata, strata){
 
-    result |>
+  result |>
     rbind(
       peopleStrata |>
         dplyr::select("person_id", dplyr::any_of(c("sex", "age_group"))) |>
@@ -364,13 +359,13 @@ addVariables <- function(x, variables) {
     x <- x |>
       dplyr::left_join(
         x |>
-        dplyr::left_join(
-          cdm[["observation_period"]] |>
-            dplyr::select("person_id",
-                          "obs_start" = "observation_period_start_date",
-                          "obs_end" = "observation_period_end_date"),
-          by = "person_id"
-        ) |>
+          dplyr::left_join(
+            cdm[["observation_period"]] |>
+              dplyr::select("person_id",
+                            "obs_start" = "observation_period_start_date",
+                            "obs_end" = "observation_period_end_date"),
+            by = "person_id"
+          ) |>
           dplyr::filter(
             .data$start_date >= .data$obs_start &
               .data$end_date <= .data$obs_end

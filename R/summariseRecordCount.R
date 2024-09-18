@@ -14,19 +14,10 @@
 #' @examples
 #' \donttest{
 #'library(dplyr)
-#'library(CDMConnector)
-#'library(DBI)
-#'library(duckdb)
 #'library(OmopSketch)
 #'
-#'# Connect to Eunomia database
-#'if (Sys.getenv("EUNOMIA_DATA_FOLDER") == "") Sys.setenv("EUNOMIA_DATA_FOLDER" = tempdir())
-#'if (!dir.exists(Sys.getenv("EUNOMIA_DATA_FOLDER"))) dir.create(Sys.getenv("EUNOMIA_DATA_FOLDER"))
-#'if (!eunomia_is_available()) downloadEunomiaData()
-#'con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
-#'cdm <- CDMConnector::cdmFromCon(
-#' con = con, cdmSchema = "main", writeSchema = "main"
-#')
+#'# Connect to a mock database
+#'cdm <- mockOmopSketch()
 #'
 #'# Run summarise clinical tables
 #'summarisedResult <- summariseRecordCount(cdm = cdm,
@@ -43,19 +34,14 @@ summariseRecordCount <- function(cdm, omopTableName, unit = "year",
   # Initial checks ----
   omopgenerics::validateCdmArgument(cdm)
   omopgenerics::assertCharacter(omopTableName)
-
-  if(missing(unit)){unit <- "year"}
-  if(missing(unitInterval)){unitInterval <- 1}
-  if(missing(ageGroup) | is.null(ageGroup)){ageGroup <- NULL}
-
   checkUnit(unit)
-  checkUnitInterval(unitInterval)
+  omopgenerics::assertNumeric(unitInterval, length = 1, min = 1)
   omopgenerics::validateAgeGroupArgument(ageGroup)
   omopgenerics::assertLogical(sex, length = 1)
 
   result <- purrr::map(omopTableName,
                        function(x) {
-                         checkOmopTable(cdm[[x]])
+                         omopgenerics::assertClass(cdm[[x]], "omop_table", call = parent.frame())
                          if(omopgenerics::isTableEmpty(cdm[[x]])) {
                            cli::cli_warn(paste0(x, " omop table is empty. Returning an empty summarised omop table."))
                            return(omopgenerics::emptySummarisedResult())
@@ -127,12 +113,16 @@ filterPersonId <- function(omopTable){
 
   cdm <- omopgenerics::cdmReference(omopTable)
   omopTableName <- omopgenerics::tableName(omopTable)
+  id <- omopgenerics::getPersonIdentifier(omopTable)
 
   if((omopTable |> dplyr::select("person_id") |> dplyr::anti_join(cdm[["person"]], by = "person_id") |> utils::head(1) |> dplyr::tally() |> dplyr::pull("n")) != 0){
     cli::cli_warn("There are person_id in the {omopTableName} that are not found in the person table. These person_id are removed from the analysis.")
 
     omopTable <- omopTable |>
-      dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id")
+      dplyr::inner_join(
+        cdm[["person"]] |>
+          dplyr::select(!!id := "person_id"),
+        by = "person_id")
   }
 
   return(omopTable)
@@ -312,7 +302,7 @@ createSummarisedResultRecordCount <- function(result, omopTable, name, unit, uni
     ) |>
     omopgenerics::newSummarisedResult(settings = dplyr::tibble(
       "result_id" = 1L,
-      "result_type" = "summarised_table_counts",
+      "result_type" = "summarise_record_count",
       "package_name" = "OmopSketch",
       "package_version" = as.character(utils::packageVersion("OmopSketch")),
       "unit" = .env$unit,

@@ -10,19 +10,38 @@
 #' @return A ggplot showing the table counts
 #'
 #' @export
+#' @examples
 #'
+#' \dontrun{
+#' library(OmopSketch)
+#' library(dplyr)
+#'
+#' cdm <- mockOmopSketch()
+#'
+#' result <- summariseInObservation(cdm$observation_period,
+#'                     unit = "month",
+#'                     unitInterval = 6,
+#'                     output = c("person-days","records"),
+#'                     ageGroup = list("<=60" = c(0,60), ">60" = c(61, Inf)),
+#'                     sex = TRUE)
+#'
+#' plotInObservation(result)
+#'
+#' PatientProfiles::mockDisconnect(cdm)
+#' }
 plotInObservation <- function(result,
                               facet = NULL,
                               colour = NULL) {
   # initial checks
   omopgenerics::validateResultArgument(result)
+  validateFacet(facet) # To remove when there's a version in omopgenerics
 
   # subset to results of interest
   result <- result |>
     visOmopResults::filterSettings(
-      .data$result_type == "summarised_observation_period")
+      .data$result_type == "summarise_in_observation")
   if (nrow(result) == 0) {
-    cli::cli_abort(c("!" = "No records found with result_type == summarised_observation_period"))
+    cli::cli_abort(c("!" = "No records found with result_type == summarise_in_observation"))
   }
 
   # check only one variable is contained

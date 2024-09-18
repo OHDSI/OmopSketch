@@ -11,20 +11,8 @@
 #' @export
 #' @examples
 #' \donttest{
-#'library(dplyr)
-#'library(CDMConnector)
-#'library(DBI)
-#'library(duckdb)
-#'library(OmopSketch)
-#'
-#'# Connect to Eunomia database
-#'if (Sys.getenv("EUNOMIA_DATA_FOLDER") == "") Sys.setenv("EUNOMIA_DATA_FOLDER" = tempdir())
-#'if (!dir.exists(Sys.getenv("EUNOMIA_DATA_FOLDER"))) dir.create(Sys.getenv("EUNOMIA_DATA_FOLDER"))
-#'if (!eunomia_is_available()) downloadEunomiaData()
-#'con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
-#'cdm <- CDMConnector::cdmFromCon(
-#' con = con, cdmSchema = "main", writeSchema = "main"
-#')
+#' # Connect to a mock dabatase
+#'cdm <- mockOmopSketch()
 #'
 #'# Run summarise clinical tables
 #'summarisedResult <- summariseRecordCount(cdm = cdm,
@@ -41,13 +29,14 @@ plotRecordCount <- function(result,
                             colour = NULL){
   # initial checks
   omopgenerics::validateResultArgument(result)
+  validateFacet(facet) # To remove when there's a version in omopgenerics
 
   # subset to results of interest
   result <- result |>
     visOmopResults::filterSettings(
-      .data$result_type == "summarised_table_counts")
+      .data$result_type == "summarise_record_count")
   if (nrow(result) == 0) {
-    cli::cli_abort(c("!" = "No records found with result_type == summarised_table_counts"))
+    cli::cli_abort(c("!" = "No records found with result_type == summarise_record_count"))
   }
 
   # plot

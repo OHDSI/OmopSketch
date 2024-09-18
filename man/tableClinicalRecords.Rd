@@ -4,10 +4,10 @@
 \alias{tableClinicalRecords}
 \title{Create a gt table from a summarised omop_table.}
 \usage{
-tableClinicalRecords(summarisedClinicalRecords)
+tableClinicalRecords(result)
 }
 \arguments{
-\item{summarisedClinicalRecords}{Output from summariseClinicalRecords().}
+\item{result}{Output from summariseClinicalRecords().}
 }
 \value{
 A gt object with the summarised data.
@@ -18,19 +18,10 @@ Create a gt table from a summarised omop_table.
 \examples{
 \donttest{
 library(dplyr)
-library(CDMConnector)
-library(DBI)
-library(duckdb)
 library(OmopSketch)
 
-# Connect to Eunomia database
-if (Sys.getenv("EUNOMIA_DATA_FOLDER") == "") Sys.setenv("EUNOMIA_DATA_FOLDER" = tempdir())
-if (!dir.exists(Sys.getenv("EUNOMIA_DATA_FOLDER"))) dir.create(Sys.getenv("EUNOMIA_DATA_FOLDER"))
-if (!eunomia_is_available()) downloadEunomiaData()
-con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
-cdm <- CDMConnector::cdmFromCon(
-con = con, cdmSchema = "main", writeSchema = "main"
-)
+# Connect to a mock database
+cdm <- mockOmopSketch()
 
 # Run summarise clinical tables
 summarisedResult <- summariseClinicalRecords(cdm = cdm,
@@ -42,5 +33,6 @@ summarisedResult <- summariseClinicalRecords(cdm = cdm,
                                             domainId = TRUE,
                                             typeConcept = TRUE)
 tableClinicalRecords(summarisedResult)
+PatientProfiles::mockDisconnect(cdm)
 }
 }
