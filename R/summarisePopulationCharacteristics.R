@@ -38,8 +38,6 @@ summarisePopulationCharacteristics <- function(cdm,
 
   cohort <- CohortConstructor::demographicsCohort(cdm = cdm,
                                                   name = omopgenerics::uniqueTableName()) |>
-    dplyr::rename("person_id" = "subject_id") |>
-    dplyr::rename("subject_id" = "person_id") |>
     CohortConstructor::trimToDateRange(dateRange = studyPeriod) |>
     PatientProfiles::addAge(indexDate = "cohort_end_date",
                             ageName = "age_at_end")

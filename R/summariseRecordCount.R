@@ -127,12 +127,16 @@ filterPersonId <- function(omopTable){
 
   cdm <- omopgenerics::cdmReference(omopTable)
   omopTableName <- omopgenerics::tableName(omopTable)
+  id <- omopgenerics::personIdentifier(omopTable)
 
   if((omopTable |> dplyr::select("person_id") |> dplyr::anti_join(cdm[["person"]], by = "person_id") |> utils::head(1) |> dplyr::tally() |> dplyr::pull("n")) != 0){
     cli::cli_warn("There are person_id in the {omopTableName} that are not found in the person table. These person_id are removed from the analysis.")
 
     omopTable <- omopTable |>
-      dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id")
+      dplyr::inner_join(
+        cdm[["person"]] |>
+          dplyr::select(!!id := "person_id"),
+        by = "person_id")
   }
 
   return(omopTable)
