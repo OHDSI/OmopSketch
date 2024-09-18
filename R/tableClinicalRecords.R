@@ -8,9 +8,6 @@
 #' @examples
 #' \donttest{
 #'library(dplyr)
-#'library(CDMConnector)
-#'library(DBI)
-#'library(duckdb)
 #'library(OmopSketch)
 #'
 #'# Connect to a mock database
@@ -26,7 +23,7 @@
 #'                                             domainId = TRUE,
 #'                                             typeConcept = TRUE)
 #' tableClinicalRecords(summarisedResult)
-#' PatientProfiles::cdmDisconnect(cdm)
+#' PatientProfiles::mockDisconnect(cdm)
 #'}
 tableClinicalRecords <- function(result) {
 
@@ -51,7 +48,7 @@ tableClinicalRecords <- function(result) {
   }
 
   result |>
-    visOmopResults::filterSettings(result_type == "summarise_clinical_records") |>
+    visOmopResults::filterSettings(.data$result_type == "summarise_clinical_records") |>
     visOmopResults::visOmopTable(
       formatEstimateName = c("N%" = "<count> (<percentage>)",
                              "N" = "<count>",
