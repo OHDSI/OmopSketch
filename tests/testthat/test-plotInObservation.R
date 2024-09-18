@@ -8,7 +8,7 @@ test_that("plotInObservation works",{
   x <-  x |> dplyr::filter(result_id == -1)
   expect_error(plotInObservation(x))
 
-  expect_error(plotInObservation(summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 1, output = "all", ageGroup = NULL, sex = FALSE)))
+  expect_error(plotInObservation(summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 1, output = c("person-days","records"), ageGroup = NULL, sex = FALSE)))
 
   x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 1, output = "person-days", ageGroup = NULL, sex = FALSE)
   expect_true(inherits(plotInObservation(x),"ggplot"))
