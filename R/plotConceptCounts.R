@@ -50,9 +50,8 @@ plotConceptCounts <- function(result,
   }
 
   result |>
-    visOmopResults::tidy() |>
     visOmopResults::barPlot(x = "variable_name",
-                            y = "record_count",
+                            y = estimate,
                             facet = facet,
                             colour = colour) +
     ggplot2::labs(
