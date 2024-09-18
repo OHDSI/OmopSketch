@@ -45,9 +45,9 @@ plotRecordCount <- function(result,
   # subset to results of interest
   result <- result |>
     visOmopResults::filterSettings(
-      .data$result_type == "summarised_table_counts")
+      .data$result_type == "summarise_record_count")
   if (nrow(result) == 0) {
-    cli::cli_abort(c("!" = "No records found with result_type == summarised_table_counts"))
+    cli::cli_abort(c("!" = "No records found with result_type == summarise_record_count"))
   }
 
   # plot
