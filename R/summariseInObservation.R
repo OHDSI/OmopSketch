@@ -58,7 +58,7 @@ summariseInObservation <- function(observationPeriod,
 
   # Count records ----
   result <- observationPeriod |>
-    countRecords(cdm, start_date_name, end_date_name, unit, output)
+    countRecords(cdm, start_date_name, end_date_name, unit, output, tablePrefix)
 
   # Add category sex overall
   result <- addSexOverall(result, sex)
@@ -143,11 +143,10 @@ getIntervalTibbleForObservation <- function(omopTable, start_date_name, end_date
     dplyr::distinct()
 }
 
-countRecords <- function(observationPeriod, cdm, start_date_name, end_date_name, unit, output){
-  tablePrefix <- omopgenerics::tmpPrefix()
+countRecords <- function(observationPeriod, cdm, start_date_name, end_date_name, unit, output, tablePrefix){
 
   if(output == "person-days" | output == "all"){
-    x <- cdm[["interval"]] |>
+    x <- cdm[[paste0(tablePrefix, "interval")]] |>
       dplyr::cross_join(
         observationPeriod |>
           dplyr::select("start_date" = "observation_period_start_date",
@@ -178,7 +177,7 @@ if(output == "records" | output == "all"){
       dplyr::summarise(estimate_value = dplyr::n(), .groups = "drop") |>
       dplyr::compute(temporary = FALSE, name = tablePrefix)
 
-    records <- cdm[["interval"]] |>
+    records <- cdm[[paste0(tablePrefix, "interval")]] |>
       dplyr::cross_join(x) |>
       dplyr::filter((.data$start_date < .data$interval_start_date & .data$end_date >= .data$interval_start_date) |
                       (.data$start_date >= .data$interval_start_date & .data$start_date <= .data$interval_end_date)) |>
