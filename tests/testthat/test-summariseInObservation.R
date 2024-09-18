@@ -92,26 +92,6 @@ test_that("check summariseInObservation works", {
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
 
-test_that("plotInObservation works",{
-  # Load mock database ----
-  cdm <- cdmEunomia()
-
-  # summariseInObservationPlot plot ----
-  x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 8)
-  expect_no_error(inherits(plotInObservation(x),"ggplot"))
-  x <-  x |> dplyr::filter(result_id == -1)
-  expect_warning(plotInObservation(x))
-
-  expect_error(plotInObservation(summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 1, output = "all", ageGroup = NULL, sex = FALSE)))
-
-  x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 1, output = "person-days", ageGroup = NULL, sex = FALSE)
-  expect_true(inherits(plotInObservation(x),"ggplot"))
-
-  x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 1, output = "records", ageGroup = NULL, sex = FALSE)
-  expect_true(inherits(plotInObservation(x),"ggplot"))
-  PatientProfiles::mockDisconnect(cdm = cdm)
-})
-
 test_that("check sex argument works", {
   # Load mock database ----
   cdm <- cdmEunomia()
@@ -203,8 +183,8 @@ test_that("check output argument works", {
   cdm <- cdmEunomia()
 
   # check value
-  x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 7, output = "all", ageGroup = NULL, sex = FALSE) |>
-    dplyr::filter(variable_name == "person-days", variable_level == "1964-01-01 to 1970-12-31", estimate_type == "integer") |>
+  x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 7, output = c("records","person-days"), ageGroup = NULL, sex = FALSE) |>
+    dplyr::filter(variable_name == "Number person-days", variable_level == "1964-01-01 to 1970-12-31", estimate_type == "integer") |>
     dplyr::pull("estimate_value") |> as.numeric()
   y <- cdm$observation_period |>
     dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
@@ -222,8 +202,8 @@ test_that("check output argument works", {
     dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
     dplyr::mutate(days = !!CDMConnector::datediff("observation_period_start_date","observation_period_end_date", interval = "day")+1) |>
     dplyr::summarise(n = sum(days, na.rm = TRUE)) |> dplyr::pull("n")
-  x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 7, output = "all", ageGroup = NULL, sex = FALSE) |>
-    dplyr::filter(variable_name == "person-days", variable_level == "1964-01-01 to 1970-12-31", estimate_type == "percentage") |>
+  x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 7, output = c("records","person-days"), ageGroup = NULL, sex = FALSE) |>
+    dplyr::filter(variable_name == "Number person-days", variable_level == "1964-01-01 to 1970-12-31", estimate_type == "percentage") |>
     dplyr::pull("estimate_value") |> as.numeric()
   y <- cdm$observation_period |>
     dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
@@ -238,24 +218,89 @@ test_that("check output argument works", {
 
   # Check sex stratified
   x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 7, output = "person-days", sex = TRUE) |>
-    dplyr::filter(variable_name == "person-days", variable_level == "1964-01-01 to 1970-12-31", estimate_type == "integer") |>
+    dplyr::filter(variable_name == "Number person-days", variable_level == "1964-01-01 to 1970-12-31", estimate_type == "integer") |>
     dplyr::filter(strata_level == "overall") |> dplyr::pull("estimate_value") |> as.numeric()
   y <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 7, output = "person-days", sex = TRUE) |>
-    dplyr::filter(variable_name == "person-days", variable_level == "1964-01-01 to 1970-12-31", estimate_type == "integer") |>
+    dplyr::filter(variable_name == "Number person-days", variable_level == "1964-01-01 to 1970-12-31", estimate_type == "integer") |>
     dplyr::filter(strata_level != "overall") |> dplyr::pull("estimate_value") |> as.numeric() |> sum()
   expect_equal(x,y)
 
   # Check age stratified
   x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 7, output = "person-days", ageGroup = list("<=20" = c(0,20), ">20" = c(21,Inf))) |>
-    dplyr::filter(variable_name == "person-days", variable_level == "1964-01-01 to 1970-12-31", estimate_type == "integer") |>
+    dplyr::filter(variable_name == "Number person-days", variable_level == "1964-01-01 to 1970-12-31", estimate_type == "integer") |>
     dplyr::filter(strata_level == "overall") |> dplyr::pull("estimate_value") |> as.numeric()
   y <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 7, output = "person-days", sex = TRUE) |>
-    dplyr::filter(variable_name == "person-days", variable_level == "1964-01-01 to 1970-12-31", estimate_type == "integer") |>
+    dplyr::filter(variable_name == "Number person-days", variable_level == "1964-01-01 to 1970-12-31", estimate_type == "integer") |>
     dplyr::filter(strata_level != "overall") |> dplyr::pull("estimate_value") |> as.numeric() |> sum()
   expect_equal(x,y)
 
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
 
+test_that("plotInObservation works",{
+  # Load mock database ----
+  cdm <- cdmEunomia()
 
+  # summariseInObservationPlot plot ----
+  x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 8)
+  expect_no_error(inherits(plotInObservation(x), "ggplot"))
+  x <-  x |> dplyr::filter(result_id == -1)
+  expect_error(plotInObservation(x))
 
+  expect_error(plotInObservation(summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 1, output = c("person-days","records"), ageGroup = NULL, sex = FALSE)))
+
+  x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 1, output = "person-days", ageGroup = NULL, sex = FALSE)
+  expect_true(inherits(plotInObservation(x),"ggplot"))
+
+  x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 1, output = "records", ageGroup = NULL, sex = FALSE)
+  expect_true(inherits(plotInObservation(x),"ggplot"))
+
+  result <- cdm$observation_period |>
+    summariseInObservation(
+      output = c("person-days", "records"),
+      sex = TRUE,
+      ageGroup = list(
+        "0-19" = c(0, 19), "20-39" = c(20, 39), "40-59" = c(40, 59),
+        "60-79" = c(60, 79), ">80" = c(80, Inf))
+    )
+
+  expect_error(plotInObservation(result))
+
+  resultpd <- result |>
+    dplyr::filter(variable_name == "Number person-days")
+
+  expect_no_error(plotInObservation(resultpd))
+  expect_no_error(
+    resultpd |>
+      visOmopResults::filterStrata(sex != "overall", age_group != "overall") |>
+      plotInObservation(facet = "sex", colour = "age_group")
+  )
+  expect_no_error(
+    resultpd |>
+      visOmopResults::filterStrata(sex != "overall", age_group != "overall") |>
+      plotInObservation(
+        facet = sex ~ age_group,
+        colour = c("age_group", "cdm_name")
+      )
+  )
+
+  resultr <- result |>
+    dplyr::filter(variable_name == "Number records in observation")
+
+  expect_no_error(plotInObservation(resultr))
+  expect_no_error(
+    resultr |>
+      visOmopResults::filterStrata(sex != "overall", age_group != "overall") |>
+      plotInObservation(facet = "sex", colour = "age_group")
+  )
+  expect_no_error(
+    resultr |>
+      visOmopResults::filterStrata(sex != "overall", age_group != "overall") |>
+      plotInObservation(
+        facet = sex ~ age_group,
+        colour = "age_group"
+      )
+  )
+
+  PatientProfiles::mockDisconnect(cdm = cdm)
+})

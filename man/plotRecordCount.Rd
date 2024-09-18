@@ -4,14 +4,16 @@
 \alias{plotRecordCount}
 \title{Create a ggplot of the records' count trend.}
 \usage{
-plotRecordCount(summarisedRecordCount, facet = NULL)
+plotRecordCount(result, facet = NULL, colour = NULL)
 }
 \arguments{
-\item{summarisedRecordCount}{Output from summariseRecordCount().}
+\item{result}{Output from summariseRecordCount().}
 
-\item{facet}{columns in data to facet. If the facet position wants to be specified, use the formula class for the input
-(e.g., strata_level ~ group_level + cdm_name). Variables before "~" will be facet by on horizontal axis, whereas those after "~" on vertical axis.
-Only the following columns are allowed to be facet by: "cdm_name", "group_level", "strata_level".}
+\item{facet}{Columns to face by. Formula format can be provided. See possible
+columns to face by with: \code{visOmopResults::tidyColumns()}.}
+
+\item{colour}{Columns to colour by. See possible columns to colour by with:
+\code{visOmopResults::tidyColumns()}.}
 }
 \value{
 A ggplot showing the table counts
@@ -22,19 +24,10 @@ Create a ggplot of the records' count trend.
 \examples{
 \donttest{
 library(dplyr)
-library(CDMConnector)
-library(DBI)
-library(duckdb)
 library(OmopSketch)
 
 # Connect to Eunomia database
-if (Sys.getenv("EUNOMIA_DATA_FOLDER") == "") Sys.setenv("EUNOMIA_DATA_FOLDER" = tempdir())
-if (!dir.exists(Sys.getenv("EUNOMIA_DATA_FOLDER"))) dir.create(Sys.getenv("EUNOMIA_DATA_FOLDER"))
-if (!eunomia_is_available()) downloadEunomiaData()
-con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
-cdm <- CDMConnector::cdmFromCon(
-con = con, cdmSchema = "main", writeSchema = "main"
-)
+cdm <- mockOmopSketch()
 
 # Run summarise clinical tables
 summarisedResult <- summariseRecordCount(cdm = cdm,
@@ -43,7 +36,7 @@ summarisedResult <- summariseRecordCount(cdm = cdm,
                                          unitInterval = 10,
                                          ageGroup = list("<=20" = c(0,20), ">20" = c(21, Inf)),
                                          sex = TRUE)
-plotRecordCount(summarisedResult, facet = strata_level ~ .)
+plotRecordCount(summarisedResult, facet = sex + age_group ~ .)
 PatientProfiles::mockDisconnect(cdm = cdm)
 }
 }

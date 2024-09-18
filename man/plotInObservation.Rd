@@ -4,18 +4,40 @@
 \alias{plotInObservation}
 \title{Create a gt table from a summarised omop_table.}
 \usage{
-plotInObservation(summarisedInObservation, facet = NULL)
+plotInObservation(result, facet = NULL, colour = NULL)
 }
 \arguments{
-\item{summarisedInObservation}{Output from summariseInObservation().}
+\item{result}{A summarised_result object (output of summariseInObservation).}
 
-\item{facet}{columns in data to facet. If the facet position wants to be specified, use the formula class for the input
-(e.g., strata_level ~ group_level + cdm_name). Variables before "~" will be facet by on horizontal axis, whereas those after "~" on vertical axis.
-Only the following columns are allowed to be facet by: "cdm_name", "group_level", "strata_level".}
+\item{facet}{Columns to face by. Formula format can be provided. See possible
+columns to face by with: \code{visOmopResults::tidyColumns()}.}
+
+\item{colour}{Columns to colour by. See possible columns to colour by with:
+\code{visOmopResults::tidyColumns()}.}
 }
 \value{
 A ggplot showing the table counts
 }
 \description{
 Create a gt table from a summarised omop_table.
+}
+\examples{
+
+\dontrun{
+library(OmopSketch)
+library(dplyr)
+
+cdm <- mockOmopSketch()
+
+result <- summariseInObservation(cdm$observation_period,
+                    unit = "month",
+                    unitInterval = 6,
+                    output = c("person-days","records"),
+                    ageGroup = list("<=60" = c(0,60), ">60" = c(61, Inf)),
+                    sex = TRUE)
+
+plotInObservation(result)
+
+PatientProfiles::mockDisconnect(cdm)
+}
 }

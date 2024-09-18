@@ -157,3 +157,20 @@ test_that("summarisePopulationCharacteristics() expected errors", {
 
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
+
+test_that("tablePopulationCharacteristics() works", {
+
+  # Load mock database ----
+  cdm <- cdmEunomia()
+
+  # Check that works ----
+  x <- summarisePopulationCharacteristics(cdm)
+  expect_no_error(y <- tablePopulationCharacteristics(x))
+  expect_true(inherits(y,"gt_tbl"))
+
+  x <- x |> dplyr::filter(.data$result_id == -1)
+  expect_warning(tablePopulationCharacteristics(x))
+  expect_warning(inherits(tablePopulationCharacteristics(x),"gt_tbl"))
+
+  PatientProfiles::mockDisconnect(cdm = cdm)
+})

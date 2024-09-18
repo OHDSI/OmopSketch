@@ -40,7 +40,9 @@ summariseConceptCounts <- function(cdm,
                                    ageGroup = NULL){
 
   omopgenerics::validateCdmArgument(cdm)
-  omopgenerics::assertList(conceptId, null = TRUE)
+  omopgenerics::assertList(conceptId, null = TRUE, named = TRUE)
+  checkCountBy(countBy)
+
   if(!is.null(conceptId) && length(names(conceptId)) != length(conceptId)){
     cli::cli_abort("conceptId must be a named list")
   }
@@ -89,7 +91,7 @@ summariseConceptCounts <- function(cdm,
       omopgenerics::newSummarisedResult(
         settings = dplyr::tibble(
           result_id = as.integer(1),
-          result_type = "code_use",
+          result_type = "summarise_concept_counts",
           package_name = "OmopSketch",
           package_version = as.character(utils::packageVersion("OmopSketch"))
         )

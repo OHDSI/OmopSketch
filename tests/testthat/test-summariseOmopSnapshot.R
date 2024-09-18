@@ -1,9 +1,19 @@
 test_that("summarise omop snapshot works", {
+  cdm <- cdmEunomia()
+  expect_no_error(result <- summariseOmopSnapshot(cdm))
+  expect_true(inherits(summariseOmopSnapshot(cdm),"summarised_result"))
+  PatientProfiles::mockDisconnect(cdm = cdm)
+})
 
+test_that("table omop snapshot works", {
   cdm <- cdmEunomia()
 
-  expect_no_error(result <- summariseOmopSnapshot(cdm))
+  # Check that works ----
+  expect_no_error(x <- tableOmopSnapshot(summariseOmopSnapshot(cdm)))
+  expect_true(inherits(x,"gt_tbl"))
+
+  x <- summariseOmopSnapshot(cdm) |> dplyr::filter(result_id == 0.1)
+  expect_warning(inherits(tableOmopSnapshot(x),"gt_tbl"))
 
   PatientProfiles::mockDisconnect(cdm = cdm)
-
 })

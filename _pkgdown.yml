@@ -7,6 +7,7 @@ reference:
   desc: Create snapshots of OMOP databases
 - contents:
   - summariseOmopSnapshot
+  - tableOmopSnapshot
 - subtitle: Clinical Tables
   desc: Summarise and plot tables in the OMOP Common Data Model
 - contents:
@@ -19,6 +20,7 @@ reference:
 - contents:
   - summariseObservationPeriod
   - plotObservationPeriod
+  - tableObservationPeriod
   - summariseInObservation
   - tableObservationPeriod
   - plotInObservation
@@ -29,8 +31,8 @@ reference:
 - subtitle: Individual Characteristics
   desc: Summarise characteristics of the individuals in the OMOP Common Data Model
 - contents:
-  - summariseEntryCharacteristics
   - summarisePopulationCharacteristics
+  - tablePopulationCharacteristics
 - subtitle: Mock Database
   desc: Create a mock database to test the OmopSketch package
 - contents:
