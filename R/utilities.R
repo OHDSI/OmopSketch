@@ -37,6 +37,7 @@ warnFacetColour <- function(result, cols) {
   invisible(NULL)
 }
 collapseStr <- function(x, sep) {
+  x <- x[x != ""]
   if (length(x) == 1) return(x)
   len <- length(x)
   paste0(paste0(x[-len], collapse = ", "), " ", sep, " ", x[len])
