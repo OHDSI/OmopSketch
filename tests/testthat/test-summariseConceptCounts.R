@@ -418,3 +418,31 @@ test_that("summarise code use - mock data", {
 
   PatientProfiles::mockDisconnect(cdm)
 })
+
+test_that("plot concept counts works", {
+  # Load mock database ----
+  cdm <- cdmEunomia()
+
+  # summariseInObservationPlot plot ----
+  x <- summariseConceptCounts(cdm, conceptId = list(codes = c(40213160)))
+  expect_error(plotConceptCounts(x))
+  x <- x |> dplyr::filter(estimate_name == "record_count")
+  expect_no_error(plotConceptCounts(x))
+  expect_true(inherits(plotConceptCounts(x), "ggplot"))
+
+  x <- summariseConceptCounts(cdm,
+                              conceptId = list("polio" = c(40213160),
+                                               "acetaminophen" = c(1125315,  1127433, 40229134, 40231925, 40162522, 19133768,  1127078)))
+  expect_error(plotConceptCounts(x))
+  x <- x |> dplyr::filter(estimate_name == "record_count")
+  expect_no_error(plotConceptCounts(x))
+  expect_message(plotConceptCounts(x))
+  expect_no_error(plotConceptCounts(x, facet = "codelist_name"))
+  expect_no_error(plotConceptCounts(x, colour = "codelist_name"))
+
+  x <-  x |> dplyr::filter(result_id == -1)
+  expect_error(plotInObservation(x))
+
+
+  PatientProfiles::mockDisconnect(cdm = cdm)
+})
