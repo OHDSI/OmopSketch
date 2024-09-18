@@ -257,7 +257,7 @@ test_that("plotInObservation works",{
 
   result <- cdm$observation_period |>
     summariseInObservation(
-      output = "all",
+      output = c("person-days", "records"),
       sex = TRUE,
       ageGroup = list(
         "0-19" = c(0, 19), "20-39" = c(20, 39), "40-59" = c(40, 59),
@@ -267,7 +267,7 @@ test_that("plotInObservation works",{
   expect_snapshot(plotInObservation(result), error = TRUE)
 
   resultpd <- result |>
-    dplyr::filter(variable_name == "person-days")
+    dplyr::filter(variable_name == "Number person-days")
 
   expect_no_error(plotInObservation(resultpd))
   expect_no_error(
@@ -285,7 +285,7 @@ test_that("plotInObservation works",{
   )
 
   resultr <- result |>
-    dplyr::filter(variable_name == "records")
+    dplyr::filter(variable_name == "Number records in observation")
 
   expect_no_error(plotInObservation(resultr))
   expect_no_error(
