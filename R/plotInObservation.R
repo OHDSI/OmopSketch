@@ -19,7 +19,7 @@ plotInObservation <- function(result,
                               facet = NULL,
                               colour = NULL) {
   # initial checks
-  omopgenerics::validateResultArguemnt(result)
+  omopgenerics::validateResultArgument(result)
 
   # subset to results of interest
   result <- result |>
