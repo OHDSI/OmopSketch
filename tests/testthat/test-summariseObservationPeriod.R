@@ -150,6 +150,9 @@ test_that("check summariseObservationPeriod works", {
     estimate_value = c("4", "4"))
   expect_identical(nrow(x), resOne |> dplyr::inner_join(x, by = colnames(x)) |> nrow())
 
+  # Check result type
+  checkResultType(resOneD, "summarise_observation_period")
+
   # empty observation period
   cdm$observation_period <- cdm$observation_period |>
     dplyr::filter(person_id == 0) |>

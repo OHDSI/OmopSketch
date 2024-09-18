@@ -159,3 +159,10 @@ validateFacet <- function(x, call = parent.frame()) {
   omopgenerics::assertCharacter(x, null = TRUE)
   return(invisible(NULL))
 }
+
+#' @noRd
+checkResultType <- function(result, result_type){
+  expect_true(result |>
+                visOmopResults::settingsColumns() |>
+                dplyr::pull("result_type") == result_type)
+}
