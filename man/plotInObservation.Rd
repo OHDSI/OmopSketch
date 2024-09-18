@@ -22,8 +22,22 @@ A ggplot showing the table counts
 Create a gt table from a summarised omop_table.
 }
 \examples{
-\donttest{
-library(dplyr)
+
+\dontrun{
 library(OmopSketch)
+library(dplyr)
+
+cdm <- mockOmopSketch()
+
+result <- summariseInObservation(cdm$observation_period,
+                    unit = "month",
+                    unitInterval = 6,
+                    output = c("person-days","records"),
+                    ageGroup = list("<=60" = c(0,60), ">60" = c(61, Inf)),
+                    sex = TRUE)
+
+plotInObservation(result)
+
+PatientProfiles::mockDisconnect(cdm)
 }
 }
