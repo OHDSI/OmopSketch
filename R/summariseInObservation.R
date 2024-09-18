@@ -36,6 +36,7 @@ summariseInObservation <- function(observationPeriod,
   omopgenerics::assertLogical(sex, length = 1)
 
   if(length(output) > 1){output <- "all"}
+  if(missing(ageGroup) | is.null(ageGroup)){ageGroup <- list("overall" = c(0,Inf))}else{ageGroup <- append(ageGroup, list("overall" = c(0, Inf)))}
 
   # Create initial variables ----
   cdm <- omopgenerics::cdmReference(observationPeriod)
@@ -50,7 +51,7 @@ summariseInObservation <- function(observationPeriod,
 
   # Insert interval table to the cdm ----
   cdm <- cdm |>
-    omopgenerics::insertTable(name = "interval", table = interval)
+    omopgenerics::insertTable(name = paste0(tablePrefix,"interval"), table = interval)
 
   # Calculate denominator ----
   denominator <- cdm |> getDenominator(output)
