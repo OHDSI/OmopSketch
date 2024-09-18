@@ -8,17 +8,17 @@ test_that("plotInObservation works",{
   x <-  x |> dplyr::filter(result_id == -1)
   expect_error(plotInObservation(x))
 
-  expect_error(plotInObservation(summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 1, output = "all", ageGroup = NULL, sex = FALSE)))
+  expect_error(plotInObservation(summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 1, output = c("person-days", "records"), ageGroup = NULL, sex = FALSE)))
 
   x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 1, output = "person-days", ageGroup = NULL, sex = FALSE)
-  expect_true(inherits(plotInObservation(x),"ggplot"))
+  expect_true(inherits(plotInObservation(x), "ggplot"))
 
   x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 1, output = "records", ageGroup = NULL, sex = FALSE)
-  expect_true(inherits(plotInObservation(x),"ggplot"))
+  expect_true(inherits(plotInObservation(x), "ggplot"))
 
   result <- cdm$observation_period |>
     summariseInObservation(
-      output = "all",
+      output = c("person-days", "records"),
       sex = TRUE,
       ageGroup = list(
         "0-19" = c(0, 19), "20-39" = c(20, 39), "40-59" = c(40, 59),
@@ -28,7 +28,7 @@ test_that("plotInObservation works",{
   expect_snapshot(plotInObservation(result), error = TRUE)
 
   resultpd <- result |>
-    dplyr::filter(variable_name == "person-days")
+    dplyr::filter(variable_name == "Number person-days")
 
   expect_no_error(plotInObservation(resultpd))
   expect_no_error(

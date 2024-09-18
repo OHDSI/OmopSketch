@@ -236,6 +236,3 @@ test_that("check output argument works", {
 
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
-
-
-
