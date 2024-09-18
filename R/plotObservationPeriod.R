@@ -33,7 +33,7 @@ plotObservationPeriod <- function(result,
                                   plotType = "barplot",
                                   facet = "cdm_name") {
   # initial checks
-  omopgenerics::assertClass(result, class = "summarised_result")
+  omopgenerics::validateResultArgument(result)
   result <- result |>
     visOmopResults::filterSettings(
       .data$result_type == "summarise_observation_period")
