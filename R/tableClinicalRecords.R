@@ -28,7 +28,7 @@
 tableClinicalRecords <- function(result) {
 
   # Initial checks ----
-  omopgenerics::assertClass(result, "summarised_result")
+  omopgenerics::validateResultArgument(result)
 
   if(result |> dplyr::tally() |> dplyr::pull("n") == 0){
     cli::cli_warn("result is empty.")
@@ -50,11 +50,11 @@ tableClinicalRecords <- function(result) {
   result |>
     visOmopResults::filterSettings(.data$result_type == "summarise_clinical_records") |>
     visOmopResults::visOmopTable(
-      formatEstimateName = c("N%" = "<count> (<percentage>)",
+      estimateName = c("N%" = "<count> (<percentage>)",
                              "N" = "<count>",
                              "Mean (SD)" = "<mean> (<sd>)"),
       header = c("cdm_name"),
-      renameColumns = c("Database name" = "cdm_name"),
+      rename = c("Database name" = "cdm_name"),
       groupColumn = c("omop_table", visOmopResults::strataColumns(result))
     )
 }
