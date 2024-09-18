@@ -89,7 +89,7 @@ summariseConceptCounts <- function(cdm,
       omopgenerics::newSummarisedResult(
         settings = dplyr::tibble(
           result_id = as.integer(1),
-          result_type = "code_use",
+          result_type = "summarise_concept_counts",
           package_name = "OmopSketch",
           package_version = as.character(utils::packageVersion("OmopSketch"))
         )

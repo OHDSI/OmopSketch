@@ -246,7 +246,7 @@ test_that("summarise code use - eunomia", {
 
   # check attributes
   expect_true(omopgenerics::settings(results)$package_name == "OmopSketch")
-  expect_true(omopgenerics::settings(results)$result_type == "code_use")
+  expect_true(omopgenerics::settings(results)$result_type == "summarise_concept_counts")
   expect_true(omopgenerics::settings(results)$package_version == packageVersion("OmopSketch"))
 
   # expected errors# expected errors

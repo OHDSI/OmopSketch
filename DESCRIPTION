@@ -49,7 +49,7 @@ Imports:
     tibble,
     tidyr,
     tidyselect,
-    visOmopResults
+    visOmopResults (>= 0.3.0.900)
 Depends: 
     R (>= 2.10)
 URL: https://oxford-pharmacoepi.github.io/OmopSketch/

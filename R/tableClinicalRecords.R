@@ -1,6 +1,6 @@
 #' Create a gt table from a summarised omop_table.
 #'
-#' @param summarisedClinicalRecords Output from summariseClinicalRecords().
+#' @param result Output from summariseClinicalRecords().
 #'
 #' @return A gt object with the summarised data.
 #'
@@ -33,16 +33,16 @@
 #'                                             typeConcept = TRUE)
 #'tableClinicalRecords(summarisedResult)
 #'}
-tableClinicalRecords <- function(summarisedClinicalRecords) {
+tableClinicalRecords <- function(result) {
 
   # Initial checks ----
-  omopgenerics::assertClass(summarisedClinicalRecords, "summarised_result")
+  omopgenerics::assertClass(result, "summarised_result")
 
-  if(summarisedClinicalRecords |> dplyr::tally() |> dplyr::pull("n") == 0){
-    cli::cli_warn("summarisedClinicalRecords is empty.")
+  if(result |> dplyr::tally() |> dplyr::pull("n") == 0){
+    cli::cli_warn("result is empty.")
 
     return(
-      summarisedClinicalRecords |>
+      result |>
       visOmopResults::splitGroup() |>
       visOmopResults::formatHeader(header = "cdm_name") |>
       dplyr::select(-c("estimate_type", "result_id",
@@ -56,7 +56,7 @@ tableClinicalRecords <- function(summarisedClinicalRecords) {
     )
   }
 
-  t <- summarisedClinicalRecords |>
+  t <- result |>
     dplyr::mutate(order = dplyr::case_when(
       variable_name == "Number of subjects"  ~ 1,
       variable_name == "Number of records" ~ 2,

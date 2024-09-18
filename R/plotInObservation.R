@@ -10,7 +10,11 @@
 #' @return A ggplot showing the table counts
 #'
 #' @export
-#'
+#' @examples
+#' \donttest{
+#' library(dplyr)
+#' library(OmopSketch)
+#' }
 plotInObservation <- function(result,
                               facet = NULL,
                               colour = NULL) {
@@ -20,9 +24,9 @@ plotInObservation <- function(result,
   # subset to results of interest
   result <- result |>
     visOmopResults::filterSettings(
-      .data$result_type == "summarised_observation_period")
+      .data$result_type == "summarise_in_observation")
   if (nrow(result) == 0) {
-    cli::cli_abort(c("!" = "No records found with result_type == summarised_observation_period"))
+    cli::cli_abort(c("!" = "No records found with result_type == summarise_in_observation"))
   }
 
   # check only one variable is contained
