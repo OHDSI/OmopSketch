@@ -151,7 +151,7 @@ test_that("check summariseObservationPeriod works", {
   expect_identical(nrow(x), resOne |> dplyr::inner_join(x, by = colnames(x)) |> nrow())
 
   # Check result type
-  checkResultType(resOneD, "summarise_observation_period")
+  checkResultType(resOne, "summarise_observation_period")
 
   # empty observation period
   cdm$observation_period <- cdm$observation_period |>
@@ -275,4 +275,63 @@ test_that("check summariseObservationPeriod works", {
   )
 
   PatientProfiles::mockDisconnect(cdm = cdm)
+})
+
+test_that("check it works with mockOmopSketch", {
+  cdm <- mockOmopSketch(numberIndividuals = 5)
+
+  sop <- summariseObservationPeriod(cdm$observation_period)
+
+  # counts
+  expect_identical(sop$estimate_value[sop$variable_name == "number records"], "5")
+  x <- dplyr::tibble(
+    strata_level = c("overall", "1st"),
+    variable_name = "number subjects",
+    estimate_value = c("5","5"))
+  expect_identical(nrow(x), sop |> dplyr::inner_join(x, by = colnames(x)) |> nrow())
+
+  # records per person
+  expect_identical(
+    sop |>
+      dplyr::filter(
+        variable_name == "records per person", estimate_name != "sd") |>
+      dplyr::pull("estimate_value"),
+    c(rep("1",8))
+  )
+
+  # duration
+  expect_identical(
+    sop |>
+      dplyr::filter(variable_name == "duration", estimate_name %in% c("min","q25","median","q75","max")) |>
+      dplyr::pull("estimate_value") |>
+      unique() |>
+      sort(),
+    as.character(
+      cdm$observation_period |>
+        dplyr::mutate(duration = observation_period_end_date - observation_period_start_date + 1) |>
+        dplyr::pull(duration) |>
+        as.character() |>
+        sort()
+    )
+  )
+
+  # days to next observation period
+  expect_identical(
+    sop |>
+      dplyr::filter(variable_name == "days to next observation period", estimate_name == "mean") |>
+      dplyr::pull("estimate_value"),
+    as.character(c(NA,NA))
+  )
+
+  # Check result type
+  omopgenerics::validateResultArgument(sop)
+
+  # table works
+  expect_no_error(tableObservationPeriod(sop))
+
+  # plot works
+  expect_no_error(plotObservationPeriod(sop))
+
+  PatientProfiles::mockDisconnect(cdm = cdm)
+
 })
