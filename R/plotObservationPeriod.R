@@ -98,7 +98,8 @@ plotObservationPeriod <- function(result,
         fill = .data$colour)
     ) +
       ggplot2::geom_col() +
-      ggplot2::xlab("Observation period")
+      ggplot2::xlab("Observation period") +
+      ggplot2::ylab(stringr::str_to_sentence(variableName))
   } else if (plotType == "boxplot") {
     p <- ggplot2::ggplot(
       data = result,
