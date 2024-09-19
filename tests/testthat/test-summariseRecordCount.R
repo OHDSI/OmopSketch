@@ -81,6 +81,10 @@ test_that("summariseRecordCount() works", {
          dplyr::pull("n"))
   )
 
+  # Check result type
+  result <- summariseRecordCount(cdm, "observation_period", unit = "month")
+  checkResultType(result, "summarise_record_count")
+
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
 

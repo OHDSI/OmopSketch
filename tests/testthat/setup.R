@@ -79,3 +79,10 @@ copyCdm <- function(cdm) {
     con = connection(), cdm = cdm, schema = writeSchema(), overwrite = TRUE
   )
 }
+checkResultType <- function(result, result_type){
+  expect_true(
+    result |>
+      visOmopResults::settingsColumns() |>
+      dplyr::pull("result_type") == result_type
+  )
+}
