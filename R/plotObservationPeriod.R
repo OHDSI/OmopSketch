@@ -71,7 +71,7 @@ plotObservationPeriod <- function(result,
   missingEstimates <- neededEstimates[!neededEstimates %in% allEstimates]
   if (length(missingEstimates)) {
     if (plotType == "densityplot") {
-      cli::cli_abort("No density estimates found, please use: summariseObservationPeriod(density = TRUE).")
+      cli::cli_abort("No density estimates found, please use: summariseObservationPeriod(estimates = 'density').")
     } else {
       cli::cli_abort("estimates not found: {missingEstimates}.")
     }
@@ -144,8 +144,8 @@ needEstimates <- function(plotType) {
   dplyr::tribble(
     ~plot_type, ~estimate_name,
     "barplot", "count",
-    "densityplot", "x",
-    "densityplot", "y",
+    "densityplot", "density_x",
+    "densityplot", "density_y",
     "boxplot", "median",
     "boxplot", "q25",
     "boxplot", "q75",

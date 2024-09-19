@@ -108,13 +108,13 @@ test_that("check summariseObservationPeriod works", {
     dplyr::group_by(strata_level) |>
     dplyr::summarise(
       n = dplyr::n(),
-      area = sum(as.numeric(estimate_value[estimate_name == "y"])) * (
-        max(as.numeric(estimate_value[estimate_name == "x"])) -
-          min(as.numeric(estimate_value[estimate_name == "x"]))
+      area = sum(as.numeric(estimate_value[estimate_name == "density_y"])) * (
+        max(as.numeric(estimate_value[estimate_name == "density_x"])) -
+          min(as.numeric(estimate_value[estimate_name == "density_x"]))
         )/(nPoints - 1)
     )
-  expect_identical(xx$n |> unique(), as.integer(nPoints*2))
-  expect_identical(xx$area |> round(2) |> unique(), 1)
+  expect_identical(xx$n |> unique() |> sort(decreasing = TRUE), c(as.integer(nPoints*2L),6L))
+  expect_identical(xx$area |> round(2) |> unique() |> sort(decreasing = TRUE), c(1,0))
 
   # days to next observation period - density
   xx <- resAll |>
@@ -123,13 +123,13 @@ test_that("check summariseObservationPeriod works", {
     dplyr::group_by(strata_level) |>
     dplyr::summarise(
       n = dplyr::n(),
-      area = sum(as.numeric(estimate_value[estimate_name == "y"])) * (
-        max(as.numeric(estimate_value[estimate_name == "x"])) -
-          min(as.numeric(estimate_value[estimate_name == "x"]))
+      area = sum(as.numeric(estimate_value[estimate_name == "density_y"])) * (
+        max(as.numeric(estimate_value[estimate_name == "density_x"])) -
+          min(as.numeric(estimate_value[estimate_name == "density_x"]))
       )/(nPoints - 1)
     )
-  expect_identical(xx$n |> unique() , as.integer(nPoints*2))
-  expect_identical(xx$area[xx$strata_level != "3"] |> round(2) |> unique(), 1)
+  expect_identical(xx$n |> unique() |> sort(decreasing = TRUE) , c(as.integer(nPoints*2L),6L))
+  expect_identical(xx$area[xx$strata_level != "2nd"] |> round(2) |> unique(), 1)
 
   # only one exposure per individual
   cdm$observation_period <- cdm$observation_period |>
