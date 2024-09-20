@@ -53,6 +53,9 @@ plotInObservation <- function(result,
     ))
   }
 
+  # warn
+  warnFacetColour(result, list(facet = asCharacterFacet(facet), colour = colour, "variable_level"))
+
   # plot
   result |>
     dplyr::mutate(variable_level = as.Date(stringr::str_extract(
