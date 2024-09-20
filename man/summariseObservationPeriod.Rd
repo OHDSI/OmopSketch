@@ -7,8 +7,8 @@ summarised_result object.}
 \usage{
 summariseObservationPeriod(
   observationPeriod,
-  estimates = c("mean", "sd", "min", "q05", "q25", "median", "q75", "q95", "max"),
-  density = FALSE
+  estimates = c("mean", "sd", "min", "q05", "q25", "median", "q75", "q95", "max",
+    "density")
 )
 }
 \arguments{
@@ -16,9 +16,6 @@ summariseObservationPeriod(
 
 \item{estimates}{Estimates to summarise the variables of interest (
 \verb{records per person}, \code{duration} and \verb{days to next observation period}).}
-
-\item{density}{Whether to export density data for time between observation
-periods.}
 }
 \value{
 A summarised_result object with the summarised data.
