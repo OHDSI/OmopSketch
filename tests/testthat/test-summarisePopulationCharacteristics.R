@@ -109,6 +109,9 @@ test_that("summarisePopulationCharacteristics() works", {
                     sort() ==
                     c("age_group_at_start", "overall")))
 
+  # Check result type
+  checkResultType(summarisedPopulation, "summarise_population_characteristics")
+
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
 

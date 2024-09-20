@@ -15,5 +15,8 @@ test_that("table omop snapshot works", {
   x <- summariseOmopSnapshot(cdm) |> dplyr::filter(result_id == 0.1)
   expect_warning(inherits(tableOmopSnapshot(x),"gt_tbl"))
 
+  # Check result type
+  checkResultType(x, "summarise_omop_snapshot")
+
   PatientProfiles::mockDisconnect(cdm = cdm)
 })

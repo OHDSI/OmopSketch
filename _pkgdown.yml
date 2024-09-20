@@ -22,12 +22,12 @@ reference:
   - plotObservationPeriod
   - tableObservationPeriod
   - summariseInObservation
-  - tableObservationPeriod
   - plotInObservation
 - subtitle: Counts
   desc: Summarise concept code use in the OMOP Common Data Model
 - contents:
   - summariseConceptCounts
+  - plotConceptCounts
 - subtitle: Individual Characteristics
   desc: Summarise characteristics of the individuals in the OMOP Common Data Model
 - contents:

@@ -21,14 +21,14 @@
 #' cdm <- CDMConnector::cdm_from_con(con,
 #'                                   cdm_schem = "main",
 #'                                   write_schema = "main")
-#'acetiminophen <- c(1125315,  1127433, 40229134,
+#'acetaminophen <- c(1125315,  1127433, 40229134,
 #'40231925, 40162522, 19133768,  1127078)
 #'poliovirus_vaccine <- c(40213160)
-#'cs <- list(acetiminophen = acetiminophen,
+#'cs <- list(acetaminophen = acetaminophen,
 #'           poliovirus_vaccine = poliovirus_vaccine)
-#'results <- summariseCodeUse(cdm, conceptId = cs)
+#'results <- summariseConceptCounts(cdm, conceptId = cs)
 #'results
-#'CDMConnector::cdmDisconnect(cdm)
+#'PatientProfiles::mockDisconnect(cdm)
 #'}
 #'
 summariseConceptCounts <- function(cdm,
