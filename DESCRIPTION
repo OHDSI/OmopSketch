@@ -40,8 +40,8 @@ Imports:
     CohortConstructor,
     dplyr,
     ggplot2,
-    omock (>= 0.2.0),
-    omopgenerics (>= 0.0.3),
+    omock (>= 0.3.0),
+    omopgenerics (>= 0.3.1),
     PatientProfiles,
     purrr,
     rlang,
@@ -54,6 +54,6 @@ Depends:
 URL: https://oxford-pharmacoepi.github.io/OmopSketch/
 BugReports: https://github.com/oxford-pharmacoepi/OmopSketch/issues
 Remotes: 
-    OHDSI/omock,
+    darwin-eu-dev/omopgenerics,
     darwin-eu/visOmopResults
 VignetteBuilder: knitr
