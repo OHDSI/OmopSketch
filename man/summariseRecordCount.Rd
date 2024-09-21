@@ -34,8 +34,6 @@ Create a summarise result object to summarise record counts of an omop_table usi
 }
 \examples{
 \donttest{
-library(dplyr)
-library(OmopSketch)
 
 # Connect to a mock database
 cdm <- mockOmopSketch()

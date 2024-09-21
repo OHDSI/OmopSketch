@@ -34,8 +34,7 @@ tableOmopSnapshot <- function(result,
   }
 
   result <- result |>
-    dplyr::mutate(variable_name = gsub("_", " ", stringr::str_to_sentence(.data$variable_name)),
-                  estimate_name = gsub("_", " ", stringr::str_to_sentence(.data$estimate_name))) |>
+    formatColumn(c("variable_name", "estimate_name")) |>
     visOmopResults::visOmopTable(
       type = type,
       hide = c("variable_level"),
@@ -67,4 +66,11 @@ emptyTable <- function(type) {
 }
 choicesTables <- function() {
   c("tibble", "flextable", "gt")
+}
+formatColumn <- function(result, col) {
+  for (x in col) {
+    result <- result |>
+      dplyr::mutate(!!x := gsub("_", " ", stringr::str_to_sentence(.data[[x]])))
+  }
+  return(result)
 }

@@ -7,6 +7,15 @@
 #' @return A gt or flextable table.
 #' @export
 #'
+#' @examples
+#' cdm <- mockOmopSketch()
+#'
+#' result <- summariseObservationPeriod(cdm$observation_period)
+#'
+#' tableObservationPeriod(result)
+#'
+#' PatientProfiles::mockDisconnect(cdm)
+#'
 tableObservationPeriod <- function(result,
                                    type = "gt") {
   # initial checks
@@ -26,6 +35,7 @@ tableObservationPeriod <- function(result,
 
   result |>
     dplyr::filter(is.na(.data$variable_level)) |> # to remove density
+    formatColumn("variable_name") |>
     visOmopResults::visOmopTable(
       estimateName = c(
         "N" = "<count>",

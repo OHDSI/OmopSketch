@@ -17,3 +17,13 @@ A gt or flextable table.
 \description{
 Create a table from the output of summariseObservationPeriod().
 }
+\examples{
+cdm <- mockOmopSketch()
+
+result <- summariseObservationPeriod(cdm$observation_period)
+
+tableObservationPeriod(result)
+
+PatientProfiles::mockDisconnect(cdm)
+
+}
