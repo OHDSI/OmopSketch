@@ -20,11 +20,12 @@ RoxygenNote: 7.3.2
 Suggests: 
     DBI,
     duckdb,
+    flextable,
     here,
     knitr,
+    odbc,
     remotes,
     rmarkdown,
-    odbc,
     RPostgres,
     testthat (>= 3.0.0),
     withr

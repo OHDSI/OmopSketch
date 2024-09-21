@@ -1,8 +1,9 @@
 #' Create a gt table from a summarised population characteristics table.
 #'
 #' @param result Output from summarisePopulationCharacteristics().
+#' @param type Type of table.
 #'
-#' @return A gt object with the summarised data.
+#' @return A visual table.
 #'
 #' @export
 #' @examples
@@ -23,7 +24,8 @@
 #' tablePopulationCharacteristics(summarisedPopulation)
 #' PatientProfiles::mockDisconnect(cdm = cdm)
 #'}
-tablePopulationCharacteristics <- function(result){
+tablePopulationCharacteristics <- function(result,
+                                           type = "gt"){
   # Initial checks ----
   omopgenerics::validateResultArgument(result)
 
