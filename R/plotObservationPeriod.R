@@ -135,8 +135,8 @@ availablePlotObservationPeriod <- function() {
     "number subjects", "barplot", "cdm_name+observation_period_ordinal",
     "records per person", "densityplot", "cdm_name",
     "records per person", "boxplot", "cdm_name",
-    "duration", "densityplot", "cdm_name+observation_period_ordinal",
-    "duration", "boxplot", "cdm_name+observation_period_ordinal",
+    "duration in days", "densityplot", "cdm_name+observation_period_ordinal",
+    "duration in days", "boxplot", "cdm_name+observation_period_ordinal",
     "days to next observation period", "densityplot", "cdm_name+observation_period_ordinal",
     "days to next observation period", "boxplot", "cdm_name+observation_period_ordinal",
   )

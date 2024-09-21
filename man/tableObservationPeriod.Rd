@@ -9,7 +9,7 @@ tableObservationPeriod(result, type = "gt")
 \arguments{
 \item{result}{A summarised result object.}
 
-\item{type}{Type of table either \code{gt} or \code{flextable}.}
+\item{type}{Type of table.}
 }
 \value{
 A gt or flextable table.

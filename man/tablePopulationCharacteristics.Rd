@@ -4,33 +4,37 @@
 \alias{tablePopulationCharacteristics}
 \title{Create a gt table from a summarised population characteristics table.}
 \usage{
-tablePopulationCharacteristics(result)
+tablePopulationCharacteristics(result, type = "gt")
 }
 \arguments{
 \item{result}{Output from summarisePopulationCharacteristics().}
+
+\item{type}{Type of table.}
 }
 \value{
-A gt object with the summarised data.
+A visual table.
 }
 \description{
 Create a gt table from a summarised population characteristics table.
 }
 \examples{
 \donttest{
-library(dplyr)
-library(OmopSketch)
 
 # Connect to a mock database
 cdm <- mockOmopSketch()
 
 # Run summarise clinical tables
 summarisedPopulation <- summarisePopulationCharacteristics(
-                       cdm = cdm,
-                       studyPeriod = c("2010-01-01",NA),
-                       sex = TRUE,
-                       ageGroup = list("<=60" = c(0, 60), ">60" = c(61, Inf))
-                       )
+  cdm = cdm,
+  studyPeriod = c("2010-01-01",NA),
+  sex = TRUE,
+  ageGroup = list("<=60" = c(0, 60), ">60" = c(61, Inf))
+)
+
+# Create a visual table
 tablePopulationCharacteristics(summarisedPopulation)
+
+# delete mock data
 PatientProfiles::mockDisconnect(cdm = cdm)
 }
 }

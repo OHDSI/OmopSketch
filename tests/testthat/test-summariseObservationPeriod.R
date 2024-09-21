@@ -84,7 +84,7 @@ test_that("check summariseObservationPeriod works", {
   # duration
   expect_identical(
     resAll |>
-      dplyr::filter(variable_name == "duration", estimate_name == "mean") |>
+      dplyr::filter(variable_name == "duration in days", estimate_name == "mean") |>
       dplyr::pull("estimate_value"),
     as.character(c(
       mean(c(20, 6, 113, 144, 18, 9, 29, 276)), mean(c(20, 18, 9, 276)),
@@ -104,7 +104,7 @@ test_that("check summariseObservationPeriod works", {
 
   # duration - density
   xx <- resAllD |>
-    dplyr::filter(variable_name == "duration", !is.na(variable_level)) |>
+    dplyr::filter(variable_name == "duration in days", !is.na(variable_level)) |>
     dplyr::group_by(strata_level) |>
     dplyr::summarise(
       n = dplyr::n(),
@@ -201,27 +201,27 @@ test_that("check summariseObservationPeriod works", {
   expect_error(
     resAll |>
       plotObservationPeriod(
-        variableName = "duration", plotType = "barplot")
+        variableName = "duration in days", plotType = "barplot")
   )
   expect_no_error(
     resAll |>
       plotObservationPeriod(
-        variableName = "duration", plotType = "boxplot")
+        variableName = "duration in days", plotType = "boxplot")
   )
   expect_error(
     resAll |>
       plotObservationPeriod(
-        variableName = "duration", plotType = "densityplot")
+        variableName = "duration in days", plotType = "densityplot")
   )
   expect_no_error(
     resAllD |>
       plotObservationPeriod(
-        variableName = "duration", plotType = "densityplot")
+        variableName = "duration in days", plotType = "densityplot")
   )
   expect_error(
     resAll |>
       plotObservationPeriod(
-        variableName = "duration", plotType = "random")
+        variableName = "duration in days", plotType = "random")
   )
   expect_error(
     resAll |>

@@ -109,6 +109,7 @@ summariseObservationPeriod <- function(observationPeriod,
       "variable_name" = dplyr::case_when(
         .data$variable_name == "n" ~ "records per person",
         .data$variable_name == "next_obs" ~ "days to next observation period",
+        .data$variable_name == "duration" ~ "duration in days",
         .default = .data$variable_name
       )
     ) |>

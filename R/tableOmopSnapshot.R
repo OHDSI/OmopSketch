@@ -20,7 +20,7 @@ tableOmopSnapshot <- function(result,
                               type = "gt") {
   # initial checks
   omopgenerics::validateResultArgument(result)
-  omopgenerics::assertChoice(type, c("tibble", "flextable", "gt"))
+  omopgenerics::assertChoice(type, choicesTables())
 
   # subset to result_type of interest
   result <- result |>
@@ -29,7 +29,7 @@ tableOmopSnapshot <- function(result,
 
   # check if it is empty
   if (nrow(result) == 0) {
-    cli::cli_warn("`result` does not contain any `summarise_omop_snapshot` results.")
+    warnEmpty("summarise_omop_snapshot")
     return(emptyTable(type))
   }
 
@@ -51,6 +51,9 @@ tableOmopSnapshot <- function(result,
   return(result)
 }
 
+warnEmpty <- function(resultType) {
+  cli::cli_warn("`result` does not contain any `{resultType}` data.")
+}
 emptyTable <- function(type) {
   pkg <- type
   pkg[pkg == "tibble"] <- "dplyr"
@@ -61,4 +64,7 @@ emptyTable <- function(type) {
     "gt" = gt::gt(x),
     "flextable" = flextable::flextable(x)
   )
+}
+choicesTables <- function() {
+  c("tibble", "flextable", "gt")
 }
