@@ -226,7 +226,7 @@ getCodeUse <- function(x,
   cdm[[tableCodelist]] <- NULL
   CDMConnector::dropTable(
     cdm = cdm,
-    name = tidyselect::starts_with(intermediateTable)
+    name = dplyr::starts_with(intermediateTable)
   )
 
   return(codeCounts)
