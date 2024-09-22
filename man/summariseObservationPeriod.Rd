@@ -8,7 +8,9 @@ summarised_result object.}
 summariseObservationPeriod(
   observationPeriod,
   estimates = c("mean", "sd", "min", "q05", "q25", "median", "q75", "q95", "max",
-    "density")
+    "density"),
+  ageGroup = NULL,
+  sex = FALSE
 )
 }
 \arguments{
@@ -16,6 +18,10 @@ summariseObservationPeriod(
 
 \item{estimates}{Estimates to summarise the variables of interest (
 \verb{records per person}, \code{duration} and \verb{days to next observation period}).}
+
+\item{ageGroup}{A list of age groups to stratify results by.}
+
+\item{sex}{Boolean variable. Whether to stratify by sex (TRUE) or not (FALSE).}
 }
 \value{
 A summarised_result object with the summarised data.

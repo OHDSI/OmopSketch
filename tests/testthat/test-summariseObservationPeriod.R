@@ -67,7 +67,7 @@ test_that("check summariseObservationPeriod works", {
   # counts
   expect_identical(resAll$estimate_value[resAll$variable_name == "number records"], "8")
   x <- dplyr::tibble(
-    strata_level = c("overall", "1st", "2nd", "3rd"),
+    group_level = c("overall", "1st", "2nd", "3rd"),
     variable_name = "number subjects",
     estimate_value = c("4", "4", "3", "1"))
   expect_identical(nrow(x), resAll |> dplyr::inner_join(x, by = colnames(x)) |> nrow())
@@ -105,7 +105,7 @@ test_that("check summariseObservationPeriod works", {
   # duration - density
   xx <- resAll |>
     dplyr::filter(variable_name == "duration", !is.na(variable_level)) |>
-    dplyr::group_by(strata_level) |>
+    dplyr::group_by(group_level) |>
     dplyr::summarise(
       n = dplyr::n(),
       area = sum(as.numeric(estimate_value[estimate_name == "density_y"])) * (
@@ -120,7 +120,7 @@ test_that("check summariseObservationPeriod works", {
   xx <- resAll |>
     dplyr::filter(variable_name == "days to next observation period",
                   !is.na(variable_level)) |>
-    dplyr::group_by(strata_level) |>
+    dplyr::group_by(group_level) |>
     dplyr::summarise(
       n = dplyr::n(),
       area = sum(as.numeric(estimate_value[estimate_name == "density_y"])) * (
@@ -129,7 +129,7 @@ test_that("check summariseObservationPeriod works", {
       )/(nPoints - 1)
     )
   expect_identical(xx$n |> unique() |> sort(decreasing = TRUE) , c(as.integer(nPoints*2L),6L))
-  expect_identical(xx$area[xx$strata_level != "2nd"] |> round(2) |> unique(), 1)
+  expect_identical(xx$area[xx$group_level != "2nd"] |> round(2) |> unique(), 1)
 
   # only one exposure per individual
   cdm$observation_period <- cdm$observation_period |>
@@ -143,7 +143,7 @@ test_that("check summariseObservationPeriod works", {
   # counts
   expect_identical(resOne$estimate_value[resOne$variable_name == "number records"], "4")
   x <- dplyr::tibble(
-    strata_level = c("overall", "1st"),
+    group_level = c("overall", "1st"),
     variable_name = "number subjects",
     estimate_value = c("4", "4"))
   expect_identical(nrow(x), resOne |> dplyr::inner_join(x, by = colnames(x)) |> nrow())

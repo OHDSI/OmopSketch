@@ -10,20 +10,6 @@ if (on_github()) {
   )
   CDMConnector::downloadEunomiaData(overwrite = TRUE)
 }
-
-connection <- function(type = Sys.getenv("DB_TO_TEST", "duckdb")) {
-  switch(
-    type,
-    "duckdb" = DBI::dbConnect(duckdb::duckdb(), ":memory:"),
-    "postgres" = DBI::dbConnect(RPostgres::Postgres(),
-                                dbname = Sys.getenv("server_dbi"),
-                                port = Sys.getenv("port"),
-                                host = Sys.getenv("host"),
-                                user = Sys.getenv("user"),
-                                password = Sys.getenv("password"))
-  )
-}
-
 schema <- function(type = Sys.getenv("DB_TO_TEST", "duckdb")) {
   switch(
     type,
@@ -31,7 +17,6 @@ schema <- function(type = Sys.getenv("DB_TO_TEST", "duckdb")) {
     "postgres" = c(schema = "results", prefix = "os_")
   )
 }
-
 cdmEunomia <- function() {
   con <- connection()
   schema <- schema()
