@@ -84,7 +84,13 @@ summariseConceptCounts(cdm,
 ``` 
 By default, the function will provide information about either the number of records (`estimate_name == "record_count"`) for each concept_id or the number of people (`estimate_name == "person_count"`): 
 ```{r, warning=FALSE}
-summariseConceptCounts(cdm, conceptId = list("acetaminophen" = acetaminophen, "sinusitis" = sinusitis), countBy = c("record","person")) \|\> select(group_level, variable_name, estimate_name) \|\> distinct() \|\> arrange(group_level, variable_name)
+summariseConceptCounts(cdm, 
+                       conceptId = list("acetaminophen" = acetaminophen, 
+                                        "sinusitis" = sinusitis), 
+                       countBy = c("record","person")) |>
+  select(group_level, variable_name, estimate_name) |>
+  distinct() |>
+  arrange(group_level, variable_name)
 
 ```         
 
@@ -110,7 +116,10 @@ summariseConceptCounts(cdm,                         conceptId = list("acetaminop
 Finally, we can visualise the concept counts using `plotRecordCounts()`. 
 
 ```{r, warning=FALSE} 
-summariseConceptCounts(cdm, conceptId = list("sinusitis" = sinusitis), countBy = "person") \|\> plotConceptCounts()
+summariseConceptCounts(cdm, 
+                       conceptId = list("sinusitis" = sinusitis), 
+                       countBy = "person") |> 
+  plotConceptCounts()
 
 ```         
 Notice that either person counts or record counts can be plotted. If both have been included in the summarised result, you will have to filter to only include one variable at time:
