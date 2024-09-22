@@ -74,3 +74,9 @@ formatColumn <- function(result, col) {
   }
   return(result)
 }
+emptyPlot <- function(type = "ggplot2", title = NULL, subtitle = NULL) {
+  if (type == "ggplot2") {
+    ggplot2::ggplot() +
+      ggplot2::labs(title = title, subtitle = subtitle)
+  }
+}
