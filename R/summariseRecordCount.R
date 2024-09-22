@@ -13,23 +13,25 @@
 #' @export
 #' @examples
 #' \donttest{
-#'library(dplyr)
-#'library(OmopSketch)
 #'
-#'# Connect to a mock database
-#'cdm <- mockOmopSketch()
+#' # Connect to a mock database
+#' cdm <- mockOmopSketch()
 #'
-#'# Run summarise clinical tables
-#'summarisedResult <- summariseRecordCount(cdm = cdm,
+#' # Run summarise clinical tables
+#' summarisedResult <- summariseRecordCount(cdm = cdm,
 #'                                          omopTableName = "condition_occurrence",
 #'                                          unit = "year",
 #'                                          unitInterval = 10,
 #'                                          ageGroup = list("<=20" = c(0,20), ">20" = c(21, Inf)),
 #'                                          sex = TRUE)
-#'summarisedResult |> print()
+#' summarisedResult |> print()
 #'}
-summariseRecordCount <- function(cdm, omopTableName, unit = "year",
-                                 unitInterval = 1, ageGroup = NULL, sex = FALSE) {
+summariseRecordCount <- function(cdm,
+                                 omopTableName,
+                                 unit = "year",
+                                 unitInterval = 1,
+                                 ageGroup = NULL,
+                                 sex = FALSE) {
 
   # Initial checks ----
   omopgenerics::validateCdmArgument(cdm)
