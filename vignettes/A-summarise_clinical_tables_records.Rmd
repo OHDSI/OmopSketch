@@ -91,6 +91,25 @@ summarisedResult |>
   glimpse()
 ```
 
+Additionally, you can also stratify the previous results by sex and age groups:
+```{r, warning=FALSE}
+summarisedResult <- summariseClinicalRecords(cdm, 
+                                             "condition_occurrence",
+                                             recordsPerPerson =  c("mean", "sd", "q05", "q95"),
+                                             inObservation = TRUE,
+                                             standardConcept = TRUE,
+                                             sourceVocabulary = TRUE,
+                                             domainId = TRUE,
+                                             typeConcept = TRUE,
+                                             sex = TRUE,
+                                             ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf)))
+
+summarisedResult |> 
+  select(variable_name, strata_level, estimate_name, estimate_value) |> 
+  glimpse()
+```
+Notice that, by default, the "overall" group will be also included, as well as crossed strata (that means, sex == "Female" and ageGroup == ">35").
+
 ## Tidy the summarised object
 `tableClinicalRecords()` will help you to tidy the previous results and create a gt table.
 ```{r, warning=FALSE}
@@ -131,20 +150,33 @@ summariseRecordCount(cdm, "drug_exposure",
                       unit = "month", 
                       unitInterval = 18, 
                       sex = TRUE, 
-                      ageGroup = list("20-29" = c(20,29),
-                                     "30-39" = c(30,39))) |> 
+                      ageGroup = list("<30" = c(0,29),
+                                     ">=30" = c(30,Inf))) |> 
   plotRecordCount()
 ```
 
-By default, `plotRecordCount()` does not apply faceting to any variables. However, you can use the `facet` argument to indicate which columns of the summarised result (either *group_level*, *strata_level* or *variable_level*) you want to facet by. If no variables are specified, different colours will be used instead.
+By default, `plotRecordCount()` does not apply faceting or colour to any variables. This can result confusing when stratifying by different variables, as seen in the previous picture. We can use VisOmopResults package to help us know by which columns we can colour or face by:
+
 ```{r, warning=FALSE}
 summariseRecordCount(cdm, "drug_exposure",
-                      unit = "month", 
-                      unitInterval = 18, 
-                      sex = TRUE) |> 
-    plotRecordCount(facet = omop_table ~ sex)
+                     unit = "month", 
+                     unitInterval = 18, 
+                     sex = TRUE,
+                     ageGroup = list("0-29" = c(0,29),
+                                     "30-Inf" = c(30,Inf)))  |>
+  visOmopResults::tidyColumns()
 ```
+Then, we can simply specify this by using the `facet` and `colour` arguments from `plotRecordCount()`
 
+```{r, warning=FALSE}
+summariseRecordCount(cdm, "drug_exposure",
+                     unit = "month", 
+                     unitInterval = 18, 
+                     sex = TRUE,
+                     ageGroup = list("0-29" = c(0,29),
+                                     "30-Inf" = c(30,Inf))) |>
+    plotRecordCount(facet = omop_table ~ age_group, colour = "sex")
+```
 
 Finally, disconnect from the cdm
 ```{r, warning=FALSE}
