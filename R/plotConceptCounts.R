@@ -51,7 +51,7 @@ plotConceptCounts <- function(result,
 
   order <- c("overall", sort(unique(result$variable_name[result$variable_name != "overall"])))
   result |>
-    dplyr::mutate(variable_name = factor(variable_name,
+    dplyr::mutate(variable_name = factor(.data$variable_name,
                                          levels = order)) |>
     visOmopResults::barPlot(x = "variable_name",
                             y = estimate,
