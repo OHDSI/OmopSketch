@@ -63,7 +63,7 @@ summarisedResult |> print()
 
 Notice that the output is in the summarised result format. 
 
-We can use the arguments to specify which statistics we want to perform. For example, use the argument `recordsPerPerson` to indicate which estimants you are interested in regarding the number of records per person. 
+We can use the arguments to specify which statistics we want to perform. For example, use the argument `recordsPerPerson` to indicate which estimants you are interested regarding the number of records per person. 
 ```{r, warning=FALSE}
 summarisedResult <- summariseClinicalRecords(cdm, 
                                              "condition_occurrence",
@@ -110,6 +110,21 @@ summarisedResult |>
 ```
 Notice that, by default, the "overall" group will be also included, as well as crossed strata (that means, sex == "Female" and ageGroup == ">35").
 
+Also, see that the analysis can be conducted for multiple OMOP tables at the same time:
+```{r, warning=FALSE}
+summarisedResult <- summariseClinicalRecords(cdm, 
+                                             c("observation_period","drug_exposure"),
+                                             recordsPerPerson =  c("mean","sd"),
+                                             inObservation = FALSE,
+                                             standardConcept = FALSE,
+                                             sourceVocabulary = FALSE,
+                                             domainId = FALSE,
+                                             typeConcept = FALSE)
+
+summarisedResult |> 
+  select(group_level, variable_name, estimate_name, estimate_value) |> 
+  glimpse()
+```
 ## Tidy the summarised object
 `tableClinicalRecords()` will help you to tidy the previous results and create a gt table.
 ```{r, warning=FALSE}
@@ -120,14 +135,15 @@ summarisedResult <- summariseClinicalRecords(cdm,
                                              standardConcept = TRUE,
                                              sourceVocabulary = TRUE,
                                              domainId = TRUE,
-                                             typeConcept = TRUE)
+                                             typeConcept = TRUE, 
+                                             sex = TRUE)
 
 summarisedResult |> 
   tableClinicalRecords()
 ```
 
 # Summarise record counts
-OmopSketch can also help you to summarise the trend of the records of an omop table. See the example below, where we use `summariseRecordCount()` to count the number of records within each year, and then, we use `plotRecordCount()` to create a ggplot with the trend.
+OmopSketch can also help you to summarise the trend of the records of an OMOP table. See the example below, where we use `summariseRecordCount()` to count the number of records within each year, and then, we use `plotRecordCount()` to create a ggplot with the trend.
 
 ```{r, warning=FALSE}
 summarisedResult <- summariseRecordCount(cdm, "drug_exposure", unit = "year", unitInterval = 1)
