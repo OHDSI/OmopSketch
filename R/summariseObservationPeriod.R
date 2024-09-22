@@ -35,6 +35,9 @@ summariseObservationPeriod <- function(observationPeriod,
   # input checks
   omopgenerics::assertClass(observationPeriod, class = "omop_table")
   omopgenerics::assertTrue(omopgenerics::tableName(observationPeriod) == "observation_period")
+  omopgenerics::assertLogical(sex)
+  omopgenerics::validateAgeGroupArgument(ageGroup)
+
   cdm <- omopgenerics::cdmReference(observationPeriod)
   opts <- PatientProfiles::availableEstimates(variableType = "numeric",
                                               fullQuantiles = TRUE) |>
