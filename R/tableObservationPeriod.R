@@ -1,5 +1,4 @@
-
-#' Create a table from the output of summariseObservationPeriod().
+#' Create a table from the output of summariseObservationPeriod()
 #'
 #' @param result A summarised result object.
 #' @param type Type of table.
