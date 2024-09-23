@@ -1,5 +1,5 @@
 test_that("check summariseInObservation works", {
-
+  skip_on_cran()
   # Load mock database ----
   cdm <- cdmEunomia()
 
@@ -93,6 +93,7 @@ test_that("check summariseInObservation works", {
 })
 
 test_that("check sex argument works", {
+  skip_on_cran()
   # Load mock database ----
   cdm <- cdmEunomia()
 
@@ -144,6 +145,7 @@ test_that("check sex argument works", {
 })
 
 test_that("check ageGroup argument works", {
+  skip_on_cran()
   # Load mock database ----
   cdm <- cdmEunomia()
 
@@ -179,6 +181,7 @@ test_that("check ageGroup argument works", {
 })
 
 test_that("check output argument works", {
+  skip_on_cran()
   # Load mock database ----
   cdm <- cdmEunomia()
 

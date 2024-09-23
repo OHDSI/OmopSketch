@@ -2,20 +2,20 @@
 % Please edit documentation in R/tableOmopSnapshot.R
 \name{tableOmopSnapshot}
 \alias{tableOmopSnapshot}
-\title{Create a gt table from a summarised omop snapshot}
+\title{Create a visual table from a summarise_omop_snapshot result.}
 \usage{
 tableOmopSnapshot(result, type = "gt")
 }
 \arguments{
 \item{result}{Output from summariseOmopSnapshot().}
 
-\item{type}{Type of table.}
+\item{type}{Type of formatting output table, either "gt" or "flextable".}
 }
 \value{
-A gt object with the summarised data.
+A gt or flextable object with the summarised data.
 }
 \description{
-Create a gt table from a summarised omop snapshot
+Create a visual table from a summarise_omop_snapshot result.
 }
 \examples{
 \donttest{

@@ -2,20 +2,20 @@
 % Please edit documentation in R/tableObservationPeriod.R
 \name{tableObservationPeriod}
 \alias{tableObservationPeriod}
-\title{Create a table from the output of summariseObservationPeriod().}
+\title{Create a visual table from a summariseObservationPeriod() result.}
 \usage{
 tableObservationPeriod(result, type = "gt")
 }
 \arguments{
 \item{result}{A summarised result object.}
 
-\item{type}{Type of table.}
+\item{type}{Type of formatting output table, either "gt" or "flextable".}
 }
 \value{
-A gt or flextable table.
+A gt or flextable object with the summarised data.
 }
 \description{
-Create a table from the output of summariseObservationPeriod().
+Create a visual table from a summariseObservationPeriod() result.
 }
 \examples{
 cdm <- mockOmopSketch()

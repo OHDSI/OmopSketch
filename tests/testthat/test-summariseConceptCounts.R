@@ -1,4 +1,5 @@
 test_that("summarise code use - eunomia", {
+  skip_on_cran()
   cdm <- cdmEunomia()
   acetiminophen <- c(1125315,  1127433, 40229134,
                      40231925, 40162522, 19133768,  1127078)
@@ -423,6 +424,7 @@ test_that("summarise code use - mock data", {
 })
 
 test_that("plot concept counts works", {
+  skip_on_cran()
   # Load mock database ----
   cdm <- cdmEunomia()
 

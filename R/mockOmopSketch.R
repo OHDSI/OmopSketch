@@ -1,18 +1,18 @@
-#' It creates a mock database for testing OmopSketch package
+#' Creates a mock database to test OmopSketch package.
 #'
-#' @param con A DBI connection to create the cdm mock object. By default, the connection would be "duckdb".
-#' @param writeSchema Name of an schema on the same connection with writing permissions.
-#' @param numberIndividuals Number of individuals to create in the cdm reference.
+#' @param con A DBI connection to create the cdm mock object. By default, the
+#' connection would be a 'duckdb' one.
+#' @param writeSchema Name of an schema of the DBI connection with writing
+#' permissions.
+#' @param numberIndividuals Number of individuals to create in the cdm
+#' reference object.
 #'
-#' @return A mock cdm_reference object created following user's specifications.
+#' @return A mock cdm_reference object.
 #' @export
 #'
 #' @examples
-#' \donttest{
-#' mockOmopSketch(numberIndividuals = 1000,
-#'                writeSchema = NULL,
-#'                con = NULL)
-#' }
+#' mockOmopSketch(numberIndividuals = 1000)
+#'
 mockOmopSketch <- function(con = NULL,
                            writeSchema = NULL,
                            numberIndividuals = 100){
@@ -42,40 +42,10 @@ mockOmopSketch <- function(con = NULL,
     omock::mockDrugExposure() |>
     omock::mockMeasurement() |>
     omock::mockObservation() |>
-    omock::mockProcedureOccurrence()
-
-  # Create device exposure table - empty (Eunomia also has it empty)
-  cdm <- omopgenerics::emptyOmopTable(cdm, "device_exposure")
-
-  # TO BE REMOVE WHEN omock::mockVisitOccurrence works
-  # Create visit_occurrence table
-  cdm <- omopgenerics::emptyOmopTable(cdm, "visit_occurrence")
-  cdm$visit_occurrence <- cdm$visit_occurrence |>
-    dplyr::full_join(
-      cdm$condition_occurrence |>
-        dplyr::select(
-          "person_id",
-          "visit_start_date" = "condition_start_date"
-        ) |>
-        dplyr::union_all(
-          cdm$drug_exposure |>
-            dplyr::select(
-              "person_id",
-              "visit_start_date" = "drug_exposure_start_date"
-            )
-        ) |>
-        dplyr::mutate(
-          "visit_occurrence_id" = dplyr::row_number(),
-          "visit_concept_id" = 9201,
-          "visit_end_date" = .data$visit_start_date,
-          "visit_type_concept_id" = 44818517
-        ) |>
-        dplyr::select("visit_occurrence_id", "person_id", "visit_concept_id", "visit_start_date",
-                      "visit_end_date", "visit_type_concept_id"),
-      by = c("person_id","visit_start_date","visit_occurrence_id","visit_concept_id",
-             "visit_end_date","visit_type_concept_id")
-
-    )
+    omock::mockProcedureOccurrence() |>
+    omock::mockVisitOccurrence() |>
+    # Create device exposure table - empty (Eunomia also has it empty)
+    omopgenerics::emptyOmopTable("device_exposure")
 
   # WHEN WE SUPORT LOCAL CDMs WE WILL HAVE TO ACCOUNT FOR THAT HERE
   cdm <- CDMConnector::copy_cdm_to(con = con, cdm = cdm, schema = writeSchema)
