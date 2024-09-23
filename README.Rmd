@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 [![Codecov test coverage](https://codecov.io/gh/oxford-pharmacoepi/OmopSketch/branch/main/graph/badge.svg)](https://app.codecov.io/gh/oxford-pharmacoepi/OmopSketch?branch=main)
 <!-- badges: end -->
 
-### WARNING: this package is under-development
+### WARNING: this package is under-development and has only been tested using mock data
 
 The goal of OmopSketch is to characterise and visualise an OMOP CDM instance to asses if it meets the necessary criteria to answer a specific clinical question and conduct a certain study.
 
@@ -51,8 +51,8 @@ cdm
 ### Snapshot
 We first create a snapshot of our database. This will allow us to track when the analysis has been conducted and capture details about the CDM version or the data release.
 ```{r}
-summariseOmopSnapshot(cdm)
-# ADD TABLE OMOP SNAPSHOT
+summariseOmopSnapshot(cdm) |>
+  tableOmopSnapshot()
 ```
 
 
@@ -68,7 +68,7 @@ We can also explore trends in the clinical table records over time.
 
 ```{r}
 summariseRecordCount(cdm, c("condition_occurrence", "drug_exposure")) |>
-  plotRecordCount(facet = "group_level")
+  plotRecordCount(facet = "omop_table")
 ```
 ### Characterise the observation period
 After visualising the main characteristics of our clinical tables, we can explore the observation period details. OmopSketch provides several functions to have an overwied of the dataset study period.
@@ -94,14 +94,18 @@ summariseObservationPeriod(cdm$observation_period) |>
 ### Characterise the concepts
 OmopSketch also provides functions to explore some of (or all) the concepts in the dataset.
 ```{r}
-acetaminophen <- c(1125315,  1127433, 40229134, 40231925, 40162522, 19133768,  1127078)
-summariseConceptCounts(cdm, conceptId = list("acetaminophen" = acetaminophen))
+acetaminophen <- c(1125315,  1127433, 1127078)
+
+summariseConceptCounts(cdm, conceptId = list("acetaminophen" = acetaminophen)) |>
+  filter(estimate_name == "record_count") |> 
+  plotConceptCounts()
 ```
 
 ### Characterise the population
 Finally, OmopSketch can also help us to characterise the population at the start and end of the observation period.
 ```{r}
-summarisePopulationCharacteristics(cdm)
+summarisePopulationCharacteristics(cdm) |>
+  tablePopulationCharacteristics()
 ```
 As seen, OmopSketch offers multiple functionalities to provide a general overview of a database. Additionally, it includes more tools and arguments that allow for deeper exploration, helping to assess the database's suitability for specific research studies. For further information, please refer to the vignettes.
 
