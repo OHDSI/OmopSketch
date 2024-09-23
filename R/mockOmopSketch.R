@@ -6,6 +6,11 @@
 #' permissions.
 #' @param numberIndividuals Number of individuals to create in the cdm
 #' reference object.
+#' @param seed An optional integer used to set the seed for random number
+#' generation, ensuring reproducibility of the generated data. If provided, this
+#' seed allows the function to produce consistent results each time it is run
+#' with the same inputs. If 'NULL', the seed is not set, which can lead to
+#' different outputs on each run.
 #'
 #' @return A mock cdm_reference object.
 #' @export
@@ -15,7 +20,8 @@
 #'
 mockOmopSketch <- function(con = NULL,
                            writeSchema = NULL,
-                           numberIndividuals = 100){
+                           numberIndividuals = 100,
+                           seed = NULL){
 
   omopgenerics::assertNumeric(numberIndividuals, min = 1, length = 1)
 
@@ -34,16 +40,16 @@ mockOmopSketch <- function(con = NULL,
   }
 
   cdm <- omock::emptyCdmReference(cdmName = "mockOmopSketch") |>
-    omock::mockPerson(nPerson = numberIndividuals) |>
-    omock::mockObservationPeriod() |>
+    omock::mockPerson(nPerson = numberIndividuals, seed = seed) |>
+    omock::mockObservationPeriod(seed = seed) |>
     omock::mockVocabularyTables() |>
-    omock::mockConditionOccurrence() |>
-    omock::mockDeath() |>
-    omock::mockDrugExposure() |>
-    omock::mockMeasurement() |>
-    omock::mockObservation() |>
-    omock::mockProcedureOccurrence() |>
-    omock::mockVisitOccurrence() |>
+    omock::mockConditionOccurrence(seed = seed) |>
+    omock::mockDeath(seed = seed) |>
+    omock::mockDrugExposure(seed = seed) |>
+    omock::mockMeasurement(seed = seed) |>
+    omock::mockObservation(seed = seed) |>
+    omock::mockProcedureOccurrence(seed = seed) |>
+    omock::mockVisitOccurrence(seed = seed) |>
     # Create device exposure table - empty (Eunomia also has it empty)
     omopgenerics::emptyOmopTable("device_exposure")
 

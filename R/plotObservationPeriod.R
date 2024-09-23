@@ -18,14 +18,15 @@
 #' library(OmopSketch)
 #'
 #' # Connect to a mock database
+#'
 #' cdm <- mockOmopSketch()
 #'
 #' result <- summariseObservationPeriod(cdm$observation_period)
 #'
-#' result |>
-#'   plotObservationPeriod()
+#' result |> plotObservationPeriod()
 #'
 #' PatientProfiles::cdmDisconnect(cdm)
+#'
 #' }
 #'
 plotObservationPeriod <- function(result,
