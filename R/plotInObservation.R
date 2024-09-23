@@ -11,6 +11,7 @@
 #'
 #' @export
 #' @examples
+#' \donttest{
 #' library(dplyr, warn.conflicts = FALSE)
 #'
 #' cdm <- mockOmopSketch()
@@ -27,6 +28,7 @@
 #'   plotInObservation(facet = "sex", colour = "age_group")
 #'
 #' PatientProfiles::mockDisconnect(cdm)
+#' }
 #'
 plotInObservation <- function(result,
                               facet = NULL,

@@ -18,7 +18,7 @@ A gt or flextable object with the summarised data.
 Create a visual table from a summariseObservationPeriod() result.
 }
 \examples{
-cdm <- mockOmopSketch()
+cdm <- mockOmopSketch(numberIndividuals = 10)
 
 result <- summariseObservationPeriod(cdm$observation_period)
 

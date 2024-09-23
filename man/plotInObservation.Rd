@@ -22,6 +22,7 @@ A ggplot showing the table counts
 Create a ggplot2 plot from the output of summariseInObservation().
 }
 \examples{
+\donttest{
 library(dplyr, warn.conflicts = FALSE)
 
 cdm <- mockOmopSketch()
@@ -38,5 +39,6 @@ result |>
   plotInObservation(facet = "sex", colour = "age_group")
 
 PatientProfiles::mockDisconnect(cdm)
+}
 
 }

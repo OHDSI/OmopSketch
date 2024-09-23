@@ -8,7 +8,7 @@
 #' @export
 #'
 #' @examples
-#' cdm <- mockOmopSketch()
+#' cdm <- mockOmopSketch(numberIndividuals = 10)
 #'
 #' result <- summariseObservationPeriod(cdm$observation_period)
 #'

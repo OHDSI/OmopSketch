@@ -14,10 +14,9 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
 #' library(dplyr, warn.conflicts = FALSE)
 #'
-#' cdm <- mockOmopSketch()
+#' cdm <- mockOmopSketch(numberIndividuals = 10)
 #'
 #' result <- summariseObservationPeriod(cdm$observation_period)
 #'
@@ -25,7 +24,6 @@
 #'   glimpse()
 #'
 #' PatientProfiles::mockDisconnect(cdm)
-#' }
 #'
 summariseObservationPeriod <- function(observationPeriod,
                                        estimates = c(
