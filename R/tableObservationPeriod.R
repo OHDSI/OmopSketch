@@ -1,4 +1,5 @@
-#' Create a table from the output of summariseObservationPeriod()
+
+#' Create a visual table from a summariseObservationPeriod() result.
 #'
 #' @param result A summarised result object.
 #' @param type Type of formatting output table, either "gt" or "flextable".
@@ -49,3 +50,4 @@ tableObservationPeriod <- function(result,
       # the user adds some custom estimates they are not going to be displayed in
     )
 }
+
