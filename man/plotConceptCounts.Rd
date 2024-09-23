@@ -2,12 +2,12 @@
 % Please edit documentation in R/plotConceptCounts.R
 \name{plotConceptCounts}
 \alias{plotConceptCounts}
-\title{Title}
+\title{Plot the concept counts of a summariseConceptCounts output.}
 \usage{
 plotConceptCounts(result, facet = NULL, colour = NULL)
 }
 \arguments{
-\item{result}{A summarised_result object (output of summariseInObservation).}
+\item{result}{A summarised_result object (output of summariseConceptCounts).}
 
 \item{facet}{Columns to face by. Formula format can be provided. See possible
 columns to face by with: \code{visOmopResults::tidyColumns()}.}
@@ -16,27 +16,8 @@ columns to face by with: \code{visOmopResults::tidyColumns()}.}
 \code{visOmopResults::tidyColumns()}.}
 }
 \value{
-A ggplot showing the concept counts
+A ggplot2 object showing the concept counts.
 }
 \description{
-Title
-}
-\examples{
-\dontrun{
-library(OmopSketch)
-library(dplyr)
-
-con <- DBI::dbConnect(duckdb::duckdb(),
-                      dbdir = CDMConnector::eunomia_dir())
-cdm <- CDMConnector::cdm_from_con(con,
-                                  cdm_schem = "main",
-                                  write_schema = "main")
-
-results <- summariseConceptCounts(cdm,
-         conceptId = list(poliovirus_vaccine = c(40213160)))
-
-plotConceptCounts(result)
-
-PatientProfiles::mockDisconnect(cdm)
-}
+Plot the concept counts of a summariseConceptCounts output.
 }

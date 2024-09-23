@@ -25,6 +25,7 @@ Authors:
 \itemize{
   \item Kim Lopez-Guell \email{kim.lopez@spc.ox.ac.uk} (\href{https://orcid.org/0000-0002-8462-8668}{ORCID})
   \item Elin Rowlands \email{elin.rowlands@ndorms.ox.ac.uk} (\href{https://orcid.org/0009-0005-5166-0417}{ORCID})
+  \item Edward Burn \email{edward.burn@ndorms.ox.ac.uk} (\href{https://orcid.org/0000-0002-9286-1128}{ORCID})
   \item Martí Català \email{marti.catalasabate@ndorms.ox.ac.uk} (\href{https://orcid.org/0000-0003-3308-9905}{ORCID})
 }
 

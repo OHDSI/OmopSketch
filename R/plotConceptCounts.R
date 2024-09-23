@@ -1,24 +1,21 @@
-#' Title
+#' Plot the concept counts of a summariseConceptCounts output.
 #'
-#' @param result A summarised_result object (output of summariseInObservation).
+#' @param result A summarised_result object (output of summariseConceptCounts).
 #' @param facet Columns to face by. Formula format can be provided. See possible
 #' columns to face by with: `visOmopResults::tidyColumns()`.
 #' @param colour Columns to colour by. See possible columns to colour by with:
 #' `visOmopResults::tidyColumns()`.
 #'
-#' @return A ggplot showing the concept counts
+#' @return A ggplot2 object showing the concept counts.
 #' @export
 #'
 #' @examples
-#' \dontrun{
 #' library(OmopSketch)
-#' library(dplyr)
+#' library(duckdb)
+#' library(CDMConnector)
 #'
-#' con <- DBI::dbConnect(duckdb::duckdb(),
-#'                       dbdir = CDMConnector::eunomia_dir())
-#' cdm <- CDMConnector::cdm_from_con(con,
-#'                                   cdm_schem = "main",
-#'                                   write_schema = "main")
+#' con <- dbConnect(duckdb(), dbdir = eunomia_dir())
+#' cdm <- cdmFromCon(con, cdmSchema = "main", writeSchema = "main")
 #'
 #' results <- summariseConceptCounts(cdm,
 #'          conceptId = list(poliovirus_vaccine = c(40213160)))
