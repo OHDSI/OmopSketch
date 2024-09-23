@@ -21,24 +21,31 @@ summariseClinicalRecords(
 )
 }
 \arguments{
-\item{cdm}{A cdm object.}
+\item{cdm}{A cdm_reference object.}
 
-\item{omopTableName}{A character vector of the names of the tables to summarise in the cdm object.}
+\item{omopTableName}{A character vector of the names of the tables to
+summarise in the cdm object.}
 
-\item{recordsPerPerson}{Generates summary statistics for the number of records per person. Set to NULL if no summary statistics are required.}
+\item{recordsPerPerson}{Generates summary statistics for the number of
+records per person. Set to NULL if no summary statistics are required.}
 
-\item{inObservation}{Boolean variable. Whether to include the percentage of records in
-observation.}
+\item{inObservation}{Boolean variable. Whether to include the percentage of
+records in observation.}
 
-\item{standardConcept}{Boolean variable. Whether to summarise standard concept information.}
+\item{standardConcept}{Boolean variable. Whether to summarise standard
+concept information.}
 
-\item{sourceVocabulary}{Boolean variable.  Whether to summarise source vocabulary information.}
+\item{sourceVocabulary}{Boolean variable.  Whether to summarise source
+vocabulary information.}
 
-\item{domainId}{Boolean variable. Whether to summarise domain id of standard concept id information.}
+\item{domainId}{Boolean variable. Whether to summarise domain id of standard
+concept id information.}
 
-\item{typeConcept}{Boolean variable. Whether to summarise type concept id field information.}
+\item{typeConcept}{Boolean variable. Whether to summarise type concept id
+field information.}
 
-\item{sex}{Boolean variable. Whether to stratify by sex (TRUE) or not (FALSE).}
+\item{sex}{Boolean variable. Whether to stratify by sex (TRUE) or not
+(FALSE).}
 
 \item{ageGroup}{A list of age groups to stratify results by.}
 }
@@ -53,25 +60,21 @@ concepts.
 }
 \examples{
 \donttest{
-library(dplyr)
-library(CDMConnector)
-library(DBI)
-library(duckdb)
-library(OmopSketch)
-
-# Connect to a mock database
 cdm <- mockOmopSketch()
 
-# Run summarise clinical tables
-summarisedResult <- summariseClinicalRecords(cdm = cdm,
-                                            omopTableName = "condition_occurrence",
-                                            recordsPerPerson = c("mean", "sd"),
-                                            inObservation = TRUE,
-                                            standardConcept = TRUE,
-                                            sourceVocabulary = TRUE,
-                                            domainId = TRUE,
-                                            typeConcept = TRUE)
-summarisedResult |> print()
+summarisedResult <- summariseClinicalRecords(
+  cdm = cdm,
+  omopTableName = "condition_occurrence",
+  recordsPerPerson = c("mean", "sd"),
+  inObservation = TRUE,
+  standardConcept = TRUE,
+  sourceVocabulary = TRUE,
+  domainId = TRUE,
+  typeConcept = TRUE
+)
+
+summarisedResult
+
 PatientProfiles::mockDisconnect(cdm = cdm)
 }
 }

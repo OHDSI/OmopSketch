@@ -7,29 +7,26 @@
 #' @param concept TRUE or FALSE. If TRUE code use will be summarised by concept.
 #' @param year TRUE or FALSE. If TRUE code use will be summarised by year.
 #' @param sex TRUE or FALSE. If TRUE code use will be summarised by sex.
-#' @param ageGroup If not NULL, a list of ageGroup vectors of length two. Code use
-#' will be thus summarised by age groups.
+#' @param ageGroup A list of ageGroup vectors of length two. Code use will be
+#' thus summarised by age groups.
 #'
-#' @return A tibble with results overall and, if specified, by strata
+#' @return A summarised_result object with results overall and, if specified, by
+#' strata.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' con <- DBI::dbConnect(duckdb::duckdb(),
-#'                       dbdir = CDMConnector::eunomia_dir())
-#' cdm <- CDMConnector::cdm_from_con(con,
-#'                                   cdm_schem = "main",
-#'                                   write_schema = "main")
-#'acetaminophen <- c(1125315,  1127433, 40229134,
-#'40231925, 40162522, 19133768,  1127078)
-#'poliovirus_vaccine <- c(40213160)
-#'cs <- list(acetaminophen = acetaminophen,
-#'           poliovirus_vaccine = poliovirus_vaccine)
-#'results <- summariseConceptCounts(cdm, conceptId = cs)
-#'results
-#'PatientProfiles::mockDisconnect(cdm)
-#'}
 #'
+#' cdm <- mockOmopSketch()
+#'
+#' cs <- list(sumatriptan = c(35604883, 35604879, 35604880, 35604884))
+#'
+#' results <- summariseConceptCounts(cdm, conceptId = cs)
+#'
+#' results
+#'
+#' PatientProfiles::mockDisconnect(cdm)
+#' }
 summariseConceptCounts <- function(cdm,
                                    conceptId,
                                    countBy = c("record", "person"),

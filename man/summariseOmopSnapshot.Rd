@@ -2,26 +2,24 @@
 % Please edit documentation in R/summariseOmopSnapshot.R
 \name{summariseOmopSnapshot}
 \alias{summariseOmopSnapshot}
-\title{Summarise OMOP database and create snapshot}
+\title{Summarise a cdm_reference object creating a snapshot with the metadata of the
+cdm_reference object.}
 \usage{
 summariseOmopSnapshot(cdm)
 }
 \arguments{
-\item{cdm}{A cdm reference object}
+\item{cdm}{A cdm_reference object.}
 }
 \value{
-A summarised result object
+A summarised_result object.
 }
 \description{
-Summarise OMOP database and create snapshot
+Summarise a cdm_reference object creating a snapshot with the metadata of the
+cdm_reference object.
 }
 \examples{
-# example code
-\donttest{
-library(OmopSketch)
-
-cdm <- mockOmopSketch(numberIndividuals = 1000)
+cdm <- mockOmopSketch(numberIndividuals = 10)
 
 summariseOmopSnapshot(cdm)
-}
+
 }

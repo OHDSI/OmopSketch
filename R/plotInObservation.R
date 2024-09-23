@@ -11,8 +11,7 @@
 #'
 #' @export
 #' @examples
-#' library(OmopSketch)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #'
 #' cdm <- mockOmopSketch()
 #'

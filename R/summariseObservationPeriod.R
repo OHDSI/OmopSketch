@@ -3,9 +3,11 @@
 #'
 #' @param observationPeriod observation_period omop table.
 #' @param estimates Estimates to summarise the variables of interest (
-#' `records per person`, `duration` and `days to next observation period`).
+#' `records per person`, `duration in days` and
+#' `days to next observation period`).
 #' @param ageGroup A list of age groups to stratify results by.
-#' @param sex Boolean variable. Whether to stratify by sex (TRUE) or not (FALSE).
+#' @param sex Boolean variable. Whether to stratify by sex (TRUE) or not
+#' (FALSE).
 #'
 #' @return A summarised_result object with the summarised data.
 #'
@@ -13,15 +15,14 @@
 #'
 #' @examples
 #' \dontrun{
-#' library(OmopSketch)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #'
 #' cdm <- mockOmopSketch()
 #'
 #' result <- summariseObservationPeriod(cdm$observation_period)
 #'
 #' result |>
-#'   dplyr::glimpse()
+#'   glimpse()
 #'
 #' PatientProfiles::mockDisconnect(cdm)
 #' }
@@ -29,7 +30,8 @@
 summariseObservationPeriod <- function(observationPeriod,
                                        estimates = c(
                                          "mean", "sd", "min", "q05", "q25",
-                                         "median", "q75", "q95", "max", "density"),
+                                         "median", "q75", "q95", "max",
+                                         "density"),
                                        ageGroup = NULL,
                                        sex = FALSE){
   # input checks

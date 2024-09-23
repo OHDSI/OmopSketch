@@ -17,11 +17,13 @@ summariseObservationPeriod(
 \item{observationPeriod}{observation_period omop table.}
 
 \item{estimates}{Estimates to summarise the variables of interest (
-\verb{records per person}, \code{duration} and \verb{days to next observation period}).}
+\verb{records per person}, \verb{duration in days} and
+\verb{days to next observation period}).}
 
 \item{ageGroup}{A list of age groups to stratify results by.}
 
-\item{sex}{Boolean variable. Whether to stratify by sex (TRUE) or not (FALSE).}
+\item{sex}{Boolean variable. Whether to stratify by sex (TRUE) or not
+(FALSE).}
 }
 \value{
 A summarised_result object with the summarised data.
@@ -32,15 +34,14 @@ summarised_result object.
 }
 \examples{
 \dontrun{
-library(OmopSketch)
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 
 cdm <- mockOmopSketch()
 
 result <- summariseObservationPeriod(cdm$observation_period)
 
 result |>
-  dplyr::glimpse()
+  glimpse()
 
 PatientProfiles::mockDisconnect(cdm)
 }

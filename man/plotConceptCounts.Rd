@@ -23,8 +23,7 @@ Plot the concept counts of a summariseConceptCounts output.
 }
 \examples{
 \donttest{
-library(OmopSketch)
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 
 cdm <- mockOmopSketch()
 

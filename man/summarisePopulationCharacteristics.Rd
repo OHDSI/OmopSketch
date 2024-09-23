@@ -2,7 +2,8 @@
 % Please edit documentation in R/summarisePopulationCharacteristics.R
 \name{summarisePopulationCharacteristics}
 \alias{summarisePopulationCharacteristics}
-\title{Summarise the characteristics of the base population of a cdm object.}
+\title{Summarise the characteristics of the base population of a cdm_reference
+object.}
 \usage{
 summarisePopulationCharacteristics(
   cdm,
@@ -12,36 +13,36 @@ summarisePopulationCharacteristics(
 )
 }
 \arguments{
-\item{cdm}{A cdm object.}
+\item{cdm}{A cdm_reference object.}
 
-\item{studyPeriod}{Dates to trim the observation period. If NA, start_observation_period and/or end_observation_period are used.}
+\item{studyPeriod}{Dates to trim the observation period. If NA,
+min(observation_period_start_date) and/or max(observation_period_end_date)
+are used.}
 
-\item{sex}{Boolean variable. Whether to stratify the results by sex.}
+\item{sex}{Whether to stratify the results by sex.}
 
-\item{ageGroup}{List of age groups to stratify by at index date. Set to NULL if no stratification is needed.}
+\item{ageGroup}{List of age groups to stratify by at index date.}
 }
 \value{
 A summarised_result object.
 }
 \description{
-Summarise the characteristics of the base population of a cdm object.
+Summarise the characteristics of the base population of a cdm_reference
+object.
 }
 \examples{
 \donttest{
-library(dplyr)
-library(OmopSketch)
-
-# Connect to a mock database
 cdm <- mockOmopSketch()
 
-# Run summarise population characteristics
-summarisedPopulation <- summarisePopulationCharacteristics(cdm = cdm,
-                                                          studyPeriod = c("2010-01-01",NA),
-                                                          sex = TRUE,
-                                                          ageGroup = NULL
-                                                          )
-summarisedPopulation |> print()
-PatientProfiles::mockDisconnect(cdm = cdm)
+summarisedPopulation <- summarisePopulationCharacteristics(
+  cdm = cdm,
+  studyPeriod = c("2010-01-01", NA),
+  sex = TRUE,
+  ageGroup = NULL
+)
 
+summarisedPopulation |> print()
+
+PatientProfiles::mockDisconnect(cdm = cdm)
 }
 }
