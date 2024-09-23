@@ -10,17 +10,23 @@
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' library(OmopSketch)
-#' library(duckdb)
-#' library(CDMConnector)
+#' library(dplyr)
 #'
-#' con <- dbConnect(duckdb(), dbdir = eunomia_dir())
-#' cdm <- cdmFromCon(con, cdmSchema = "main", writeSchema = "main")
+#' cdm <- mockOmopSketch()
 #'
-#' results <- summariseConceptCounts(cdm,
-#'          conceptId = list(poliovirus_vaccine = c(40213160)))
+#' result <- cdm |>
+#'   summariseConceptCounts(
+#'     conceptId = list(
+#'       "Renal agenesis" = 194152,
+#'       "Manic mood" = c(4226696, 4304866, 37110496, 40371897)
+#'     )
+#'   )
 #'
-#' plotConceptCounts(result)
+#' result |>
+#'   filter(estimate_name == "person_count", variable_name == "overall") |>
+#'   plotConceptCounts(facet = "codelist_name", colour = "codelist_name")
 #'
 #' PatientProfiles::mockDisconnect(cdm)
 #' }

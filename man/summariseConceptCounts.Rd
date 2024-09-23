@@ -6,7 +6,7 @@
 \usage{
 summariseConceptCounts(
   cdm,
-  conceptId = NULL,
+  conceptId,
   countBy = c("record", "person"),
   concept = TRUE,
   year = FALSE,
@@ -17,8 +17,7 @@ summariseConceptCounts(
 \arguments{
 \item{cdm}{A cdm object}
 
-\item{conceptId}{List of concept IDs to summarise. If NULL, all concepts from
-the concept table will be used}
+\item{conceptId}{List of concept IDs to summarise.}
 
 \item{countBy}{Either "record" for record-level counts or "person" for
 person-level counts}

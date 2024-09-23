@@ -1,8 +1,7 @@
 #' Summarise code use in patient-level data
 #'
 #' @param cdm A cdm object
-#' @param conceptId List of concept IDs to summarise. If NULL, all concepts from
-#' the concept table will be used
+#' @param conceptId List of concept IDs to summarise.
 #' @param countBy Either "record" for record-level counts or "person" for
 #' person-level counts
 #' @param concept TRUE or FALSE. If TRUE code use will be summarised by concept.
@@ -32,7 +31,7 @@
 #'}
 #'
 summariseConceptCounts <- function(cdm,
-                                   conceptId = NULL,
+                                   conceptId,
                                    countBy = c("record", "person"),
                                    concept = TRUE,
                                    year = FALSE,
@@ -40,7 +39,7 @@ summariseConceptCounts <- function(cdm,
                                    ageGroup = NULL){
 
   omopgenerics::validateCdmArgument(cdm)
-  omopgenerics::assertList(conceptId, null = TRUE, named = TRUE)
+  omopgenerics::assertList(conceptId, named = TRUE)
   checkCountBy(countBy)
 
   if(!is.null(conceptId) && length(names(conceptId)) != length(conceptId)){
@@ -48,14 +47,14 @@ summariseConceptCounts <- function(cdm,
   }
 
   # Get all concepts in concept table if conceptId is NULL
-  if(is.null(conceptId)) {
-    conceptId <- cdm$concept |>
-      dplyr::select("concept_name", "concept_id") |>
-      dplyr::collect() |>
-      dplyr::group_by(.data$concept_name)  |>
-      dplyr::summarise(named_vec = list(.data$concept_id)) |>
-      tibble::deframe()
-  }
+  # if(is.null(conceptId)) {
+  #   conceptId <- cdm$concept |>
+  #     dplyr::select("concept_name", "concept_id") |>
+  #     dplyr::collect() |>
+  #     dplyr::group_by(.data$concept_name)  |>
+  #     dplyr::summarise(named_vec = list(.data$concept_id)) |>
+  #     tibble::deframe()
+  # }
 
   getAllCodeUse <- function() {
     codeUse <- list()

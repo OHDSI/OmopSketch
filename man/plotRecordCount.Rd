@@ -23,17 +23,17 @@ Create a ggplot of the records' count trend.
 }
 \examples{
 \donttest{
-# Connect to a mock dabatase
 cdm <- mockOmopSketch()
 
-# Run summarise clinical tables
-summarisedResult <- summariseRecordCount(cdm = cdm,
-                                         omopTableName = "condition_occurrence",
-                                         unit = "year",
-                                         unitInterval = 10,
-                                         ageGroup = list("<=20" = c(0,20), ">20" = c(21, Inf)),
-                                         sex = TRUE)
-plotRecordCount(summarisedResult, facet = sex + age_group ~ .)
+summarisedResult <- summariseRecordCount(
+  cdm = cdm,
+  omopTableName = "condition_occurrence",
+  ageGroup = list("<=20" = c(0,20), ">20" = c(21, Inf)),
+  sex = TRUE
+)
+
+plotRecordCount(summarisedResult, colour = "age_group", facet = sex ~ .)
+
 PatientProfiles::mockDisconnect(cdm = cdm)
 }
 }

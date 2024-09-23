@@ -21,3 +21,25 @@ A ggplot2 object showing the concept counts.
 \description{
 Plot the concept counts of a summariseConceptCounts output.
 }
+\examples{
+\donttest{
+library(OmopSketch)
+library(dplyr)
+
+cdm <- mockOmopSketch()
+
+result <- cdm |>
+  summariseConceptCounts(
+    conceptId = list(
+      "Renal agenesis" = 194152,
+      "Manic mood" = c(4226696, 4304866, 37110496, 40371897)
+    )
+  )
+
+result |>
+  filter(estimate_name == "person_count", variable_name == "overall") |>
+  plotConceptCounts(facet = "codelist_name", colour = "codelist_name")
+
+PatientProfiles::mockDisconnect(cdm)
+}
+}
