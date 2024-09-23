@@ -43,7 +43,12 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mockOmopSketch</span><span class="op">(</span>con <span class="op">=</span> <span class="cn">NULL</span>, writeSchema <span class="op">=</span> <span class="cn">NULL</span>, numberIndividuals <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mockOmopSketch</span><span class="op">(</span></span>
+<span>  con <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  writeSchema <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  numberIndividuals <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  seed <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -60,6 +65,13 @@
 
 <dt id="arg-numberindividuals">numberIndividuals<a class="anchor" aria-label="anchor" href="#arg-numberindividuals"></a></dt>
 <dd><p>Number of individuals to create in the cdm reference.</p></dd>
+
+
+<dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
+<dd><p>An optional integer used to set the seed for random number generation, ensuring
+reproducibility of the generated data. If provided, this seed allows the function
+to produce consistent results each time it is run with the same inputs. If 'NULL',
+the seed is not set, which can lead to different outputs on each run.</p></dd>
 
 </dl></div>
     <div class="section level2">
