@@ -1,12 +1,9 @@
-
 #' Summarise the observation period table getting some overall statistics in a
 #' summarised_result object.
 #'
 #' @param observationPeriod observation_period omop table.
 #' @param estimates Estimates to summarise the variables of interest (
 #' `records per person`, `duration` and `days to next observation period`).
-#' @param density Whether to export density data for time between observation
-#' periods.
 #'
 #' @return A summarised_result object with the summarised data.
 #'
@@ -30,20 +27,17 @@
 summariseObservationPeriod <- function(observationPeriod,
                                        estimates = c(
                                          "mean", "sd", "min", "q05", "q25",
-                                         "median", "q75", "q95", "max"),
-                                       density = FALSE){
+                                         "median", "q75", "q95", "max", "density")){
   # input checks
   omopgenerics::assertClass(observationPeriod, class = "omop_table")
   omopgenerics::assertTrue(omopgenerics::tableName(observationPeriod) == "observation_period")
   cdm <- omopgenerics::cdmReference(observationPeriod)
-  omopgenerics::assertLogical(density, length = 1)
-
   opts <- PatientProfiles::availableEstimates(variableType = "numeric",
                                               fullQuantiles = TRUE) |>
     dplyr::pull("estimate_name")
   omopgenerics::assertChoice(estimates, opts, unique = TRUE)
 
-  if (observationPeriod |> dplyr::ungroup() |> dplyr::tally() |> dplyr::pull() == 0) {
+  if (omopgenerics::isTableEmpty(observationPeriod)) {
     obsSr <- observationPeriod |>
       PatientProfiles::summariseResult(
         variables = NULL, estimates = NULL, counts = TRUE)
@@ -74,30 +68,21 @@ summariseObservationPeriod <- function(observationPeriod,
         estimates = estimates
       ) |>
       suppressMessages() |>
-      dplyr::union_all(
-        obs |>
-          dplyr::group_by(.data$person_id) |>
-          dplyr::tally(name = "n") |>
-          PatientProfiles::summariseResult(
-            variables = c("n"),
-            estimates = estimates,
-            counts = F
-          ) |>
-          suppressMessages()
-      ) |>
-      dplyr::filter(
-        .data$variable_name != "number records" | .data$strata_level == "overall") |>
-      addOrdinalLevels() |>
-      arrangeSr(estimates) |>
-      dplyr::union_all(
-        obs |>
-          densitySummary(density) |>
-          dplyr::mutate(
-            result_id = 1L, cdm_name = "unknown", group_name = "overall",
-            group_level = "overall", estimate_type = "numeric",
-            additional_name = "overall", additional_level = "overall"
-          )
-      )
+        dplyr::union_all(
+          obs |>
+            dplyr::group_by(.data$person_id) |>
+            dplyr::tally(name = "n") |>
+            PatientProfiles::summariseResult(
+              variables = c("n"),
+              estimates = estimates,
+              counts = F
+            ) |>
+            suppressMessages()
+          )|>
+            dplyr::filter(
+              .data$variable_name != "number records" | .data$strata_level == "overall") |>
+            addOrdinalLevels() |>
+            arrangeSr(estimates)
   }
 
   obsSr <- obsSr |>
@@ -109,6 +94,7 @@ summariseObservationPeriod <- function(observationPeriod,
       "variable_name" = dplyr::case_when(
         .data$variable_name == "n" ~ "records per person",
         .data$variable_name == "next_obs" ~ "days to next observation period",
+        .data$variable_name == "duration" ~ "duration in days",
         .default = .data$variable_name
       )
     ) |>
@@ -116,9 +102,9 @@ summariseObservationPeriod <- function(observationPeriod,
       "result_id" = 1L,
       "result_type" = "summarise_observation_period",
       "package_name" = "OmopSketch",
-      "package_version" = as.character(utils::packageVersion("OmopSketch")),
-      "density" = density
+      "package_version" = as.character(utils::packageVersion("OmopSketch"))
     ))
+
   return(obsSr)
 }
 
@@ -181,76 +167,4 @@ arrangeSr <- function(x, estimates) {
     dplyr::arrange(.data$order_id) |>
     dplyr::select(-"order_id")
   return(x)
-}
-densitySummary <- function(data, density) {
-  if (density) {
-    densityResult <- data |>
-      dplyr::group_by(.data$id) |>
-      dplyr::tally() |>
-      dplyr::pull("n") |>
-      formatDensity() |>
-      dplyr::mutate(variable_name = "n") |>
-      dplyr::union_all(
-        data$duration |>
-          formatDensity() |>
-          dplyr::mutate(variable_name = "duration")
-      ) |>
-      dplyr::union_all(
-        data$next_obs |>
-          formatDensity() |>
-          dplyr::mutate(variable_name = "next_obs")
-      ) |>
-      dplyr::mutate(strata_name = "overall", strata_level = "overall")
-    for (id in sort(unique(data$id))) {
-      idd <- data$id == id
-      densityResult <- densityResult |>
-        dplyr::union_all(
-          data$duration[idd] |>
-            formatDensity() |>
-            dplyr::mutate(variable_name = "duration") |>
-            dplyr::union_all(
-              data$next_obs[idd] |>
-                formatDensity() |>
-                dplyr::mutate(variable_name = "next_obs")
-            ) |>
-            dplyr::mutate(strata_name = "id", strata_level = as.character(id))
-        )
-    }
-  } else {
-    densityResult <- dplyr::tibble(
-      variable_name = character(),
-      variable_level = character(),
-      estimate_name = character(),
-      estimate_value = character(),
-      strata_name = character(),
-      strata_level = character()
-    )
-  }
-  return(densityResult)
-}
-formatDensity <- function(x) {
-  nPoints <- 512
-  nDigits <- ceiling(log(nPoints)/log(10))
-  x <- x[!is.na(x)]
-  if (length(x) == 1) {
-    den <- stats::density(x, bw = 0.5)
-  } else if (length(x) == 0) {
-    den <- list(x = NA, y = NA)
-  } else {
-    den <- stats::density(x, n = nPoints)
-  }
-  lev <- paste0(
-    "density_", stringr::str_pad(seq_len(nPoints), nDigits, pad = "0"))
-  res <- dplyr::tibble(
-    variable_level = lev,
-    estimate_name = "x",
-    estimate_value = as.character(den$x)
-  ) |>
-    dplyr::union_all(dplyr::tibble(
-      variable_level = lev,
-      estimate_name = "y",
-      estimate_value = as.character(den$y)
-    )) |>
-    dplyr::arrange(.data$variable_level, .data$estimate_name)
-  return(res)
 }

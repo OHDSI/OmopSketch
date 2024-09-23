@@ -37,7 +37,7 @@ plotConceptCounts <- function(result,
   result <- result |>
     visOmopResults::filterSettings(.data$result_type == "summarise_concept_counts")
   if (nrow(result) == 0) {
-    cli::cli_abort(c("!" = "No records found with result_type == summarise_in_observation"))
+    cli::cli_abort(c("!" = "No records found with result_type == summarise_concept_counts"))
   }
 
   # check only one estimate is contained
@@ -49,7 +49,10 @@ plotConceptCounts <- function(result,
     ))
   }
 
+  order <- c("overall", sort(unique(result$variable_name[result$variable_name != "overall"])))
   result |>
+    dplyr::mutate(variable_name = factor(.data$variable_name,
+                                         levels = order)) |>
     visOmopResults::barPlot(x = "variable_name",
                             y = estimate,
                             facet = facet,

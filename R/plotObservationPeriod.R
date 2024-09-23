@@ -34,95 +34,61 @@ plotObservationPeriod <- function(result,
                                   facet = "cdm_name") {
   # initial checks
   omopgenerics::validateResultArgument(result)
+
+  # subset to result_type of interest
   result <- result |>
     visOmopResults::filterSettings(
       .data$result_type == "summarise_observation_period")
+
+  # check if it is empty
   if (nrow(result) == 0) {
-    "No results found for `result_type` == 'summarise_observation_period'" |>
-      cli::cli_abort()
+    warnEmpty("summarise_observation_period")
+    return(emptyPlot())
   }
-  if (result$estimate_value[result$variable_name == "number records"] == "0") {
-    cli::cli_warn("Obsevation period table was empty.")
-    return(ggplot2::ggplot())
-  }
-  variableNames <- availablePlotObservationPeriod() |>
-    dplyr::pull("variable_name") |>
-    unique()
+
+  variableNames <- unique(availablePlotObservationPeriod()$variable_name)
   omopgenerics::assertChoice(variableName, variableNames, length = 1)
   plotTypes <- availablePlotObservationPeriod() |>
     dplyr::filter(.data$variable_name == .env$variableName) |>
     dplyr::pull("plot_type")
   omopgenerics::assertChoice(plotType, plotTypes, length = 1)
-  optFacetColour <- availablePlotObservationPeriod() |>
-    dplyr::filter(.data$variable_name == .env$variableName,
-                  .data$plot_type == .env$plotType) |>
-    dplyr::pull("facet") |>
-    strsplit(split = "+", fixed = TRUE) |>
-    unlist()
-  omopgenerics::assertChoice(facet, optFacetColour, unique = TRUE, null = TRUE)
+  optFacetColour <- c("cdm_name", "observation_period_ordinal")
+  optFacetColour <- optFacetColour[optFacetColour %in% visOmopResults::tidyColumns(result)]
+  omopgenerics::assertChoice(asCharacterFacet(facet), optFacetColour)
   colour <- optFacetColour[!optFacetColour %in% facet]
 
-  neededEstimates <- needEstimates(plotType)
-  result <- result |>
-    dplyr::filter(
-      .data$variable_name == .env$variableName,
-      .data$estimate_name %in% .env$neededEstimates)
-  allEstimates <- result$estimate_name |> unique()
-  missingEstimates <- neededEstimates[!neededEstimates %in% allEstimates]
-  if (length(missingEstimates)) {
-    if (plotType == "densityplot") {
-      cli::cli_abort("No density estimates found, please use: summariseObservationPeriod(density = TRUE).")
-    } else {
-      cli::cli_abort("estimates not found: {missingEstimates}.")
-    }
-  }
-
-  result <- result |>
-    visOmopResults::pivotEstimates() |>
-    visOmopResults::splitAll() |>
-    dplyr::select(-c("result_id", "variable_name", "variable_level")) |>
-    uniteVariable(cols = colour, colname = "colour", def = "")
-
-  if (plotType != "densityplot") {
-    result <- result |>
-      dplyr::mutate("x" = .data$colour)
-  }
+  # this is due to bug in visOmopResults to remove in next release
+  # https://github.com/darwin-eu/visOmopResults/issues/246
+  if (length(facet) == 0) facet <- NULL
+  if (length(colour) == 0) colour <- NULL
 
   if (plotType == "barplot") {
-    result <- result |>
-      dplyr::filter(.data$observation_period_ordinal != "overall")
-    p <- ggplot2::ggplot(
-      data = result,
-      mapping = ggplot2::aes(
-        x = .data$x, y = .data$count, colour = .data$colour,
-        fill = .data$colour)
-    ) +
-      ggplot2::geom_col() +
-      ggplot2::xlab("Observation period")
+    p <- visOmopResults::barPlot(
+      result = result,
+      x = colour,
+      y = "count",
+      facet = facet,
+      colour = colour
+    )
   } else if (plotType == "boxplot") {
-    p <- ggplot2::ggplot(
-      data = result,
-      mapping = ggplot2::aes(
-        x = .data$x, ymin = .data$min, lower = .data$q25, middle = .data$median,
-        upper = .data$q75, ymax = .data$max, colour = .data$colour)
-    ) +
-      ggplot2::geom_boxplot(stat = "identity") +
-      ggplot2::xlab("Observation period") +
-      ggplot2::ylab(stringr::str_to_sentence(variableName))
+    p <- visOmopResults::boxPlot(
+      result = result,
+      x = colour,
+      facet = facet,
+      colour = colour
+    )
   } else {
-    p <- ggplot2::ggplot(
-      data = result,
-      mapping = ggplot2::aes(
-        x = .data$x, y = .data$y, colour = .data$colour, group = .data$colour)
-    ) +
-      ggplot2::geom_line() +
-      ggplot2::ylab("") +
-      ggplot2::xlab(paste0(stringr::str_to_sentence(variableName), " (days)"))
-  }
-
-  if (!is.null(facet)) {
-    p <- p +
-      ggplot2::facet_wrap(facet)
+    p <- visOmopResults::scatterPlot(
+      result = result,
+      x = "density_x",
+      y = "density_y",
+      line = TRUE,
+      point = FALSE,
+      ribbon = FALSE,
+      facet = facet,
+      colour = colour,
+      group = optFacetColour
+    )
   }
 
   return(p)
@@ -134,8 +100,8 @@ availablePlotObservationPeriod <- function() {
     "number subjects", "barplot", "cdm_name+observation_period_ordinal",
     "records per person", "densityplot", "cdm_name",
     "records per person", "boxplot", "cdm_name",
-    "duration", "densityplot", "cdm_name+observation_period_ordinal",
-    "duration", "boxplot", "cdm_name+observation_period_ordinal",
+    "duration in days", "densityplot", "cdm_name+observation_period_ordinal",
+    "duration in days", "boxplot", "cdm_name+observation_period_ordinal",
     "days to next observation period", "densityplot", "cdm_name+observation_period_ordinal",
     "days to next observation period", "boxplot", "cdm_name+observation_period_ordinal",
   )
@@ -144,8 +110,8 @@ needEstimates <- function(plotType) {
   dplyr::tribble(
     ~plot_type, ~estimate_name,
     "barplot", "count",
-    "densityplot", "x",
-    "densityplot", "y",
+    "densityplot", "density_x",
+    "densityplot", "density_y",
     "boxplot", "median",
     "boxplot", "q25",
     "boxplot", "q75",

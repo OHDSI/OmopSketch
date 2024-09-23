@@ -4,10 +4,12 @@
 \alias{tableClinicalRecords}
 \title{Create a gt table from a summarised omop_table.}
 \usage{
-tableClinicalRecords(result)
+tableClinicalRecords(result, type = "gt")
 }
 \arguments{
 \item{result}{Output from summariseClinicalRecords().}
+
+\item{type}{type of table.}
 }
 \value{
 A gt object with the summarised data.
@@ -17,22 +19,23 @@ Create a gt table from a summarised omop_table.
 }
 \examples{
 \donttest{
-library(dplyr)
-library(OmopSketch)
 
 # Connect to a mock database
 cdm <- mockOmopSketch()
 
 # Run summarise clinical tables
-summarisedResult <- summariseClinicalRecords(cdm = cdm,
-                                            omopTableName = "condition_occurrence",
-                                            recordsPerPerson = c("mean", "sd"),
-                                            inObservation = TRUE,
-                                            standardConcept = TRUE,
-                                            sourceVocabulary = TRUE,
-                                            domainId = TRUE,
-                                            typeConcept = TRUE)
+summarisedResult <- summariseClinicalRecords(
+  cdm = cdm,
+  omopTableName = "condition_occurrence",
+  recordsPerPerson = c("mean", "sd"),
+  inObservation = TRUE,
+  standardConcept = TRUE,
+  sourceVocabulary = TRUE,
+  domainId = TRUE,
+  typeConcept = TRUE)
+
 tableClinicalRecords(summarisedResult)
+
 PatientProfiles::mockDisconnect(cdm)
 }
 }

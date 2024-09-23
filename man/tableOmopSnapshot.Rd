@@ -4,10 +4,12 @@
 \alias{tableOmopSnapshot}
 \title{Create a gt table from a summarised omop snapshot}
 \usage{
-tableOmopSnapshot(result)
+tableOmopSnapshot(result, type = "gt")
 }
 \arguments{
-\item{result}{Output from summariseOmopSnapshot()}
+\item{result}{Output from summariseOmopSnapshot().}
+
+\item{type}{Type of table.}
 }
 \value{
 A gt object with the summarised data.
@@ -17,9 +19,6 @@ Create a gt table from a summarised omop snapshot
 }
 \examples{
 \donttest{
-library(dplyr)
-library(OmopSketch)
-
 cdm <- mockOmopSketch(numberIndividuals = 1000)
 
 cdm |>
