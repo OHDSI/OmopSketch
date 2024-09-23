@@ -4,11 +4,11 @@
 \name{OmopSketch-package}
 \alias{OmopSketch}
 \alias{OmopSketch-package}
-\title{OmopSketch: What the Package Does (One Line, Title Case)}
+\title{OmopSketch: An R Package to Characterise the OMOP tables in a database.}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-What the package does (one paragraph).
+The package uses the OMOP tables of the database to summarise key information that may be used to assess its suitability for a certain study. The package offers basic functionalities designed for one-time execution per database release, as well as additional features for ongoing, study-specific analysis. These capabilities enable detailed exploration of the domains and feasibility counts.
 }
 \seealso{
 Useful links:

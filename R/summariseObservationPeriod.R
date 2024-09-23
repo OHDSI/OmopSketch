@@ -45,7 +45,7 @@ summariseObservationPeriod <- function(observationPeriod,
   omopgenerics::assertChoice(estimates, opts, unique = TRUE)
   tablePrefix <-  omopgenerics::tmpPrefix()
   strata   <- getStrataList(sex, ageGroup)
-  strataId <- append("id", lapply(strata, function(x) c("id", x)))
+  strataId <- c(list("id"),  strata |> purrr::map(\(x) c("id", x)))
 
   if (omopgenerics::isTableEmpty(observationPeriod)) {
     obsSr <- observationPeriod |>
