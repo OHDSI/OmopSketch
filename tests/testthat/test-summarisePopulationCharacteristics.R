@@ -115,7 +115,7 @@ test_that("summarisePopulationCharacteristics() works", {
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
 
-test_that("summarisePopulationCharacteristics() works omock", {
+test_that("summarisePopulationCharacteristics() works", {
   # Load mock database ----
   cdm <- omock::mockCdmReference() |>
     omock::mockPerson(seed = 1L) |>
@@ -179,7 +179,7 @@ test_that("tablePopulationCharacteristics() works", {
 })
 
 test_that("summarisePopulationCharacteristics() works with mockOmopSKetch", {
-  cdm <- mockOmopSketch(numberIndividuals = 2)
+  cdm <- mockOmopSketch(numberIndividuals = 2, seed = 1)
   expect_warning(summarisedPopulation <- summarisePopulationCharacteristics(
     cdm = cdm)
   )
@@ -214,12 +214,12 @@ test_that("summarisePopulationCharacteristics() works with mockOmopSKetch", {
                     dplyr::pull() ==
                     c(50,50)))
   expect_true(all(summarisedPopulation |>
-                dplyr::filter(variable_name == "Age at start", estimate_name %in% c("min","max")) |>
-                dplyr::pull("estimate_value") |>
-                sort() ==
-                cdm$observation_period |>
-                PatientProfiles::addAge(indexDate = "observation_period_start_date") |>
-                dplyr::pull("age") |>
-                sort()))
+                    dplyr::filter(variable_name == "Age at start", estimate_name %in% c("min","max")) |>
+                    dplyr::pull("estimate_value") |>
+                    sort() ==
+                    cdm$observation_period |>
+                    PatientProfiles::addAge(indexDate = "observation_period_start_date") |>
+                    dplyr::pull("age") |>
+                    sort()))
 
 })

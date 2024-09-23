@@ -271,7 +271,7 @@ test_that("check summariseObservationPeriod works", {
 })
 
 test_that("check it works with mockOmopSketch", {
-  cdm <- mockOmopSketch(numberIndividuals = 5)
+  cdm <- mockOmopSketch(numberIndividuals = 5, seed = 1)
 
   sop <- summariseObservationPeriod(cdm$observation_period)
 
@@ -287,7 +287,7 @@ test_that("check it works with mockOmopSketch", {
   expect_identical(
     sop |>
       dplyr::filter(
-        variable_name == "records per person", estimate_name != "sd") |>
+        variable_name == "records per person", estimate_name != "sd", !grepl("density", estimate_name)) |>
       dplyr::pull("estimate_value"),
     c(rep("1",8))
   )
@@ -295,7 +295,7 @@ test_that("check it works with mockOmopSketch", {
   # duration
   expect_identical(
     sop |>
-      dplyr::filter(variable_name == "duration", estimate_name %in% c("min","q25","median","q75","max")) |>
+      dplyr::filter(variable_name == "duration in days", estimate_name %in% c("min","q25","median","q75","max")) |>
       dplyr::pull("estimate_value") |>
       unique() |>
       sort(),
