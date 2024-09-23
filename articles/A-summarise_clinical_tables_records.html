@@ -107,7 +107,7 @@ database.</p>
 <span></span>
 <span><span class="co"># Connect to Eunomia database</span></span>
 <span><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu">duckdb</span><span class="fu">::</span><span class="fu"><a href="https://r.duckdb.org/reference/duckdb.html" class="external-link">duckdb</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu">CDMConnector</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/CDMConnector/reference/eunomiaDir.html" class="external-link">eunomia_dir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Creating CDM database /tmp/RtmpkhVgva/GiBleed_5.3.zip</span></span>
+<span><span class="co">#&gt; Creating CDM database /tmp/RtmpeU0oSy/GiBleed_5.3.zip</span></span>
 <span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu">CDMConnector</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/CDMConnector/reference/cdm_from_con.html" class="external-link">cdmFromCon</a></span><span class="op">(</span></span>
 <span>  con <span class="op">=</span> <span class="va">con</span>, cdmSchema <span class="op">=</span> <span class="st">"main"</span>, writeSchema <span class="op">=</span> <span class="st">"main"</span></span>
 <span><span class="op">)</span></span>
@@ -141,17 +141,17 @@ tables of the cdm (i.e., <strong>condition_occurrence</strong>).</p>
 <span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseClinicalRecords.html">summariseClinicalRecords</a></span><span class="op">(</span><span class="va">cdm</span>, <span class="st">"condition_occurrence"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising table counts</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-09-23 15:45:21.920357</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-09-23 16:05:08.816376</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-23 15:45:22.065111</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-23 16:05:08.97185</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> records_per_person: mean, sd, median, q25, q75, min, max</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Table is collected to memory as not all requested estimates are supported on</span></span>
 <span><span class="co">#&gt;   the database side</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-09-23 15:45:22.979456</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-09-23 16:05:09.924019</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-23 15:45:23.032629</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-23 16:05:09.981576</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising in_observation, standard, domain_id, and type information</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -192,17 +192,17 @@ records per person.</p>
 <span>                                             recordsPerPerson <span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span>, <span class="st">"sd"</span>, <span class="st">"q05"</span>, <span class="st">"q95"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising table counts</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-09-23 15:45:27.322497</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-09-23 16:05:14.41414</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-23 15:45:27.46852</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-23 16:05:14.5587</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> records_per_person: mean, sd, q05, q95</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Table is collected to memory as not all requested estimates are supported on</span></span>
 <span><span class="co">#&gt;   the database side</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-09-23 15:45:28.370517</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-09-23 16:05:15.470153</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-23 15:45:28.414247</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-23 16:05:15.522133</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising in_observation, standard, domain_id, and type information</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
@@ -233,17 +233,17 @@ vocabulary have (<code>domainId = TRUE</code>) or the concept’s type
 <span>                                             typeConcept <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising table counts</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-09-23 15:45:32.49988</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-09-23 16:05:19.667262</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-23 15:45:32.655599</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-23 16:05:19.812232</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> records_per_person: mean, sd, q05, q95</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Table is collected to memory as not all requested estimates are supported on</span></span>
 <span><span class="co">#&gt;   the database side</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-09-23 15:45:33.577019</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-09-23 16:05:20.717981</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-23 15:45:33.623913</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-23 16:05:20.766767</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising in_observation, standard, domain_id, source, and type information</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
@@ -269,23 +269,21 @@ age groups:</p>
 <span>                                             ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">34</span><span class="op">)</span>, <span class="st">"&gt;=35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising table counts</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-09-23 15:45:42.173397</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-09-23 16:05:29.217983</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">■■■■■■■■■■■■■■■■                </span>2/4 group-strata combinations @ 2024-09-23 15:4…</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">■■■■■■■■■■■■■■■■                </span>2/4 group-strata combinations @ 2024-09-23 16:0…</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■         </span>3/4 group-strata combinations @ 2024-09-23 15:4…</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ </span>4/4 group-strata combinations @ 2024-09-23 16:0…</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ </span>4/4 group-strata combinations @ 2024-09-23 15:4…</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-23 15:45:46.370075</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-23 16:05:33.411502</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> records_per_person: mean, sd, q05, q95</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Table is collected to memory as not all requested estimates are supported on</span></span>
 <span><span class="co">#&gt;   the database side</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-09-23 15:45:48.326252</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-09-23 16:05:35.423104</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-23 15:45:48.530971</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-23 16:05:35.630157</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising in_observation, standard, domain_id, source, and type information</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
@@ -313,26 +311,26 @@ at the same time:</p>
 <span>                                             typeConcept <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising table counts</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-09-23 15:45:53.080932</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-09-23 16:05:40.429118</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-23 15:45:53.252884</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-23 16:05:40.603197</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> records_per_person: mean, sd</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-09-23 15:45:54.12674</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-09-23 16:05:41.499906</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-23 15:45:54.344099</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-23 16:05:41.725971</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising table counts</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-09-23 15:45:57.727566</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-09-23 16:05:45.18137</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-23 15:45:57.873002</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-23 16:05:45.334976</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> records_per_person: mean, sd</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-09-23 15:45:58.706813</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-09-23 16:05:46.178221</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-23 15:45:58.91759</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-23 16:05:46.389103</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -360,17 +358,17 @@ previous results and create a gt table.</p>
 <span>                                             sex <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising table counts</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-09-23 15:46:03.883221</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-09-23 16:05:51.331328</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-23 15:46:05.228167</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-23 16:05:52.675044</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> records_per_person: mean, sd, q05, q95</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Table is collected to memory as not all requested estimates are supported on</span></span>
 <span><span class="co">#&gt;   the database side</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-09-23 15:46:06.954132</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-09-23 16:05:54.398107</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-23 15:46:07.054896</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-23 16:05:54.498215</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising in_observation, standard, domain_id, source, and type information</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
