@@ -3,7 +3,8 @@ pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   A-summarise_clinical_tables_records: A-summarise_clinical_tables_records.html
-last_built: 2024-09-22T21:21Z
+  B-summarise_concept_counts: B-summarise_concept_counts.html
+last_built: 2024-09-23T11:15Z
 urls:
   reference: https://oxford-pharmacoepi.github.io/OmopSketch/reference
   article: https://oxford-pharmacoepi.github.io/OmopSketch/articles
