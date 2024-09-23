@@ -105,7 +105,7 @@ test_that("check summariseObservationPeriod works", {
   # duration - density
   xx <- resAllD |>
     dplyr::filter(variable_name == "duration in days", !is.na(variable_level)) |>
-    dplyr::group_by(strata_level) |>
+    dplyr::group_by(group_level) |>
     dplyr::summarise(
       n = dplyr::n(),
       area = sum(as.numeric(estimate_value[estimate_name == "density_y"])) * (

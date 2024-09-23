@@ -67,7 +67,7 @@ copyCdm <- function(cdm) {
 checkResultType <- function(result, result_type){
   expect_true(
     result |>
-      settings() |>
+      omopgenerics::settings() |>
       dplyr::pull("result_type") == result_type
   )
 }
