@@ -1,9 +1,9 @@
 #' Create a table from the output of summariseObservationPeriod()
 #'
 #' @param result A summarised result object.
-#' @param type Type of table.
+#' @param type Type of formatting output table, either "gt" or "flextable".
 #'
-#' @return A gt or flextable table.
+#' @return A gt or flextable object with the summarised data.
 #' @export
 #'
 #' @examples
