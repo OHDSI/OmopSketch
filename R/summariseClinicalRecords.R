@@ -203,20 +203,17 @@ summariseClinicalRecord <- function(omopTableName, cdm, recordsPerPerson,
 # Functions -----
 getStrataList <- function(sex, ageGroup){
 
-  strata <- list()
+  strata <- as.character()
 
   if(!is.null(ageGroup)){
-    strata <- append(strata, list("age_group"))
+    strata <- append(strata, "age_group")
   }
 
   if(sex){
-    strata <- append(strata, list("sex"))
+    strata <- append(strata, "sex")
   }
 
-  if(!is.null(ageGroup) && sex){
-    strata <- append(strata, list(c("age_group","sex")))
-  }
-
+  strata <- omopgenerics::combineStrata(levels = strata)
   return(strata)
 }
 

@@ -1,3 +1,4 @@
+
 #' Create a visual table from a summariseObservationPeriod() result.
 #'
 #' @param result A summarised result object.
