@@ -1,9 +1,9 @@
-#' Create a gt table from a summarised omop_table.
+#' Create a visual table from a summarise_clinical_record result.
 #'
 #' @param result Output from summariseClinicalRecords().
-#' @param type type of table.
+#' @param type Type of formatting output table, either "gt" or "flextable".
 #'
-#' @return A gt object with the summarised data.
+#' @return A gt or flextable object with the summarised data.
 #'
 #' @export
 #' @examples

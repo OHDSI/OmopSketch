@@ -1,9 +1,9 @@
-#' Create a gt table from a summarised omop snapshot
+#' Create a visual table from a summarise_omop_snapshot result.
 #'
 #' @param result  Output from summariseOmopSnapshot().
-#' @param type Type of table.
+#' @param type Type of formatting output table, either "gt" or "flextable".
 #'
-#' @return A gt object with the summarised data.
+#' @return A gt or flextable object with the summarised data.
 #' @export
 #'
 #' @examples
