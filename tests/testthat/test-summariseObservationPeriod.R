@@ -67,7 +67,7 @@ test_that("check summariseObservationPeriod works", {
   # counts
   expect_identical(resAll$estimate_value[resAll$variable_name == "number records"], "8")
   x <- dplyr::tibble(
-    strata_level = c("overall", "1st", "2nd", "3rd"),
+    group_level = c("overall", "1st", "2nd", "3rd"),
     variable_name = "number subjects",
     estimate_value = c("4", "4", "3", "1"))
   expect_identical(nrow(x), resAll |> dplyr::inner_join(x, by = colnames(x)) |> nrow())
@@ -105,7 +105,7 @@ test_that("check summariseObservationPeriod works", {
   # duration - density
   xx <- resAllD |>
     dplyr::filter(variable_name == "duration in days", !is.na(variable_level)) |>
-    dplyr::group_by(strata_level) |>
+    dplyr::group_by(group_level) |>
     dplyr::summarise(
       n = dplyr::n(),
       area = sum(as.numeric(estimate_value[estimate_name == "density_y"])) * (
@@ -120,7 +120,7 @@ test_that("check summariseObservationPeriod works", {
   xx <- resAll |>
     dplyr::filter(variable_name == "days to next observation period",
                   !is.na(variable_level)) |>
-    dplyr::group_by(strata_level) |>
+    dplyr::group_by(group_level) |>
     dplyr::summarise(
       n = dplyr::n(),
       area = sum(as.numeric(estimate_value[estimate_name == "density_y"])) * (
@@ -129,7 +129,7 @@ test_that("check summariseObservationPeriod works", {
       )/(nPoints - 1)
     )
   expect_identical(xx$n |> unique() |> sort(decreasing = TRUE) , c(as.integer(nPoints*2L),6L))
-  expect_identical(xx$area[xx$strata_level != "2nd"] |> round(2) |> unique(), 1)
+  expect_identical(xx$area[xx$group_level != "2nd"] |> round(2) |> unique(), 1)
 
   # only one exposure per individual
   cdm$observation_period <- cdm$observation_period |>
@@ -143,7 +143,7 @@ test_that("check summariseObservationPeriod works", {
   # counts
   expect_identical(resOne$estimate_value[resOne$variable_name == "number records"], "4")
   x <- dplyr::tibble(
-    strata_level = c("overall", "1st"),
+    group_level = c("overall", "1st"),
     variable_name = "number subjects",
     estimate_value = c("4", "4"))
   expect_identical(nrow(x), resOne |> dplyr::inner_join(x, by = colnames(x)) |> nrow())
@@ -269,3 +269,105 @@ test_that("check summariseObservationPeriod works", {
 
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
+
+test_that("check summariseObservationPeriod strata works", {
+  # helper function
+  removeSettings <- function(x) {
+    attr(x, "settings") <- NULL
+    return(x)
+  }
+  nPoints <- 512
+
+  # Load mock database
+  cdm <- omopgenerics::cdmFromTables(
+    tables = list(
+      person = dplyr::tibble(
+        person_id = as.integer(1:4),
+        gender_concept_id = c(8507L, 8532L, 8532L, 8507L),
+        year_of_birth = c(2010L, 2010L, 2011L, 2012L),
+        month_of_birth = 1L,
+        day_of_birth = 1L,
+        race_concept_id = 0L,
+        ethnicity_concept_id = 0L
+      ),
+      observation_period = dplyr::tibble(
+        observation_period_id = as.integer(1:8),
+        person_id = c(1, 1, 1, 2, 2, 3, 3, 4) |> as.integer(),
+        observation_period_start_date = as.Date(c(
+          "2020-03-01", "2020-03-25", "2020-04-25", "2020-08-10", "2020-03-10",
+          "2020-03-01", "2020-04-10", "2020-03-10"
+        )),
+        observation_period_end_date = as.Date(c(
+          "2020-03-20", "2020-03-30", "2020-08-15", "2020-12-31", "2020-03-27",
+          "2020-03-09", "2020-05-08", "2020-12-10"
+        )),
+        period_type_concept_id = 0L
+      )
+    ),
+    cdmName = "mock data"
+  )
+  cdm <- CDMConnector::copyCdmTo(
+    con = connection(), cdm = cdm, schema = schema())
+
+  # simple run
+  expect_no_error(resAll <- summariseObservationPeriod(cdm$observation_period,
+                                                          estimates = c("mean", "sd", "min", "max", "median", "density")))
+  expect_no_error(resStrata <- summariseObservationPeriod(cdm$observation_period,
+                                                       estimates = c("mean", "sd", "min", "max", "median", "density"),
+                                                       ageGroup = list("<10" = c(0,9), ">=10" = c(10, Inf)),
+                                                       sex = TRUE))
+  # test overall
+  x <- resStrata |>
+    dplyr::filter(strata_name == "overall", strata_level == "overall") |>
+    dplyr::rename("strata" = "estimate_value") |>
+    dplyr::inner_join(
+      resAll |>
+        dplyr::rename("all" = "estimate_value")
+    )
+  expect_identical(x$strata, x$all)
+
+  # check strata groups have the expected value
+  expect_identical(resStrata |>
+    dplyr::filter(variable_name == "number subjects",
+                  strata_level == "Female",
+                  group_level == "2nd") |>
+    dplyr::pull("estimate_value"),"2")
+
+  expect_identical(resStrata |>
+                     dplyr::filter(variable_name == "number subjects",
+                                   strata_level == ">=10 &&& Male",
+                                   group_level == "3rd") |>
+                     dplyr::pull("estimate_value"),"1")
+
+  # duration
+  expect_identical(
+    resStrata |>
+      dplyr::filter(variable_name == "duration in days", estimate_name == "mean", strata_level == ">=10") |>
+      dplyr::pull("estimate_value"),
+    as.character(c(
+      mean(c(20, 18)),
+      mean(c(6, 144)),
+      mean(113)))
+    )
+
+  expect_identical(
+    resStrata |>
+      dplyr::filter(variable_name == "duration in days", estimate_name == "mean", strata_level == "<10") |>
+      dplyr::pull("estimate_value"),
+    as.character(c(
+      mean(c(9, 276)),
+      mean(c(29))))
+  )
+
+  # days to next observation period
+  expect_identical(
+    resStrata |>
+      dplyr::filter(variable_name == "days to next observation period", estimate_name == "mean",
+                    strata_level == "<10 &&& Female", group_level == "1st") |>
+      dplyr::pull("estimate_value"), "32"
+  )
+
+  PatientProfiles::mockDisconnect(cdm = cdm)
+})
+
+
