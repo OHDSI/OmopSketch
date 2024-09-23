@@ -16,12 +16,12 @@
 #' @export
 #'
 #' @examples
-#' mockOmopSketch(numberIndividuals = 1000)
+#' mockOmopSketch(numberIndividuals = 100)
 #'
 mockOmopSketch <- function(con = NULL,
                            writeSchema = NULL,
                            numberIndividuals = 100,
-                           seed = NULL){
+                           seed = NULL) {
 
   omopgenerics::assertNumeric(numberIndividuals, min = 1, length = 1)
 
