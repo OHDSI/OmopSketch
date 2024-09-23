@@ -7,7 +7,7 @@
 tableObservationPeriod(result, type = "gt")
 }
 \arguments{
-\item{result}{A summarised result object.}
+\item{result}{A summarised_result object.}
 
 \item{type}{Type of formatting output table, either "gt" or "flextable".}
 }
