@@ -177,3 +177,49 @@ test_that("tablePopulationCharacteristics() works", {
 
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
+
+test_that("summarisePopulationCharacteristics() works with mockOmopSKetch", {
+  cdm <- mockOmopSketch(numberIndividuals = 2, seed = 1)
+  expect_warning(summarisedPopulation <- summarisePopulationCharacteristics(
+    cdm = cdm)
+  )
+  expect_true(inherits(summarisedPopulation,"summarised_result"))
+  expect_true(all(summarisedPopulation |>
+                    dplyr::select("strata_name") |>
+                    dplyr::distinct() |>
+                    dplyr::pull() ==
+                    c("overall")))
+  expect_true(all(summarisedPopulation |>
+                    dplyr::filter(variable_name == "Number records") |>
+                    dplyr::select("estimate_value") |>
+                    dplyr::pull() ==
+                    2))
+  expect_true(all(summarisedPopulation |>
+                    dplyr::filter(variable_name == "Cohort start date" & estimate_name == "min") |>
+                    dplyr::select("estimate_value") |>
+                    dplyr::pull() ==
+                    "1999-04-05"))
+  expect_true(summarisedPopulation |>
+                dplyr::filter(variable_name == "Age at end", estimate_name == "median") |>
+                dplyr::pull("estimate_value") ==
+                as.character(mean(c(40,16))))
+  expect_true(all(summarisedPopulation |>
+                    dplyr::filter(variable_name == "Cohort end date" & estimate_name == "max") |>
+                    dplyr::select("estimate_value") |>
+                    dplyr::pull() ==
+                    "2013-06-29"))
+  expect_true(all(summarisedPopulation |>
+                    dplyr::filter(variable_name == "Sex", estimate_name == "percentage") |>
+                    dplyr::select("estimate_value") |>
+                    dplyr::pull() ==
+                    c(50,50)))
+  expect_true(all(summarisedPopulation |>
+                    dplyr::filter(variable_name == "Age at start", estimate_name %in% c("min","max")) |>
+                    dplyr::pull("estimate_value") |>
+                    sort() ==
+                    cdm$observation_period |>
+                    PatientProfiles::addAge(indexDate = "observation_period_start_date") |>
+                    dplyr::pull("age") |>
+                    sort()))
+
+})

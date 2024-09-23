@@ -2,20 +2,20 @@
 % Please edit documentation in R/tablePopulationCharacteristics.R
 \name{tablePopulationCharacteristics}
 \alias{tablePopulationCharacteristics}
-\title{Create a gt table from a summarised population characteristics table.}
+\title{Create a visual table from a summarise_population_characteristics result.}
 \usage{
 tablePopulationCharacteristics(result, type = "gt")
 }
 \arguments{
 \item{result}{Output from summarisePopulationCharacteristics().}
 
-\item{type}{Type of table.}
+\item{type}{Type of formatting output table, either "gt" or "flextable".}
 }
 \value{
-A visual table.
+A gt or flextable object with the summarised data.
 }
 \description{
-Create a gt table from a summarised population characteristics table.
+Create a visual table from a summarise_population_characteristics result.
 }
 \examples{
 \donttest{
