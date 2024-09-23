@@ -1,5 +1,5 @@
 Package: OmopSketch
-Title: What the Package Does (One Line, Title Case)
+Title: An R Package to Characterise the OMOP tables in a database.
 Version: 0.0.0.9000
 Authors@R: c(
     person("Marta", "Alcalde-Herraiz", email = "marta.alcaldeherraiz@ndorms.ox.ac.uk", 
@@ -12,7 +12,7 @@ Authors@R: c(
     person("Marti", "Catala", email = "marti.catalasabate@ndorms.ox.ac.uk", 
     role = c("aut"), comment = c(ORCID = "0000-0003-3308-9905")))
 Maintainer: Marta Alcalde-Herraiz <marta.alcaldeherraiz@ndorms.ox.ac.uk>
-Description: What the package does (one paragraph).
+Description: The package uses the OMOP tables of the database to summarise key information that may be used to assess its suitability for a certain study. The package offers basic functionalities designed for one-time execution per database release, as well as additional features for ongoing, study-specific analysis. These capabilities enable detailed exploration of the domains and feasibility counts.
 License: Apache License (>= 2)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

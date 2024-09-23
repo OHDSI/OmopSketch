@@ -1,4 +1,4 @@
-#' Create a visual table from a summarise_observation_period result.
+#' Create a table from the output of summariseObservationPeriod()
 #'
 #' @param result A summarised result object.
 #' @param type Type of formatting output table, either "gt" or "flextable".
