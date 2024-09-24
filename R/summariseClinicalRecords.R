@@ -171,7 +171,7 @@ summariseClinicalRecord <- function(omopTableName, cdm, recordsPerPerson,
     result <- result |>
       dplyr::bind_rows(
         omopTable |>
-          addVariables(variables) |>
+          addVariables(variables, strata) |>
           dplyr::group_by(dplyr::across(dplyr::all_of(variables)), .data$age_group, .data$sex) |>
           dplyr::tally() |>
           dplyr::collect() |>
@@ -296,7 +296,7 @@ addRecordsPerPerson <- function(result, omopTable, recordsPerPerson, cdm, people
     )
 }
 
-addVariables <- function(x, variables) {
+addVariables <- function(x, variables, strata) {
 
   name <- omopgenerics::tableName(x)
 
