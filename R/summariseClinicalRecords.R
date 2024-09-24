@@ -185,8 +185,8 @@ summariseClinicalRecord <- function(omopTableName, cdm, recordsPerPerson,
 
   # Format output as a summarised result
   result <- result |>
-    tidyr::fill(result_id, cdm_name, group_name, group_level,
-                additional_name, additional_level, .direction = "downup") |>
+    tidyr::fill("result_id", "cdm_name", "group_name", "group_level",
+                "additional_name", "additional_level", .direction = "downup") |>
     dplyr::mutate(
       "group_name" = "omop_table",
       "group_level" = omopgenerics::tableName(omopTable)
