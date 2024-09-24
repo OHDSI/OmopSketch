@@ -18,6 +18,11 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+library(CDMConnector)
+if (Sys.getenv("EUNOMIA_DATA_FOLDER") == "") Sys.setenv("EUNOMIA_DATA_FOLDER" = tempdir())
+if (!dir.exists(Sys.getenv("EUNOMIA_DATA_FOLDER"))) dir.create(Sys.getenv("EUNOMIA_DATA_FOLDER"))
+if (!eunomia_is_available()) downloadEunomiaData()
 ```
 
 # Introduction
@@ -30,9 +35,18 @@ Before we dive into *OmopSketch* functions, we need first to load the essential 
 
 ```{r, warning=FALSE}
 library(dplyr)
+library(CDMConnector)
+library(DBI)
+library(duckdb)
 library(OmopSketch)
 
-cdm <- mockOmopSketch()
+# Connect to Eunomia database
+con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
+cdm <- CDMConnector::cdmFromCon(
+  con = con, cdmSchema = "main", writeSchema = "main"
+)
+
+cdm 
 ```
 
 # Summarise population characteristics
