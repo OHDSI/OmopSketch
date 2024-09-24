@@ -4,11 +4,11 @@
 \name{OmopSketch-package}
 \alias{OmopSketch}
 \alias{OmopSketch-package}
-\title{OmopSketch: An R Package to Characterise the OMOP tables in a database.}
+\title{OmopSketch: Characterise Tables of an OMOP Common Data Model Instance}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-The package uses the OMOP tables of the database to summarise key information that may be used to assess its suitability for a certain study. The package offers basic functionalities designed for one-time execution per database release, as well as additional features for ongoing, study-specific analysis. These capabilities enable detailed exploration of the domains and feasibility counts.
+Summarise key information in data mapped to the Observational Medical Outcomes Partnership (OMOP) common data model. Asses suitability to perform specific epidemiological studies and explore the different domains to obtain feasibility counts and trends.
 }
 \seealso{
 Useful links:
@@ -24,13 +24,9 @@ Useful links:
 Authors:
 \itemize{
   \item Kim Lopez-Guell \email{kim.lopez@spc.ox.ac.uk} (\href{https://orcid.org/0000-0002-8462-8668}{ORCID})
-  \item Elin Rowlands \email{elin.rowlands@ndorms.ox.ac.uk}
-  \item Marti Catala \email{marti.catalasabate@ndorms.ox.ac.uk} (\href{https://orcid.org/0000-0003-3308-9905}{ORCID})
-}
-
-Other contributors:
-\itemize{
-  \item Yuchen Guo \email{yuchen.guo@ndorms.ox.ac.uk} (\href{https://orcid.org/0000-0002-0847-4855}{ORCID}) [contributor]
+  \item Elin Rowlands \email{elin.rowlands@ndorms.ox.ac.uk} (\href{https://orcid.org/0009-0005-5166-0417}{ORCID})
+  \item Edward Burn \email{edward.burn@ndorms.ox.ac.uk} (\href{https://orcid.org/0000-0002-9286-1128}{ORCID})
+  \item Martí Català \email{marti.catalasabate@ndorms.ox.ac.uk} (\href{https://orcid.org/0000-0003-3308-9905}{ORCID})
 }
 
 }

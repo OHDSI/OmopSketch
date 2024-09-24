@@ -13,20 +13,18 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' library(dplyr)
-#' library(OmopSketch)
-#'
-#' # Connect to a mock database
-#'
-#' cdm <- mockOmopSketch()
+#' \donttest{
+#' cdm <- mockOmopSketch(numberIndividuals = 100)
 #'
 #' result <- summariseObservationPeriod(cdm$observation_period)
 #'
-#' result |> plotObservationPeriod()
+#' result |>
+#'   plotObservationPeriod(
+#'     variableName = "duration in days",
+#'     plotType = "boxplot"
+#'   )
 #'
-#' PatientProfiles::cdmDisconnect(cdm)
-#'
+#' PatientProfiles::mockDisconnect(cdm)
 #' }
 #'
 plotObservationPeriod <- function(result,
@@ -53,6 +51,10 @@ plotObservationPeriod <- function(result,
     dplyr::filter(.data$variable_name == .env$variableName) |>
     dplyr::pull("plot_type")
   omopgenerics::assertChoice(plotType, plotTypes, length = 1)
+
+  result <- result |>
+    dplyr::filter(.data$variable_name == .env$variableName)
+
   optFacetColour <- c("cdm_name", "observation_period_ordinal")
   optFacetColour <- optFacetColour[optFacetColour %in% visOmopResults::tidyColumns(result)]
   omopgenerics::assertChoice(asCharacterFacet(facet), optFacetColour)

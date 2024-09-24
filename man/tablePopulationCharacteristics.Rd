@@ -19,22 +19,19 @@ Create a visual table from a summarise_population_characteristics result.
 }
 \examples{
 \donttest{
-
-# Connect to a mock database
 cdm <- mockOmopSketch()
 
-# Run summarise clinical tables
 summarisedPopulation <- summarisePopulationCharacteristics(
   cdm = cdm,
-  studyPeriod = c("2010-01-01",NA),
+  studyPeriod = c("2010-01-01", NA),
   sex = TRUE,
   ageGroup = list("<=60" = c(0, 60), ">60" = c(61, Inf))
 )
 
-# Create a visual table
-tablePopulationCharacteristics(summarisedPopulation)
+summarisedPopulation |>
+  suppress(minCellCount = 5) |>
+  tablePopulationCharacteristics()
 
-# delete mock data
 PatientProfiles::mockDisconnect(cdm = cdm)
 }
 }

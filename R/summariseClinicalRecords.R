@@ -4,44 +4,47 @@
 #' records are in observation, number of present domains and number of present
 #' concepts.
 #'
-#' @param cdm A cdm object.
-#' @param omopTableName A character vector of the names of the tables to summarise in the cdm object.
-#' @param recordsPerPerson Generates summary statistics for the number of records per person. Set to NULL if no summary statistics are required.
-#' @param inObservation Boolean variable. Whether to include the percentage of records in
-#' observation.
-#' @param standardConcept Boolean variable. Whether to summarise standard concept information.
-#' @param sourceVocabulary Boolean variable.  Whether to summarise source vocabulary information.
-#' @param domainId  Boolean variable. Whether to summarise domain id of standard concept id information.
-#' @param typeConcept  Boolean variable. Whether to summarise type concept id field information.
+#' @param cdm A cdm_reference object.
+#' @param omopTableName A character vector of the names of the tables to
+#' summarise in the cdm object.
+#' @param recordsPerPerson Generates summary statistics for the number of
+#' records per person. Set to NULL if no summary statistics are required.
+#' @param inObservation Boolean variable. Whether to include the percentage of
+#' records in observation.
+#' @param standardConcept Boolean variable. Whether to summarise standard
+#' concept information.
+#' @param sourceVocabulary Boolean variable.  Whether to summarise source
+#' vocabulary information.
+#' @param domainId  Boolean variable. Whether to summarise domain id of standard
+#' concept id information.
+#' @param typeConcept  Boolean variable. Whether to summarise type concept id
+#' field information.
 #' @param ageGroup A list of age groups to stratify results by.
-#' @param sex Boolean variable. Whether to stratify by sex (TRUE) or not (FALSE).
+#' @param sex Boolean variable. Whether to stratify by sex (TRUE) or not
+#' (FALSE).
 #'
 #' @return A summarised_result object.
 #'
 #' @export
 #' @examples
 #' \donttest{
-#'library(dplyr)
-#'library(CDMConnector)
-#'library(DBI)
-#'library(duckdb)
-#'library(OmopSketch)
+#' cdm <- mockOmopSketch()
 #'
-#'# Connect to a mock database
-#'cdm <- mockOmopSketch()
+#' summarisedResult <- summariseClinicalRecords(
+#'   cdm = cdm,
+#'   omopTableName = "condition_occurrence",
+#'   recordsPerPerson = c("mean", "sd"),
+#'   inObservation = TRUE,
+#'   standardConcept = TRUE,
+#'   sourceVocabulary = TRUE,
+#'   domainId = TRUE,
+#'   typeConcept = TRUE
+#' )
 #'
-#'# Run summarise clinical tables
-#'summarisedResult <- summariseClinicalRecords(cdm = cdm,
-#'                                             omopTableName = "condition_occurrence",
-#'                                             recordsPerPerson = c("mean", "sd"),
-#'                                             inObservation = TRUE,
-#'                                             standardConcept = TRUE,
-#'                                             sourceVocabulary = TRUE,
-#'                                             domainId = TRUE,
-#'                                             typeConcept = TRUE)
-#'summarisedResult |> print()
-#'PatientProfiles::mockDisconnect(cdm = cdm)
-#'}
+#' summarisedResult
+#'
+#' PatientProfiles::mockDisconnect(cdm = cdm)
+#' }
 summariseClinicalRecords <- function(cdm,
                                      omopTableName,
                                      recordsPerPerson = c("mean", "sd", "median", "q25", "q75", "min", "max"),

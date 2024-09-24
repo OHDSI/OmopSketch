@@ -1,3 +1,4 @@
+
 #' Create a visual table from a summarise_omop_snapshot result.
 #'
 #' @param result  Output from summariseOmopSnapshot().
@@ -7,15 +8,15 @@
 #' @export
 #'
 #' @examples
-#' \donttest{
-#' cdm <- mockOmopSketch(numberIndividuals = 1000)
+#' cdm <- mockOmopSketch(numberIndividuals = 10)
 #'
-#' cdm |>
-#'   summariseOmopSnapshot() |>
+#' result <- summariseOmopSnapshot(cdm)
+#'
+#' result |>
 #'   tableOmopSnapshot()
 #'
 #' PatientProfiles::mockDisconnect(cdm)
-#'}
+#'
 tableOmopSnapshot <- function(result,
                               type = "gt") {
   # initial checks

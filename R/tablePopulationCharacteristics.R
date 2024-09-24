@@ -1,3 +1,4 @@
+
 #' Create a visual table from a summarise_population_characteristics result.
 #'
 #' @param result Output from summarisePopulationCharacteristics().
@@ -8,22 +9,19 @@
 #' @export
 #' @examples
 #' \donttest{
-#'
-#' # Connect to a mock database
 #' cdm <- mockOmopSketch()
 #'
-#' # Run summarise clinical tables
 #' summarisedPopulation <- summarisePopulationCharacteristics(
 #'   cdm = cdm,
-#'   studyPeriod = c("2010-01-01",NA),
+#'   studyPeriod = c("2010-01-01", NA),
 #'   sex = TRUE,
 #'   ageGroup = list("<=60" = c(0, 60), ">60" = c(61, Inf))
 #' )
 #'
-#' # Create a visual table
-#' tablePopulationCharacteristics(summarisedPopulation)
+#' summarisedPopulation |>
+#'   suppress(minCellCount = 5) |>
+#'   tablePopulationCharacteristics()
 #'
-#' # delete mock data
 #' PatientProfiles::mockDisconnect(cdm = cdm)
 #'}
 tablePopulationCharacteristics <- function(result,
@@ -50,7 +48,9 @@ tablePopulationCharacteristics <- function(result,
       estimateName = c(
         "N%" = "<count> (<percentage>)",
         "N" = "<count>",
-        "Mean (SD)" = "<mean> (<sd>)"),
+        "Median [Q25 - Q75]" = "<median> [<q25> - <q75>]",
+        "Mean (SD)" = "<mean> (<sd>)",
+        "Range" = "<min> to <max>"),
       rename = c("Database name" = "cdm_name"),
       header = c("cdm_name"),
       groupColumn = visOmopResults::strataColumns(result))

@@ -7,7 +7,7 @@
 tableObservationPeriod(result, type = "gt")
 }
 \arguments{
-\item{result}{A summarised result object.}
+\item{result}{A summarised_result object.}
 
 \item{type}{Type of formatting output table, either "gt" or "flextable".}
 }
@@ -18,12 +18,14 @@ A gt or flextable object with the summarised data.
 Create a visual table from a summariseObservationPeriod() result.
 }
 \examples{
-cdm <- mockOmopSketch()
+\donttest{
+cdm <- mockOmopSketch(numberIndividuals = 100)
 
 result <- summariseObservationPeriod(cdm$observation_period)
 
 tableObservationPeriod(result)
 
 PatientProfiles::mockDisconnect(cdm)
+}
 
 }

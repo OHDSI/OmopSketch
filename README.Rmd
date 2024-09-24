@@ -39,10 +39,10 @@ remotes::install_github("oxford-pharmacoepi/OmopSketch")
 
 Let's start by creating a cdm object using the Eunomia mock dataset:
 
-```{r, message=TRUE}
+```{r, message=TRUE, warning=FALSE}
 library(duckdb)
 library(CDMConnector)
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 library(OmopSketch)
 con <- dbConnect(duckdb(), eunomia_dir())
 cdm <- cdmFromCon(con = con, cdmSchema = "main", writeSchema = "main")

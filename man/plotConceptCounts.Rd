@@ -2,12 +2,12 @@
 % Please edit documentation in R/plotConceptCounts.R
 \name{plotConceptCounts}
 \alias{plotConceptCounts}
-\title{Title}
+\title{Plot the concept counts of a summariseConceptCounts output.}
 \usage{
 plotConceptCounts(result, facet = NULL, colour = NULL)
 }
 \arguments{
-\item{result}{A summarised_result object (output of summariseInObservation).}
+\item{result}{A summarised_result object (output of summariseConceptCounts).}
 
 \item{facet}{Columns to face by. Formula format can be provided. See possible
 columns to face by with: \code{visOmopResults::tidyColumns()}.}
@@ -16,26 +16,28 @@ columns to face by with: \code{visOmopResults::tidyColumns()}.}
 \code{visOmopResults::tidyColumns()}.}
 }
 \value{
-A ggplot showing the concept counts
+A ggplot2 object showing the concept counts.
 }
 \description{
-Title
+Plot the concept counts of a summariseConceptCounts output.
 }
 \examples{
-\dontrun{
-library(OmopSketch)
-library(dplyr)
+\donttest{
+library(dplyr, warn.conflicts = FALSE)
 
-con <- DBI::dbConnect(duckdb::duckdb(),
-                      dbdir = CDMConnector::eunomia_dir())
-cdm <- CDMConnector::cdm_from_con(con,
-                                  cdm_schem = "main",
-                                  write_schema = "main")
+cdm <- mockOmopSketch()
 
-results <- summariseConceptCounts(cdm,
-         conceptId = list(poliovirus_vaccine = c(40213160)))
+result <- cdm |>
+  summariseConceptCounts(
+    conceptId = list(
+      "Renal agenesis" = 194152,
+      "Manic mood" = c(4226696, 4304866, 37110496, 40371897)
+    )
+  )
 
-plotConceptCounts(result)
+result |>
+  filter(estimate_name == "person_count", variable_name == "overall") |>
+  plotConceptCounts(facet = "codelist_name", colour = "codelist_name")
 
 PatientProfiles::mockDisconnect(cdm)
 }

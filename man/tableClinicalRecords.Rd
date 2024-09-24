@@ -2,7 +2,7 @@
 % Please edit documentation in R/tableClinicalRecords.R
 \name{tableClinicalRecords}
 \alias{tableClinicalRecords}
-\title{Create a visual table from a summarise_clinical_record result.}
+\title{Create a visual table from a summariseClinicalRecord() output.}
 \usage{
 tableClinicalRecords(result, type = "gt")
 }
@@ -15,26 +15,27 @@ tableClinicalRecords(result, type = "gt")
 A gt or flextable object with the summarised data.
 }
 \description{
-Create a visual table from a summarise_clinical_record result.
+Create a visual table from a summariseClinicalRecord() output.
 }
 \examples{
 \donttest{
 
-# Connect to a mock database
 cdm <- mockOmopSketch()
 
-# Run summarise clinical tables
 summarisedResult <- summariseClinicalRecords(
   cdm = cdm,
-  omopTableName = "condition_occurrence",
+  omopTableName = c("condition_occurrence", "drug_exposure"),
   recordsPerPerson = c("mean", "sd"),
   inObservation = TRUE,
   standardConcept = TRUE,
   sourceVocabulary = TRUE,
   domainId = TRUE,
-  typeConcept = TRUE)
+  typeConcept = TRUE
+)
 
-tableClinicalRecords(summarisedResult)
+summarisedResult |>
+  suppress(minCellCount = 5) |>
+  tableClinicalRecords()
 
 PatientProfiles::mockDisconnect(cdm)
 }

@@ -1,31 +1,38 @@
-#' Create a summarise result object to summarise record counts of an omop_table using a specific time interval. Only records that fall within the observation period are counted.
+
+#' Summarise record counts of an omop_table using a specific time interval. Only
+#' records that fall within the observation period are considered.
 #'
-#' @param cdm A cdm object.
+#' @param cdm A cdm_reference object.
 #' @param omopTableName A character vector of omop tables from the cdm.
-#' @param unit Whether to stratify by "year" or by "month".
-#' @param unitInterval An integer. Number of years or months to include within the same interval.
+#' @param unit Time unit it can either be "year" or "month".
+#' @param unitInterval Number of years or months to include within the same
+#' interval.
 #' @param ageGroup A list of age groups to stratify results by.
-#' @param sex Boolean variable. Whether to stratify by sex (TRUE) or not (FALSE).
+#' @param sex Whether to stratify by sex (TRUE) or not (FALSE).
 #'
 #' @return A summarised_result object.
 #'
-#' @importFrom rlang :=
 #' @export
 #' @examples
 #' \donttest{
+#' library(dplyr, warn.conflicts = FALSE)
 #'
-#' # Connect to a mock database
 #' cdm <- mockOmopSketch()
 #'
-#' # Run summarise clinical tables
-#' summarisedResult <- summariseRecordCount(cdm = cdm,
-#'                                          omopTableName = "condition_occurrence",
-#'                                          unit = "year",
-#'                                          unitInterval = 10,
-#'                                          ageGroup = list("<=20" = c(0,20), ">20" = c(21, Inf)),
-#'                                          sex = TRUE)
-#' summarisedResult |> print()
-#'}
+#' summarisedResult <- summariseRecordCount(
+#'   cdm = cdm,
+#'   omopTableName = c("condition_occurrence", "drug_exposure"),
+#'   unit = "year",
+#'   unitInterval = 10,
+#'   ageGroup = list("<=20" = c(0,20), ">20" = c(21, Inf)),
+#'   sex = TRUE
+#' )
+#'
+#' summarisedResult |>
+#'   glimpse()
+#'
+#' PatientProfiles::mockDisconnect(cdm = cdm)
+#' }
 summariseRecordCount <- function(cdm,
                                  omopTableName,
                                  unit = "year",

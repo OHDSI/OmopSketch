@@ -2,7 +2,8 @@
 % Please edit documentation in R/summariseInObservation.R
 \name{summariseInObservation}
 \alias{summariseInObservation}
-\title{Create a summarised result with the number of people in observation during a specific interval of time.}
+\title{Summarise the number of people in observation during a specific interval of
+time.}
 \usage{
 summariseInObservation(
   observationPeriod,
@@ -14,40 +15,47 @@ summariseInObservation(
 )
 }
 \arguments{
-\item{observationPeriod}{observation_period omop table.}
+\item{observationPeriod}{An observation_period omop table. It must be part of
+a cdm_reference object.}
 
 \item{unit}{Whether to stratify by "year" or by "month".}
 
-\item{unitInterval}{Number of years or months to include within the time interval.}
+\item{unitInterval}{Number of years or months to include within the time
+interval.}
 
-\item{output}{Output format. It can be either the number of records ("records") that are in observation in the specific interval of time, the number of person-days ("person-days"), or both c("records","person-days").}
+\item{output}{Output format. It can be either the number of records
+("records") that are in observation in the specific interval of time, the
+number of person-days ("person-days"), or both c("records","person-days").}
 
 \item{ageGroup}{A list of age groups to stratify results by.}
 
-\item{sex}{Boolean variable. Whether to stratify by sex (TRUE) or not (FALSE).}
+\item{sex}{Boolean variable. Whether to stratify by sex (TRUE) or not
+(FALSE).}
 }
 \value{
 A summarised_result object.
 }
 \description{
-Create a summarised result with the number of people in observation during a specific interval of time.
+Summarise the number of people in observation during a specific interval of
+time.
 }
 \examples{
 \dontrun{
-library(OmopSketch)
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 
 cdm <- mockOmopSketch()
 
-result <- summariseInObservation(cdm$observation_period,
-                    unit = "month",
-                    unitInterval = 6,
-                    output = c("person-days","records"),
-                    ageGroup = list("<=60" = c(0,60), ">60" = c(61, Inf)),
-                    sex = TRUE)
+result <- summariseInObservation(
+  cdm$observation_period,
+  unit = "month",
+  unitInterval = 6,
+  output = c("person-days","records"),
+  ageGroup = list("<=60" = c(0,60), ">60" = c(61, Inf)),
+  sex = TRUE
+)
 
 result |>
-  dplyr::glimpse()
+  glimpse()
 
 PatientProfiles::mockDisconnect(cdm)
 }

@@ -1,4 +1,5 @@
-#' Create a visual table from a summarise_clinical_record result.
+
+#' Create a visual table from a summariseClinicalRecord() output.
 #'
 #' @param result Output from summariseClinicalRecords().
 #' @param type Type of formatting output table, either "gt" or "flextable".
@@ -9,21 +10,22 @@
 #' @examples
 #' \donttest{
 #'
-#' # Connect to a mock database
 #' cdm <- mockOmopSketch()
 #'
-#' # Run summarise clinical tables
 #' summarisedResult <- summariseClinicalRecords(
 #'   cdm = cdm,
-#'   omopTableName = "condition_occurrence",
+#'   omopTableName = c("condition_occurrence", "drug_exposure"),
 #'   recordsPerPerson = c("mean", "sd"),
 #'   inObservation = TRUE,
 #'   standardConcept = TRUE,
 #'   sourceVocabulary = TRUE,
 #'   domainId = TRUE,
-#'   typeConcept = TRUE)
+#'   typeConcept = TRUE
+#' )
 #'
-#' tableClinicalRecords(summarisedResult)
+#' summarisedResult |>
+#'   suppress(minCellCount = 5) |>
+#'   tableClinicalRecords()
 #'
 #' PatientProfiles::mockDisconnect(cdm)
 #'}
@@ -49,7 +51,7 @@ tableClinicalRecords <- function(result,
     visOmopResults::visOmopTable(
       type = type,
       estimateName = c(
-        "N%" = "<count> (<percentage>)",
+        "N (%)" = "<count> (<percentage>%)",
         "N" = "<count>",
         "Mean (SD)" = "<mean> (<sd>)"),
       header = c("cdm_name"),
