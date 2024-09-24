@@ -13,7 +13,7 @@ concepts."><meta property="og:image" content="https://oxford-pharmacoepi.github.
 
     <a class="navbar-brand me-2" href="../index.html">OmopSketch</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,40 +71,47 @@ concepts.</p>
 
 
 <dl><dt id="arg-cdm">cdm<a class="anchor" aria-label="anchor" href="#arg-cdm"></a></dt>
-<dd><p>A cdm object.</p></dd>
+<dd><p>A cdm_reference object.</p></dd>
 
 
 <dt id="arg-omoptablename">omopTableName<a class="anchor" aria-label="anchor" href="#arg-omoptablename"></a></dt>
-<dd><p>A character vector of the names of the tables to summarise in the cdm object.</p></dd>
+<dd><p>A character vector of the names of the tables to
+summarise in the cdm object.</p></dd>
 
 
 <dt id="arg-recordsperperson">recordsPerPerson<a class="anchor" aria-label="anchor" href="#arg-recordsperperson"></a></dt>
-<dd><p>Generates summary statistics for the number of records per person. Set to NULL if no summary statistics are required.</p></dd>
+<dd><p>Generates summary statistics for the number of
+records per person. Set to NULL if no summary statistics are required.</p></dd>
 
 
 <dt id="arg-inobservation">inObservation<a class="anchor" aria-label="anchor" href="#arg-inobservation"></a></dt>
-<dd><p>Boolean variable. Whether to include the percentage of records in
-observation.</p></dd>
+<dd><p>Boolean variable. Whether to include the percentage of
+records in observation.</p></dd>
 
 
 <dt id="arg-standardconcept">standardConcept<a class="anchor" aria-label="anchor" href="#arg-standardconcept"></a></dt>
-<dd><p>Boolean variable. Whether to summarise standard concept information.</p></dd>
+<dd><p>Boolean variable. Whether to summarise standard
+concept information.</p></dd>
 
 
 <dt id="arg-sourcevocabulary">sourceVocabulary<a class="anchor" aria-label="anchor" href="#arg-sourcevocabulary"></a></dt>
-<dd><p>Boolean variable.  Whether to summarise source vocabulary information.</p></dd>
+<dd><p>Boolean variable.  Whether to summarise source
+vocabulary information.</p></dd>
 
 
 <dt id="arg-domainid">domainId<a class="anchor" aria-label="anchor" href="#arg-domainid"></a></dt>
-<dd><p>Boolean variable. Whether to summarise domain id of standard concept id information.</p></dd>
+<dd><p>Boolean variable. Whether to summarise domain id of standard
+concept id information.</p></dd>
 
 
 <dt id="arg-typeconcept">typeConcept<a class="anchor" aria-label="anchor" href="#arg-typeconcept"></a></dt>
-<dd><p>Boolean variable. Whether to summarise type concept id field information.</p></dd>
+<dd><p>Boolean variable. Whether to summarise type concept id
+field information.</p></dd>
 
 
 <dt id="arg-sex">sex<a class="anchor" aria-label="anchor" href="#arg-sex"></a></dt>
-<dd><p>Boolean variable. Whether to stratify by sex (TRUE) or not (FALSE).</p></dd>
+<dd><p>Boolean variable. Whether to stratify by sex (TRUE) or not
+(FALSE).</p></dd>
 
 
 <dt id="arg-agegroup">ageGroup<a class="anchor" aria-label="anchor" href="#arg-agegroup"></a></dt>
@@ -119,43 +126,30 @@ observation.</p></dd>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘dplyr’</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:stats’:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>     filter, lag</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:base’:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>     intersect, setdiff, setequal, union</span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://darwin-eu.github.io/CDMConnector/" class="external-link">CDMConnector</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org" class="external-link">DBI</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r.duckdb.org/" class="external-link">duckdb</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://oxford-pharmacoepi.github.io/OmopSketch/">OmopSketch</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Connect to a mock database</span></span></span>
 <span class="r-in"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="mockOmopSketch.html">mockOmopSketch</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Run summarise clinical tables</span></span></span>
-<span class="r-in"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu">summariseClinicalRecords</span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span>,</span></span>
-<span class="r-in"><span>                                            omopTableName <span class="op">=</span> <span class="st">"condition_occurrence"</span>,</span></span>
-<span class="r-in"><span>                                            recordsPerPerson <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span>, <span class="st">"sd"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                                            inObservation <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
-<span class="r-in"><span>                                            standardConcept <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
-<span class="r-in"><span>                                            sourceVocabulary <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
-<span class="r-in"><span>                                            domainId <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
-<span class="r-in"><span>                                            typeConcept <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu">summariseClinicalRecords</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span></span>
+<span class="r-in"><span>  omopTableName <span class="op">=</span> <span class="st">"condition_occurrence"</span>,</span></span>
+<span class="r-in"><span>  recordsPerPerson <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span>, <span class="st">"sd"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  inObservation <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  standardConcept <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  sourceVocabulary <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  domainId <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  typeConcept <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising table counts</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → Start summary of data, at 2024-09-24 11:09:23.550737</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-24 11:09:23.690727</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → Start summary of data, at 2024-09-24 11:24:17.263079</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-24 11:24:17.4202</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising records per person</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> records_per_person: mean, sd</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → Start summary of data, at 2024-09-24 11:09:24.486902</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-24 11:09:24.689177</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → Start summary of data, at 2024-09-24 11:24:18.276214</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-24 11:24:18.49367</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising in_observation, standard, domain_id, source, and type information</span>
-<span class="r-in"><span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">summarisedResult</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 15 × 13</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    result_id cdm_name       group_name group_level      strata_name strata_level</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       </span>
@@ -177,6 +171,7 @@ observation.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 7 more variables: variable_name &lt;chr&gt;, variable_level &lt;chr&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   estimate_name &lt;chr&gt;, estimate_type &lt;chr&gt;, estimate_value &lt;chr&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   additional_name &lt;chr&gt;, additional_level &lt;chr&gt;</span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">PatientProfiles</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu-dev.github.io/PatientProfiles/reference/mockDisconnect.html" class="external-link">mockDisconnect</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
@@ -186,7 +181,7 @@ observation.</p></dd>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Marta Alcalde-Herraiz, Kim Lopez-Guell, Elin Rowlands, Marti Catala.</p>
+  <p>Developed by Marta Alcalde-Herraiz, Kim Lopez-Guell, Elin Rowlands, Edward Burn, Martí Català.</p>
 </div>
 
 <div class="pkgdown-footer-right">

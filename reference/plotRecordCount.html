@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">OmopSketch</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,20 +72,20 @@ columns to face by with: <code><a href="https://darwin-eu.github.io/visOmopResul
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="co"># Connect to a mock dabatase</span></span></span>
 <span class="r-in"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="mockOmopSketch.html">mockOmopSketch</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Run summarise clinical tables</span></span></span>
-<span class="r-in"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="summariseRecordCount.html">summariseRecordCount</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span>,</span></span>
-<span class="r-in"><span>                                         omopTableName <span class="op">=</span> <span class="st">"condition_occurrence"</span>,</span></span>
-<span class="r-in"><span>                                         unit <span class="op">=</span> <span class="st">"year"</span>,</span></span>
-<span class="r-in"><span>                                         unitInterval <span class="op">=</span> <span class="fl">10</span>,</span></span>
-<span class="r-in"><span>                                         ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;=20"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">20</span><span class="op">)</span>, <span class="st">"&gt;20"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">21</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                                         sex <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">plotRecordCount</span><span class="op">(</span><span class="va">summarisedResult</span>, facet <span class="op">=</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">age_group</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="summariseRecordCount.html">summariseRecordCount</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span></span>
+<span class="r-in"><span>  omopTableName <span class="op">=</span> <span class="st">"condition_occurrence"</span>,</span></span>
+<span class="r-in"><span>  ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;=20"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">20</span><span class="op">)</span>, <span class="st">"&gt;20"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">21</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  sex <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">plotRecordCount</span><span class="op">(</span><span class="va">summarisedResult</span>, colour <span class="op">=</span> <span class="st">"age_group"</span>, facet <span class="op">=</span> <span class="va">sex</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> The following column type were changed:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> variable_level: from double to character</span>
 <span class="r-plt img"><img src="plotRecordCount-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">PatientProfiles</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu-dev.github.io/PatientProfiles/reference/mockDisconnect.html" class="external-link">mockDisconnect</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
@@ -95,7 +95,7 @@ columns to face by with: <code><a href="https://darwin-eu.github.io/visOmopResul
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Marta Alcalde-Herraiz, Kim Lopez-Guell, Elin Rowlands, Marti Catala.</p>
+  <p>Developed by Marta Alcalde-Herraiz, Kim Lopez-Guell, Elin Rowlands, Edward Burn, Martí Català.</p>
 </div>
 
 <div class="pkgdown-footer-right">

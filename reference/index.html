@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">OmopSketch</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,7 +51,7 @@
           <code><a href="summariseOmopSnapshot.html">summariseOmopSnapshot()</a></code>
 
         </dt>
-        <dd>Summarise OMOP database and create snapshot</dd>
+        <dd>Summarise a cdm_reference object creating a snapshot with the metadata of the cdm_reference object.</dd>
       </dl><dl><dt>
 
           <code><a href="tableOmopSnapshot.html">tableOmopSnapshot()</a></code>
@@ -80,13 +80,13 @@
           <code><a href="tableClinicalRecords.html">tableClinicalRecords()</a></code>
 
         </dt>
-        <dd>Create a visual table from a summarise_clinical_record result.</dd>
+        <dd>Create a visual table from a summariseClinicalRecord() output.</dd>
       </dl><dl><dt>
 
           <code><a href="summariseRecordCount.html">summariseRecordCount()</a></code>
 
         </dt>
-        <dd>Create a summarise result object to summarise record counts of an omop_table using a specific time interval. Only records that fall within the observation period are counted.</dd>
+        <dd>Summarise record counts of an omop_table using a specific time interval. Only records that fall within the observation period are considered.</dd>
       </dl><dl><dt>
 
           <code><a href="plotRecordCount.html">plotRecordCount()</a></code>
@@ -121,19 +121,19 @@
           <code><a href="tableObservationPeriod.html">tableObservationPeriod()</a></code>
 
         </dt>
-        <dd>Create a visual table from a summarise_observation_period result.</dd>
+        <dd>Create a visual table from a summariseObservationPeriod() result.</dd>
       </dl><dl><dt>
 
           <code><a href="summariseInObservation.html">summariseInObservation()</a></code>
 
         </dt>
-        <dd>Create a summarised result with the number of people in observation during a specific interval of time.</dd>
+        <dd>Summarise the number of people in observation during a specific interval of time.</dd>
       </dl><dl><dt>
 
           <code><a href="plotInObservation.html">plotInObservation()</a></code>
 
         </dt>
-        <dd>Create a gt table from a summarised omop_table.</dd>
+        <dd>Create a ggplot2 plot from the output of summariseInObservation().</dd>
       </dl></div><div class="section level2">
 
       <h3 id="counts">Counts<a class="anchor" aria-label="anchor" href="#counts"></a></h3>
@@ -156,7 +156,7 @@
           <code><a href="plotConceptCounts.html">plotConceptCounts()</a></code>
 
         </dt>
-        <dd>Title</dd>
+        <dd>Plot the concept counts of a summariseConceptCounts output.</dd>
       </dl></div><div class="section level2">
 
       <h3 id="individual-characteristics">Individual Characteristics<a class="anchor" aria-label="anchor" href="#individual-characteristics"></a></h3>
@@ -173,7 +173,7 @@
           <code><a href="summarisePopulationCharacteristics.html">summarisePopulationCharacteristics()</a></code>
 
         </dt>
-        <dd>Summarise the characteristics of the base population of a cdm object.</dd>
+        <dd>Summarise the characteristics of the base population of a cdm_reference object.</dd>
       </dl><dl><dt>
 
           <code><a href="tablePopulationCharacteristics.html">tablePopulationCharacteristics()</a></code>
@@ -196,14 +196,14 @@
           <code><a href="mockOmopSketch.html">mockOmopSketch()</a></code>
 
         </dt>
-        <dd>It creates a mock database for testing OmopSketch package</dd>
+        <dd>Creates a mock database to test OmopSketch package.</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Marta Alcalde-Herraiz, Kim Lopez-Guell, Elin Rowlands, Marti Catala.</p>
+  <p>Developed by Marta Alcalde-Herraiz, Kim Lopez-Guell, Elin Rowlands, Edward Burn, Martí Català.</p>
 </div>
 
 <div class="pkgdown-footer-right">
