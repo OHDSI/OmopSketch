@@ -183,7 +183,6 @@ test_that("summariseRecordCount() ageGroup argument works", {
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
 
-
 test_that("summariseRecordCount() sex argument works", {
   # Load mock database ----
   cdm <- cdmEunomia()
@@ -238,5 +237,28 @@ test_that("summariseRecordCount() sex argument works", {
   expect_equal(x,y)
 
   PatientProfiles::mockDisconnect(cdm = cdm)
+})
+
+test_that("summariseRecordCount() works with mockOmopSketch", {
+  cdm <- mockOmopSketch(numberIndividuals = 3, seed = 1)
+  conditionpp <- cdm$condition_occurrence |>
+    PatientProfiles::addDemographics(indexDate = "condition_start_date",ageGroup = list(c(0,20),c(21,150))) |>
+    dplyr::mutate(year = clock::get_year(condition_start_date)) |>
+    dplyr::group_by(year, age_group, sex) |>
+    dplyr::summarise(n = n())
+
+  expect_no_error(co <- summariseRecordCount(cdm, "condition_occurrence", sex = TRUE, ageGroup = list(c(0,20),c(21,150))))
+
+  expect_true(co |> dplyr::filter(grepl("Male",strata_level)) |>
+                dplyr::tally() |> dplyr::pull() == 0)
+  expect_true(all(co |> dplyr::filter(grepl("&&&",strata_level)) |>
+                dplyr::pull("estimate_value") |> sort() ==
+                  conditionpp |> dplyr::pull("n") |> as.character() |> sort()))
+
+  # Check result type
+  checkResultType(co, "summarise_record_count")
+
+  PatientProfiles::mockDisconnect(cdm = cdm)
+
 })
 

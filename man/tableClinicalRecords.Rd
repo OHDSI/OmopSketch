@@ -2,20 +2,20 @@
 % Please edit documentation in R/tableClinicalRecords.R
 \name{tableClinicalRecords}
 \alias{tableClinicalRecords}
-\title{Create a gt table from a summarised omop_table.}
+\title{Create a visual table from a summarise_clinical_record result.}
 \usage{
 tableClinicalRecords(result, type = "gt")
 }
 \arguments{
 \item{result}{Output from summariseClinicalRecords().}
 
-\item{type}{type of table.}
+\item{type}{Type of formatting output table, either "gt" or "flextable".}
 }
 \value{
-A gt object with the summarised data.
+A gt or flextable object with the summarised data.
 }
 \description{
-Create a gt table from a summarised omop_table.
+Create a visual table from a summarise_clinical_record result.
 }
 \examples{
 \donttest{
