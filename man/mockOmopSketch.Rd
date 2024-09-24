@@ -2,7 +2,7 @@
 % Please edit documentation in R/mockOmopSketch.R
 \name{mockOmopSketch}
 \alias{mockOmopSketch}
-\title{It creates a mock database for testing OmopSketch package}
+\title{Creates a mock database to test OmopSketch package.}
 \usage{
 mockOmopSketch(
   con = NULL,
@@ -12,27 +12,28 @@ mockOmopSketch(
 )
 }
 \arguments{
-\item{con}{A DBI connection to create the cdm mock object. By default, the connection would be "duckdb".}
+\item{con}{A DBI connection to create the cdm mock object. By default, the
+connection would be a 'duckdb' one.}
 
-\item{writeSchema}{Name of an schema on the same connection with writing permissions.}
+\item{writeSchema}{Name of an schema of the DBI connection with writing
+permissions.}
 
-\item{numberIndividuals}{Number of individuals to create in the cdm reference.}
+\item{numberIndividuals}{Number of individuals to create in the cdm
+reference object.}
 
-\item{seed}{An optional integer used to set the seed for random number generation, ensuring
-reproducibility of the generated data. If provided, this seed allows the function
-to produce consistent results each time it is run with the same inputs. If 'NULL',
-the seed is not set, which can lead to different outputs on each run.}
+\item{seed}{An optional integer used to set the seed for random number
+generation, ensuring reproducibility of the generated data. If provided, this
+seed allows the function to produce consistent results each time it is run
+with the same inputs. If 'NULL', the seed is not set, which can lead to
+different outputs on each run.}
 }
 \value{
-A mock cdm_reference object created following user's specifications.
+A mock cdm_reference object.
 }
 \description{
-It creates a mock database for testing OmopSketch package
+Creates a mock database to test OmopSketch package.
 }
 \examples{
-\donttest{
-mockOmopSketch(numberIndividuals = 1000,
-               writeSchema = NULL,
-               con = NULL)
-}
+mockOmopSketch(numberIndividuals = 100)
+
 }

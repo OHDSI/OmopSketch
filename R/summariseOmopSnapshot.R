@@ -1,21 +1,18 @@
-#' Summarise OMOP database and create snapshot
+
+#' Summarise a cdm_reference object creating a snapshot with the metadata of the
+#' cdm_reference object.
 #'
-#' @param cdm A cdm reference object
+#' @param cdm A cdm_reference object.
 #'
-#' @return A summarised result object
+#' @return A summarised_result object.
 #'
 #' @export
 #'
 #' @examples
-#' # example code
-#' \donttest{
-#'library(OmopSketch)
-#'
-#' cdm <- mockOmopSketch(numberIndividuals = 1000)
+#' cdm <- mockOmopSketch(numberIndividuals = 10)
 #'
 #' summariseOmopSnapshot(cdm)
-#' }
-
+#'
 summariseOmopSnapshot <- function(cdm) {
 
   omopgenerics::validateCdmArgument(cdm)
@@ -34,7 +31,6 @@ summariseOmopSnapshot <- function(cdm) {
 
   return(summaryTable)
 }
-
 
 internalTibble <- function(summaryTable){
   summaryTable |>

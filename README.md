@@ -36,19 +36,9 @@ Let’s start by creating a cdm object using the Eunomia mock dataset:
 
 ``` r
 library(duckdb)
-#> Warning: package 'duckdb' was built under R version 4.3.3
 #> Loading required package: DBI
-#> Warning: package 'DBI' was built under R version 4.3.3
 library(CDMConnector)
-library(dplyr)
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
+library(dplyr, warn.conflicts = FALSE)
 library(OmopSketch)
 con <- dbConnect(duckdb(), eunomia_dir())
 cdm <- cdmFromCon(con = con, cdmSchema = "main", writeSchema = "main")
@@ -82,20 +72,20 @@ summariseOmopSnapshot(cdm) |>
 #> ! Results have not been suppressed.
 ```
 
-<div id="ykomcyxsmr" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ykomcyxsmr table {
+<div id="xqbckkubve" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#xqbckkubve table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-&#10;#ykomcyxsmr thead, #ykomcyxsmr tbody, #ykomcyxsmr tfoot, #ykomcyxsmr tr, #ykomcyxsmr td, #ykomcyxsmr th {
+&#10;#xqbckkubve thead, #xqbckkubve tbody, #xqbckkubve tfoot, #xqbckkubve tr, #xqbckkubve td, #xqbckkubve th {
   border-style: none;
 }
-&#10;#ykomcyxsmr p {
+&#10;#xqbckkubve p {
   margin: 0;
   padding: 0;
 }
-&#10;#ykomcyxsmr .gt_table {
+&#10;#xqbckkubve .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -120,11 +110,11 @@ summariseOmopSnapshot(cdm) |>
   border-left-width: 2px;
   border-left-color: #D3D3D3;
 }
-&#10;#ykomcyxsmr .gt_caption {
+&#10;#xqbckkubve .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
-&#10;#ykomcyxsmr .gt_title {
+&#10;#xqbckkubve .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -135,7 +125,7 @@ summariseOmopSnapshot(cdm) |>
   border-bottom-color: #FFFFFF;
   border-bottom-width: 0;
 }
-&#10;#ykomcyxsmr .gt_subtitle {
+&#10;#xqbckkubve .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -146,7 +136,7 @@ summariseOmopSnapshot(cdm) |>
   border-top-color: #FFFFFF;
   border-top-width: 0;
 }
-&#10;#ykomcyxsmr .gt_heading {
+&#10;#xqbckkubve .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -157,12 +147,12 @@ summariseOmopSnapshot(cdm) |>
   border-right-width: 1px;
   border-right-color: #D3D3D3;
 }
-&#10;#ykomcyxsmr .gt_bottom_border {
+&#10;#xqbckkubve .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#ykomcyxsmr .gt_col_headings {
+&#10;#xqbckkubve .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -176,7 +166,7 @@ summariseOmopSnapshot(cdm) |>
   border-right-width: 1px;
   border-right-color: #D3D3D3;
 }
-&#10;#ykomcyxsmr .gt_col_heading {
+&#10;#xqbckkubve .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -195,7 +185,7 @@ summariseOmopSnapshot(cdm) |>
   padding-right: 5px;
   overflow-x: hidden;
 }
-&#10;#ykomcyxsmr .gt_column_spanner_outer {
+&#10;#xqbckkubve .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -206,13 +196,13 @@ summariseOmopSnapshot(cdm) |>
   padding-left: 4px;
   padding-right: 4px;
 }
-&#10;#ykomcyxsmr .gt_column_spanner_outer:first-child {
+&#10;#xqbckkubve .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
-&#10;#ykomcyxsmr .gt_column_spanner_outer:last-child {
+&#10;#xqbckkubve .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
-&#10;#ykomcyxsmr .gt_column_spanner {
+&#10;#xqbckkubve .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -223,10 +213,10 @@ summariseOmopSnapshot(cdm) |>
   display: inline-block;
   width: 100%;
 }
-&#10;#ykomcyxsmr .gt_spanner_row {
+&#10;#xqbckkubve .gt_spanner_row {
   border-bottom-style: hidden;
 }
-&#10;#ykomcyxsmr .gt_group_heading {
+&#10;#xqbckkubve .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -251,7 +241,7 @@ summariseOmopSnapshot(cdm) |>
   vertical-align: middle;
   text-align: left;
 }
-&#10;#ykomcyxsmr .gt_empty_group_heading {
+&#10;#xqbckkubve .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -265,13 +255,13 @@ summariseOmopSnapshot(cdm) |>
   border-bottom-color: #D3D3D3;
   vertical-align: middle;
 }
-&#10;#ykomcyxsmr .gt_from_md > :first-child {
+&#10;#xqbckkubve .gt_from_md > :first-child {
   margin-top: 0;
 }
-&#10;#ykomcyxsmr .gt_from_md > :last-child {
+&#10;#xqbckkubve .gt_from_md > :last-child {
   margin-bottom: 0;
 }
-&#10;#ykomcyxsmr .gt_row {
+&#10;#xqbckkubve .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -289,7 +279,7 @@ summariseOmopSnapshot(cdm) |>
   vertical-align: middle;
   overflow-x: hidden;
 }
-&#10;#ykomcyxsmr .gt_stub {
+&#10;#xqbckkubve .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -301,7 +291,7 @@ summariseOmopSnapshot(cdm) |>
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#ykomcyxsmr .gt_stub_row_group {
+&#10;#xqbckkubve .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -314,13 +304,13 @@ summariseOmopSnapshot(cdm) |>
   padding-right: 5px;
   vertical-align: top;
 }
-&#10;#ykomcyxsmr .gt_row_group_first td {
+&#10;#xqbckkubve .gt_row_group_first td {
   border-top-width: 2px;
 }
-&#10;#ykomcyxsmr .gt_row_group_first th {
+&#10;#xqbckkubve .gt_row_group_first th {
   border-top-width: 2px;
 }
-&#10;#ykomcyxsmr .gt_summary_row {
+&#10;#xqbckkubve .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -329,14 +319,14 @@ summariseOmopSnapshot(cdm) |>
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#ykomcyxsmr .gt_first_summary_row {
+&#10;#xqbckkubve .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
-&#10;#ykomcyxsmr .gt_first_summary_row.thick {
+&#10;#xqbckkubve .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
-&#10;#ykomcyxsmr .gt_last_summary_row {
+&#10;#xqbckkubve .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -345,7 +335,7 @@ summariseOmopSnapshot(cdm) |>
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#ykomcyxsmr .gt_grand_summary_row {
+&#10;#xqbckkubve .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -354,7 +344,7 @@ summariseOmopSnapshot(cdm) |>
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#ykomcyxsmr .gt_first_grand_summary_row {
+&#10;#xqbckkubve .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -363,7 +353,7 @@ summariseOmopSnapshot(cdm) |>
   border-top-width: 6px;
   border-top-color: #D3D3D3;
 }
-&#10;#ykomcyxsmr .gt_last_grand_summary_row_top {
+&#10;#xqbckkubve .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -372,10 +362,10 @@ summariseOmopSnapshot(cdm) |>
   border-bottom-width: 6px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#ykomcyxsmr .gt_striped {
+&#10;#xqbckkubve .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
-&#10;#ykomcyxsmr .gt_table_body {
+&#10;#xqbckkubve .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -383,7 +373,7 @@ summariseOmopSnapshot(cdm) |>
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#ykomcyxsmr .gt_footnotes {
+&#10;#xqbckkubve .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -396,7 +386,7 @@ summariseOmopSnapshot(cdm) |>
   border-right-width: 2px;
   border-right-color: #D3D3D3;
 }
-&#10;#ykomcyxsmr .gt_footnote {
+&#10;#xqbckkubve .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -404,7 +394,7 @@ summariseOmopSnapshot(cdm) |>
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#ykomcyxsmr .gt_sourcenotes {
+&#10;#xqbckkubve .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -417,64 +407,64 @@ summariseOmopSnapshot(cdm) |>
   border-right-width: 2px;
   border-right-color: #D3D3D3;
 }
-&#10;#ykomcyxsmr .gt_sourcenote {
+&#10;#xqbckkubve .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#ykomcyxsmr .gt_left {
+&#10;#xqbckkubve .gt_left {
   text-align: left;
 }
-&#10;#ykomcyxsmr .gt_center {
+&#10;#xqbckkubve .gt_center {
   text-align: center;
 }
-&#10;#ykomcyxsmr .gt_right {
+&#10;#xqbckkubve .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
-&#10;#ykomcyxsmr .gt_font_normal {
+&#10;#xqbckkubve .gt_font_normal {
   font-weight: normal;
 }
-&#10;#ykomcyxsmr .gt_font_bold {
+&#10;#xqbckkubve .gt_font_bold {
   font-weight: bold;
 }
-&#10;#ykomcyxsmr .gt_font_italic {
+&#10;#xqbckkubve .gt_font_italic {
   font-style: italic;
 }
-&#10;#ykomcyxsmr .gt_super {
+&#10;#xqbckkubve .gt_super {
   font-size: 65%;
 }
-&#10;#ykomcyxsmr .gt_footnote_marks {
+&#10;#xqbckkubve .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
-&#10;#ykomcyxsmr .gt_asterisk {
+&#10;#xqbckkubve .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
-&#10;#ykomcyxsmr .gt_indent_1 {
+&#10;#xqbckkubve .gt_indent_1 {
   text-indent: 5px;
 }
-&#10;#ykomcyxsmr .gt_indent_2 {
+&#10;#xqbckkubve .gt_indent_2 {
   text-indent: 10px;
 }
-&#10;#ykomcyxsmr .gt_indent_3 {
+&#10;#xqbckkubve .gt_indent_3 {
   text-indent: 15px;
 }
-&#10;#ykomcyxsmr .gt_indent_4 {
+&#10;#xqbckkubve .gt_indent_4 {
   text-indent: 20px;
 }
-&#10;#ykomcyxsmr .gt_indent_5 {
+&#10;#xqbckkubve .gt_indent_5 {
   text-indent: 25px;
 }
-&#10;#ykomcyxsmr .katex-display {
+&#10;#xqbckkubve .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
-&#10;#ykomcyxsmr div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+&#10;#xqbckkubve div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -496,7 +486,7 @@ summariseOmopSnapshot(cdm) |>
     </tr>
     <tr class="gt_row_group_first"><td headers="General  Estimate" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Snapshot date</td>
 <td headers="General  [header_name]Database name
-[header_level]Synthea synthetic health database" class="gt_row gt_left" style="text-align: right;">2024-09-22</td></tr>
+[header_level]Synthea synthetic health database" class="gt_row gt_left" style="text-align: right;">2024-09-23</td></tr>
     <tr><td headers="General  Estimate" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Person count</td>
 <td headers="General  [header_name]Database name
 [header_level]Synthea synthetic health database" class="gt_row gt_left" style="text-align: right;">2,694</td></tr>
@@ -556,49 +546,49 @@ summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
   tableClinicalRecords()
 #> ℹ Summarising table counts
 #> ℹ The following estimates will be computed:
-#> → Start summary of data, at 2024-09-22 19:29:25.817017
+#> → Start summary of data, at 2024-09-23 21:38:31.36394
 #> 
-#> ✔ Summary finished, at 2024-09-22 19:29:25.869157
+#> ✔ Summary finished, at 2024-09-23 21:38:31.418166
 #> ℹ Summarising records per person
 #> ℹ The following estimates will be computed:
 #> • records_per_person: mean, sd, median, q25, q75, min, max
 #> ! Table is collected to memory as not all requested estimates are supported on
 #>   the database side
-#> → Start summary of data, at 2024-09-22 19:29:26.188857
+#> → Start summary of data, at 2024-09-23 21:38:31.763101
 #> 
-#> ✔ Summary finished, at 2024-09-22 19:29:26.206181
+#> ✔ Summary finished, at 2024-09-23 21:38:31.780797
 #> ℹ Summarising in_observation, standard, domain_id, and type information
 #> ℹ Summarising table counts
 #> ℹ The following estimates will be computed:
-#> → Start summary of data, at 2024-09-22 19:29:27.57777
+#> → Start summary of data, at 2024-09-23 21:38:33.205371
 #> 
-#> ✔ Summary finished, at 2024-09-22 19:29:27.628348
+#> ✔ Summary finished, at 2024-09-23 21:38:33.259787
 #> ℹ Summarising records per person
 #> ℹ The following estimates will be computed:
 #> • records_per_person: mean, sd, median, q25, q75, min, max
 #> ! Table is collected to memory as not all requested estimates are supported on
 #>   the database side
-#> → Start summary of data, at 2024-09-22 19:29:27.953459
+#> → Start summary of data, at 2024-09-23 21:38:33.611892
 #> 
-#> ✔ Summary finished, at 2024-09-22 19:29:27.970218
+#> ✔ Summary finished, at 2024-09-23 21:38:33.627355
 #> ℹ Summarising in_observation, standard, domain_id, and type information
 #> ! Results have not been suppressed.
 ```
 
-<div id="tfhaaoonsd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#tfhaaoonsd table {
+<div id="spqvffjwef" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#spqvffjwef table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-&#10;#tfhaaoonsd thead, #tfhaaoonsd tbody, #tfhaaoonsd tfoot, #tfhaaoonsd tr, #tfhaaoonsd td, #tfhaaoonsd th {
+&#10;#spqvffjwef thead, #spqvffjwef tbody, #spqvffjwef tfoot, #spqvffjwef tr, #spqvffjwef td, #spqvffjwef th {
   border-style: none;
 }
-&#10;#tfhaaoonsd p {
+&#10;#spqvffjwef p {
   margin: 0;
   padding: 0;
 }
-&#10;#tfhaaoonsd .gt_table {
+&#10;#spqvffjwef .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -623,11 +613,11 @@ summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
   border-left-width: 2px;
   border-left-color: #D3D3D3;
 }
-&#10;#tfhaaoonsd .gt_caption {
+&#10;#spqvffjwef .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
-&#10;#tfhaaoonsd .gt_title {
+&#10;#spqvffjwef .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -638,7 +628,7 @@ summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
   border-bottom-color: #FFFFFF;
   border-bottom-width: 0;
 }
-&#10;#tfhaaoonsd .gt_subtitle {
+&#10;#spqvffjwef .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -649,7 +639,7 @@ summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
   border-top-color: #FFFFFF;
   border-top-width: 0;
 }
-&#10;#tfhaaoonsd .gt_heading {
+&#10;#spqvffjwef .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -660,12 +650,12 @@ summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
   border-right-width: 1px;
   border-right-color: #D3D3D3;
 }
-&#10;#tfhaaoonsd .gt_bottom_border {
+&#10;#spqvffjwef .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#tfhaaoonsd .gt_col_headings {
+&#10;#spqvffjwef .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -679,7 +669,7 @@ summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
   border-right-width: 1px;
   border-right-color: #D3D3D3;
 }
-&#10;#tfhaaoonsd .gt_col_heading {
+&#10;#spqvffjwef .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -698,7 +688,7 @@ summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
   padding-right: 5px;
   overflow-x: hidden;
 }
-&#10;#tfhaaoonsd .gt_column_spanner_outer {
+&#10;#spqvffjwef .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -709,13 +699,13 @@ summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
   padding-left: 4px;
   padding-right: 4px;
 }
-&#10;#tfhaaoonsd .gt_column_spanner_outer:first-child {
+&#10;#spqvffjwef .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
-&#10;#tfhaaoonsd .gt_column_spanner_outer:last-child {
+&#10;#spqvffjwef .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
-&#10;#tfhaaoonsd .gt_column_spanner {
+&#10;#spqvffjwef .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -726,10 +716,10 @@ summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
   display: inline-block;
   width: 100%;
 }
-&#10;#tfhaaoonsd .gt_spanner_row {
+&#10;#spqvffjwef .gt_spanner_row {
   border-bottom-style: hidden;
 }
-&#10;#tfhaaoonsd .gt_group_heading {
+&#10;#spqvffjwef .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -754,7 +744,7 @@ summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
   vertical-align: middle;
   text-align: left;
 }
-&#10;#tfhaaoonsd .gt_empty_group_heading {
+&#10;#spqvffjwef .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -768,13 +758,13 @@ summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
   border-bottom-color: #D3D3D3;
   vertical-align: middle;
 }
-&#10;#tfhaaoonsd .gt_from_md > :first-child {
+&#10;#spqvffjwef .gt_from_md > :first-child {
   margin-top: 0;
 }
-&#10;#tfhaaoonsd .gt_from_md > :last-child {
+&#10;#spqvffjwef .gt_from_md > :last-child {
   margin-bottom: 0;
 }
-&#10;#tfhaaoonsd .gt_row {
+&#10;#spqvffjwef .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -792,7 +782,7 @@ summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
   vertical-align: middle;
   overflow-x: hidden;
 }
-&#10;#tfhaaoonsd .gt_stub {
+&#10;#spqvffjwef .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -804,7 +794,7 @@ summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#tfhaaoonsd .gt_stub_row_group {
+&#10;#spqvffjwef .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -817,13 +807,13 @@ summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
   padding-right: 5px;
   vertical-align: top;
 }
-&#10;#tfhaaoonsd .gt_row_group_first td {
+&#10;#spqvffjwef .gt_row_group_first td {
   border-top-width: 2px;
 }
-&#10;#tfhaaoonsd .gt_row_group_first th {
+&#10;#spqvffjwef .gt_row_group_first th {
   border-top-width: 2px;
 }
-&#10;#tfhaaoonsd .gt_summary_row {
+&#10;#spqvffjwef .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -832,14 +822,14 @@ summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#tfhaaoonsd .gt_first_summary_row {
+&#10;#spqvffjwef .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
-&#10;#tfhaaoonsd .gt_first_summary_row.thick {
+&#10;#spqvffjwef .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
-&#10;#tfhaaoonsd .gt_last_summary_row {
+&#10;#spqvffjwef .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -848,7 +838,7 @@ summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#tfhaaoonsd .gt_grand_summary_row {
+&#10;#spqvffjwef .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -857,7 +847,7 @@ summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#tfhaaoonsd .gt_first_grand_summary_row {
+&#10;#spqvffjwef .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -866,7 +856,7 @@ summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
   border-top-width: 6px;
   border-top-color: #D3D3D3;
 }
-&#10;#tfhaaoonsd .gt_last_grand_summary_row_top {
+&#10;#spqvffjwef .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -875,10 +865,10 @@ summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
   border-bottom-width: 6px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#tfhaaoonsd .gt_striped {
+&#10;#spqvffjwef .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
-&#10;#tfhaaoonsd .gt_table_body {
+&#10;#spqvffjwef .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -886,7 +876,7 @@ summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#tfhaaoonsd .gt_footnotes {
+&#10;#spqvffjwef .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -899,7 +889,7 @@ summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
   border-right-width: 2px;
   border-right-color: #D3D3D3;
 }
-&#10;#tfhaaoonsd .gt_footnote {
+&#10;#spqvffjwef .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -907,7 +897,7 @@ summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#tfhaaoonsd .gt_sourcenotes {
+&#10;#spqvffjwef .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -920,64 +910,64 @@ summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
   border-right-width: 2px;
   border-right-color: #D3D3D3;
 }
-&#10;#tfhaaoonsd .gt_sourcenote {
+&#10;#spqvffjwef .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#tfhaaoonsd .gt_left {
+&#10;#spqvffjwef .gt_left {
   text-align: left;
 }
-&#10;#tfhaaoonsd .gt_center {
+&#10;#spqvffjwef .gt_center {
   text-align: center;
 }
-&#10;#tfhaaoonsd .gt_right {
+&#10;#spqvffjwef .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
-&#10;#tfhaaoonsd .gt_font_normal {
+&#10;#spqvffjwef .gt_font_normal {
   font-weight: normal;
 }
-&#10;#tfhaaoonsd .gt_font_bold {
+&#10;#spqvffjwef .gt_font_bold {
   font-weight: bold;
 }
-&#10;#tfhaaoonsd .gt_font_italic {
+&#10;#spqvffjwef .gt_font_italic {
   font-style: italic;
 }
-&#10;#tfhaaoonsd .gt_super {
+&#10;#spqvffjwef .gt_super {
   font-size: 65%;
 }
-&#10;#tfhaaoonsd .gt_footnote_marks {
+&#10;#spqvffjwef .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
-&#10;#tfhaaoonsd .gt_asterisk {
+&#10;#spqvffjwef .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
-&#10;#tfhaaoonsd .gt_indent_1 {
+&#10;#spqvffjwef .gt_indent_1 {
   text-indent: 5px;
 }
-&#10;#tfhaaoonsd .gt_indent_2 {
+&#10;#spqvffjwef .gt_indent_2 {
   text-indent: 10px;
 }
-&#10;#tfhaaoonsd .gt_indent_3 {
+&#10;#spqvffjwef .gt_indent_3 {
   text-indent: 15px;
 }
-&#10;#tfhaaoonsd .gt_indent_4 {
+&#10;#spqvffjwef .gt_indent_4 {
   text-indent: 20px;
 }
-&#10;#tfhaaoonsd .gt_indent_5 {
+&#10;#spqvffjwef .gt_indent_5 {
   text-indent: 25px;
 }
-&#10;#tfhaaoonsd .katex-display {
+&#10;#spqvffjwef .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
-&#10;#tfhaaoonsd div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+&#10;#spqvffjwef div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -999,17 +989,17 @@ summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
     <tr class="gt_group_heading_row">
       <th colspan="4" class="gt_group_heading" style="background-color: #E9E9E9; font-weight: bold;" scope="colgroup" id="condition_occurrence">condition_occurrence</th>
     </tr>
-    <tr class="gt_row_group_first"><td headers="condition_occurrence  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">number records</td>
+    <tr class="gt_row_group_first"><td headers="condition_occurrence  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Number records</td>
 <td headers="condition_occurrence  Variable level" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">-</td>
 <td headers="condition_occurrence  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N</td>
 <td headers="condition_occurrence  [header_name]Database name
 [header_level]Synthea synthetic health database" class="gt_row gt_right" style="text-align: right;">65,332</td></tr>
-    <tr><td headers="condition_occurrence  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">number subjects</td>
+    <tr><td headers="condition_occurrence  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Number subjects</td>
 <td headers="condition_occurrence  Variable level" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">-</td>
 <td headers="condition_occurrence  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N%</td>
 <td headers="condition_occurrence  [header_name]Database name
 [header_level]Synthea synthetic health database" class="gt_row gt_right" style="text-align: right;">2,694 (100.00)</td></tr>
-    <tr><td headers="condition_occurrence  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">records_per_person</td>
+    <tr><td headers="condition_occurrence  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Records per person</td>
 <td headers="condition_occurrence  Variable level" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">-</td>
 <td headers="condition_occurrence  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Mean (SD)</td>
 <td headers="condition_occurrence  [header_name]Database name
@@ -1060,24 +1050,24 @@ summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
 <td headers="condition_occurrence  [header_name]Database name
 [header_level]Synthea synthetic health database" class="gt_row gt_right" style="text-align: right;">65,332 (100.00)</td></tr>
     <tr><td headers="condition_occurrence  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Type concept id</td>
-<td headers="condition_occurrence  Variable level" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">EHR encounter diagnosis (32020)</td>
+<td headers="condition_occurrence  Variable level" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Ehr encounter diagnosis (32020)</td>
 <td headers="condition_occurrence  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N%</td>
 <td headers="condition_occurrence  [header_name]Database name
 [header_level]Synthea synthetic health database" class="gt_row gt_right" style="text-align: right;">65,332 (100.00)</td></tr>
     <tr class="gt_group_heading_row">
       <th colspan="4" class="gt_group_heading" style="background-color: #E9E9E9; font-weight: bold;" scope="colgroup" id="drug_exposure">drug_exposure</th>
     </tr>
-    <tr class="gt_row_group_first"><td headers="drug_exposure  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">number records</td>
+    <tr class="gt_row_group_first"><td headers="drug_exposure  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Number records</td>
 <td headers="drug_exposure  Variable level" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">-</td>
 <td headers="drug_exposure  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N</td>
 <td headers="drug_exposure  [header_name]Database name
 [header_level]Synthea synthetic health database" class="gt_row gt_right" style="text-align: right;">67,707</td></tr>
-    <tr><td headers="drug_exposure  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">number subjects</td>
+    <tr><td headers="drug_exposure  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Number subjects</td>
 <td headers="drug_exposure  Variable level" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">-</td>
 <td headers="drug_exposure  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N%</td>
 <td headers="drug_exposure  [header_name]Database name
 [header_level]Synthea synthetic health database" class="gt_row gt_right" style="text-align: right;">2,694 (100.00)</td></tr>
-    <tr><td headers="drug_exposure  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">records_per_person</td>
+    <tr><td headers="drug_exposure  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Records per person</td>
 <td headers="drug_exposure  Variable level" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">-</td>
 <td headers="drug_exposure  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Mean (SD)</td>
 <td headers="drug_exposure  [header_name]Database name
@@ -1133,7 +1123,7 @@ summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
 <td headers="drug_exposure  [header_name]Database name
 [header_level]Synthea synthetic health database" class="gt_row gt_right" style="text-align: right;">41,997 (62.03)</td></tr>
     <tr><td headers="drug_exposure  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
-<td headers="drug_exposure  Variable level" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Dispensed in Outpatient office (581452)</td>
+<td headers="drug_exposure  Variable level" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Dispensed in outpatient office (581452)</td>
 <td headers="drug_exposure  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N%</td>
 <td headers="drug_exposure  [header_name]Database name
 [header_level]Synthea synthetic health database" class="gt_row gt_right" style="text-align: right;">25,710 (37.97)</td></tr>
@@ -1175,31 +1165,23 @@ period per each individual in the database using
 ``` r
 summariseObservationPeriod(cdm$observation_period) |>
   tableObservationPeriod()
-#> Warning: The `split` argument of `visOmopTable()` is deprecated as of visOmopResults
-#> 0.4.0.
-#> ℹ The deprecated feature was likely used in the OmopSketch package.
-#>   Please report the issue at
-#>   <https://github.com/oxford-pharmacoepi/OmopSketch/issues>.
-#> This warning is displayed once every 8 hours.
-#> Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-#> generated.
 #> ! Results have not been suppressed.
 ```
 
-<div id="ukvvhmkcjo" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ukvvhmkcjo table {
+<div id="dyjdpcfzdl" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#dyjdpcfzdl table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-&#10;#ukvvhmkcjo thead, #ukvvhmkcjo tbody, #ukvvhmkcjo tfoot, #ukvvhmkcjo tr, #ukvvhmkcjo td, #ukvvhmkcjo th {
+&#10;#dyjdpcfzdl thead, #dyjdpcfzdl tbody, #dyjdpcfzdl tfoot, #dyjdpcfzdl tr, #dyjdpcfzdl td, #dyjdpcfzdl th {
   border-style: none;
 }
-&#10;#ukvvhmkcjo p {
+&#10;#dyjdpcfzdl p {
   margin: 0;
   padding: 0;
 }
-&#10;#ukvvhmkcjo .gt_table {
+&#10;#dyjdpcfzdl .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1224,11 +1206,11 @@ summariseObservationPeriod(cdm$observation_period) |>
   border-left-width: 2px;
   border-left-color: #D3D3D3;
 }
-&#10;#ukvvhmkcjo .gt_caption {
+&#10;#dyjdpcfzdl .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
-&#10;#ukvvhmkcjo .gt_title {
+&#10;#dyjdpcfzdl .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1239,7 +1221,7 @@ summariseObservationPeriod(cdm$observation_period) |>
   border-bottom-color: #FFFFFF;
   border-bottom-width: 0;
 }
-&#10;#ukvvhmkcjo .gt_subtitle {
+&#10;#dyjdpcfzdl .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1250,7 +1232,7 @@ summariseObservationPeriod(cdm$observation_period) |>
   border-top-color: #FFFFFF;
   border-top-width: 0;
 }
-&#10;#ukvvhmkcjo .gt_heading {
+&#10;#dyjdpcfzdl .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1261,12 +1243,12 @@ summariseObservationPeriod(cdm$observation_period) |>
   border-right-width: 1px;
   border-right-color: #D3D3D3;
 }
-&#10;#ukvvhmkcjo .gt_bottom_border {
+&#10;#dyjdpcfzdl .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#ukvvhmkcjo .gt_col_headings {
+&#10;#dyjdpcfzdl .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1280,7 +1262,7 @@ summariseObservationPeriod(cdm$observation_period) |>
   border-right-width: 1px;
   border-right-color: #D3D3D3;
 }
-&#10;#ukvvhmkcjo .gt_col_heading {
+&#10;#dyjdpcfzdl .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1299,7 +1281,7 @@ summariseObservationPeriod(cdm$observation_period) |>
   padding-right: 5px;
   overflow-x: hidden;
 }
-&#10;#ukvvhmkcjo .gt_column_spanner_outer {
+&#10;#dyjdpcfzdl .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1310,13 +1292,13 @@ summariseObservationPeriod(cdm$observation_period) |>
   padding-left: 4px;
   padding-right: 4px;
 }
-&#10;#ukvvhmkcjo .gt_column_spanner_outer:first-child {
+&#10;#dyjdpcfzdl .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
-&#10;#ukvvhmkcjo .gt_column_spanner_outer:last-child {
+&#10;#dyjdpcfzdl .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
-&#10;#ukvvhmkcjo .gt_column_spanner {
+&#10;#dyjdpcfzdl .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1327,10 +1309,10 @@ summariseObservationPeriod(cdm$observation_period) |>
   display: inline-block;
   width: 100%;
 }
-&#10;#ukvvhmkcjo .gt_spanner_row {
+&#10;#dyjdpcfzdl .gt_spanner_row {
   border-bottom-style: hidden;
 }
-&#10;#ukvvhmkcjo .gt_group_heading {
+&#10;#dyjdpcfzdl .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1355,7 +1337,7 @@ summariseObservationPeriod(cdm$observation_period) |>
   vertical-align: middle;
   text-align: left;
 }
-&#10;#ukvvhmkcjo .gt_empty_group_heading {
+&#10;#dyjdpcfzdl .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1369,13 +1351,13 @@ summariseObservationPeriod(cdm$observation_period) |>
   border-bottom-color: #D3D3D3;
   vertical-align: middle;
 }
-&#10;#ukvvhmkcjo .gt_from_md > :first-child {
+&#10;#dyjdpcfzdl .gt_from_md > :first-child {
   margin-top: 0;
 }
-&#10;#ukvvhmkcjo .gt_from_md > :last-child {
+&#10;#dyjdpcfzdl .gt_from_md > :last-child {
   margin-bottom: 0;
 }
-&#10;#ukvvhmkcjo .gt_row {
+&#10;#dyjdpcfzdl .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1393,7 +1375,7 @@ summariseObservationPeriod(cdm$observation_period) |>
   vertical-align: middle;
   overflow-x: hidden;
 }
-&#10;#ukvvhmkcjo .gt_stub {
+&#10;#dyjdpcfzdl .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1405,7 +1387,7 @@ summariseObservationPeriod(cdm$observation_period) |>
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#ukvvhmkcjo .gt_stub_row_group {
+&#10;#dyjdpcfzdl .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1418,13 +1400,13 @@ summariseObservationPeriod(cdm$observation_period) |>
   padding-right: 5px;
   vertical-align: top;
 }
-&#10;#ukvvhmkcjo .gt_row_group_first td {
+&#10;#dyjdpcfzdl .gt_row_group_first td {
   border-top-width: 2px;
 }
-&#10;#ukvvhmkcjo .gt_row_group_first th {
+&#10;#dyjdpcfzdl .gt_row_group_first th {
   border-top-width: 2px;
 }
-&#10;#ukvvhmkcjo .gt_summary_row {
+&#10;#dyjdpcfzdl .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1433,14 +1415,14 @@ summariseObservationPeriod(cdm$observation_period) |>
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#ukvvhmkcjo .gt_first_summary_row {
+&#10;#dyjdpcfzdl .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
-&#10;#ukvvhmkcjo .gt_first_summary_row.thick {
+&#10;#dyjdpcfzdl .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
-&#10;#ukvvhmkcjo .gt_last_summary_row {
+&#10;#dyjdpcfzdl .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1449,7 +1431,7 @@ summariseObservationPeriod(cdm$observation_period) |>
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#ukvvhmkcjo .gt_grand_summary_row {
+&#10;#dyjdpcfzdl .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1458,7 +1440,7 @@ summariseObservationPeriod(cdm$observation_period) |>
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#ukvvhmkcjo .gt_first_grand_summary_row {
+&#10;#dyjdpcfzdl .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1467,7 +1449,7 @@ summariseObservationPeriod(cdm$observation_period) |>
   border-top-width: 6px;
   border-top-color: #D3D3D3;
 }
-&#10;#ukvvhmkcjo .gt_last_grand_summary_row_top {
+&#10;#dyjdpcfzdl .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1476,10 +1458,10 @@ summariseObservationPeriod(cdm$observation_period) |>
   border-bottom-width: 6px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#ukvvhmkcjo .gt_striped {
+&#10;#dyjdpcfzdl .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
-&#10;#ukvvhmkcjo .gt_table_body {
+&#10;#dyjdpcfzdl .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1487,7 +1469,7 @@ summariseObservationPeriod(cdm$observation_period) |>
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#ukvvhmkcjo .gt_footnotes {
+&#10;#dyjdpcfzdl .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1500,7 +1482,7 @@ summariseObservationPeriod(cdm$observation_period) |>
   border-right-width: 2px;
   border-right-color: #D3D3D3;
 }
-&#10;#ukvvhmkcjo .gt_footnote {
+&#10;#dyjdpcfzdl .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1508,7 +1490,7 @@ summariseObservationPeriod(cdm$observation_period) |>
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#ukvvhmkcjo .gt_sourcenotes {
+&#10;#dyjdpcfzdl .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1521,64 +1503,64 @@ summariseObservationPeriod(cdm$observation_period) |>
   border-right-width: 2px;
   border-right-color: #D3D3D3;
 }
-&#10;#ukvvhmkcjo .gt_sourcenote {
+&#10;#dyjdpcfzdl .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#ukvvhmkcjo .gt_left {
+&#10;#dyjdpcfzdl .gt_left {
   text-align: left;
 }
-&#10;#ukvvhmkcjo .gt_center {
+&#10;#dyjdpcfzdl .gt_center {
   text-align: center;
 }
-&#10;#ukvvhmkcjo .gt_right {
+&#10;#dyjdpcfzdl .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
-&#10;#ukvvhmkcjo .gt_font_normal {
+&#10;#dyjdpcfzdl .gt_font_normal {
   font-weight: normal;
 }
-&#10;#ukvvhmkcjo .gt_font_bold {
+&#10;#dyjdpcfzdl .gt_font_bold {
   font-weight: bold;
 }
-&#10;#ukvvhmkcjo .gt_font_italic {
+&#10;#dyjdpcfzdl .gt_font_italic {
   font-style: italic;
 }
-&#10;#ukvvhmkcjo .gt_super {
+&#10;#dyjdpcfzdl .gt_super {
   font-size: 65%;
 }
-&#10;#ukvvhmkcjo .gt_footnote_marks {
+&#10;#dyjdpcfzdl .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
-&#10;#ukvvhmkcjo .gt_asterisk {
+&#10;#dyjdpcfzdl .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
-&#10;#ukvvhmkcjo .gt_indent_1 {
+&#10;#dyjdpcfzdl .gt_indent_1 {
   text-indent: 5px;
 }
-&#10;#ukvvhmkcjo .gt_indent_2 {
+&#10;#dyjdpcfzdl .gt_indent_2 {
   text-indent: 10px;
 }
-&#10;#ukvvhmkcjo .gt_indent_3 {
+&#10;#dyjdpcfzdl .gt_indent_3 {
   text-indent: 15px;
 }
-&#10;#ukvvhmkcjo .gt_indent_4 {
+&#10;#dyjdpcfzdl .gt_indent_4 {
   text-indent: 20px;
 }
-&#10;#ukvvhmkcjo .gt_indent_5 {
+&#10;#dyjdpcfzdl .gt_indent_5 {
   text-indent: 25px;
 }
-&#10;#ukvvhmkcjo .katex-display {
+&#10;#dyjdpcfzdl .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
-&#10;#ukvvhmkcjo div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+&#10;#dyjdpcfzdl div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1598,17 +1580,17 @@ summariseObservationPeriod(cdm$observation_period) |>
   </thead>
   <tbody class="gt_table_body">
     <tr><td headers="Observation period ordinal" class="gt_row gt_left" style="text-align: left;">overall</td>
-<td headers="Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">number records</td>
+<td headers="Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Number records</td>
 <td headers="Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N</td>
 <td headers="[header_name]CDM name
 [header_level]Synthea synthetic health database" class="gt_row gt_left" style="text-align: right;">2,694</td></tr>
     <tr><td headers="Observation period ordinal" class="gt_row gt_left" style="text-align: left; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000;"></td>
-<td headers="Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">number subjects</td>
+<td headers="Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Number subjects</td>
 <td headers="Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N</td>
 <td headers="[header_name]CDM name
 [header_level]Synthea synthetic health database" class="gt_row gt_left" style="text-align: right;">2,694</td></tr>
     <tr><td headers="Observation period ordinal" class="gt_row gt_left" style="text-align: left; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000;"></td>
-<td headers="Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">records per person</td>
+<td headers="Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Records per person</td>
 <td headers="Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">mean (sd)</td>
 <td headers="[header_name]CDM name
 [header_level]Synthea synthetic health database" class="gt_row gt_left" style="text-align: right;">1.00 (0.00)</td></tr>
@@ -1618,7 +1600,7 @@ summariseObservationPeriod(cdm$observation_period) |>
 <td headers="[header_name]CDM name
 [header_level]Synthea synthetic health database" class="gt_row gt_left" style="text-align: right;">1 [1 - 1]</td></tr>
     <tr><td headers="Observation period ordinal" class="gt_row gt_left" style="text-align: left; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000;"></td>
-<td headers="Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">duration</td>
+<td headers="Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Duration in days</td>
 <td headers="Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">mean (sd)</td>
 <td headers="[header_name]CDM name
 [header_level]Synthea synthetic health database" class="gt_row gt_left" style="text-align: right;">21,602.60 (5,460.69)</td></tr>
@@ -1628,7 +1610,7 @@ summariseObservationPeriod(cdm$observation_period) |>
 <td headers="[header_name]CDM name
 [header_level]Synthea synthetic health database" class="gt_row gt_left" style="text-align: right;">20,872 [17,495 - 24,702]</td></tr>
     <tr><td headers="Observation period ordinal" class="gt_row gt_left" style="text-align: left; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000;"></td>
-<td headers="Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">days to next observation period</td>
+<td headers="Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Days to next observation period</td>
 <td headers="Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">mean (sd)</td>
 <td headers="[header_name]CDM name
 [header_level]Synthea synthetic health database" class="gt_row gt_left" style="text-align: right;">-</td></tr>
@@ -1638,12 +1620,12 @@ summariseObservationPeriod(cdm$observation_period) |>
 <td headers="[header_name]CDM name
 [header_level]Synthea synthetic health database" class="gt_row gt_left" style="text-align: right;">-</td></tr>
     <tr><td headers="Observation period ordinal" class="gt_row gt_left" style="text-align: left;">1st</td>
-<td headers="Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">number subjects</td>
+<td headers="Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Number subjects</td>
 <td headers="Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N</td>
 <td headers="[header_name]CDM name
 [header_level]Synthea synthetic health database" class="gt_row gt_left" style="text-align: right;">2,694</td></tr>
     <tr><td headers="Observation period ordinal" class="gt_row gt_left" style="text-align: left; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000;"></td>
-<td headers="Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">duration</td>
+<td headers="Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Duration in days</td>
 <td headers="Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">mean (sd)</td>
 <td headers="[header_name]CDM name
 [header_level]Synthea synthetic health database" class="gt_row gt_left" style="text-align: right;">21,602.60 (5,460.69)</td></tr>
@@ -1653,7 +1635,7 @@ summariseObservationPeriod(cdm$observation_period) |>
 <td headers="[header_name]CDM name
 [header_level]Synthea synthetic health database" class="gt_row gt_left" style="text-align: right;">20,872 [17,495 - 24,702]</td></tr>
     <tr><td headers="Observation period ordinal" class="gt_row gt_left" style="text-align: left; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000;"></td>
-<td headers="Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">days to next observation period</td>
+<td headers="Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Days to next observation period</td>
 <td headers="Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">mean (sd)</td>
 <td headers="[header_name]CDM name
 [header_level]Synthea synthetic health database" class="gt_row gt_left" style="text-align: right;">-</td></tr>
@@ -1689,6 +1671,8 @@ summariseConceptCounts(cdm, conceptId = list("acetaminophen" = acetaminophen)) |
   filter(estimate_name == "record_count") |> 
   plotConceptCounts()
 #> ℹ Getting use of codes from acetaminophen
+#> ! The following column type were changed:
+#> • variable_name: from integer to character
 ```
 
 <img src="man/figures/README-unnamed-chunk-9-1.png" width="100%" />
@@ -1701,15 +1685,15 @@ the start and end of the observation period.
 ``` r
 summarisePopulationCharacteristics(cdm) |>
   tablePopulationCharacteristics()
-#> Warning: ! 1 casted column in og_015_1727029776 (cohort_set) as do not match expected
+#> Warning: ! 1 casted column in og_015_1727120322 (cohort_set) as do not match expected
 #>   column type:
 #> • `cohort_definition_id` from numeric to integer
-#> Warning: ! 1 column in og_015_1727029776 do not match expected column type:
+#> Warning: ! 1 column in og_015_1727120322 do not match expected column type:
 #> • `cohort_definition_id` is numeric but expected integer
 #> ! cohort columns will be reordered to match the expected order:
 #>   cohort_definition_id, subject_id, cohort_start_date, and cohort_end_date.
 #> ℹ Building new trimmed cohort
-#> Warning: ! 1 column in tmp_011_og_017_1727029776 do not match expected column type:
+#> Warning: ! 1 column in tmp_011_og_017_1727120322 do not match expected column type:
 #> • `cohort_definition_id` is numeric but expected integer
 #> Creating initial cohort
 #> ! cohort columns will be reordered to match the expected order:
@@ -1728,20 +1712,20 @@ summarisePopulationCharacteristics(cdm) |>
 #> ! Results have not been suppressed.
 ```
 
-<div id="myhstgxkbh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#myhstgxkbh table {
+<div id="wynepvuhcj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#wynepvuhcj table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-&#10;#myhstgxkbh thead, #myhstgxkbh tbody, #myhstgxkbh tfoot, #myhstgxkbh tr, #myhstgxkbh td, #myhstgxkbh th {
+&#10;#wynepvuhcj thead, #wynepvuhcj tbody, #wynepvuhcj tfoot, #wynepvuhcj tr, #wynepvuhcj td, #wynepvuhcj th {
   border-style: none;
 }
-&#10;#myhstgxkbh p {
+&#10;#wynepvuhcj p {
   margin: 0;
   padding: 0;
 }
-&#10;#myhstgxkbh .gt_table {
+&#10;#wynepvuhcj .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1766,11 +1750,11 @@ summarisePopulationCharacteristics(cdm) |>
   border-left-width: 2px;
   border-left-color: #D3D3D3;
 }
-&#10;#myhstgxkbh .gt_caption {
+&#10;#wynepvuhcj .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
-&#10;#myhstgxkbh .gt_title {
+&#10;#wynepvuhcj .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1781,7 +1765,7 @@ summarisePopulationCharacteristics(cdm) |>
   border-bottom-color: #FFFFFF;
   border-bottom-width: 0;
 }
-&#10;#myhstgxkbh .gt_subtitle {
+&#10;#wynepvuhcj .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1792,7 +1776,7 @@ summarisePopulationCharacteristics(cdm) |>
   border-top-color: #FFFFFF;
   border-top-width: 0;
 }
-&#10;#myhstgxkbh .gt_heading {
+&#10;#wynepvuhcj .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1803,12 +1787,12 @@ summarisePopulationCharacteristics(cdm) |>
   border-right-width: 1px;
   border-right-color: #D3D3D3;
 }
-&#10;#myhstgxkbh .gt_bottom_border {
+&#10;#wynepvuhcj .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#myhstgxkbh .gt_col_headings {
+&#10;#wynepvuhcj .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1822,7 +1806,7 @@ summarisePopulationCharacteristics(cdm) |>
   border-right-width: 1px;
   border-right-color: #D3D3D3;
 }
-&#10;#myhstgxkbh .gt_col_heading {
+&#10;#wynepvuhcj .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1841,7 +1825,7 @@ summarisePopulationCharacteristics(cdm) |>
   padding-right: 5px;
   overflow-x: hidden;
 }
-&#10;#myhstgxkbh .gt_column_spanner_outer {
+&#10;#wynepvuhcj .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1852,13 +1836,13 @@ summarisePopulationCharacteristics(cdm) |>
   padding-left: 4px;
   padding-right: 4px;
 }
-&#10;#myhstgxkbh .gt_column_spanner_outer:first-child {
+&#10;#wynepvuhcj .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
-&#10;#myhstgxkbh .gt_column_spanner_outer:last-child {
+&#10;#wynepvuhcj .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
-&#10;#myhstgxkbh .gt_column_spanner {
+&#10;#wynepvuhcj .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1869,10 +1853,10 @@ summarisePopulationCharacteristics(cdm) |>
   display: inline-block;
   width: 100%;
 }
-&#10;#myhstgxkbh .gt_spanner_row {
+&#10;#wynepvuhcj .gt_spanner_row {
   border-bottom-style: hidden;
 }
-&#10;#myhstgxkbh .gt_group_heading {
+&#10;#wynepvuhcj .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1897,7 +1881,7 @@ summarisePopulationCharacteristics(cdm) |>
   vertical-align: middle;
   text-align: left;
 }
-&#10;#myhstgxkbh .gt_empty_group_heading {
+&#10;#wynepvuhcj .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1911,13 +1895,13 @@ summarisePopulationCharacteristics(cdm) |>
   border-bottom-color: #D3D3D3;
   vertical-align: middle;
 }
-&#10;#myhstgxkbh .gt_from_md > :first-child {
+&#10;#wynepvuhcj .gt_from_md > :first-child {
   margin-top: 0;
 }
-&#10;#myhstgxkbh .gt_from_md > :last-child {
+&#10;#wynepvuhcj .gt_from_md > :last-child {
   margin-bottom: 0;
 }
-&#10;#myhstgxkbh .gt_row {
+&#10;#wynepvuhcj .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1935,7 +1919,7 @@ summarisePopulationCharacteristics(cdm) |>
   vertical-align: middle;
   overflow-x: hidden;
 }
-&#10;#myhstgxkbh .gt_stub {
+&#10;#wynepvuhcj .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1947,7 +1931,7 @@ summarisePopulationCharacteristics(cdm) |>
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#myhstgxkbh .gt_stub_row_group {
+&#10;#wynepvuhcj .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1960,13 +1944,13 @@ summarisePopulationCharacteristics(cdm) |>
   padding-right: 5px;
   vertical-align: top;
 }
-&#10;#myhstgxkbh .gt_row_group_first td {
+&#10;#wynepvuhcj .gt_row_group_first td {
   border-top-width: 2px;
 }
-&#10;#myhstgxkbh .gt_row_group_first th {
+&#10;#wynepvuhcj .gt_row_group_first th {
   border-top-width: 2px;
 }
-&#10;#myhstgxkbh .gt_summary_row {
+&#10;#wynepvuhcj .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1975,14 +1959,14 @@ summarisePopulationCharacteristics(cdm) |>
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#myhstgxkbh .gt_first_summary_row {
+&#10;#wynepvuhcj .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
-&#10;#myhstgxkbh .gt_first_summary_row.thick {
+&#10;#wynepvuhcj .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
-&#10;#myhstgxkbh .gt_last_summary_row {
+&#10;#wynepvuhcj .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1991,7 +1975,7 @@ summarisePopulationCharacteristics(cdm) |>
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#myhstgxkbh .gt_grand_summary_row {
+&#10;#wynepvuhcj .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2000,7 +1984,7 @@ summarisePopulationCharacteristics(cdm) |>
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#myhstgxkbh .gt_first_grand_summary_row {
+&#10;#wynepvuhcj .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2009,7 +1993,7 @@ summarisePopulationCharacteristics(cdm) |>
   border-top-width: 6px;
   border-top-color: #D3D3D3;
 }
-&#10;#myhstgxkbh .gt_last_grand_summary_row_top {
+&#10;#wynepvuhcj .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2018,10 +2002,10 @@ summarisePopulationCharacteristics(cdm) |>
   border-bottom-width: 6px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#myhstgxkbh .gt_striped {
+&#10;#wynepvuhcj .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
-&#10;#myhstgxkbh .gt_table_body {
+&#10;#wynepvuhcj .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2029,7 +2013,7 @@ summarisePopulationCharacteristics(cdm) |>
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#myhstgxkbh .gt_footnotes {
+&#10;#wynepvuhcj .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2042,7 +2026,7 @@ summarisePopulationCharacteristics(cdm) |>
   border-right-width: 2px;
   border-right-color: #D3D3D3;
 }
-&#10;#myhstgxkbh .gt_footnote {
+&#10;#wynepvuhcj .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2050,7 +2034,7 @@ summarisePopulationCharacteristics(cdm) |>
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#myhstgxkbh .gt_sourcenotes {
+&#10;#wynepvuhcj .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2063,64 +2047,64 @@ summarisePopulationCharacteristics(cdm) |>
   border-right-width: 2px;
   border-right-color: #D3D3D3;
 }
-&#10;#myhstgxkbh .gt_sourcenote {
+&#10;#wynepvuhcj .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#myhstgxkbh .gt_left {
+&#10;#wynepvuhcj .gt_left {
   text-align: left;
 }
-&#10;#myhstgxkbh .gt_center {
+&#10;#wynepvuhcj .gt_center {
   text-align: center;
 }
-&#10;#myhstgxkbh .gt_right {
+&#10;#wynepvuhcj .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
-&#10;#myhstgxkbh .gt_font_normal {
+&#10;#wynepvuhcj .gt_font_normal {
   font-weight: normal;
 }
-&#10;#myhstgxkbh .gt_font_bold {
+&#10;#wynepvuhcj .gt_font_bold {
   font-weight: bold;
 }
-&#10;#myhstgxkbh .gt_font_italic {
+&#10;#wynepvuhcj .gt_font_italic {
   font-style: italic;
 }
-&#10;#myhstgxkbh .gt_super {
+&#10;#wynepvuhcj .gt_super {
   font-size: 65%;
 }
-&#10;#myhstgxkbh .gt_footnote_marks {
+&#10;#wynepvuhcj .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
-&#10;#myhstgxkbh .gt_asterisk {
+&#10;#wynepvuhcj .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
-&#10;#myhstgxkbh .gt_indent_1 {
+&#10;#wynepvuhcj .gt_indent_1 {
   text-indent: 5px;
 }
-&#10;#myhstgxkbh .gt_indent_2 {
+&#10;#wynepvuhcj .gt_indent_2 {
   text-indent: 10px;
 }
-&#10;#myhstgxkbh .gt_indent_3 {
+&#10;#wynepvuhcj .gt_indent_3 {
   text-indent: 15px;
 }
-&#10;#myhstgxkbh .gt_indent_4 {
+&#10;#wynepvuhcj .gt_indent_4 {
   text-indent: 20px;
 }
-&#10;#myhstgxkbh .gt_indent_5 {
+&#10;#wynepvuhcj .gt_indent_5 {
   text-indent: 25px;
 }
-&#10;#myhstgxkbh .katex-display {
+&#10;#wynepvuhcj .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
-&#10;#myhstgxkbh div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+&#10;#wynepvuhcj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>

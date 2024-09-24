@@ -1,4 +1,5 @@
 test_that("summarisePopulationCharacteristics() works", {
+  skip_on_cran()
   # Load mock database ----
   cdm <- cdmEunomia()
 
@@ -147,6 +148,7 @@ test_that("summarisePopulationCharacteristics() works", {
 })
 
 test_that("summarisePopulationCharacteristics() expected errors", {
+  skip_on_cran()
   # Load mock database ----
   cdm <- cdmEunomia()
 
@@ -162,7 +164,7 @@ test_that("summarisePopulationCharacteristics() expected errors", {
 })
 
 test_that("tablePopulationCharacteristics() works", {
-
+  skip_on_cran()
   # Load mock database ----
   cdm <- cdmEunomia()
 

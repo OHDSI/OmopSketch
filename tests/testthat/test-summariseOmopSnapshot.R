@@ -1,4 +1,5 @@
 test_that("summarise omop snapshot works", {
+  skip_on_cran()
   cdm <- cdmEunomia()
   expect_no_error(result <- summariseOmopSnapshot(cdm))
   expect_true(inherits(summariseOmopSnapshot(cdm),"summarised_result"))
@@ -6,6 +7,7 @@ test_that("summarise omop snapshot works", {
 })
 
 test_that("table omop snapshot works", {
+  skip_on_cran()
   cdm <- cdmEunomia()
 
   # Check that works ----

@@ -2,12 +2,12 @@
 % Please edit documentation in R/tableObservationPeriod.R
 \name{tableObservationPeriod}
 \alias{tableObservationPeriod}
-\title{Create a visual table from a summarise_observation_period result.}
+\title{Create a visual table from a summariseObservationPeriod() result.}
 \usage{
 tableObservationPeriod(result, type = "gt")
 }
 \arguments{
-\item{result}{A summarised result object.}
+\item{result}{A summarised_result object.}
 
 \item{type}{Type of formatting output table, either "gt" or "flextable".}
 }
@@ -15,15 +15,17 @@ tableObservationPeriod(result, type = "gt")
 A gt or flextable object with the summarised data.
 }
 \description{
-Create a visual table from a summarise_observation_period result.
+Create a visual table from a summariseObservationPeriod() result.
 }
 \examples{
-cdm <- mockOmopSketch()
+\donttest{
+cdm <- mockOmopSketch(numberIndividuals = 100)
 
 result <- summariseObservationPeriod(cdm$observation_period)
 
 tableObservationPeriod(result)
 
 PatientProfiles::mockDisconnect(cdm)
+}
 
 }

@@ -1,5 +1,5 @@
 test_that("summariseClinicalRecords() works", {
-
+  skip_on_cran()
   # Load mock database ----
   cdm <- cdmEunomia()
 
@@ -78,7 +78,7 @@ test_that("summariseClinicalRecords() works", {
 })
 
 test_that("summariseClinicalRecords() sex and ageGroup argument work", {
-
+  skip_on_cran()
   # Load mock database ----
   cdm <- cdmEunomia()
 
@@ -211,6 +211,7 @@ test_that("summariseClinicalRecords() sex and ageGroup argument work", {
 
 
 test_that("tableClinicalRecords() works", {
+  skip_on_cran()
   # Load mock database ----
   cdm <- cdmEunomia()
 
