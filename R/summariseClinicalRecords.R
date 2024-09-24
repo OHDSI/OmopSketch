@@ -391,6 +391,11 @@ addVariables <- function(x, variables, strata) {
       dplyr::union_all(
         x |>
           dplyr::mutate(sex = "overall")
+      ) |>
+      dplyr::union_all(
+        x |>
+          dplyr::mutate(sex = "overall") |>
+          dplyr::mutate(age_group = "overall")
       )
 
   }
