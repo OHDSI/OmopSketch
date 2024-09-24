@@ -185,10 +185,8 @@ summariseClinicalRecord <- function(omopTableName, cdm, recordsPerPerson,
 
   # Format output as a summarised result
   result <- result |>
-    tidyr::fill(
-      "result_id", "cdm_name", "group_name", "group_level", "additional_name",
-      "additional_level", .direction = "downup"
-    ) |>
+    tidyr::fill(.data$result_id, .data$cdm_name, .data$group_name, .data$group_level,
+                .data$additional_name, .data$additional_level, .direction = "downup") |>
     dplyr::mutate(
       "group_name" = "omop_table",
       "group_level" = omopgenerics::tableName(omopTable)
@@ -473,7 +471,7 @@ formatResults <- function(x, variableName, variableLevel, denominator, result) {
 
   denominator <- denominator |>
     dplyr::select("strata_name", "strata_level", "denominator" = "estimate_value") |>
-    visOmopResults.splitStrata()
+    visOmopResults::splitStrata()
 
   if(!"age_group" %in% colnames(denominator)){
     denominator <- denominator |>
@@ -506,7 +504,7 @@ formatResults <- function(x, variableName, variableLevel, denominator, result) {
         .data$estimate_name == "count", "integer", "percentage"
       )
     ) |>
-    visOmopResults.uniteStrata(cols = c("age_group","sex")) |>
+    visOmopResults::uniteStrata(cols = c("age_group","sex")) |>
     dplyr::select(
       "strata_name", "strata_level", "variable_name", "variable_level",
       "estimate_name", "estimate_type", "estimate_value"

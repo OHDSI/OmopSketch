@@ -37,7 +37,7 @@ tableClinicalRecords <- function(result,
 
   # subset to result_type of interest
   result <- result |>
-    visOmopResults.filterSettings(
+    visOmopResults::filterSettings(
       .data$result_type == "summarise_clinical_records")
 
   # check if it is empty
@@ -48,7 +48,7 @@ tableClinicalRecords <- function(result,
 
   result |>
     formatColumn(c("variable_name", "variable_level")) |>
-    visOmopResults.visOmopTable(
+    visOmopResults::visOmopTable(
       type = type,
       estimateName = c(
         "N (%)" = "<count> (<percentage>%)",
@@ -56,6 +56,6 @@ tableClinicalRecords <- function(result,
         "Mean (SD)" = "<mean> (<sd>)"),
       header = c("cdm_name"),
       rename = c("Database name" = "cdm_name"),
-      groupColumn = c("omop_table", visOmopResults.strataColumns(result))
+      groupColumn = c("omop_table", visOmopResults::strataColumns(result))
     )
 }

@@ -34,12 +34,12 @@ test_that("plotInObservation works", {
   expect_warning(plotInObservation(resultpd))
   expect_no_error(
     resultpd |>
-      visOmopResults.filterStrata(sex != "overall", age_group != "overall") |>
+      visOmopResults::filterStrata(sex != "overall", age_group != "overall") |>
       plotInObservation(facet = "sex", colour = "age_group")
   )
   expect_no_error(
     resultpd |>
-      visOmopResults.filterStrata(sex != "overall", age_group != "overall") |>
+      visOmopResults::filterStrata(sex != "overall", age_group != "overall") |>
       plotInObservation(
         facet = sex ~ age_group,
         colour = c("age_group", "cdm_name")
@@ -52,12 +52,12 @@ test_that("plotInObservation works", {
   expect_warning(plotInObservation(resultr))
   expect_no_error(
     resultr |>
-      visOmopResults.filterStrata(sex != "overall", age_group != "overall") |>
+      visOmopResults::filterStrata(sex != "overall", age_group != "overall") |>
       plotInObservation(facet = "sex", colour = "age_group")
   )
   expect_no_error(
     resultr |>
-      visOmopResults.filterStrata(sex != "overall", age_group != "overall") |>
+      visOmopResults::filterStrata(sex != "overall", age_group != "overall") |>
       plotInObservation(
         facet = sex ~ age_group,
         colour = "age_group"

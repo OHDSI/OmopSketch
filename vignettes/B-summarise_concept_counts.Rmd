@@ -140,7 +140,7 @@ summariseConceptCounts(cdm,
                        countBy = c("person"),
                        sex = TRUE, 
                        ageGroup = list("<=50" = c(0,50), ">50" = c(51, Inf))) |>
-  visOmopResults.tidyColumns()
+  visOmopResults::tidyColumns()
 
 summariseConceptCounts(cdm, 
                        conceptId = list("sinusitis" = sinusitis),

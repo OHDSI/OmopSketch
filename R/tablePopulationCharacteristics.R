@@ -32,7 +32,7 @@ tablePopulationCharacteristics <- function(result,
 
   # subset to result_type of interest
   result <- result |>
-    visOmopResults.filterSettings(
+    visOmopResults::filterSettings(
       .data$result_type == "summarise_population_characteristics")
 
   # check if it is empty
@@ -43,7 +43,7 @@ tablePopulationCharacteristics <- function(result,
 
   # Function
   result <- result |>
-    visOmopResults.visOmopTable(
+    visOmopResults::visOmopTable(
       hide = c("cohort_name"),
       estimateName = c(
         "N%" = "<count> (<percentage>)",
@@ -53,7 +53,7 @@ tablePopulationCharacteristics <- function(result,
         "Range" = "<min> to <max>"),
       rename = c("Database name" = "cdm_name"),
       header = c("cdm_name"),
-      groupColumn = visOmopResults.strataColumns(result))
+      groupColumn = visOmopResults::strataColumns(result))
 
   return(result)
 }

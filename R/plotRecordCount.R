@@ -2,9 +2,9 @@
 #'
 #' @param result Output from summariseRecordCount().
 #' @param facet Columns to face by. Formula format can be provided. See possible
-#' columns to face by with: `visOmopResults.tidyColumns()`.
+#' columns to face by with: `visOmopResults::tidyColumns()`.
 #' @param colour Columns to colour by. See possible columns to colour by with:
-#' `visOmopResults.tidyColumns()`.
+#' `visOmopResults::tidyColumns()`.
 #'
 #' @return A ggplot showing the table counts
 #'
@@ -33,7 +33,7 @@ plotRecordCount <- function(result,
 
   # subset to results of interest
   result <- result |>
-    visOmopResults.filterSettings(
+    visOmopResults::filterSettings(
       .data$result_type == "summarise_record_count")
   if (nrow(result) == 0) {
     cli::cli_abort(c("!" = "No records found with result_type == summarise_record_count"))
@@ -44,7 +44,7 @@ plotRecordCount <- function(result,
     dplyr::mutate(variable_level = as.Date(stringr::str_extract(
       .data$variable_level, "^[^ to]+"))) |>
     dplyr::filter(.data$estimate_name == "count") |>
-    visOmopResults.scatterPlot(
+    visOmopResults::scatterPlot(
       x = "variable_level",
       y = "count",
       line = TRUE,
@@ -54,7 +54,7 @@ plotRecordCount <- function(result,
       ymax = NULL,
       facet = facet,
       colour = colour,
-      group = c("cdm_name", "omop_table", visOmopResults.strataColumns(result))
+      group = c("cdm_name", "omop_table", visOmopResults::strataColumns(result))
     ) +
     ggplot2::labs(
       y = "Incident records",

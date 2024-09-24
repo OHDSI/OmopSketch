@@ -25,7 +25,7 @@ tableOmopSnapshot <- function(result,
 
   # subset to result_type of interest
   result <- result |>
-    visOmopResults.filterSettings(
+    visOmopResults::filterSettings(
       .data$result_type == "summarise_omop_snapshot")
 
   # check if it is empty
@@ -36,7 +36,7 @@ tableOmopSnapshot <- function(result,
 
   result <- result |>
     formatColumn(c("variable_name", "estimate_name")) |>
-    visOmopResults.visOmopTable(
+    visOmopResults::visOmopTable(
       type = type,
       hide = c("variable_level"),
       estimateName = c("N" = "<Count>"),
