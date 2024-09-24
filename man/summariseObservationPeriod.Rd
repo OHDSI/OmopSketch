@@ -33,9 +33,10 @@ Summarise the observation period table getting some overall statistics in a
 summarised_result object.
 }
 \examples{
+\donttest{
 library(dplyr, warn.conflicts = FALSE)
 
-cdm <- mockOmopSketch(numberIndividuals = 10)
+cdm <- mockOmopSketch(numberIndividuals = 100)
 
 result <- summariseObservationPeriod(cdm$observation_period)
 
@@ -43,5 +44,6 @@ result |>
   glimpse()
 
 PatientProfiles::mockDisconnect(cdm)
+}
 
 }

@@ -8,13 +8,15 @@
 #' @export
 #'
 #' @examples
-#' cdm <- mockOmopSketch(numberIndividuals = 10)
+#' \donttest{
+#' cdm <- mockOmopSketch(numberIndividuals = 100)
 #'
 #' result <- summariseObservationPeriod(cdm$observation_period)
 #'
 #' tableObservationPeriod(result)
 #'
 #' PatientProfiles::mockDisconnect(cdm)
+#' }
 #'
 tableObservationPeriod <- function(result,
                                    type = "gt") {

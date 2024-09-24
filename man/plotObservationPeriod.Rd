@@ -30,8 +30,8 @@ A ggplot2 object.
 Create a plot from the output of summariseObservationPeriod().
 }
 \examples{
-
-cdm <- mockOmopSketch(numberIndividuals = 10)
+\donttest{
+cdm <- mockOmopSketch(numberIndividuals = 100)
 
 result <- summariseObservationPeriod(cdm$observation_period)
 
@@ -42,5 +42,6 @@ result |>
   )
 
 PatientProfiles::mockDisconnect(cdm)
+}
 
 }

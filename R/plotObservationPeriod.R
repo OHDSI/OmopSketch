@@ -13,8 +13,8 @@
 #' @export
 #'
 #' @examples
-#'
-#' cdm <- mockOmopSketch(numberIndividuals = 10)
+#' \donttest{
+#' cdm <- mockOmopSketch(numberIndividuals = 100)
 #'
 #' result <- summariseObservationPeriod(cdm$observation_period)
 #'
@@ -25,6 +25,7 @@
 #'   )
 #'
 #' PatientProfiles::mockDisconnect(cdm)
+#' }
 #'
 plotObservationPeriod <- function(result,
                                   variableName = "number subjects",

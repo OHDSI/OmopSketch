@@ -39,7 +39,7 @@ strata.
 Summarise code use in patient-level data
 }
 \examples{
-\dontrun{
+\donttest{
 
 cdm <- mockOmopSketch()
 
