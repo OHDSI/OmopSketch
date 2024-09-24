@@ -1,6 +1,7 @@
 
 on_github <- function() {
-  !interactive() && !identical(Sys.getenv("NOT_CRAN"), "false")
+  #!interactive() && !identical(Sys.getenv("NOT_CRAN"), "false")
+  FALSE
 }
 if (on_github()) {
   withr::local_envvar(

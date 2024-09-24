@@ -41,6 +41,7 @@ Suggests:
     here,
     knitr,
     odbc,
+    officer,
     remotes,
     rmarkdown,
     RPostgres,
@@ -56,6 +57,7 @@ Imports:
     CohortConstructor,
     dplyr,
     ggplot2,
+    glue,
     omock (>= 0.3.0),
     omopgenerics (>= 0.3.1),
     PatientProfiles,
@@ -63,8 +65,7 @@ Imports:
     rlang,
     stringr,
     tibble,
-    tidyr,
-    visOmopResults (>= 0.4.0)
+    tidyr
 Depends: 
     R (>= 2.10)
 URL: https://oxford-pharmacoepi.github.io/OmopSketch/

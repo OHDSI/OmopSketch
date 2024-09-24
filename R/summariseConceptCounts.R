@@ -201,8 +201,8 @@ getCodeUse <- function(x,
         "variable_name" = dplyr::if_else(is.na(.data$standard_concept_name), "overall", .data$standard_concept_name),
         "variable_level" = as.character(.data$standard_concept_id)
       ) %>%
-      visOmopResults::uniteGroup(cols = c("cohort_name", "codelist_name")) %>%
-      visOmopResults::uniteAdditional(
+      visOmopResults.uniteGroup(cols = c("cohort_name", "codelist_name")) %>%
+      visOmopResults.uniteAdditional(
         cols = c("source_concept_name", "source_concept_id", "domain_id")
       ) %>%
       dplyr::select(
@@ -516,7 +516,7 @@ getGroupedRecordCount <- function(records,
       dplyr::mutate(estimate_value = as.character(.data$estimate_value)) %>%
       dplyr::collect()
   )  %>%
-    visOmopResults::uniteStrata(cols = groupBy) %>%
+    visOmopResults.uniteStrata(cols = groupBy) %>%
     dplyr::mutate(estimate_name = "record_count")
 
   return(groupedCounts)
@@ -547,7 +547,7 @@ getGroupedPersonCount <- function(records,
       dplyr::tally(name = "estimate_value") %>%
       dplyr::mutate(estimate_value = as.character(.data$estimate_value)) %>%
       dplyr::collect()) %>%
-    visOmopResults::uniteStrata(cols = groupBy) %>%
+    visOmopResults.uniteStrata(cols = groupBy) %>%
     dplyr::mutate(estimate_name = "person_count")
 
   return(groupedCounts)

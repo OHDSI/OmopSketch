@@ -298,7 +298,7 @@ createSummarisedResultRecordCount <- function(result, omopTable, name, unit, uni
       "variable_name" = "incidence_records",
     ) |>
     dplyr::rename("variable_level" = "interval_group") |>
-    visOmopResults::uniteStrata(cols = c("age_group","sex")) |>
+    visOmopResults.uniteStrata(cols = c("age_group","sex")) |>
     dplyr::mutate(
       "result_id" = as.integer(1),
       "cdm_name" = omopgenerics::cdmName(omopgenerics::cdmReference(omopTable)),

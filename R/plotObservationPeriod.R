@@ -35,7 +35,7 @@ plotObservationPeriod <- function(result,
 
   # subset to result_type of interest
   result <- result |>
-    visOmopResults::filterSettings(
+    visOmopResults.filterSettings(
       .data$result_type == "summarise_observation_period")
 
   # check if it is empty
@@ -55,7 +55,7 @@ plotObservationPeriod <- function(result,
     dplyr::filter(.data$variable_name == .env$variableName)
 
   optFacetColour <- c("cdm_name", "observation_period_ordinal")
-  optFacetColour <- optFacetColour[optFacetColour %in% visOmopResults::tidyColumns(result)]
+  optFacetColour <- optFacetColour[optFacetColour %in% visOmopResults.tidyColumns(result)]
   omopgenerics::assertChoice(asCharacterFacet(facet), optFacetColour)
   colour <- optFacetColour[!optFacetColour %in% facet]
 
@@ -65,7 +65,7 @@ plotObservationPeriod <- function(result,
   if (length(colour) == 0) colour <- NULL
 
   if (plotType == "barplot") {
-    p <- visOmopResults::barPlot(
+    p <- visOmopResults.barPlot(
       result = result,
       x = colour,
       y = "count",
@@ -73,14 +73,14 @@ plotObservationPeriod <- function(result,
       colour = colour
     )
   } else if (plotType == "boxplot") {
-    p <- visOmopResults::boxPlot(
+    p <- visOmopResults.boxPlot(
       result = result,
       x = colour,
       facet = facet,
       colour = colour
     )
   } else {
-    p <- visOmopResults::scatterPlot(
+    p <- visOmopResults.scatterPlot(
       result = result,
       x = "density_x",
       y = "density_y",

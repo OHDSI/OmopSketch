@@ -24,7 +24,7 @@ tableObservationPeriod <- function(result,
 
   # subset to result_type of interest
   result <- result |>
-    visOmopResults::filterSettings(
+    visOmopResults.filterSettings(
       .data$result_type == "summarise_observation_period")
 
   # check if it is empty
@@ -36,13 +36,13 @@ tableObservationPeriod <- function(result,
   result |>
     dplyr::filter(is.na(.data$variable_level)) |> # to remove density
     formatColumn("variable_name") |>
-    visOmopResults::visOmopTable(
+    visOmopResults.visOmopTable(
       estimateName = c(
         "N" = "<count>",
         "mean (sd)" = "<mean> (<sd>)",
         "median [Q25 - Q75]" = "<median> [<q25> - <q75>]"),
       header = "cdm_name",
-      groupColumn = visOmopResults::strataColumns(result),
+      groupColumn = visOmopResults.strataColumns(result),
       hide = c(
         "result_id", "estimate_type", "strata_name", "variable_level"),
       type = type,

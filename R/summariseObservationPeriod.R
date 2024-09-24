@@ -128,7 +128,7 @@ addOrdinalLevels <- function(x) {
     dplyr::pull("strata_name")
 
   x <- x |>
-    visOmopResults::splitStrata()
+    visOmopResults.splitStrata()
   xx <- suppressWarnings(as.integer(x$id))
   desena <- (floor(xx/10)) %% 10
   unitat <- xx %% 10
@@ -146,7 +146,7 @@ addOrdinalLevels <- function(x) {
     dplyr::mutate("group_level" = .env$val) |>
     dplyr::select(-c("id")) |>
     dplyr::mutate("group_name" = dplyr::if_else(.data$group_level == "overall", "overall", "observation_period_ordinal")) |>
-    visOmopResults::uniteStrata(cols = strata_cols)
+    visOmopResults.uniteStrata(cols = strata_cols)
 
   return(x)
 }

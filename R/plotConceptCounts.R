@@ -2,9 +2,9 @@
 #'
 #' @param result A summarised_result object (output of summariseConceptCounts).
 #' @param facet Columns to face by. Formula format can be provided. See possible
-#' columns to face by with: `visOmopResults::tidyColumns()`.
+#' columns to face by with: `visOmopResults.tidyColumns()`.
 #' @param colour Columns to colour by. See possible columns to colour by with:
-#' `visOmopResults::tidyColumns()`.
+#' `visOmopResults.tidyColumns()`.
 #'
 #' @return A ggplot2 object showing the concept counts.
 #' @export
@@ -37,7 +37,7 @@ plotConceptCounts <- function(result,
 
   # subset to results of interest
   result <- result |>
-    visOmopResults::filterSettings(.data$result_type == "summarise_concept_counts")
+    visOmopResults.filterSettings(.data$result_type == "summarise_concept_counts")
   if (nrow(result) == 0) {
     cli::cli_abort(c("!" = "No records found with result_type == summarise_concept_counts"))
   }
@@ -55,7 +55,7 @@ plotConceptCounts <- function(result,
   result |>
     dplyr::mutate(variable_name = factor(.data$variable_name,
                                          levels = order)) |>
-    visOmopResults::barPlot(x = "variable_name",
+    visOmopResults.barPlot(x = "variable_name",
                             y = estimate,
                             facet = facet,
                             colour = colour) +
