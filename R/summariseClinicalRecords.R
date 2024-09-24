@@ -174,7 +174,7 @@ summariseClinicalRecord <- function(omopTableName, cdm, recordsPerPerson,
     result <- result |>
       dplyr::bind_rows(
         omopTable |>
-          addVariables(variables) |>
+          addVariables(variables, strata) |>
           dplyr::group_by(dplyr::across(dplyr::all_of(variables)), .data$age_group, .data$sex) |>
           dplyr::tally() |>
           dplyr::collect() |>
@@ -185,8 +185,8 @@ summariseClinicalRecord <- function(omopTableName, cdm, recordsPerPerson,
 
   # Format output as a summarised result
   result <- result |>
-    tidyr::fill(.data$result_id, .data$cdm_name, .data$group_name, .data$group_level,
-                .data$additional_name, .data$additional_level, .direction = "downup") |>
+    tidyr::fill("result_id", "cdm_name", "group_name", "group_level",
+                "additional_name", "additional_level", .direction = "downup") |>
     dplyr::mutate(
       "group_name" = "omop_table",
       "group_level" = omopgenerics::tableName(omopTable)
@@ -299,7 +299,7 @@ addRecordsPerPerson <- function(result, omopTable, recordsPerPerson, cdm, people
     )
 }
 
-addVariables <- function(x, variables) {
+addVariables <- function(x, variables, strata) {
 
   name <- omopgenerics::tableName(x)
 
@@ -381,6 +381,19 @@ addVariables <- function(x, variables) {
     dplyr::select(dplyr::all_of(variables), "age_group", "sex") |>
     dplyr::mutate(dplyr::across(dplyr::everything(), ~as.character(.)))
 
+  # Create overall groups - This chunk will need efficiency improvement
+  if(length(strata) == 3){
+    x <- x |>
+      dplyr::union_all(
+        x |>
+          dplyr::mutate(age_group = "overall")
+      ) |>
+      dplyr::union_all(
+        x |>
+          dplyr::mutate(sex = "overall")
+      )
+
+  }
   return(x)
 }
 
