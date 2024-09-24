@@ -6,7 +6,7 @@
 \usage{
 summariseConceptCounts(
   cdm,
-  conceptId = NULL,
+  conceptId,
   countBy = c("record", "person"),
   concept = TRUE,
   year = FALSE,
@@ -17,8 +17,7 @@ summariseConceptCounts(
 \arguments{
 \item{cdm}{A cdm object}
 
-\item{conceptId}{List of concept IDs to summarise. If NULL, all concepts from
-the concept table will be used}
+\item{conceptId}{List of concept IDs to summarise.}
 
 \item{countBy}{Either "record" for record-level counts or "person" for
 person-level counts}
@@ -29,30 +28,27 @@ person-level counts}
 
 \item{sex}{TRUE or FALSE. If TRUE code use will be summarised by sex.}
 
-\item{ageGroup}{If not NULL, a list of ageGroup vectors of length two. Code use
-will be thus summarised by age groups.}
+\item{ageGroup}{A list of ageGroup vectors of length two. Code use will be
+thus summarised by age groups.}
 }
 \value{
-A tibble with results overall and, if specified, by strata
+A summarised_result object with results overall and, if specified, by
+strata.
 }
 \description{
 Summarise code use in patient-level data
 }
 \examples{
-\dontrun{
-con <- DBI::dbConnect(duckdb::duckdb(),
-                      dbdir = CDMConnector::eunomia_dir())
-cdm <- CDMConnector::cdm_from_con(con,
-                                  cdm_schem = "main",
-                                  write_schema = "main")
-acetaminophen <- c(1125315,  1127433, 40229134,
-40231925, 40162522, 19133768,  1127078)
-poliovirus_vaccine <- c(40213160)
-cs <- list(acetaminophen = acetaminophen,
-          poliovirus_vaccine = poliovirus_vaccine)
+\donttest{
+
+cdm <- mockOmopSketch()
+
+cs <- list(sumatriptan = c(35604883, 35604879, 35604880, 35604884))
+
 results <- summariseConceptCounts(cdm, conceptId = cs)
+
 results
+
 PatientProfiles::mockDisconnect(cdm)
 }
-
 }

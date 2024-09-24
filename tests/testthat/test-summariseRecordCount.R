@@ -1,5 +1,5 @@
 test_that("summariseRecordCount() works", {
-
+  skip_on_cran()
   # Load mock database ----
   cdm <- cdmEunomia()
 
@@ -89,6 +89,7 @@ test_that("summariseRecordCount() works", {
 })
 
 test_that("plotRecordCount() works", {
+  skip_on_cran()
   # Load mock database ----
   cdm <- cdmEunomia()
 
@@ -108,6 +109,7 @@ test_that("plotRecordCount() works", {
 })
 
 test_that("summariseRecordCount() ageGroup argument works", {
+  skip_on_cran()
   # Load mock database ----
   cdm <- cdmEunomia()
 
@@ -184,6 +186,7 @@ test_that("summariseRecordCount() ageGroup argument works", {
 })
 
 test_that("summariseRecordCount() sex argument works", {
+  skip_on_cran()
   # Load mock database ----
   cdm <- cdmEunomia()
 

@@ -1,38 +1,34 @@
 #' Summarise code use in patient-level data
 #'
 #' @param cdm A cdm object
-#' @param conceptId List of concept IDs to summarise. If NULL, all concepts from
-#' the concept table will be used
+#' @param conceptId List of concept IDs to summarise.
 #' @param countBy Either "record" for record-level counts or "person" for
 #' person-level counts
 #' @param concept TRUE or FALSE. If TRUE code use will be summarised by concept.
 #' @param year TRUE or FALSE. If TRUE code use will be summarised by year.
 #' @param sex TRUE or FALSE. If TRUE code use will be summarised by sex.
-#' @param ageGroup If not NULL, a list of ageGroup vectors of length two. Code use
-#' will be thus summarised by age groups.
+#' @param ageGroup A list of ageGroup vectors of length two. Code use will be
+#' thus summarised by age groups.
 #'
-#' @return A tibble with results overall and, if specified, by strata
+#' @return A summarised_result object with results overall and, if specified, by
+#' strata.
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' con <- DBI::dbConnect(duckdb::duckdb(),
-#'                       dbdir = CDMConnector::eunomia_dir())
-#' cdm <- CDMConnector::cdm_from_con(con,
-#'                                   cdm_schem = "main",
-#'                                   write_schema = "main")
-#'acetaminophen <- c(1125315,  1127433, 40229134,
-#'40231925, 40162522, 19133768,  1127078)
-#'poliovirus_vaccine <- c(40213160)
-#'cs <- list(acetaminophen = acetaminophen,
-#'           poliovirus_vaccine = poliovirus_vaccine)
-#'results <- summariseConceptCounts(cdm, conceptId = cs)
-#'results
-#'PatientProfiles::mockDisconnect(cdm)
-#'}
+#' \donttest{
 #'
+#' cdm <- mockOmopSketch()
+#'
+#' cs <- list(sumatriptan = c(35604883, 35604879, 35604880, 35604884))
+#'
+#' results <- summariseConceptCounts(cdm, conceptId = cs)
+#'
+#' results
+#'
+#' PatientProfiles::mockDisconnect(cdm)
+#' }
 summariseConceptCounts <- function(cdm,
-                                   conceptId = NULL,
+                                   conceptId,
                                    countBy = c("record", "person"),
                                    concept = TRUE,
                                    year = FALSE,
@@ -40,7 +36,7 @@ summariseConceptCounts <- function(cdm,
                                    ageGroup = NULL){
 
   omopgenerics::validateCdmArgument(cdm)
-  omopgenerics::assertList(conceptId, null = TRUE, named = TRUE)
+  omopgenerics::assertList(conceptId, named = TRUE)
   checkCountBy(countBy)
 
   if(!is.null(conceptId) && length(names(conceptId)) != length(conceptId)){
@@ -48,14 +44,14 @@ summariseConceptCounts <- function(cdm,
   }
 
   # Get all concepts in concept table if conceptId is NULL
-  if(is.null(conceptId)) {
-    conceptId <- cdm$concept |>
-      dplyr::select("concept_name", "concept_id") |>
-      dplyr::collect() |>
-      dplyr::group_by(.data$concept_name)  |>
-      dplyr::summarise(named_vec = list(.data$concept_id)) |>
-      tibble::deframe()
-  }
+  # if(is.null(conceptId)) {
+  #   conceptId <- cdm$concept |>
+  #     dplyr::select("concept_name", "concept_id") |>
+  #     dplyr::collect() |>
+  #     dplyr::group_by(.data$concept_name)  |>
+  #     dplyr::summarise(named_vec = list(.data$concept_id)) |>
+  #     tibble::deframe()
+  # }
 
   getAllCodeUse <- function() {
     codeUse <- list()

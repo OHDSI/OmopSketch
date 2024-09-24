@@ -1,5 +1,5 @@
 
-#' Create a gt table from a summarised omop_table.
+#' Create a ggplot2 plot from the output of summariseInObservation().
 #'
 #' @param result A summarised_result object (output of summariseInObservation).
 #' @param facet Columns to face by. Formula format can be provided. See possible
@@ -11,24 +11,25 @@
 #'
 #' @export
 #' @examples
-#'
-#' \dontrun{
-#' library(OmopSketch)
-#' library(dplyr)
+#' \donttest{
+#' library(dplyr, warn.conflicts = FALSE)
 #'
 #' cdm <- mockOmopSketch()
 #'
-#' result <- summariseInObservation(cdm$observation_period,
-#'                     unit = "month",
-#'                     unitInterval = 6,
-#'                     output = c("person-days","records"),
-#'                     ageGroup = list("<=60" = c(0,60), ">60" = c(61, Inf)),
-#'                     sex = TRUE)
+#' result <- summariseInObservation(
+#'   cdm$observation_period,
+#'   output = c("person-days","records"),
+#'   ageGroup = list("<=40" = c(0, 40), ">40" = c(41, Inf)),
+#'   sex = TRUE
+#' )
 #'
-#' plotInObservation(result)
+#' result |>
+#'   filter(variable_name == "Number person-days") |>
+#'   plotInObservation(facet = "sex", colour = "age_group")
 #'
 #' PatientProfiles::mockDisconnect(cdm)
 #' }
+#'
 plotInObservation <- function(result,
                               facet = NULL,
                               colour = NULL) {

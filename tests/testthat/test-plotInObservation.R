@@ -1,4 +1,5 @@
-test_that("plotInObservation works",{
+test_that("plotInObservation works", {
+  skip_on_cran()
   # Load mock database ----
   cdm <- cdmEunomia()
 

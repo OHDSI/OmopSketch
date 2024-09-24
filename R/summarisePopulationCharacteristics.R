@@ -1,36 +1,37 @@
-#' Summarise the characteristics of the base population of a cdm object.
+
+#' Summarise the characteristics of the base population of a cdm_reference
+#' object.
 #'
-#' @param cdm A cdm object.
-#' @param studyPeriod Dates to trim the observation period. If NA, start_observation_period and/or end_observation_period are used.
-#' @param sex Boolean variable. Whether to stratify the results by sex.
-#' @param ageGroup List of age groups to stratify by at index date. Set to NULL if no stratification is needed.
+#' @param cdm A cdm_reference object.
+#' @param studyPeriod Dates to trim the observation period. If NA,
+#' min(observation_period_start_date) and/or max(observation_period_end_date)
+#' are used.
+#' @param sex Whether to stratify the results by sex.
+#' @param ageGroup List of age groups to stratify by at index date.
 #'
 #' @return A summarised_result object.
 #'
 #' @export
 #' @examples
 #' \donttest{
-#'library(dplyr)
-#'library(OmopSketch)
-#'
-#' # Connect to a mock database
 #' cdm <- mockOmopSketch()
 #'
-#'# Run summarise population characteristics
-#' summarisedPopulation <- summarisePopulationCharacteristics(cdm = cdm,
-#'                                                           studyPeriod = c("2010-01-01",NA),
-#'                                                           sex = TRUE,
-#'                                                           ageGroup = NULL
-#'                                                           )
-#' summarisedPopulation |> print()
-#' PatientProfiles::mockDisconnect(cdm = cdm)
+#' summarisedPopulation <- summarisePopulationCharacteristics(
+#'   cdm = cdm,
+#'   studyPeriod = c("2010-01-01", NA),
+#'   sex = TRUE,
+#'   ageGroup = NULL
+#' )
 #'
-#'}
+#' summarisedPopulation |> print()
+#'
+#' PatientProfiles::mockDisconnect(cdm = cdm)
+#' }
 summarisePopulationCharacteristics <- function(cdm,
                                                studyPeriod = c(NA, NA),
                                                sex = FALSE,
                                                ageGroup = NULL) {
-
+  # check inputs
   omopgenerics::validateCdmArgument(cdm)
   studyPeriod <- validateStudyPeriod(cdm, studyPeriod)
   omopgenerics::assertLogical(sex, length = 1)
