@@ -52,7 +52,7 @@ cdm
 We first create a snapshot of our database. This will allow us to track when the analysis has been conducted and capture details about the CDM version or the data release.
 ```{r}
 summariseOmopSnapshot(cdm) |>
-  tableOmopSnapshot()
+  tableOmopSnapshot(type = "flextable")
 ```
 
 
@@ -61,7 +61,7 @@ Once we have collected the snapshot information, we can start characteristing th
 
 ```{r}
 summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
-  tableClinicalRecords()
+  tableClinicalRecords(type = "flextable")
 ```
 
 We can also explore trends in the clinical table records over time.
@@ -82,7 +82,7 @@ summariseInObservation(cdm$observation_period, output = "records") |>
 You can also visualise and explore the characteristics of the observation period per each individual in the database using `summariseObservationPeriod()`. 
 ```{r}
 summariseObservationPeriod(cdm$observation_period) |>
-  tableObservationPeriod()
+  tableObservationPeriod(type = "flextable")
 ```
 
 Or if visualisation is prefered, you can easily build a histogram to explore how many participants have more than one observation period.
@@ -105,7 +105,7 @@ summariseConceptCounts(cdm, conceptId = list("acetaminophen" = acetaminophen)) |
 Finally, OmopSketch can also help us to characterise the population at the start and end of the observation period.
 ```{r}
 summarisePopulationCharacteristics(cdm) |>
-  tablePopulationCharacteristics()
+  tablePopulationCharacteristics(type = "flextable")
 ```
 As seen, OmopSketch offers multiple functionalities to provide a general overview of a database. Additionally, it includes more tools and arguments that allow for deeper exploration, helping to assess the database's suitability for specific research studies. For further information, please refer to the vignettes.
 
