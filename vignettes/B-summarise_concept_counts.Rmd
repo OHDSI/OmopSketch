@@ -18,6 +18,11 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+library(CDMConnector)
+if (Sys.getenv("EUNOMIA_DATA_FOLDER") == "") Sys.setenv("EUNOMIA_DATA_FOLDER" = tempdir())
+if (!dir.exists(Sys.getenv("EUNOMIA_DATA_FOLDER"))) dir.create(Sys.getenv("EUNOMIA_DATA_FOLDER"))
+if (!eunomia_is_available()) downloadEunomiaData()
 ```
 
 # Introduction
@@ -30,17 +35,24 @@ Let's see an example of the previous functions. To start with, we will load esse
 
 ```{r, warning=FALSE}
 library(dplyr)
-library(omock)
+library(CDMConnector)
+library(DBI)
+library(duckdb)
 library(OmopSketch)
 library(CodelistGenerator)
 
-# Connect to mock database
-cdm <- mockOmopSketch()
+# Connect to Eunomia database
+con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
+cdm <- CDMConnector::cdmFromCon(
+  con = con, cdmSchema = "main", writeSchema = "main"
+)
+
+cdm 
 ```
 
 # Summarise concept counts
 
-First, let's generate a list of codes for the drug `acetaminophen` and condition `sinusitis` using [CodelistGenerator](https://darwin-eu.github.io/CodelistGenerator/index.html) package.
+First, let's generate a list of codes for the concept `dementia` using [CodelistGenerator](https://darwin-eu.github.io/CodelistGenerator/index.html) package.
 
 ```{r, warning=FALSE}
 acetaminophen <- getCandidateCodes(
@@ -97,9 +109,7 @@ summariseConceptCounts(cdm,
 One can further stratify by year, sex or age group using the `year`, `sex`, and `ageGroup` arguments.
 
 ``` {r, warning=FALSE} 
-summariseConceptCounts(cdm, conceptId = list("acetaminophen" = acetaminophen, "sinusitis" = sinusitis), countBy = "person", year = TRUE, sex = TRUE, ageGroup = list("<=50" = c(0, 50), ">50" = c(51, Inf))) |>
-  select(group_level, strata_level, variable_name, estimate_name) |>
-  glimpse()
+summariseConceptCounts(cdm,                         conceptId = list("acetaminophen" = acetaminophen,                                         "sinusitis" = sinusitis),                        countBy = "person",                        year = TRUE,                        sex  = TRUE,                        ageGroup = list("<=50" = c(0,50), ">50" = c(51,Inf))) |>   select(group_level, strata_level, variable_name, estimate_name) |>   glimpse() 
 ```
 
 ## Visualise the results 
