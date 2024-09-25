@@ -189,16 +189,15 @@ test_that("summariseClinicalRecords() sex and ageGroup argument work", {
   # Check num records
   records <- result |>
     dplyr::filter(variable_name == "number records", estimate_name == "count")
-  expect_true(records |> dplyr::filter(strata_name == "overall") |> dplyr::pull(estimate_value) == "9")
-  expect_true(records |> dplyr::filter(strata_level == "old") |> dplyr::pull(estimate_value) == "5")
-  expect_true(records |> dplyr::filter(strata_level == "young") |> dplyr::pull(estimate_value) == "4")
-  expect_true(records |> dplyr::filter(strata_level == "Male") |> dplyr::pull(estimate_value) == "5")
-  expect_true(records |> dplyr::filter(strata_level == "Female") |> dplyr::pull(estimate_value) == "4")
+  expect_identical(records |> dplyr::filter(strata_name == "overall") |> dplyr::pull(estimate_value), "9")
+  expect_identical(records |> dplyr::filter(strata_level == "old") |> dplyr::pull(estimate_value), "5")
+  expect_identical(records |> dplyr::filter(strata_level == "young") |> dplyr::pull(estimate_value), "4")
+  expect_identical(records |> dplyr::filter(strata_level == "Male") |> dplyr::pull(estimate_value), "5")
+  expect_identical(records |> dplyr::filter(strata_level == "Female") |> dplyr::pull(estimate_value), "4")
   expect_identical(records |> dplyr::filter(strata_level == "old &&& Male") |> dplyr::pull(estimate_value), "3")
   expect_identical(records |> dplyr::filter(strata_level == "old &&& Female") |> dplyr::pull(estimate_value), "2")
-  expect_true(records |> dplyr::filter(strata_level == "young &&& Male") |> dplyr::pull(estimate_value) == "2")
-  expect_true(records |> dplyr::filter(strata_level == "young &&& Female") |> dplyr::pull(estimate_value) == "2")
-
+  expect_identical(records |> dplyr::filter(strata_level == "young &&& Male") |> dplyr::pull(estimate_value), "2")
+  expect_identical(records |> dplyr::filter(strata_level == "young &&& Female") |> dplyr::pull(estimate_value), "2")
 
   # Check stats
   records <- result |>

@@ -13,7 +13,7 @@ if (on_github()) {
 schema <- function(type = Sys.getenv("DB_TO_TEST", "duckdb")) {
   switch(
     type,
-    "duckdb" = c(schema = "main", prefix = "os_"),
+    "duckdb" = c(schema = "main", prefix = "omop_sketch_"),
     "postgres" = c(schema = "results", prefix = "os_")
   )
 }
