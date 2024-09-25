@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Summarise key information in data mapped to the Observational Medical Outcomes Partnership (OMOP) common data model. Asses suitability to perform specific epidemiological studies and explore the different domains to obtain feasibility counts and trends.
+Summarises key information in data mapped to the Observational Medical Outcomes Partnership (OMOP) common data model. Assess suitability to perform specific epidemiological studies and explore the different domains to obtain feasibility counts and trends.
 }
 \seealso{
 Useful links:

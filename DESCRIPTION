@@ -24,8 +24,8 @@ Authors@R: c(
         role = c("aut"), comment = c(ORCID = "0000-0003-3308-9905")
     ))
 Maintainer: Marta Alcalde-Herraiz <marta.alcaldeherraiz@ndorms.ox.ac.uk>
-Description: Summarise key information in data mapped to the Observational 
-    Medical Outcomes Partnership (OMOP) common data model. Asses suitability to 
+Description: Summarises key information in data mapped to the Observational 
+    Medical Outcomes Partnership (OMOP) common data model. Assess suitability to 
     perform specific epidemiological studies and explore the different domains
     to obtain feasibility counts and trends.
 License: Apache License (>= 2)

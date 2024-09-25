@@ -8,10 +8,8 @@
 #' "densityplot".
 #' @param facet Elements to facet by, it can be "cdm_name",
 #' "observation_period_ordinal", both or none.
-#'
 #' @return A ggplot2 object.
 #' @export
-#'
 #' @examples
 #' \donttest{
 #' cdm <- mockOmopSketch(numberIndividuals = 100)
@@ -26,7 +24,6 @@
 #'
 #' PatientProfiles::mockDisconnect(cdm)
 #' }
-#'
 plotObservationPeriod <- function(result,
                                   variableName = "number subjects",
                                   plotType = "barplot",

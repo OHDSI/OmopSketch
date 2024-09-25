@@ -26,5 +26,4 @@ result |>
   tableOmopSnapshot()
 
 PatientProfiles::mockDisconnect(cdm)
-
 }

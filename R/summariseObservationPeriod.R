@@ -1,6 +1,5 @@
 #' Summarise the observation period table getting some overall statistics in a
 #' summarised_result object.
-#'
 #' @param observationPeriod observation_period omop table.
 #' @param estimates Estimates to summarise the variables of interest (
 #' `records per person`, `duration in days` and
@@ -8,11 +7,8 @@
 #' @param ageGroup A list of age groups to stratify results by.
 #' @param sex Boolean variable. Whether to stratify by sex (TRUE) or not
 #' (FALSE).
-#'
 #' @return A summarised_result object with the summarised data.
-#'
 #' @export
-#'
 #' @examples
 #' \donttest{
 #' library(dplyr, warn.conflicts = FALSE)
@@ -26,7 +22,6 @@
 #'
 #' PatientProfiles::mockDisconnect(cdm)
 #' }
-#'
 summariseObservationPeriod <- function(observationPeriod,
                                        estimates = c(
                                          "mean", "sd", "min", "q05", "q25",

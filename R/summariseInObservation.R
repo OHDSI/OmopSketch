@@ -12,13 +12,10 @@
 #' @param ageGroup A list of age groups to stratify results by.
 #' @param sex Boolean variable. Whether to stratify by sex (TRUE) or not
 #' (FALSE).
-#'
 #' @return A summarised_result object.
-#'
 #' @export
-#'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(dplyr, warn.conflicts = FALSE)
 #'
 #' cdm <- mockOmopSketch()
@@ -37,7 +34,6 @@
 #'
 #' PatientProfiles::mockDisconnect(cdm)
 #' }
-#'
 summariseInObservation <- function(observationPeriod,
                                    unit = "year",
                                    unitInterval = 1,

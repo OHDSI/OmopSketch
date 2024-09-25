@@ -45,5 +45,4 @@ result |>
 
 PatientProfiles::mockDisconnect(cdm)
 }
-
 }

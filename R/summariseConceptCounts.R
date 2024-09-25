@@ -1,3 +1,4 @@
+
 #' Summarise code use in patient-level data
 #'
 #' @param cdm A cdm object
@@ -9,11 +10,9 @@
 #' @param sex TRUE or FALSE. If TRUE code use will be summarised by sex.
 #' @param ageGroup A list of ageGroup vectors of length two. Code use will be
 #' thus summarised by age groups.
-#'
 #' @return A summarised_result object with results overall and, if specified, by
 #' strata.
 #' @export
-#'
 #' @examples
 #' \donttest{
 #'

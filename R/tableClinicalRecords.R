@@ -3,13 +3,10 @@
 #'
 #' @param result Output from summariseClinicalRecords().
 #' @param type Type of formatting output table, either "gt" or "flextable".
-#'
 #' @return A gt or flextable object with the summarised data.
-#'
 #' @export
 #' @examples
 #' \donttest{
-#'
 #' cdm <- mockOmopSketch()
 #'
 #' summarisedResult <- summariseClinicalRecords(

@@ -6,9 +6,7 @@
 #' columns to face by with: `visOmopResults::tidyColumns()`.
 #' @param colour Columns to colour by. See possible columns to colour by with:
 #' `visOmopResults::tidyColumns()`.
-#'
 #' @return A ggplot showing the table counts
-#'
 #' @export
 #' @examples
 #' \donttest{
@@ -29,7 +27,6 @@
 #'
 #' PatientProfiles::mockDisconnect(cdm)
 #' }
-#'
 plotInObservation <- function(result,
                               facet = NULL,
                               colour = NULL) {
