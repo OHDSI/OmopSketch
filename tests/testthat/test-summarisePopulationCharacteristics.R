@@ -4,9 +4,7 @@ test_that("summarisePopulationCharacteristics() works", {
   cdm <- cdmEunomia()
 
   # Check that works ----
-  expect_warning(summarisedPopulation <- summarisePopulationCharacteristics(
-    cdm = cdm)
-    )
+  expect_no_error(summarisedPopulation <- summarisePopulationCharacteristics(cdm = cdm))
   expect_true(inherits(summarisedPopulation,"summarised_result"))
   expect_true(all(summarisedPopulation |>
                     dplyr::select("strata_name") |>
@@ -29,14 +27,14 @@ test_that("summarisePopulationCharacteristics() works", {
                 dplyr::pull() !=
                 0)
 
-  expect_warning(summarisedPopulationEqual <- summarisePopulationCharacteristics(
+  expect_no_error(summarisedPopulationEqual <- summarisePopulationCharacteristics(
     cdm = cdm,
     studyPeriod = NULL)
   )
   expect_equal(summarisedPopulation, summarisedPopulationEqual)
 
   # Add date range
-  expect_warning(summarisedPopulation <- summarisePopulationCharacteristics(
+  expect_no_error(summarisedPopulation <- summarisePopulationCharacteristics(
     cdm = cdm,
     studyPeriod = c("1900-01-01", "2010-01-01"))
   )
@@ -58,7 +56,7 @@ test_that("summarisePopulationCharacteristics() works", {
                     "2010-01-01"))
 
   # Add sex and age group strata
-  expect_warning(summarisedPopulation <- summarisePopulationCharacteristics(
+  expect_no_error(summarisedPopulation <- summarisePopulationCharacteristics(
     cdm = cdm,
     studyPeriod = c("1950-01-01", NA),
     sex = TRUE,
@@ -85,7 +83,7 @@ test_that("summarisePopulationCharacteristics() works", {
                 dplyr::pull("estimate_value"))
 
   # Only sex
-  expect_warning(summarisedPopulation <- summarisePopulationCharacteristics(
+  expect_no_error(summarisedPopulation <- summarisePopulationCharacteristics(
     cdm = cdm,
     sex = TRUE
   ))
@@ -98,7 +96,7 @@ test_that("summarisePopulationCharacteristics() works", {
                     c("overall", "sex")))
 
   # Only age group
-  expect_warning(summarisedPopulation <- summarisePopulationCharacteristics(
+  expect_no_error(summarisedPopulation <- summarisePopulationCharacteristics(
     cdm = cdm,
     ageGroup = list(c(0,1), c(2,Inf))
   ))
@@ -124,7 +122,7 @@ test_that("summarisePopulationCharacteristics() works", {
     copyCdm()
 
   # Add sex and age group strata
-  expect_warning(summarisedPopulation <- summarisePopulationCharacteristics(
+  expect_no_error(summarisedPopulation <- summarisePopulationCharacteristics(
     cdm = cdm,
     sex = TRUE,
     ageGroup = list(c(0,20),c(21,150)))
@@ -182,7 +180,7 @@ test_that("tablePopulationCharacteristics() works", {
 
 test_that("summarisePopulationCharacteristics() works with mockOmopSKetch", {
   cdm <- mockOmopSketch(numberIndividuals = 2, seed = 1)
-  expect_warning(summarisedPopulation <- summarisePopulationCharacteristics(
+  expect_no_error(summarisedPopulation <- summarisePopulationCharacteristics(
     cdm = cdm)
   )
   expect_true(inherits(summarisedPopulation,"summarised_result"))
