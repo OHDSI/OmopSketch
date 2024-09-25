@@ -222,6 +222,7 @@ getNumberPeopleInCdm <- function(cdm, strata, peopleStrata){
 
   peopleStrata |>
     dplyr::select(-c("observation_period_start_date","observation_period_end_date")) |>
+    dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") |>
     PatientProfiles::summariseResult(strata = strata,
                                      includeOverallStrata = TRUE,
                                      counts = TRUE,

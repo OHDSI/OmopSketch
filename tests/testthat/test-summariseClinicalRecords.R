@@ -101,16 +101,18 @@ test_that("summariseClinicalRecords() sex and ageGroup argument work", {
   expect_equal(
     dplyr::bind_rows(op, vo,m) |>
       dplyr::mutate(estimate_value = dplyr::if_else(
-        .data$variable_name == "records_per_person",
+        .data$estimate_type != "integer",
         as.character(round(as.numeric(.data$estimate_value), 3)),
         .data$estimate_value
-      )) |> dplyr::arrange(dplyr::across(dplyr::everything())),
+      )) |>
+      dplyr::arrange(dplyr::across(dplyr::everything())),
     all |>
       dplyr::mutate(estimate_value = dplyr::if_else(
-        .data$variable_name == "records_per_person",
+        .data$estimate_type != "integer",
         as.character(round(as.numeric(.data$estimate_value), 3)),
         .data$estimate_value
-      )) |> dplyr::arrange(dplyr::across(dplyr::everything()))
+      )) |>
+      dplyr::arrange(dplyr::across(dplyr::everything()))
   )
 
   # Check sex and age group---
@@ -149,7 +151,7 @@ test_that("summariseClinicalRecords() sex and ageGroup argument work", {
       person = dplyr::tibble(
         person_id = as.integer(1:5),
         gender_concept_id = c(8507L, 8532L, 8532L, 8507L, 8507L),
-        year_of_birth = c(2010L, 2010L, 2011L, 2012L, 2013L),
+        year_of_birth = c(2000L, 2000L, 2011L, 2012L, 2013L),
         month_of_birth = 1L,
         day_of_birth = 1L,
         race_concept_id = 0L,
