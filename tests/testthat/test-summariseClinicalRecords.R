@@ -114,9 +114,8 @@ test_that("summariseClinicalRecords() sex and ageGroup argument work", {
             as.character(round(as.numeric(.data$estimate_value), 3)),
             .data$estimate_value
           ))
-      ) |>
-      nrow(),
-    0L
+      ),
+    omopgenerics::emptySummarisedResult()
   )
 
   # Check sex and age group---
