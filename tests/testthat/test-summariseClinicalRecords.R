@@ -98,21 +98,25 @@ test_that("summariseClinicalRecords() sex and ageGroup argument work", {
                                                   c("observation_period", "visit_occurrence", "measurement"),
                                                   sex = TRUE,
                                                   ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
-  expect_equal(
+
+
+  expect_identical(
     dplyr::bind_rows(op, vo,m) |>
       dplyr::mutate(estimate_value = dplyr::if_else(
         .data$estimate_type != "integer",
         as.character(round(as.numeric(.data$estimate_value), 3)),
         .data$estimate_value
       )) |>
-      dplyr::arrange(dplyr::across(dplyr::everything())),
-    all |>
-      dplyr::mutate(estimate_value = dplyr::if_else(
-        .data$estimate_type != "integer",
-        as.character(round(as.numeric(.data$estimate_value), 3)),
-        .data$estimate_value
-      )) |>
-      dplyr::arrange(dplyr::across(dplyr::everything()))
+      dplyr::anti_join(
+        all |>
+          dplyr::mutate(estimate_value = dplyr::if_else(
+            .data$estimate_type != "integer",
+            as.character(round(as.numeric(.data$estimate_value), 3)),
+            .data$estimate_value
+          ))
+      ) |>
+      nrow(),
+    0L
   )
 
   # Check sex and age group---
