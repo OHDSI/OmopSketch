@@ -13,8 +13,8 @@ Summarises key information in data mapped to the Observational Medical Outcomes 
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://oxford-pharmacoepi.github.io/OmopSketch/}
-  \item Report bugs at \url{https://github.com/oxford-pharmacoepi/OmopSketch/issues}
+  \item \url{https://OHDSI.github.io/OmopSketch/}
+  \item Report bugs at \url{https://github.com/OHDSI/OmopSketch/issues}
 }
 
 }
