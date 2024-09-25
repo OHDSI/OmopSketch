@@ -264,8 +264,7 @@ addStrataToPeopleInObservation <- function(cdm, ageGroup, sex, tablePrefix){
       CohortConstructor::demographicsCohort(name = paste0(tablePrefix, "demographics_table"),
                                             sex = NULL,
                                             ageRange = ageGroup,
-                                            minPriorObservation = NULL,
-                                            minFutureObservation = NULL)
+                                            minPriorObservation = NULL)
   ))
 
   if(is.null(ageGroup)){
