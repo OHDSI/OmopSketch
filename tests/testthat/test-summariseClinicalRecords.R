@@ -104,13 +104,13 @@ test_that("summariseClinicalRecords() sex and ageGroup argument work", {
         .data$variable_name == "records_per_person",
         as.character(round(as.numeric(.data$estimate_value), 3)),
         .data$estimate_value
-      )),
+      )) |> dplyr::arrange(dplyr::across(dplyr::everything())),
     all |>
       dplyr::mutate(estimate_value = dplyr::if_else(
         .data$variable_name == "records_per_person",
         as.character(round(as.numeric(.data$estimate_value), 3)),
         .data$estimate_value
-      ))
+      )) |> dplyr::arrange(dplyr::across(dplyr::everything()))
   )
 
   # Check sex and age group---
@@ -194,8 +194,8 @@ test_that("summariseClinicalRecords() sex and ageGroup argument work", {
   expect_true(records |> dplyr::filter(strata_level == "young") |> dplyr::pull(estimate_value) == "4")
   expect_true(records |> dplyr::filter(strata_level == "Male") |> dplyr::pull(estimate_value) == "5")
   expect_true(records |> dplyr::filter(strata_level == "Female") |> dplyr::pull(estimate_value) == "4")
-  expect_true(records |> dplyr::filter(strata_level == "old &&& Male") |> dplyr::pull(estimate_value) == "3")
-  expect_true(records |> dplyr::filter(strata_level == "old &&& Female") |> dplyr::pull(estimate_value) == "2")
+  expect_identical(records |> dplyr::filter(strata_level == "old &&& Male") |> dplyr::pull(estimate_value), "3")
+  expect_identical(records |> dplyr::filter(strata_level == "old &&& Female") |> dplyr::pull(estimate_value), "2")
   expect_true(records |> dplyr::filter(strata_level == "young &&& Male") |> dplyr::pull(estimate_value) == "2")
   expect_true(records |> dplyr::filter(strata_level == "young &&& Female") |> dplyr::pull(estimate_value) == "2")
 
