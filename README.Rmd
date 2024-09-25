@@ -13,13 +13,13 @@ knitr::opts_chunk$set(
 )
 ```
 
-# OmopSketch <a href="https://oxford-pharmacoepi.github.io/OmopSketch/"><img src="man/figures/logo.png" align="right" height="138" alt="OmopSketch website" /></a>
+# OmopSketch <a href="https://OHDSI.github.io/OmopSketch/"><img src="man/figures/logo.png" align="right" height="138" alt="OmopSketch website" /></a>
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![R-CMD-check](https://github.com/oxford-pharmacoepi/OmopSketch/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/oxford-pharmacoepi/OmopSketch/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/OHDSI/OmopSketch/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/OHDSI/OmopSketch/actions/workflows/R-CMD-check.yaml)
 [![CRAN status](https://www.r-pkg.org/badges/version/OmopSketch)](https://CRAN.R-project.org/package=OmopSketch)
-[![Codecov test coverage](https://codecov.io/gh/oxford-pharmacoepi/OmopSketch/branch/main/graph/badge.svg)](https://app.codecov.io/gh/oxford-pharmacoepi/OmopSketch?branch=main)
+[![Codecov test coverage](https://codecov.io/gh/OHDSI/OmopSketch/branch/main/graph/badge.svg)](https://app.codecov.io/gh/OHDSI/OmopSketch?branch=main)
 <!-- badges: end -->
 
 ### WARNING: this package is under-development and has only been tested using mock data
@@ -32,7 +32,7 @@ You can install the development version of OmopSketch from [GitHub](https://gith
 
 ``` r
 # install.packages("remotes")
-remotes::install_github("oxford-pharmacoepi/OmopSketch")
+remotes::install_github("OHDSI/OmopSketch")
 ```
 
 ## Example
