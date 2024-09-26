@@ -43,7 +43,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/oxford-pharmacoepi/OmopSketch/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/OHDSI/OmopSketch/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -59,7 +59,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Summarise clinical tables records</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/oxford-pharmacoepi/OmopSketch/blob/main/vignettes/A-summarise_clinical_tables_records.Rmd" class="external-link"><code>vignettes/A-summarise_clinical_tables_records.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/OHDSI/OmopSketch/blob/main/vignettes/A-summarise_clinical_tables_records.Rmd" class="external-link"><code>vignettes/A-summarise_clinical_tables_records.Rmd</code></a></small>
       <div class="d-none name"><code>A-summarise_clinical_tables_records.Rmd</code></div>
     </div>
 
@@ -100,7 +100,7 @@ database.</p>
 <span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://oxford-pharmacoepi.github.io/OmopSketch/">OmopSketch</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://OHDSI.github.io/OmopSketch/">OmopSketch</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Connect to mock database</span></span>
 <span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mockOmopSketch.html">mockOmopSketch</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -119,17 +119,17 @@ tables of the cdm (i.e., <strong>condition_occurrence</strong>).</p>
 <code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseClinicalRecords.html">summariseClinicalRecords</a></span><span class="op">(</span><span class="va">cdm</span>, <span class="st">"condition_occurrence"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising table counts</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-09-24 12:26:01.178921</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-09-26 11:50:02.052057</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-24 12:26:01.322035</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-26 11:50:02.188615</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> records_per_person: mean, sd, median, q25, q75, min, max</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Table is collected to memory as not all requested estimates are supported on</span></span>
 <span><span class="co">#&gt;   the database side</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-09-24 12:26:02.215382</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-09-26 11:50:03.064975</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-24 12:26:02.263939</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-26 11:50:03.116145</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising in_observation, standard, domain_id, and type information</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -168,17 +168,17 @@ records per person.</p>
 <span>                                             recordsPerPerson <span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span>, <span class="st">"sd"</span>, <span class="st">"q05"</span>, <span class="st">"q95"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising table counts</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-09-24 12:26:06.482603</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-09-26 11:50:06.917675</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-24 12:26:06.630779</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-26 11:50:07.058949</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> records_per_person: mean, sd, q05, q95</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Table is collected to memory as not all requested estimates are supported on</span></span>
 <span><span class="co">#&gt;   the database side</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-09-24 12:26:07.519939</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-09-26 11:50:07.923788</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-24 12:26:07.563222</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-26 11:50:07.973374</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising in_observation, standard, domain_id, and type information</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
@@ -209,17 +209,17 @@ vocabulary have (<code>domainId = TRUE</code>) or the concept’s type
 <span>                                             typeConcept <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising table counts</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-09-24 12:26:11.557587</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-09-26 11:50:11.69029</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-24 12:26:11.707576</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-26 11:50:11.827073</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> records_per_person: mean, sd, q05, q95</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Table is collected to memory as not all requested estimates are supported on</span></span>
 <span><span class="co">#&gt;   the database side</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-09-24 12:26:12.606618</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-09-26 11:50:12.712903</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-24 12:26:12.650408</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-26 11:50:12.756197</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising in_observation, standard, domain_id, source, and type information</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
@@ -245,23 +245,21 @@ age groups:</p>
 <span>                                             ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">34</span><span class="op">)</span>, <span class="st">"&gt;=35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising table counts</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-09-24 12:26:20.723241</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-09-26 11:50:20.455677</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">■■■■■■■■■■■■■■■■                </span>2/4 group-strata combinations @ 2024-09-24 12:2…</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">■■■■■■■■■■■■■■■■                </span>2/4 group-strata combinations @ 2024-09-26 11:5…</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■         </span>3/4 group-strata combinations @ 2024-09-24 12:2…</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ </span>4/4 group-strata combinations @ 2024-09-26 11:5…</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ </span>4/4 group-strata combinations @ 2024-09-24 12:2…</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-24 12:26:24.25096</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-26 11:50:23.92083</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> records_per_person: mean, sd, q05, q95</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Table is collected to memory as not all requested estimates are supported on</span></span>
 <span><span class="co">#&gt;   the database side</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-09-24 12:26:26.096107</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-09-26 11:50:25.746989</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-24 12:26:26.29471</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-26 11:50:25.942816</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising in_observation, standard, domain_id, source, and type information</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
@@ -289,26 +287,26 @@ at the same time:</p>
 <span>                                             typeConcept <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising table counts</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-09-24 12:26:32.508801</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-09-26 11:50:31.822351</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-24 12:26:32.653567</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-26 11:50:31.959477</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> records_per_person: mean, sd</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-09-24 12:26:33.450131</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-09-26 11:50:32.725598</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-24 12:26:33.655986</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-26 11:50:32.919044</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising table counts</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-09-24 12:26:36.96357</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-09-26 11:50:35.861438</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-24 12:26:37.106946</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-26 11:50:35.99596</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> records_per_person: mean, sd</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-09-24 12:26:37.906961</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-09-26 11:50:36.783122</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-24 12:26:38.105855</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-26 11:50:36.985294</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -336,39 +334,39 @@ previous results and create a gt table.</p>
 <span>                                             sex <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising table counts</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-09-24 12:26:42.829299</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-09-26 11:50:41.35822</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-24 12:26:44.167692</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-26 11:50:42.593189</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> records_per_person: mean, sd, q05, q95</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Table is collected to memory as not all requested estimates are supported on</span></span>
 <span><span class="co">#&gt;   the database side</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-09-24 12:26:45.791087</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-09-26 11:50:44.290873</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-24 12:26:45.886696</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-09-26 11:50:44.38304</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising in_observation, standard, domain_id, source, and type information</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/tableClinicalRecords.html">tableClinicalRecords</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Results have not been suppressed.</span></span></code></pre></div>
-<div id="vgtmfltqix" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#vgtmfltqix table {
+<div id="zkyqmjyxvx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#zkyqmjyxvx table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#vgtmfltqix thead, #vgtmfltqix tbody, #vgtmfltqix tfoot, #vgtmfltqix tr, #vgtmfltqix td, #vgtmfltqix th {
+#zkyqmjyxvx thead, #zkyqmjyxvx tbody, #zkyqmjyxvx tfoot, #zkyqmjyxvx tr, #zkyqmjyxvx td, #zkyqmjyxvx th {
   border-style: none;
 }
 
-#vgtmfltqix p {
+#zkyqmjyxvx p {
   margin: 0;
   padding: 0;
 }
 
-#vgtmfltqix .gt_table {
+#zkyqmjyxvx .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -394,12 +392,12 @@ previous results and create a gt table.</p>
   border-left-color: #D3D3D3;
 }
 
-#vgtmfltqix .gt_caption {
+#zkyqmjyxvx .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#vgtmfltqix .gt_title {
+#zkyqmjyxvx .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -411,7 +409,7 @@ previous results and create a gt table.</p>
   border-bottom-width: 0;
 }
 
-#vgtmfltqix .gt_subtitle {
+#zkyqmjyxvx .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -423,7 +421,7 @@ previous results and create a gt table.</p>
   border-top-width: 0;
 }
 
-#vgtmfltqix .gt_heading {
+#zkyqmjyxvx .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -435,13 +433,13 @@ previous results and create a gt table.</p>
   border-right-color: #D3D3D3;
 }
 
-#vgtmfltqix .gt_bottom_border {
+#zkyqmjyxvx .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#vgtmfltqix .gt_col_headings {
+#zkyqmjyxvx .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -456,7 +454,7 @@ previous results and create a gt table.</p>
   border-right-color: #D3D3D3;
 }
 
-#vgtmfltqix .gt_col_heading {
+#zkyqmjyxvx .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -476,7 +474,7 @@ previous results and create a gt table.</p>
   overflow-x: hidden;
 }
 
-#vgtmfltqix .gt_column_spanner_outer {
+#zkyqmjyxvx .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -488,15 +486,15 @@ previous results and create a gt table.</p>
   padding-right: 4px;
 }
 
-#vgtmfltqix .gt_column_spanner_outer:first-child {
+#zkyqmjyxvx .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#vgtmfltqix .gt_column_spanner_outer:last-child {
+#zkyqmjyxvx .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#vgtmfltqix .gt_column_spanner {
+#zkyqmjyxvx .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -508,11 +506,11 @@ previous results and create a gt table.</p>
   width: 100%;
 }
 
-#vgtmfltqix .gt_spanner_row {
+#zkyqmjyxvx .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#vgtmfltqix .gt_group_heading {
+#zkyqmjyxvx .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -538,7 +536,7 @@ previous results and create a gt table.</p>
   text-align: left;
 }
 
-#vgtmfltqix .gt_empty_group_heading {
+#zkyqmjyxvx .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -553,15 +551,15 @@ previous results and create a gt table.</p>
   vertical-align: middle;
 }
 
-#vgtmfltqix .gt_from_md > :first-child {
+#zkyqmjyxvx .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#vgtmfltqix .gt_from_md > :last-child {
+#zkyqmjyxvx .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#vgtmfltqix .gt_row {
+#zkyqmjyxvx .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -580,7 +578,7 @@ previous results and create a gt table.</p>
   overflow-x: hidden;
 }
 
-#vgtmfltqix .gt_stub {
+#zkyqmjyxvx .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -593,7 +591,7 @@ previous results and create a gt table.</p>
   padding-right: 5px;
 }
 
-#vgtmfltqix .gt_stub_row_group {
+#zkyqmjyxvx .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -607,15 +605,15 @@ previous results and create a gt table.</p>
   vertical-align: top;
 }
 
-#vgtmfltqix .gt_row_group_first td {
+#zkyqmjyxvx .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#vgtmfltqix .gt_row_group_first th {
+#zkyqmjyxvx .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#vgtmfltqix .gt_summary_row {
+#zkyqmjyxvx .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -625,16 +623,16 @@ previous results and create a gt table.</p>
   padding-right: 5px;
 }
 
-#vgtmfltqix .gt_first_summary_row {
+#zkyqmjyxvx .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#vgtmfltqix .gt_first_summary_row.thick {
+#zkyqmjyxvx .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#vgtmfltqix .gt_last_summary_row {
+#zkyqmjyxvx .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -644,7 +642,7 @@ previous results and create a gt table.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#vgtmfltqix .gt_grand_summary_row {
+#zkyqmjyxvx .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -654,7 +652,7 @@ previous results and create a gt table.</p>
   padding-right: 5px;
 }
 
-#vgtmfltqix .gt_first_grand_summary_row {
+#zkyqmjyxvx .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -664,7 +662,7 @@ previous results and create a gt table.</p>
   border-top-color: #D3D3D3;
 }
 
-#vgtmfltqix .gt_last_grand_summary_row_top {
+#zkyqmjyxvx .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -674,11 +672,11 @@ previous results and create a gt table.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#vgtmfltqix .gt_striped {
+#zkyqmjyxvx .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#vgtmfltqix .gt_table_body {
+#zkyqmjyxvx .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -687,7 +685,7 @@ previous results and create a gt table.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#vgtmfltqix .gt_footnotes {
+#zkyqmjyxvx .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -701,7 +699,7 @@ previous results and create a gt table.</p>
   border-right-color: #D3D3D3;
 }
 
-#vgtmfltqix .gt_footnote {
+#zkyqmjyxvx .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -710,7 +708,7 @@ previous results and create a gt table.</p>
   padding-right: 5px;
 }
 
-#vgtmfltqix .gt_sourcenotes {
+#zkyqmjyxvx .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -724,7 +722,7 @@ previous results and create a gt table.</p>
   border-right-color: #D3D3D3;
 }
 
-#vgtmfltqix .gt_sourcenote {
+#zkyqmjyxvx .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -732,72 +730,72 @@ previous results and create a gt table.</p>
   padding-right: 5px;
 }
 
-#vgtmfltqix .gt_left {
+#zkyqmjyxvx .gt_left {
   text-align: left;
 }
 
-#vgtmfltqix .gt_center {
+#zkyqmjyxvx .gt_center {
   text-align: center;
 }
 
-#vgtmfltqix .gt_right {
+#zkyqmjyxvx .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#vgtmfltqix .gt_font_normal {
+#zkyqmjyxvx .gt_font_normal {
   font-weight: normal;
 }
 
-#vgtmfltqix .gt_font_bold {
+#zkyqmjyxvx .gt_font_bold {
   font-weight: bold;
 }
 
-#vgtmfltqix .gt_font_italic {
+#zkyqmjyxvx .gt_font_italic {
   font-style: italic;
 }
 
-#vgtmfltqix .gt_super {
+#zkyqmjyxvx .gt_super {
   font-size: 65%;
 }
 
-#vgtmfltqix .gt_footnote_marks {
+#zkyqmjyxvx .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#vgtmfltqix .gt_asterisk {
+#zkyqmjyxvx .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#vgtmfltqix .gt_indent_1 {
+#zkyqmjyxvx .gt_indent_1 {
   text-indent: 5px;
 }
 
-#vgtmfltqix .gt_indent_2 {
+#zkyqmjyxvx .gt_indent_2 {
   text-indent: 10px;
 }
 
-#vgtmfltqix .gt_indent_3 {
+#zkyqmjyxvx .gt_indent_3 {
   text-indent: 15px;
 }
 
-#vgtmfltqix .gt_indent_4 {
+#zkyqmjyxvx .gt_indent_4 {
   text-indent: 20px;
 }
 
-#vgtmfltqix .gt_indent_5 {
+#zkyqmjyxvx .gt_indent_5 {
   text-indent: 25px;
 }
 
-#vgtmfltqix .katex-display {
+#zkyqmjyxvx .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#vgtmfltqix div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#zkyqmjyxvx div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>

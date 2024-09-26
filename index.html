@@ -11,9 +11,9 @@
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Characterise Tables of an OMOP Common Data Model Instance">
-<meta name="description" content="Summarise key information in data mapped to the Observational Medical Outcomes Partnership (OMOP) common data model. Asses suitability to perform specific epidemiological studies and explore the different domains to obtain feasibility counts and trends.">
-<meta property="og:description" content="Summarise key information in data mapped to the Observational Medical Outcomes Partnership (OMOP) common data model. Asses suitability to perform specific epidemiological studies and explore the different domains to obtain feasibility counts and trends.">
-<meta property="og:image" content="https://oxford-pharmacoepi.github.io/OmopSketch/logo.png">
+<meta name="description" content="Summarises key information in data mapped to the Observational Medical Outcomes Partnership (OMOP) common data model. Assess suitability to perform specific epidemiological studies and explore the different domains to obtain feasibility counts and trends.">
+<meta property="og:description" content="Summarises key information in data mapped to the Observational Medical Outcomes Partnership (OMOP) common data model. Assess suitability to perform specific epidemiological studies and explore the different domains to obtain feasibility counts and trends.">
+<meta property="og:image" content="https://OHDSI.github.io/OmopSketch/logo.png">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -46,7 +46,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/oxford-pharmacoepi/OmopSketch/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/OHDSI/OmopSketch/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -73,7 +73,7 @@
 <p>You can install the development version of OmopSketch from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"oxford-pharmacoepi/OmopSketch"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"OHDSI/OmopSketch"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
@@ -84,7 +84,7 @@
 <span><span class="co">#&gt; Loading required package: DBI</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://darwin-eu.github.io/CDMConnector/" class="external-link">CDMConnector</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://oxford-pharmacoepi.github.io/OmopSketch/">OmopSketch</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://OHDSI.github.io/OmopSketch/">OmopSketch</a></span><span class="op">)</span></span>
 <span><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu"><a href="https://r.duckdb.org/reference/duckdb.html" class="external-link">duckdb</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="https://darwin-eu.github.io/CDMConnector/reference/eunomiaDir.html" class="external-link">eunomia_dir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://darwin-eu.github.io/CDMConnector/reference/cdm_from_con.html" class="external-link">cdmFromCon</a></span><span class="op">(</span>con <span class="op">=</span> <span class="va">con</span>, cdmSchema <span class="op">=</span> <span class="st">"main"</span>, writeSchema <span class="op">=</span> <span class="st">"main"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Note: method with signature 'DBIConnection#Id' chosen for function 'dbExistsTable',</span></span>
@@ -122,31 +122,31 @@
 <span>  <span class="fu"><a href="reference/tableClinicalRecords.html">tableClinicalRecords</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"flextable"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; ℹ Summarising table counts</span></span>
 <span><span class="co">#&gt; ℹ The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-09-24 12:48:56.361573</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-09-25 12:14:06.676817</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ✔ Summary finished, at 2024-09-24 12:48:56.415861</span></span>
+<span><span class="co">#&gt; ✔ Summary finished, at 2024-09-25 12:14:06.815944</span></span>
 <span><span class="co">#&gt; ℹ Summarising records per person</span></span>
 <span><span class="co">#&gt; ℹ The following estimates will be computed:</span></span>
 <span><span class="co">#&gt; • records_per_person: mean, sd, median, q25, q75, min, max</span></span>
 <span><span class="co">#&gt; ! Table is collected to memory as not all requested estimates are supported on</span></span>
 <span><span class="co">#&gt;   the database side</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-09-24 12:48:56.778719</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-09-25 12:14:07.908258</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ✔ Summary finished, at 2024-09-24 12:48:56.797614</span></span>
+<span><span class="co">#&gt; ✔ Summary finished, at 2024-09-25 12:14:07.955041</span></span>
 <span><span class="co">#&gt; ℹ Summarising in_observation, standard, domain_id, and type information</span></span>
 <span><span class="co">#&gt; ℹ Summarising table counts</span></span>
 <span><span class="co">#&gt; ℹ The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-09-24 12:48:58.347989</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-09-25 12:14:11.725276</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ✔ Summary finished, at 2024-09-24 12:48:58.403043</span></span>
+<span><span class="co">#&gt; ✔ Summary finished, at 2024-09-25 12:14:11.877293</span></span>
 <span><span class="co">#&gt; ℹ Summarising records per person</span></span>
 <span><span class="co">#&gt; ℹ The following estimates will be computed:</span></span>
 <span><span class="co">#&gt; • records_per_person: mean, sd, median, q25, q75, min, max</span></span>
 <span><span class="co">#&gt; ! Table is collected to memory as not all requested estimates are supported on</span></span>
 <span><span class="co">#&gt;   the database side</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-09-24 12:48:58.741719</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-09-25 12:14:12.808874</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ✔ Summary finished, at 2024-09-24 12:48:58.757574</span></span>
+<span><span class="co">#&gt; ✔ Summary finished, at 2024-09-25 12:14:12.850686</span></span>
 <span><span class="co">#&gt; ℹ Summarising in_observation, standard, domain_id, and type information</span></span>
 <span><span class="co">#&gt; ! Results have not been suppressed.</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-4-1.png" width="100%"></p>
@@ -197,15 +197,15 @@
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/summarisePopulationCharacteristics.html">summarisePopulationCharacteristics</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="reference/tablePopulationCharacteristics.html">tablePopulationCharacteristics</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"flextable"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: ! 1 casted column in og_015_1727178548 (cohort_set) as do not match expected</span></span>
+<span><span class="co">#&gt; Warning: ! 1 casted column in og_015_1727262876 (cohort_set) as do not match expected</span></span>
 <span><span class="co">#&gt;   column type:</span></span>
 <span><span class="co">#&gt; • `cohort_definition_id` from numeric to integer</span></span>
-<span><span class="co">#&gt; Warning: ! 1 column in og_015_1727178548 do not match expected column type:</span></span>
+<span><span class="co">#&gt; Warning: ! 1 column in og_015_1727262876 do not match expected column type:</span></span>
 <span><span class="co">#&gt; • `cohort_definition_id` is numeric but expected integer</span></span>
 <span><span class="co">#&gt; ! cohort columns will be reordered to match the expected order:</span></span>
 <span><span class="co">#&gt;   cohort_definition_id, subject_id, cohort_start_date, and cohort_end_date.</span></span>
 <span><span class="co">#&gt; ℹ Building new trimmed cohort</span></span>
-<span><span class="co">#&gt; Warning: ! 1 column in tmp_011_og_017_1727178548 do not match expected column type:</span></span>
+<span><span class="co">#&gt; Warning: ! 1 column in tmp_011_og_017_1727262877 do not match expected column type:</span></span>
 <span><span class="co">#&gt; • `cohort_definition_id` is numeric but expected integer</span></span>
 <span><span class="co">#&gt; Creating initial cohort</span></span>
 <span><span class="co">#&gt; ! cohort columns will be reordered to match the expected order:</span></span>
@@ -222,20 +222,20 @@
 <span><span class="co">#&gt; ! The following column type were changed:</span></span>
 <span><span class="co">#&gt; • variable_name: from integer to character</span></span>
 <span><span class="co">#&gt; ! Results have not been suppressed.</span></span></code></pre></div>
-<div id="gyhscrwufx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#gyhscrwufx table {
+<div id="yucwhpcvkx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#yucwhpcvkx table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-&#10;#gyhscrwufx thead, #gyhscrwufx tbody, #gyhscrwufx tfoot, #gyhscrwufx tr, #gyhscrwufx td, #gyhscrwufx th {
+&#10;#yucwhpcvkx thead, #yucwhpcvkx tbody, #yucwhpcvkx tfoot, #yucwhpcvkx tr, #yucwhpcvkx td, #yucwhpcvkx th {
   border-style: none;
 }
-&#10;#gyhscrwufx p {
+&#10;#yucwhpcvkx p {
   margin: 0;
   padding: 0;
 }
-&#10;#gyhscrwufx .gt_table {
+&#10;#yucwhpcvkx .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -260,11 +260,11 @@
   border-left-width: 2px;
   border-left-color: #D3D3D3;
 }
-&#10;#gyhscrwufx .gt_caption {
+&#10;#yucwhpcvkx .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
-&#10;#gyhscrwufx .gt_title {
+&#10;#yucwhpcvkx .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -275,7 +275,7 @@
   border-bottom-color: #FFFFFF;
   border-bottom-width: 0;
 }
-&#10;#gyhscrwufx .gt_subtitle {
+&#10;#yucwhpcvkx .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -286,7 +286,7 @@
   border-top-color: #FFFFFF;
   border-top-width: 0;
 }
-&#10;#gyhscrwufx .gt_heading {
+&#10;#yucwhpcvkx .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -297,12 +297,12 @@
   border-right-width: 1px;
   border-right-color: #D3D3D3;
 }
-&#10;#gyhscrwufx .gt_bottom_border {
+&#10;#yucwhpcvkx .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#gyhscrwufx .gt_col_headings {
+&#10;#yucwhpcvkx .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -316,7 +316,7 @@
   border-right-width: 1px;
   border-right-color: #D3D3D3;
 }
-&#10;#gyhscrwufx .gt_col_heading {
+&#10;#yucwhpcvkx .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -335,7 +335,7 @@
   padding-right: 5px;
   overflow-x: hidden;
 }
-&#10;#gyhscrwufx .gt_column_spanner_outer {
+&#10;#yucwhpcvkx .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -346,13 +346,13 @@
   padding-left: 4px;
   padding-right: 4px;
 }
-&#10;#gyhscrwufx .gt_column_spanner_outer:first-child {
+&#10;#yucwhpcvkx .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
-&#10;#gyhscrwufx .gt_column_spanner_outer:last-child {
+&#10;#yucwhpcvkx .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
-&#10;#gyhscrwufx .gt_column_spanner {
+&#10;#yucwhpcvkx .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -363,10 +363,10 @@
   display: inline-block;
   width: 100%;
 }
-&#10;#gyhscrwufx .gt_spanner_row {
+&#10;#yucwhpcvkx .gt_spanner_row {
   border-bottom-style: hidden;
 }
-&#10;#gyhscrwufx .gt_group_heading {
+&#10;#yucwhpcvkx .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -391,7 +391,7 @@
   vertical-align: middle;
   text-align: left;
 }
-&#10;#gyhscrwufx .gt_empty_group_heading {
+&#10;#yucwhpcvkx .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -405,13 +405,13 @@
   border-bottom-color: #D3D3D3;
   vertical-align: middle;
 }
-&#10;#gyhscrwufx .gt_from_md > :first-child {
+&#10;#yucwhpcvkx .gt_from_md > :first-child {
   margin-top: 0;
 }
-&#10;#gyhscrwufx .gt_from_md > :last-child {
+&#10;#yucwhpcvkx .gt_from_md > :last-child {
   margin-bottom: 0;
 }
-&#10;#gyhscrwufx .gt_row {
+&#10;#yucwhpcvkx .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -429,7 +429,7 @@
   vertical-align: middle;
   overflow-x: hidden;
 }
-&#10;#gyhscrwufx .gt_stub {
+&#10;#yucwhpcvkx .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -441,7 +441,7 @@
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#gyhscrwufx .gt_stub_row_group {
+&#10;#yucwhpcvkx .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -454,13 +454,13 @@
   padding-right: 5px;
   vertical-align: top;
 }
-&#10;#gyhscrwufx .gt_row_group_first td {
+&#10;#yucwhpcvkx .gt_row_group_first td {
   border-top-width: 2px;
 }
-&#10;#gyhscrwufx .gt_row_group_first th {
+&#10;#yucwhpcvkx .gt_row_group_first th {
   border-top-width: 2px;
 }
-&#10;#gyhscrwufx .gt_summary_row {
+&#10;#yucwhpcvkx .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -469,14 +469,14 @@
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#gyhscrwufx .gt_first_summary_row {
+&#10;#yucwhpcvkx .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
-&#10;#gyhscrwufx .gt_first_summary_row.thick {
+&#10;#yucwhpcvkx .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
-&#10;#gyhscrwufx .gt_last_summary_row {
+&#10;#yucwhpcvkx .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -485,7 +485,7 @@
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#gyhscrwufx .gt_grand_summary_row {
+&#10;#yucwhpcvkx .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -494,7 +494,7 @@
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#gyhscrwufx .gt_first_grand_summary_row {
+&#10;#yucwhpcvkx .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -503,7 +503,7 @@
   border-top-width: 6px;
   border-top-color: #D3D3D3;
 }
-&#10;#gyhscrwufx .gt_last_grand_summary_row_top {
+&#10;#yucwhpcvkx .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -512,10 +512,10 @@
   border-bottom-width: 6px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#gyhscrwufx .gt_striped {
+&#10;#yucwhpcvkx .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
-&#10;#gyhscrwufx .gt_table_body {
+&#10;#yucwhpcvkx .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -523,7 +523,7 @@
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#gyhscrwufx .gt_footnotes {
+&#10;#yucwhpcvkx .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -536,7 +536,7 @@
   border-right-width: 2px;
   border-right-color: #D3D3D3;
 }
-&#10;#gyhscrwufx .gt_footnote {
+&#10;#yucwhpcvkx .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -544,7 +544,7 @@
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#gyhscrwufx .gt_sourcenotes {
+&#10;#yucwhpcvkx .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -557,64 +557,64 @@
   border-right-width: 2px;
   border-right-color: #D3D3D3;
 }
-&#10;#gyhscrwufx .gt_sourcenote {
+&#10;#yucwhpcvkx .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#gyhscrwufx .gt_left {
+&#10;#yucwhpcvkx .gt_left {
   text-align: left;
 }
-&#10;#gyhscrwufx .gt_center {
+&#10;#yucwhpcvkx .gt_center {
   text-align: center;
 }
-&#10;#gyhscrwufx .gt_right {
+&#10;#yucwhpcvkx .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
-&#10;#gyhscrwufx .gt_font_normal {
+&#10;#yucwhpcvkx .gt_font_normal {
   font-weight: normal;
 }
-&#10;#gyhscrwufx .gt_font_bold {
+&#10;#yucwhpcvkx .gt_font_bold {
   font-weight: bold;
 }
-&#10;#gyhscrwufx .gt_font_italic {
+&#10;#yucwhpcvkx .gt_font_italic {
   font-style: italic;
 }
-&#10;#gyhscrwufx .gt_super {
+&#10;#yucwhpcvkx .gt_super {
   font-size: 65%;
 }
-&#10;#gyhscrwufx .gt_footnote_marks {
+&#10;#yucwhpcvkx .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
-&#10;#gyhscrwufx .gt_asterisk {
+&#10;#yucwhpcvkx .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
-&#10;#gyhscrwufx .gt_indent_1 {
+&#10;#yucwhpcvkx .gt_indent_1 {
   text-indent: 5px;
 }
-&#10;#gyhscrwufx .gt_indent_2 {
+&#10;#yucwhpcvkx .gt_indent_2 {
   text-indent: 10px;
 }
-&#10;#gyhscrwufx .gt_indent_3 {
+&#10;#yucwhpcvkx .gt_indent_3 {
   text-indent: 15px;
 }
-&#10;#gyhscrwufx .gt_indent_4 {
+&#10;#yucwhpcvkx .gt_indent_4 {
   text-indent: 20px;
 }
-&#10;#gyhscrwufx .gt_indent_5 {
+&#10;#yucwhpcvkx .gt_indent_5 {
   text-indent: 25px;
 }
-&#10;#gyhscrwufx .katex-display {
+&#10;#yucwhpcvkx .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
-&#10;#gyhscrwufx div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+&#10;#yucwhpcvkx div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -917,8 +917,9 @@ Range
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/oxford-pharmacoepi/OmopSketch/" class="external-link">Browse source code</a></li>
-<li><a href="https://github.com/oxford-pharmacoepi/OmopSketch/issues" class="external-link">Report a bug</a></li>
+<li><a href="https://cloud.r-project.org/package=OmopSketch" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/OHDSI/OmopSketch/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/OHDSI/OmopSketch/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
@@ -953,9 +954,9 @@ Range
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
-<li><a href="https://github.com/oxford-pharmacoepi/OmopSketch/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/oxford-pharmacoepi/OmopSketch/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://github.com/OHDSI/OmopSketch/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/OHDSI/OmopSketch/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://CRAN.R-project.org/package=OmopSketch" class="external-link"><img src="https://www.r-pkg.org/badges/version/OmopSketch" alt="CRAN status"></a></li>
-<li><a href="https://app.codecov.io/gh/oxford-pharmacoepi/OmopSketch?branch=main" class="external-link"><img src="https://codecov.io/gh/oxford-pharmacoepi/OmopSketch/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://app.codecov.io/gh/OHDSI/OmopSketch?branch=main" class="external-link"><img src="https://codecov.io/gh/OHDSI/OmopSketch/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
 </ul>
 </div>
 
