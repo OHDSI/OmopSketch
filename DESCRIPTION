@@ -24,8 +24,8 @@ Authors@R: c(
         role = c("aut"), comment = c(ORCID = "0000-0003-3308-9905")
     ))
 Maintainer: Marta Alcalde-Herraiz <marta.alcaldeherraiz@ndorms.ox.ac.uk>
-Description: Summarise key information in data mapped to the Observational 
-    Medical Outcomes Partnership (OMOP) common data model. Asses suitability to 
+Description: Summarises key information in data mapped to the Observational 
+    Medical Outcomes Partnership (OMOP) common data model. Assess suitability to 
     perform specific epidemiological studies and explore the different domains
     to obtain feasibility counts and trends.
 License: Apache License (>= 2)
@@ -67,6 +67,6 @@ Imports:
     visOmopResults (>= 0.4.0)
 Depends: 
     R (>= 2.10)
-URL: https://oxford-pharmacoepi.github.io/OmopSketch/
-BugReports: https://github.com/oxford-pharmacoepi/OmopSketch/issues
+URL: https://OHDSI.github.io/OmopSketch/
+BugReports: https://github.com/OHDSI/OmopSketch/issues
 VignetteBuilder: knitr

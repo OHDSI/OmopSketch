@@ -19,7 +19,6 @@ Create a visual table from a summariseClinicalRecord() output.
 }
 \examples{
 \donttest{
-
 cdm <- mockOmopSketch()
 
 summarisedResult <- summariseClinicalRecords(

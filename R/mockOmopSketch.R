@@ -11,13 +11,10 @@
 #' seed allows the function to produce consistent results each time it is run
 #' with the same inputs. If 'NULL', the seed is not set, which can lead to
 #' different outputs on each run.
-#'
 #' @return A mock cdm_reference object.
 #' @export
-#'
 #' @examples
 #' mockOmopSketch(numberIndividuals = 100)
-#'
 mockOmopSketch <- function(con = NULL,
                            writeSchema = NULL,
                            numberIndividuals = 100,

@@ -22,9 +22,7 @@
 #' @param ageGroup A list of age groups to stratify results by.
 #' @param sex Boolean variable. Whether to stratify by sex (TRUE) or not
 #' (FALSE).
-#'
 #' @return A summarised_result object.
-#'
 #' @export
 #' @examples
 #' \donttest{
@@ -224,6 +222,7 @@ getNumberPeopleInCdm <- function(cdm, strata, peopleStrata){
 
   peopleStrata |>
     dplyr::select(-c("observation_period_start_date","observation_period_end_date")) |>
+    dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") |>
     PatientProfiles::summariseResult(strata = strata,
                                      includeOverallStrata = TRUE,
                                      counts = TRUE,

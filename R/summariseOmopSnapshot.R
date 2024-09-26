@@ -3,16 +3,12 @@
 #' cdm_reference object.
 #'
 #' @param cdm A cdm_reference object.
-#'
 #' @return A summarised_result object.
-#'
 #' @export
-#'
 #' @examples
 #' cdm <- mockOmopSketch(numberIndividuals = 10)
 #'
 #' summariseOmopSnapshot(cdm)
-#'
 summariseOmopSnapshot <- function(cdm) {
 
   omopgenerics::validateCdmArgument(cdm)

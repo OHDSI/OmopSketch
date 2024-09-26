@@ -5,10 +5,8 @@
 #' columns to face by with: `visOmopResults::tidyColumns()`.
 #' @param colour Columns to colour by. See possible columns to colour by with:
 #' `visOmopResults::tidyColumns()`.
-#'
 #' @return A ggplot2 object showing the concept counts.
 #' @export
-#'
 #' @examples
 #' \donttest{
 #' library(dplyr, warn.conflicts = FALSE)

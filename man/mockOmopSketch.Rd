@@ -35,5 +35,4 @@ Creates a mock database to test OmopSketch package.
 }
 \examples{
 mockOmopSketch(numberIndividuals = 100)
-
 }

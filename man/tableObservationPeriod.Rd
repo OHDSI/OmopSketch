@@ -27,5 +27,4 @@ tableObservationPeriod(result)
 
 PatientProfiles::mockDisconnect(cdm)
 }
-
 }

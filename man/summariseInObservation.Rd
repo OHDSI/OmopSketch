@@ -40,7 +40,7 @@ Summarise the number of people in observation during a specific interval of
 time.
 }
 \examples{
-\dontrun{
+\donttest{
 library(dplyr, warn.conflicts = FALSE)
 
 cdm <- mockOmopSketch()
@@ -59,5 +59,4 @@ result |>
 
 PatientProfiles::mockDisconnect(cdm)
 }
-
 }

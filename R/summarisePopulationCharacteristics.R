@@ -8,9 +8,7 @@
 #' are used.
 #' @param sex Whether to stratify the results by sex.
 #' @param ageGroup List of age groups to stratify by at index date.
-#'
 #' @return A summarised_result object.
-#'
 #' @export
 #' @examples
 #' \donttest{

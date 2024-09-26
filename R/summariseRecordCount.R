@@ -9,9 +9,7 @@
 #' interval.
 #' @param ageGroup A list of age groups to stratify results by.
 #' @param sex Whether to stratify by sex (TRUE) or not (FALSE).
-#'
 #' @return A summarised_result object.
-#'
 #' @export
 #' @examples
 #' \donttest{

@@ -1,12 +1,9 @@
 
 #' Create a visual table from a summarise_omop_snapshot result.
-#'
 #' @param result  Output from summariseOmopSnapshot().
 #' @param type Type of formatting output table, either "gt" or "flextable".
-#'
 #' @return A gt or flextable object with the summarised data.
 #' @export
-#'
 #' @examples
 #' cdm <- mockOmopSketch(numberIndividuals = 10)
 #'
@@ -16,7 +13,6 @@
 #'   tableOmopSnapshot()
 #'
 #' PatientProfiles::mockDisconnect(cdm)
-#'
 tableOmopSnapshot <- function(result,
                               type = "gt") {
   # initial checks

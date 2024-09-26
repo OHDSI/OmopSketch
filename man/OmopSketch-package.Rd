@@ -8,13 +8,13 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Summarise key information in data mapped to the Observational Medical Outcomes Partnership (OMOP) common data model. Asses suitability to perform specific epidemiological studies and explore the different domains to obtain feasibility counts and trends.
+Summarises key information in data mapped to the Observational Medical Outcomes Partnership (OMOP) common data model. Assess suitability to perform specific epidemiological studies and explore the different domains to obtain feasibility counts and trends.
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://oxford-pharmacoepi.github.io/OmopSketch/}
-  \item Report bugs at \url{https://github.com/oxford-pharmacoepi/OmopSketch/issues}
+  \item \url{https://OHDSI.github.io/OmopSketch/}
+  \item Report bugs at \url{https://github.com/OHDSI/OmopSketch/issues}
 }
 
 }

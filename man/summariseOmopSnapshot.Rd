@@ -21,5 +21,4 @@ cdm_reference object.
 cdm <- mockOmopSketch(numberIndividuals = 10)
 
 summariseOmopSnapshot(cdm)
-
 }
