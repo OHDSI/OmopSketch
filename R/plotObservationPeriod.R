@@ -68,15 +68,14 @@ plotObservationPeriod <- function(result,
       x = colour,
       y = "count",
       facet = facet,
-      colour = colour
-    )
+      colour = colour) +
+      ggplot2::ylab(stringr::str_to_sentence(unique(result$variable_name)))
   } else if (plotType == "boxplot") {
     p <- visOmopResults::boxPlot(
       result = result,
       x = colour,
       facet = facet,
-      colour = colour
-    )
+      colour = colour)
   } else {
     p <- visOmopResults::scatterPlot(
       result = result,
@@ -87,8 +86,9 @@ plotObservationPeriod <- function(result,
       ribbon = FALSE,
       facet = facet,
       colour = colour,
-      group = optFacetColour
-    )
+      group = optFacetColour) +
+      ggplot2::xlab(stringr::str_to_sentence(unique(result$variable_name))) +
+      ggplot2::ylab("Density")
   }
 
   return(p)
