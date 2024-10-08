@@ -65,7 +65,8 @@ summarisePopulationCharacteristics <- function(cdm,
     dplyr::mutate(variable_name = dplyr::if_else(.data$variable_name == "Age", "Age at start", .data$variable_name)) |>
     dplyr::mutate(variable_name = factor(.data$variable_name,
                                          levels = c("Number records", "Number subjects", "Cohort start date", "Cohort end date",
-                                                    "Age at start", "Age at end", "Sex", "Prior observation", "Future observation"))) |>
+                                                    "Age at start", "Age at end", "Sex", "Prior observation", "Future observation",
+                                                    "Days in cohort"))) |>
     dplyr::arrange(.data$variable_name) |>
     omopgenerics::newSummarisedResult(
       settings = dplyr::tibble(
