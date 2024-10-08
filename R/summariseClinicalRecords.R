@@ -71,7 +71,7 @@ summariseClinicalRecords <- function(cdm,
   omopgenerics::assertLogical(domainId, length = 1)
   omopgenerics::assertLogical(typeConcept, length = 1)
   omopgenerics::assertLogical(sex, length = 1)
-  omopgenerics::validateAgeGroupArgument(ageGroup)
+  ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "")[[1]]
 
   result <- purrr::map(omopTableName,
                        function(x) {

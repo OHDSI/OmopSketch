@@ -55,7 +55,7 @@ summariseInObservation <- function(observationPeriod,
   checkUnit(unit)
   omopgenerics::assertNumeric(unitInterval, length = 1, min = 1)
   checkOutput(output)
-  omopgenerics::validateAgeGroupArgument(ageGroup)
+  ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "")[[1]]
   omopgenerics::assertLogical(sex, length = 1)
 
   if(length(output) > 1){output <- "all"}

@@ -118,7 +118,7 @@ getCodeUse <- function(x,
   omopgenerics::assertLogical(concept)
   omopgenerics::assertLogical(year)
   omopgenerics::assertLogical(sex)
-  omopgenerics::validateAgeGroupArgument(ageGroup)
+  ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "")[[1]]
 
   tableCodelist <- paste0(omopgenerics::uniqueTableName(),
                           omopgenerics::uniqueId())

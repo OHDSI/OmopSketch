@@ -78,28 +78,27 @@ test_that("summariseClinicalRecords() works", {
 })
 
 test_that("summariseClinicalRecords() sex and ageGroup argument work", {
-  # skip_on_cran()
-  # # Load mock database ----
-  # cdm <- cdmEunomia()
-  #
-  # # Check all tables work ----
-  # expect_true(inherits(summariseClinicalRecords(cdm, "observation_period", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))),"summarised_result"))
-  # expect_no_error(op <- summariseClinicalRecords(cdm, "observation_period", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
-  # expect_no_error(vo <- summariseClinicalRecords(cdm, "visit_occurrence", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
-  # expect_no_error(summariseClinicalRecords(cdm, "condition_occurrence", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf))))
-  # expect_no_error(summariseClinicalRecords(cdm, "drug_exposure", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
-  # expect_no_error(summariseClinicalRecords(cdm, "procedure_occurrence", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
-  # expect_warning(summariseClinicalRecords(cdm, "device_exposure", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
-  # expect_no_error(m <- summariseClinicalRecords(cdm, "measurement", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
-  # expect_no_error(summariseClinicalRecords(cdm, "observation", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
-  # expect_warning(summariseClinicalRecords(cdm, "death", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
-  #
-  # expect_no_error(all <- summariseClinicalRecords(cdm,
-  #                                                 c("observation_period", "visit_occurrence", "measurement"),
-  #                                                 sex = TRUE,
-  #                                                 ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
-  #
-  #
+  skip_on_cran()
+  # Load mock database ----
+  cdm <- cdmEunomia()
+
+  # Check all tables work ----
+  expect_true(inherits(summariseClinicalRecords(cdm, "observation_period", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))),"summarised_result"))
+  expect_no_error(op <- summariseClinicalRecords(cdm, "observation_period", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
+  expect_no_error(vo <- summariseClinicalRecords(cdm, "visit_occurrence", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
+  expect_no_error(m <- summariseClinicalRecords(cdm, "measurement", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
+  expect_no_error(summariseClinicalRecords(cdm,
+                                           c("condition_occurrence", "drug_exposure", "procedure_occurrence",
+                                             "device_exposure","observation","death"),
+                                           sex = FALSE,
+                                           ageGroup = list(">= 30" = c(30, Inf))))
+
+  expect_no_error(all <- summariseClinicalRecords(cdm,
+                                                  c("observation_period", "visit_occurrence", "measurement"),
+                                                  sex = TRUE,
+                                                  ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
+
+  PatientProfiles::mockDisconnect(cdm = cdm)
   # expect_identical(
   #   dplyr::bind_rows(op, vo,m) |>
   #     dplyr::mutate(estimate_value = dplyr::if_else(
@@ -209,10 +208,7 @@ test_that("summariseClinicalRecords() sex and ageGroup argument work", {
   #   dplyr::filter(variable_name == "records_per_person")
   # expect_true(records |> dplyr::filter(strata_name == "overall", estimate_name == "mean") |> dplyr::pull(estimate_value) == "1.8")
   # expect_true(records |> dplyr::filter(strata_level == "old &&& Male", estimate_name == "median") |> dplyr::pull(estimate_value) == "3")
-  #
-  # PatientProfiles::mockDisconnect(cdm = cdm)
 })
-
 
 test_that("tableClinicalRecords() works", {
   skip_on_cran()

@@ -5,6 +5,7 @@ test_that("summarisePopulationCharacteristics() works", {
 
   # Check that works ----
   expect_no_error(summarisedPopulation <- summarisePopulationCharacteristics(cdm = cdm))
+
   expect_true(inherits(summarisedPopulation,"summarised_result"))
   expect_true(all(summarisedPopulation |>
                     dplyr::select("strata_name") |>
@@ -114,7 +115,7 @@ test_that("summarisePopulationCharacteristics() works", {
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
 
-test_that("summarisePopulationCharacteristics() works", {
+test_that("summarisePopulationCharacteristics() strata works", {
   # Load mock database ----
   cdm <- omock::mockCdmReference() |>
     omock::mockPerson(seed = 1L) |>

@@ -149,6 +149,8 @@ test_that("check ageGroup argument works", {
   # Load mock database ----
   cdm <- cdmEunomia()
 
+  expect_no_error(summariseClinicalRecords(cdm, "condition_occurrence", ageGroup = list(c(0,20), c(21, Inf))))
+
   x <- summariseInObservation(cdm$observation_period, unit = "year", unitInterval = 10, ageGroup = list("<=20" = c(0,20), ">20" = c(21,Inf))) |>
     dplyr::filter(variable_level == "1928-01-01 to 1937-12-31", estimate_name == "count", strata_level == "<=20") |>
     dplyr::pull(estimate_value) |> as.numeric()

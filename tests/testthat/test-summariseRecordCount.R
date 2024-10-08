@@ -114,6 +114,8 @@ test_that("summariseRecordCount() ageGroup argument works", {
   cdm <- cdmEunomia()
 
   # Check that works ----
+  expect_no_error(summariseRecordCount(cdm, "condition_occurrence", ageGroup = list(c(65, Inf), c(0,64))))
+
   expect_no_error(t <- summariseRecordCount(cdm, "condition_occurrence",
                                              ageGroup = list(">=65" = c(65, Inf), "<65" = c(0,64))))
   x <- t |>
