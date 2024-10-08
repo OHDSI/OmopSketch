@@ -43,7 +43,7 @@ summariseRecordCount <- function(cdm,
   omopgenerics::assertCharacter(omopTableName)
   checkUnit(unit)
   omopgenerics::assertNumeric(unitInterval, length = 1, min = 1)
-  omopgenerics::validateAgeGroupArgument(ageGroup)
+  ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "")[[1]]
   omopgenerics::assertLogical(sex, length = 1)
 
   result <- purrr::map(omopTableName,

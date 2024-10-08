@@ -369,6 +369,10 @@ test_that("check summariseObservationPeriod strata works", {
     con = connection(), cdm = cdm, schema = schema())
 
   # simple run
+  expect_no_error(summariseObservationPeriod(cdm$observation_period,
+                                             estimates = c("mean"),
+                                             ageGroup = list(c(0,9), c(10, Inf))))
+
   expect_no_error(resAll <- summariseObservationPeriod(cdm$observation_period,
                                                           estimates = c("mean", "sd", "min", "max", "median", "density")))
   expect_no_error(resStrata <- summariseObservationPeriod(cdm$observation_period,
