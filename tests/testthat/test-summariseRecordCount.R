@@ -154,9 +154,10 @@ test_that("summariseRecordCount() ageGroup argument works", {
                                              ageGroup = list("<=20" = c(0,20), "21 to 40" = c(21,40), "41 to 60" = c(41,60), ">60" = c(61, Inf))))
    x <- t |>
     dplyr::select("strata_level", "variable_level", "estimate_value") |>
-    dplyr::filter(strata_level == "<=20" & variable_level == "1920-01-01 to 1920-12-31") |>
-    dplyr::summarise(n = sum(as.numeric(estimate_value))) |>
-    dplyr::pull("n")
+    dplyr::filter(strata_level == "<=20" & variable_level == "1920-01-01 to 1920-12-31")
+   # |>
+   #  dplyr::summarise(n = sum(as.numeric(estimate_value))) |>
+   #  dplyr::pull("n")
   y <- cdm$condition_occurrence |>
     dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") |>
     PatientProfiles::addAgeQuery(indexDate = "condition_start_date", ageGroup = list("<=20" = c(0,20))) |>
