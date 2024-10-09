@@ -162,9 +162,10 @@ test_that("summariseRecordCount() ageGroup argument works", {
     dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") |>
     PatientProfiles::addAgeQuery(indexDate = "condition_start_date", ageGroup = list("<=20" = c(0,20))) |>
     dplyr::filter(age_group == "<=20") |>
-    dplyr::filter(clock::get_year(condition_start_date) == "1920") |>
-    dplyr::summarise(n = dplyr::n()) |>
-    dplyr::pull("n") |> as.numeric()
+    dplyr::filter(clock::get_year(condition_start_date) == "1920")
+  # |>
+  #   dplyr::summarise(n = dplyr::n()) |>
+  #   dplyr::pull("n") |> as.numeric()
   expect_equal(x,y)
 
 
