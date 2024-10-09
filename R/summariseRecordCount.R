@@ -106,11 +106,8 @@ summariseRecordCountInternal <- function(omopTableName, cdm, unit, unitInterval,
   # Obtain record counts for each interval ----
   result <- splitIncidenceBetweenIntervals(cdm, omopTable, date, strata)
 
-  # Create overall group ----
-  result <- createOverallGroup(result, ageGroup, sex, strata)
-
   # Create summarised result ----
-  result <- createSummarisedResultRecordCount(result, omopTable, omopTableName, unit, unitInterval)
+  result <- createSummarisedResultRecordCount(result, sex, ageGroup, omopTable, omopTableName, unit, unitInterval)
   omopgenerics::dropTable(cdm = cdm, name = "interval")
 
   return(result)
@@ -222,88 +219,34 @@ getIntervalTibble <- function(omopTable, start_date_name, end_date_name, unit, u
 }
 
 splitIncidenceBetweenIntervals <- function(cdm, omopTable, date, strata){
-
   cdm$interval |>
     dplyr::inner_join(
       omopTable |>
         dplyr::rename("incidence_date" = dplyr::all_of(.env$date)) |>
-        dplyr::mutate("my" = paste0(clock::get_month(.data$incidence_date),"-",clock::get_year(.data$incidence_date))) |>
-        dplyr::group_by(.data$age_group,.data$sex,.data$my) |>
-        dplyr::summarise(n = dplyr::n()) |>
-        dplyr::ungroup(),
+        dplyr::mutate("my" = paste0(clock::get_month(.data$incidence_date),"-",clock::get_year(.data$incidence_date))),
       by = "my"
     ) |>
     dplyr::select(-c("my")) |>
-    dplyr::group_by(.data$interval_group, dplyr::across(dplyr::any_of(strata))) |>
-    dplyr::summarise("estimate_value" = sum(.data$n, na.rm = TRUE), .groups = "drop") |>
-    dplyr::collect() |>
-    dplyr::arrange(.data$interval_group)
+    dplyr::relocate("person_id") |>
+    dplyr::select(-c("interval_start_date", "interval_end_date", "incidence_date", "person_id"))
 }
 
-createOverallGroup <- function(result, ageGroup, sex, strata){
-  ageStrata <- FALSE %in% c(names(ageGroup) == "overall")
+createSummarisedResultRecordCount <- function(result, sex, ageGroup, omopTable, omopTableName, unit, unitInterval){
 
-  if(ageStrata & sex){ # If we stratified by age and sex
-    # sex = overall, ageGroup = overall
-    result <- result |>
-      rbind(
-        result |>
-          dplyr::group_by(.data$interval_group) |>
-          dplyr::summarise(estimate_value = sum(.data$estimate_value, na.rm = TRUE), .groups = "drop") |>
-          dplyr::mutate(age_group = "overall", sex = "overall")
-      ) |>
-    # Create ageGroup = overall for each sex group
-      rbind(
-        result |>
-          dplyr::group_by(.data$interval_group, .data$sex) |>
-          dplyr::summarise(estimate_value = sum(.data$estimate_value, na.rm = TRUE), .groups = "drop") |>
-          dplyr::mutate(age_group = "overall")
-      ) |>
-    # Create sex group = overall for each ageGroup
-      rbind(
-        result |>
-          dplyr::group_by(.data$interval_group, .data$age_group) |>
-          dplyr::summarise(estimate_value = sum(.data$estimate_value, na.rm = TRUE), .groups = "drop") |>
-          dplyr::mutate(sex = "overall")
-      )
-  }else if(!sex & !ageStrata){ # If no stratification
-    result <- result |> dplyr::mutate(age_group = "overall", sex = "overall")
-  }else if(!sex & ageStrata){ # If only age stratification
-    result <- result |>
-      rbind(
-        result |>
-          dplyr::group_by(.data$interval_group, .data$sex) |>
-          dplyr::summarise(estimate_value = sum(.data$estimate_value, na.rm = TRUE), .groups = "drop") |>
-          dplyr::mutate(age_group = "overall")
-      )
-  }else if(sex & !ageStrata){ # If only sex stratification
-    result <- result |>
-      rbind(
-        result |>
-          dplyr::group_by(.data$interval_group, .data$age_group) |>
-          dplyr::summarise(estimate_value = sum(.data$estimate_value, na.rm = TRUE), .groups = "drop") |>
-          dplyr::mutate(sex = "overall")
-      )
-  }
-
-  return(result)
-}
-
-createSummarisedResultRecordCount <- function(result, omopTable, name, unit, unitInterval){
-  result <- result |>
-    dplyr::mutate(
-      "estimate_value" = as.character(.data$estimate_value),
-      "variable_name" = "incidence_records",
-    ) |>
-    dplyr::rename("variable_level" = "interval_group") |>
-    visOmopResults::uniteStrata(cols = c("age_group","sex")) |>
+  PatientProfiles::summariseResult(
+    result,
+    strata = getStrataList(sex, ageGroup),
+    includeOverallStrata = TRUE,
+    estimates = "count",
+    counts = FALSE
+  ) |>
+    dplyr::filter(!.data$variable_name %in% c("sex", "age_group")) |>
+    dplyr::mutate("variable_name" = "incidence_records") |>
     dplyr::mutate(
       "result_id" = as.integer(1),
       "cdm_name" = omopgenerics::cdmName(omopgenerics::cdmReference(omopTable)),
       "group_name"  = "omop_table",
-      "group_level" = name,
-      "estimate_name" = "count",
-      "estimate_type" = "integer",
+      "group_level" = omopTableName,
       "additional_name" = "time_interval",
       "additional_level" = gsub(" to.*","",.data$variable_level)
     ) |>
