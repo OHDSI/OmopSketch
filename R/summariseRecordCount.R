@@ -233,13 +233,15 @@ splitIncidenceBetweenIntervals <- function(cdm, omopTable, date, strata){
 
 createSummarisedResultRecordCount <- function(result, sex, ageGroup, omopTable, omopTableName, unit, unitInterval){
 
-  PatientProfiles::summariseResult(
+  result <- PatientProfiles::summariseResult(
     result,
     strata = getStrataList(sex, ageGroup),
     includeOverallStrata = TRUE,
     estimates = "count",
     counts = FALSE
-  ) |>
+  )
+
+  result |>
     dplyr::filter(!.data$variable_name %in% c("sex", "age_group")) |>
     dplyr::mutate("variable_name" = "incidence_records") |>
     dplyr::mutate(
