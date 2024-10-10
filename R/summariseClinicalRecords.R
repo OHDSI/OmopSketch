@@ -115,7 +115,7 @@ summariseClinicalRecord <- function(omopTableName, cdm, recordsPerPerson,
   omopTable <- filterPersonId(omopTable) |>
     addStrataToOmopTable(date, ageGroup, sex)
 
-  if ("observation_period" == omopTableName) {
+    if ("observation_period" == omopTableName) {
     if(standardConcept){
       if(!missing(standardConcept)){
         cli::cli_inform("standardConcept turned to FALSE for observation_period OMOP table", call = call)
@@ -223,11 +223,13 @@ getNumberPeopleInCdm <- function(cdm, strata, peopleStrata){
   peopleStrata |>
     dplyr::select(-c("observation_period_start_date","observation_period_end_date")) |>
     dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") |>
+    dplyr::collect() |> # https://github.com/darwin-eu-dev/PatientProfiles/issues/706
     PatientProfiles::summariseResult(strata = strata,
                                      includeOverallStrata = TRUE,
                                      counts = TRUE,
-                                     estimates = c("max")) |>
-    suppressMessages()
+                                     estimates = c("")) |>
+    suppressMessages() |>
+    dplyr::filter(.data$variable_name != "number records")
 }
 
 addCounts <- function(result, strata, omopTable){
@@ -238,6 +240,7 @@ addCounts <- function(result, strata, omopTable){
     rbind(
       omopTable |>
         dplyr::select("person_id", dplyr::any_of(c("age_group","sex"))) |>
+        dplyr::collect() |> # https://github.com/darwin-eu-dev/PatientProfiles/issues/706
         PatientProfiles::summariseResult(strata = strata,
                                          includeOverallStrata = TRUE,
                                          counts = TRUE,
@@ -288,6 +291,7 @@ addRecordsPerPerson <- function(result, omopTable, recordsPerPerson, cdm, people
           .data$records_per_person
         )) |>
         dplyr::distinct() |>
+        dplyr::collect() |> # https://github.com/darwin-eu-dev/PatientProfiles/issues/706
         PatientProfiles::summariseResult(
           strata = strata,
           includeOverallStrata = TRUE,
