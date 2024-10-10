@@ -115,7 +115,7 @@ summariseClinicalRecord <- function(omopTableName, cdm, recordsPerPerson,
   omopTable <- filterPersonId(omopTable) |>
     addStrataToOmopTable(date, ageGroup, sex)
 
-  if ("observation_period" == omopTableName) {
+    if ("observation_period" == omopTableName) {
     if(standardConcept){
       if(!missing(standardConcept)){
         cli::cli_inform("standardConcept turned to FALSE for observation_period OMOP table", call = call)
@@ -227,8 +227,9 @@ getNumberPeopleInCdm <- function(cdm, strata, peopleStrata){
     PatientProfiles::summariseResult(strata = strata,
                                      includeOverallStrata = TRUE,
                                      counts = TRUE,
-                                     estimates = c("max")) |>
-    suppressMessages()
+                                     estimates = c("")) |>
+    suppressMessages() |>
+    dplyr::filter(.data$variable_name != "number records")
 }
 
 addCounts <- function(result, strata, omopTable){
