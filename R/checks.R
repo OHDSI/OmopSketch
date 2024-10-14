@@ -161,12 +161,9 @@ validateFacet <- function(facet, result, call = parent.frame()) {
     facet <- unlist(strsplit(facet, " \\+ "))
     facet <- facet[facet != "~" & facet != "+" & facet != "."]
   }
-    # Assert choices
-    optFacetColour <- visOmopResults::tidyColumns(result)
-    optFacetColour <- optFacetColour[optFacetColour %in% visOmopResults::tidyColumns(result)]
 
     facet <- as.character(facet)
-    omopgenerics::assertChoice(facet, optFacetColour, null = TRUE, call = call)
+    omopgenerics::assertChoice(facet, visOmopResults::tidyColumns(result), null = TRUE, call = call)
 
   return(invisible(NULL))
 }

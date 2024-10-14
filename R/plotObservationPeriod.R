@@ -66,7 +66,7 @@ plotObservationPeriod <- function(result,
   if (length(facet) == 0) facet <- NULL
   if (length(colour) == 0) colour <- NULL
 
-  if(length(unique(result$group_name)) == 1){
+  if(length(visOmopResults::groupColumns(result)) == 0){
     result <- result |>
       dplyr::mutate(group_name  = "observation_period_ordinal",
              group_level = "Overall")
