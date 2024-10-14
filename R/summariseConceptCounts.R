@@ -1,5 +1,5 @@
 
-#' Summarise code use in patient-level data
+#' Summarise concept counts in patient-level data. Only concepts recorded during observation period are counted.
 #'
 #' @param cdm A cdm object
 #' @param conceptId List of concept IDs to summarise.
@@ -50,30 +50,26 @@ summariseConceptCounts <- function(cdm,
   #     tibble::deframe()
   # }
 
-  getAllCodeUse <- function() {
-    codeUse <- list()
-    cli::cli_progress_bar("Getting use of codes", total = length(conceptId))
-    for(i in 1:length(conceptId)) {
-      cli::cli_alert_info("Getting concept counts of {names(conceptId)[i]}")
-      codeUse[[i]] <- getCodeUse(conceptId[i],
-                                 cdm = cdm,
-                                 cohortTable = NULL,
-                                 cohortId = NULL,
-                                 timing = "any",
-                                 countBy = countBy,
-                                 concept = concept,
-                                 year = year,
-                                 sex = sex,
-                                 ageGroup = ageGroup)
-      Sys.sleep(i/length(conceptId))
-      cli::cli_progress_update()
-    }
-    codeUse <- codeUse |>
-      dplyr::bind_rows()
-    cli::cli_progress_done()
-    return(codeUse)
+  codeUse <- list()
+  cli::cli_progress_bar("Getting use of codes", total = length(conceptId))
+  for(i in 1:length(conceptId)) {
+    cli::cli_alert_info("Getting concept counts of {names(conceptId)[i]}")
+    codeUse[[i]] <- getCodeUse(conceptId[i],
+                               cdm = cdm,
+                               cohortTable = NULL,
+                               cohortId = NULL,
+                               timing = "any",
+                               countBy = countBy,
+                               concept = concept,
+                               year = year,
+                               sex = sex,
+                               ageGroup = ageGroup)
+    Sys.sleep(i/length(conceptId))
+    cli::cli_progress_update()
   }
-  codeUse <- getAllCodeUse()
+  codeUse <- codeUse |>
+    dplyr::bind_rows()
+  cli::cli_progress_done()
 
   if(nrow(codeUse) > 0) {
     codeUse <- codeUse %>%
@@ -90,7 +86,15 @@ summariseConceptCounts <- function(cdm,
         )
       )
   } else {
-    codeUse <- omopgenerics::emptySummarisedResult()
+    codeUse <- omopgenerics::emptySummarisedResult() %>%
+      omopgenerics::newSummarisedResult(
+        settings = dplyr::tibble(
+          result_id = as.integer(1),
+          result_type = "summarise_concept_counts",
+          package_name = "OmopSketch",
+          package_version = as.character(utils::packageVersion("OmopSketch"))
+        )
+      )
   }
 
   return(codeUse)
@@ -153,7 +157,8 @@ getCodeUse <- function(x,
                                 cohortTable = cohortTable,
                                 cohortId = cohortId,
                                 timing = timing,
-                                intermediateTable = intermediateTable)
+                                intermediateTable = intermediateTable,
+                                tablePrefix = tablePrefix)
 
   if(is.null(records)){
     cc <- dplyr::tibble()
@@ -179,14 +184,9 @@ getCodeUse <- function(x,
    #                     name = omopgenerics::tableName(records),
    #                     temporary = FALSE)
    #  }
+
   strata <- getStrataList(sex,ageGroup)
   if(year){strata <- omopgenerics::combineStrata(c("year", unique(unlist(strata))))}
-
-
-
-
-
-
 
   cc <- records |>
     dplyr::distinct() |>
@@ -213,41 +213,6 @@ getCodeUse <- function(x,
     dplyr::mutate("additional_name"  = dplyr::if_else(is.na(.data$additional_name), "overall", .data$additional_name),
                   "additional_level" = dplyr::if_else(is.na(.data$additional_level), "overall", .data$additional_level))
 
-    # byAgeGroup <- !is.null(ageGroup)
-    # codeCounts <- getSummaryCounts(records = records1,
-    #                                cdm = cdm,
-    #                                countBy = countBy,
-    #                                concept = concept,
-    #                                year = year,
-    #                                sex = sex,
-    #                                byAgeGroup = byAgeGroup)
-    #
-    # if (is.null(cohortTable)) {
-    #   cohortName <- NA
-    # } else {
-    #   cohortName <- omopgenerics::settings(cdm[[cohortTable]]) %>%
-    #     dplyr::filter(.data$cohort_definition_id == cohortId) %>%
-    #     dplyr::pull("cohort_name")
-    # }
-    #
-    # codeCounts <-  codeCounts %>%
-    #   dplyr::mutate(
-    #     "codelist_name" := !!names(x),
-    #     "cohort_name" = .env$cohortName,
-    #     "estimate_type" = "integer",
-    #     "variable_name" = dplyr::if_else(is.na(.data$standard_concept_name), "overall", .data$standard_concept_name),
-    #     "variable_level" = as.character(.data$standard_concept_id)
-    #   ) %>%
-    #   visOmopResults::uniteGroup(cols = c("cohort_name", "codelist_name")) %>%
-    #   visOmopResults::uniteAdditional(
-    #     cols = c("source_concept_name", "source_concept_id", "domain_id")
-    #   ) %>%
-    #   dplyr::select(
-    #     "group_name", "group_level", "strata_name", "strata_level",
-    #     "variable_name", "variable_level", "estimate_name", "estimate_type",
-    #     "estimate_value", "additional_name", "additional_level"
-    #   )
-
   CDMConnector::dropTable(cdm = cdm, name = dplyr::starts_with(tablePrefix))
 
   return(cc)
@@ -258,7 +223,8 @@ getRelevantRecords <- function(cdm,
                                cohortTable,
                                cohortId,
                                timing,
-                               intermediateTable){
+                               intermediateTable,
+                               tablePrefix){
 
   codes <- cdm[[tableCodelist]] |> dplyr::collect()
 
@@ -267,40 +233,13 @@ getRelevantRecords <- function(cdm,
   sourceConceptIdName <- purrr::discard(unique(codes$source_concept), is.na)
   dateName <- purrr::discard(unique(codes$start_date), is.na)
 
-  if(!is.null(cohortTable)){
-    if(is.null(cohortId)){
-      cohortSubjects <- cdm[[cohortTable]] %>%
-        dplyr::select("subject_id", "cohort_start_date") %>%
-        dplyr::rename("person_id" = "subject_id") %>%
-        dplyr::distinct()
-    } else {
-      cohortSubjects <- cdm[[cohortTable]] %>%
-        dplyr::filter(.data$cohort_definition_id %in% cohortId) %>%
-        dplyr::select("subject_id", "cohort_start_date") %>%
-        dplyr::rename("person_id" = "subject_id") %>%
-        dplyr::distinct()
-    }
-  }
-
   if(length(tableName)>0){
     codeRecords <- cdm[[tableName[[1]]]]
-    if(!is.null(cohortTable)){
-      # keep only records of those in the cohorts of interest
-      codeRecords <- codeRecords %>%
-        dplyr::inner_join(cohortSubjects,
-                          by = "person_id")
-      if(timing == "entry"){
-        codeRecords <- codeRecords %>%
-          dplyr::filter(.data$cohort_start_date == !!dplyr::sym(dateName[[1]]))
-      }
-    }
 
-    if(is.null(codeRecords)){
-      return(NULL)
-    }
+    if(is.null(codeRecords)){return(NULL)}
 
-    tableCodes <- paste0(omopgenerics::uniqueTableName(),
-                         omopgenerics::uniqueId())
+    tableCodes <- paste0(tablePrefix, "table_codes")
+
     cdm <- omopgenerics::insertTable(cdm = cdm,
                                      name = tableCodes,
                                      table = codes %>%
@@ -320,6 +259,7 @@ getRelevantRecords <- function(cdm,
                     "source_concept_id" = .env$sourceConceptIdName[[1]]) %>%
       dplyr::inner_join(cdm[[tableCodes]],
                         by = c("standard_concept_id"="concept_id")) %>%
+      filterInObservation(indexDate = "date") |>
       dplyr::compute(
         name = paste0(intermediateTable,"_grr"),
         temporary = FALSE,
@@ -338,16 +278,7 @@ getRelevantRecords <- function(cdm,
   if(length(tableName) > 1) {
     for(i in 1:(length(tableName)-1)) {
       workingRecords <-  cdm[[tableName[[i+1]]]]
-      if(!is.null(cohortTable)){
-        # keep only records of those in the cohorts of interest
-        workingRecords <- workingRecords %>%
-          dplyr::inner_join(cohortSubjects,
-                            by = "person_id")
-        if(timing == "entry"){
-          workingRecords <- workingRecords %>%
-            dplyr::filter(.data$cohort_start_date == !!dplyr::sym(dateName[[i+1]]))
-        }
-      }
+
       workingRecords <-  workingRecords %>%
         dplyr::mutate(date = !!dplyr::sym(dateName[[i+1]])) %>%
         dplyr::mutate(year = clock::get_year(date)) %>%
