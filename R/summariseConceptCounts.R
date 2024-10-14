@@ -15,6 +15,7 @@
 #' @export
 #' @examples
 #' \donttest{
+#' library(OmopSketch)
 #'
 #' cdm <- mockOmopSketch()
 #'
@@ -167,6 +168,7 @@ getCodeUse <- function(x,
   records <- addStrataToOmopTable(records, "date", ageGroup, sex)
 
   strata <- getStrataList(sex,ageGroup)
+  if(year){strata <- omopgenerics::combineStrata(c("year", unique(unlist(strata))))}
 
   cc <- records |>
     dplyr::distinct() |>
