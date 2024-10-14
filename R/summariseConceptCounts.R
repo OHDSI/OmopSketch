@@ -76,27 +76,20 @@ summariseConceptCounts <- function(cdm,
       dplyr::mutate(
         result_id = as.integer(1),
         cdm_name = omopgenerics::cdmName(cdm)
-      ) %>%
-      omopgenerics::newSummarisedResult(
-        settings = dplyr::tibble(
-          result_id = as.integer(1),
-          result_type = "summarise_concept_counts",
-          package_name = "OmopSketch",
-          package_version = as.character(utils::packageVersion("OmopSketch"))
-        )
       )
   } else {
-    codeUse <- omopgenerics::emptySummarisedResult() %>%
-      omopgenerics::newSummarisedResult(
-        settings = dplyr::tibble(
-          result_id = as.integer(1),
-          result_type = "summarise_concept_counts",
-          package_name = "OmopSketch",
-          package_version = as.character(utils::packageVersion("OmopSketch"))
-        )
-      )
+    codeUse <- omopgenerics::emptySummarisedResult()
   }
 
+  codeUse <- codeUse %>%
+    omopgenerics::newSummarisedResult(
+      settings = dplyr::tibble(
+        result_id = as.integer(1),
+        result_type = "summarise_concept_counts",
+        package_name = "OmopSketch",
+        package_version = as.character(utils::packageVersion("OmopSketch"))
+      )
+    )
   return(codeUse)
 }
 
@@ -110,7 +103,7 @@ getCodeUse <- function(x,
                        year,
                        sex,
                        ageGroup,
-                       call = parent.frame()) {
+                       call = parent.frame()){
 
   tablePrefix <-  omopgenerics::tmpPrefix()
 
@@ -118,11 +111,12 @@ getCodeUse <- function(x,
   omopgenerics::assertChoice(timing, choices = c("any", "entry"))
   omopgenerics::assertNumeric(x[[1]], integerish = TRUE)
   omopgenerics::assertList(x)
-  omopgenerics::assertLogical(concept)
-  omopgenerics::assertLogical(year)
-  omopgenerics::assertLogical(sex)
+  omopgenerics::assertLogical(concept, length = 1)
+  omopgenerics::assertLogical(year, length = 1)
+  omopgenerics::assertLogical(sex, length = 1)
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "")[[1]]
 
+  # Create code list table
   tableCodelist <- paste0(tablePrefix,"codelist")
   cdm <- omopgenerics::insertTable(cdm = cdm,
                                    name = tableCodelist,
@@ -136,6 +130,7 @@ getCodeUse <- function(x,
       by = "concept_id"
     )
 
+  # Create domains table
   tableDomainsData <- paste0(tablePrefix,"domains_data")
   cdm <- omopgenerics::insertTable(cdm = cdm,
                                    name = tableDomainsData,
@@ -151,6 +146,7 @@ getCodeUse <- function(x,
                    temporary = FALSE,
                    overwrite = TRUE)
 
+  # Create records table
   intermediateTable <- paste0(tablePrefix,"intermediate_table")
   records <- getRelevantRecords(cdm = cdm,
                                 tableCodelist = tableCodelist,
@@ -170,23 +166,7 @@ getCodeUse <- function(x,
 
   records <- addStrataToOmopTable(records, "date", ageGroup, sex)
 
-   # if(!is.null(records) &&
-   #   (records %>% utils::head(1) %>% dplyr::tally() %>% dplyr::pull("n") > 0)) {
-   #  if(sex == TRUE | !is.null(ageGroup)){
-   #    records <- records %>%
-   #      PatientProfiles::addDemographicsQuery(age = !is.null(ageGroup),
-   #                                            ageGroup = ageGroup,
-   #                                            sex = sex,
-   #                                            priorObservation = FALSE,
-   #                                            futureObservation =  FALSE,
-   #                                            indexDate = "date") |>
-   #      dplyr::compute(overwrite = TRUE,
-   #                     name = omopgenerics::tableName(records),
-   #                     temporary = FALSE)
-   #  }
-
   strata <- getStrataList(sex,ageGroup)
-  if(year){strata <- omopgenerics::combineStrata(c("year", unique(unlist(strata))))}
 
   cc <- records |>
     dplyr::distinct() |>
@@ -346,4 +326,3 @@ getConceptsInfo <- function(records){
       "additional_level" = "overall"
     )
 }
-
