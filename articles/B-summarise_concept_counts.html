@@ -99,7 +99,7 @@ database.</p>
 <span></span>
 <span><span class="co"># Connect to Eunomia database</span></span>
 <span><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu">duckdb</span><span class="fu">::</span><span class="fu"><a href="https://r.duckdb.org/reference/duckdb.html" class="external-link">duckdb</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu">CDMConnector</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/CDMConnector/reference/eunomiaDir.html" class="external-link">eunomia_dir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Creating CDM database /tmp/Rtmp5yAS24/GiBleed_5.3.zip</span></span>
+<span><span class="co">#&gt; Creating CDM database /tmp/Rtmp71XbQP/GiBleed_5.3.zip</span></span>
 <span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu">CDMConnector</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/CDMConnector/reference/cdm_from_con.html" class="external-link">cdmFromCon</a></span><span class="op">(</span></span>
 <span>  con <span class="op">=</span> <span class="va">con</span>, cdmSchema <span class="op">=</span> <span class="st">"main"</span>, writeSchema <span class="op">=</span> <span class="st">"main"</span></span>
 <span><span class="op">)</span></span>
@@ -167,17 +167,17 @@ from OmopSketch:</p>
 <span>                                        <span class="st">"sinusitis"</span> <span class="op">=</span> <span class="va">sinusitis</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span>   </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span>, <span class="va">variable_level</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span><span class="op">)</span> <span class="op">|&gt;</span>   </span>
 <span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span> </span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Getting use of codes from acetaminophen</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Getting concept counts of acetaminophen</span></span>
 <span><span class="co">#&gt; Getting use of codes <span style="color: #00BB00;">■■■■■■■■■■■■■■■■                </span>  50% | ETA:  2s</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Getting use of codes from sinusitis</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Getting concept counts of sinusitis</span></span>
 <span><span class="co">#&gt; Getting use of codes <span style="color: #00BB00;">■■■■■■■■■■■■■■■■                </span>  50% | ETA:  2sGetting use of codes <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ </span> 100% | ETA:  0s</span></span>
 <span><span class="co">#&gt; Rows: 24</span></span>
 <span><span class="co">#&gt; Columns: 5</span></span>
 <span><span class="co">#&gt; $ group_level    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "acetaminophen", "acetaminophen", "acetaminophen", "ace…</span></span>
-<span><span class="co">#&gt; $ variable_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall", "Acetaminophen 160 MG Oral Tablet", "Acetami…</span></span>
-<span><span class="co">#&gt; $ variable_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, "1127078", "1127433", "40162522", "40231925", "1913…</span></span>
-<span><span class="co">#&gt; $ estimate_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "record_count", "record_count", "record_count", "record…</span></span>
-<span><span class="co">#&gt; $ estimate_value <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "14205", "2158", "9365", "312", "306", "71", "1993", "2…</span></span></code></pre></div>
+<span><span class="co">#&gt; $ variable_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall", "overall", "Acetaminophen 160 MG Oral Tablet…</span></span>
+<span><span class="co">#&gt; $ variable_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, "1127078", "1127433", "40162522", "40231925", "…</span></span>
+<span><span class="co">#&gt; $ estimate_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "record_count", "person_count", "record_count", "record…</span></span>
+<span><span class="co">#&gt; $ estimate_value <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "14205", "2679", "2158", "9365", "312", "306", "71", "1…</span></span></code></pre></div>
 <p>By default, the function will provide information about either the
 number of records (<code>estimate_name == "record_count"</code>) for
 each concept_id or the number of people
@@ -190,10 +190,8 @@ each concept_id or the number of people
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span>, <span class="va">estimate_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Getting use of codes from acetaminophen</span></span>
-<span><span class="co">#&gt; Getting use of codes <span style="color: #00BB00;">■■■■■■■■■■■■■■■■                </span>  50% | ETA:  2s</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Getting use of codes from sinusitis</span></span>
-<span><span class="co">#&gt; Getting use of codes <span style="color: #00BB00;">■■■■■■■■■■■■■■■■                </span>  50% | ETA:  2sGetting use of codes <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ </span> 100% | ETA:  0s</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Getting concept counts of acetaminophen</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Getting concept counts of sinusitis</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 24 × 3</span></span></span>
 <span><span class="co">#&gt;    group_level   variable_name                                     estimate_name</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        </span></span>
@@ -218,8 +216,10 @@ each concept_id or the number of people
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span>, <span class="va">estimate_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span><span class="op">)</span> </span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Getting use of codes from acetaminophen</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Getting use of codes from sinusitis</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Getting concept counts of acetaminophen</span></span>
+<span><span class="co">#&gt; Getting use of codes <span style="color: #00BB00;">■■■■■■■■■■■■■■■■                </span>  50% | ETA:  2s</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Getting concept counts of sinusitis</span></span>
+<span><span class="co">#&gt; Getting use of codes <span style="color: #00BB00;">■■■■■■■■■■■■■■■■                </span>  50% | ETA:  2sGetting use of codes <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ </span> 100% | ETA:  0s</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 12 × 3</span></span></span>
 <span><span class="co">#&gt;    group_level   variable_name                                     estimate_name</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        </span></span>
@@ -240,15 +240,15 @@ each concept_id or the number of people
 arguments.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/summariseConceptCounts.html">summariseConceptCounts</a></span><span class="op">(</span><span class="va">cdm</span>,                         conceptId <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"acetaminophen"</span> <span class="op">=</span> <span class="va">acetaminophen</span>,                                         <span class="st">"sinusitis"</span> <span class="op">=</span> <span class="va">sinusitis</span><span class="op">)</span>,                        countBy <span class="op">=</span> <span class="st">"person"</span>,                        year <span class="op">=</span> <span class="cn">TRUE</span>,                        sex  <span class="op">=</span> <span class="cn">TRUE</span>,                        ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;=50"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">50</span><span class="op">)</span>, <span class="st">"&gt;50"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">51</span>,<span class="cn">Inf</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span>   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">strata_level</span>, <span class="va">variable_name</span>, <span class="va">estimate_name</span><span class="op">)</span> <span class="op">|&gt;</span>   <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span> </span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Getting use of codes from acetaminophen</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Getting concept counts of acetaminophen</span></span>
 <span><span class="co">#&gt; Getting use of codes <span style="color: #00BB00;">■■■■■■■■■■■■■■■■                </span>  50% | ETA:  3s</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Getting use of codes from sinusitis</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Getting concept counts of sinusitis</span></span>
 <span><span class="co">#&gt; Getting use of codes <span style="color: #00BB00;">■■■■■■■■■■■■■■■■                </span>  50% | ETA:  3sGetting use of codes <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ </span> 100% | ETA:  0s</span></span>
-<span><span class="co">#&gt; Rows: 1,173</span></span>
+<span><span class="co">#&gt; Rows: 7,545</span></span>
 <span><span class="co">#&gt; Columns: 4</span></span>
 <span><span class="co">#&gt; $ group_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "acetaminophen", "acetaminophen", "acetaminophen", "acet…</span></span>
-<span><span class="co">#&gt; $ strata_level  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall", "overall", "overall", "overall", "overall", "…</span></span>
-<span><span class="co">#&gt; $ variable_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall", "Acetaminophen 325 MG / Hydrocodone Bitartrat…</span></span>
+<span><span class="co">#&gt; $ strata_level  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall", "1909", "1910", "1911", "1912", "1913", "1914…</span></span>
+<span><span class="co">#&gt; $ variable_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall", "overall", "overall", "overall", "overall", "…</span></span>
 <span><span class="co">#&gt; $ estimate_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "person_count", "person_count", "person_count", "person_…</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="visualise-the-results">Visualise the results<a class="anchor" aria-label="anchor" href="#visualise-the-results"></a>
@@ -260,7 +260,7 @@ arguments.</p>
 <span>                       conceptId <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"sinusitis"</span> <span class="op">=</span> <span class="va">sinusitis</span><span class="op">)</span>, </span>
 <span>                       countBy <span class="op">=</span> <span class="st">"person"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/plotConceptCounts.html">plotConceptCounts</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Getting use of codes from sinusitis</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Getting concept counts of sinusitis</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> The following column type were changed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> variable_name: from integer to character</span></span></code></pre></div>
 <p><img src="B-summarise_concept_counts_files/figure-html/unnamed-chunk-8-1.png" width="700">
@@ -273,7 +273,7 @@ filter to only include one variable at time:</p>
 <span>                       countBy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"person"</span>,<span class="st">"record"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">estimate_name</span> <span class="op">==</span> <span class="st">"person_count"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/plotConceptCounts.html">plotConceptCounts</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Getting use of codes from sinusitis</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Getting concept counts of sinusitis</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> The following column type were changed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> variable_name: from integer to character</span></span></code></pre></div>
 <p><img src="B-summarise_concept_counts_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
@@ -289,9 +289,9 @@ package.</p>
 <span>                       sex <span class="op">=</span> <span class="cn">TRUE</span>, </span>
 <span>                       ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;=50"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">50</span><span class="op">)</span>, <span class="st">"&gt;50"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">51</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">visOmopResults</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/visOmopResults/reference/tidyColumns.html" class="external-link">tidyColumns</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Getting use of codes from sinusitis</span></span>
-<span><span class="co">#&gt;  [1] "cdm_name"            "codelist_name"       "sex"                </span></span>
-<span><span class="co">#&gt;  [4] "age_group"           "variable_name"       "variable_level"     </span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Getting concept counts of sinusitis</span></span>
+<span><span class="co">#&gt;  [1] "cdm_name"            "codelist_name"       "age_group"          </span></span>
+<span><span class="co">#&gt;  [4] "sex"                 "variable_name"       "variable_level"     </span></span>
 <span><span class="co">#&gt;  [7] "person_count"        "source_concept_name" "source_concept_id"  </span></span>
 <span><span class="co">#&gt; [10] "domain_id"           "result_type"         "package_name"       </span></span>
 <span><span class="co">#&gt; [13] "package_version"</span></span>
@@ -302,7 +302,7 @@ package.</p>
 <span>                       sex <span class="op">=</span> <span class="cn">TRUE</span>, </span>
 <span>                       ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;=50"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">50</span><span class="op">)</span>, <span class="st">"&gt;50"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">51</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/plotConceptCounts.html">plotConceptCounts</a></span><span class="op">(</span>facet <span class="op">=</span> <span class="st">"sex"</span>, colour <span class="op">=</span> <span class="st">"age_group"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Getting use of codes from sinusitis</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Getting concept counts of sinusitis</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> The following column type were changed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> variable_name: from integer to character</span></span></code></pre></div>
 <p><img src="B-summarise_concept_counts_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
