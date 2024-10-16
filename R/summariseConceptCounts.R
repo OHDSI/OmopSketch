@@ -6,7 +6,8 @@
 #' @param countBy Either "record" for record-level counts or "person" for
 #' person-level counts
 #' @param concept TRUE or FALSE. If TRUE code use will be summarised by concept.
-#' @param year TRUE or FALSE. If TRUE code use will be summarised by year.
+#' @param unit Time unit it can either be "year" or "month".
+#' @param unitInterval Number of years or months to include within the same
 #' @param sex TRUE or FALSE. If TRUE code use will be summarised by sex.
 #' @param ageGroup A list of ageGroup vectors of length two. Code use will be
 #' thus summarised by age groups.
@@ -31,7 +32,8 @@ summariseConceptCounts <- function(cdm,
                                    conceptId,
                                    countBy = c("record", "person"),
                                    concept = TRUE,
-                                   year = FALSE,
+                                   unit = "year",
+                                   unitInterval = 1,
                                    sex = FALSE,
                                    ageGroup = NULL){
 
@@ -40,6 +42,8 @@ summariseConceptCounts <- function(cdm,
   checkCountBy(countBy)
   omopgenerics::assertChoice(countBy, choices = c("record", "person"))
   countBy <- gsub("persons","subjects",paste0("number ",countBy,"s"))
+  unit <- "year"
+  unitInterval <- 1
 
   # Get all concepts in concept table if conceptId is NULL
   # if(is.null(conceptId)) {
@@ -57,9 +61,6 @@ summariseConceptCounts <- function(cdm,
     cli::cli_alert_info("Getting concept counts of {names(conceptId)[i]}")
     codeUse[[i]] <- getCodeUse(conceptId[i],
                                cdm = cdm,
-                               cohortTable = NULL,
-                               cohortId = NULL,
-                               timing = "any",
                                countBy = countBy,
                                concept = concept,
                                year = year,
@@ -96,9 +97,6 @@ summariseConceptCounts <- function(cdm,
 
 getCodeUse <- function(x,
                        cdm,
-                       cohortTable,
-                       cohortId,
-                       timing,
                        countBy,
                        concept,
                        year,
@@ -108,12 +106,9 @@ getCodeUse <- function(x,
 
   tablePrefix <-  omopgenerics::tmpPrefix()
 
-  omopgenerics::assertCharacter(timing, len = 1)
-  omopgenerics::assertChoice(timing, choices = c("any", "entry"))
   omopgenerics::assertNumeric(x[[1]], integerish = TRUE)
   omopgenerics::assertList(x)
   omopgenerics::assertLogical(concept, length = 1)
-  omopgenerics::assertLogical(year, length = 1)
   omopgenerics::assertLogical(sex, length = 1)
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "")[[1]]
 
@@ -151,12 +146,8 @@ getCodeUse <- function(x,
   intermediateTable <- paste0(tablePrefix,"intermediate_table")
   records <- getRelevantRecords(cdm = cdm,
                                 tableCodelist = tableCodelist,
-                                cohortTable = cohortTable,
-                                cohortId = cohortId,
-                                timing = timing,
                                 intermediateTable = intermediateTable,
                                 tablePrefix = tablePrefix)
-
   if(is.null(records)){
     cc <- dplyr::tibble()
     cli::cli_inform(c(
@@ -167,11 +158,21 @@ getCodeUse <- function(x,
 
   records <- addStrataToOmopTable(records, "date", ageGroup, sex)
 
-  strata <- getStrataList(sex,ageGroup)
-  if(year){strata <- omopgenerics::combineStrata(c("year", unique(unlist(strata))))}
+  interval <- getIntervalTibble(omopTable = records,
+                                start_date_name = "date",
+                                end_date_name   = "date",
+                                unit = unit,
+                                unitInterval = unitInterval)
+
+  cdm <- cdm |> omopgenerics::insertTable(name = paste0(tablePrefix,"interval"), table = interval)
+
+  records <- splitIncidenceBetweenIntervals(cdm, records, "date", tablePrefix)
+
+  strata <- omopgenerics::combineStrata(c(unique(unlist(getStrataList(sex,ageGroup))), "interval_group"))
+
+  if(!"person" %in% c(countBy)){records <- records |> dplyr::select("person_id")}
 
   cc <- records |>
-    dplyr::distinct() |>
     dplyr::collect() |> # https://github.com/darwin-eu-dev/PatientProfiles/issues/706
     PatientProfiles::summariseResult(strata = strata,
                                      variable = "standard_concept_name",
@@ -179,7 +180,7 @@ getCodeUse <- function(x,
                                      includeOverallGroup = TRUE,
                                      includeOverallStrata = TRUE,
                                      counts = TRUE,
-                                     estimates = c("count")) |>
+                                     estimates = as.character()) |>
     suppressMessages() |>
     dplyr::filter(.data$variable_name %in% .env$countBy) |>
     dplyr::mutate(estimate_name  = dplyr::if_else(.data$variable_name == "number records", "record_count", "person_count"),
@@ -202,9 +203,6 @@ getCodeUse <- function(x,
 
 getRelevantRecords <- function(cdm,
                                tableCodelist,
-                               cohortTable,
-                               cohortId,
-                               timing,
                                intermediateTable,
                                tablePrefix){
 
@@ -212,7 +210,7 @@ getRelevantRecords <- function(cdm,
 
   tableName <- purrr::discard(unique(codes$table_name), is.na)
   standardConceptIdName <- purrr::discard(unique(codes$standard_concept), is.na)
-  sourceConceptIdName <- purrr::discard(unique(codes$source_concept), is.na)
+  sourceConceptIdName   <- purrr::discard(unique(codes$source_concept), is.na)
   dateName <- purrr::discard(unique(codes$start_date), is.na)
 
   if(length(tableName)>0){
@@ -232,11 +230,10 @@ getRelevantRecords <- function(cdm,
 
     codeRecords <- codeRecords %>%
       dplyr::mutate(date = !!dplyr::sym(dateName[[1]])) %>%
-      dplyr::mutate(year = clock::get_year(date)) %>%
       dplyr::select(dplyr::all_of(c("person_id",
                                     standardConceptIdName[[1]],
                                     sourceConceptIdName[[1]],
-                                    "date", "year"))) %>%
+                                    "date"))) %>%
       dplyr::rename("standard_concept_id" = .env$standardConceptIdName[[1]],
                     "source_concept_id" = .env$sourceConceptIdName[[1]]) %>%
       dplyr::inner_join(cdm[[tableCodes]],

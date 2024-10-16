@@ -9,7 +9,8 @@ test_that("summarise code use - eunomia", {
   startNames <- CDMConnector::listSourceTables(cdm)
   results <- summariseConceptCounts(cdm = cdm,
                                     conceptId = cs,
-                                    year = TRUE,
+                                    unit = "year",
+                                    unitInterval = 1,
                                     sex = TRUE,
                                     ageGroup = list(c(0,17),
                                                     c(18,65),
@@ -25,7 +26,7 @@ test_that("summarise code use - eunomia", {
       omopgenerics::suppress(results) |>
         dplyr::filter(
           variable_name == "overall",
-          strata_level == "1909",
+          strata_level == "1909-01-01 to 1909-12-31",
           group_level == "acetiminophen"
         ) |>
         dplyr::pull("estimate_value"),
@@ -48,7 +49,8 @@ test_that("summarise code use - eunomia", {
                 dplyr::pull("estimate_value") |>
                 as.numeric() ==
                 cdm$drug_exposure %>%
-                dplyr::filter(drug_concept_id %in%  acetiminophen) %>%
+                dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") |>
+                dplyr::filter(drug_concept_id %in% c(acetiminophen)) %>%
                 dplyr::tally() %>%
                 dplyr::pull("n"))
 
@@ -73,8 +75,8 @@ test_that("summarise code use - eunomia", {
   # overall record count
   expect_true(results %>%
                 dplyr::filter(group_name == "codelist_name" &
-                                strata_name == "year" &
-                                strata_level == "2008" &
+                                strata_name == "interval_group" &
+                                strata_level == "2008-01-01 to 2008-12-31" &
                                 group_level == "acetiminophen" &
                                 estimate_name == "record_count",
                               variable_name == "overall") %>%
@@ -89,8 +91,8 @@ test_that("summarise code use - eunomia", {
   # overall person count
   expect_true(results %>%
                 dplyr::filter(group_name == "codelist_name" &
-                                strata_name == "year" &
-                                strata_level == "2008" &
+                                strata_name == "interval_group" &
+                                strata_level == "2008-01-01 to 2008-12-31" &
                                 group_level == "acetiminophen" &
                                 estimate_name == "person_count",
                               variable_name == "overall") %>%
@@ -165,7 +167,8 @@ test_that("summarise code use - eunomia", {
 
   results <- summariseConceptCounts(list("acetiminophen" = acetiminophen),
                               cdm = cdm, countBy = "person",
-                              year = FALSE,
+                              unit = "year",
+                              unitInterval = 10,
                               sex = FALSE,
                               ageGroup = NULL)
   expect_true(nrow(results %>%
@@ -175,7 +178,8 @@ test_that("summarise code use - eunomia", {
 
   results <- summariseConceptCounts(list("acetiminophen" = acetiminophen),
                               cdm = cdm, countBy = "record",
-                              year = FALSE,
+                              unit = "year",
+                              unitInterval = 100,
                               sex = FALSE,
                               ageGroup = NULL)
   expect_true(nrow(results %>%
@@ -187,42 +191,48 @@ test_that("summarise code use - eunomia", {
   # condition
   expect_true(nrow(summariseConceptCounts(list(cs= c(4112343)),
                                     cdm = cdm,
-                                    year = FALSE,
+                                    unit = "year",
+                                    unitInterval = 10,
                                     sex = FALSE,
                                     ageGroup = NULL))>1)
 
   # visit
   expect_true(nrow(summariseConceptCounts(list(cs= c(9201)),
                                     cdm = cdm,
-                                    year = FALSE,
+                                    unit = "year",
+                                    unitInterval = 10,
                                     sex = FALSE,
                                     ageGroup = NULL))>1)
 
   # drug
   expect_true(nrow(summariseConceptCounts(list(cs= c(40213160)),
                                     cdm = cdm,
-                                    year = FALSE,
+                                    unit = "year",
+                                    unitInterval = 10,
                                     sex = FALSE,
                                     ageGroup = NULL))>1)
 
   # measurement
   expect_true(nrow(summariseConceptCounts(list(cs= c(3006322)),
                                     cdm = cdm,
-                                    year = FALSE,
+                                    unit = "year",
+                                    unitInterval = 10,
                                     sex = FALSE,
                                     ageGroup = NULL))>1)
 
   # procedure and condition
   expect_true(nrow(summariseConceptCounts(list(cs= c(4107731,4112343)),
                                     cdm = cdm,
-                                    year = FALSE,
+                                    unit = "year",
+                                    unitInterval = 10,
                                     sex = FALSE,
                                     ageGroup = NULL))>1)
 
   # no records
   expect_message(results <- summariseConceptCounts(list(cs= c(999999)),
                                              cdm = cdm,
-                                             year = FALSE,
+                                             unit = "year",
+                                             unitInterval = 10,
                                              sex = FALSE,
                                              ageGroup = NULL))
   expect_true(nrow(results) == 0)
@@ -251,7 +261,8 @@ test_that("summarise code use - eunomia", {
   # check attributes
   results <- summariseConceptCounts(cdm = cdm,
                                     conceptId = cs,
-                                    year = TRUE,
+                                    unit = "year",
+                                    unitInterval = 1,
                                     sex = TRUE,
                                     ageGroup = list(c(0,17),
                                                     c(18,65),
@@ -264,42 +275,56 @@ test_that("summarise code use - eunomia", {
   # expected errors# expected errors
   expect_error(summariseConceptCounts("not a concept",
                                 cdm = cdm,
-                                year = FALSE,
+                                unit = "year",
+                                unitInterval = 1,
                                 sex = FALSE,
                                 ageGroup = NULL))
   expect_error(summariseConceptCounts("123",
                                 cdm = cdm,
-                                year = FALSE,
+                                unit = "year",
+                                unitInterval = 1,
                                 sex = FALSE,
                                 ageGroup = NULL))
   expect_error(summariseConceptCounts(list("123"), # not named
                                 cdm = cdm,
-                                year = FALSE,
+                                unit = "year",
+                                unitInterval = 1,
                                 sex = FALSE,
                                 ageGroup = NULL))
   expect_error(summariseConceptCounts(list(a = 123),
                                 cdm = "not a cdm",
-                                year = FALSE,
+                                unit = "year",
+                                unitInterval = 1,
                                 sex = FALSE,
                                 ageGroup = NULL))
   expect_error(summariseConceptCounts(list(a = 123),
                                 cdm = cdm,
-                                year = "Maybe",
+                                unit = "Maybe",
+                                unitInterval = 1,
                                 sex = FALSE,
                                 ageGroup = NULL))
   expect_error(summariseConceptCounts(list(a = 123),
+                                      cdm = cdm,
+                                      unit = "year",
+                                      unitInterval = -1,
+                                      sex = FALSE,
+                                      ageGroup = NULL))
+  expect_error(summariseConceptCounts(list(a = 123),
                                 cdm = cdm,
-                                year = FALSE,
+                                unit = "year",
+                                unitInterval = 1,
                                 sex = "Maybe",
                                 ageGroup = NULL))
   expect_error(summariseConceptCounts(list(a = 123),
                                 cdm = cdm,
-                                year = FALSE,
+                                unit = "year",
+                                unitInterval = 1,
                                 sex = FALSE,
                                 ageGroup = list(c(18,17))))
   expect_error(summariseConceptCounts(list(a = 123),
                                 cdm = cdm,
-                                year = FALSE,
+                                unit = "year",
+                                unitInterval = 1,
                                 sex = FALSE,
                                 ageGroup = list(c(0,17),
                                                 c(15,20))))
