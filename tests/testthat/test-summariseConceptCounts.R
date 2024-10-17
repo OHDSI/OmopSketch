@@ -396,21 +396,25 @@ test_that("summarise code use - mock data", {
 
   # Arthritis (codes 3 and 17), one record of 17 per ind and one record of 3 ind 1
   expect_equal(result |>
-                 dplyr::filter(variable_name == "Arthritis") |>
+                 dplyr::filter(variable_name == "Arthritis",
+                               strata_level == "overall") |>
                  dplyr::arrange(variable_level, estimate_name) |>
                  dplyr::pull(estimate_value),
-               c("1", "2", "1", "1"))
+               c("2", "1", "1", "1"))
 
   # Osteoarthritis (code 5), two records ind 2, one record ind 1
   expect_equal(result |>
-                 dplyr::filter(variable_name == "Osteoarthritis of hip") |>
+                 dplyr::filter(variable_name == "Osteoarthritis of hip",
+                               strata_level == "overall") |>
                  dplyr::arrange(variable_level, estimate_name) |>
                  dplyr::pull(estimate_value),
-               c("2","3"))
+               c("3","2"))
 
   # Musculoskeletal disorder (code 1), one record each ind
   expect_equal(result |>
-                 dplyr::filter(variable_name == "Musculoskeletal disorder") |>
+                 dplyr::filter(variable_name == "Musculoskeletal disorder",
+                               strata_level == "overall"),
+               strata_level == "overall"|>
                  dplyr::arrange(variable_level, estimate_name) |>
                  dplyr::pull(estimate_value),
                c("2","2"))
@@ -423,17 +427,17 @@ test_that("summarise code use - mock data", {
                  dplyr::filter(variable_name == "Arthritis" & strata_level == "Male") |>
                  dplyr::arrange(variable_level, estimate_name) |>
                  dplyr::pull(estimate_value),
-               c("1","2"))
+               c("2","1"))
   expect_equal(result |>
                  dplyr::filter(variable_name == "Arthritis" & strata_level == "3 to 150 &&& Male") |>
                  dplyr::arrange(variable_level, estimate_name) |>
                  dplyr::pull(estimate_value),
-               c("1","2"))
+               c("2","1"))
   expect_equal(result |>
                  dplyr::filter(variable_name == "Arthritis" & strata_level == "3 to 150") |>
                  dplyr::arrange(variable_level, estimate_name) |>
                  dplyr::pull(estimate_value),
-               c("1","2","1","1"))
+               c("2","1","1","1"))
 
   # Osteoarthritis of hip (code 5), two records ind 2 and one ind 1
   expect_equal(result |>
