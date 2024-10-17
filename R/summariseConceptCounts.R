@@ -87,7 +87,7 @@ summariseConceptCounts <- function(cdm,
   codeUse <- codeUse %>%
     omopgenerics::newSummarisedResult(
       settings = dplyr::tibble(
-        result_id = as.integer(1),
+        result_id = 1L,
         result_type = "summarise_concept_counts",
         package_name = "OmopSketch",
         package_version = as.character(utils::packageVersion("OmopSketch"))
@@ -187,18 +187,17 @@ getCodeUse <- function(x,
                                      estimates = as.character()) |>
     suppressMessages() |>
     dplyr::filter(.data$variable_name %in% .env$countBy) |>
-    dplyr::mutate(estimate_name  = dplyr::if_else(.data$variable_name == "number records", "Number records", "Number subjects"),
-                  variable_level = dplyr::if_else(.data$group_level == "overall", NA, .data$group_level)) |>
+    dplyr::mutate("variable_name" = stringr::str_to_sentence(.data$variable_name)) |>
+    dplyr::mutate(standard_concept_id = group_level) |>
     dplyr::mutate(group_name = "codelist_name") |>
     dplyr::mutate(group_level = names(x)) |>
     dplyr::mutate(cdm_name = omopgenerics::cdmName(cdm)) |>
-    dplyr::select(-c("variable_name", "additional_name", "additional_level")) |>
+    dplyr::select(-c("additional_name", "additional_level")) |>
     dplyr::left_join(
       getConceptsInfo(records),
-      by = "variable_level"
+      by = "standard_concept_id"
     ) |>
-    dplyr::mutate("additional_name"  = dplyr::if_else(is.na(.data$additional_name), "overall", .data$additional_name),
-                  "additional_level" = dplyr::if_else(is.na(.data$additional_level), "overall", .data$additional_level))
+    dplyr::select(-"standard_concept_id")
 
   CDMConnector::dropTable(cdm = cdm, name = dplyr::starts_with(tablePrefix))
 
@@ -318,13 +317,12 @@ getConceptsInfo <- function(records){
     dplyr::select("standard_concept_name", "standard_concept_id", "source_concept_name", "source_concept_id", "domain_id") |>
     dplyr::distinct() |>
     dplyr::collect() |>
-    dplyr::mutate("additional_name"  = "source_concept_name &&& source_concept_id &&& domain_id") |>
-    dplyr::mutate("additional_level" = paste0(.data$source_concept_name, " &&& ", .data$source_concept_id, " &&& ", .data$domain_id)) |>
-    dplyr::select("variable_name" = "standard_concept_name", "variable_level" = "standard_concept_id","additional_name", "additional_level") |>
+    dplyr::mutate("additional_name"  = "standard_concept_name &&& standard_concept_id &&& source_concept_name &&& source_concept_id &&& domain_id") |>
+    dplyr::mutate("additional_level" = paste0(.data$standard_concept_name, " &&& ",.data$standard_concept_id, " &&& ", .data$source_concept_name, " &&& ", .data$source_concept_id, " &&& ", .data$domain_id)) |>
+    dplyr::select("standard_concept_id","additional_name", "additional_level") |>
     dplyr::mutate(dplyr::across(dplyr::everything(), as.character)) |>
     dplyr::add_row(
-      "variable_name"  = "overall",
-      "variable_level" = NA,
+      "standard_concept_id" = "overall",
       "additional_name"  = "overall",
       "additional_level" = "overall"
     )

@@ -23,14 +23,13 @@ test_that("summarise code use - eunomia", {
 
   # min cell counts:
   expect_equal(
-      omopgenerics::suppress(results) |>
+      omopgenerics::suppress(results, 5) |>
         dplyr::filter(
           variable_name == "overall",
           strata_level == "1909-01-01 to 1909-12-31",
-          group_level == "acetiminophen"
-        ) |>
+          group_level == "acetiminophen") |>
         dplyr::pull("estimate_value"),
-      as.character(c(NA,NA))
+      as.character()
   )
 
   # check is a summarised result
@@ -44,8 +43,8 @@ test_that("summarise code use - eunomia", {
                                 strata_name == "overall" &
                                 strata_level == "overall" &
                                 group_level == "acetiminophen" &
-                                estimate_name == "record_count",
-                              variable_name == "overall") %>%
+                                variable_name == "Number records",
+                              additional_name == "overall") %>%
                 dplyr::pull("estimate_value") |>
                 as.numeric() ==
                 cdm$drug_exposure %>%
@@ -60,8 +59,8 @@ test_that("summarise code use - eunomia", {
                                 strata_name == "overall" &
                                 strata_level == "overall" &
                                 group_level == "acetiminophen" &
-                                estimate_name == "person_count",
-                              variable_name == "overall") %>%
+                                variable_name == "Number subjects",
+                              additional_name == "overall") %>%
                 dplyr::pull("estimate_value") |>
                 as.numeric()  ==
                 cdm$drug_exposure %>%
@@ -78,8 +77,8 @@ test_that("summarise code use - eunomia", {
                                 strata_name == "interval_group" &
                                 strata_level == "2008-01-01 to 2008-12-31" &
                                 group_level == "acetiminophen" &
-                                estimate_name == "record_count",
-                              variable_name == "overall") %>%
+                                variable_name == "Number records",
+                              additional_name == "overall") %>%
                 dplyr::pull("estimate_value") |>
                 as.numeric()  ==
                 cdm$drug_exposure %>%
@@ -94,8 +93,8 @@ test_that("summarise code use - eunomia", {
                                 strata_name == "interval_group" &
                                 strata_level == "2008-01-01 to 2008-12-31" &
                                 group_level == "acetiminophen" &
-                                estimate_name == "person_count",
-                              variable_name == "overall") %>%
+                                variable_name == "Number subjects",
+                              additional_name == "overall") %>%
                 dplyr::pull("estimate_value") |>
                 as.numeric() ==
                 cdm$drug_exposure %>%
@@ -113,8 +112,8 @@ test_that("summarise code use - eunomia", {
                                 strata_name == "sex" &
                                 strata_level == "Male" &
                                 group_level == "acetiminophen" &
-                                estimate_name == "record_count",
-                              variable_name == "overall") %>%
+                                variable_name == "Number records",
+                              additional_name == "overall") %>%
                 dplyr::pull("estimate_value") |>
                 as.numeric() ==
                 cdm$drug_exposure %>%
@@ -129,8 +128,8 @@ test_that("summarise code use - eunomia", {
                                 strata_name == "age_group &&& sex" &
                                 strata_level == "18 to 65 &&& Male" &
                                 group_level == "acetiminophen" &
-                                estimate_name == "record_count",
-                              variable_name == "overall") %>%
+                                variable_name == "Number records",
+                              additional_name == "overall") %>%
                 dplyr::pull("estimate_value") |>
                 as.numeric() ==
                 cdm$drug_exposure %>%
@@ -149,8 +148,8 @@ test_that("summarise code use - eunomia", {
                                 strata_name == "age_group &&& sex" &
                                 strata_level == "18 to 65 &&& Male" &
                                 group_level == "acetiminophen" &
-                                estimate_name == "person_count",
-                              variable_name == "overall") %>%
+                                variable_name == "Number subjects",
+                              additional_name == "overall") %>%
                 dplyr::pull("estimate_value") |>
                 as.numeric() ==
                 cdm$drug_exposure %>%
@@ -172,9 +171,9 @@ test_that("summarise code use - eunomia", {
                               sex = FALSE,
                               ageGroup = NULL)
   expect_true(nrow(results %>%
-                     dplyr::filter(estimate_name == "person_count")) > 0)
+                     dplyr::filter(variable_name == "Number records")) > 0)
   expect_true(nrow(results %>%
-                     dplyr::filter(estimate_name == "record_count")) == 0)
+                     dplyr::filter(variable_name == "Number records")) == 0)
 
   results <- summariseConceptCounts(list("acetiminophen" = acetiminophen),
                               cdm = cdm, countBy = "record",
@@ -183,9 +182,9 @@ test_that("summarise code use - eunomia", {
                               sex = FALSE,
                               ageGroup = NULL)
   expect_true(nrow(results %>%
-                     dplyr::filter(estimate_name == "person_count")) == 0)
+                     dplyr::filter(variable_name == "Number subjects")) == 0)
   expect_true(nrow(results %>%
-                     dplyr::filter(estimate_name == "record_count")) > 0)
+                     dplyr::filter(variable_name == "Number records")) > 0)
 
   # domains covered
   # condition
@@ -396,26 +395,28 @@ test_that("summarise code use - mock data", {
 
   # Arthritis (codes 3 and 17), one record of 17 per ind and one record of 3 ind 1
   expect_equal(result |>
-                 dplyr::filter(variable_name == "Arthritis",
+                 visOmopResults::splitAdditional() |>
+                 dplyr::filter(standard_concept_name == "Arthritis",
                                strata_level == "overall") |>
-                 dplyr::arrange(variable_level, estimate_name) |>
+                 dplyr::arrange(standard_concept_id, variable_name) |>
                  dplyr::pull(estimate_value),
                c("2", "1", "1", "1"))
 
   # Osteoarthritis (code 5), two records ind 2, one record ind 1
   expect_equal(result |>
-                 dplyr::filter(variable_name == "Osteoarthritis of hip",
+                 visOmopResults::splitAdditional() |>
+                 dplyr::filter(standard_concept_name == "Osteoarthritis of hip",
                                strata_level == "overall") |>
-                 dplyr::arrange(variable_level, estimate_name) |>
+                 dplyr::arrange(standard_concept_id, variable_name) |>
                  dplyr::pull(estimate_value),
                c("3","2"))
 
   # Musculoskeletal disorder (code 1), one record each ind
   expect_equal(result |>
-                 dplyr::filter(variable_name == "Musculoskeletal disorder",
-                               strata_level == "overall"),
-               strata_level == "overall"|>
-                 dplyr::arrange(variable_level, estimate_name) |>
+                 visOmopResults::splitAdditional() |>
+                 dplyr::filter(standard_concept_name == "Musculoskeletal disorder",
+                               strata_level == "overall") |>
+                 dplyr::arrange(standard_concept_id, variable_name) |>
                  dplyr::pull(estimate_value),
                c("2","2"))
 
@@ -424,47 +425,55 @@ test_that("summarise code use - mock data", {
 
   # Arthritis (codes 3 and 17), one record of each per ind
   expect_equal(result |>
-                 dplyr::filter(variable_name == "Arthritis" & strata_level == "Male") |>
-                 dplyr::arrange(variable_level, estimate_name) |>
+                 visOmopResults::splitAdditional() |>
+                 dplyr::filter(standard_concept_name == "Arthritis" & strata_level == "Male") |>
+                 dplyr::arrange(standard_concept_id, variable_name) |>
                  dplyr::pull(estimate_value),
                c("2","1"))
   expect_equal(result |>
-                 dplyr::filter(variable_name == "Arthritis" & strata_level == "3 to 150 &&& Male") |>
-                 dplyr::arrange(variable_level, estimate_name) |>
+                 visOmopResults::splitAdditional() |>
+                 dplyr::filter(standard_concept_name =="Arthritis" & strata_level == "3 to 150 &&& Male") |>
+                 dplyr::arrange(standard_concept_id, variable_name) |>
                  dplyr::pull(estimate_value),
                c("2","1"))
   expect_equal(result |>
-                 dplyr::filter(variable_name == "Arthritis" & strata_level == "3 to 150") |>
-                 dplyr::arrange(variable_level, estimate_name) |>
+                 visOmopResults::splitAdditional() |>
+                 dplyr::filter(standard_concept_name == "Arthritis" & strata_level == "3 to 150") |>
+                 dplyr::arrange(standard_concept_id, variable_name) |>
                  dplyr::pull(estimate_value),
                c("2","1","1","1"))
 
   # Osteoarthritis of hip (code 5), two records ind 2 and one ind 1
   expect_equal(result |>
-                 dplyr::filter(variable_name == "Osteoarthritis of hip" & strata_level == "Female") |>
+                 visOmopResults::splitAdditional() |>
+                 dplyr::filter(standard_concept_name == "Osteoarthritis of hip" & strata_level == "Female") |>
                  dplyr::tally() |>
                  dplyr::pull(),
                2)
 
   # Musculoskeletal disorder (code 1), one record each ind
   expect_equal(result |>
-                 dplyr::filter(variable_name == "Musculoskeletal disorder" & strata_level == "3 to 150 &&& Female") |>
-                 dplyr::arrange(variable_level, estimate_name) |>
+                 visOmopResults::splitAdditional() |>
+                 dplyr::filter(standard_concept_name == "Musculoskeletal disorder" & strata_level == "3 to 150 &&& Female") |>
+                 dplyr::arrange(standard_concept_id, variable_name) |>
                  dplyr::pull(estimate_value),
                c("1","1"))
   expect_equal(result |>
-                 dplyr::filter(variable_name == "Musculoskeletal disorder" & strata_level == "3 to 150 &&& Male") |>
-                 dplyr::arrange(variable_level, estimate_name) |>
+                 visOmopResults::splitAdditional() |>
+                 dplyr::filter(standard_concept_name == "Musculoskeletal disorder" & strata_level == "3 to 150 &&& Male") |>
+                 dplyr::arrange(standard_concept_id, variable_name) |>
                  dplyr::pull(estimate_value),
                c("1","1"))
   expect_equal(result |>
-                 dplyr::filter(variable_name == "Musculoskeletal disorder" & strata_level == "3 to 150") |>
-                 dplyr::arrange(variable_level, estimate_name) |>
+                 visOmopResults::splitAdditional() |>
+                 dplyr::filter(standard_concept_name == "Musculoskeletal disorder" & strata_level == "3 to 150") |>
+                 dplyr::arrange(standard_concept_id, variable_name) |>
                  dplyr::pull(estimate_value),
                c("2","2"))
   expect_equal(result |>
-                 dplyr::filter(variable_name == "Musculoskeletal disorder" & strata_level == "overall") |>
-                 dplyr::arrange(variable_level, estimate_name) |>
+                 visOmopResults::splitAdditional() |>
+                 dplyr::filter(standard_concept_name == "Musculoskeletal disorder" & strata_level == "overall") |>
+                 dplyr::arrange(standard_concept_id, variable_name) |>
                  dplyr::pull(estimate_value),
                c("2","2"))
 
@@ -479,7 +488,7 @@ test_that("plot concept counts works", {
   # summariseInObservationPlot plot ----
   x <- summariseConceptCounts(cdm, conceptId = list(codes = c(40213160)))
   expect_error(plotConceptCounts(x))
-  x <- x |> dplyr::filter(estimate_name == "record_count")
+  x <- x |> dplyr::filter(variable_name == "Number records")
   expect_no_error(plotConceptCounts(x))
   expect_true(inherits(plotConceptCounts(x), "ggplot"))
 
@@ -487,7 +496,7 @@ test_that("plot concept counts works", {
                               conceptId = list("polio" = c(40213160),
                                                "acetaminophen" = c(1125315,  1127433, 40229134, 40231925, 40162522, 19133768,  1127078)))
   expect_error(plotConceptCounts(x))
-  x <- x |> dplyr::filter(estimate_name == "record_count")
+  x <- x |> dplyr::filter(variable_name == "Number records")
   expect_no_error(plotConceptCounts(x))
   expect_message(plotConceptCounts(x))
   expect_no_error(plotConceptCounts(x, facet = "codelist_name"))
