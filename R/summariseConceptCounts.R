@@ -40,6 +40,8 @@ summariseConceptCounts <- function(cdm,
   omopgenerics::validateCdmArgument(cdm)
   omopgenerics::assertList(conceptId, named = TRUE)
   checkCountBy(countBy)
+  checkUnit(unit)
+  omopgenerics::assertNumeric(unitInterval, length = 1, min = 1)
   omopgenerics::assertChoice(countBy, choices = c("record", "person"))
   countBy <- gsub("persons","subjects",paste0("number ",countBy,"s"))
   unit <- "year"
@@ -110,8 +112,6 @@ getCodeUse <- function(x,
 
   omopgenerics::assertNumeric(x[[1]], integerish = TRUE)
   omopgenerics::assertList(x)
-  checkUnit(unit)
-  omopgenerics::assertNumeric(unitInterval, length = 1, min = 1)
   omopgenerics::assertLogical(concept, length = 1)
   omopgenerics::assertLogical(sex, length = 1)
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "")[[1]]

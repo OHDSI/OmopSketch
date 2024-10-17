@@ -171,7 +171,7 @@ test_that("summarise code use - eunomia", {
                               sex = FALSE,
                               ageGroup = NULL)
   expect_true(nrow(results %>%
-                     dplyr::filter(variable_name == "Number records")) > 0)
+                     dplyr::filter(variable_name == "Number subjects")) > 0)
   expect_true(nrow(results %>%
                      dplyr::filter(variable_name == "Number records")) == 0)
 
