@@ -35,8 +35,8 @@ plotConceptCounts <- function(result,
 
   # subset to results of interest
   result <- result |>
-    visOmopResults::filterSettings(.data$result_type == "summarise_concept_counts") |>
-    visOmopResults::splitAdditional()
+    visOmopResults::filterSettings(.data$result_type == "summarise_concept_counts")
+
   if (nrow(result) == 0) {
     cli::cli_abort(c("!" = "No records found with result_type == summarise_concept_counts"))
   }
@@ -50,27 +50,22 @@ plotConceptCounts <- function(result,
     ))
   }
 
-  order <- c("overall", sort(unique(result$standard_concept_name[result$standard_concept_name != "overall"])))
-  result <- result |>
-    dplyr::mutate(variable_name = "standard_concept_name",
-                  variable_level = factor(.data$standard_concept_name, levels = order)) |>
-    visOmopResults::uniteAdditional(c("domain_id", "standard_concept_name", "standard_concept_id", "source_concept_name", "source_concept_id"))
-
   # Detect if there are several time intervals
-  if(any("interval_group" %in% unique(result$strata_name))){
+  if(length(unique(result$variable_level)) > 1 ){
     # Line plot where each concept is a different line
     p <- result |>
-      visOmopResults::scatterPlot(x = "interval_group",
+      dplyr::filter(.data$variable_level != "overall") |>
+      visOmopResults::scatterPlot(x = "variable_level",
                                   y = "count",
                                   line   = TRUE,
                                   point  = TRUE,
                                   ribbon = TRUE,
-                                  group  = "variable_level",
+                                  group  = "standard_concept_name",
                                   facet  = facet,
                                   colour = colour)
   }else{
     p <- result |>
-      visOmopResults::barPlot(x = "variable_level",
+      visOmopResults::barPlot(x = "standard_concept_name",
                               y = "count",
                               facet = facet,
                               colour = colour)  +
@@ -81,5 +76,4 @@ plotConceptCounts <- function(result,
 
  p +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust = 1))
-
 }

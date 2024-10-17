@@ -3,7 +3,7 @@
 #'
 #' @param observationPeriod An observation_period omop table. It must be part of
 #' a cdm_reference object.
-#' @param unit Whether to stratify by "year" or by "month".
+#' @param interval Time interval to stratify by. It can either be "year" or "month".
 #' @param unitInterval Number of years or months to include within the time
 #' interval.
 #' @param output Output format. It can be either the number of records
@@ -22,7 +22,7 @@
 #'
 #' result <- summariseInObservation(
 #'   cdm$observation_period,
-#'   unit = "month",
+#'   interval = "month",
 #'   unitInterval = 6,
 #'   output = c("person-days","records"),
 #'   ageGroup = list("<=60" = c(0,60), ">60" = c(61, Inf)),
@@ -35,7 +35,7 @@
 #' PatientProfiles::mockDisconnect(cdm)
 #' }
 summariseInObservation <- function(observationPeriod,
-                                   unit = "year",
+                                   interval = "year",
                                    unitInterval = 1,
                                    output = "records",
                                    ageGroup = NULL,
@@ -52,7 +52,7 @@ summariseInObservation <- function(observationPeriod,
     return(omopgenerics::emptySummarisedResult())
   }
 
-  checkUnit(unit)
+  checkUnit(interval)
   omopgenerics::assertNumeric(unitInterval, length = 1, min = 1)
   checkOutput(output)
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "")[[1]]
@@ -70,24 +70,24 @@ summariseInObservation <- function(observationPeriod,
   start_date_name <- startDate(name)
   end_date_name   <- endDate(name)
 
-  interval <- getIntervalTibbleForObservation(observationPeriod, start_date_name, end_date_name, unit, unitInterval)
+  timeInterval <- getIntervalTibbleForObservation(observationPeriod, start_date_name, end_date_name, interval, unitInterval)
 
   # Insert interval table to the cdm ----
   cdm <- cdm |>
-    omopgenerics::insertTable(name = paste0(tablePrefix,"interval"), table = interval)
+    omopgenerics::insertTable(name = paste0(tablePrefix,"interval"), table = timeInterval)
 
   # Calculate denominator ----
   denominator <- cdm |> getDenominator(output)
 
   # Count records ----
   result <- observationPeriod |>
-    countRecords(cdm, start_date_name, end_date_name, unit, output, tablePrefix)
+    countRecords(cdm, start_date_name, end_date_name, interval, output, tablePrefix)
 
   # Add category sex overall
   result <- addSexOverall(result, sex)
 
   # Create summarisedResult
-  result <- createSummarisedResultObservationPeriod(result, observationPeriod, name, denominator, unit, unitInterval)
+  result <- createSummarisedResultObservationPeriod(result, observationPeriod, name, denominator, interval, unitInterval)
 
   CDMConnector::dropTable(cdm, name = dplyr::starts_with(tablePrefix))
   return(result)
@@ -134,23 +134,23 @@ getDenominator <- function(cdm, output){
   }
 }
 
-getIntervalTibbleForObservation <- function(omopTable, start_date_name, end_date_name, unit, unitInterval){
+getIntervalTibbleForObservation <- function(omopTable, start_date_name, end_date_name, interval, unitInterval){
   startDate <- getOmopTableStartDate(omopTable, start_date_name)
   endDate   <- getOmopTableEndDate(omopTable, end_date_name)
 
   tibble::tibble(
-    "group" = seq.Date(startDate, endDate, .env$unit)
+    "group" = seq.Date(startDate, endDate, .env$interval)
   ) |>
     dplyr::rowwise() |>
     dplyr::mutate("interval" = max(which(
-      .data$group >= seq.Date(from = startDate, to = endDate, by = paste(.env$unitInterval, .env$unit))
+      .data$group >= seq.Date(from = startDate, to = endDate, by = paste(.env$unitInterval, .env$interval))
     ),
     na.rm = TRUE)) |>
     dplyr::ungroup() |>
     dplyr::group_by(.data$interval) |>
     dplyr::mutate(
       "interval_start_date" = min(.data$group),
-      "interval_end_date"   = dplyr::if_else(.env$unit == "year",
+      "interval_end_date"   = dplyr::if_else(.env$interval == "year",
                                              clock::add_years(min(.data$group),.env$unitInterval)-1,
                                              clock::add_months(min(.data$group),.env$unitInterval)-1)
     ) |>
@@ -166,7 +166,7 @@ getIntervalTibbleForObservation <- function(omopTable, start_date_name, end_date
     dplyr::distinct()
 }
 
-countRecords <- function(observationPeriod, cdm, start_date_name, end_date_name, unit, output, tablePrefix){
+countRecords <- function(observationPeriod, cdm, start_date_name, end_date_name, interval, output, tablePrefix){
 
   if(output == "person-days" | output == "all"){
     x <- cdm[[paste0(tablePrefix, "interval")]] |>
@@ -222,7 +222,7 @@ if(output == "records" | output == "all"){
   return(x)
 }
 
-createSummarisedResultObservationPeriod <- function(result, observationPeriod, name, denominator, unit, unitInterval){
+createSummarisedResultObservationPeriod <- function(result, observationPeriod, name, denominator, interval, unitInterval){
   result <- result |>
     dplyr::mutate("estimate_value" = as.character(.data$estimate_value)) |>
     dplyr::rename("variable_level" = "time_interval") |>
@@ -251,7 +251,7 @@ createSummarisedResultObservationPeriod <- function(result, observationPeriod, n
       "result_type" = "summarise_in_observation",
       "package_name" = "OmopSketch",
       "package_version" = as.character(utils::packageVersion("OmopSketch")),
-      "unit" = .env$unit,
+      "interval" = .env$interval,
       "unitInterval" = .env$unitInterval
     ))
 

@@ -4,7 +4,7 @@ test_that("summariseRecordCount() works", {
   cdm <- cdmEunomia()
 
   # Check inputs ----
-  expect_warning(inherits(summariseRecordCount(cdm, "observation_period", unit = "month"),"summarised_result"))
+  expect_warning(inherits(summariseRecordCount(cdm, "observation_period", interval = "month"),"summarised_result"))
   expect_warning(inherits(summariseRecordCount(cdm, "observation_period", unitInterval = 5),"summarised_result"))
 
   expect_warning(summariseRecordCount(cdm, "observation_period"))
@@ -39,7 +39,7 @@ test_that("summariseRecordCount() works", {
   )
 
   expect_true(
-  summariseRecordCount(cdm, "condition_occurrence", unit = "month") |>
+  summariseRecordCount(cdm, "condition_occurrence", interval = "month") |>
     dplyr::filter(variable_level == "1961-02-01 to 1961-02-28") |>
     dplyr::pull("estimate_value") |>
     as.numeric() ==
@@ -54,7 +54,7 @@ test_that("summariseRecordCount() works", {
   )
 
   expect_true(
-    (summariseRecordCount(cdm, "condition_occurrence", unit = "month", unitInterval = 3) |>
+    (summariseRecordCount(cdm, "condition_occurrence", interval = "month", unitInterval = 3) |>
       dplyr::filter(variable_level %in% c("1984-01-01 to 1984-03-31")) |>
       dplyr::pull("estimate_value") |>
       as.numeric()) ==
@@ -83,7 +83,7 @@ test_that("summariseRecordCount() works", {
   )
 
   # Check result type
-  result <- summariseRecordCount(cdm, "observation_period", unit = "month")
+  result <- summariseRecordCount(cdm, "observation_period", interval = "month")
   checkResultType(result, "summarise_record_count")
 
   PatientProfiles::mockDisconnect(cdm = cdm)

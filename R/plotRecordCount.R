@@ -39,8 +39,7 @@ plotRecordCount <- function(result,
 
   # plot
   result |>
-    dplyr::mutate(variable_level = as.Date(stringr::str_extract(
-      .data$variable_level, "^[^ to]+"))) |>
+    dplyr::mutate(variable_level = as.Date(gsub(" to.*","",.data$variable_level))) |>
     dplyr::filter(.data$estimate_name == "count") |>
     visOmopResults::scatterPlot(
       x = "variable_level",

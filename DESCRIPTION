@@ -71,4 +71,4 @@ URL: https://OHDSI.github.io/OmopSketch/
 BugReports: https://github.com/OHDSI/OmopSketch/issues
 VignetteBuilder: knitr
 Remotes:  
-    darwin-eu-dev/omopgenerics
+    darwin-eu-dev/omopgenerics@mah_vl

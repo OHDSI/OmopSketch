@@ -4,7 +4,7 @@
 #'
 #' @param cdm A cdm_reference object.
 #' @param omopTableName A character vector of omop tables from the cdm.
-#' @param unit Time unit it can either be "year" or "month".
+#' @param interval Time interval to stratify by. It can either be "year" or "month".
 #' @param unitInterval Number of years or months to include within the same
 #' interval.
 #' @param ageGroup A list of age groups to stratify results by.
@@ -20,7 +20,7 @@
 #' summarisedResult <- summariseRecordCount(
 #'   cdm = cdm,
 #'   omopTableName = c("condition_occurrence", "drug_exposure"),
-#'   unit = "year",
+#'   interval = "year",
 #'   unitInterval = 10,
 #'   ageGroup = list("<=20" = c(0,20), ">20" = c(21, Inf)),
 #'   sex = TRUE
@@ -33,7 +33,7 @@
 #' }
 summariseRecordCount <- function(cdm,
                                  omopTableName,
-                                 unit = "year",
+                                 interval = "year",
                                  unitInterval = 1,
                                  ageGroup = NULL,
                                  sex = FALSE) {
@@ -54,7 +54,7 @@ summariseRecordCount <- function(cdm,
                          }
                          summariseRecordCountInternal(x,
                                                       cdm = cdm,
-                                                      unit = unit,
+                                                      interval = interval,
                                                       unitInterval = unitInterval,
                                                       ageGroup = ageGroup,
                                                       sex = sex)
@@ -66,7 +66,7 @@ summariseRecordCount <- function(cdm,
 }
 
 #' @noRd
-summariseRecordCountInternal <- function(omopTableName, cdm, unit, unitInterval,
+summariseRecordCountInternal <- function(omopTableName, cdm, interval, unitInterval,
                                          ageGroup, sex) {
 
   prefix <- omopgenerics::tmpPrefix()
@@ -93,20 +93,20 @@ summariseRecordCountInternal <- function(omopTableName, cdm, unit, unitInterval,
   }
 
   # interval sequence ----
-  interval <- getIntervalTibble(omopTable = omopTable,
+  timeInterval <- getIntervalTibble(omopTable = omopTable,
                                 start_date_name = date,
                                 end_date_name   = date,
-                                unit = unit,
+                                interval = interval,
                                 unitInterval = unitInterval)
 
   # Insert interval table to the cdm ----
-  cdm <- cdm |> omopgenerics::insertTable(name = paste0(prefix, "interval"), table = interval)
+  cdm <- cdm |> omopgenerics::insertTable(name = paste0(prefix, "interval"), table = timeInterval)
 
   # Obtain record counts for each interval ----
   result <- splitIncidenceBetweenIntervals(cdm, omopTable, date, prefix)
 
   # Create summarised result ----
-  result <- createSummarisedResultRecordCount(result, sex, ageGroup, omopTable, omopTableName, unit, unitInterval)
+  result <- createSummarisedResultRecordCount(result, sex, ageGroup, omopTable, omopTableName, interval, unitInterval)
   omopgenerics::dropTable(cdm = cdm, name = dplyr::starts_with(prefix))
 
   return(result)
@@ -184,7 +184,7 @@ getOmopTableEndDate   <- function(omopTable, date){
     dplyr::pull("end_date")
 }
 
-getIntervalTibble <- function(omopTable, start_date_name, end_date_name, unit, unitInterval){
+getIntervalTibble <- function(omopTable, start_date_name, end_date_name, interval, unitInterval){
   startDate <- getOmopTableStartDate(omopTable, start_date_name)
   endDate   <- getOmopTableEndDate(omopTable, end_date_name)
 
@@ -193,14 +193,14 @@ getIntervalTibble <- function(omopTable, start_date_name, end_date_name, unit, u
   ) |>
     dplyr::rowwise() |>
     dplyr::mutate("interval" = max(which(
-      .data$group >= seq.Date(from = startDate, to = endDate, by = paste(.env$unitInterval, .env$unit))
+      .data$group >= seq.Date(from = startDate, to = endDate, by = paste(.env$unitInterval, .env$interval))
     ),
     na.rm = TRUE)) |>
     dplyr::ungroup() |>
     dplyr::group_by(.data$interval) |>
     dplyr::mutate(
       "interval_start_date" = min(.data$group),
-      "interval_end_date"   = dplyr::if_else(.env$unit == "year",
+      "interval_end_date"   = dplyr::if_else(.env$interval == "year",
                                              clock::add_years(min(.data$group),.env$unitInterval)-1,
                                              clock::add_months(min(.data$group),.env$unitInterval)-1)
     ) |>
@@ -230,7 +230,7 @@ splitIncidenceBetweenIntervals <- function(cdm, omopTable, date, prefix){
     dplyr::select(-c("interval_start_date", "interval_end_date", "incidence_date"))
 }
 
-createSummarisedResultRecordCount <- function(result, sex, ageGroup, omopTable, omopTableName, unit, unitInterval){
+createSummarisedResultRecordCount <- function(result, sex, ageGroup, omopTable, omopTableName, interval, unitInterval){
 
   result |>
     dplyr::select(-"person_id") |>
@@ -248,15 +248,17 @@ createSummarisedResultRecordCount <- function(result, sex, ageGroup, omopTable, 
       "cdm_name" = omopgenerics::cdmName(omopgenerics::cdmReference(omopTable)),
       "group_name"  = "omop_table",
       "group_level" = omopTableName,
-      "additional_name" = "time_interval",
-      "additional_level" = gsub(" to.*","",.data$variable_level)
+      "additional_name" = "overall",
+      "additional_level" = "overall"
     ) |>
-    omopgenerics::newSummarisedResult(settings = dplyr::tibble(
-      "result_id" = 1L,
-      "result_type" = "summarise_record_count",
-      "package_name" = "OmopSketch",
-      "package_version" = as.character(utils::packageVersion("OmopSketch")),
-      "unit" = .env$unit,
-      "unitInterval" = .env$unitInterval
-    ))
+    omopgenerics::newSummarisedResult(
+      settings = dplyr::tibble(
+        "result_id" = 1L,
+        "result_type" = "summarise_record_count",
+        "package_name" = "OmopSketch",
+        "package_version" = as.character(utils::packageVersion("OmopSketch")),
+        "interval" = .env$interval,
+        "unitInterval" = .env$unitInterval
+      )
+    )
 }

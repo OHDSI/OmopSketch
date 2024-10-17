@@ -9,7 +9,7 @@ summariseConceptCounts(
   conceptId,
   countBy = c("record", "person"),
   concept = TRUE,
-  unit = "year",
+  interval = "year",
   unitInterval = 1,
   sex = FALSE,
   ageGroup = NULL
@@ -25,7 +25,7 @@ person-level counts}
 
 \item{concept}{TRUE or FALSE. If TRUE code use will be summarised by concept.}
 
-\item{unit}{Time unit it can either be "year" or "month".}
+\item{interval}{Time interval to stratify by. It can either be "year" or "month".}
 
 \item{unitInterval}{Number of years or months to include within the same}
 

@@ -6,7 +6,7 @@
 #' @param countBy Either "record" for record-level counts or "person" for
 #' person-level counts
 #' @param concept TRUE or FALSE. If TRUE code use will be summarised by concept.
-#' @param unit Time unit it can either be "year" or "month".
+#' @param interval Time interval to stratify by. It can either be "year" or "month".
 #' @param unitInterval Number of years or months to include within the same
 #' @param sex TRUE or FALSE. If TRUE code use will be summarised by sex.
 #' @param ageGroup A list of ageGroup vectors of length two. Code use will be
@@ -32,7 +32,7 @@ summariseConceptCounts <- function(cdm,
                                    conceptId,
                                    countBy = c("record", "person"),
                                    concept = TRUE,
-                                   unit = "year",
+                                   interval = "year",
                                    unitInterval = 1,
                                    sex = FALSE,
                                    ageGroup = NULL){
@@ -40,12 +40,10 @@ summariseConceptCounts <- function(cdm,
   omopgenerics::validateCdmArgument(cdm)
   omopgenerics::assertList(conceptId, named = TRUE)
   checkCountBy(countBy)
-  checkUnit(unit)
+  checkUnit(interval)
   omopgenerics::assertNumeric(unitInterval, length = 1, min = 1)
   omopgenerics::assertChoice(countBy, choices = c("record", "person"))
   countBy <- gsub("persons","subjects",paste0("number ",countBy,"s"))
-  unit <- "year"
-  unitInterval <- 1
 
   # Get all concepts in concept table if conceptId is NULL
   # if(is.null(conceptId)) {
@@ -65,7 +63,7 @@ summariseConceptCounts <- function(cdm,
                                cdm = cdm,
                                countBy = countBy,
                                concept = concept,
-                               unit = unit,
+                               interval = interval,
                                unitInterval = unitInterval,
                                sex = sex,
                                ageGroup = ageGroup)
@@ -92,7 +90,9 @@ summariseConceptCounts <- function(cdm,
         result_id = 1L,
         result_type = "summarise_concept_counts",
         package_name = "OmopSketch",
-        package_version = as.character(utils::packageVersion("OmopSketch"))
+        package_version = as.character(utils::packageVersion("OmopSketch")),
+        "interval" = .env$interval,
+        "unitInterval" = .env$unitInterval
       )
     )
   return(codeUse)
@@ -102,7 +102,7 @@ getCodeUse <- function(x,
                        cdm,
                        countBy,
                        concept,
-                       unit,
+                       interval,
                        unitInterval,
                        sex,
                        ageGroup,
@@ -162,13 +162,13 @@ getCodeUse <- function(x,
 
   records <- addStrataToOmopTable(records, "date", ageGroup, sex)
 
-  interval <- getIntervalTibble(omopTable = records,
+  intervalTibble <- getIntervalTibble(omopTable = records,
                                 start_date_name = "date",
                                 end_date_name   = "date",
-                                unit = unit,
+                                interval = interval,
                                 unitInterval = unitInterval)
 
-  cdm <- cdm |> omopgenerics::insertTable(name = paste0(tablePrefix,"interval"), table = interval)
+  cdm <- cdm |> omopgenerics::insertTable(name = paste0(tablePrefix,"interval"), table = intervalTibble)
 
   records <- splitIncidenceBetweenIntervals(cdm, records, "date", tablePrefix)
 
@@ -199,6 +199,13 @@ getCodeUse <- function(x,
     ) |>
     dplyr::select(-"standard_concept_id")
 
+  if(interval != "overall"){
+    cc <- cc |>
+      visOmopResults::splitStrata() |>
+      dplyr::mutate(variable_level = .data$interval_group) |>
+      visOmopResults::uniteStrata(unique(unlist(strata))[unique(unlist(strata)) != "interval_group"]) |>
+      dplyr::select(-"interval_group")
+  }
   CDMConnector::dropTable(cdm = cdm, name = dplyr::starts_with(tablePrefix))
 
   return(cc)
