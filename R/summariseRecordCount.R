@@ -233,7 +233,7 @@ splitIncidenceBetweenIntervals <- function(cdm, omopTable, date, prefix){
 createSummarisedResultRecordCount <- function(result, sex, ageGroup, omopTable, omopTableName, unit, unitInterval){
 
   result |>
-    dplyr::select(-"person_id")
+    dplyr::select(-"person_id") |>
     dplyr::collect() |> # https://github.com/darwin-eu-dev/PatientProfiles/issues/706
     PatientProfiles::summariseResult(
       strata = getStrataList(sex, ageGroup),

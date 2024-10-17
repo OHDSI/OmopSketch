@@ -174,7 +174,7 @@ getCodeUse <- function(x,
 
   strata <- omopgenerics::combineStrata(c(unique(unlist(getStrataList(sex,ageGroup))), "interval_group"))
 
-  if(!"person" %in% c(countBy)){records <- records |> dplyr::select(-"person_id")}
+  if(!"number subjects" %in% c(countBy)){records <- records |> dplyr::select(-"person_id")}
 
   cc <- records |>
     dplyr::collect() |> # https://github.com/darwin-eu-dev/PatientProfiles/issues/706
