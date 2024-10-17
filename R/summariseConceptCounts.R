@@ -63,7 +63,8 @@ summariseConceptCounts <- function(cdm,
                                cdm = cdm,
                                countBy = countBy,
                                concept = concept,
-                               year = year,
+                               unit = unit,
+                               unitInterval = unitInterval,
                                sex = sex,
                                ageGroup = ageGroup)
     Sys.sleep(i/length(conceptId))
@@ -99,7 +100,8 @@ getCodeUse <- function(x,
                        cdm,
                        countBy,
                        concept,
-                       year,
+                       unit,
+                       unitInterval,
                        sex,
                        ageGroup,
                        call = parent.frame()){
@@ -108,6 +110,8 @@ getCodeUse <- function(x,
 
   omopgenerics::assertNumeric(x[[1]], integerish = TRUE)
   omopgenerics::assertList(x)
+  checkUnit(unit)
+  omopgenerics::assertNumeric(unitInterval, length = 1, min = 1)
   omopgenerics::assertLogical(concept, length = 1)
   omopgenerics::assertLogical(sex, length = 1)
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "")[[1]]
@@ -170,7 +174,7 @@ getCodeUse <- function(x,
 
   strata <- omopgenerics::combineStrata(c(unique(unlist(getStrataList(sex,ageGroup))), "interval_group"))
 
-  if(!"person" %in% c(countBy)){records <- records |> dplyr::select("person_id")}
+  if(!"person" %in% c(countBy)){records <- records |> dplyr::select(-"person_id")}
 
   cc <- records |>
     dplyr::collect() |> # https://github.com/darwin-eu-dev/PatientProfiles/issues/706
