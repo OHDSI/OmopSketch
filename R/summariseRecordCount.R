@@ -248,8 +248,8 @@ createSummarisedResultRecordCount <- function(result, sex, ageGroup, omopTable, 
       "cdm_name" = omopgenerics::cdmName(omopgenerics::cdmReference(omopTable)),
       "group_name"  = "omop_table",
       "group_level" = omopTableName,
-      "additional_name" = "time_interval",
-      "additional_level" = gsub(" to.*","",.data$variable_level)
+      "additional_name" = "overall",
+      "additional_level" = "overall"
     ) |>
     omopgenerics::newSummarisedResult(settings = dplyr::tibble(
       "result_id" = 1L,
