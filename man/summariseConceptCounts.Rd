@@ -2,7 +2,7 @@
 % Please edit documentation in R/summariseConceptCounts.R
 \name{summariseConceptCounts}
 \alias{summariseConceptCounts}
-\title{Summarise code use in patient-level data}
+\title{Summarise concept counts in patient-level data. Only concepts recorded during observation period are counted.}
 \usage{
 summariseConceptCounts(
   cdm,
@@ -36,10 +36,11 @@ A summarised_result object with results overall and, if specified, by
 strata.
 }
 \description{
-Summarise code use in patient-level data
+Summarise concept counts in patient-level data. Only concepts recorded during observation period are counted.
 }
 \examples{
 \donttest{
+library(OmopSketch)
 
 cdm <- mockOmopSketch()
 
