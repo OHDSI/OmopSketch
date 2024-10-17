@@ -99,7 +99,7 @@ database.</p>
 <span></span>
 <span><span class="co"># Connect to Eunomia database</span></span>
 <span><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu">duckdb</span><span class="fu">::</span><span class="fu"><a href="https://r.duckdb.org/reference/duckdb.html" class="external-link">duckdb</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu">CDMConnector</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/CDMConnector/reference/eunomiaDir.html" class="external-link">eunomia_dir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Creating CDM database /tmp/Rtmp71XbQP/GiBleed_5.3.zip</span></span>
+<span><span class="co">#&gt; Creating CDM database /tmp/RtmpNnWn5g/GiBleed_5.3.zip</span></span>
 <span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu">CDMConnector</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/CDMConnector/reference/cdm_from_con.html" class="external-link">cdmFromCon</a></span><span class="op">(</span></span>
 <span>  con <span class="op">=</span> <span class="va">con</span>, cdmSchema <span class="op">=</span> <span class="st">"main"</span>, writeSchema <span class="op">=</span> <span class="st">"main"</span></span>
 <span><span class="op">)</span></span>
@@ -174,10 +174,10 @@ from OmopSketch:</p>
 <span><span class="co">#&gt; Rows: 24</span></span>
 <span><span class="co">#&gt; Columns: 5</span></span>
 <span><span class="co">#&gt; $ group_level    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "acetaminophen", "acetaminophen", "acetaminophen", "ace…</span></span>
-<span><span class="co">#&gt; $ variable_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall", "overall", "Acetaminophen 160 MG Oral Tablet…</span></span>
-<span><span class="co">#&gt; $ variable_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, "1127078", "1127433", "40162522", "40231925", "…</span></span>
+<span><span class="co">#&gt; $ variable_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall", "overall", "Acetaminophen 325 MG / Hydrocodo…</span></span>
+<span><span class="co">#&gt; $ variable_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, "40162522", "40231925", "1127433", "1127078", "…</span></span>
 <span><span class="co">#&gt; $ estimate_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "record_count", "person_count", "record_count", "record…</span></span>
-<span><span class="co">#&gt; $ estimate_value <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "14205", "2679", "2158", "9365", "312", "306", "71", "1…</span></span></code></pre></div>
+<span><span class="co">#&gt; $ estimate_value <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "14205", "2679", "312", "306", "9365", "2158", "71", "1…</span></span></code></pre></div>
 <p>By default, the function will provide information about either the
 number of records (<code>estimate_name == "record_count"</code>) for
 each concept_id or the number of people
