@@ -188,7 +188,7 @@ getCodeUse <- function(x,
     suppressMessages() |>
     dplyr::filter(.data$variable_name %in% .env$countBy) |>
     dplyr::mutate("variable_name" = stringr::str_to_sentence(.data$variable_name)) |>
-    dplyr::mutate(standard_concept_id = group_level) |>
+    dplyr::mutate(standard_concept_id = .data$group_level) |>
     dplyr::mutate(group_name = "codelist_name") |>
     dplyr::mutate(group_level = names(x)) |>
     dplyr::mutate(cdm_name = omopgenerics::cdmName(cdm)) |>

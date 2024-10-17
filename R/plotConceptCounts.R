@@ -53,7 +53,7 @@ plotConceptCounts <- function(result,
   order <- c("overall", sort(unique(result$standard_concept_name[result$standard_concept_name != "overall"])))
   result <- result |>
     dplyr::mutate(variable_name = "standard_concept_name",
-                  variable_level = factor(standard_concept_name, levels = order)) |>
+                  variable_level = factor(.data$standard_concept_name, levels = order)) |>
     visOmopResults::uniteAdditional(c("domain_id", "standard_concept_name", "standard_concept_id", "source_concept_name", "source_concept_id"))
 
   # Detect if there are several time intervals
