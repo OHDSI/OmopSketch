@@ -1,5 +1,6 @@
 #' Summarise the observation period table getting some overall statistics in a
 #' summarised_result object.
+#'
 #' @param observationPeriod observation_period omop table.
 #' @param estimates Estimates to summarise the variables of interest (
 #' `records per person`, `duration in days` and
@@ -7,8 +8,11 @@
 #' @param ageGroup A list of age groups to stratify results by.
 #' @param sex Boolean variable. Whether to stratify by sex (TRUE) or not
 #' (FALSE).
+#'
 #' @return A summarised_result object with the summarised data.
+#'
 #' @export
+#'
 #' @examples
 #' \donttest{
 #' library(dplyr, warn.conflicts = FALSE)
@@ -119,13 +123,8 @@ summariseObservationPeriod <- function(observationPeriod,
 }
 
 addOrdinalLevels <- function(x) {
-  strata_cols <- x |>
-    dplyr::select("strata_name") |>
-    dplyr::filter(!grepl("&&&", x$strata_name),
-                  .data$strata_name != "overall",
-                  .data$strata_name != "id") |>
-    dplyr::distinct() |>
-    dplyr::pull("strata_name")
+  strata_cols <- visOmopResults::strataColumns(x)
+  strata_cols <- strata_cols[strata_cols != "id"]
 
   x <- x |>
     visOmopResults::splitStrata()
@@ -145,7 +144,7 @@ addOrdinalLevels <- function(x) {
   x <- x |>
     dplyr::mutate("group_level" = .env$val) |>
     dplyr::select(-c("id")) |>
-    dplyr::mutate("group_name" = dplyr::if_else(.data$group_level == "overall", "overall", "observation_period_ordinal")) |>
+    dplyr::mutate("group_name" = "observation_period_ordinal") |>
     visOmopResults::uniteStrata(cols = strata_cols)
 
   return(x)
