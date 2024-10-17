@@ -109,7 +109,14 @@ summariseConceptCounts(cdm,
 One can further stratify by year, sex or age group using the `year`, `sex`, and `ageGroup` arguments.
 
 ``` {r, warning=FALSE} 
-summariseConceptCounts(cdm,                         conceptId = list("acetaminophen" = acetaminophen,                                         "sinusitis" = sinusitis),                        countBy = "person",                        year = TRUE,                        sex  = TRUE,                        ageGroup = list("<=50" = c(0,50), ">50" = c(51,Inf))) |>   select(group_level, strata_level, variable_name, estimate_name) |>   glimpse() 
+summariseConceptCounts(cdm,
+                       conceptId = list("acetaminophen" = acetaminophen,
+                                        "sinusitis" = sinusitis),
+                       countBy = "person",
+                       unit = "year", unitInterval = 1,
+                       sex  = TRUE,  
+                       ageGroup = list("<=50" = c(0,50), ">50" = c(51,Inf))) |>   
+  select(group_level, strata_level, variable_name, estimate_name) |>   glimpse() 
 ```
 
 ## Visualise the results 
@@ -128,7 +135,7 @@ Notice that either person counts or record counts can be plotted. If both have b
 summariseConceptCounts(cdm, 
                        conceptId = list("sinusitis" = sinusitis),
                        countBy = c("person","record")) |>
-  filter(estimate_name == "person_count") |>
+  filter(variable_name == "Number subjects") |>
   plotConceptCounts()
 ```
 
