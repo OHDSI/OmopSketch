@@ -187,7 +187,7 @@ getCodeUse <- function(x,
                                      estimates = as.character()) |>
     suppressMessages() |>
     dplyr::filter(.data$variable_name %in% .env$countBy) |>
-    dplyr::mutate(estimate_name  = dplyr::if_else(.data$variable_name == "number records", "record_count", "person_count"),
+    dplyr::mutate(estimate_name  = dplyr::if_else(.data$variable_name == "number records", "Number records", "Number subjects"),
                   variable_level = dplyr::if_else(.data$group_level == "overall", NA, .data$group_level)) |>
     dplyr::mutate(group_name = "codelist_name") |>
     dplyr::mutate(group_level = names(x)) |>
