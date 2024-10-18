@@ -3,9 +3,7 @@
 #'
 #' @param observationPeriod An observation_period omop table. It must be part of
 #' a cdm_reference object.
-#' @param interval Time interval to stratify by. It can either be "year" or "month".
-#' @param unitInterval Number of years or months to include within the time
-#' interval.
+#' @param interval Time interval to stratify by. It can either be "years", "quarters", "months" or "overall".
 #' @param output Output format. It can be either the number of records
 #' ("records") that are in observation in the specific interval of time, the
 #' number of person-days ("person-days"), or both c("records","person-days").
@@ -22,8 +20,7 @@
 #'
 #' result <- summariseInObservation(
 #'   cdm$observation_period,
-#'   interval = "month",
-#'   unitInterval = 6,
+#'   interval = "months",
 #'   output = c("person-days","records"),
 #'   ageGroup = list("<=60" = c(0,60), ">60" = c(61, Inf)),
 #'   sex = TRUE
@@ -35,8 +32,7 @@
 #' PatientProfiles::mockDisconnect(cdm)
 #' }
 summariseInObservation <- function(observationPeriod,
-                                   interval = "year",
-                                   unitInterval = 1,
+                                   interval = "overall",
                                    output = "records",
                                    ageGroup = NULL,
                                    sex = FALSE){
@@ -52,11 +48,12 @@ summariseInObservation <- function(observationPeriod,
     return(omopgenerics::emptySummarisedResult())
   }
 
-  checkInterval(interval)
-  omopgenerics::assertNumeric(unitInterval, length = 1, min = 1)
   checkOutput(output)
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "")[[1]]
   omopgenerics::assertLogical(sex, length = 1)
+  x <- validateIntervals(interval)
+  interval <- x$interval
+  unitInterval <- x$unitInterval
 
   if(length(output) > 1){output <- "all"}
   if(missing(ageGroup) | is.null(ageGroup)){ageGroup <- list("overall" = c(0,Inf))}else{ageGroup <- append(ageGroup, list("overall" = c(0, Inf)))}
@@ -64,30 +61,38 @@ summariseInObservation <- function(observationPeriod,
   # Create initial variables ----
   cdm <- omopgenerics::cdmReference(observationPeriod)
   observationPeriod <- addStrataToPeopleInObservation(cdm, ageGroup, sex, tablePrefix)
-
-  # Observation period ----
-  name <- "observation_period"
-  start_date_name <- startDate(name)
-  end_date_name   <- endDate(name)
-
-  timeInterval <- getIntervalTibbleForObservation(observationPeriod, start_date_name, end_date_name, interval, unitInterval)
-
-  # Insert interval table to the cdm ----
-  cdm <- cdm |>
-    omopgenerics::insertTable(name = paste0(tablePrefix,"interval"), table = timeInterval)
+  strata <- getStrataList(sex, ageGroup)
 
   # Calculate denominator ----
   denominator <- cdm |> getDenominator(output)
 
-  # Count records ----
-  result <- observationPeriod |>
-    countRecords(cdm, start_date_name, end_date_name, interval, output, tablePrefix)
+  # Observation period ----
+  if(interval != "overall"){
+    name <- "observation_period"
+    start_date_name <- startDate(name)
+    end_date_name   <- endDate(name)
 
-  # Add category sex overall
-  result <- addSexOverall(result, sex)
+    timeInterval <- getIntervalTibbleForObservation(observationPeriod, start_date_name, end_date_name, interval, unitInterval)
+
+    # Insert interval table to the cdm ----
+    cdm <- cdm |>
+      omopgenerics::insertTable(name = paste0(tablePrefix,"interval"), table = timeInterval)
+
+    # Count records ----
+    result <- observationPeriod |>
+      countRecords(cdm, start_date_name, end_date_name, interval, output, tablePrefix)
+
+    # Add category sex overall
+    result <- addSexOverall(result, sex)
+  }
+  # Calculate people in obs overall
+
 
   # Create summarisedResult
   result <- createSummarisedResultObservationPeriod(result, observationPeriod, name, denominator, interval, unitInterval)
+
+
+
 
   CDMConnector::dropTable(cdm, name = dplyr::starts_with(tablePrefix))
   return(result)
@@ -215,7 +220,7 @@ if(output == "records" | output == "all"){
   x <- personDays |>
     rbind(records) |>
     dplyr::arrange(.data$interval_group) |>
-    dplyr::rename("time_interval" = "interval_group")
+    dplyr::rename("variable_level" = "interval_group")
 
   omopgenerics::dropTable(cdm = cdm, name = c(dplyr::starts_with(tablePrefix)))
 
@@ -225,7 +230,6 @@ if(output == "records" | output == "all"){
 createSummarisedResultObservationPeriod <- function(result, observationPeriod, name, denominator, interval, unitInterval){
   result <- result |>
     dplyr::mutate("estimate_value" = as.character(.data$estimate_value)) |>
-    dplyr::rename("variable_level" = "time_interval") |>
     visOmopResults::uniteStrata(cols = c("sex", "age_group")) |>
     dplyr::mutate(
       "result_id" = as.integer(1),
