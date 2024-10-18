@@ -119,17 +119,17 @@ tables of the cdm (i.e., <strong>condition_occurrence</strong>).</p>
 <code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseClinicalRecords.html">summariseClinicalRecords</a></span><span class="op">(</span><span class="va">cdm</span>, <span class="st">"condition_occurrence"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising table counts</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-10-17 16:00:22.282495</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-10-18 12:35:14.361634</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-17 16:00:22.315117</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-18 12:35:14.396597</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> records_per_person: mean, sd, median, q25, q75, min, max</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Table is collected to memory as not all requested estimates are supported on</span></span>
 <span><span class="co">#&gt;   the database side</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-10-17 16:00:22.704914</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-10-18 12:35:14.79557</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-17 16:00:22.759803</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-18 12:35:14.849696</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising in_observation, standard, domain_id, and type information</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -170,17 +170,17 @@ records per person.</p>
 <span>                                             recordsPerPerson <span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span>, <span class="st">"sd"</span>, <span class="st">"q05"</span>, <span class="st">"q95"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising table counts</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-10-17 16:00:26.32862</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-10-18 12:35:18.475805</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-17 16:00:26.356107</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-18 12:35:18.509378</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> records_per_person: mean, sd, q05, q95</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Table is collected to memory as not all requested estimates are supported on</span></span>
 <span><span class="co">#&gt;   the database side</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-10-17 16:00:26.738679</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-10-18 12:35:18.903297</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-17 16:00:26.780865</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-18 12:35:18.948083</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising in_observation, standard, domain_id, and type information</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
@@ -211,17 +211,17 @@ vocabulary have (<code>domainId = TRUE</code>) or the concept’s type
 <span>                                             typeConcept <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising table counts</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-10-17 16:00:30.197742</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-10-18 12:35:22.503302</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-17 16:00:30.225486</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-18 12:35:22.532705</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> records_per_person: mean, sd, q05, q95</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Table is collected to memory as not all requested estimates are supported on</span></span>
 <span><span class="co">#&gt;   the database side</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-10-17 16:00:30.609239</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-10-18 12:35:22.934862</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-17 16:00:30.655883</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-18 12:35:22.986586</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising in_observation, standard, domain_id, source, and type information</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
@@ -247,17 +247,17 @@ age groups:</p>
 <span>                                             ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">34</span><span class="op">)</span>, <span class="st">"&gt;=35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising table counts</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-10-17 16:00:36.054364</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-10-18 12:35:28.452482</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-17 16:00:36.196061</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-18 12:35:28.59014</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> records_per_person: mean, sd, q05, q95</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Table is collected to memory as not all requested estimates are supported on</span></span>
 <span><span class="co">#&gt;   the database side</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-10-17 16:00:36.75781</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-10-18 12:35:29.158777</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-17 16:00:36.960089</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-18 12:35:29.368371</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising in_observation, standard, domain_id, source, and type information</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
@@ -285,26 +285,26 @@ at the same time:</p>
 <span>                                             typeConcept <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising table counts</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-10-17 16:00:42.626321</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-10-18 12:35:35.096494</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-17 16:00:42.654176</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-18 12:35:35.132357</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> records_per_person: mean, sd</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-10-17 16:00:43.042058</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-10-18 12:35:35.529219</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-17 16:00:43.083803</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-18 12:35:35.57238</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising table counts</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-10-17 16:00:45.835021</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-10-18 12:35:38.334157</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-17 16:00:45.863344</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-18 12:35:38.363752</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> records_per_person: mean, sd</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-10-17 16:00:46.261637</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-10-18 12:35:38.758534</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-17 16:00:46.310742</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-18 12:35:38.802057</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -332,17 +332,17 @@ previous results and create a gt table.</p>
 <span>                                             sex <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising table counts</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-10-17 16:00:49.589892</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-10-18 12:35:42.029403</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-17 16:00:49.663563</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-18 12:35:42.099418</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> records_per_person: mean, sd, q05, q95</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Table is collected to memory as not all requested estimates are supported on</span></span>
 <span><span class="co">#&gt;   the database side</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-10-17 16:00:50.202924</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-10-18 12:35:42.63487</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-17 16:00:50.298602</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-18 12:35:42.735515</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising in_observation, standard, domain_id, source, and type information</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
@@ -1025,14 +1025,14 @@ an OMOP table. See the example below, where we use
 within each year, and then, we use <code><a href="../reference/plotRecordCount.html">plotRecordCount()</a></code> to
 create a ggplot with the trend.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseRecordCount.html">summariseRecordCount</a></span><span class="op">(</span><span class="va">cdm</span>, <span class="st">"drug_exposure"</span>, unit <span class="op">=</span> <span class="st">"year"</span>, unitInterval <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseRecordCount.html">summariseRecordCount</a></span><span class="op">(</span><span class="va">cdm</span>, <span class="st">"drug_exposure"</span>, interval <span class="op">=</span> <span class="st">"year"</span>, unitInterval <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> interval_group: count</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> sex: count</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> age_group: count</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-10-17 16:00:53.0299</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-10-18 12:35:45.477412</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-17 16:00:53.103728</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-18 12:35:45.546997</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 66 × 13</span></span></span>
@@ -1058,21 +1058,21 @@ create a ggplot with the trend.</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> variable_level: from double to character</span></span></code></pre></div>
 <p><img src="A-summarise_clinical_tables_records_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 <p>Note that you can adjust the time interval period using the
-<code>unit</code> argument, which can be set to either “year” or
+<code>interval</code> argument, which can be set to either “year” or
 “month”, and the <code>unitInterval</code> argument, which must be an
 integer specifying the number of years or months which to count the
 records. See the example below, where it shows the number of records
 every 18 months:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/summariseRecordCount.html">summariseRecordCount</a></span><span class="op">(</span><span class="va">cdm</span>, <span class="st">"drug_exposure"</span>, unit <span class="op">=</span> <span class="st">"month"</span>, unitInterval <span class="op">=</span> <span class="fl">18</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/summariseRecordCount.html">summariseRecordCount</a></span><span class="op">(</span><span class="va">cdm</span>, <span class="st">"drug_exposure"</span>, interval <span class="op">=</span> <span class="st">"month"</span>, unitInterval <span class="op">=</span> <span class="fl">18</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/plotRecordCount.html">plotRecordCount</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> interval_group: count</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> sex: count</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> age_group: count</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-10-17 16:00:54.803247</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-10-18 12:35:47.223311</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-17 16:00:54.873356</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-18 12:35:47.29802</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> The following column type were changed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> variable_level: from double to character</span></span></code></pre></div>
 <p><img src="A-summarise_clinical_tables_records_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
@@ -1082,7 +1082,7 @@ in both cases, the function will automatically create a group called
 <em>overall</em> with all the sex groups and all the age groups.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/summariseRecordCount.html">summariseRecordCount</a></span><span class="op">(</span><span class="va">cdm</span>, <span class="st">"drug_exposure"</span>,</span>
-<span>                      unit <span class="op">=</span> <span class="st">"month"</span>, </span>
+<span>                      interval <span class="op">=</span> <span class="st">"month"</span>, </span>
 <span>                      unitInterval <span class="op">=</span> <span class="fl">18</span>, </span>
 <span>                      sex <span class="op">=</span> <span class="cn">TRUE</span>, </span>
 <span>                      ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;30"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">29</span><span class="op">)</span>,</span>
@@ -1092,9 +1092,9 @@ in both cases, the function will automatically create a group called
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> interval_group: count</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> age_group: count</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> sex: count</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-10-17 16:00:56.928534</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-10-18 12:35:49.337228</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-17 16:00:57.241413</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-18 12:35:49.661509</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> The following column type were changed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> variable_level: from double to character</span></span></code></pre></div>
 <p><img src="A-summarise_clinical_tables_records_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
@@ -1104,7 +1104,7 @@ different variables, as seen in the previous picture. We can use <a href="https:
 package to help us know by which columns we can colour or face by:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/summariseRecordCount.html">summariseRecordCount</a></span><span class="op">(</span><span class="va">cdm</span>, <span class="st">"drug_exposure"</span>,</span>
-<span>                     unit <span class="op">=</span> <span class="st">"month"</span>, </span>
+<span>                     interval <span class="op">=</span> <span class="st">"month"</span>, </span>
 <span>                     unitInterval <span class="op">=</span> <span class="fl">18</span>, </span>
 <span>                     sex <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                     ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"0-29"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">29</span><span class="op">)</span>,</span>
@@ -1114,18 +1114,17 @@ package to help us know by which columns we can colour or face by:</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> interval_group: count</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> age_group: count</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> sex: count</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-10-17 16:00:59.298558</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-10-18 12:35:51.710234</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-17 16:00:59.601948</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-18 12:35:52.028298</span></span>
 <span><span class="co">#&gt;  [1] "cdm_name"        "omop_table"      "age_group"       "sex"            </span></span>
-<span><span class="co">#&gt;  [5] "variable_name"   "variable_level"  "count"           "time_interval"  </span></span>
-<span><span class="co">#&gt;  [9] "result_type"     "package_name"    "package_version" "unit"           </span></span>
-<span><span class="co">#&gt; [13] "unitInterval"</span></span></code></pre></div>
+<span><span class="co">#&gt;  [5] "variable_name"   "variable_level"  "count"           "result_type"    </span></span>
+<span><span class="co">#&gt;  [9] "package_name"    "package_version" "interval"        "unitInterval"</span></span></code></pre></div>
 <p>Then, we can simply specify this by using the <code>facet</code> and
 <code>colour</code> arguments from <code><a href="../reference/plotRecordCount.html">plotRecordCount()</a></code></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/summariseRecordCount.html">summariseRecordCount</a></span><span class="op">(</span><span class="va">cdm</span>, <span class="st">"drug_exposure"</span>,</span>
-<span>                     unit <span class="op">=</span> <span class="st">"month"</span>, </span>
+<span>                     interval <span class="op">=</span> <span class="st">"month"</span>, </span>
 <span>                     unitInterval <span class="op">=</span> <span class="fl">18</span>, </span>
 <span>                     sex <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                     ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"0-29"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">29</span><span class="op">)</span>,</span>
@@ -1135,9 +1134,9 @@ package to help us know by which columns we can colour or face by:</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> interval_group: count</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> age_group: count</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> sex: count</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-10-17 16:01:01.319324</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2024-10-18 12:35:53.719483</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-17 16:01:01.630443</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-18 12:35:54.041243</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> The following column type were changed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> variable_level: from double to character</span></span></code></pre></div>
 <p><img src="A-summarise_clinical_tables_records_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
