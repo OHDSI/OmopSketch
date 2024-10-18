@@ -55,7 +55,8 @@ test_that("summariseRecordCount() works", {
 
   expect_true(
     (summariseRecordCount(cdm, "condition_occurrence", interval = "months") |>
-      dplyr::filter(variable_level %in% c("1984-01-01 to 1984-03-31")) |>
+      dplyr::filter(variable_level %in% c("1984-01-01 to 1984-01-31", "1984-02-01 to 1984-02-29", "1984-03-01 to 1984-03-31")) |>
+      dplyr::summarise("estimate_value" = sum(as.numeric(estimate_value), na.rm = TRUE)) |>
       dplyr::pull("estimate_value") |>
       as.numeric()) ==
       (cdm$condition_occurrence |>
