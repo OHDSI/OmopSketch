@@ -4,7 +4,7 @@
 #'
 #' @param cdm A cdm_reference object.
 #' @param omopTableName A character vector of omop tables from the cdm.
-#' @param interval Time interval to stratify by. It can either be "year" or "month".
+#' @param interval Time interval to stratify by. It can either be "years", "quarters", "months" or "overall".
 #' @param unitInterval Number of years or months to include within the same
 #' interval.
 #' @param ageGroup A list of age groups to stratify results by.
@@ -20,8 +20,7 @@
 #' summarisedResult <- summariseRecordCount(
 #'   cdm = cdm,
 #'   omopTableName = c("condition_occurrence", "drug_exposure"),
-#'   interval = "year",
-#'   unitInterval = 10,
+#'   interval = "years",
 #'   ageGroup = list("<=20" = c(0,20), ">20" = c(21, Inf)),
 #'   sex = TRUE
 #' )
@@ -33,16 +32,17 @@
 #' }
 summariseRecordCount <- function(cdm,
                                  omopTableName,
-                                 interval = "year",
-                                 unitInterval = 1,
+                                 interval = "years",
                                  ageGroup = NULL,
                                  sex = FALSE) {
 
   # Initial checks ----
   omopgenerics::validateCdmArgument(cdm)
   omopgenerics::assertCharacter(omopTableName)
-  checkInterval(interval)
-  omopgenerics::assertNumeric(unitInterval, length = 1, min = 1)
+  validateIntervals(interval)
+  x <- checkInterval(interval)
+  interval <- x$interval
+  unitInterval <- x$unitInterval
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "")[[1]]
   omopgenerics::assertLogical(sex, length = 1)
 
