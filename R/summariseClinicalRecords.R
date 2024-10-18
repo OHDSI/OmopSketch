@@ -92,7 +92,7 @@ summariseClinicalRecords <- function(cdm,
       ageGroup = ageGroup
     )
   }) |>
-    dplyr::bind_rows()
+    omopgenerics::bind()
 
   return(result)
 }
@@ -148,7 +148,7 @@ summariseClinicalRecord <- function(omopTableName,
   strata <- c(list(character()), strata)
 
   # Counts summary ----
-  cli::cli_inform(c("i" = "Summarising table counts and records per person"))
+  cli::cli_inform(c("i" = "Summarising {.pkg {omopTableName}} counts and records per person"))
   result <- summariseRecordsPerPerson(
     omopTable, date, sex, ageGroup, recordsPerPerson)
 
@@ -163,7 +163,7 @@ summariseClinicalRecord <- function(omopTableName,
       inObservation, standardConcept, sourceVocabulary, domainId, typeConcept
     )
 
-    cli::cli_inform(c("i" = "Summarising {variables} information"))
+    cli::cli_inform(c("i" = "Summarising {.pkg {omopTableName}}: {.var {variables}}."))
 
     result <- result |>
       dplyr::bind_rows(
@@ -172,7 +172,7 @@ summariseClinicalRecord <- function(omopTableName,
           dplyr::group_by(dplyr::across(dplyr::everything())) |>
           dplyr::summarise(n = as.integer(dplyr::n()), .groups = "drop") |>
           dplyr::collect() |>
-          summaryData(denominator, strata)
+          summaryData(denominator, strata, cdm)
       )
   }
 
@@ -485,7 +485,7 @@ columnsVariables <- function(inObservation, standardConcept, sourceVocabulary, d
   )]
 }
 
-summaryData <- function(x, denominator, strata) {
+summaryData <- function(x, denominator, strata, cdm) {
 
   cols <- colnames(x)
 
