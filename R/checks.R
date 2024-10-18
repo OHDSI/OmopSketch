@@ -22,7 +22,7 @@ validateIntervals <- function(interval){
     interval == "years" ~ 1
   )
 
-  if(interval == "quarters"){quarters <- "month"}else{interval <- gsub("$s","",interval)}
+  if(interval == "quarters"){quarters <- "month"}else{interval <- gsub("s$","",interval)}
 
   return(list("interval" = interval, "unitInterval" = unitInterval))
 }
