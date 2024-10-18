@@ -178,11 +178,13 @@ summariseClinicalRecord <- function(omopTableName,
 
   # Format output as a summarised result
   result <- result |>
-    tidyr::fill("result_id", "cdm_name", "group_name", "group_level",
-                "additional_name", "additional_level", .direction = "downup") |>
     dplyr::mutate(
+      "result_id" = 1L,
+      "cdm_name" = omopgenerics::cdmName(cdm),
       "group_name" = "omop_table",
-      "group_level" = omopgenerics::tableName(omopTable)
+      "group_level" = omopTableName,
+      "additional_name" = "overall",
+      "additional_level" = "overall"
     ) |>
     omopgenerics::newSummarisedResult(settings = dplyr::tibble(
       "result_id" = 1L,
@@ -485,39 +487,41 @@ columnsVariables <- function(inObservation, standardConcept, sourceVocabulary, d
 
 summaryData <- function(x, denominator, strata) {
 
-  variables <- colnames(x)[!c("age_group", "sex") %in% colnames(x)]
+  cols <- colnames(x)
 
   results <- list()
 
   # in observation ----
-  if ("in_observation" %in% variables) {
+  if ("in_observation" %in% cols) {
     results[["obs"]] <- x |>
       dplyr::mutate("in_observation" = dplyr::if_else(
-        !is.na(.data$in_observation), "Yes", "No"
+        .data$in_observation == "1", "Yes", "No"
       )) |>
       formatResults("In observation", "in_observation", denominator, strata)
   }
 
   # standard -----
-  if ("standard" %in% variables) {
+  if ("standard" %in% cols) {
     results[["standard"]] <- x |>
-      formatResults("Standard concept", "standard", denominator, result)
+      formatResults("Standard concept", "standard", denominator, strata)
   }
 
   # source ----
-  if ("source" %in% variables) {
-    results[["source"]] <- x |> formatResults("Source vocabulary", "source", denominator, result)
+  if ("source" %in% cols) {
+    results[["source"]] <- x |>
+      formatResults("Source vocabulary", "source", denominator, strata)
   }
 
   # domain ----
-  if ("domain_id" %in% variables) {
-    results[["domain"]] <- x |> formatResults("Domain", "domain_id", denominator, result)
+  if ("domain_id" %in% cols) {
+    results[["domain"]] <- x |>
+      formatResults("Domain", "domain_id", denominator, strata)
   }
 
   # type ----
-  if ("type" %in% variables) {
+  if ("type" %in% cols) {
     xx <- x |>
-      formatResults("Type concept id", "type", denominator, result) |>
+      formatResults("Type concept id", "type", denominator, strata) |>
       dplyr::left_join(
         conceptTypes |>
           dplyr::select(
@@ -554,11 +558,11 @@ summaryData <- function(x, denominator, strata) {
           paste0(.data$new_variable_level, " (", .data$variable_level, ")")
         ))
     }
-    results[["type"]] <- xx |> dplyr::select(-"new_variable_level")
+    results[["type"]] <- xx |>
+      dplyr::select(-"new_variable_level")
   }
 
-  results <- results |>
-    dplyr::bind_rows()
+  results <- dplyr::bind_rows(results)
 
   return(results)
 }
