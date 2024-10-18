@@ -35,7 +35,9 @@ plotConceptCounts <- function(result,
 
   # subset to results of interest
   result <- result |>
-    visOmopResults::filterSettings(.data$result_type == "summarise_concept_counts")
+    visOmopResults::filterSettings(.data$result_type == "summarise_concept_counts") |>
+    dplyr::mutate(variable_level = gsub(" to.*","",.data$variable_level)) |>
+    dplyr::mutate(variable_level = gsub("-01$","",.data$variable_level))
 
   if (nrow(result) == 0) {
     cli::cli_abort(c("!" = "No records found with result_type == summarise_concept_counts"))
@@ -46,7 +48,7 @@ plotConceptCounts <- function(result,
   if (length(variable) > 1) {
     cli::cli_abort(c(
       "!" = "Subset to the variable of interest, there are results from: {variable}.",
-      "i" = "result |> dplyr::filter(estimate_name == '{variable[1]}')"
+      "i" = "result |> dplyr::filter(variable_name == '{variable[1]}')"
     ))
   }
 
