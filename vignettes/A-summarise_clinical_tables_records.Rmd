@@ -150,7 +150,7 @@ summarisedResult |> print()
 summarisedResult |> plotRecordCount()
 ```
 
-Note that you can adjust the time interval period using the `interval` argument, which can be set to either "year" or "month", and the `unitInterval` argument, which must be an integer specifying the number of years or months which to count the records. See the example below, where it shows the number of records every 18 months:
+Note that you can adjust the time interval period using the `interval` argument, which can be set to either "years" or "months", and the `unitInterval` argument, which must be an integer specifying the number of years or months which to count the records. See the example below, where it shows the number of records every 18 months:
 
 ```{r, warning=FALSE}
 summariseRecordCount(cdm, "drug_exposure", interval = "month", unitInterval = 18) |> 

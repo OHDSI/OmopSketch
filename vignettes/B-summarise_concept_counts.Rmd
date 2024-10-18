@@ -113,7 +113,7 @@ summariseConceptCounts(cdm,
                        conceptId = list("acetaminophen" = acetaminophen,
                                         "sinusitis" = sinusitis),
                        countBy = "person",
-                       interval = "year", unitInterval = 10,
+                       interval = "years",
                        sex  = TRUE,  
                        ageGroup = list("<=50" = c(0,50), ">50" = c(51,Inf))) |>   
   select(group_level, strata_level, variable_name, estimate_name) |>   glimpse() 
@@ -153,6 +153,6 @@ summariseConceptCounts(cdm,
                        conceptId = list("sinusitis" = sinusitis),
                        countBy = c("person"),
                        sex = TRUE, 
-                       ageGroup = list("<=50" = c(0,50), ">50" = c(51, Inf)))|>
+                       ageGroup = list("<=50" = c(0,50), ">50" = c(51, Inf))) |>
   plotConceptCounts(facet = "sex", colour = "age_group")
 ```

@@ -2,18 +2,29 @@
 checkInterval <- function(interval, call = parent.frame()){
   omopgenerics::assertCharacter(interval, length = 1, na = FALSE, null = FALSE, call = call)
 
-  if(!interval %in% c("overall","years","month","quarters")){
-    cli::cli_abort("Interval argument {interval} is not valid. Valid options are either `overall`, `year`, `quarters` or `month`.", call = call)
+  if(!interval %in% c("year","month")){
+    cli::cli_abort("Interval argument {interval} is not valid. Valid options are either `year` or `month`.", call = call)
   }
 }
 
-validateUniteInterval <- function(interval){
+validateIntervals <- function(interval){
+
+  omopgenerics::assertCharacter(interval, length = 1, na = FALSE, null = FALSE, call = call)
+
+  if(!interval %in% c("overall","years","months","quarters")){
+    cli::cli_abort("Interval argument {interval} is not valid. Valid options are either `overall`, `years`, `quarters` or `months`.", call = call)
+  }
+
   unitInterval <- dplyr::case_when(
-    interval == "overall" ~ NULL,
-    interval == "quarts" ~ 4,
+    interval == "overall" ~ NA,
+    interval == "quarters" ~ 4,
     interval == "months" ~ 1,
     interval == "years" ~ 1
   )
+
+  if(interval == "quarters"){quarters <- "month"}else{interval <- gsub("$s","",interval)}
+
+  return(list("interval" = interval, "unitInterval" = unitInterval))
 }
 
 #' @noRd
