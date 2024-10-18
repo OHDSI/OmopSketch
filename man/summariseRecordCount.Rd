@@ -8,7 +8,7 @@ records that fall within the observation period are considered.}
 summariseRecordCount(
   cdm,
   omopTableName,
-  unit = "year",
+  interval = "year",
   unitInterval = 1,
   ageGroup = NULL,
   sex = FALSE
@@ -19,7 +19,7 @@ summariseRecordCount(
 
 \item{omopTableName}{A character vector of omop tables from the cdm.}
 
-\item{unit}{Time unit it can either be "year" or "month".}
+\item{interval}{Time interval to stratify by. It can either be "year" or "month".}
 
 \item{unitInterval}{Number of years or months to include within the same
 interval.}
@@ -44,7 +44,7 @@ cdm <- mockOmopSketch()
 summarisedResult <- summariseRecordCount(
   cdm = cdm,
   omopTableName = c("condition_occurrence", "drug_exposure"),
-  unit = "year",
+  interval = "year",
   unitInterval = 10,
   ageGroup = list("<=20" = c(0,20), ">20" = c(21, Inf)),
   sex = TRUE
