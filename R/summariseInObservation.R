@@ -85,8 +85,6 @@ summariseInObservation <- function(observationPeriod,
     # Add category sex overall
     result <- addSexOverall(result, sex)
   }
-  # Calculate people in obs overall
-
 
   # Create summarisedResult
   result <- createSummarisedResultObservationPeriod(result, observationPeriod, name, denominator, interval, unitInterval)
@@ -174,47 +172,61 @@ getIntervalTibbleForObservation <- function(omopTable, start_date_name, end_date
 countRecords <- function(observationPeriod, cdm, start_date_name, end_date_name, interval, output, tablePrefix){
 
   if(output == "person-days" | output == "all"){
-    x <- cdm[[paste0(tablePrefix, "interval")]] |>
-      dplyr::cross_join(
-        observationPeriod |>
-          dplyr::select("start_date" = "observation_period_start_date",
-                        "end_date"   = "observation_period_end_date",
-                        "age_group", "sex","person_id")
-      ) |>
-      dplyr::filter((.data$start_date < .data$interval_start_date & .data$end_date >= .data$interval_start_date) |
-                      (.data$start_date >= .data$interval_start_date & .data$start_date <= .data$interval_end_date)) %>%
-      dplyr::mutate(start_date = pmax(.data$interval_start_date, .data$start_date, na.rm = TRUE)) |>
-      dplyr::mutate(end_date   = pmin(.data$interval_end_date, .data$end_date, na.rm = TRUE)) |>
-      dplyr::compute(temporary = FALSE, name = tablePrefix)
+    if(interval == "overall"){
+      x <- cdm[[paste0(tablePrefix, "interval")]] |>
+        dplyr::cross_join(
+          observationPeriod |>
+            dplyr::select("start_date" = "observation_period_start_date",
+                          "end_date"   = "observation_period_end_date",
+                          "age_group", "sex","person_id")
+        ) |>
+        dplyr::filter((.data$start_date < .data$interval_start_date & .data$end_date >= .data$interval_start_date) |
+                        (.data$start_date >= .data$interval_start_date & .data$start_date <= .data$interval_end_date)) %>%
+        dplyr::mutate(start_date = pmax(.data$interval_start_date, .data$start_date, na.rm = TRUE)) |>
+        dplyr::mutate(end_date   = pmin(.data$interval_end_date, .data$end_date, na.rm = TRUE)) |>
+        dplyr::compute(temporary = FALSE, name = tablePrefix)
+    }else{
+      x <- observationPeriod |>
+        dplyr::rename("start_date" = "observation_period_start_date",
+                      "end_date"   = "observation_period_end_date")
+    }
 
     personDays <- x %>%
       dplyr::mutate(estimate_value = !!CDMConnector::datediff("start_date","end_date", interval = "day")+1) |>
-      dplyr::group_by(.data$interval_group, .data$sex, .data$age_group) |>
+      dplyr::group_by(dplyr::across(dplyr::any_of(c("interval_group", "sex", "age_group")))) |>
       dplyr::summarise(estimate_value = sum(.data$estimate_value, na.rm = TRUE), .groups = "drop") |>
       dplyr::mutate(variable_name = "Number person-days") |>
       dplyr::collect()
   }else{
-    personDays <- createEmptyIntervalTable()
+    personDays <- createEmptyIntervalTable(interval)
   }
 
 if(output == "records" | output == "all"){
-    x <- observationPeriod |>
-      dplyr::mutate("start_date" = as.Date(paste0(clock::get_year(.data[[start_date_name]]),"/",clock::get_month(.data[[start_date_name]]),"/01"))) |>
-      dplyr::mutate("end_date"   = as.Date(paste0(clock::get_year(.data[[end_date_name]]),"/",clock::get_month(.data[[end_date_name]]),"/01"))) |>
-      dplyr::group_by(.data$start_date, .data$end_date, .data$age_group, .data$sex) |>
-      dplyr::summarise(estimate_value = dplyr::n(), .groups = "drop") |>
-      dplyr::compute(temporary = FALSE, name = tablePrefix)
 
-    records <- cdm[[paste0(tablePrefix, "interval")]] |>
-      dplyr::cross_join(x) |>
-      dplyr::filter((.data$start_date < .data$interval_start_date & .data$end_date >= .data$interval_start_date) |
-                      (.data$start_date >= .data$interval_start_date & .data$start_date <= .data$interval_end_date)) |>
-      dplyr::group_by(.data$interval_group, .data$age_group, .data$sex) |>
-      dplyr::summarise(estimate_value = sum(.data$estimate_value, na.rm = TRUE), .groups = "drop") |>
-      dplyr::mutate(variable_name = "Number records in observation") |>
-      dplyr::collect()
+    if(interval == "overall"){
+      x <- observationPeriod |>
+        dplyr::mutate("start_date" = as.Date(paste0(clock::get_year(.data[[start_date_name]]),"/",clock::get_month(.data[[start_date_name]]),"/01"))) |>
+        dplyr::mutate("end_date"   = as.Date(paste0(clock::get_year(.data[[end_date_name]]),"/",clock::get_month(.data[[end_date_name]]),"/01"))) |>
+        dplyr::group_by(.data$start_date, .data$end_date, .data$age_group, .data$sex) |>
+        dplyr::summarise(estimate_value = dplyr::n(), .groups = "drop") |>
+        dplyr::compute(temporary = FALSE, name = tablePrefix)
+
+      records <- cdm[[paste0(tablePrefix, "interval")]] |>
+        dplyr::cross_join(x) |>
+        dplyr::filter((.data$start_date < .data$interval_start_date & .data$end_date >= .data$interval_start_date) |
+                        (.data$start_date >= .data$interval_start_date & .data$start_date <= .data$interval_end_date)) |>
+        dplyr::group_by(.data$interval_group, .data$age_group, .data$sex) |>
+        dplyr::summarise(estimate_value = sum(.data$estimate_value, na.rm = TRUE), .groups = "drop") |>
+        dplyr::mutate(variable_name = "Number records in observation") |>
+        dplyr::collect()
+    }else{
+      records <- observationPeriod |>
+        dplyr::group_by(.data$age_group, .data$sex) |>
+        dplyr::summarise(estimate_value = dplyr::n(), .groups = "drop") |>
+        dplyr::collect()
+    }
   }else{
-    records <- createEmptyIntervalTable()
+    records <- createEmptyIntervalTable(interval)
   }
 
   x <- personDays |>
@@ -327,11 +339,21 @@ addSexOverall <- function(result, sex){
   return(result)
 }
 
-createEmptyIntervalTable <- function(){
-  tibble::tibble(
-    "interval_group" = as.character(),
-    "sex" = as.character(),
-    "age_group" = as.character(),
-    "estimate_value" = as.double()
-  )
+createEmptyIntervalTable <- function(interval){
+  if(interval == "overall"){
+    tibble::tibble(
+      "sex" = as.character(),
+      "age_group" = as.character(),
+      "estimate_value" = as.double()
+    )
+
+  }else{
+    tibble::tibble(
+      "interval_group" = as.character(),
+      "sex" = as.character(),
+      "age_group" = as.character(),
+      "estimate_value" = as.double()
+    )
+  }
+
 }
