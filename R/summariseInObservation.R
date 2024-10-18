@@ -52,7 +52,7 @@ summariseInObservation <- function(observationPeriod,
     return(omopgenerics::emptySummarisedResult())
   }
 
-  checkUnit(interval)
+  checkInterval(interval)
   omopgenerics::assertNumeric(unitInterval, length = 1, min = 1)
   checkOutput(output)
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "")[[1]]

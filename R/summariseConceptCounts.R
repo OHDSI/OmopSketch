@@ -33,17 +33,19 @@ summariseConceptCounts <- function(cdm,
                                    countBy = c("record", "person"),
                                    concept = TRUE,
                                    interval = "year",
-                                   unitInterval = 1,
                                    sex = FALSE,
                                    ageGroup = NULL){
 
   omopgenerics::validateCdmArgument(cdm)
   omopgenerics::assertList(conceptId, named = TRUE)
   checkCountBy(countBy)
-  checkUnit(interval)
-  omopgenerics::assertNumeric(unitInterval, length = 1, min = 1)
+  checkInterval(interval)
   omopgenerics::assertChoice(countBy, choices = c("record", "person"))
   countBy <- gsub("persons","subjects",paste0("number ",countBy,"s"))
+  # interval <- validateUnitInterval(interval)
+
+
+  omopgenerics::assertNumeric(unitInterval, length = 1, min = 1)
 
   # Get all concepts in concept table if conceptId is NULL
   # if(is.null(conceptId)) {

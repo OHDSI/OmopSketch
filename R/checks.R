@@ -1,10 +1,19 @@
 #' @noRd
-checkUnit <- function(unit, call = parent.frame()){
-  omopgenerics::assertCharacter(unit, length = 1, na = FALSE, null = FALSE, call = call)
+checkInterval <- function(interval, call = parent.frame()){
+  omopgenerics::assertCharacter(interval, length = 1, na = FALSE, null = FALSE, call = call)
 
-  if(!unit %in% c("year","month")){
-    cli::cli_abort("Unit argument {unit} is not valid. Valid options are either `year` or `month`.", call = call)
+  if(!interval %in% c("overall","years","month","quarters")){
+    cli::cli_abort("Interval argument {interval} is not valid. Valid options are either `overall`, `year`, `quarters` or `month`.", call = call)
   }
+}
+
+validateUniteInterval <- function(interval){
+  unitInterval <- dplyr::case_when(
+    interval == "overall" ~ NULL,
+    interval == "quarts" ~ 4,
+    interval == "months" ~ 1,
+    interval == "years" ~ 1
+  )
 }
 
 #' @noRd
