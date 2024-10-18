@@ -5,8 +5,6 @@
 #' @param cdm A cdm_reference object.
 #' @param omopTableName A character vector of omop tables from the cdm.
 #' @param interval Time interval to stratify by. It can either be "years", "quarters", "months" or "overall".
-#' @param unitInterval Number of years or months to include within the same
-#' interval.
 #' @param ageGroup A list of age groups to stratify results by.
 #' @param sex Whether to stratify by sex (TRUE) or not (FALSE).
 #' @return A summarised_result object.
@@ -32,15 +30,14 @@
 #' }
 summariseRecordCount <- function(cdm,
                                  omopTableName,
-                                 interval = "years",
+                                 interval = "overall",
                                  ageGroup = NULL,
                                  sex = FALSE) {
 
   # Initial checks ----
   omopgenerics::validateCdmArgument(cdm)
   omopgenerics::assertCharacter(omopTableName)
-  validateIntervals(interval)
-  x <- checkInterval(interval)
+  x <- validateIntervals(interval)
   interval <- x$interval
   unitInterval <- x$unitInterval
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "")[[1]]
@@ -79,35 +76,38 @@ summariseRecordCountInternal <- function(omopTableName, cdm, interval, unitInter
   result <- omopgenerics::emptySummarisedResult()
   date   <- startDate(omopTableName)
 
-  # Create strata variable ----
-  strata <- c("age_group","sex")
+  strata <- getStrataList(sex, ageGroup)
 
   # Incidence counts ----
   omopTable <- omopTable |>
     dplyr::select(dplyr::all_of(date), "person_id")
 
-  omopTable <- addStrataToOmopTable(omopTable, date, ageGroup, sex)
+  result <- addStrataToOmopTable(omopTable, date, ageGroup, sex)
 
   if(omopTableName != "observation_period") {
-    omopTable <- omopTable |>
+    result <- result |>
       filterInObservation(indexDate = date)
   }
 
-  # interval sequence ----
-  timeInterval <- getIntervalTibble(omopTable = omopTable,
-                                start_date_name = date,
-                                end_date_name   = date,
-                                interval = interval,
-                                unitInterval = unitInterval)
+  if(interval != "overall"){
+    # interval sequence ----
+    timeInterval <- getIntervalTibble(omopTable = omopTable,
+                                      start_date_name = date,
+                                      end_date_name   = date,
+                                      interval = interval,
+                                      unitInterval = unitInterval)
 
-  # Insert interval table to the cdm ----
-  cdm <- cdm |> omopgenerics::insertTable(name = paste0(prefix, "interval"), table = timeInterval)
+    # Insert interval table to the cdm ----
+    cdm <- cdm |> omopgenerics::insertTable(name = paste0(prefix, "interval"), table = timeInterval)
 
-  # Obtain record counts for each interval ----
-  result <- splitIncidenceBetweenIntervals(cdm, omopTable, date, prefix)
+    # Obtain record counts for each interval ----
+    result <- splitIncidenceBetweenIntervals(cdm, result, date, prefix)
+
+    strata <- omopgenerics::combineStrata(c(unique(unlist(strata)), "interval_group"))
+  }
 
   # Create summarised result ----
-  result <- createSummarisedResultRecordCount(result, sex, ageGroup, omopTable, omopTableName, interval, unitInterval)
+  result <- createSummarisedResultRecordCount(result, strata, omopTable, omopTableName, interval, unitInterval)
   omopgenerics::dropTable(cdm = cdm, name = dplyr::starts_with(prefix))
 
   return(result)
@@ -231,19 +231,21 @@ splitIncidenceBetweenIntervals <- function(cdm, omopTable, date, prefix){
     dplyr::select(-c("interval_start_date", "interval_end_date", "incidence_date"))
 }
 
-createSummarisedResultRecordCount <- function(result, sex, ageGroup, omopTable, omopTableName, interval, unitInterval){
+createSummarisedResultRecordCount <- function(result, strata, omopTable, omopTableName, interval, unitInterval){
 
-  result |>
+  result <- result |>
+    dplyr::mutate(n = 1) |>
     dplyr::select(-"person_id") |>
     dplyr::collect() |> # https://github.com/darwin-eu-dev/PatientProfiles/issues/706
     PatientProfiles::summariseResult(
-      strata = getStrataList(sex, ageGroup),
+      variables = "n",
+      strata = strata,
       includeOverallStrata = TRUE,
-      estimates = "count",
-      counts = FALSE
+      estimates = as.character(),
+      counts = TRUE,
     ) |>
-    dplyr::filter(!.data$variable_name %in% c("sex", "age_group")) |>
-    dplyr::mutate("variable_name" = "incidence_records") |>
+    suppressMessages() |>
+    dplyr::mutate("variable_name" = stringr::str_to_sentence(.data$variable_name)) |>
     dplyr::mutate(
       "result_id" = as.integer(1),
       "cdm_name" = omopgenerics::cdmName(omopgenerics::cdmReference(omopTable)),
@@ -251,15 +253,23 @@ createSummarisedResultRecordCount <- function(result, sex, ageGroup, omopTable, 
       "group_level" = omopTableName,
       "additional_name" = "overall",
       "additional_level" = "overall"
-    ) |>
+    )
+
+  if(interval != "overall"){
+    result <- result |>
+      visOmopResults::splitStrata() |>
+      dplyr::mutate(variable_level = .data$interval_group) |>
+      visOmopResults::uniteStrata(unique(unlist(strata))[unique(unlist(strata)) != "interval_group"]) |>
+      dplyr::select(-"interval_group")
+  }
+
+  result |>
     omopgenerics::newSummarisedResult(
       settings = dplyr::tibble(
         "result_id" = 1L,
         "result_type" = "summarise_record_count",
         "package_name" = "OmopSketch",
-        "package_version" = as.character(utils::packageVersion("OmopSketch")),
-        "interval" = .env$interval,
-        "unitInterval" = .env$unitInterval
+        "package_version" = as.character(utils::packageVersion("OmopSketch"))
       )
     )
 }

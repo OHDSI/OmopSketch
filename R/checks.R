@@ -7,7 +7,7 @@ checkInterval <- function(interval, call = parent.frame()){
   }
 }
 
-validateIntervals <- function(interval){
+validateIntervals <- function(interval, call = parent.frame()){
 
   omopgenerics::assertCharacter(interval, length = 1, na = FALSE, null = FALSE, call = call)
 
