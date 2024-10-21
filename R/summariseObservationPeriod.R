@@ -32,7 +32,7 @@ summariseObservationPeriod <- function(observationPeriod,
                                          "median", "q75", "q95", "max",
                                          "density"),
                                        ageGroup = NULL,
-                                       sex = FALSE){
+                                       sex = FALSE) {
   # input checks
   omopgenerics::assertClass(observationPeriod, class = "omop_table")
   omopgenerics::assertTrue(omopgenerics::tableName(observationPeriod) == "observation_period")
