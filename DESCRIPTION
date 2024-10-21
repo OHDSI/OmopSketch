@@ -45,7 +45,8 @@ Suggests:
     rmarkdown,
     RPostgres,
     testthat (>= 3.0.0),
-    withr
+    withr,
+    omock (>= 0.3.0)
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Imports: 
@@ -56,8 +57,6 @@ Imports:
     CohortConstructor (>= 0.3.1),
     dplyr,
     ggplot2,
-    omock (>= 0.3.0),
-    omopgenerics (>= 0.3.1),
     purrr,
     rlang,
     stringr,
@@ -69,6 +68,6 @@ Depends:
 URL: https://OHDSI.github.io/OmopSketch/
 BugReports: https://github.com/OHDSI/OmopSketch/issues
 VignetteBuilder: knitr
-Remotes:  
-    darwin-eu-dev/omopgenerics@mah_vl
-    darwin-eu-dev/PatientProfiles@issue_706
+Remotes: 
+    darwin-eu-dev/omopgenerics@mah_vl,
+    darwin-eu-dev/PatientProfiles@issue_705
