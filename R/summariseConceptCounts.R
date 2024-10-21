@@ -177,7 +177,7 @@ getCodeUse <- function(x,
   if(!"number subjects" %in% c(countBy)){records <- records |> dplyr::select(-"person_id")}
 
   cc <- records |>
-    dplyr::collect() |> # https://github.com/darwin-eu-dev/PatientProfiles/issues/706
+    # dplyr::collect() |> # https://github.com/darwin-eu-dev/PatientProfiles/issues/706
     PatientProfiles::summariseResult(strata = strata,
                                      variable = "standard_concept_name",
                                      group = "standard_concept_id",

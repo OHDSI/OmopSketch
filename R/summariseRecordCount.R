@@ -234,7 +234,7 @@ createSummarisedResultRecordCount <- function(result, sex, ageGroup, omopTable, 
 
   result |>
     dplyr::select(-"person_id") |>
-    dplyr::collect() |> # https://github.com/darwin-eu-dev/PatientProfiles/issues/706
+    # dplyr::collect() |> # https://github.com/darwin-eu-dev/PatientProfiles/issues/706
     PatientProfiles::summariseResult(
       strata = getStrataList(sex, ageGroup),
       includeOverallStrata = TRUE,
