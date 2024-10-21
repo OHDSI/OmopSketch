@@ -13,13 +13,14 @@ getMissingData <- function(cdm,
 
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "")[[1]]
 
+  omopTable <- cdm[[omopTableName]]
+
   if (is.null(col)){
   col<-colnames(omopTable)
   }else{
   omopgenerics::assertChoice(col, choices = colnames(omopTable))
     }
 
-  omopTable <- cdm[[omopTableName]]
   indexDate <- startDate(omopgenerics::tableName(cdm[[omopTableName]]))
   x <- omopTable |> PatientProfiles::addDemographicsQuery(age = FALSE, ageGroup = ageGroup, sex = sex, indexDate = indexDate)
 
