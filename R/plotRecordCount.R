@@ -37,24 +37,34 @@ plotRecordCount <- function(result,
     cli::cli_abort(c("!" = "No records found with result_type == summarise_record_count"))
   }
 
-  # plot
-  result |>
-    dplyr::mutate(variable_level = as.Date(gsub(" to.*","",.data$variable_level))) |>
-    dplyr::filter(.data$estimate_name == "count") |>
-    visOmopResults::scatterPlot(
-      x = "variable_level",
-      y = "count",
-      line = TRUE,
-      point = TRUE,
-      ribbon = FALSE,
-      ymin = NULL,
-      ymax = NULL,
-      facet = facet,
-      colour = colour,
-      group = c("cdm_name", "omop_table", visOmopResults::strataColumns(result))
-    ) +
-    ggplot2::labs(
-      y = "Incident records",
-      x = "Date"
-    )
+  # Detect if there are several time intervals
+  if(length(unique(result$variable_level)) > 1 ){
+    # Line plot where each concept is a different line
+    p <- result |>
+      dplyr::filter(.data$variable_level != "overall") |>
+      dplyr::filter(.data$estimate_name == "count") |>
+      visOmopResults::scatterPlot(x = "variable_level",
+                                  y = "count",
+                                  line   = TRUE,
+                                  point  = TRUE,
+                                  ribbon = FALSE,
+                                  facet  = facet,
+                                  colour = colour,
+                                  group = c("cdm_name", "omop_table", visOmopResults::strataColumns(result))) +
+      ggplot2::labs(
+        y = "Number records",
+        x = "Date"
+      )
+  }else{
+    p <- result |>
+      visOmopResults::barPlot(x = "variable_level",
+                              y = "count",
+                              facet = facet,
+                              colour = colour)  +
+      ggplot2::labs(
+        y = "Count",
+        x = "Number records"
+      )
+  }
+  p
 }
