@@ -17,7 +17,7 @@ getMissingData <- function(cdm,
 
   if (is.null(col)){
   col<-colnames(omopTable)
-  }else{
+  } else{
   omopgenerics::assertChoice(col, choices = colnames(omopTable))
     }
 
@@ -29,25 +29,25 @@ getMissingData <- function(cdm,
 
 
 
-  results_list <- purrr::map(col, function(colname) {
+  results_list <- purrr::map(col, function(c) {
 
 
     overall_result <- x |>
-        dplyr::select(dplyr::any_of(colname)) |>
+        dplyr::select(dplyr::any_of(c)) |>
         dplyr::summarise(
-        na_count = sum(dplyr::if_else(is.na(.data[[colname]]),1,0)),
+        na_count = sum(dplyr::if_else(is.na(.data[[c]]),1,0)),
         total_count = n(),
-        colname = colname,
+        colname = c,
         .groups = "drop") |>
       dplyr::mutate(na_percentage = dplyr::if_else(total_count > 0, (na_count / total_count) * 100, 0))
     if (!rlang::is_empty(strata))
     {
     stratified_result <- x |>
-      dplyr::group_by(across(dplyr::all_of(strata))) |>
+      dplyr::group_by(across(dplyr::all_of(strata)), na.rm = TRUE) |>
       dplyr::summarise(
-        na_count = sum(dplyr::if_else(is.na(.data[[colname]]),1,0)),
+        na_count = sum(dplyr::if_else(is.na(.data[[c]]),1,0)),
         total_count = n(),
-        colname = colname,
+        colname = c,
         .groups = "drop"
       ) |>
       dplyr::mutate(na_percentage = dplyr::if_else(total_count > 0, (na_count / total_count) * 100, 0))
@@ -59,7 +59,7 @@ getMissingData <- function(cdm,
         dplyr::summarise(
           na_count = sum(.data$na_count, na.rm = TRUE),
           total_count = sum(.data$total_count, na.rm = TRUE),
-          colname = dplyr::first(.data$colname),
+          colname = c,
           .groups = "drop"
         ) |>
         dplyr::mutate(na_percentage = dplyr::if_else(total_count > 0, (na_count / total_count) * 100, 0))
