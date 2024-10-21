@@ -26,6 +26,7 @@
 #' results
 #'
 #' PatientProfiles::mockDisconnect(cdm)
+#'
 #' }
 summariseConceptCounts <- function(cdm,
                                    conceptId,
@@ -176,12 +177,19 @@ getCodeUse <- function(x,
   }
 
   if(!"number subjects" %in% c(countBy)){records <- records |> dplyr::select(-"person_id")}
+  if(concept){
+    group <- list("standard_concept_id")
+  }else{
+    group <- list()
+    records <- records |>
+      dplyr::mutate("standard_concept_name" = !!names(x))
+    }
 
   cc <- records |>
     # dplyr::collect() |> # https://github.com/darwin-eu-dev/PatientProfiles/issues/706
     PatientProfiles::summariseResult(strata = strata,
                                      variable = "standard_concept_name",
-                                     group = "standard_concept_id",
+                                     group = group,
                                      includeOverallGroup = TRUE,
                                      includeOverallStrata = TRUE,
                                      counts = TRUE,
