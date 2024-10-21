@@ -72,7 +72,8 @@ getMissingData <- function(cdm,
 
   })
 
-  final_results <- purrr::reduce(results_list, dplyr::union)
+  final_results <- purrr::reduce(results_list, dplyr::union)|>
+    dplyr::collect()
 
   result<-final_results|>
     dplyr::mutate(dplyr::across(dplyr::all_of(strata), ~ dplyr::coalesce(., "overall")))|>
