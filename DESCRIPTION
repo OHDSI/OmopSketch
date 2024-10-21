@@ -57,6 +57,8 @@ Imports:
     CohortConstructor (>= 0.3.1),
     dplyr,
     ggplot2,
+    omopgenerics (>= 0.3.1),
+    PatientProfiles (>= 1.2.0.900),
     purrr,
     rlang,
     stringr,
@@ -68,6 +70,6 @@ Depends:
 URL: https://OHDSI.github.io/OmopSketch/
 BugReports: https://github.com/OHDSI/OmopSketch/issues
 VignetteBuilder: knitr
-Remotes: 
+Remotes:  
     darwin-eu-dev/omopgenerics@mah_vl,
     darwin-eu-dev/PatientProfiles@issue_705
