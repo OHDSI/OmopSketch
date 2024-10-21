@@ -3,7 +3,6 @@
 <url><loc>https://OHDSI.github.io/OmopSketch/LICENSE.html</loc></url>
 <url><loc>https://OHDSI.github.io/OmopSketch/articles/A-summarise_clinical_tables_records.html</loc></url>
 <url><loc>https://OHDSI.github.io/OmopSketch/articles/B-summarise_concept_counts.html</loc></url>
-<url><loc>https://OHDSI.github.io/OmopSketch/articles/C-summarise_pop_characteristics.html</loc></url>
 <url><loc>https://OHDSI.github.io/OmopSketch/articles/index.html</loc></url>
 <url><loc>https://OHDSI.github.io/OmopSketch/authors.html</loc></url>
 <url><loc>https://OHDSI.github.io/OmopSketch/index.html</loc></url>
@@ -20,11 +19,9 @@
 <url><loc>https://OHDSI.github.io/OmopSketch/reference/summariseInObservation.html</loc></url>
 <url><loc>https://OHDSI.github.io/OmopSketch/reference/summariseObservationPeriod.html</loc></url>
 <url><loc>https://OHDSI.github.io/OmopSketch/reference/summariseOmopSnapshot.html</loc></url>
-<url><loc>https://OHDSI.github.io/OmopSketch/reference/summarisePopulationCharacteristics.html</loc></url>
 <url><loc>https://OHDSI.github.io/OmopSketch/reference/summariseRecordCount.html</loc></url>
 <url><loc>https://OHDSI.github.io/OmopSketch/reference/tableClinicalRecords.html</loc></url>
 <url><loc>https://OHDSI.github.io/OmopSketch/reference/tableObservationPeriod.html</loc></url>
 <url><loc>https://OHDSI.github.io/OmopSketch/reference/tableOmopSnapshot.html</loc></url>
-<url><loc>https://OHDSI.github.io/OmopSketch/reference/tablePopulationCharacteristics.html</loc></url>
 </urlset>
 
