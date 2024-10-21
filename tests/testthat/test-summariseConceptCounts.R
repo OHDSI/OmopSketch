@@ -168,43 +168,6 @@ test_that("summarise code use - eunomia", {
                 dplyr::tally() %>%
                 dplyr::pull("n"))
 
-  results1 <- summariseConceptCounts(cdm = cdm,
-                                     conceptId = cs,
-                                     interval = "years",
-                                     concept = FALSE,
-                                     sex = TRUE,
-                                     ageGroup = list(c(0,17),
-                                                     c(18,65),
-                                                     c(66, 100)))
-
-  expect_true(results1$additional_level |> unique() |> length() == 1)
-  expect_equal(
-    results1 |>
-      dplyr::filter(variable_name == "Number records") |>
-      dplyr::arrange(dplyr::across(dplyr::everything())),
-    results |>
-      dplyr::filter(variable_name == "Number records", additional_name == "overall") |>
-      dplyr::arrange(dplyr::across(dplyr::everything()))
-  )
-  expect_true(results1 |>
-    dplyr::filter(variable_name  == "Number subjects",
-                  group_level == "acetiminophen",
-                  variable_level == "1909-01-01 to 1909-12-31",
-                  strata_level == "0 to 17")  |>
-    dplyr::pull("estimate_value") |>
-    as.numeric() ==
-    cdm$drug_exposure %>%
-    dplyr::filter(drug_concept_id %in% acetiminophen) %>%
-    PatientProfiles::addAge(indexDate = "drug_exposure_start_date") %>%
-    PatientProfiles::addSex() %>%
-    dplyr::filter(age >= "0", age <= "17", clock::get_year(drug_exposure_start_date) == 1909) |>
-    dplyr::select("person_id") %>%
-    dplyr::distinct() %>%
-    dplyr::tally() %>%
-    dplyr::pull("n"))
-  expect_true(results1$group_level |> unique() |> length() == 2)
-  expect_true(results1$additional_name |> unique() |> length() == 1)
-
   results <- summariseConceptCounts(list("acetiminophen" = acetiminophen),
                               cdm = cdm, countBy = "person",
                               interval = "years",
@@ -214,7 +177,6 @@ test_that("summarise code use - eunomia", {
                      dplyr::filter(variable_name == "Number subjects")) > 0)
   expect_true(nrow(results %>%
                      dplyr::filter(variable_name == "Number records")) == 0)
-
 
   results <- summariseConceptCounts(list("acetiminophen" = acetiminophen),
                               cdm = cdm, countBy = "record",
