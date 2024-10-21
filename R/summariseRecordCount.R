@@ -236,7 +236,7 @@ createSummarisedResultRecordCount <- function(result, strata, omopTable, omopTab
   result <- result |>
     dplyr::mutate(n = 1) |>
     dplyr::select(-"person_id") |>
-    dplyr::collect() |> # https://github.com/darwin-eu-dev/PatientProfiles/issues/706
+    # dplyr::collect() |> # https://github.com/darwin-eu-dev/PatientProfiles/issues/706
     PatientProfiles::summariseResult(
       variables = "n",
       strata = strata,
