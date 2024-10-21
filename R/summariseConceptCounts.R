@@ -6,8 +6,7 @@
 #' @param countBy Either "record" for record-level counts or "person" for
 #' person-level counts
 #' @param concept TRUE or FALSE. If TRUE code use will be summarised by concept.
-#' @param interval Time interval to stratify by. It can either be "year" or "month".
-#' @param unitInterval Number of years or months to include within the same
+#' @param interval Time interval to stratify by. It can either be "years", "quarters", "months" or "overall".
 #' @param sex TRUE or FALSE. If TRUE code use will be summarised by sex.
 #' @param ageGroup A list of ageGroup vectors of length two. Code use will be
 #' thus summarised by age groups.
@@ -32,18 +31,22 @@ summariseConceptCounts <- function(cdm,
                                    conceptId,
                                    countBy = c("record", "person"),
                                    concept = TRUE,
-                                   interval = "year",
-                                   unitInterval = 1,
+                                   interval = "overall",
                                    sex = FALSE,
                                    ageGroup = NULL){
 
   omopgenerics::validateCdmArgument(cdm)
   omopgenerics::assertList(conceptId, named = TRUE)
   checkCountBy(countBy)
-  checkUnit(interval)
-  omopgenerics::assertNumeric(unitInterval, length = 1, min = 1)
   omopgenerics::assertChoice(countBy, choices = c("record", "person"))
   countBy <- gsub("persons","subjects",paste0("number ",countBy,"s"))
+  x <- validateIntervals(interval)
+  interval <- x$interval
+  unitInterval <- x$unitInterval
+  omopgenerics::assertNumeric(unitInterval, length = 1, min = 1, na = TRUE)
+  omopgenerics::assertLogical(concept, length = 1)
+  omopgenerics::assertLogical(sex, length = 1)
+  ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "")[[1]]
 
   # Get all concepts in concept table if conceptId is NULL
   # if(is.null(conceptId)) {
@@ -90,9 +93,7 @@ summariseConceptCounts <- function(cdm,
         result_id = 1L,
         result_type = "summarise_concept_counts",
         package_name = "OmopSketch",
-        package_version = as.character(utils::packageVersion("OmopSketch")),
-        "interval" = .env$interval,
-        "unitInterval" = .env$unitInterval
+        package_version = as.character(utils::packageVersion("OmopSketch"))
       )
     )
   return(codeUse)
@@ -112,9 +113,6 @@ getCodeUse <- function(x,
 
   omopgenerics::assertNumeric(x[[1]], integerish = TRUE)
   omopgenerics::assertList(x)
-  omopgenerics::assertLogical(concept, length = 1)
-  omopgenerics::assertLogical(sex, length = 1)
-  ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "")[[1]]
 
   # Create code list table
   tableCodelist <- paste0(tablePrefix,"codelist")
@@ -161,18 +159,21 @@ getCodeUse <- function(x,
   }
 
   records <- addStrataToOmopTable(records, "date", ageGroup, sex)
+  strata  <- getStrataList(sex, ageGroup)
 
-  intervalTibble <- getIntervalTibble(omopTable = records,
-                                start_date_name = "date",
-                                end_date_name   = "date",
-                                interval = interval,
-                                unitInterval = unitInterval)
+  if(interval != "overall"){
+    intervalTibble <- getIntervalTibble(omopTable = records,
+                                        start_date_name = "date",
+                                        end_date_name   = "date",
+                                        interval = interval,
+                                        unitInterval = unitInterval)
 
-  cdm <- cdm |> omopgenerics::insertTable(name = paste0(tablePrefix,"interval"), table = intervalTibble)
+    cdm <- cdm |> omopgenerics::insertTable(name = paste0(tablePrefix,"interval"), table = intervalTibble)
 
-  records <- splitIncidenceBetweenIntervals(cdm, records, "date", tablePrefix)
+    records <- splitIncidenceBetweenIntervals(cdm, records, "date", tablePrefix)
 
-  strata <- omopgenerics::combineStrata(c(unique(unlist(getStrataList(sex,ageGroup))), "interval_group"))
+    strata <- omopgenerics::combineStrata(c(unique(unlist(getStrataList(sex,ageGroup))), "interval_group"))
+  }
 
   if(!"number subjects" %in% c(countBy)){records <- records |> dplyr::select(-"person_id")}
 
