@@ -50,57 +50,58 @@ summariseAllConceptCounts <- function(cdm,
                                           sex = sex,
                                           indexDate = indexDate, priorObservation = FALSE, futureObservation = FALSE)
   if (year){
-    x <- x|> dplyr::mutate(year = as.character(clock::get_year(.data[[indexDate]])))
+    x <- x|> dplyr::mutate(year = as.character(lubridate::year(.data[[indexDate]])))
   }
 
   strata <- my_getStrataList(sex = sex, year = year, ageGroup = ageGroup)
 
   stratification <- omopgenerics::combineStrata(strata)
 
-  level <- c(dplyr::all_of(conceptId), "concept_name")
+  level <- c(conceptId, "concept_name")
 
   groupings <- c(list(level), purrr::map(stratification, ~ c(level, .x)))
-
-  result <- list()
 
 
   if ("record" %in% countBy){
 
     stratified_result <- x |>
       dplyr::group_by(across(dplyr::all_of(c(level,strata)))) |>
-      dplyr::summarise(estimate_value = dplyr::n(), .groups = "drop") |>
-      dplyr::collect()
+      dplyr::summarise(estimate_value = as.integer(dplyr::n()), .groups = "drop")
 
     grouped_results <- purrr::map(groupings, \(g) {
       stratified_result |>
         dplyr::group_by(dplyr::across(dplyr::all_of(g))) |>
-        dplyr::summarise(estimate_value = sum(.data$estimate_value, na.rm = TRUE), .groups = "drop")
+        dplyr::summarise(estimate_value = as.integer(sum(.data$estimate_value, na.rm = TRUE)), .groups = "drop")
     })
 
-    result_record <- dplyr::bind_rows(grouped_results)|>
-      dplyr::mutate(dplyr::across(dplyr::all_of(strata), ~ tidyr::replace_na(., "overall"))) |>
+    result_record <- purrr::reduce(grouped_results, dplyr::union)|>
+      dplyr::mutate(dplyr::across(dplyr::all_of(strata), ~ dplyr::coalesce(., "overall")))|>
       dplyr::mutate(estimate_name = "record_count")
-    result <- dplyr::bind_rows(result, result_record)
-
   }
-
   if ("person" %in% countBy){
 
     grouped_results <- purrr::map(groupings, \(g) {
       x |>
         dplyr::group_by(dplyr::across(dplyr::all_of(g))) |>
-        dplyr::summarise(estimate_value = dplyr::n(), .groups = "drop")|>
-        dplyr::collect()
+        dplyr::summarise(estimate_value = as.integer(dplyr::n()), .groups = "drop")
     })
 
-    result_person <- dplyr::bind_rows(grouped_results) |>
-      dplyr::mutate(across(dplyr::all_of(strata), ~ tidyr::replace_na(., "overall"))) |>
+    result_person <- purrr::reduce(grouped_results, dplyr::union) |>
+      dplyr::mutate(across(dplyr::all_of(strata), ~ dplyr::coalesce(., "overall"))) |>
       dplyr::mutate(estimate_name = "person_count")
-    result <- dplyr::bind_rows(result, result_person)
 
   }
 
+  if ("person" %in% countBy & "record" %in% countBy){
+    result<-dplyr::union(result_record, result_person)
+  }else if ("person" %in% countBy ){
+    result<-result_person
+  }else if ("record" %in% countBy){
+    result<-result_record
+  }
 
+
+  result<- result|>dplyr::collect()
   sr <- result |>
     dplyr::mutate(
       result_id = 1L,

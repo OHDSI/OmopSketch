@@ -15,8 +15,7 @@ getMissingData <- function(cdm,
 
   if (is.null(col)){
   col<-colnames(omopTable)
-  }
-  else{
+  }else{
   omopgenerics::assertChoice(col, choices = colnames(omopTable))
     }
 
@@ -28,56 +27,60 @@ getMissingData <- function(cdm,
   stratification <- omopgenerics::combineStrata(strata)
 
 
+
   results_list <- purrr::map(col, function(colname) {
 
-    # Overall NA count and percentage (no stratification)
+
     overall_result <- x |>
         dplyr::select(dplyr::any_of(colname)) |>
         dplyr::summarise(
         na_count = sum(dplyr::if_else(is.na(.data[[colname]]),1,0)),
         total_count = n(),
-        .groups = "drop",
-        colname = colname
-      ) |>
-      dplyr::mutate(na_percentage = dplyr::if_else(total_count > 0, (na_count / total_count) * 100, 0)) |>
-      dplyr::collect()
-
-    # Summarize missing values and totals by strata
+        colname = colname,
+        .groups = "drop") |>
+      dplyr::mutate(na_percentage = dplyr::if_else(total_count > 0, (na_count / total_count) * 100, 0))
+    if (!rlang::is_empty(strata))
+    {
     stratified_result <- x |>
       dplyr::group_by(across(dplyr::all_of(strata))) |>
       dplyr::summarise(
         na_count = sum(dplyr::if_else(is.na(.data[[colname]]),1,0)),
         total_count = n(),
-        .groups = "drop",
-        colname = colname
+        colname = colname,
+        .groups = "drop"
       ) |>
-      dplyr::mutate(na_percentage = if_else(total_count > 0, (na_count / total_count) * 100, 0)) |>
-      dplyr::collect()
+      dplyr::mutate(na_percentage = dplyr::if_else(total_count > 0, (na_count / total_count) * 100, 0))
 
     # Group results for each level of stratification
-    grouped_results <- purrr::map_dfr(stratification, function(g) {
+    grouped_results <- purrr::map(stratification, function(g) {
       stratified_result |>
         dplyr::group_by(across(dplyr::all_of(g))) |>
-        dplyr::reframe(
-          na_count = sum(na_count),
-          total_count = sum(total_count),
-          na_percentage = dplyr::if_else(total_count > 0, (na_count / total_count) * 100, 0),
-          colname = colname,
-
-        )
+        dplyr::summarise(
+          na_count = sum(.data$na_count, na.rm = TRUE),
+          total_count = sum(.data$total_count, na.rm = TRUE),
+          colname = dplyr::first(.data$colname),
+          .groups = "drop"
+        ) |>
+        dplyr::mutate(na_percentage = dplyr::if_else(total_count > 0, (na_count / total_count) * 100, 0))
     })
-    return(dplyr::bind_rows(overall_result, grouped_results))
+    grouped_results <- purrr::reduce(grouped_results, dplyr::union)
+    return(dplyr::union(overall_result, grouped_results))
+     } else {
+       return(overall_result)
+    }
+
   })
 
-  final_results <- dplyr::bind_rows(results_list)
+  final_results <- purrr::reduce(results_list, dplyr::union)
 
   result<-final_results|>
-    dplyr::mutate(dplyr::across(dplyr::all_of(strata), ~ tidyr::replace_na(., "overall")))|> #ACROSS STRATA COLUMNS
+    dplyr::mutate(dplyr::across(dplyr::all_of(strata), ~ dplyr::coalesce(., "overall")))|>
     tidyr::pivot_longer(
       cols = c(na_count, na_percentage),
       names_to = "estimate_name",
       values_to = "estimate_value"
-    )
+    ) |>
+    dplyr::collect()
 
   sr <- result |>
     dplyr::mutate(
