@@ -34,7 +34,7 @@ summariseAllConceptCounts <- function(cdm,
 
   omopTable <- cdm[[omopTableName]] |>
     dplyr::ungroup()
-  # check if table is empty
+
 
   conceptId <- standardConcept(omopgenerics::tableName(cdm[[omopTableName]]))
 
@@ -44,13 +44,13 @@ summariseAllConceptCounts <- function(cdm,
   x <- omopTable |>
     dplyr::left_join(
       cdm$concept |> dplyr::select("concept_id", "concept_name"),
-      by = setNames("concept_id", conceptId)) |>
+      by = stats::setNames("concept_id", conceptId)) |>
     PatientProfiles::addDemographicsQuery(age = FALSE,
                                           ageGroup = ageGroup,
                                           sex = sex,
                                           indexDate = indexDate, priorObservation = FALSE, futureObservation = FALSE)
   if (year){
-    x <- x|> dplyr::mutate(year = as.character(lubridate::year(.data[[indexDate]])))
+    x <- x|> dplyr::mutate(year = as.character(clock::get_year(.data[[indexDate]])))
   }
 
   strata <- my_getStrataList(sex = sex, year = year, ageGroup = ageGroup)
@@ -65,7 +65,7 @@ summariseAllConceptCounts <- function(cdm,
   if ("record" %in% countBy){
 
     stratified_result <- x |>
-      dplyr::group_by(across(dplyr::all_of(c(level,strata)))) |>
+      dplyr::group_by(dplyr::across(dplyr::all_of(c(level,strata)))) |>
       dplyr::summarise(estimate_value = as.integer(dplyr::n()), .groups = "drop")
 
     grouped_results <- purrr::map(groupings, \(g) {
@@ -87,7 +87,7 @@ summariseAllConceptCounts <- function(cdm,
     })
 
     result_person <- purrr::reduce(grouped_results, dplyr::union) |>
-      dplyr::mutate(across(dplyr::all_of(strata), ~ dplyr::coalesce(., "overall"))) |>
+      dplyr::mutate(dplyr::across(dplyr::all_of(strata), ~ dplyr::coalesce(., "overall"))) |>
       dplyr::mutate(estimate_name = "person_count")
 
   }

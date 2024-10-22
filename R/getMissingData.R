@@ -1,3 +1,5 @@
+
+
 getMissingData <- function(cdm,
                            omopTableName,
                            col = NULL,
@@ -36,33 +38,33 @@ getMissingData <- function(cdm,
         dplyr::select(dplyr::any_of(c)) |>
         dplyr::summarise(
         na_count = sum(dplyr::if_else(is.na(.data[[c]]),1,0)),
-        total_count = n(),
+        total_count = dplyr::n(),
         colname = c,
         .groups = "drop") |>
-      dplyr::mutate(na_percentage = dplyr::if_else(total_count > 0, (na_count / total_count) * 100, 0))
+      dplyr::mutate(na_percentage = dplyr::if_else(.data$total_count > 0, (.data$na_count / .data$total_count) * 100, 0))
     if (!rlang::is_empty(strata))
     {
     stratified_result <- x |>
-      dplyr::group_by(across(dplyr::all_of(strata)), na.rm = TRUE) |>
+      dplyr::group_by(dplyr::across(dplyr::all_of(strata)), na.rm = TRUE) |>
       dplyr::summarise(
         na_count = sum(dplyr::if_else(is.na(.data[[c]]),1,0)),
-        total_count = n(),
+        total_count = dplyr::n(),
         colname = c,
         .groups = "drop"
       ) |>
-      dplyr::mutate(na_percentage = dplyr::if_else(total_count > 0, (na_count / total_count) * 100, 0))
+      dplyr::mutate(na_percentage = dplyr::if_else(.data$total_count > 0, (.data$na_count / .data$total_count) * 100, 0))
 
     # Group results for each level of stratification
     grouped_results <- purrr::map(stratification, function(g) {
       stratified_result |>
-        dplyr::group_by(across(dplyr::all_of(g))) |>
+        dplyr::group_by(dplyr::across(dplyr::all_of(g))) |>
         dplyr::summarise(
           na_count = sum(.data$na_count, na.rm = TRUE),
           total_count = sum(.data$total_count, na.rm = TRUE),
           colname = c,
           .groups = "drop"
         ) |>
-        dplyr::mutate(na_percentage = dplyr::if_else(total_count > 0, (na_count / total_count) * 100, 0))
+        dplyr::mutate(na_percentage = dplyr::if_else(.data$total_count > 0, (.data$na_count / .data$total_count) * 100, 0))
     })
     grouped_results <- purrr::reduce(grouped_results, dplyr::union)
     return(dplyr::union(overall_result, grouped_results))
@@ -78,7 +80,7 @@ getMissingData <- function(cdm,
   result<-final_results|>
     dplyr::mutate(dplyr::across(dplyr::all_of(strata), ~ dplyr::coalesce(., "overall")))|>
     tidyr::pivot_longer(
-      cols = c(na_count, na_percentage),
+      cols = c(.data$na_count, .data$na_percentage),
       names_to = "estimate_name",
       values_to = "estimate_value"
     ) |>
@@ -99,7 +101,7 @@ getMissingData <- function(cdm,
       "variable_level" = NA
     ) |>
     dplyr::rename("variable_name" = "colname") |>
-    dplyr::select(!c(total_count))
+    dplyr::select(!c(.data$total_count))
 
 
   return(sr)
