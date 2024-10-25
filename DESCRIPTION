@@ -45,20 +45,20 @@ Suggests:
     rmarkdown,
     RPostgres,
     testthat (>= 3.0.0),
-    withr
+    withr,
+    omock (>= 0.3.0),
+    covr
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Imports: 
     CDMConnector (>= 1.3.0),
     cli,
     clock,
-    CohortCharacteristics (>= 0.3.0),
     CohortConstructor (>= 0.3.1),
     dplyr,
     ggplot2,
-    omock (>= 0.3.0),
     omopgenerics (>= 0.3.1),
-    PatientProfiles (>= 1.2.0),
+    PatientProfiles (>= 1.2.0.900),
     purrr,
     rlang,
     stringr,
@@ -70,3 +70,6 @@ Depends:
 URL: https://OHDSI.github.io/OmopSketch/
 BugReports: https://github.com/OHDSI/OmopSketch/issues
 VignetteBuilder: knitr
+Remotes: 
+    darwin-eu-dev/omopgenerics@mah_vl,
+    darwin-eu-dev/PatientProfiles@issue_705

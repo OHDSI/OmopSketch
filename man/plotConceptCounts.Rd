@@ -23,7 +23,7 @@ Plot the concept counts of a summariseConceptCounts output.
 }
 \examples{
 \donttest{
-library(dplyr, warn.conflicts = FALSE)
+library(dplyr)
 
 cdm <- mockOmopSketch()
 
@@ -36,7 +36,7 @@ result <- cdm |>
   )
 
 result |>
-  filter(estimate_name == "person_count", variable_name == "overall") |>
+  filter(variable_name == "Number subjects") |>
   plotConceptCounts(facet = "codelist_name", colour = "codelist_name")
 
 PatientProfiles::mockDisconnect(cdm)

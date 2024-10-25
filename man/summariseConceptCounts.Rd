@@ -9,7 +9,7 @@ summariseConceptCounts(
   conceptId,
   countBy = c("record", "person"),
   concept = TRUE,
-  year = FALSE,
+  interval = "overall",
   sex = FALSE,
   ageGroup = NULL
 )
@@ -24,7 +24,7 @@ person-level counts}
 
 \item{concept}{TRUE or FALSE. If TRUE code use will be summarised by concept.}
 
-\item{year}{TRUE or FALSE. If TRUE code use will be summarised by year.}
+\item{interval}{Time interval to stratify by. It can either be "years", "quarters", "months" or "overall".}
 
 \item{sex}{TRUE or FALSE. If TRUE code use will be summarised by sex.}
 
@@ -51,5 +51,6 @@ results <- summariseConceptCounts(cdm, conceptId = cs)
 results
 
 PatientProfiles::mockDisconnect(cdm)
+
 }
 }

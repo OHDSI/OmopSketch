@@ -333,7 +333,7 @@ addCounts <- function(result, strata, omopTable){
     rbind(
       omopTable |>
         dplyr::select("person_id", dplyr::any_of(c("age_group","sex"))) |>
-        dplyr::collect() |> # https://github.com/darwin-eu-dev/PatientProfiles/issues/706
+        # dplyr::collect() |> # https://github.com/darwin-eu-dev/PatientProfiles/issues/706
         PatientProfiles::summariseResult(strata = strata,
                                          includeOverallStrata = TRUE,
                                          counts = TRUE,
@@ -384,7 +384,7 @@ addRecordsPerPerson <- function(result, omopTable, recordsPerPerson, cdm, people
           .data$records_per_person
         )) |>
         dplyr::distinct() |>
-        dplyr::collect() |> # https://github.com/darwin-eu-dev/PatientProfiles/issues/706
+        # dplyr::collect() |> # https://github.com/darwin-eu-dev/PatientProfiles/issues/706
         PatientProfiles::summariseResult(
           strata = strata,
           includeOverallStrata = TRUE,

@@ -50,7 +50,7 @@ summariseObservationPeriod <- function(observationPeriod,
 
   if (omopgenerics::isTableEmpty(observationPeriod)) {
     obsSr <- observationPeriod |>
-      dplyr::collect() |> # https://github.com/darwin-eu-dev/PatientProfiles/issues/706
+      # dplyr::collect() |> # https://github.com/darwin-eu-dev/PatientProfiles/issues/706
       PatientProfiles::summariseResult(
         variables = NULL, estimates = NULL, counts = TRUE)
   } else {
@@ -74,7 +74,7 @@ summariseObservationPeriod <- function(observationPeriod,
       dplyr::collect()
 
     obsSr <- obs |>
-      dplyr::collect() |> # https://github.com/darwin-eu-dev/PatientProfiles/issues/706
+      # dplyr::collect() |> # https://github.com/darwin-eu-dev/PatientProfiles/issues/706
       PatientProfiles::summariseResult(
         strata = strataId,
         variables = c("duration", "next_obs"),
@@ -86,7 +86,7 @@ summariseObservationPeriod <- function(observationPeriod,
             dplyr::group_by(.data$person_id, dplyr::across(dplyr::any_of(c("sex","age_group")))) |>
             dplyr::tally(name = "n") |>
             dplyr::ungroup() |>
-            dplyr::collect() |> # https://github.com/darwin-eu-dev/PatientProfiles/issues/706
+            # dplyr::collect() |> # https://github.com/darwin-eu-dev/PatientProfiles/issues/706
             PatientProfiles::summariseResult(
               variables = c("n"),
               estimates = estimates,

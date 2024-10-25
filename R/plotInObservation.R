@@ -10,7 +10,7 @@
 #' @export
 #' @examples
 #' \donttest{
-#' library(dplyr, warn.conflicts = FALSE)
+#' library(dplyr)
 #'
 #' cdm <- mockOmopSketch()
 #'
@@ -55,24 +55,32 @@ plotInObservation <- function(result,
   warnFacetColour(result, list(facet = asCharacterFacet(facet), colour = colour, "variable_level"))
 
   # plot
-  result |>
-    dplyr::mutate(variable_level = as.Date(stringr::str_extract(
-      .data$variable_level, "^[^ to]+"))) |>
-    dplyr::filter(.data$estimate_name == "count") |>
-    visOmopResults::scatterPlot(
-      x = "variable_level",
-      y = "count",
-      line = TRUE,
-      point = TRUE,
-      ribbon = FALSE,
-      ymin = NULL,
-      ymax = NULL,
-      facet = facet,
-      colour = colour,
-      group = c("cdm_name", "omop_table", visOmopResults::strataColumns(result))
-    ) +
-    ggplot2::labs(
-      y = variable,
-      x = "Date"
-    )
+  if(length(unique(result$variable_level)) > 1 ){
+    result |>
+      dplyr::mutate(variable_level = as.Date(gsub(" to.*","",.data$variable_level))) |>
+      dplyr::filter(.data$estimate_name == "count") |>
+      visOmopResults::scatterPlot(
+        x = "variable_level",
+        y = "count",
+        line = TRUE,
+        point = TRUE,
+        ribbon = FALSE,
+        ymin = NULL,
+        ymax = NULL,
+        facet = facet,
+        colour = colour,
+        group = c("cdm_name", "omop_table", visOmopResults::strataColumns(result))
+      ) +
+      ggplot2::labs(
+        y = variable,
+        x = "Date"
+      )
+  }else{
+    result |>
+      dplyr::filter(.data$estimate_name == "count") |>
+      visOmopResults::barPlot(x = "variable_name",
+                              y = "count",
+                              facet  = facet,
+                              colour = colour)
+  }
 }
