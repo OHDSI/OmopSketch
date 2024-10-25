@@ -19,7 +19,7 @@ summariseOmopSnapshot <- function(cdm) {
     internalTibble() |>
     omopgenerics::newSummarisedResult(settings = dplyr::tibble(
       result_id = unique(summaryTable$result_id),
-      package_name = "omopSketch",
+      package_name = "OmopSketch",
       package_version = as.character(utils::packageVersion("OmopSketch")),
       result_type = "summarise_omop_snapshot"
     ))
