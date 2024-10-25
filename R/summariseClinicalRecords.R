@@ -238,6 +238,7 @@ summariseRecordsPerPerson <- function(omopTable, date, sex, ageGroup, recordsPer
     dplyr::select(dplyr::any_of(c(
       "cohort_definition_id", "person_id" = "subject_id", "sex"
     ))) |>
+    dplyr::distinct() |>
     dplyr::collect() |>
     dplyr::left_join(set, by = "cohort_definition_id") |>
     dplyr::select(!"cohort_definition_id") |>
