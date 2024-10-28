@@ -132,20 +132,19 @@ filterPersonId <- function(omopTable){
   return(omopTable)
 }
 
-addStrataToOmopTable <- function(omopTable, date, ageGroup, sex){
-  suppressWarnings(omopTable |>
-                     dplyr::mutate(sex = "overall") |>
-                     dplyr::mutate(age_group = "overall") |>
-                     PatientProfiles::addDemographicsQuery(indexDate = date,
-                                                           age = FALSE,
-                                                           ageGroup = ageGroup,
-                                                           missingAgeGroupValue = "unknown",
-                                                           sex = sex,
-                                                           missingSexValue = "unknown",
-                                                           priorObservation = FALSE,
-                                                           futureObservation = FALSE,
-                                                           dateOfBirth = FALSE))
-
+addStrataToOmopTable <- function(omopTable, date, ageGroup, sex) {
+  omopTable |>
+    PatientProfiles::addDemographicsQuery(
+      indexDate = date,
+      age = FALSE,
+      ageGroup = ageGroup,
+      missingAgeGroupValue = "unknown",
+      sex = sex,
+      missingSexValue = "unknown",
+      priorObservation = FALSE,
+      futureObservation = FALSE,
+      dateOfBirth = FALSE
+    )
 }
 
 filterInObservation <- function(x, indexDate){

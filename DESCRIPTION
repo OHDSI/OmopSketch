@@ -58,7 +58,7 @@ Imports:
     dplyr,
     ggplot2,
     omopgenerics (>= 0.3.1),
-    PatientProfiles (>= 1.2.0.900),
+    PatientProfiles (>= 1.2.1),
     purrr,
     rlang,
     stringr,
@@ -71,5 +71,4 @@ URL: https://OHDSI.github.io/OmopSketch/
 BugReports: https://github.com/OHDSI/OmopSketch/issues
 VignetteBuilder: knitr
 Remotes: 
-    darwin-eu-dev/omopgenerics@mah_vl,
-    darwin-eu-dev/PatientProfiles@issue_705
+    darwin-eu-dev/omopgenerics@mah_vl
