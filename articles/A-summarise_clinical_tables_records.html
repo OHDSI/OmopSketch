@@ -116,20 +116,9 @@ OmopSketch package to help us have an overview of one of the clinical
 tables of the cdm (i.e., <strong>condition_occurrence</strong>).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseClinicalRecords.html">summariseClinicalRecords</a></span><span class="op">(</span><span class="va">cdm</span>, <span class="st">"condition_occurrence"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising table counts</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-10-25 15:59:02.763061</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-25 15:59:02.90092</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> records_per_person: mean, sd, median, q25, q75, min, max</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Table is collected to memory as not all requested estimates are supported on</span></span>
-<span><span class="co">#&gt;   the database side</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-10-25 15:59:03.786699</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-25 15:59:03.833363</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising in_observation, standard, domain_id, and type information</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">condition_occurrence</span> counts and records per person</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">condition_occurrence</span>: `in_observation`, `standard`, `domain_id`,</span></span>
+<span><span class="co">#&gt;   and `type`.</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 20 × 13</span></span></span>
@@ -167,20 +156,9 @@ records per person.</p>
 <code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseClinicalRecords.html">summariseClinicalRecords</a></span><span class="op">(</span><span class="va">cdm</span>, </span>
 <span>                                             <span class="st">"condition_occurrence"</span>,</span>
 <span>                                             recordsPerPerson <span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span>, <span class="st">"sd"</span>, <span class="st">"q05"</span>, <span class="st">"q95"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising table counts</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-10-25 15:59:07.670111</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-25 15:59:07.812053</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> records_per_person: mean, sd, q05, q95</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Table is collected to memory as not all requested estimates are supported on</span></span>
-<span><span class="co">#&gt;   the database side</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-10-25 15:59:08.691596</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-25 15:59:08.734935</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising in_observation, standard, domain_id, and type information</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">condition_occurrence</span> counts and records per person</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">condition_occurrence</span>: `in_observation`, `standard`, `domain_id`,</span></span>
+<span><span class="co">#&gt;   and `type`.</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">variable_name</span> <span class="op">==</span> <span class="st">"records_per_person"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -208,29 +186,18 @@ vocabulary have (<code>domainId = TRUE</code>) or the concept’s type
 <span>                                             sourceVocabulary <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                                             domainId <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                                             typeConcept <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising table counts</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-10-25 15:59:12.54292</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-25 15:59:12.690854</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> records_per_person: mean, sd, q05, q95</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Table is collected to memory as not all requested estimates are supported on</span></span>
-<span><span class="co">#&gt;   the database side</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-10-25 15:59:13.596522</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-25 15:59:13.640235</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising in_observation, standard, domain_id, source, and type information</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">condition_occurrence</span> counts and records per person</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">condition_occurrence</span>: `in_observation`, `standard`, `domain_id`,</span></span>
+<span><span class="co">#&gt;   `source`, and `type`.</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">variable_name</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 19</span></span>
 <span><span class="co">#&gt; Columns: 3</span></span>
-<span><span class="co">#&gt; $ variable_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "number records", "number subjects", "number subjects",…</span></span>
-<span><span class="co">#&gt; $ estimate_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count", "count", "percentage", "mean", "sd", "q05", "q…</span></span>
-<span><span class="co">#&gt; $ estimate_value <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "1900", "100", "100", "19", "4.54383809641856", "13", "…</span></span></code></pre></div>
+<span><span class="co">#&gt; $ variable_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "number subjects", "number subjects", "records_per_pers…</span></span>
+<span><span class="co">#&gt; $ estimate_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count", "percentage", "mean", "sd", "q05", "q95", "cou…</span></span>
+<span><span class="co">#&gt; $ estimate_value <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "100", "100", "19", "4.54383809641856", "13", "26", "19…</span></span></code></pre></div>
 <p>Additionally, you can also stratify the previous results by sex and
 age groups:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -244,34 +211,19 @@ age groups:</p>
 <span>                                             typeConcept <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                                             sex <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                                             ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">34</span><span class="op">)</span>, <span class="st">"&gt;=35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising table counts</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-10-25 15:59:21.213786</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">■■■■■■■■■■■■■■■■                </span>2/4 group-strata combinations @ 2024-10-25 15:5…</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ </span>4/4 group-strata combinations @ 2024-10-25 15:5…</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-25 15:59:23.878925</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> records_per_person: mean, sd, q05, q95</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Table is collected to memory as not all requested estimates are supported on</span></span>
-<span><span class="co">#&gt;   the database side</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-10-25 15:59:25.736545</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-25 15:59:25.93943</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising in_observation, standard, domain_id, source, and type information</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">condition_occurrence</span> counts and records per person</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">condition_occurrence</span>: `in_observation`, `standard`, `domain_id`,</span></span>
+<span><span class="co">#&gt;   `source`, and `type`.</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">variable_name</span>, <span class="va">strata_level</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 171</span></span>
 <span><span class="co">#&gt; Columns: 4</span></span>
-<span><span class="co">#&gt; $ variable_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "number records", "number subjects", "number records", …</span></span>
-<span><span class="co">#&gt; $ strata_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall", "overall", "&lt;35", "&gt;=35", "&lt;35", "&gt;=35", "Fe…</span></span>
-<span><span class="co">#&gt; $ estimate_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count", "count", "count", "count", "count", "count", "…</span></span>
-<span><span class="co">#&gt; $ estimate_value <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "1900", "100", "1569", "331", "83", "17", "1067", "833"…</span></span></code></pre></div>
+<span><span class="co">#&gt; $ variable_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "number subjects", "number subjects", "records_per_pers…</span></span>
+<span><span class="co">#&gt; $ strata_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall", "overall", "overall", "overall", "overall", …</span></span>
+<span><span class="co">#&gt; $ estimate_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count", "percentage", "mean", "sd", "q05", "q95", "cou…</span></span>
+<span><span class="co">#&gt; $ estimate_value <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "100", "100", "19", "4.54383809641856", "13", "26", "19…</span></span></code></pre></div>
 <p>Notice that, by default, the “overall” group will be also included,
 as well as crossed strata (that means, sex == “Female” and ageGroup ==
 “&gt;35”).</p>
@@ -286,28 +238,8 @@ at the same time:</p>
 <span>                                             sourceVocabulary <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>                                             domainId <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>                                             typeConcept <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising table counts</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-10-25 15:59:32.0195</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-25 15:59:32.156753</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> records_per_person: mean, sd</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-10-25 15:59:32.942058</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-25 15:59:33.145978</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising table counts</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-10-25 15:59:36.196011</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-25 15:59:36.340264</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> records_per_person: mean, sd</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-10-25 15:59:37.147834</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-25 15:59:37.345575</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">observation_period</span> counts and records per person</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">drug_exposure</span> counts and records per person</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -315,9 +247,9 @@ at the same time:</p>
 <span><span class="co">#&gt; Rows: 10</span></span>
 <span><span class="co">#&gt; Columns: 4</span></span>
 <span><span class="co">#&gt; $ group_level    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "observation_period", "observation_period", "observatio…</span></span>
-<span><span class="co">#&gt; $ variable_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "number records", "number subjects", "number subjects",…</span></span>
-<span><span class="co">#&gt; $ estimate_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count", "count", "percentage", "mean", "sd", "count", …</span></span>
-<span><span class="co">#&gt; $ estimate_value <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "100", "100", "100", "1", "0", "5600", "100", "100", "5…</span></span></code></pre></div>
+<span><span class="co">#&gt; $ variable_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "number subjects", "number subjects", "records_per_pers…</span></span>
+<span><span class="co">#&gt; $ estimate_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count", "percentage", "mean", "sd", "count", "count", …</span></span>
+<span><span class="co">#&gt; $ estimate_value <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "100", "100", "1", "0", "100", "100", "100", "56", "7.2…</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="tidy-the-summarised-object">Tidy the summarised object<a class="anchor" aria-label="anchor" href="#tidy-the-summarised-object"></a>
 </h3>
@@ -333,41 +265,30 @@ previous results and create a gt table.</p>
 <span>                                             domainId <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                                             typeConcept <span class="op">=</span> <span class="cn">TRUE</span>, </span>
 <span>                                             sex <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising table counts</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-10-25 15:59:41.850358</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-25 15:59:42.884667</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> records_per_person: mean, sd, q05, q95</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Table is collected to memory as not all requested estimates are supported on</span></span>
-<span><span class="co">#&gt;   the database side</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2024-10-25 15:59:44.628117</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2024-10-25 15:59:44.722083</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising in_observation, standard, domain_id, source, and type information</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">condition_occurrence</span> counts and records per person</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">condition_occurrence</span>: `in_observation`, `standard`, `domain_id`,</span></span>
+<span><span class="co">#&gt;   `source`, and `type`.</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/tableClinicalRecords.html">tableClinicalRecords</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Results have not been suppressed.</span></span></code></pre></div>
-<div id="zkyqmjyxvx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#zkyqmjyxvx table {
+<div id="hnfbpukvzk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#hnfbpukvzk table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#zkyqmjyxvx thead, #zkyqmjyxvx tbody, #zkyqmjyxvx tfoot, #zkyqmjyxvx tr, #zkyqmjyxvx td, #zkyqmjyxvx th {
+#hnfbpukvzk thead, #hnfbpukvzk tbody, #hnfbpukvzk tfoot, #hnfbpukvzk tr, #hnfbpukvzk td, #hnfbpukvzk th {
   border-style: none;
 }
 
-#zkyqmjyxvx p {
+#hnfbpukvzk p {
   margin: 0;
   padding: 0;
 }
 
-#zkyqmjyxvx .gt_table {
+#hnfbpukvzk .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -393,12 +314,12 @@ previous results and create a gt table.</p>
   border-left-color: #D3D3D3;
 }
 
-#zkyqmjyxvx .gt_caption {
+#hnfbpukvzk .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#zkyqmjyxvx .gt_title {
+#hnfbpukvzk .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -410,7 +331,7 @@ previous results and create a gt table.</p>
   border-bottom-width: 0;
 }
 
-#zkyqmjyxvx .gt_subtitle {
+#hnfbpukvzk .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -422,7 +343,7 @@ previous results and create a gt table.</p>
   border-top-width: 0;
 }
 
-#zkyqmjyxvx .gt_heading {
+#hnfbpukvzk .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -434,13 +355,13 @@ previous results and create a gt table.</p>
   border-right-color: #D3D3D3;
 }
 
-#zkyqmjyxvx .gt_bottom_border {
+#hnfbpukvzk .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#zkyqmjyxvx .gt_col_headings {
+#hnfbpukvzk .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -455,7 +376,7 @@ previous results and create a gt table.</p>
   border-right-color: #D3D3D3;
 }
 
-#zkyqmjyxvx .gt_col_heading {
+#hnfbpukvzk .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -475,7 +396,7 @@ previous results and create a gt table.</p>
   overflow-x: hidden;
 }
 
-#zkyqmjyxvx .gt_column_spanner_outer {
+#hnfbpukvzk .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -487,15 +408,15 @@ previous results and create a gt table.</p>
   padding-right: 4px;
 }
 
-#zkyqmjyxvx .gt_column_spanner_outer:first-child {
+#hnfbpukvzk .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#zkyqmjyxvx .gt_column_spanner_outer:last-child {
+#hnfbpukvzk .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#zkyqmjyxvx .gt_column_spanner {
+#hnfbpukvzk .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -507,11 +428,11 @@ previous results and create a gt table.</p>
   width: 100%;
 }
 
-#zkyqmjyxvx .gt_spanner_row {
+#hnfbpukvzk .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#zkyqmjyxvx .gt_group_heading {
+#hnfbpukvzk .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -537,7 +458,7 @@ previous results and create a gt table.</p>
   text-align: left;
 }
 
-#zkyqmjyxvx .gt_empty_group_heading {
+#hnfbpukvzk .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -552,15 +473,15 @@ previous results and create a gt table.</p>
   vertical-align: middle;
 }
 
-#zkyqmjyxvx .gt_from_md > :first-child {
+#hnfbpukvzk .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#zkyqmjyxvx .gt_from_md > :last-child {
+#hnfbpukvzk .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#zkyqmjyxvx .gt_row {
+#hnfbpukvzk .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -579,7 +500,7 @@ previous results and create a gt table.</p>
   overflow-x: hidden;
 }
 
-#zkyqmjyxvx .gt_stub {
+#hnfbpukvzk .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -592,7 +513,7 @@ previous results and create a gt table.</p>
   padding-right: 5px;
 }
 
-#zkyqmjyxvx .gt_stub_row_group {
+#hnfbpukvzk .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -606,15 +527,15 @@ previous results and create a gt table.</p>
   vertical-align: top;
 }
 
-#zkyqmjyxvx .gt_row_group_first td {
+#hnfbpukvzk .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#zkyqmjyxvx .gt_row_group_first th {
+#hnfbpukvzk .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#zkyqmjyxvx .gt_summary_row {
+#hnfbpukvzk .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -624,16 +545,16 @@ previous results and create a gt table.</p>
   padding-right: 5px;
 }
 
-#zkyqmjyxvx .gt_first_summary_row {
+#hnfbpukvzk .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#zkyqmjyxvx .gt_first_summary_row.thick {
+#hnfbpukvzk .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#zkyqmjyxvx .gt_last_summary_row {
+#hnfbpukvzk .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -643,7 +564,7 @@ previous results and create a gt table.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#zkyqmjyxvx .gt_grand_summary_row {
+#hnfbpukvzk .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -653,7 +574,7 @@ previous results and create a gt table.</p>
   padding-right: 5px;
 }
 
-#zkyqmjyxvx .gt_first_grand_summary_row {
+#hnfbpukvzk .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -663,7 +584,7 @@ previous results and create a gt table.</p>
   border-top-color: #D3D3D3;
 }
 
-#zkyqmjyxvx .gt_last_grand_summary_row_top {
+#hnfbpukvzk .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -673,11 +594,11 @@ previous results and create a gt table.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#zkyqmjyxvx .gt_striped {
+#hnfbpukvzk .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#zkyqmjyxvx .gt_table_body {
+#hnfbpukvzk .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -686,7 +607,7 @@ previous results and create a gt table.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#zkyqmjyxvx .gt_footnotes {
+#hnfbpukvzk .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -700,7 +621,7 @@ previous results and create a gt table.</p>
   border-right-color: #D3D3D3;
 }
 
-#zkyqmjyxvx .gt_footnote {
+#hnfbpukvzk .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -709,7 +630,7 @@ previous results and create a gt table.</p>
   padding-right: 5px;
 }
 
-#zkyqmjyxvx .gt_sourcenotes {
+#hnfbpukvzk .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -723,7 +644,7 @@ previous results and create a gt table.</p>
   border-right-color: #D3D3D3;
 }
 
-#zkyqmjyxvx .gt_sourcenote {
+#hnfbpukvzk .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -731,72 +652,72 @@ previous results and create a gt table.</p>
   padding-right: 5px;
 }
 
-#zkyqmjyxvx .gt_left {
+#hnfbpukvzk .gt_left {
   text-align: left;
 }
 
-#zkyqmjyxvx .gt_center {
+#hnfbpukvzk .gt_center {
   text-align: center;
 }
 
-#zkyqmjyxvx .gt_right {
+#hnfbpukvzk .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#zkyqmjyxvx .gt_font_normal {
+#hnfbpukvzk .gt_font_normal {
   font-weight: normal;
 }
 
-#zkyqmjyxvx .gt_font_bold {
+#hnfbpukvzk .gt_font_bold {
   font-weight: bold;
 }
 
-#zkyqmjyxvx .gt_font_italic {
+#hnfbpukvzk .gt_font_italic {
   font-style: italic;
 }
 
-#zkyqmjyxvx .gt_super {
+#hnfbpukvzk .gt_super {
   font-size: 65%;
 }
 
-#zkyqmjyxvx .gt_footnote_marks {
+#hnfbpukvzk .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#zkyqmjyxvx .gt_asterisk {
+#hnfbpukvzk .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#zkyqmjyxvx .gt_indent_1 {
+#hnfbpukvzk .gt_indent_1 {
   text-indent: 5px;
 }
 
-#zkyqmjyxvx .gt_indent_2 {
+#hnfbpukvzk .gt_indent_2 {
   text-indent: 10px;
 }
 
-#zkyqmjyxvx .gt_indent_3 {
+#hnfbpukvzk .gt_indent_3 {
   text-indent: 15px;
 }
 
-#zkyqmjyxvx .gt_indent_4 {
+#hnfbpukvzk .gt_indent_4 {
   text-indent: 20px;
 }
 
-#zkyqmjyxvx .gt_indent_5 {
+#hnfbpukvzk .gt_indent_5 {
   text-indent: 25px;
 }
 
-#zkyqmjyxvx .katex-display {
+#hnfbpukvzk .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#zkyqmjyxvx div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#hnfbpukvzk div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -820,13 +741,6 @@ previous results and create a gt table.</p>
 <th colspan="4" class="gt_group_heading" style="background-color: #E9E9E9; font-weight: bold;" scope="colgroup" id="condition_occurrence; overall">condition_occurrence; overall</th>
     </tr>
 <tr class="gt_row_group_first">
-<td headers="condition_occurrence; overall  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Number records</td>
-<td headers="condition_occurrence; overall  Variable level" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">-</td>
-<td headers="condition_occurrence; overall  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N</td>
-<td headers="condition_occurrence; overall  [header_name]Database name
-[header_level]mockOmopSketch" class="gt_row gt_right" style="text-align: right;">1,900</td>
-</tr>
-<tr>
 <td headers="condition_occurrence; overall  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Number subjects</td>
 <td headers="condition_occurrence; overall  Variable level" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">-</td>
 <td headers="condition_occurrence; overall  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N (%)</td>
@@ -854,17 +768,59 @@ previous results and create a gt table.</p>
 <td headers="condition_occurrence; overall  [header_name]Database name
 [header_level]mockOmopSketch" class="gt_row gt_right" style="text-align: right;">26</td>
 </tr>
+<tr>
+<td headers="condition_occurrence; overall  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Number records</td>
+<td headers="condition_occurrence; overall  Variable level" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">-</td>
+<td headers="condition_occurrence; overall  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N</td>
+<td headers="condition_occurrence; overall  [header_name]Database name
+[header_level]mockOmopSketch" class="gt_row gt_right" style="text-align: right;">1,900</td>
+</tr>
+<tr>
+<td headers="condition_occurrence; overall  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">In observation</td>
+<td headers="condition_occurrence; overall  Variable level" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Yes</td>
+<td headers="condition_occurrence; overall  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N (%)</td>
+<td headers="condition_occurrence; overall  [header_name]Database name
+[header_level]mockOmopSketch" class="gt_row gt_right" style="text-align: right;">1,900 (100.00%)</td>
+</tr>
+<tr>
+<td headers="condition_occurrence; overall  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Standard concept</td>
+<td headers="condition_occurrence; overall  Variable level" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Source</td>
+<td headers="condition_occurrence; overall  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N (%)</td>
+<td headers="condition_occurrence; overall  [header_name]Database name
+[header_level]mockOmopSketch" class="gt_row gt_right" style="text-align: right;">1,300 (68.42%)</td>
+</tr>
+<tr>
+<td headers="condition_occurrence; overall  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="condition_occurrence; overall  Variable level" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Standard</td>
+<td headers="condition_occurrence; overall  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N (%)</td>
+<td headers="condition_occurrence; overall  [header_name]Database name
+[header_level]mockOmopSketch" class="gt_row gt_right" style="text-align: right;">600 (31.58%)</td>
+</tr>
+<tr>
+<td headers="condition_occurrence; overall  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Source vocabulary</td>
+<td headers="condition_occurrence; overall  Variable level" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">No matching concept</td>
+<td headers="condition_occurrence; overall  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N (%)</td>
+<td headers="condition_occurrence; overall  [header_name]Database name
+[header_level]mockOmopSketch" class="gt_row gt_right" style="text-align: right;">1,900 (100.00%)</td>
+</tr>
+<tr>
+<td headers="condition_occurrence; overall  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Domain</td>
+<td headers="condition_occurrence; overall  Variable level" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Condition</td>
+<td headers="condition_occurrence; overall  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N (%)</td>
+<td headers="condition_occurrence; overall  [header_name]Database name
+[header_level]mockOmopSketch" class="gt_row gt_right" style="text-align: right;">1,900 (100.00%)</td>
+</tr>
+<tr>
+<td headers="condition_occurrence; overall  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Type concept id</td>
+<td headers="condition_occurrence; overall  Variable level" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1</td>
+<td headers="condition_occurrence; overall  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N (%)</td>
+<td headers="condition_occurrence; overall  [header_name]Database name
+[header_level]mockOmopSketch" class="gt_row gt_right" style="text-align: right;">1,900 (100.00%)</td>
+</tr>
 <tr class="gt_group_heading_row">
 <th colspan="4" class="gt_group_heading" style="background-color: #E9E9E9; font-weight: bold;" scope="colgroup" id="condition_occurrence; Female">condition_occurrence; Female</th>
     </tr>
 <tr class="gt_row_group_first">
-<td headers="condition_occurrence; Female  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Number records</td>
-<td headers="condition_occurrence; Female  Variable level" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">-</td>
-<td headers="condition_occurrence; Female  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N</td>
-<td headers="condition_occurrence; Female  [header_name]Database name
-[header_level]mockOmopSketch" class="gt_row gt_right" style="text-align: right;">1,067</td>
-</tr>
-<tr>
 <td headers="condition_occurrence; Female  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Number subjects</td>
 <td headers="condition_occurrence; Female  Variable level" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">-</td>
 <td headers="condition_occurrence; Female  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N (%)</td>
@@ -891,6 +847,13 @@ previous results and create a gt table.</p>
 <td headers="condition_occurrence; Female  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">q95</td>
 <td headers="condition_occurrence; Female  [header_name]Database name
 [header_level]mockOmopSketch" class="gt_row gt_right" style="text-align: right;">26</td>
+</tr>
+<tr>
+<td headers="condition_occurrence; Female  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Number records</td>
+<td headers="condition_occurrence; Female  Variable level" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">-</td>
+<td headers="condition_occurrence; Female  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N</td>
+<td headers="condition_occurrence; Female  [header_name]Database name
+[header_level]mockOmopSketch" class="gt_row gt_right" style="text-align: right;">1,067</td>
 </tr>
 <tr>
 <td headers="condition_occurrence; Female  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">In observation</td>
@@ -938,13 +901,6 @@ previous results and create a gt table.</p>
 <th colspan="4" class="gt_group_heading" style="background-color: #E9E9E9; font-weight: bold;" scope="colgroup" id="condition_occurrence; Male">condition_occurrence; Male</th>
     </tr>
 <tr class="gt_row_group_first">
-<td headers="condition_occurrence; Male  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Number records</td>
-<td headers="condition_occurrence; Male  Variable level" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">-</td>
-<td headers="condition_occurrence; Male  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N</td>
-<td headers="condition_occurrence; Male  [header_name]Database name
-[header_level]mockOmopSketch" class="gt_row gt_right" style="text-align: right;">833</td>
-</tr>
-<tr>
 <td headers="condition_occurrence; Male  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Number subjects</td>
 <td headers="condition_occurrence; Male  Variable level" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">-</td>
 <td headers="condition_occurrence; Male  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N (%)</td>
@@ -971,6 +927,13 @@ previous results and create a gt table.</p>
 <td headers="condition_occurrence; Male  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">q95</td>
 <td headers="condition_occurrence; Male  [header_name]Database name
 [header_level]mockOmopSketch" class="gt_row gt_right" style="text-align: right;">27</td>
+</tr>
+<tr>
+<td headers="condition_occurrence; Male  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Number records</td>
+<td headers="condition_occurrence; Male  Variable level" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">-</td>
+<td headers="condition_occurrence; Male  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N</td>
+<td headers="condition_occurrence; Male  [header_name]Database name
+[header_level]mockOmopSketch" class="gt_row gt_right" style="text-align: right;">833</td>
 </tr>
 <tr>
 <td headers="condition_occurrence; Male  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">In observation</td>
