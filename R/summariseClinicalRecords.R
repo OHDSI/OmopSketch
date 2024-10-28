@@ -200,7 +200,7 @@ summariseClinicalRecord <- function(omopTableName,
 
 # Functions -----
 getStrataList <- function(sex, ageGroup){
-  omopgenerics::combineStrata(c("sex"[sex], "age_group"[!is.null(ageGroup)]))
+  omopgenerics::combineStrata(c("age_group"[!is.null(ageGroup)], "sex"[sex]))
 }
 
 summariseRecordsPerPerson <- function(omopTable, date, sex, ageGroup, recordsPerPerson) {
