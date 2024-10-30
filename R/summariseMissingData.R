@@ -16,6 +16,7 @@ summariseMissingData <- function(cdm,
                                  omopTableName,
                                  col = NULL,
                                  sex = FALSE,
+                                 year = FALSE,
                                  ageGroup = NULL){
 
 
@@ -27,10 +28,15 @@ summariseMissingData <- function(cdm,
 
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "")[[1]]
 
-  strata <- my_getStrataList(sex = sex, ageGroup = ageGroup)
+  strata <- my_getStrataList(sex = sex, ageGroup = ageGroup, year = year)
   stratification <- c(list(character()),omopgenerics::combineStrata(strata))
 
   result_tables <-  purrr::map(omopTableName, function(table) {
+
+    if (omopgenerics::isTableEmpty(cdm[[table]])){
+      cli::cli_warn(paste0(table, " omop table is empty."))
+      return(NULL)
+    }
 
     omopTable <- cdm[[table]]
     col_table <- intersect(col, colnames(omopTable))
@@ -40,14 +46,16 @@ summariseMissingData <- function(cdm,
 
     indexDate <- startDate(omopgenerics::tableName(omopTable))
     x <- omopTable |> PatientProfiles::addDemographicsQuery(age = FALSE, ageGroup = ageGroup, sex = sex, indexDate = indexDate)
-
+    if (year){
+      x <- x|> dplyr::mutate(year = as.character(clock::get_year(.data[[indexDate]])))
+    }
 
     result_columns <- purrr::map(col_table, function(c) {
 
       stratified_result <- x |>
         dplyr::group_by(dplyr::across(dplyr::all_of(strata))) |>
         dplyr::summarise(
-          na_count = sum(as.integer(is.na(.data[[c]]))), #try is.numeric
+          na_count = sum(as.integer(is.na(.data[[c]])), na.rm = TRUE),
           total_count = dplyr::n(),
           .groups = "drop"
         ) |>
@@ -58,8 +66,8 @@ summariseMissingData <- function(cdm,
         stratified_result |>
           dplyr::group_by(dplyr::across(dplyr::all_of(g))) |>
           dplyr::summarise(
-            na_count = sum(.data$na_count, na.rm = TRUE),
-            total_count = sum(.data$total_count, na.rm = TRUE),
+            na_count = sum(na_count, na.rm = TRUE),
+            total_count = sum(total_count, na.rm = TRUE),
             colName = c,
             .groups = "drop"
           ) |>
@@ -73,36 +81,24 @@ summariseMissingData <- function(cdm,
     res <- purrr::reduce(result_columns, dplyr::union)|>
       dplyr::mutate(omop_table = table)
 
+    warningDataRequire(cdm = cdm, res = res, table = table)
 
-
-    required_cols <- omopgenerics::omopTableFields(CDMConnector::cdmVersion(cdm))|>
-      dplyr::filter(.data$cdm_table_name==table)|>
-      dplyr::filter(.data$is_required==TRUE)|>
-      dplyr::pull(.data$cdm_field_name)
-    warning_columns <- res |>
-      dplyr::filter(.data$colName %in% required_cols)|>
-      dplyr::filter(.data$na_count>0)|>
-      dplyr::distinct(.data$colName)|>
-      dplyr::pull()
-
-    if (length(warning_columns) > 0) {
-      cli::cli_warn(c(
-        "These columns contain missing values, which are not permitted:",
-        "{.val {warning_columns}}"
-      ))
-    }
     return(res)
   })
+  if (rlang::is_empty(purrr::compact(result_tables))){
+    return(omopgenerics::emptySummarisedResult())
+  }
 
 
-  result<-purrr::reduce(result_tables, dplyr::union)|>
+  result <- purrr::compact(result_tables) |>
+    purrr::reduce(dplyr::union)|>
     dplyr::mutate(dplyr::across(dplyr::all_of(strata), ~ dplyr::coalesce(., "overall")))|>
     dplyr::mutate(
-      na_count = as.double(.data$na_count),     # Cast na_count to double
-      na_percentage = as.double(.data$na_percentage)  # Ensure na_percentage is double as well
+      na_count = as.double(na_count),     # Cast na_count to double
+      na_percentage = as.double(na_percentage)
     )|>
     tidyr::pivot_longer(
-      cols = c(.data$na_count, .data$na_percentage),
+      cols = c(na_count, na_percentage),
       names_to = "estimate_name",
       values_to = "estimate_value"
     )
@@ -119,10 +115,10 @@ summariseMissingData <- function(cdm,
     dplyr::mutate(
       "estimate_value" = as.character(.data$estimate_value),
       "estimate_type" = "integer",
-      "variable_level" = NA
+      "variable_level" = NA_character_
     ) |>
     dplyr::rename("variable_name" = "colName") |>
-    dplyr::select(!c(.data$total_count))
+    dplyr::select(!c(total_count))
 
   settings <- dplyr::tibble(
     result_id = unique(sr$result_id),
@@ -137,4 +133,24 @@ summariseMissingData <- function(cdm,
   return(sr)
 
 }
+
+warningDataRequire <- function(cdm, table, res){
+required_cols <- omopgenerics::omopTableFields(CDMConnector::cdmVersion(cdm))|>
+  dplyr::filter(.data$cdm_table_name==table)|>
+  dplyr::filter(.data$is_required==TRUE)|>
+  dplyr::pull(.data$cdm_field_name)
+warning_columns <- res |>
+  dplyr::filter(.data$colName %in% required_cols)|>
+  dplyr::filter(.data$na_count>0)|>
+  dplyr::distinct(.data$colName)|>
+  dplyr::pull()
+
+if (length(warning_columns) > 0) {
+  cli::cli_warn(c(
+    "These columns contain missing values, which are not permitted:",
+    "{.val {warning_columns}}"
+  ))
+}
+}
+
 

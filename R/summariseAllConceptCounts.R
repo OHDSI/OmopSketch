@@ -49,12 +49,19 @@ summariseAllConceptCounts <- function(cdm,
   stratification <- omopgenerics::combineStrata(strata)
 
   result_tables <- purrr::map(omopTableName, function(table){
+
   omopTable <- cdm[[table]] |>
     dplyr::ungroup()
 
-
+  if (omopgenerics::isTableEmpty(omopTable)){
+      cli::cli_warn(paste0(table, " omop table is empty."))
+      return(NULL)
+    }
   conceptId <- standardConcept(omopgenerics::tableName(omopTable))
-
+  if (is.na(conceptId)){
+    cli::cli_warn(paste0(table, " omop table doesn't contain standard concepts."))
+    return(NULL)
+  }
 
   indexDate <- startDate(omopgenerics::tableName(omopTable))
 
@@ -116,8 +123,12 @@ summariseAllConceptCounts <- function(cdm,
     dplyr::select(!c(conceptId))
     return(result)
   })
+  if (rlang::is_empty(purrr::compact(result_tables))){
+    return(omopgenerics::emptySummarisedResult())
+  }
 
-  sr <- purrr::reduce(result_tables, dplyr::bind_rows) |>
+  sr <-purrr::compact(result_tables) |>
+    purrr::reduce(dplyr::union)|>
     dplyr::mutate(
       result_id = 1L,
       cdm_name = omopgenerics::cdmName(cdm)
