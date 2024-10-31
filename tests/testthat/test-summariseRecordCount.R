@@ -249,6 +249,7 @@ test_that("summariseRecordCount() sex argument works", {
 })
 
 test_that("summariseRecordCount() works with mockOmopSketch", {
+  skip_on_cran()
   cdm <- mockOmopSketch(numberIndividuals = 3, seed = 1)
   conditionpp <- cdm$condition_occurrence |>
     PatientProfiles::addDemographics(indexDate = "condition_start_date",ageGroup = list(c(0,20),c(21,150))) |>
