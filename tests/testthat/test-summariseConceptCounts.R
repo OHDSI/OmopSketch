@@ -351,6 +351,7 @@ test_that("summarise code use - eunomia", {
 })
 
 test_that("summarise code use - mock data", {
+  skip_on_cran()
   person <- tibble::tibble(
     person_id = c(1L,2L),
     gender_concept_id = c(8532L,8507L),

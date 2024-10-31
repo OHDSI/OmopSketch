@@ -24,6 +24,7 @@ test_that("table omop snapshot works", {
 })
 
 test_that("works with mockOmopSketch",{
+  skip_on_cran()
   cdm <- mockOmopSketch()
   expect_no_error(x <- tableOmopSnapshot(summariseOmopSnapshot(cdm)))
   expect_true(inherits(x,"gt_tbl"))
