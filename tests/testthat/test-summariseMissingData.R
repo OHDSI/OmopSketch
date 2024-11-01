@@ -42,13 +42,11 @@ test_that("summariseMissingData() works", {
     dplyr::tally()|>
     dplyr::pull()==3)
 
-  # cdm$procedure_occurrence <- cdm$procedure_occurrence |>
-  #   dplyr::mutate(procedure_concept_id = NA_integer_) |>
-  #   dplyr::compute(temporary=TRUE)
-  #
-  # expect_warning(summariseMissingData(cdm, "procedure_occurrence", col="person_id", ageGroup = list(c(0,50))))
-  #
-  # cdm <- omopgenerics::readSourceTable(cdm = cdm, "procedure_occurrence")
+  cdm$procedure_occurrence <- cdm$procedure_occurrence |>
+    dplyr::mutate(procedure_concept_id = NA_integer_) |>
+    dplyr::compute(name = "procedure_occurrence", temporary = FALSE)
+
+  expect_warning(summariseMissingData(cdm, "procedure_occurrence", col="procedure_concept_id", ageGroup = list(c(0,50))))
 
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
