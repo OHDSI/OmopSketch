@@ -1,6 +1,6 @@
 test_that("summarise code use - eunomia", {
   skip_on_cran()
- cdm <- cdmEunomia()
+  cdm <- cdmEunomia()
   acetiminophen <- c(1125315,  1127433, 40229134,
                      40231925, 40162522, 19133768,  1127078)
   poliovirus_vaccine <- c(40213160)
@@ -10,6 +10,8 @@ test_that("summarise code use - eunomia", {
   results <- summariseConceptCounts(cdm = cdm,
                                     conceptId = cs,
                                     interval = "years",
+                                    countBy = c("record", "person"),
+                                    concept = TRUE,
                                     sex = TRUE,
                                     ageGroup = list(c(0,17),
                                                     c(18,65),
@@ -23,12 +25,15 @@ test_that("summarise code use - eunomia", {
   # min cell counts:
   expect_equal(
       omopgenerics::suppress(results, 5) |>
+        visOmopResults::splitAdditional() |>
         dplyr::filter(
-          variable_name == "overall",
-          strata_level == "1909-01-01 to 1909-12-31",
+          strata_level == "overall",
+          variable_name == "Number records",
+          standard_concept_id == "overall",
+          time_interval == "1909-01-01 to 1909-12-31",
           group_level == "acetiminophen") |>
         dplyr::pull("estimate_value"),
-      as.character()
+      as.character(NA)
   )
 
   # check is a summarised result
@@ -38,13 +43,12 @@ test_that("summarise code use - eunomia", {
 
   # overall record count
   expect_true(results %>%
-                dplyr::filter(group_name == "codelist_name" &
-                                strata_name == "overall" &
-                                strata_level == "overall" &
-                                variable_level == "overall" &
-                                group_level == "acetiminophen" &
-                                variable_name == "Number records",
-                              additional_name == "overall") %>%
+                dplyr::filter(group_name == "codelist_name",
+                                strata_name == "overall",
+                                strata_level == "overall",
+                                additional_level == "overall",
+                                group_level == "acetiminophen",
+                                variable_name == "Number records") %>%
                 dplyr::pull("estimate_value") |>
                 as.numeric() ==
                 cdm$drug_exposure %>%
@@ -58,7 +62,6 @@ test_that("summarise code use - eunomia", {
                 dplyr::filter(group_name == "codelist_name" &
                                 strata_name == "overall" &
                                 strata_level == "overall" &
-                                variable_level == "overall" &
                                 group_level == "acetiminophen" &
                                 variable_name == "Number subjects",
                               additional_name == "overall") %>%
@@ -74,12 +77,13 @@ test_that("summarise code use - eunomia", {
   # by year
   # overall record count
   expect_true(results %>%
+                visOmopResults::splitAdditional() |>
                 dplyr::filter(group_name == "codelist_name" &
                                 strata_name == "overall" &
-                                variable_level == "2008-01-01 to 2008-12-31" &
+                                time_interval == "2008-01-01 to 2008-12-31" &
                                 group_level == "acetiminophen" &
                                 variable_name == "Number records",
-                              additional_name == "overall") %>%
+                              standard_concept_name == "overall") %>%
                 dplyr::pull("estimate_value") |>
                 as.numeric()  ==
                 cdm$drug_exposure %>%
@@ -90,12 +94,13 @@ test_that("summarise code use - eunomia", {
 
   # overall person count
   expect_true(results %>%
+                visOmopResults::splitAdditional() |>
                 dplyr::filter(group_name == "codelist_name" &
                                 strata_name == "overall" &
-                                variable_level == "2008-01-01 to 2008-12-31" &
+                                time_interval == "2008-01-01 to 2008-12-31" &
                                 group_level == "acetiminophen" &
                                 variable_name == "Number subjects",
-                              additional_name == "overall") %>%
+                              standard_concept_name == "overall") %>%
                 dplyr::pull("estimate_value") |>
                 as.numeric() ==
                 cdm$drug_exposure %>%
@@ -112,7 +117,6 @@ test_that("summarise code use - eunomia", {
                 dplyr::filter(group_name == "codelist_name" &
                                 strata_name == "sex" &
                                 strata_level == "Male" &
-                                variable_level == "overall" &
                                 group_level == "acetiminophen" &
                                 variable_name == "Number records" &
                               additional_name == "overall") %>%
@@ -129,7 +133,6 @@ test_that("summarise code use - eunomia", {
                 dplyr::filter(group_name == "codelist_name" &
                                 strata_name == "age_group &&& sex" &
                                 strata_level == "18 to 65 &&& Male" &
-                                variable_level == "overall" &
                                 group_level == "acetiminophen" &
                                 variable_name == "Number records",
                               additional_name == "overall") %>%
@@ -150,7 +153,6 @@ test_that("summarise code use - eunomia", {
                 dplyr::filter(group_name == "codelist_name" &
                                 strata_name == "age_group &&& sex" &
                                 strata_level == "18 to 65 &&& Male" &
-                                variable_level == "overall" &
                                 group_level == "acetiminophen" &
                                 variable_name == "Number subjects",
                               additional_name == "overall") %>%
@@ -177,33 +179,35 @@ test_that("summarise code use - eunomia", {
                                                      c(18,65),
                                                      c(66, 100)))
 
-  expect_true(results1$additional_level |> unique() |> length() == 1)
   expect_equal(
     results1 |>
+      visOmopResults::splitAdditional() |>
       dplyr::filter(variable_name == "Number records") |>
       dplyr::arrange(dplyr::across(dplyr::everything())),
     results |>
-      dplyr::filter(variable_name == "Number records", additional_name == "overall") |>
+      visOmopResults::splitAdditional() |>
+      dplyr::filter(variable_name == "Number records", standard_concept_name == "overall") |>
+      dplyr::select(-c(starts_with("standard_"), starts_with("source_"), "domain_id")) |>
       dplyr::arrange(dplyr::across(dplyr::everything()))
   )
   expect_true(results1 |>
-    dplyr::filter(variable_name  == "Number subjects",
-                  group_level == "acetiminophen",
-                  variable_level == "1909-01-01 to 1909-12-31",
-                  strata_level == "0 to 17")  |>
-    dplyr::pull("estimate_value") |>
-    as.numeric() ==
-    cdm$drug_exposure %>%
-    dplyr::filter(drug_concept_id %in% acetiminophen) %>%
-    PatientProfiles::addAge(indexDate = "drug_exposure_start_date") %>%
-    PatientProfiles::addSex() %>%
-    dplyr::filter(age >= "0", age <= "17", clock::get_year(drug_exposure_start_date) == 1909) |>
-    dplyr::select("person_id") %>%
-    dplyr::distinct() %>%
-    dplyr::tally() %>%
-    dplyr::pull("n"))
+                visOmopResults::splitAdditional() |>
+                dplyr::filter(variable_name  == "Number subjects",
+                              group_level == "acetiminophen",
+                              time_interval == "1909-01-01 to 1909-12-31",
+                              strata_level == "0 to 17")  |>
+                dplyr::pull("estimate_value") |>
+                as.numeric() ==
+                cdm$drug_exposure %>%
+                dplyr::filter(drug_concept_id %in% acetiminophen) %>%
+                PatientProfiles::addAge(indexDate = "drug_exposure_start_date") %>%
+                PatientProfiles::addSex() %>%
+                dplyr::filter(age >= "0", age <= "17", clock::get_year(drug_exposure_start_date) == 1909) |>
+                dplyr::select("person_id") %>%
+                dplyr::distinct() %>%
+                dplyr::tally() %>%
+                dplyr::pull("n"))
   expect_true(results1$group_level |> unique() |> length() == 2)
-  expect_true(results1$additional_name |> unique() |> length() == 1)
 
   results <- summariseConceptCounts(list("acetiminophen" = acetiminophen),
                               cdm = cdm, countBy = "person",

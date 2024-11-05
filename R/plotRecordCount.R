@@ -57,13 +57,13 @@ plotRecordCount <- function(result,
       )
   }else{
     p <- result |>
-      visOmopResults::barPlot(x = "additional_level",
+      visOmopResults::barPlot(x = "variable_name",
                               y = "count",
                               facet = facet,
                               colour = colour)  +
       ggplot2::labs(
         y = "Count",
-        x = "Number records"
+        x = ""
       )
   }
   p

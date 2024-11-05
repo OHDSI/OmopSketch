@@ -338,7 +338,7 @@ addSexOverall <- function(result, sex){
         dplyr::group_by(.data$age_group, .data$additional_level, .data$variable_name) |>
         dplyr::summarise(estimate_value = sum(.data$estimate_value, na.rm = TRUE), .groups = "drop") |>
         dplyr::mutate(sex = "overall",
-                      additional_name = dplyr::if_else(additional_level == "overall", "overall", "time_interval"))
+                      additional_name = dplyr::if_else(.data$additional_level == "overall", "overall", "time_interval"))
     )
   }
   return(result)
