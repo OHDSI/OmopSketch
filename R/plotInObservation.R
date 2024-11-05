@@ -52,15 +52,15 @@ plotInObservation <- function(result,
   }
 
   # warn
-  warnFacetColour(result, list(facet = asCharacterFacet(facet), colour = colour, "variable_level"))
+  warnFacetColour(result, list(facet = asCharacterFacet(facet), colour = colour, "additional_level"))
 
   # plot
-  if(length(unique(result$variable_level)) > 1 ){
+  if(length(unique(result$additional_level)) > 1 ){
     result |>
-      dplyr::mutate(variable_level = as.Date(gsub(" to.*","",.data$variable_level))) |>
+      dplyr::mutate(additional_level = as.character(gsub("-01$","",as.Date(gsub(" to.*","",.data$additional_level))))) |>
       dplyr::filter(.data$estimate_name == "count") |>
       visOmopResults::scatterPlot(
-        x = "variable_level",
+        x = "time_interval",
         y = "count",
         line = TRUE,
         point = TRUE,

@@ -52,6 +52,7 @@ summariseInObservation <- function(observationPeriod,
   checkOutput(output)
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "")[[1]]
   omopgenerics::assertLogical(sex, length = 1)
+  original_interval <- interval
   x <- validateIntervals(interval)
   interval <- x$interval
   unitInterval <- x$unitInterval
@@ -88,7 +89,7 @@ summariseInObservation <- function(observationPeriod,
   result <- addSexOverall(result, sex)
 
   # Create summarisedResult
-  result <- createSummarisedResultObservationPeriod(result, observationPeriod, name, denominator, interval, unitInterval)
+  result <- createSummarisedResultObservationPeriod(result, observationPeriod, name, denominator, original_interval)
 
   CDMConnector::dropTable(cdm, name = dplyr::starts_with(tablePrefix))
   return(result)
@@ -172,7 +173,7 @@ countRecords <- function(observationPeriod, cdm, start_date_name, end_date_name,
   if(output == "person-days" | output == "all"){
     if(interval != "overall"){
       x <- cdm[[paste0(tablePrefix, "interval")]] |>
-        dplyr::rename("variable_level" = "interval_group") |>
+        dplyr::rename("additional_level" = "interval_group") |>
         dplyr::cross_join(
           observationPeriod |>
             dplyr::select("start_date" = "observation_period_start_date",
@@ -188,14 +189,16 @@ countRecords <- function(observationPeriod, cdm, start_date_name, end_date_name,
       x <- observationPeriod |>
         dplyr::rename("start_date" = "observation_period_start_date",
                       "end_date"   = "observation_period_end_date") |>
-        dplyr::mutate("variable_level" = NA)
+        dplyr::mutate("additional_level" = "overall",
+                      "additional_name"  = "overall")
     }
 
     personDays <- x %>%
       dplyr::mutate(estimate_value = !!CDMConnector::datediff("start_date","end_date", interval = "day")+1) |>
-      dplyr::group_by(dplyr::across(dplyr::any_of(c("variable_level", "sex", "age_group")))) |>
+      dplyr::group_by(dplyr::across(dplyr::any_of(c("additional_level", "sex", "age_group")))) |>
       dplyr::summarise(estimate_value = sum(.data$estimate_value, na.rm = TRUE), .groups = "drop") |>
-      dplyr::mutate(variable_name = "Number person-days") |>
+      dplyr::mutate("variable_name" = "Number person-days",
+                    "additional_name" = "time_interval") |>
       dplyr::collect()
   }else{
     personDays <- createEmptyIntervalTable(interval)
@@ -212,20 +215,22 @@ if(output == "records" | output == "all"){
         dplyr::compute(temporary = FALSE, name = tablePrefix)
 
       records <- cdm[[paste0(tablePrefix, "interval")]] |>
-        dplyr::rename("variable_level" = "interval_group") |>
+        dplyr::rename("additional_level" = "interval_group") |>
         dplyr::cross_join(x) |>
         dplyr::filter((.data$start_date < .data$interval_start_date & .data$end_date >= .data$interval_start_date) |
                         (.data$start_date >= .data$interval_start_date & .data$start_date <= .data$interval_end_date)) |>
-        dplyr::group_by(.data$variable_level, .data$age_group, .data$sex) |>
+        dplyr::group_by(.data$additional_level, .data$age_group, .data$sex) |>
         dplyr::summarise(estimate_value = sum(.data$estimate_value, na.rm = TRUE), .groups = "drop") |>
-        dplyr::mutate(variable_name = "Number records in observation") |>
+        dplyr::mutate("variable_name" = "Number records in observation",
+                      "additional_name" = "time_interval") |>
         dplyr::collect()
     }else{
       records <- observationPeriod |>
         dplyr::group_by(.data$age_group, .data$sex) |>
         dplyr::summarise(estimate_value = dplyr::n(), .groups = "drop") |>
         dplyr::mutate("variable_name" = "Number records in observation",
-                      "variable_level" = NA) |>
+                      "additional_level" = "overall",
+                      "additional_name"  = "overall") |>
         dplyr::collect()
     }
   }else{
@@ -234,12 +239,12 @@ if(output == "records" | output == "all"){
 
   x <- personDays |>
     rbind(records) |>
-    dplyr::arrange(dplyr::across(dplyr::any_of("variable_level")))
+    dplyr::arrange(dplyr::across(dplyr::any_of("additional_level")))
 
   return(x)
 }
 
-createSummarisedResultObservationPeriod <- function(result, observationPeriod, name, denominator, interval, unitInterval){
+createSummarisedResultObservationPeriod <- function(result, observationPeriod, name, denominator, original_interval){
   result <- result |>
     dplyr::mutate("estimate_value" = as.character(.data$estimate_value)) |>
     visOmopResults::uniteStrata(cols = c("sex", "age_group")) |>
@@ -248,15 +253,14 @@ createSummarisedResultObservationPeriod <- function(result, observationPeriod, n
       "cdm_name" = omopgenerics::cdmName(omopgenerics::cdmReference(observationPeriod)),
       "group_name"  = "omop_table",
       "group_level" = name,
+      "variable_level" = as.character(NA),
       "estimate_name" = "count",
-      "estimate_type" = "integer",
-      "additional_name" = "overall",
-      "additional_level" = "overall"
+      "estimate_type" = "integer"
     )
 
   result <- result |>
     rbind(result) |>
-    dplyr::group_by(.data$variable_level, .data$strata_level, .data$variable_name) |>
+    dplyr::group_by(.data$additional_level, .data$strata_level, .data$variable_name) |>
     dplyr::mutate(estimate_type = dplyr::if_else(dplyr::row_number() == 2, "percentage", .data$estimate_type)) |>
     dplyr::inner_join(denominator, by = "variable_name") |>
     dplyr::mutate(estimate_value = dplyr::if_else(.data$estimate_type == "percentage", as.character(as.numeric(.data$estimate_value)/denominator*100), .data$estimate_value)) |>
@@ -267,8 +271,7 @@ createSummarisedResultObservationPeriod <- function(result, observationPeriod, n
       "result_type" = "summarise_in_observation",
       "package_name" = "OmopSketch",
       "package_version" = as.character(utils::packageVersion("OmopSketch")),
-      "interval" = .env$interval,
-      "unitInterval" = .env$unitInterval
+      "interval" = .env$original_interval
     ))
 
   return(result)
@@ -332,9 +335,10 @@ addSexOverall <- function(result, sex){
   if(sex){
     result <- result |> rbind(
       result |>
-        dplyr::group_by(.data$age_group, .data$variable_level, .data$variable_name) |>
+        dplyr::group_by(.data$age_group, .data$additional_level, .data$variable_name) |>
         dplyr::summarise(estimate_value = sum(.data$estimate_value, na.rm = TRUE), .groups = "drop") |>
-        dplyr::mutate(sex = "overall")
+        dplyr::mutate(sex = "overall",
+                      additional_name = dplyr::if_else(additional_level == "overall", "overall", "time_interval"))
     )
   }
   return(result)

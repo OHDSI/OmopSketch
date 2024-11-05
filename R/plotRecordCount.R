@@ -38,12 +38,12 @@ plotRecordCount <- function(result,
   }
 
   # Detect if there are several time intervals
-  if(length(unique(result$variable_level)) > 1 ){
+  if(length(unique(result$additional_level)) > 1 ){
     # Line plot where each concept is a different line
     p <- result |>
-      dplyr::filter(.data$variable_level != "overall") |>
+      dplyr::filter(.data$additional_level != "overall") |>
       dplyr::filter(.data$estimate_name == "count") |>
-      visOmopResults::scatterPlot(x = "variable_level",
+      visOmopResults::scatterPlot(x = "time_interval",
                                   y = "count",
                                   line   = TRUE,
                                   point  = TRUE,
@@ -57,7 +57,7 @@ plotRecordCount <- function(result,
       )
   }else{
     p <- result |>
-      visOmopResults::barPlot(x = "variable_level",
+      visOmopResults::barPlot(x = "additional_level",
                               y = "count",
                               facet = facet,
                               colour = colour)  +

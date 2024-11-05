@@ -1,6 +1,6 @@
 test_that("summarise code use - eunomia", {
   skip_on_cran()
-  cdm <- cdmEunomia()
+ cdm <- cdmEunomia()
   acetiminophen <- c(1125315,  1127433, 40229134,
                      40231925, 40162522, 19133768,  1127078)
   poliovirus_vaccine <- c(40213160)
