@@ -186,7 +186,6 @@ getCodeUse <- function(x,
     }
 
   cc <- records |>
-    # dplyr::collect() |> # https://github.com/darwin-eu-dev/PatientProfiles/issues/706
     PatientProfiles::summariseResult(strata = strata,
                                      variable = "standard_concept_name",
                                      group = group,
@@ -211,7 +210,10 @@ getCodeUse <- function(x,
   if(interval != "overall"){
     cc <- cc |>
       visOmopResults::splitStrata() |>
-      dplyr::mutate(variable_level = .data$interval_group) |>
+      dplyr::mutate("additional_level" = dplyr::if_else(.data$interval_group == "overall", .data$additional_level, paste0(.data$interval_group, " &&& ", .data$additional_level))) |>
+      dplyr::mutate("additional_name" = dplyr::if_else(.data$interval_group == "overall", .data$additional_name, paste0("time_interval &&& ", .data$additional_name))) |>
+      dplyr::mutate("additional_level" = gsub(" &&& overall$", "", .data$additional_level)) |>
+      dplyr::mutate("additional_name" = gsub(" &&& overall$", "", .data$additional_name)) |>
       visOmopResults::uniteStrata(unique(unlist(strata))[unique(unlist(strata)) != "interval_group"]) |>
       dplyr::select(-"interval_group")
   }
