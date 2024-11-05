@@ -143,17 +143,17 @@ summarisedResult |>
 OmopSketch can also help you to summarise the trend of the records of an OMOP table. See the example below, where we use `summariseRecordCount()` to count the number of records within each year, and then, we use `plotRecordCount()` to create a ggplot with the trend.
 
 ```{r, warning=FALSE}
-summarisedResult <- summariseRecordCount(cdm, "drug_exposure", unit = "year", unitInterval = 1)
+summarisedResult <- summariseRecordCount(cdm, "drug_exposure", interval = "years")
 
 summarisedResult |> print()
 
 summarisedResult |> plotRecordCount()
 ```
 
-Note that you can adjust the time interval period using the `unit` argument, which can be set to either "year" or "month", and the `unitInterval` argument, which must be an integer specifying the number of years or months which to count the records. See the example below, where it shows the number of records every 18 months:
+Note that you can adjust the time interval period using the `interval` argument, which can be set to either "years" or "months". See the example below, where it shows the number of records every 18 months:
 
 ```{r, warning=FALSE}
-summariseRecordCount(cdm, "drug_exposure", unit = "month", unitInterval = 18) |> 
+summariseRecordCount(cdm, "drug_exposure", interval = "months") |> 
   plotRecordCount()
 ```
 
@@ -161,8 +161,7 @@ We can further stratify our counts by sex (setting argument `sex = TRUE`) or by 
 
 ```{r, warning=FALSE}
 summariseRecordCount(cdm, "drug_exposure",
-                      unit = "month", 
-                      unitInterval = 18, 
+                      interval = "months",
                       sex = TRUE, 
                       ageGroup = list("<30" = c(0,29),
                                      ">=30" = c(30,Inf))) |> 
@@ -173,8 +172,7 @@ By default, `plotRecordCount()` does not apply faceting or colour to any variabl
 
 ```{r, warning=FALSE}
 summariseRecordCount(cdm, "drug_exposure",
-                     unit = "month", 
-                     unitInterval = 18, 
+                     interval = "months", 
                      sex = TRUE,
                      ageGroup = list("0-29" = c(0,29),
                                      "30-Inf" = c(30,Inf)))  |>
@@ -185,8 +183,7 @@ Then, we can simply specify this by using the `facet` and `colour` arguments fro
 
 ```{r, warning=FALSE}
 summariseRecordCount(cdm, "drug_exposure",
-                     unit = "month", 
-                     unitInterval = 18, 
+                     interval = "months",
                      sex = TRUE,
                      ageGroup = list("0-29" = c(0,29),
                                      "30-Inf" = c(30,Inf))) |>
