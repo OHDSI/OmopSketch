@@ -143,7 +143,7 @@ summariseAllConceptCounts <- function(cdm,
   result<- result |>
     dplyr::mutate("omop_table" = table,
                   "variable_level" = as.character(.data[[conceptId]])) |>
-    dplyr::select(!c(conceptId))
+    dplyr::select(-dplyr::all_of(conceptId))
     return(result)
   })
   if (rlang::is_empty(purrr::compact(result_tables))){

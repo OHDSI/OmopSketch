@@ -9,10 +9,10 @@ test_that("summariseMissingData() works", {
   expect_no_error(x<-summariseMissingData(cdm, "visit_occurrence"))
   expect_no_error(summariseMissingData(cdm, "condition_occurrence"))
   expect_no_error(summariseMissingData(cdm, "drug_exposure"))
-  expect_no_error(summariseMissingData(cdm, "procedure_occurrence"))
+  expect_no_error(summariseMissingData(cdm, "procedure_occurrence", year = TRUE))
   expect_warning(summariseMissingData(cdm, "device_exposure"))
   expect_no_error(z<-summariseMissingData(cdm, "measurement"))
-  expect_no_error(s<-summariseMissingData(cdm, "observation", year = TRUE))
+  expect_no_error(s<-summariseMissingData(cdm, "observation"))
   expect_warning(summariseMissingData(cdm, "death"))
 
 
