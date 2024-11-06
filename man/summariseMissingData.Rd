@@ -9,6 +9,7 @@ summariseMissingData(
   omopTableName,
   col = NULL,
   sex = FALSE,
+  year = FALSE,
   ageGroup = NULL
 )
 }
