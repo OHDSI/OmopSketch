@@ -15,6 +15,30 @@ my_getStrataList <- function(sex = FALSE, ageGroup = NULL, year = FALSE){
   }
   return(strata)
 }
+
+
+checkFeasibility <- function(omopTable, tableName, conceptId){
+
+  if (omopgenerics::isTableEmpty(omopTable)){
+    cli::cli_warn(paste0(tableName, " omop table is empty."))
+    return(NULL)
+  }
+
+  if (is.na(conceptId)){
+    cli::cli_warn(paste0(tableName, " omop table doesn't contain standard concepts."))
+    return(NULL)
+  }
+
+  y <- omopTable |>
+    dplyr::filter(!is.na(.data[[conceptId]]))
+
+  if (omopgenerics::isTableEmpty(y)){
+    cli::cli_warn(paste0(tableName, " omop table doesn't contain standard concepts."))
+    return(NULL)
+  }
+  return(TRUE)
+}
+
 #' Summarise concept use in patient-level data
 #'
 #' @param cdm A cdm object
@@ -50,22 +74,24 @@ summariseAllConceptCounts <- function(cdm,
 
   result_tables <- purrr::map(omopTableName, function(table){
 
+
+
+
   omopTable <- cdm[[table]] |>
     dplyr::ungroup()
 
-  if (omopgenerics::isTableEmpty(omopTable)){
-      cli::cli_warn(paste0(table, " omop table is empty."))
-      return(NULL)
-    }
+
   conceptId <- standardConcept(omopgenerics::tableName(omopTable))
-  if (is.na(conceptId)){
-    cli::cli_warn(paste0(table, " omop table doesn't contain standard concepts."))
+
+  if (is.null(checkFeasibility(omopTable, table, conceptId))){
     return(NULL)
   }
+
 
   indexDate <- startDate(omopgenerics::tableName(omopTable))
 
   x <- omopTable |>
+    dplyr::filter(!is.na(.data[[conceptId]])) |>
     dplyr::left_join(
       cdm$concept |> dplyr::select("concept_id", "concept_name"),
       by = stats::setNames("concept_id", conceptId)) |>
@@ -120,7 +146,8 @@ summariseAllConceptCounts <- function(cdm,
   result<- result |>
     dplyr::mutate("omop_table" = table,
                   "variable_level" = as.character(.data[[conceptId]])) |>
-    dplyr::select(!c(conceptId))
+
+    dplyr::select(-dplyr::all_of(conceptId))
     return(result)
   })
   if (rlang::is_empty(purrr::compact(result_tables))){

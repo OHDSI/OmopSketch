@@ -37,7 +37,7 @@ result <- cdm |>
 
 result |>
   filter(variable_name == "Number subjects") |>
-  plotConceptCounts(facet = "codelist_name", colour = "codelist_name")
+  plotConceptCounts(facet = "codelist_name", colour = "standard_concept_name")
 
 PatientProfiles::mockDisconnect(cdm)
 }

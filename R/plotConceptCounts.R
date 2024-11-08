@@ -23,7 +23,7 @@
 #'
 #' result |>
 #'   filter(variable_name == "Number subjects") |>
-#'   plotConceptCounts(facet = "codelist_name", colour = "codelist_name")
+#'   plotConceptCounts(facet = "codelist_name", colour = "standard_concept_name")
 #'
 #' PatientProfiles::mockDisconnect(cdm)
 #' }
@@ -35,9 +35,7 @@ plotConceptCounts <- function(result,
 
   # subset to results of interest
   result <- result |>
-    visOmopResults::filterSettings(.data$result_type == "summarise_concept_counts") |>
-    dplyr::mutate(variable_level = gsub(" to.*","",.data$variable_level)) |>
-    dplyr::mutate(variable_level = gsub("-01$","",.data$variable_level))
+    visOmopResults::filterSettings(.data$result_type == "summarise_concept_counts")
 
   if (nrow(result) == 0) {
     cli::cli_abort(c("!" = "No records found with result_type == summarise_concept_counts"))
@@ -52,12 +50,14 @@ plotConceptCounts <- function(result,
     ))
   }
 
+  result1 <- result |> visOmopResults::splitAdditional()
   # Detect if there are several time intervals
-  if(length(unique(result$variable_level)) > 1 ){
+  if("time_interval" %in% colnames(result1)){
     # Line plot where each concept is a different line
-    p <- result |>
-      dplyr::filter(.data$variable_level != "overall") |>
-      visOmopResults::scatterPlot(x = "variable_level",
+    p <- result1 |>
+      dplyr::filter(.data$time_interval != "overall") |>
+      visOmopResults::uniteAdditional(cols = c("time_interval", "standard_concept_name", "standard_concept_id", "source_concept_name", "source_concept_id", "domain_id")) |>
+      visOmopResults::scatterPlot(x = "time_interval",
                                   y = "count",
                                   line   = TRUE,
                                   point  = TRUE,
@@ -66,11 +66,20 @@ plotConceptCounts <- function(result,
                                   facet  = facet,
                                   colour = colour)
   }else{
-    p <- result |>
-      visOmopResults::barPlot(x = "standard_concept_name",
-                              y = "count",
-                              facet = facet,
-                              colour = colour)  +
+    if("standard_concept_name" %in% colnames(result1)){
+      p <- result |>
+        visOmopResults::barPlot(x = "standard_concept_name",
+                                y = "count",
+                                facet = facet,
+                                colour = colour)
+    }else{
+      p <- result |>
+        visOmopResults::barPlot(x = "codelist_name",
+                                y = "count",
+                                facet = facet,
+                                colour = colour)
+    }
+    p <- p +
       ggplot2::labs(
         x = "Concept name"
       )

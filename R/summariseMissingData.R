@@ -10,8 +10,7 @@
 #' thus summarised by age groups.
 #' @return A summarised_result object with results overall and, if specified, by
 #' strata.
-#' @export
-
+#' @expor
 summariseMissingData <- function(cdm,
                                  omopTableName,
                                  col = NULL,
