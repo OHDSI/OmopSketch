@@ -14,13 +14,17 @@
 <url><loc>https://OHDSI.github.io/OmopSketch/reference/plotObservationPeriod.html</loc></url>
 <url><loc>https://OHDSI.github.io/OmopSketch/reference/plotRecordCount.html</loc></url>
 <url><loc>https://OHDSI.github.io/OmopSketch/reference/reexports.html</loc></url>
+<url><loc>https://OHDSI.github.io/OmopSketch/reference/summariseAllConceptCounts.html</loc></url>
 <url><loc>https://OHDSI.github.io/OmopSketch/reference/summariseClinicalRecords.html</loc></url>
 <url><loc>https://OHDSI.github.io/OmopSketch/reference/summariseConceptCounts.html</loc></url>
 <url><loc>https://OHDSI.github.io/OmopSketch/reference/summariseInObservation.html</loc></url>
+<url><loc>https://OHDSI.github.io/OmopSketch/reference/summariseMissingData.html</loc></url>
 <url><loc>https://OHDSI.github.io/OmopSketch/reference/summariseObservationPeriod.html</loc></url>
 <url><loc>https://OHDSI.github.io/OmopSketch/reference/summariseOmopSnapshot.html</loc></url>
 <url><loc>https://OHDSI.github.io/OmopSketch/reference/summariseRecordCount.html</loc></url>
+<url><loc>https://OHDSI.github.io/OmopSketch/reference/tableAllConceptCounts.html</loc></url>
 <url><loc>https://OHDSI.github.io/OmopSketch/reference/tableClinicalRecords.html</loc></url>
+<url><loc>https://OHDSI.github.io/OmopSketch/reference/tableMissingData.html</loc></url>
 <url><loc>https://OHDSI.github.io/OmopSketch/reference/tableObservationPeriod.html</loc></url>
 <url><loc>https://OHDSI.github.io/OmopSketch/reference/tableOmopSnapshot.html</loc></url>
 </urlset>
