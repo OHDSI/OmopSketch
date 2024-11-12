@@ -2,14 +2,14 @@
 % Please edit documentation in R/summariseConceptCounts.R
 \name{summariseConceptCounts}
 \alias{summariseConceptCounts}
-\title{Summarise concept counts in patient-level data. Only concepts recorded during observation period are counted.}
+\title{Summarise code use in patient-level data}
 \usage{
 summariseConceptCounts(
   cdm,
   conceptId,
   countBy = c("record", "person"),
   concept = TRUE,
-  interval = "overall",
+  year = FALSE,
   sex = FALSE,
   ageGroup = NULL
 )
@@ -24,7 +24,7 @@ person-level counts}
 
 \item{concept}{TRUE or FALSE. If TRUE code use will be summarised by concept.}
 
-\item{interval}{Time interval to stratify by. It can either be "years", "quarters", "months" or "overall".}
+\item{year}{TRUE or FALSE. If TRUE code use will be summarised by year.}
 
 \item{sex}{TRUE or FALSE. If TRUE code use will be summarised by sex.}
 
@@ -36,11 +36,10 @@ A summarised_result object with results overall and, if specified, by
 strata.
 }
 \description{
-Summarise concept counts in patient-level data. Only concepts recorded during observation period are counted.
+Summarise code use in patient-level data
 }
 \examples{
 \donttest{
-library(OmopSketch)
 
 cdm <- mockOmopSketch()
 
@@ -51,6 +50,5 @@ results <- summariseConceptCounts(cdm, conceptId = cs)
 results
 
 PatientProfiles::mockDisconnect(cdm)
-
 }
 }

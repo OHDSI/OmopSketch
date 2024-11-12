@@ -28,6 +28,11 @@ reference:
 - contents:
   - summariseConceptCounts
   - plotConceptCounts
+- subtitle: Individual Characteristics
+  desc: Summarise characteristics of the individuals in the OMOP Common Data Model
+- contents:
+  - summarisePopulationCharacteristics
+  - tablePopulationCharacteristics
 - subtitle: Mock Database
   desc: Create a mock database to test the OmopSketch package
 - contents:

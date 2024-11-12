@@ -7,7 +7,8 @@ time.}
 \usage{
 summariseInObservation(
   observationPeriod,
-  interval = "overall",
+  unit = "year",
+  unitInterval = 1,
   output = "records",
   ageGroup = NULL,
   sex = FALSE
@@ -17,7 +18,10 @@ summariseInObservation(
 \item{observationPeriod}{An observation_period omop table. It must be part of
 a cdm_reference object.}
 
-\item{interval}{Time interval to stratify by. It can either be "years", "quarters", "months" or "overall".}
+\item{unit}{Whether to stratify by "year" or by "month".}
+
+\item{unitInterval}{Number of years or months to include within the time
+interval.}
 
 \item{output}{Output format. It can be either the number of records
 ("records") that are in observation in the specific interval of time, the
@@ -43,7 +47,8 @@ cdm <- mockOmopSketch()
 
 result <- summariseInObservation(
   cdm$observation_period,
-  interval = "months",
+  unit = "month",
+  unitInterval = 6,
   output = c("person-days","records"),
   ageGroup = list("<=60" = c(0,60), ">60" = c(61, Inf)),
   sex = TRUE
@@ -53,6 +58,5 @@ result |>
   glimpse()
 
 PatientProfiles::mockDisconnect(cdm)
-
 }
 }

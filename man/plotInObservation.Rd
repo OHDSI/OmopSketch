@@ -23,7 +23,7 @@ Create a ggplot2 plot from the output of summariseInObservation().
 }
 \examples{
 \donttest{
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 
 cdm <- mockOmopSketch()
 
