@@ -6,12 +6,12 @@
 #' @param col A character vector of column names to check for missing values.
 #' If `NULL`, all columns in the specified tables are checked. Default is `NULL`.
 #' @param sex TRUE or FALSE. If TRUE code use will be summarised by sex.
+#' @param year TRUE or FALSE. If TRUE code use will be summarised by year.
 #' @param ageGroup A list of ageGroup vectors of length two. Code use will be
 #' thus summarised by age groups.
 #' @return A summarised_result object with results overall and, if specified, by
 #' strata.
 #' @export
-
 summariseMissingData <- function(cdm,
                                  omopTableName,
                                  col = NULL,
@@ -66,8 +66,8 @@ summariseMissingData <- function(cdm,
         stratified_result |>
           dplyr::group_by(dplyr::across(dplyr::all_of(g))) |>
           dplyr::summarise(
-            na_count = sum(na_count, na.rm = TRUE),
-            total_count = sum(total_count, na.rm = TRUE),
+            na_count = sum(.data$na_count, na.rm = TRUE),
+            total_count = sum(.data$total_count, na.rm = TRUE),
             colName = c,
             .groups = "drop"
           ) |>
@@ -94,11 +94,11 @@ summariseMissingData <- function(cdm,
     purrr::reduce(dplyr::union)|>
     dplyr::mutate(dplyr::across(dplyr::all_of(strata), ~ dplyr::coalesce(., "overall")))|>
     dplyr::mutate(
-      na_count = as.double(na_count),     # Cast na_count to double
-      na_percentage = as.double(na_percentage)
+      na_count = as.double(.data$na_count),     # Cast na_count to double
+      na_percentage = as.double(.data$na_percentage)
     )|>
     tidyr::pivot_longer(
-      cols = c(na_count, na_percentage),
+      cols = c(.data$na_count, .data$na_percentage),
       names_to = "estimate_name",
       values_to = "estimate_value"
     )
@@ -118,7 +118,7 @@ summariseMissingData <- function(cdm,
       "variable_level" = NA_character_
     ) |>
     dplyr::rename("variable_name" = "colName") |>
-    dplyr::select(!c(total_count))
+    dplyr::select(!c(.data$total_count))
 
   settings <- dplyr::tibble(
     result_id = unique(sr$result_id),
