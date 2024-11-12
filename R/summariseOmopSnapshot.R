@@ -6,9 +6,12 @@
 #' @return A summarised_result object.
 #' @export
 #' @examples
+#' \donttest{
+#' library(OmopSketch)
 #' cdm <- mockOmopSketch(numberIndividuals = 10)
 #'
 #' summariseOmopSnapshot(cdm)
+#' }
 summariseOmopSnapshot <- function(cdm) {
 
   omopgenerics::validateCdmArgument(cdm)

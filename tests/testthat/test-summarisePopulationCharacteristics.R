@@ -116,35 +116,35 @@ test_that("summarisePopulationCharacteristics() works", {
 })
 
 test_that("summarisePopulationCharacteristics() strata works", {
-  # skip_on_cran()
-  # # Load mock database ----
-  # cdm <- omock::mockCdmReference() |>
-  #   omock::mockPerson(seed = 1L) |>
-  #   omock::mockObservationPeriod(seed = 1L) |>
-  #   copyCdm()
-  #
-  # # Add sex and age group strata
-  # expect_no_error(summarisedPopulation <- summarisePopulationCharacteristics(
-  #   cdm = cdm,
-  #   sex = TRUE,
-  #   ageGroup = list(c(0,20),c(21,150)))
-  # )
-  # expect_true(inherits(summarisedPopulation,"summarised_result"))
-  # expect_true(all(summarisedPopulation |>
-  #                   dplyr::select("strata_name") |>
-  #                   dplyr::distinct() |>
-  #                   dplyr::pull() |>
-  #                   sort() ==
-  #                   c("age_group_at_start", "age_group_at_start &&& sex", "overall", "sex")))
-  #
-  # expect_true(all(summarisedPopulation |>
-  #                   dplyr::filter(variable_name == "Number records") |>
-  #                   dplyr::arrange(strata_name, strata_level) |>
-  #                   dplyr::select("estimate_value") |>
-  #                   dplyr::pull() ==
-  #                   c(4,6,1,3,4,2,10,5,5)))
-  #
-  # PatientProfiles::mockDisconnect(cdm = cdm)
+  skip_on_cran()
+  # Load mock database ----
+  cdm <- omock::mockCdmReference() |>
+    omock::mockPerson(seed = 1L) |>
+    omock::mockObservationPeriod(seed = 1L) |>
+    copyCdm()
+
+  # Add sex and age group strata
+  expect_no_error(summarisedPopulation <- summarisePopulationCharacteristics(
+    cdm = cdm,
+    sex = TRUE,
+    ageGroup = list(c(0,20),c(21,150)))
+  )
+  expect_true(inherits(summarisedPopulation,"summarised_result"))
+  expect_true(all(summarisedPopulation |>
+                    dplyr::select("strata_name") |>
+                    dplyr::distinct() |>
+                    dplyr::pull() |>
+                    sort() ==
+                    c("age_group_at_start", "age_group_at_start &&& sex", "overall", "sex")))
+
+  expect_true(all(summarisedPopulation |>
+                    dplyr::filter(variable_name == "Number records") |>
+                    dplyr::arrange(strata_name, strata_level) |>
+                    dplyr::select("estimate_value") |>
+                    dplyr::pull() ==
+                    c(4,6,1,3,4,2,10,5,5)))
+
+  PatientProfiles::mockDisconnect(cdm = cdm)
 })
 
 test_that("summarisePopulationCharacteristics() expected errors", {
@@ -181,49 +181,49 @@ test_that("tablePopulationCharacteristics() works", {
 })
 
 test_that("summarisePopulationCharacteristics() works with mockOmopSKetch", {
-#   skip_on_cran()
-#   cdm <- mockOmopSketch(numberIndividuals = 2, seed = 1)
-#   expect_no_error(summarisedPopulation <- summarisePopulationCharacteristics(
-#     cdm = cdm)
-#   )
-#   expect_true(inherits(summarisedPopulation,"summarised_result"))
-#   expect_true(all(summarisedPopulation |>
-#                     dplyr::select("strata_name") |>
-#                     dplyr::distinct() |>
-#                     dplyr::pull() ==
-#                     c("overall")))
-#   expect_true(all(summarisedPopulation |>
-#                     dplyr::filter(variable_name == "Number records") |>
-#                     dplyr::select("estimate_value") |>
-#                     dplyr::pull() ==
-#                     2))
-#   expect_true(all(summarisedPopulation |>
-#                     dplyr::filter(variable_name == "Cohort start date" & estimate_name == "min") |>
-#                     dplyr::select("estimate_value") |>
-#                     dplyr::pull() ==
-#                     "1999-04-05"))
-#   expect_true(summarisedPopulation |>
-#                 dplyr::filter(variable_name == "Age at end", estimate_name == "median") |>
-#                 dplyr::pull("estimate_value") ==
-#                 as.character(mean(c(40,16))))
-#   expect_true(all(summarisedPopulation |>
-#                     dplyr::filter(variable_name == "Cohort end date" & estimate_name == "max") |>
-#                     dplyr::select("estimate_value") |>
-#                     dplyr::pull() ==
-#                     "2013-06-29"))
-#   expect_true(all(summarisedPopulation |>
-#                     dplyr::filter(variable_name == "Sex", estimate_name == "percentage") |>
-#                     dplyr::select("estimate_value") |>
-#                     dplyr::pull() ==
-#                     c(50,50)))
-#   expect_true(all(summarisedPopulation |>
-#                     dplyr::filter(variable_name == "Age at start", estimate_name %in% c("min","max")) |>
-#                     dplyr::pull("estimate_value") |>
-#                     sort() ==
-#                     cdm$observation_period |>
-#                     PatientProfiles::addAge(indexDate = "observation_period_start_date") |>
-#                     dplyr::pull("age") |>
-#                     sort()))
-#   PatientProfiles::mockDisconnect(cdm = cdm)
+  skip_on_cran()
+  cdm <- mockOmopSketch(numberIndividuals = 2, seed = 1)
+  expect_no_error(summarisedPopulation <- summarisePopulationCharacteristics(
+    cdm = cdm)
+  )
+  expect_true(inherits(summarisedPopulation,"summarised_result"))
+  expect_true(all(summarisedPopulation |>
+                    dplyr::select("strata_name") |>
+                    dplyr::distinct() |>
+                    dplyr::pull() ==
+                    c("overall")))
+  expect_true(all(summarisedPopulation |>
+                    dplyr::filter(variable_name == "Number records") |>
+                    dplyr::select("estimate_value") |>
+                    dplyr::pull() ==
+                    2))
+  expect_true(all(summarisedPopulation |>
+                    dplyr::filter(variable_name == "Cohort start date" & estimate_name == "min") |>
+                    dplyr::select("estimate_value") |>
+                    dplyr::pull() ==
+                    "1999-04-05"))
+  expect_true(summarisedPopulation |>
+                dplyr::filter(variable_name == "Age at end", estimate_name == "median") |>
+                dplyr::pull("estimate_value") ==
+                as.character(mean(c(40,16))))
+  expect_true(all(summarisedPopulation |>
+                    dplyr::filter(variable_name == "Cohort end date" & estimate_name == "max") |>
+                    dplyr::select("estimate_value") |>
+                    dplyr::pull() ==
+                    "2013-06-29"))
+  expect_true(all(summarisedPopulation |>
+                    dplyr::filter(variable_name == "Sex", estimate_name == "percentage") |>
+                    dplyr::select("estimate_value") |>
+                    dplyr::pull() ==
+                    c(50,50)))
+  expect_true(all(summarisedPopulation |>
+                    dplyr::filter(variable_name == "Age at start", estimate_name %in% c("min","max")) |>
+                    dplyr::pull("estimate_value") |>
+                    sort() ==
+                    cdm$observation_period |>
+                    PatientProfiles::addAge(indexDate = "observation_period_start_date") |>
+                    dplyr::pull("age") |>
+                    sort()))
+  PatientProfiles::mockDisconnect(cdm = cdm)
 
 })
