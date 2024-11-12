@@ -6,6 +6,7 @@
 #' @param col A character vector of column names to check for missing values.
 #' If `NULL`, all columns in the specified tables are checked. Default is `NULL`.
 #' @param sex TRUE or FALSE. If TRUE code use will be summarised by sex.
+#' @param year TRUE or FALSE. If TRUE code use will be summarised by year.
 #' @param ageGroup A list of ageGroup vectors of length two. Code use will be
 #' thus summarised by age groups.
 #' @param sample An integer to sample the table to only that number of records.
@@ -14,7 +15,6 @@
 #' @return A summarised_result object with results overall and, if specified, by
 #' strata.
 #' @export
-
 summariseMissingData <- function(cdm,
                                  omopTableName,
                                  col = NULL,

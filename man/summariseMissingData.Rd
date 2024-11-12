@@ -25,6 +25,8 @@ If \code{NULL}, all columns in the specified tables are checked. Default is \cod
 
 \item{sex}{TRUE or FALSE. If TRUE code use will be summarised by sex.}
 
+\item{year}{TRUE or FALSE. If TRUE code use will be summarised by year.}
+  
 \item{ageGroup}{A list of ageGroup vectors of length two. Code use will be
 thus summarised by age groups.}
 

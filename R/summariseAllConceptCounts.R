@@ -16,6 +16,7 @@ my_getStrataList <- function(sex = FALSE, ageGroup = NULL, year = FALSE){
   return(strata)
 }
 
+
 checkFeasibility <- function(omopTable, tableName, conceptId){
 
   if (omopgenerics::isTableEmpty(omopTable)){
@@ -37,6 +38,7 @@ checkFeasibility <- function(omopTable, tableName, conceptId){
   }
   return(TRUE)
 }
+
 #' Summarise concept use in patient-level data
 #'
 #' @param cdm A cdm object
@@ -71,6 +73,7 @@ summariseAllConceptCounts <- function(cdm,
   stratification <- omopgenerics::combineStrata(strata)
 
   result_tables <- purrr::map(omopTableName, function(table){
+
 
 
 
@@ -143,6 +146,7 @@ summariseAllConceptCounts <- function(cdm,
   result<- result |>
     dplyr::mutate("omop_table" = table,
                   "variable_level" = as.character(.data[[conceptId]])) |>
+
     dplyr::select(-dplyr::all_of(conceptId))
     return(result)
   })
