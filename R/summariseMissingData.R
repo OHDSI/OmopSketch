@@ -8,6 +8,9 @@
 #' @param sex TRUE or FALSE. If TRUE code use will be summarised by sex.
 #' @param ageGroup A list of ageGroup vectors of length two. Code use will be
 #' thus summarised by age groups.
+#' @param sample An integer to sample the table to only that number of records.
+#' If NULL no sample is done.
+#'
 #' @return A summarised_result object with results overall and, if specified, by
 #' strata.
 #' @export
