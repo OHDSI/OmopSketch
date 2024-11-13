@@ -15,8 +15,6 @@ reference:
   - tableClinicalRecords
   - summariseRecordCount
   - plotRecordCount
-  - summariseMissingData
-  - tableMissingData
 - subtitle: Observation Periods
   desc: Summarise and plot the observation period table in the OMOP Common Data Model
 - contents:
