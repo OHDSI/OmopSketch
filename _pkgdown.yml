@@ -30,8 +30,8 @@ reference:
 - contents:
   - summariseConceptCounts
   - plotConceptCounts
-  - summariseAllConceptCounts
-  - tableAllConceptCounts
+  - summarisePopulationCharacteristics
+  - tablePopulationCharacteristics
 - subtitle: Mock Database
   desc: Create a mock database to test the OmopSketch package
 - contents:
