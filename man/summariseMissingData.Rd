@@ -20,7 +20,7 @@ summariseMissingData(
 summarise in the cdm object.}
 
 \item{col}{A character vector of column names to check for missing values.
-If \code{NULL}, all columns in the specified tables are checked. Default is \code{NULL}.}
+If `NULL`, all columns in the specified tables are checked. Default is `NULL`.}
 
 \item{sex}{TRUE or FALSE. If TRUE code use will be summarised by sex.}
 

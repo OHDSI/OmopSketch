@@ -10,10 +10,10 @@ plotRecordCount(result, facet = NULL, colour = NULL)
 \item{result}{Output from summariseRecordCount().}
 
 \item{facet}{Columns to face by. Formula format can be provided. See possible
-columns to face by with: \code{visOmopResults::tidyColumns()}.}
+columns to face by with: `visOmopResults::tidyColumns()`.}
 
 \item{colour}{Columns to colour by. See possible columns to colour by with:
-\code{visOmopResults::tidyColumns()}.}
+`visOmopResults::tidyColumns()`.}
 }
 \value{
 A ggplot showing the table counts
