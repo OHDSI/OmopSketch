@@ -9,7 +9,7 @@ time."><meta property="og:image" content="https://OHDSI.github.io/OmopSketch/log
 
     <a class="navbar-brand me-2" href="../index.html">OmopSketch</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,7 +47,8 @@ time.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">summariseInObservation</span><span class="op">(</span></span>
 <span>  <span class="va">observationPeriod</span>,</span>
-<span>  interval <span class="op">=</span> <span class="st">"overall"</span>,</span>
+<span>  unit <span class="op">=</span> <span class="st">"year"</span>,</span>
+<span>  unitInterval <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  output <span class="op">=</span> <span class="st">"records"</span>,</span>
 <span>  ageGroup <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  sex <span class="op">=</span> <span class="cn">FALSE</span></span>
@@ -63,8 +64,13 @@ time.</p>
 a cdm_reference object.</p></dd>
 
 
-<dt id="arg-interval">interval<a class="anchor" aria-label="anchor" href="#arg-interval"></a></dt>
-<dd><p>Time interval to stratify by. It can either be "years", "quarters", "months" or "overall".</p></dd>
+<dt id="arg-unit">unit<a class="anchor" aria-label="anchor" href="#arg-unit"></a></dt>
+<dd><p>Whether to stratify by "year" or by "month".</p></dd>
+
+
+<dt id="arg-unitinterval">unitInterval<a class="anchor" aria-label="anchor" href="#arg-unitinterval"></a></dt>
+<dd><p>Number of years or months to include within the time
+interval.</p></dd>
 
 
 <dt id="arg-output">output<a class="anchor" aria-label="anchor" href="#arg-output"></a></dt>
@@ -96,7 +102,8 @@ number of person-days ("person-days"), or both c("records","person-days").</p></
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">summariseInObservation</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>,</span></span>
-<span class="r-in"><span>  interval <span class="op">=</span> <span class="st">"months"</span>,</span></span>
+<span class="r-in"><span>  unit <span class="op">=</span> <span class="st">"month"</span>,</span></span>
+<span class="r-in"><span>  unitInterval <span class="op">=</span> <span class="fl">6</span>,</span></span>
 <span class="r-in"><span>  output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"person-days"</span>,<span class="st">"records"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;=60"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">60</span><span class="op">)</span>, <span class="st">"&gt;60"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">61</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  sex <span class="op">=</span> <span class="cn">TRUE</span></span></span>
@@ -104,24 +111,23 @@ number of person-days ("person-days"), or both c("records","person-days").</p></
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">result</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Rows: 18,720</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Rows: 2,900</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Columns: 13</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ result_id        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ cdm_name         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "mockOmopSketch", "mockOmopSketch", "mockOmopSketch",…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ group_name       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "omop_table", "omop_table", "omop_table", "omop_table…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ group_level      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "observation_period", "observation_period", "observat…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ strata_name      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "sex", "sex &amp;&amp;&amp; age_group", "sex &amp;&amp;&amp; age_group", "sex…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $ strata_level     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Female", "Female &amp;&amp;&amp; &lt;=60", "Female &amp;&amp;&amp; &lt;=60", "Fema…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ strata_level     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Male", "Male &amp;&amp;&amp; &lt;=60", "Male &amp;&amp;&amp; &lt;=60", "Male", "Ma…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Number person-days", "Number person-days", "Number r…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $ variable_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ variable_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "1954-07-01 to 1954-12-31", "1954-07-01 to 1954-12-31…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ estimate_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count", "count", "count", "count", "count", "count",…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ estimate_type    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "integer", "integer", "integer", "integer", "integer"…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $ estimate_value   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "28", "28", "1", "1", "30", "30", "1", "1", "31", "31…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $ additional_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "time_interval", "time_interval", "time_interval", "t…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "1955-03-01 to 1955-03-31", "1955-03-01 to 1955-03-31…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ estimate_value   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "176", "176", "1", "1", "181", "181", "1", "1", "96",…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ additional_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall", "overall", "overall", "overall", "overall"…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall", "overall", "overall", "overall", "overall"…</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">PatientProfiles</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/PatientProfiles/man/mockDisconnect.html" class="external-link">mockDisconnect</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
@@ -130,7 +136,7 @@ number of person-days ("person-days"), or both c("records","person-days").</p></
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Marta Alcalde-Herraiz, Kim Lopez-Guell, Elin Rowlands, Cecilia Campanile, Edward Burn, Martí Català.</p>
+  <p>Developed by Marta Alcalde-Herraiz, Kim Lopez-Guell, Elin Rowlands, Edward Burn, Martí Català.</p>
 </div>
 
 <div class="pkgdown-footer-right">

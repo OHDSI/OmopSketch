@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">OmopSketch</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -92,18 +92,6 @@
 
         </dt>
         <dd>Create a ggplot of the records' count trend.</dd>
-      </dl><dl><dt>
-
-          <code><a href="summariseMissingData.html">summariseMissingData()</a></code>
-
-        </dt>
-        <dd>Summarise missing data in omop tables</dd>
-      </dl><dl><dt>
-
-          <code><a href="tableMissingData.html">tableMissingData()</a></code>
-
-        </dt>
-        <dd>Create a visual table from a summariseMissingData() result.</dd>
       </dl></div><div class="section level2">
 
       <h3 id="observation-periods">Observation Periods<a class="anchor" aria-label="anchor" href="#observation-periods"></a></h3>
@@ -161,7 +149,7 @@
           <code><a href="summariseConceptCounts.html">summariseConceptCounts()</a></code>
 
         </dt>
-        <dd>Summarise concept counts in patient-level data. Only concepts recorded during observation period are counted.</dd>
+        <dd>Summarise code use in patient-level data</dd>
       </dl><dl><dt>
 
           <code><a href="plotConceptCounts.html">plotConceptCounts()</a></code>
@@ -170,16 +158,16 @@
         <dd>Plot the concept counts of a summariseConceptCounts output.</dd>
       </dl><dl><dt>
 
-          <code><a href="summariseAllConceptCounts.html">summariseAllConceptCounts()</a></code>
+          <code><a href="summarisePopulationCharacteristics.html">summarisePopulationCharacteristics()</a></code>
 
         </dt>
-        <dd>Summarise concept use in patient-level data</dd>
+        <dd>Summarise the characteristics of the base population of a cdm_reference object.</dd>
       </dl><dl><dt>
 
-          <code><a href="tableAllConceptCounts.html">tableAllConceptCounts()</a></code>
+          <code><a href="tablePopulationCharacteristics.html">tablePopulationCharacteristics()</a></code>
 
         </dt>
-        <dd>Create a visual table from a summariseAllConceptCounts() result.</dd>
+        <dd>Create a visual table from a summarise_population_characteristics result.</dd>
       </dl></div><div class="section level2">
 
       <h3 id="mock-database">Mock Database<a class="anchor" aria-label="anchor" href="#mock-database"></a></h3>
@@ -203,7 +191,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Marta Alcalde-Herraiz, Kim Lopez-Guell, Elin Rowlands, Cecilia Campanile, Edward Burn, Martí Català.</p>
+  <p>Developed by Marta Alcalde-Herraiz, Kim Lopez-Guell, Elin Rowlands, Edward Burn, Martí Català.</p>
 </div>
 
 <div class="pkgdown-footer-right">
