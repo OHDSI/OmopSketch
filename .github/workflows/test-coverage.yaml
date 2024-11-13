@@ -13,6 +13,8 @@ permissions: read-all
 jobs:
   test-coverage:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - uses: actions/checkout@v4
@@ -42,7 +44,7 @@ jobs:
           file: ./cobertura.xml
           plugin: noop
           disable_search: true
-          token: 8e3843c1-7a05-4c43-89ac-ddc8f0edff7d
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Show testthat output
         if: always()

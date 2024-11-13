@@ -6,9 +6,12 @@
 #' @return A summarised_result object.
 #' @export
 #' @examples
+#' \donttest{
+#' library(OmopSketch)
 #' cdm <- mockOmopSketch(numberIndividuals = 10)
 #'
 #' summariseOmopSnapshot(cdm)
+#' }
 summariseOmopSnapshot <- function(cdm) {
 
   omopgenerics::validateCdmArgument(cdm)
@@ -19,7 +22,7 @@ summariseOmopSnapshot <- function(cdm) {
     internalTibble() |>
     omopgenerics::newSummarisedResult(settings = dplyr::tibble(
       result_id = unique(summaryTable$result_id),
-      package_name = "OmopSketch",
+      package_name = "omopSketch",
       package_version = as.character(utils::packageVersion("OmopSketch")),
       result_type = "summarise_omop_snapshot"
     ))

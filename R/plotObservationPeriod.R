@@ -57,9 +57,9 @@ plotObservationPeriod <- function(result,
 
   validateFacet(facet, result)
 
-  optFacetColour <- c("cdm_name", "observation_period_ordinal",
-                      visOmopResults::strataColumns(result))
-  omopgenerics::assertChoice(facet, optFacetColour, null = TRUE)
+  optFacetColour <- visOmopResults::tidyColumns(result)
+  optFacetColour <- optFacetColour[optFacetColour %in% visOmopResults::tidyColumns(result)]
+  omopgenerics::assertChoice(facet, optFacetColour, null = TRUE, call = call)
 
   # this is due to bug in visOmopResults to remove in next release
   # https://github.com/darwin-eu/visOmopResults/issues/246
@@ -68,7 +68,8 @@ plotObservationPeriod <- function(result,
 
   if(length(visOmopResults::groupColumns(result)) == 0){
     result <- result |>
-      dplyr::mutate(group_name  = "observation_period_ordinal")
+      dplyr::mutate(group_name  = "observation_period_ordinal",
+             group_level = "Overall")
   }
 
   if (plotType == "barplot") {
@@ -85,7 +86,7 @@ plotObservationPeriod <- function(result,
       x = "observation_period_ordinal",
       facet = facet,
       colour = colour)
-  } else if (plotType == "densityplot") {
+  } else {
     p <- visOmopResults::scatterPlot(
       result = result,
       x = "density_x",
@@ -95,8 +96,7 @@ plotObservationPeriod <- function(result,
       ribbon = FALSE,
       facet = facet,
       colour = colour,
-      group = optFacetColour
-    ) +
+      group = optFacetColour) +
       ggplot2::xlab(stringr::str_to_sentence(unique(result$variable_name))) +
       ggplot2::ylab("Density")
   }

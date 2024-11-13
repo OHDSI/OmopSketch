@@ -5,6 +5,8 @@
 #' @return A gt or flextable object with the summarised data.
 #' @export
 #' @examples
+#' \donttest{
+#' library(OmopSketch)
 #' cdm <- mockOmopSketch(numberIndividuals = 10)
 #'
 #' result <- summariseOmopSnapshot(cdm)
@@ -13,6 +15,7 @@
 #'   tableOmopSnapshot()
 #'
 #' PatientProfiles::mockDisconnect(cdm)
+#' }
 tableOmopSnapshot <- function(result,
                               type = "gt") {
   # initial checks

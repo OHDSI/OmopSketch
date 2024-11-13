@@ -1,6 +1,6 @@
 Package: OmopSketch
 Title: Characterise Tables of an OMOP Common Data Model Instance
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: c(
     person( 
         "Marta", "Alcalde-Herraiz", 
@@ -14,10 +14,6 @@ Authors@R: c(
     person(
         "Elin", "Rowlands", email = "elin.rowlands@ndorms.ox.ac.uk", 
         role = c("aut"), comment = c(ORCID = "0009-0005-5166-0417")
-    ),
-    person(
-        "Cecilia", "Campanile", email = "cecilia.campanile@ndorms.ox.ac.uk", 
-        role = c("aut"), comment = c(ORCID = "0009-0007-6629-4661")
     ),
     person(
         "Edward", "Burn", email = "edward.burn@ndorms.ox.ac.uk", 
@@ -34,45 +30,27 @@ Description: Summarises key information in data mapped to the Observational
     to obtain feasibility counts and trends.
 License: Apache License (>= 2)
 Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
-Suggests:
-    CodelistGenerator,
-    DBI,
-    duckdb,
-    flextable,
-    gt,
-    here,
-    knitr,
-    odbc,
-    remotes,
-    rmarkdown,
-    RPostgres,
-    testthat (>= 3.0.0),
-    withr,
-    omock (>= 0.3.0),
-    covr
+Suggests: CodelistGenerator, DBI, here, knitr, odbc, remotes,
+        rmarkdown, RPostgres, testthat (>= 3.0.0), withr
 Config/testthat/edition: 3
 Config/testthat/parallel: true
-Imports: 
-    CDMConnector (>= 1.3.0),
-    cli,
-    clock,
-    CohortConstructor (>= 0.3.1),
-    dplyr,
-    ggplot2,
-    omopgenerics (>= 0.3.1),
-    PatientProfiles (>= 1.2.1),
-    purrr,
-    rlang,
-    stringr,
-    tibble,
-    tidyr,
-    visOmopResults (>= 0.4.0)
-Depends: 
-    R (>= 2.10)
+Imports: CDMConnector (>= 1.3.0), cli, clock, gt, flextable,
+        CohortCharacteristics (>= 0.3.0), CohortConstructor (>= 0.3.1),
+        dplyr, ggplot2, omock (>= 0.3.0), omopgenerics (>= 0.3.1),
+        PatientProfiles (>= 1.2.0), purrr, rlang, stringr, tibble,
+        tidyr, visOmopResults (>= 0.4.0), duckdb
+Depends: R (>= 2.10)
 URL: https://OHDSI.github.io/OmopSketch/
 BugReports: https://github.com/OHDSI/OmopSketch/issues
 VignetteBuilder: knitr
-Remotes: 
-    darwin-eu-dev/omopgenerics
+NeedsCompilation: no
+Packaged: 2024-11-12 21:14:36 UTC; martaa
+Author: Marta Alcalde-Herraiz [aut, cre]
+    (<https://orcid.org/0009-0002-4405-1814>),
+  Kim Lopez-Guell [aut] (<https://orcid.org/0000-0002-8462-8668>),
+  Elin Rowlands [aut] (<https://orcid.org/0009-0005-5166-0417>),
+  Edward Burn [aut] (<https://orcid.org/0000-0002-9286-1128>),
+  Martí Català [aut] (<https://orcid.org/0000-0003-3308-9905>)
+Repository: CRAN
+Date/Publication: 2024-11-12 21:40:07 UTC

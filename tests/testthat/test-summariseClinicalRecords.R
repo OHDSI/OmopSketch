@@ -193,17 +193,14 @@ test_that("summariseClinicalRecords() sex and ageGroup argument work", {
   cdm <- CDMConnector::copyCdmTo(
     con = connection(), cdm = cdm, schema = schema())
 
-  result <- summariseClinicalRecords(
-    cdm = cdm,
-    omopTableName = "observation_period",
-    inObservation = FALSE,
-    standardConcept = FALSE,
-    sourceVocabulary = FALSE,
-    domainId = FALSE,
-    typeConcept = FALSE,
-    sex = TRUE,
-    ageGroup = list("old" = c(10, Inf), "young" = c(0, 9))
-  )
+  result <- summariseClinicalRecords(cdm, "observation_period",
+                           inObservation = FALSE,
+                           standardConcept = FALSE,
+                           sourceVocabulary = FALSE,
+                           domainId = FALSE,
+                           typeConcept = FALSE,
+                           sex = TRUE,
+                           ageGroup = list("old" = c(10, Inf), "young" = c(0, 9)))
 
   # Check num records
   records <- result |>
