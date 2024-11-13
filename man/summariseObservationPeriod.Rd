@@ -17,8 +17,8 @@ summariseObservationPeriod(
 \item{observationPeriod}{observation_period omop table.}
 
 \item{estimates}{Estimates to summarise the variables of interest (
-`records per person`, `duration in days` and
-`days to next observation period`).}
+\verb{records per person}, \verb{duration in days} and
+\verb{days to next observation period}).}
 
 \item{ageGroup}{A list of age groups to stratify results by.}
 

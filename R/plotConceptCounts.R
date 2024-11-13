@@ -9,7 +9,7 @@
 #' @export
 #' @examples
 #' \donttest{
-#' library(dplyr, warn.conflicts = FALSE)
+#' library(dplyr)
 #'
 #' cdm <- mockOmopSketch()
 #'
@@ -22,8 +22,8 @@
 #'   )
 #'
 #' result |>
-#'   filter(estimate_name == "person_count", variable_name == "overall") |>
-#'   plotConceptCounts(facet = "codelist_name", colour = "codelist_name")
+#'   filter(variable_name == "Number subjects") |>
+#'   plotConceptCounts(facet = "codelist_name", colour = "standard_concept_name")
 #'
 #' PatientProfiles::mockDisconnect(cdm)
 #' }
@@ -36,29 +36,55 @@ plotConceptCounts <- function(result,
   # subset to results of interest
   result <- result |>
     visOmopResults::filterSettings(.data$result_type == "summarise_concept_counts")
+
   if (nrow(result) == 0) {
     cli::cli_abort(c("!" = "No records found with result_type == summarise_concept_counts"))
   }
 
   # check only one estimate is contained
-  estimate <- unique(result$estimate_name)
-  if (length(estimate) > 1) {
+ variable <- unique(result$variable_name)
+  if (length(variable) > 1) {
     cli::cli_abort(c(
-      "!" = "Subset to the estimate of interest, there are results from: {estimate}.",
-      "i" = "result |> dplyr::filter(estimate_name == '{estimate[1]}')"
+      "!" = "Subset to the variable of interest, there are results from: {variable}.",
+      "i" = "result |> dplyr::filter(variable_name == '{variable[1]}')"
     ))
   }
 
-  order <- c("overall", sort(unique(result$variable_name[result$variable_name != "overall"])))
-  result |>
-    dplyr::mutate(variable_name = factor(.data$variable_name,
-                                         levels = order)) |>
-    visOmopResults::barPlot(x = "variable_name",
-                            y = estimate,
-                            facet = facet,
-                            colour = colour) +
-    ggplot2::labs(
-      x = "Concept name"
-    ) +
+  result1 <- result |> visOmopResults::splitAdditional()
+  # Detect if there are several time intervals
+  if("time_interval" %in% colnames(result1)){
+    # Line plot where each concept is a different line
+    p <- result1 |>
+      dplyr::filter(.data$time_interval != "overall") |>
+      visOmopResults::uniteAdditional(cols = c("time_interval", "standard_concept_name", "standard_concept_id", "source_concept_name", "source_concept_id", "domain_id")) |>
+      visOmopResults::scatterPlot(x = "time_interval",
+                                  y = "count",
+                                  line   = TRUE,
+                                  point  = TRUE,
+                                  ribbon = TRUE,
+                                  group  = "standard_concept_name",
+                                  facet  = facet,
+                                  colour = colour)
+  }else{
+    if("standard_concept_name" %in% colnames(result1)){
+      p <- result |>
+        visOmopResults::barPlot(x = "standard_concept_name",
+                                y = "count",
+                                facet = facet,
+                                colour = colour)
+    }else{
+      p <- result |>
+        visOmopResults::barPlot(x = "codelist_name",
+                                y = "count",
+                                facet = facet,
+                                colour = colour)
+    }
+    p <- p +
+      ggplot2::labs(
+        x = "Concept name"
+      )
+  }
+
+ p +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust = 1))
 }
