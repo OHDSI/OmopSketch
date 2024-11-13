@@ -34,8 +34,5 @@ A mock cdm_reference object.
 Creates a mock database to test OmopSketch package.
 }
 \examples{
-\donttest{
-library(OmopSketch)
 mockOmopSketch(numberIndividuals = 100)
-}
 }

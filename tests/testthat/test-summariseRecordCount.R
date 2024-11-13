@@ -4,28 +4,28 @@ test_that("summariseRecordCount() works", {
   cdm <- cdmEunomia()
 
   # Check inputs ----
-  expect_warning(inherits(summariseRecordCount(cdm, "observation_period", unit = "month"),"summarised_result"))
-  expect_warning(inherits(summariseRecordCount(cdm, "observation_period", unitInterval = 5),"summarised_result"))
+  expect_warning(inherits(summariseRecordCount(cdm, "observation_period", interval = "months"),"summarised_result"))
+  expect_warning(inherits(summariseRecordCount(cdm, "observation_period"),"summarised_result"))
 
   expect_warning(summariseRecordCount(cdm, "observation_period"))
   expect_no_error(summariseRecordCount(cdm, "visit_occurrence"))
-  expect_no_error(co <- summariseRecordCount(cdm, "condition_occurrence"))
   expect_no_error(summariseRecordCount(cdm, "drug_exposure"))
   expect_no_error(summariseRecordCount(cdm, "procedure_occurrence"))
-  expect_warning(de <- summariseRecordCount(cdm, "device_exposure"))
   expect_no_error(summariseRecordCount(cdm, "measurement"))
-  expect_no_error(o <- summariseRecordCount(cdm, "observation"))
   expect_warning(summariseRecordCount(cdm, "death"))
+
+  expect_no_error(co <- summariseRecordCount(cdm, "condition_occurrence"))
+  expect_warning(de  <- summariseRecordCount(cdm, "device_exposure"))
+  expect_no_error(o  <- summariseRecordCount(cdm, "observation"))
 
   expect_no_error(all <- summariseRecordCount(cdm, c("condition_occurrence",
                                                       "device_exposure","observation")))
   expect_equal(all, dplyr::bind_rows(co,de,o))
 
-
   # Check inputs ----
   expect_true(
-    (summariseRecordCount(cdm, "observation_period") |>
-       dplyr::filter(variable_level == "1963-01-01 to 1963-12-31") |>
+    (summariseRecordCount(cdm, "observation_period", interval = "years") |>
+       dplyr::filter(additional_level == "1963-01-01 to 1963-12-31") |>
        dplyr::pull("estimate_value") |>
        as.numeric()) ==
       (cdm$observation_period |>
@@ -38,8 +38,8 @@ test_that("summariseRecordCount() works", {
   )
 
   expect_true(
-  summariseRecordCount(cdm, "condition_occurrence", unit = "month") |>
-    dplyr::filter(variable_level == "1961-02-01 to 1961-02-28") |>
+  summariseRecordCount(cdm, "condition_occurrence", interval = "months") |>
+    dplyr::filter(additional_level == "1961-02-01 to 1961-02-28") |>
     dplyr::pull("estimate_value") |>
     as.numeric() ==
   (cdm$condition_occurrence |>
@@ -53,8 +53,9 @@ test_that("summariseRecordCount() works", {
   )
 
   expect_true(
-    (summariseRecordCount(cdm, "condition_occurrence", unit = "month", unitInterval = 3) |>
-      dplyr::filter(variable_level %in% c("1984-01-01 to 1984-03-31")) |>
+    (summariseRecordCount(cdm, "condition_occurrence", interval = "months") |>
+      dplyr::filter(additional_level %in% c("1984-01-01 to 1984-01-31", "1984-02-01 to 1984-02-29", "1984-03-01 to 1984-03-31")) |>
+      dplyr::summarise("estimate_value" = sum(as.numeric(estimate_value), na.rm = TRUE)) |>
       dplyr::pull("estimate_value") |>
       as.numeric()) ==
       (cdm$condition_occurrence |>
@@ -68,8 +69,11 @@ test_that("summariseRecordCount() works", {
   )
 
   expect_true(
-    (summariseRecordCount(cdm, "drug_exposure", unitInterval = 8) |>
-       dplyr::filter(variable_level == "1981-01-01 to 1988-12-31") |>
+    (summariseRecordCount(cdm, "drug_exposure", interval = "years") |>
+       dplyr::filter(additional_level %in% c("1981-01-01 to 1981-12-31", "1982-01-01 to 1982-12-31", "1983-01-01 to 1983-12-31",
+                                           "1984-01-01 to 1984-12-31", "1985-01-01 to 1985-12-31", "1986-01-01 to 1986-12-31",
+                                           "1987-01-01 to 1987-12-31", "1988-01-01 to 1988-12-31")) |>
+       dplyr::summarise("estimate_value" = sum(as.numeric(.data$estimate_value), na.rm = TRUE)) |>
        dplyr::pull("estimate_value") |>
        as.numeric()) ==
       (cdm$drug_exposure |>
@@ -82,7 +86,7 @@ test_that("summariseRecordCount() works", {
   )
 
   # Check result type
-  result <- summariseRecordCount(cdm, "observation_period", unit = "month")
+  result <- summariseRecordCount(cdm, "observation_period", interval = "months")
   checkResultType(result, "summarise_record_count")
 
   PatientProfiles::mockDisconnect(cdm = cdm)
@@ -93,12 +97,12 @@ test_that("plotRecordCount() works", {
   # Load mock database ----
   cdm <- cdmEunomia()
 
-  p <- summariseRecordCount(cdm, "drug_exposure", unitInterval = 8) |>
+  p <- summariseRecordCount(cdm, "drug_exposure", interval = "years") |>
     plotRecordCount()
 
   expect_true(inherits(p,"ggplot"))
 
-  p2 <- summariseRecordCount(cdm, c("condition_occurrence","drug_exposure"), unitInterval = 8) |>
+  p2 <- summariseRecordCount(cdm, c("condition_occurrence","drug_exposure"), interval = "years") |>
     plotRecordCount(facet = "omop_table")
 
   expect_true(inherits(p2,"ggplot"))
@@ -119,16 +123,16 @@ test_that("summariseRecordCount() ageGroup argument works", {
   expect_no_error(t <- summariseRecordCount(cdm, "condition_occurrence",
                                              ageGroup = list(">=65" = c(65, Inf), "<65" = c(0,64))))
   x <- t |>
-    dplyr::select("strata_level", "variable_level", "estimate_value") |>
+    dplyr::select("strata_level", "additional_level", "estimate_value") |>
     dplyr::filter(strata_level != "overall") |>
-    dplyr::group_by(variable_level) |>
+    dplyr::group_by(additional_level) |>
     dplyr::summarise(estimate_value = sum(as.numeric(estimate_value))) |>
-    dplyr::arrange(variable_level) |>
+    dplyr::arrange(additional_level) |>
     dplyr::pull("estimate_value")
   y <- t |>
-    dplyr::select("strata_level", "variable_level", "estimate_value") |>
+    dplyr::select("strata_level", "additional_level", "estimate_value") |>
     dplyr::filter(strata_level == "overall") |>
-    dplyr::arrange(variable_level) |>
+    dplyr::arrange(additional_level) |>
     dplyr::mutate(estimate_value = as.numeric(estimate_value)) |>
     dplyr::pull("estimate_value")
   expect_equal(x,y)
@@ -136,25 +140,25 @@ test_that("summariseRecordCount() ageGroup argument works", {
   expect_no_error(t <- summariseRecordCount(cdm, "condition_occurrence",
                                              ageGroup = list("<=20" = c(0,20), "21 to 40" = c(21,40), "41 to 60" = c(41,60), ">60" = c(61, Inf))))
   x <- t |>
-    dplyr::select("strata_level", "variable_level", "estimate_value") |>
+    dplyr::select("strata_level", "additional_level", "estimate_value") |>
     dplyr::filter(strata_level != "overall") |>
-    dplyr::group_by(variable_level) |>
+    dplyr::group_by(additional_level) |>
     dplyr::summarise(estimate_value = sum(as.numeric(estimate_value))) |>
-    dplyr::arrange(variable_level) |>
+    dplyr::arrange(additional_level) |>
     dplyr::pull("estimate_value")
   y <- t |>
-    dplyr::select("strata_level", "variable_level", "estimate_value") |>
+    dplyr::select("strata_level", "additional_level", "estimate_value") |>
     dplyr::filter(strata_level == "overall") |>
-    dplyr::arrange(variable_level) |>
+    dplyr::arrange(additional_level) |>
     dplyr::mutate(estimate_value = as.numeric(estimate_value)) |>
     dplyr::pull("estimate_value")
   expect_equal(x,y)
 
-  expect_no_error(t <- summariseRecordCount(cdm, "condition_occurrence",
-                                             ageGroup = list("<=20" = c(0,20), "21 to 40" = c(21,40), "41 to 60" = c(41,60), ">60" = c(61, Inf))))
-   x <- t |>
-    dplyr::select("strata_level", "variable_level", "estimate_value") |>
-    dplyr::filter(strata_level == "<=20" & variable_level == "1920-01-01 to 1920-12-31") |>
+  expect_no_error(t <- summariseRecordCount(cdm, "condition_occurrence", interval = "years",
+                                            ageGroup = list("<=20" = c(0,20), "21 to 40" = c(21,40), "41 to 60" = c(41,60), ">60" = c(61, Inf))))
+  x <- t |>
+    dplyr::select("strata_level", "additional_level", "estimate_value") |>
+    dplyr::filter(strata_level == "<=20" & additional_level == "1920-01-01 to 1920-12-31") |>
     dplyr::summarise(n = sum(as.numeric(estimate_value))) |>
     dplyr::pull("n")
   y <- cdm$condition_occurrence |>
@@ -167,14 +171,13 @@ test_that("summariseRecordCount() ageGroup argument works", {
   expect_equal(x,y)
 
 
-  expect_no_error(t <- summariseRecordCount(cdm, "condition_occurrence",
+  expect_no_error(t <- summariseRecordCount(cdm, "condition_occurrence", interval = "years",
                                             ageGroup = list("<=20" = c(0,20), "21 to 40" = c(21,40), "41 to 60" = c(41,60))))
   x <- t |>
-    dplyr::select("strata_level", "variable_level", "estimate_value") |>
-    dplyr::filter(strata_level == "<=20" & variable_level == "1920-01-01 to 1920-12-31") |>
+    dplyr::select("strata_level", "additional_level", "estimate_value") |>
+    dplyr::filter(strata_level == "<=20" & additional_level == "1920-01-01 to 1920-12-31") |>
     dplyr::summarise(n = sum(as.numeric(estimate_value))) |>
     dplyr::pull("n") |> as.numeric()
-  x
   y <- cdm$condition_occurrence |>
     dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") |>
     PatientProfiles::addAgeQuery(indexDate = "condition_start_date", ageGroup = list("<=20" = c(0,20))) |>
@@ -195,40 +198,40 @@ test_that("summariseRecordCount() sex argument works", {
   # Check that works ----
   expect_no_error(t <- summariseRecordCount(cdm, "condition_occurrence", sex = TRUE))
   x <- t |>
-    dplyr::select("strata_level", "variable_level", "estimate_value") |>
+    dplyr::select("strata_level", "additional_level", "estimate_value") |>
     dplyr::filter(strata_level != "overall") |>
-    dplyr::group_by(variable_level) |>
+    dplyr::group_by(additional_level) |>
     dplyr::summarise(estimate_value = sum(as.numeric(estimate_value))) |>
-    dplyr::arrange(variable_level) |>
+    dplyr::arrange(additional_level) |>
     dplyr::pull("estimate_value")
   y <- t |>
-    dplyr::select("strata_level", "variable_level", "estimate_value") |>
+    dplyr::select("strata_level", "additional_level", "estimate_value") |>
     dplyr::filter(strata_level == "overall") |>
-    dplyr::arrange(variable_level) |>
+    dplyr::arrange(additional_level) |>
     dplyr::mutate(estimate_value = as.numeric(estimate_value)) |>
     dplyr::pull("estimate_value")
   expect_equal(x,y)
 
   expect_warning(t <- summariseRecordCount(cdm, "observation_period", sex = TRUE))
   x <- t |>
-    dplyr::select("strata_level", "variable_level", "estimate_value") |>
+    dplyr::select("strata_level", "additional_level", "estimate_value") |>
     dplyr::filter(strata_level != "overall") |>
-    dplyr::group_by(variable_level) |>
+    dplyr::group_by(additional_level) |>
     dplyr::summarise(estimate_value = sum(as.numeric(estimate_value))) |>
-    dplyr::arrange(variable_level) |>
+    dplyr::arrange(additional_level) |>
     dplyr::pull("estimate_value")
   y <- t |>
-    dplyr::select("strata_level", "variable_level", "estimate_value") |>
+    dplyr::select("strata_level", "additional_level", "estimate_value") |>
     dplyr::filter(strata_level == "overall") |>
-    dplyr::arrange(variable_level) |>
+    dplyr::arrange(additional_level) |>
     dplyr::mutate(estimate_value = as.numeric(estimate_value)) |>
     dplyr::pull("estimate_value")
   expect_equal(x,y)
 
-  expect_no_error(t <- summariseRecordCount(cdm, "condition_occurrence", sex = TRUE))
+  expect_no_error(t <- summariseRecordCount(cdm, "condition_occurrence", sex = TRUE, interval = "years"))
   x <- t |>
-    dplyr::select("strata_level", "variable_level", "estimate_value") |>
-    dplyr::filter(strata_level == "Male", variable_level == "1937-01-01 to 1937-12-31") |> dplyr::pull(estimate_value)
+    dplyr::select("strata_level", "additional_level", "estimate_value") |>
+    dplyr::filter(strata_level == "Male", additional_level == "1937-01-01 to 1937-12-31") |> dplyr::pull(estimate_value)
 
   y <- cdm$condition_occurrence |>
     dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") |>
@@ -253,11 +256,11 @@ test_that("summariseRecordCount() works with mockOmopSketch", {
     dplyr::group_by(year, age_group, sex) |>
     dplyr::summarise(n = n())
 
-  expect_no_error(co <- summariseRecordCount(cdm, "condition_occurrence", sex = TRUE, ageGroup = list(c(0,20),c(21,150))))
+  expect_no_error(co <- summariseRecordCount(cdm, "condition_occurrence", interval = "years", sex = TRUE, ageGroup = list(c(0,20),c(21,150))))
 
   expect_true(co |> dplyr::filter(grepl("Male",strata_level)) |>
                 dplyr::tally() |> dplyr::pull() == 0)
-  expect_true(all(co |> dplyr::filter(grepl("&&&",strata_level)) |>
+  expect_true(all(co |> dplyr::filter(grepl("&&&",strata_level), additional_level != "overall") |>
                 dplyr::pull("estimate_value") |> sort() ==
                   conditionpp |> dplyr::pull("n") |> as.character() |> sort()))
 

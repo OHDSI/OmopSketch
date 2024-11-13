@@ -1,6 +1,5 @@
 test_that("check summariseObservationPeriod works", {
   skip_on_cran()
-
   # helper function
   removeSettings <- function(x) {
     attr(x, "settings") <- NULL
@@ -334,7 +333,6 @@ test_that("check it works with mockOmopSketch", {
 
 test_that("check summariseObservationPeriod strata works", {
   skip_on_cran()
-
   # helper function
   removeSettings <- function(x) {
     attr(x, "settings") <- NULL

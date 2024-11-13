@@ -14,10 +14,7 @@
 #' @return A mock cdm_reference object.
 #' @export
 #' @examples
-#' \donttest{
-#' library(OmopSketch)
 #' mockOmopSketch(numberIndividuals = 100)
-#' }
 mockOmopSketch <- function(con = NULL,
                            writeSchema = NULL,
                            numberIndividuals = 100,

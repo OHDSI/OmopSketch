@@ -22,10 +22,10 @@ plotObservationPeriod(
 "densityplot".}
 
 \item{facet}{Columns to colour by. See possible columns to colour by with:
-`visOmopResults::tidyColumns()`.}
+\code{visOmopResults::tidyColumns()}.}
 
 \item{colour}{Columns to colour by. See possible columns to colour by with:
-`visOmopResults::tidyColumns()`.}
+\code{visOmopResults::tidyColumns()}.}
 }
 \value{
 A ggplot2 object.
