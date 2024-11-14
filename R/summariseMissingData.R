@@ -9,6 +9,9 @@
 #' @param year TRUE or FALSE. If TRUE code use will be summarised by year.
 #' @param ageGroup A list of ageGroup vectors of length two. Code use will be
 #' thus summarised by age groups.
+#' @param sample An integer to sample the table to only that number of records.
+#' If NULL no sample is done.
+#'
 #' @return A summarised_result object with results overall and, if specified, by
 #' strata.
 #' @export
@@ -17,94 +20,131 @@ summariseMissingData <- function(cdm,
                                  col = NULL,
                                  sex = FALSE,
                                  year = FALSE,
-                                 ageGroup = NULL){
-
-
+                                 ageGroup = NULL,
+                                 sample = 1000000){
+  # initial checks
   omopgenerics::validateCdmArgument(cdm)
-
+  omopgenerics::assertCharacter(col, null = TRUE)
   omopgenerics::assertLogical(sex, length = 1)
-  omopgenerics::assertChoice(omopTableName,choices = omopgenerics::omopTables(), unique = TRUE)
-
-
-  ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "")[[1]]
+  omopgenerics::assertLogical(year, length = 1)
+  omopgenerics::assertChoice(omopTableName, choices = omopgenerics::omopTables(), unique = TRUE)
+  omopgenerics::assertNumeric(sample, null = TRUE, integerish = TRUE, length = 1, min = 1)
+  ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, multipleAgeGroup = FALSE, null = TRUE, ageGroupName = "age_group")$age_group
 
   strata <- my_getStrataList(sex = sex, ageGroup = ageGroup, year = year)
-  stratification <- c(list(character()),omopgenerics::combineStrata(strata))
+  stratification <- c(list(character()), omopgenerics::combineStrata(strata))
 
-  result_tables <-  purrr::map(omopTableName, function(table) {
+  result <- purrr::map(omopTableName, function(table) {
+
+    sampling <- !is.null(sample) & !is.infinite(sample)
 
     if (omopgenerics::isTableEmpty(cdm[[table]])){
       cli::cli_warn(paste0(table, " omop table is empty."))
       return(NULL)
     }
 
+    possibleColumns <- omopgenerics::omopColumns(
+      table = table, version = omopgenerics::cdmVersion(cdm)
+    )
+    col_table <- intersect(col, possibleColumns)
+    if (rlang::is_empty(col_table)) col_table <- possibleColumns
+
     omopTable <- cdm[[table]]
-    col_table <- intersect(col, colnames(omopTable))
-    if (is.null(col_table) | rlang::is_empty(col_table)){
-      col_table<-colnames(omopTable)
+
+    if (sampling & omopTable |> dplyr::tally() |> dplyr::pull() <= sample) {
+      sampling <- FALSE
     }
 
-    indexDate <- startDate(omopgenerics::tableName(omopTable))
-    x <- omopTable |> PatientProfiles::addDemographicsQuery(age = FALSE, ageGroup = ageGroup, sex = sex, indexDate = indexDate)
-    if (year){
-      x <- x|> dplyr::mutate(year = as.character(clock::get_year(.data[[indexDate]])))
+    if (sampling) {
+      id <- paste0(table, "_id")
+      nm <- omopgenerics::uniqueTableName()
+      idTibble <- omopTable |>
+        dplyr::pull(dplyr::all_of(id)) |>
+        base::sample(size = sample) |>
+        list() |>
+        rlang::set_names(id) |>
+        dplyr::as_tibble()
+      idName <- "ids_sample"
+      cdm <- omopgenerics::insertTable(
+        cdm = cdm, name = idName, table = idTibble
+      )
+      omopTable <- omopTable |>
+        dplyr::inner_join(cdm[[idName]], by = id) |>
+        dplyr::compute(name = nm, temporary = FALSE)
+      omopgenerics::dropSourceTable(cdm = cdm, name = idName)
     }
 
-    result_columns <- purrr::map(col_table, function(c) {
+    indexDate <- startDate(name = table)
 
-      stratified_result <- x |>
-        dplyr::group_by(dplyr::across(dplyr::all_of(strata))) |>
+    if (sex | !is.null(ageGroup)) {
+      omopTable <- omopTable |>
+        PatientProfiles::addDemographicsQuery(
+          age = FALSE, ageGroup = ageGroup, sex = sex, indexDate = indexDate
+        )
+    }
+    if (year) {
+      omopTable <- omopTable |>
+        dplyr::mutate(year = as.character(clock::get_year(.data[[indexDate]])))
+    }
+
+    stratified_result <- omopTable |>
+      dplyr::group_by(dplyr::across(dplyr::all_of(strata))) |>
+      dplyr::summarise(
+        dplyr::across(
+            .cols = dplyr::all_of(col_table),
+          ~ sum(as.integer(is.na(.x)), na.rm = TRUE)
+        ),
+        total_count = dplyr::n(),
+        .groups = "drop"
+      ) |>
+      dplyr::collect()
+
+    # Group results for each level of stratification
+    grouped_results <- purrr::map(stratification, function(g) {
+      stratified_result |>
+        dplyr::group_by(dplyr::across(dplyr::all_of(g))) |>
         dplyr::summarise(
-          na_count = sum(as.integer(is.na(.data[[c]])), na.rm = TRUE),
-          total_count = dplyr::n(),
+          dplyr::across(
+            .cols = dplyr::all_of(c(col_table, "total_count")),
+            .fns = sum
+          ),
           .groups = "drop"
         ) |>
-        dplyr::collect()
+        tidyr::pivot_longer(
+          cols = col_table, names_to = "column_name", values_to = "na_count"
+        ) |>
+        dplyr::mutate(na_percentage = dplyr::if_else(
+          .data$total_count > 0, (.data$na_count / .data$total_count) * 100, 0
+        ))
+    }) |>
+      dplyr::bind_rows() |>
+      dplyr::mutate(omop_table = table) |>
+      dplyr::select(!"total_count")
 
-      # Group results for each level of stratification
-      grouped_results <- purrr::map(stratification, function(g) {
-        stratified_result |>
-          dplyr::group_by(dplyr::across(dplyr::all_of(g))) |>
-          dplyr::summarise(
-            na_count = sum(.data$na_count, na.rm = TRUE),
-            total_count = sum(.data$total_count, na.rm = TRUE),
-            colName = c,
-            .groups = "drop"
-          ) |>
-          dplyr::mutate(na_percentage = dplyr::if_else(.data$total_count > 0, (.data$na_count / .data$total_count) * 100, 0))
-      })
+    if (sampling) omopgenerics::dropSourceTable(cdm = cdm, name = nm)
 
-      return(purrr::reduce(grouped_results, dplyr::bind_rows))
+    warningDataRequire(cdm = cdm, res = grouped_results, table = table)
 
-    })
+    return(grouped_results)
+  }) |>
+    purrr::compact()
 
-    res <- purrr::reduce(result_columns, dplyr::union)|>
-      dplyr::mutate(omop_table = table)
-
-    warningDataRequire(cdm = cdm, res = res, table = table)
-
-    return(res)
-  })
-  if (rlang::is_empty(purrr::compact(result_tables))){
+  if (rlang::is_empty(result)){
     return(omopgenerics::emptySummarisedResult())
   }
 
-
-  result <- purrr::compact(result_tables) |>
-    purrr::reduce(dplyr::union)|>
+  result <- result |>
+    dplyr::bind_rows() |>
     dplyr::mutate(dplyr::across(dplyr::all_of(strata), ~ dplyr::coalesce(., "overall")))|>
     dplyr::mutate(
-      na_count = as.double(.data$na_count),     # Cast na_count to double
-      na_percentage = as.double(.data$na_percentage)
+      na_count = as.character(.data$na_count),
+      na_percentage = as.character(.data$na_percentage)
     )|>
     tidyr::pivot_longer(
-      cols = c(.data$na_count, .data$na_percentage),
+      cols = c("na_count", "na_percentage"),
       names_to = "estimate_name",
       values_to = "estimate_value"
-    )
-
-
-  sr <- result |>
+    ) |>
     dplyr::mutate(
       result_id = 1L,
       cdm_name = omopgenerics::cdmName(cdm),
@@ -113,44 +153,37 @@ summariseMissingData <- function(cdm,
     visOmopResults::uniteStrata(cols = strata) |>
     visOmopResults::uniteAdditional() |>
     dplyr::mutate(
-      "estimate_value" = as.character(.data$estimate_value),
       "estimate_type" = "integer",
       "variable_level" = NA_character_
     ) |>
-    dplyr::rename("variable_name" = "colName") |>
-    dplyr::select(!c(.data$total_count))
+    dplyr::rename("variable_name" = "column_name") |>
+    omopgenerics::newSummarisedResult(settings = dplyr::tibble(
+      result_id = 1L,
+      package_name = "OmopSketch",
+      package_version = as.character(utils::packageVersion("OmopSketch")),
+      result_type = "summarise_missing_data"
+    ))
 
-  settings <- dplyr::tibble(
-    result_id = unique(sr$result_id),
-    package_name = "omopSketch",
-    package_version = as.character(utils::packageVersion("OmopSketch")),
-    result_type = "summarise_missing_data"
-  )
-  sr <- sr |>
-    omopgenerics::newSummarisedResult(settings = settings)
-
-
-  return(sr)
-
+  return(result)
 }
 
 warningDataRequire <- function(cdm, table, res){
-required_cols <- omopgenerics::omopTableFields(CDMConnector::cdmVersion(cdm))|>
-  dplyr::filter(.data$cdm_table_name==table)|>
-  dplyr::filter(.data$is_required==TRUE)|>
-  dplyr::pull(.data$cdm_field_name)
-warning_columns <- res |>
-  dplyr::filter(.data$colName %in% required_cols)|>
-  dplyr::filter(.data$na_count>0)|>
-  dplyr::distinct(.data$colName)|>
-  dplyr::pull()
+  required_cols <- omopgenerics::omopTableFields(CDMConnector::cdmVersion(cdm))|>
+    dplyr::filter(.data$cdm_table_name==table)|>
+    dplyr::filter(.data$is_required==TRUE)|>
+    dplyr::pull(.data$cdm_field_name)
+  warning_columns <- res |>
+    dplyr::filter(.data$column_name %in% required_cols) |>
+    dplyr::filter(.data$na_count>0)|>
+    dplyr::pull("column_name") |>
+    unique()
 
-if (length(warning_columns) > 0) {
-  cli::cli_warn(c(
-    "These columns contain missing values, which are not permitted:",
-    "{.val {warning_columns}}"
-  ))
-}
+  if (length(warning_columns) > 0) {
+    cli::cli_warn(c(
+      "These columns contain missing values, which are not permitted:",
+      "{.val {warning_columns}}"
+    ))
+  }
 }
 
 
