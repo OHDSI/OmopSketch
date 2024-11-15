@@ -51,7 +51,8 @@ Suggests:
     testthat (>= 3.0.0),
     withr,
     omock (>= 0.3.0),
-    covr
+    covr,
+    ggplot2
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Imports: 
@@ -60,7 +61,6 @@ Imports:
     clock,
     CohortConstructor (>= 0.3.1),
     dplyr,
-    ggplot2,
     omopgenerics (>= 0.3.1),
     PatientProfiles (>= 1.2.1),
     purrr,
