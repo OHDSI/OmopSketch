@@ -85,7 +85,7 @@ summariseInObservation <- function(observationPeriod,
   }
 
   # Count records ----
-  result <- observationPeriod |> #here
+  result <- observationPeriod |>
     countRecords(cdm, start_date_name, end_date_name, interval, output, tablePrefix)
 
   # Add category sex overall

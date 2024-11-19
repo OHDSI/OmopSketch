@@ -173,7 +173,7 @@ getCodeUse <- function(x,
   records <- addStrataToOmopTable(records, "date", ageGroup, sex)
   strata  <- getStrataList(sex, ageGroup)
 
-  #here
+
 
   if(interval != "overall"){
     intervalTibble <- getIntervalTibble(omopTable = records,
