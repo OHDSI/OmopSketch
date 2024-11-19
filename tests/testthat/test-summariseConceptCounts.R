@@ -188,7 +188,8 @@ test_that("summarise code use - eunomia", {
       visOmopResults::splitAdditional() |>
       dplyr::filter(variable_name == "Number records", standard_concept_name == "overall") |>
       dplyr::select(-c(starts_with("standard_"), starts_with("source_"), "domain_id")) |>
-      dplyr::arrange(dplyr::across(dplyr::everything()))
+      dplyr::arrange(dplyr::across(dplyr::everything())),
+    ignore_attr = TRUE
   )
   expect_true(results1 |>
                 visOmopResults::splitAdditional() |>

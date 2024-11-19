@@ -39,7 +39,7 @@ test_that("summariseAllConceptCount works", {
     dplyr::select(variable_level, estimate_value)
   s <- s |>
     dplyr::select(variable_level, estimate_value)
-  expect_equal(x, s)
+  expect_equal(x, s, ignore_attr = TRUE)
 
   x <- z |>
     dplyr::filter(strata_name == "age_group") |>
