@@ -60,3 +60,27 @@ asCharacterFacet <- function(facet) {
   }
   return(facet)
 }
+
+
+createSettings <- function(result_type, result_id = 1L, package_name = "OmopSketch", study_period = NULL) {
+  # Create the initial settings tibble
+  settings <- dplyr::tibble(
+    "result_id" = result_id,
+    "result_type" = result_type,
+    "package_name" = package_name,
+    "package_version" = as.character(utils::packageVersion(package_name))
+  )
+
+  # Conditionally add study period columns
+  if (!is.null(study_period)) {
+    settings <- settings |>
+      dplyr::mutate(
+        "study_period_start" = study_period[1],
+        "study_period_end" = study_period[2]
+      )
+  }
+  # Return the settings tibble
+  return(settings)
+}
+
+

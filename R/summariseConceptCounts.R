@@ -10,6 +10,8 @@
 #' @param sex TRUE or FALSE. If TRUE code use will be summarised by sex.
 #' @param ageGroup A list of ageGroup vectors of length two. Code use will be
 #' thus summarised by age groups.
+#' @param dateRange A list containing the minimum and the maximum dates
+#' defining the time range within which the analysis is performed.
 #' @return A summarised_result object with results overall and, if specified, by
 #' strata.
 #' @export
@@ -34,7 +36,8 @@ summariseConceptCounts <- function(cdm,
                                    concept = TRUE,
                                    interval = "overall",
                                    sex = FALSE,
-                                   ageGroup = NULL){
+                                   ageGroup = NULL,
+                                   dateRange = NULL){
 
   omopgenerics::validateCdmArgument(cdm)
   omopgenerics::assertList(conceptId, named = TRUE)
@@ -48,7 +51,7 @@ summariseConceptCounts <- function(cdm,
   omopgenerics::assertLogical(concept, length = 1)
   omopgenerics::assertLogical(sex, length = 1)
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "")[[1]]
-
+  dateRange <- validateStudyPeriod(cdm, dateRange)
   # Get all concepts in concept table if conceptId is NULL
   # if(is.null(conceptId)) {
   #   conceptId <- cdm$concept |>
@@ -70,7 +73,8 @@ summariseConceptCounts <- function(cdm,
                                interval = interval,
                                unitInterval = unitInterval,
                                sex = sex,
-                               ageGroup = ageGroup)
+                               ageGroup = ageGroup,
+                               dateRange = dateRange)
     Sys.sleep(i/length(conceptId))
     cli::cli_progress_update()
   }
@@ -90,12 +94,7 @@ summariseConceptCounts <- function(cdm,
 
   codeUse <- codeUse %>%
     omopgenerics::newSummarisedResult(
-      settings = dplyr::tibble(
-        result_id = 1L,
-        result_type = "summarise_concept_counts",
-        package_name = "OmopSketch",
-        package_version = as.character(utils::packageVersion("OmopSketch"))
-      )
+createSettings(result_type = "summarise_concept_counts", study_period = dateRange)
     )
   return(codeUse)
 }
@@ -108,6 +107,7 @@ getCodeUse <- function(x,
                        unitInterval,
                        sex,
                        ageGroup,
+                       dateRange,
                        call = parent.frame()){
 
   tablePrefix <-  omopgenerics::tmpPrefix()
@@ -159,8 +159,21 @@ getCodeUse <- function(x,
     return(omopgenerics::emptySummarisedResult())
   }
 
+  if (!is.null(dateRange))
+  {
+  records <- records |>
+    dplyr::filter(
+      as.Date(date) >= !!dateRange[1]& as.Date(date) <= !!dateRange[2]
+    )
+  if (is.null(warningEmptyStudyPeriod(records))){
+     return(tibble::tibble())
+  }
+
+  }
   records <- addStrataToOmopTable(records, "date", ageGroup, sex)
   strata  <- getStrataList(sex, ageGroup)
+
+  #here
 
   if(interval != "overall"){
     intervalTibble <- getIntervalTibble(omopTable = records,

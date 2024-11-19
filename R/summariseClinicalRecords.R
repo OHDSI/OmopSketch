@@ -22,6 +22,8 @@
 #' @param ageGroup A list of age groups to stratify results by.
 #' @param sex Boolean variable. Whether to stratify by sex (TRUE) or not
 #' (FALSE).
+#' @param dateRange A list containing the minimum and the maximum dates
+#' defining the time range within which the analysis is performed.
 #' @return A summarised_result object.
 #' @export
 #' @examples
@@ -52,13 +54,14 @@ summariseClinicalRecords <- function(cdm,
                                      domainId = TRUE,
                                      typeConcept = TRUE,
                                      sex = FALSE,
-                                     ageGroup = NULL) {
+                                     ageGroup = NULL,
+                                     dateRange = NULL) {
   # Initial checks ----
   omopgenerics::validateCdmArgument(cdm)
   opts <- omopgenerics::omopTables()
   opts <- opts[opts %in% names(cdm)]
   omopgenerics::assertChoice(omopTableName, choices = opts)
-
+  dateRange <- validateStudyPeriod(cdm, dateRange)
   estimates <- PatientProfiles::availableEstimates(
     variableType = "numeric", fullQuantiles = TRUE) |>
     dplyr::pull("estimate_name")
@@ -89,7 +92,8 @@ summariseClinicalRecords <- function(cdm,
       domainId = domainId,
       typeConcept = typeConcept,
       sex = sex,
-      ageGroup = ageGroup
+      ageGroup = ageGroup,
+      dateRange = dateRange
     )
   }) |>
     omopgenerics::bind()
@@ -108,6 +112,7 @@ summariseClinicalRecord <- function(omopTableName,
                                     typeConcept,
                                     sex,
                                     ageGroup,
+                                    dateRange,
                                     call = parent.frame(3)) {
 
   tablePrefix <-  omopgenerics::tmpPrefix()
@@ -119,6 +124,11 @@ summariseClinicalRecord <- function(omopTableName,
 
   omopTable <- cdm[[omopTableName]] |>
     dplyr::ungroup()
+
+  omopTable <- studyPeriod(omopTable, dateRange)
+  if(omopgenerics::isTableEmpty(omopTable)) {
+    return(omopgenerics::emptySummarisedResult())
+  }
 
   omopTable <- filterPersonId(omopTable) |>
     addStrataToOmopTable(date, ageGroup, sex)
@@ -176,6 +186,7 @@ summariseClinicalRecord <- function(omopTableName,
       )
   }
 
+
   # Format output as a summarised result
   result <- result |>
     dplyr::mutate(
@@ -186,12 +197,8 @@ summariseClinicalRecord <- function(omopTableName,
       "additional_name" = "overall",
       "additional_level" = "overall"
     ) |>
-    omopgenerics::newSummarisedResult(settings = dplyr::tibble(
-      "result_id" = 1L,
-      "result_type" = "summarise_clinical_records",
-      "package_name" = "OmopSketch",
-      "package_version" = as.character(utils::packageVersion("OmopSketch"))
-    ))
+    omopgenerics::newSummarisedResult(settings = createSettings(result_type = "summarise_clinical_records", study_period = dateRange)
+    )
 
   CDMConnector::dropTable(cdm, name = dplyr::starts_with(tablePrefix))
 

@@ -252,3 +252,24 @@ test_that("check output argument works", {
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
 
+test_that("dateRange argument works", {
+  skip_on_cran()
+  # Load mock database ----
+  cdm <- cdmEunomia()
+  expect_warning( summariseInObservation(cdm$observation_period, dateRange =  as.Date(c("2012-01-01", "2018-01-01"))))
+
+  expect_no_error(summariseInObservation(cdm$observation_period, dateRange =  as.Date(c("1940-01-01", "2018-01-01"))))
+  expect_message(x<-summariseInObservation(cdm$observation_period, dateRange =  as.Date(c("1940-01-01", "2024-01-01"))))
+  observationRange <- cdm$observation_period |>
+    dplyr::summarise(minobs = min(.data$observation_period_start_date, na.rm = TRUE),
+                     maxobs = max(.data$observation_period_end_date, na.rm = TRUE))
+  expect_no_error(y<-  summariseInObservation(cdm$observation_period, dateRange = as.Date(c("1940-01-01", observationRange |>dplyr::pull("maxobs")))))
+  expect_equal(x,y, ignore_attr = TRUE)
+  expect_false(attr(x, 'settings')$study_period_end==attr(y, 'settings')$study_period_end)
+  expect_error( summariseInObservation(cdm$observation_period, dateRange =  as.Date(c("2015-01-01", "2014-01-01"))))
+  expect_warning(z<- summariseInObservation(cdm$observation_period, dateRange =  as.Date(c("2020-01-01", "2021-01-01"))))
+  expect_equal(z, omopgenerics::emptySummarisedResult(), ignore_attr = TRUE)
+  expect_equal( summariseInObservation(cdm$observation_period,dateRange = as.Date(c("1940-01-01",NA))), y, ignore_attr = TRUE)
+
+  PatientProfiles::mockDisconnect(cdm = cdm)
+})

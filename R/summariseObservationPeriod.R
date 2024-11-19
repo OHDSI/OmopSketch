@@ -8,6 +8,8 @@
 #' @param ageGroup A list of age groups to stratify results by.
 #' @param sex Boolean variable. Whether to stratify by sex (TRUE) or not
 #' (FALSE).
+#' @param dateRange A list containing the minimum and the maximum dates
+#' defining the time range within which the analysis is performed.
 #'
 #' @return A summarised_result object with the summarised data.
 #'
@@ -32,14 +34,15 @@ summariseObservationPeriod <- function(observationPeriod,
                                          "median", "q75", "q95", "max",
                                          "density"),
                                        ageGroup = NULL,
-                                       sex = FALSE) {
+                                       sex = FALSE,
+                                       dateRange = NULL) {
   # input checks
   omopgenerics::assertClass(observationPeriod, class = "omop_table")
   omopgenerics::assertTrue(omopgenerics::tableName(observationPeriod) == "observation_period")
   omopgenerics::assertLogical(sex)
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "")[[1]]
-
   cdm <- omopgenerics::cdmReference(observationPeriod)
+  dateRange <- validateStudyPeriod(cdm, dateRange)
   opts <- PatientProfiles::availableEstimates(variableType = "numeric",
                                               fullQuantiles = TRUE) |>
     dplyr::pull("estimate_name")
@@ -54,8 +57,10 @@ summariseObservationPeriod <- function(observationPeriod,
       PatientProfiles::summariseResult(
         variables = NULL, estimates = NULL, counts = TRUE)
   } else {
+
     # prepare
-    obs <- addStrataToPeopleInObservation(cdm, ageGroup, sex, tablePrefix) |>
+
+    obs <- addStrataToPeopleInObservation(cdm, ageGroup, sex, tablePrefix, dateRange) |>
       filterPersonId() |>
       dplyr::select(
         "person_id", dplyr::any_of(c("sex","age_group")),
@@ -72,7 +77,10 @@ summariseObservationPeriod <- function(observationPeriod,
       dplyr::ungroup() |>
       dplyr::select("person_id", "id", "duration", "next_obs", dplyr::any_of(c("sex","age_group"))) |>
       dplyr::collect()
-
+   if (dim(obs)[1]==0){
+     return(omopgenerics::emptySummarisedResult()|>omopgenerics::newSummarisedResult(
+       settings = createSettings(result_type = "summarise_observation_period", study_period = dateRange)))
+   }
     obsSr <- obs |>
       # dplyr::collect() |> # https://github.com/darwin-eu-dev/PatientProfiles/issues/706
       PatientProfiles::summariseResult(
@@ -111,13 +119,8 @@ summariseObservationPeriod <- function(observationPeriod,
       )
     ) |>
     omopgenerics::newSummarisedResult(
-      settings = dplyr::tibble(
-        "result_id" = 1L,
-        "result_type" = "summarise_observation_period",
-        "package_name" = "OmopSketch",
-        "package_version" = as.character(utils::packageVersion("OmopSketch"))
-      )
-    )
+      settings = createSettings(result_type = "summarise_observation_period", study_period = dateRange))
+
 
   return(obsSr)
 }

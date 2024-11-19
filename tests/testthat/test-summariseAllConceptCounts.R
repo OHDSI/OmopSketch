@@ -17,7 +17,7 @@ test_that("summariseAllConceptCount works", {
   expect_no_error(all <- summariseAllConceptCounts(cdm, c("visit_occurrence", "measurement")))
   expect_equal(all, dplyr::bind_rows(x, y))
   expect_equal(summariseAllConceptCounts(cdm, "procedure_occurrence", countBy = "record"), summariseAllConceptCounts(cdm, "procedure_occurrence"))
-
+  expect_warning(summariseAllConceptCounts(cdm, "observation_period"))
   expect_error(summariseAllConceptCounts(cdm, omopTableName = ""))
   expect_error(summariseAllConceptCounts(cdm, omopTableName = "visit_occurrence", countBy = "dd"))
 
@@ -56,4 +56,37 @@ test_that("summariseAllConceptCount works", {
     check.attributes = FALSE
   ))
 
+})
+test_that("dateRange argument works", {
+  skip_on_cran()
+  # Load mock database ----
+  cdm <- cdmEunomia()
+  expect_no_error(summariseAllConceptCounts(cdm, "condition_occurrence", dateRange =  as.Date(c("2012-01-01", "2018-01-01"))))
+  expect_message(x<-summariseAllConceptCounts(cdm, "drug_exposure", dateRange =  as.Date(c("2012-01-01", "2025-01-01"))))
+  observationRange <- cdm$observation_period |>
+    dplyr::summarise(minobs = min(.data$observation_period_start_date, na.rm = TRUE),
+                     maxobs = max(.data$observation_period_end_date, na.rm = TRUE))
+  expect_no_error(y<- summariseAllConceptCounts(cdm, "drug_exposure", dateRange = as.Date(c("2012-01-01", observationRange |>dplyr::pull("maxobs")))))
+  expect_equal(x,y, ignore_attr = TRUE)
+  expect_false(attr(x, 'settings')$study_period_end==attr(y, 'settings')$study_period_end)
+  expect_error(summariseAllConceptCounts(cdm, "drug_exposure", dateRange =  as.Date(c("2015-01-01", "2014-01-01"))))
+  expect_warning(y<-summariseAllConceptCounts(cdm, "drug_exposure", dateRange =  as.Date(c("2020-01-01", "2021-01-01"))))
+  expect_equal(y, omopgenerics::emptySummarisedResult(), ignore_attr = TRUE)
+})
+
+test_that("tableAllConceptCounts() works", {
+  skip_on_cran()
+  # Load mock database ----
+  cdm <- cdmEunomia()
+
+  # Check that works ----
+  expect_no_error(x <- tableAllConceptCounts(summariseAllConceptCounts(cdm, "condition_occurrence")))
+  expect_true(inherits(x,"gt_tbl"))
+  expect_no_error(y <- tableAllConceptCounts(summariseAllConceptCounts(cdm, c("drug_exposure",
+                                                                    "measurement"))))
+  expect_true(inherits(y,"gt_tbl"))
+  expect_warning(t <- summariseAllConceptCounts(cdm, "death"))
+  expect_warning(inherits(tableAllConceptCounts(t),"gt_tbl"))
+
+  PatientProfiles::mockDisconnect(cdm = cdm)
 })

@@ -11,6 +11,8 @@
 #' thus summarised by age groups.
 #' @param sample An integer to sample the table to only that number of records.
 #' If NULL no sample is done.
+#' @param dateRange A list containing the minimum and the maximum dates
+#' defining the time range within which the analysis is performed.
 #'
 #' @return A summarised_result object with results overall and, if specified, by
 #' strata.
@@ -21,7 +23,8 @@ summariseMissingData <- function(cdm,
                                  sex = FALSE,
                                  year = FALSE,
                                  ageGroup = NULL,
-                                 sample = 1000000){
+                                 sample = 1000000,
+                                 dateRange = NULL){
   # initial checks
   omopgenerics::validateCdmArgument(cdm)
   omopgenerics::assertCharacter(col, null = TRUE)
@@ -29,6 +32,7 @@ summariseMissingData <- function(cdm,
   omopgenerics::assertLogical(year, length = 1)
   omopgenerics::assertChoice(omopTableName, choices = omopgenerics::omopTables(), unique = TRUE)
   omopgenerics::assertNumeric(sample, null = TRUE, integerish = TRUE, length = 1, min = 1)
+  dateRange <- validateStudyPeriod(cdm, dateRange)
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, multipleAgeGroup = FALSE, null = TRUE, ageGroupName = "age_group")$age_group
 
   strata <- my_getStrataList(sex = sex, ageGroup = ageGroup, year = year)
@@ -37,8 +41,9 @@ summariseMissingData <- function(cdm,
   result <- purrr::map(omopTableName, function(table) {
 
     sampling <- !is.null(sample) & !is.infinite(sample)
-
-    if (omopgenerics::isTableEmpty(cdm[[table]])){
+    omopTable <- cdm[[table]]
+    omopTable <- studyPeriod(omopTable, dateRange)
+    if (omopgenerics::isTableEmpty(omopTable)){
       cli::cli_warn(paste0(table, " omop table is empty."))
       return(NULL)
     }
@@ -49,7 +54,6 @@ summariseMissingData <- function(cdm,
     col_table <- intersect(col, possibleColumns)
     if (rlang::is_empty(col_table)) col_table <- possibleColumns
 
-    omopTable <- cdm[[table]]
 
     if (sampling & omopTable |> dplyr::tally() |> dplyr::pull() <= sample) {
       sampling <- FALSE
@@ -73,6 +77,7 @@ summariseMissingData <- function(cdm,
         dplyr::compute(name = nm, temporary = FALSE)
       omopgenerics::dropSourceTable(cdm = cdm, name = idName)
     }
+
 
     indexDate <- startDate(name = table)
 
@@ -156,13 +161,11 @@ summariseMissingData <- function(cdm,
       "estimate_type" = "integer",
       "variable_level" = NA_character_
     ) |>
-    dplyr::rename("variable_name" = "column_name") |>
-    omopgenerics::newSummarisedResult(settings = dplyr::tibble(
-      result_id = 1L,
-      package_name = "OmopSketch",
-      package_version = as.character(utils::packageVersion("OmopSketch")),
-      result_type = "summarise_missing_data"
-    ))
+    dplyr::rename("variable_name" = "column_name")
+
+
+ result <- result |>
+    omopgenerics::newSummarisedResult(settings = createSettings(result_type = "summarise_missing_data", study_period = dateRange))
 
   return(result)
 }

@@ -120,7 +120,7 @@ checkCountBy <- function(countBy, call = parent.frame()){
 #' @noRd
 validateStudyPeriod <- function(cdm, studyPeriod, call = parent.frame()) {
   if(is.null(studyPeriod)) {
-    studyPeriod <- c(NA,NA)
+    return(NULL)
   }
   # First date checks
   if(!is.na(studyPeriod[1]) & !is.na(studyPeriod[2]) & studyPeriod[1] > studyPeriod[2]) {
@@ -166,7 +166,7 @@ validateStudyPeriod <- function(cdm, studyPeriod, call = parent.frame()) {
                               dplyr::pull("maxobs")))
     }
     if(studyPeriod[2] > clock::date_today(zone = "GMT")) {
-      cli::cli_alert(paste0("The observation period in the cdm ends after current date."))
+      cli::cli_alert(paste0("The given date range ends after current date."))
     }
   }
 

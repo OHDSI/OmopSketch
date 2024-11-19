@@ -10,7 +10,8 @@ summariseObservationPeriod(
   estimates = c("mean", "sd", "min", "q05", "q25", "median", "q75", "q95", "max",
     "density"),
   ageGroup = NULL,
-  sex = FALSE
+  sex = FALSE,
+  dateRange = NULL
 )
 }
 \arguments{
@@ -24,6 +25,9 @@ summariseObservationPeriod(
 
 \item{sex}{Boolean variable. Whether to stratify by sex (TRUE) or not
 (FALSE).}
+
+\item{dateRange}{A list containing the minimum and the maximum dates
+defining the time range within which the analysis is performed.}
 }
 \value{
 A summarised_result object with the summarised data.

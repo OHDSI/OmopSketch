@@ -271,3 +271,27 @@ test_that("summariseRecordCount() works with mockOmopSketch", {
 
 })
 
+test_that("dateRnge argument works", {
+  skip_on_cran()
+  # Load mock database ----
+  cdm <- cdmEunomia()
+
+  expect_no_error(summariseRecordCount(cdm, "condition_occurrence", dateRange =  as.Date(c("2012-01-01", "2018-01-01"))))
+  expect_message(x<-summariseRecordCount(cdm, "drug_exposure", dateRange =  as.Date(c("2012-01-01", "2025-01-01"))))
+  observationRange <- cdm$observation_period |>
+    dplyr::summarise(minobs = min(.data$observation_period_start_date, na.rm = TRUE),
+                     maxobs = max(.data$observation_period_end_date, na.rm = TRUE))
+  expect_no_error(y<- summariseRecordCount(cdm, "drug_exposure", dateRange = as.Date(c("2012-01-01", observationRange |>dplyr::pull("maxobs")))))
+  expect_equal(x,y, ignore_attr = TRUE)
+  expect_false(attr(x, 'settings')$study_period_end==attr(y, 'settings')$study_period_end)
+  expect_error(summariseRecordCount(cdm, "drug_exposure", dateRange =  as.Date(c("2015-01-01", "2014-01-01"))))
+  expect_message(expect_warning(z<-summariseRecordCount(cdm, "drug_exposure", dateRange =  as.Date(c("2020-01-01", "2021-01-01")))))
+  expect_equal(z, omopgenerics::emptySummarisedResult(), ignore_attr = TRUE)
+  expect_equal(summariseRecordCount(cdm, "drug_exposure",dateRange = as.Date(c("2012-01-01",NA))), y, ignore_attr = TRUE)
+
+
+
+  PatientProfiles::mockDisconnect(cdm = cdm)
+})
+
+
