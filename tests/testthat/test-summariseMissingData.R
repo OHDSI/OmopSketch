@@ -47,14 +47,16 @@ test_that("summariseMissingData() works", {
   cdm$procedure_occurrence <- cdm$procedure_occurrence |>
     dplyr::mutate(procedure_concept_id = NA_integer_) |>
     dplyr::compute(name = "procedure_occurrence", temporary = FALSE)
+
+  expect_warning(summariseMissingData(cdm, "procedure_occurrence", col="procedure_concept_id", ageGroup = list(c(0,50))))
+  expect_no_error(summariseMissingData(cdm, "procedure_occurrence", col="procedure_concept_id", ageGroup = list(c(0,50)), sample=100))
 })
 
   test_that("dateRange argument works", {
     skip_on_cran()
     # Load mock database ----
     cdm <- cdmEunomia()
-  expect_warning(summariseMissingData(cdm, "procedure_occurrence", col="procedure_concept_id", ageGroup = list(c(0,50))))
-  expect_no_error(summariseMissingData(cdm, "procedure_occurrence", col="procedure_concept_id", ageGroup = list(c(0,50)), sample=100))
+
   expect_no_error(summariseMissingData(cdm, "condition_occurrence", dateRange =  as.Date(c("2012-01-01", "2018-01-01"))))
   expect_message(x<-summariseMissingData(cdm, "drug_exposure", dateRange =  as.Date(c("2012-01-01", "2025-01-01"))))
   observationRange <- cdm$observation_period |>
@@ -62,7 +64,7 @@ test_that("summariseMissingData() works", {
                      maxobs = max(.data$observation_period_end_date, na.rm = TRUE))
   expect_no_error(y<- summariseMissingData(cdm, "drug_exposure", dateRange = as.Date(c("2012-01-01", observationRange |>dplyr::pull("maxobs")))))
   expect_equal(x,y, ignore_attr = TRUE)
-  expect_false(attr(x, 'settings')$study_period_end==attr(y, 'settings')$study_period_end)
+  expect_false(settings(x)$study_period_end==settings(y)$study_period_end)
   expect_error(summariseMissingData(cdm, "drug_exposure", dateRange =  as.Date(c("2015-01-01", "2014-01-01"))))
   expect_warning(expect_warning(z<-summariseMissingData(cdm, "drug_exposure", dateRange =  as.Date(c("2020-01-01", "2021-01-01")))))
   expect_equal(z, omopgenerics::emptySummarisedResult(), ignore_attr = TRUE)

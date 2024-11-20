@@ -51,7 +51,7 @@ summariseRecordCount <- function(cdm,
   result <- purrr::map(omopTableName,
                        function(x) {
                          omopgenerics::assertClass(cdm[[x]], "omop_table", call = parent.frame())
-                         cdm[[x]]<-studyPeriod(cdm[[x]], dateRange)
+                         cdm[[x]]<-restrictStudyPeriod(cdm[[x]], dateRange)
                          if(omopgenerics::isTableEmpty(cdm[[x]])) {
                            cli::cli_warn(paste0(x, " omop table is empty. Returning an empty summarised omop table."))
                            return(omopgenerics::emptySummarisedResult())

@@ -92,7 +92,7 @@ summariseAllConceptCounts <- function(cdm,
     return(NULL)
   }
 
-  omopTable <- studyPeriod(omopTable, dateRange)
+  omopTable <- restrictStudyPeriod(omopTable, dateRange)
 
 
   indexDate <- startDate(omopgenerics::tableName(omopTable))

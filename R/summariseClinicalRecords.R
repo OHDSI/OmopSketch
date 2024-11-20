@@ -125,7 +125,7 @@ summariseClinicalRecord <- function(omopTableName,
   omopTable <- cdm[[omopTableName]] |>
     dplyr::ungroup()
 
-  omopTable <- studyPeriod(omopTable, dateRange)
+  omopTable <- restrictStudyPeriod(omopTable, dateRange)
   if(omopgenerics::isTableEmpty(omopTable)) {
     return(omopgenerics::emptySummarisedResult())
   }

@@ -75,8 +75,8 @@ createSettings <- function(result_type, result_id = 1L, package_name = "OmopSket
   if (!is.null(study_period)) {
     settings <- settings |>
       dplyr::mutate(
-        "study_period_start" = study_period[1],
-        "study_period_end" = study_period[2]
+        "study_period_start" = as.character(study_period[1]),
+        "study_period_end" = as.character(study_period[2])
       )
   }
   # Return the settings tibble

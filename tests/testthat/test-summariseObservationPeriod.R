@@ -450,7 +450,7 @@ test_that("dateRnge argument works", {
                      maxobs = max(.data$observation_period_end_date, na.rm = TRUE))
   expect_no_error(y<-  summariseObservationPeriod(cdm$observation_period, dateRange = as.Date(c("1940-01-01", observationRange |>dplyr::pull("maxobs"))),estimates = "min" ))
   expect_equal(x,y, ignore_attr = TRUE)
-  expect_false(attr(x, 'settings')$study_period_end==attr(y, 'settings')$study_period_end)
+  expect_false(settings(x)$study_period_end==settings(y)$study_period_end)
   expect_error( summariseObservationPeriod(cdm$observation_period, dateRange =  as.Date(c("2015-01-01", "2014-01-01"))))
   expect_warning(z<- summariseObservationPeriod(cdm$observation_period, dateRange =  as.Date(c("2020-01-01", "2021-01-01"))))
   expect_equal(z, omopgenerics::emptySummarisedResult(), ignore_attr = TRUE)

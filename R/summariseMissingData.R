@@ -42,7 +42,7 @@ summariseMissingData <- function(cdm,
 
     sampling <- !is.null(sample) & !is.infinite(sample)
     omopTable <- cdm[[table]]
-    omopTable <- studyPeriod(omopTable, dateRange)
+    omopTable <- restrictStudyPeriod(omopTable, dateRange)
     if (omopgenerics::isTableEmpty(omopTable)){
       cli::cli_warn(paste0(table, " omop table is empty."))
       return(NULL)
