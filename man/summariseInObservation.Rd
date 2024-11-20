@@ -10,7 +10,8 @@ summariseInObservation(
   interval = "overall",
   output = "records",
   ageGroup = NULL,
-  sex = FALSE
+  sex = FALSE,
+  dateRange = NULL
 )
 }
 \arguments{
@@ -27,6 +28,9 @@ number of person-days ("person-days"), or both c("records","person-days").}
 
 \item{sex}{Boolean variable. Whether to stratify by sex (TRUE) or not
 (FALSE).}
+
+\item{dateRange}{A list containing the minimum and the maximum dates
+defining the time range within which the analysis is performed.}
 }
 \value{
 A summarised_result object.

@@ -188,7 +188,8 @@ test_that("summarise code use - eunomia", {
       visOmopResults::splitAdditional() |>
       dplyr::filter(variable_name == "Number records", standard_concept_name == "overall") |>
       dplyr::select(-c(starts_with("standard_"), starts_with("source_"), "domain_id")) |>
-      dplyr::arrange(dplyr::across(dplyr::everything()))
+      dplyr::arrange(dplyr::across(dplyr::everything())),
+    ignore_attr = TRUE
   )
   expect_true(results1 |>
                 visOmopResults::splitAdditional() |>
@@ -350,6 +351,10 @@ test_that("summarise code use - eunomia", {
                                 sex = FALSE,
                                 ageGroup = list(c(0,17),
                                                 c(15,20))))
+
+
+
+
 
   CDMConnector::cdmDisconnect(cdm)
 })
@@ -528,6 +533,27 @@ test_that("plot concept counts works", {
 
   x <-  x |> dplyr::filter(result_id == -1)
   expect_error(plotInObservation(x))
+
+  PatientProfiles::mockDisconnect(cdm = cdm)
+})
+
+test_that("dateRange argument works", {
+  skip_on_cran()
+  # Load mock database ----
+  cdm <- cdmEunomia()
+
+  expect_no_error(summariseConceptCounts(cdm,conceptId = list("polio" = c(40213160)), dateRange =  as.Date(c("1930-01-01", "2018-01-01"))))
+  expect_message(x<-summariseConceptCounts(cdm,conceptId = list("polio" = c(40213160)), dateRange =  as.Date(c("1930-01-01", "2025-01-01"))))
+  observationRange <- cdm$observation_period |>
+    dplyr::summarise(minobs = min(.data$observation_period_start_date, na.rm = TRUE),
+                     maxobs = max(.data$observation_period_end_date, na.rm = TRUE))
+  expect_no_error(y<- summariseConceptCounts(cdm,conceptId = list("polio" = c(40213160)), dateRange = as.Date(c("1930-01-01", observationRange |>dplyr::pull("maxobs")))))
+  expect_equal(x,y, ignore_attr = TRUE)
+  expect_false(settings(x)$study_period_end==settings(y)$study_period_end)
+  expect_error(summariseConceptCounts(cdm,conceptId = list("polio" = c(40213160)), dateRange =  as.Date(c("2015-01-01", "2014-01-01"))))
+  expect_warning(z<-summariseConceptCounts(cdm,conceptId = list("polio" = c(40213160)), dateRange =  as.Date(c("2020-01-01", "2021-01-01"))))
+  expect_equal(z, omopgenerics::emptySummarisedResult(), ignore_attr = TRUE)
+  expect_equal(summariseConceptCounts(cdm,conceptId = list("polio" = c(40213160)),dateRange = as.Date(c("1930-01-01",NA))), y, ignore_attr = TRUE)
 
   PatientProfiles::mockDisconnect(cdm = cdm)
 })

@@ -10,6 +10,8 @@
 #' @param ageGroup A list of age groups to stratify results by.
 #' @param sex Boolean variable. Whether to stratify by sex (TRUE) or not
 #' (FALSE).
+#' @param dateRange A list containing the minimum and the maximum dates
+#' defining the time range within which the analysis is performed.
 #' @return A summarised_result object.
 #' @export
 #' @examples
@@ -36,13 +38,14 @@ summariseInObservation <- function(observationPeriod,
                                    interval = "overall",
                                    output = "records",
                                    ageGroup = NULL,
-                                   sex = FALSE){
+                                   sex = FALSE, dateRange = NULL){
 
   tablePrefix <-  omopgenerics::tmpPrefix()
 
   # Initial checks ----
   omopgenerics::assertClass(observationPeriod, "omop_table")
   omopgenerics::assertTrue(omopgenerics::tableName(observationPeriod) == "observation_period")
+  dateRange <- validateStudyPeriod(omopgenerics::cdmReference(observationPeriod), dateRange)
 
   if(omopgenerics::isTableEmpty(observationPeriod)){
     cli::cli_warn("observation_period table is empty. Returning an empty summarised result.")
@@ -62,7 +65,7 @@ summariseInObservation <- function(observationPeriod,
 
   # Create initial variables ----
   cdm <- omopgenerics::cdmReference(observationPeriod)
-  observationPeriod <- addStrataToPeopleInObservation(cdm, ageGroup, sex, tablePrefix)
+  observationPeriod <- addStrataToPeopleInObservation(cdm, ageGroup, sex, tablePrefix, dateRange)
   strata <- getStrataList(sex, ageGroup)
 
   # Calculate denominator ----
@@ -89,7 +92,7 @@ summariseInObservation <- function(observationPeriod,
   result <- addSexOverall(result, sex)
 
   # Create summarisedResult
-  result <- createSummarisedResultObservationPeriod(result, observationPeriod, name, denominator, original_interval)
+  result <- createSummarisedResultObservationPeriod(result, observationPeriod, name, denominator,dateRange, original_interval)
 
   CDMConnector::dropTable(cdm, name = dplyr::starts_with(tablePrefix))
   return(result)
@@ -244,7 +247,12 @@ if(output == "records" | output == "all"){
   return(x)
 }
 
-createSummarisedResultObservationPeriod <- function(result, observationPeriod, name, denominator, original_interval){
+createSummarisedResultObservationPeriod <- function(result, observationPeriod, name, denominator, dateRange,original_interval){
+  if (dim(result)[1] == 0) {
+    result<-omopgenerics::emptySummarisedResult() |>
+      omopgenerics::newSummarisedResult(settings = createSettings(result_type = "summarise_in_observation", study_period = dateRange)|>
+                                          dplyr::mutate("interval" = .env$original_interval))
+  }else{
   result <- result |>
     dplyr::mutate("estimate_value" = as.character(.data$estimate_value)) |>
     visOmopResults::uniteStrata(cols = c("sex", "age_group")) |>
@@ -266,18 +274,14 @@ createSummarisedResultObservationPeriod <- function(result, observationPeriod, n
     dplyr::mutate(estimate_value = dplyr::if_else(.data$estimate_type == "percentage", as.character(as.numeric(.data$estimate_value)/denominator*100), .data$estimate_value)) |>
     dplyr::select(-c("denominator")) |>
     dplyr::mutate(estimate_name = dplyr::if_else(.data$estimate_type == "percentage", "percentage", .data$estimate_name)) |>
-    omopgenerics::newSummarisedResult(settings = dplyr::tibble(
-      "result_id" = 1L,
-      "result_type" = "summarise_in_observation",
-      "package_name" = "OmopSketch",
-      "package_version" = as.character(utils::packageVersion("OmopSketch")),
-      "interval" = .env$original_interval
-    ))
-
+    omopgenerics::newSummarisedResult(settings = createSettings(result_type = "summarise_in_observation", study_period = dateRange)|>
+                                        dplyr::mutate("interval" = .env$original_interval)
+    )
+}
   return(result)
 }
 
-addStrataToPeopleInObservation <- function(cdm, ageGroup, sex, tablePrefix) {
+addStrataToPeopleInObservation <- function(cdm, ageGroup, sex, tablePrefix, dateRange) {
   demographics <- cdm |>
     CohortConstructor::demographicsCohort(
       name = paste0(tablePrefix, "demographics_table"),
@@ -287,6 +291,11 @@ addStrataToPeopleInObservation <- function(cdm, ageGroup, sex, tablePrefix) {
     ) |>
     suppressMessages()
 
+  if (!is.null(dateRange)) {
+    demographics <- demographics |>
+      CohortConstructor::requireInDateRange(dateRange = dateRange)
+    warningEmptyStudyPeriod(demographics)
+  }
   if (sex) {
     demographics <- demographics |>
       PatientProfiles::addSexQuery()

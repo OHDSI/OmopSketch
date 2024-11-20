@@ -11,7 +11,8 @@ summariseMissingData(
   sex = FALSE,
   year = FALSE,
   ageGroup = NULL,
-  sample = 1e+06
+  sample = 1e+06,
+  dateRange = NULL
 )
 }
 \arguments{
@@ -26,12 +27,15 @@ If \code{NULL}, all columns in the specified tables are checked. Default is \cod
 \item{sex}{TRUE or FALSE. If TRUE code use will be summarised by sex.}
 
 \item{year}{TRUE or FALSE. If TRUE code use will be summarised by year.}
-  
+
 \item{ageGroup}{A list of ageGroup vectors of length two. Code use will be
 thus summarised by age groups.}
 
 \item{sample}{An integer to sample the table to only that number of records.
 If NULL no sample is done.}
+
+\item{dateRange}{A list containing the minimum and the maximum dates
+defining the time range within which the analysis is performed.}
 }
 \value{
 A summarised_result object with results overall and, if specified, by
