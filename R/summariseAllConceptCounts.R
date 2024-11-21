@@ -39,6 +39,8 @@ checkFeasibility <- function(omopTable, tableName, conceptId){
   return(TRUE)
 }
 
+
+
 #' Summarise concept use in patient-level data
 #'
 #' @param cdm A cdm object
@@ -50,6 +52,8 @@ checkFeasibility <- function(omopTable, tableName, conceptId){
 #' @param sex TRUE or FALSE. If TRUE code use will be summarised by sex.
 #' @param ageGroup A list of ageGroup vectors of length two. Code use will be
 #' thus summarised by age groups.
+#' @param dateRange A list containing the minimum and the maximum dates
+#' defining the time range within which the analysis is performed.
 #' @return A summarised_result object with results overall and, if specified, by
 #' strata.
 #' @export
@@ -58,7 +62,8 @@ summariseAllConceptCounts <- function(cdm,
                             countBy = "record",
                             year = FALSE,
                             sex = FALSE,
-                            ageGroup = NULL){
+                            ageGroup = NULL,
+                            dateRange = NULL){
 
   omopgenerics::validateCdmArgument(cdm)
   checkCountBy(countBy)
@@ -67,7 +72,7 @@ summariseAllConceptCounts <- function(cdm,
   omopgenerics::assertChoice(omopTableName,choices = omopgenerics::omopTables(), unique = TRUE)
 
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "")[[1]]
-
+  dateRange <- validateStudyPeriod(cdm, dateRange)
   strata <- my_getStrataList(sex = sex, year = year, ageGroup = ageGroup)
 
   stratification <- omopgenerics::combineStrata(strata)
@@ -87,6 +92,8 @@ summariseAllConceptCounts <- function(cdm,
     return(NULL)
   }
 
+  omopTable <- restrictStudyPeriod(omopTable, dateRange)
+
 
   indexDate <- startDate(omopgenerics::tableName(omopTable))
 
@@ -102,6 +109,7 @@ summariseAllConceptCounts <- function(cdm,
   if (year){
     x <- x|> dplyr::mutate(year = as.character(clock::get_year(.data[[indexDate]])))
   }
+
 
   level <- c(conceptId, "concept_name")
 
@@ -172,14 +180,8 @@ summariseAllConceptCounts <- function(cdm,
   #   dplyr::select(!c())
 
 
-  settings <- dplyr::tibble(
-    result_id = unique(sr$result_id),
-    package_name = "omopSketch",
-    package_version = as.character(utils::packageVersion("OmopSketch")),
-    result_type = "summarise_all_concept_counts"
-  )
   sr <- sr |>
-    omopgenerics::newSummarisedResult(settings = settings)
+    omopgenerics::newSummarisedResult(settings = createSettings(result_type = "summarise_all_concept_counts", study_period = dateRange))
 
   return(sr)
 

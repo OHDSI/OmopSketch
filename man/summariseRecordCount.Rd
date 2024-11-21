@@ -10,7 +10,8 @@ summariseRecordCount(
   omopTableName,
   interval = "overall",
   ageGroup = NULL,
-  sex = FALSE
+  sex = FALSE,
+  dateRange = NULL
 )
 }
 \arguments{
@@ -23,6 +24,9 @@ summariseRecordCount(
 \item{ageGroup}{A list of age groups to stratify results by.}
 
 \item{sex}{Whether to stratify by sex (TRUE) or not (FALSE).}
+
+\item{dateRange}{A list containing the minimum and the maximum dates
+defining the time range within which the analysis is performed.}
 }
 \value{
 A summarised_result object.

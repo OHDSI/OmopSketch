@@ -17,7 +17,8 @@ summariseClinicalRecords(
   domainId = TRUE,
   typeConcept = TRUE,
   sex = FALSE,
-  ageGroup = NULL
+  ageGroup = NULL,
+  dateRange = NULL
 )
 }
 \arguments{
@@ -48,6 +49,9 @@ field information.}
 (FALSE).}
 
 \item{ageGroup}{A list of age groups to stratify results by.}
+
+\item{dateRange}{A list containing the minimum and the maximum dates
+defining the time range within which the analysis is performed.}
 }
 \value{
 A summarised_result object.

@@ -11,7 +11,8 @@ summariseConceptCounts(
   concept = TRUE,
   interval = "overall",
   sex = FALSE,
-  ageGroup = NULL
+  ageGroup = NULL,
+  dateRange = NULL
 )
 }
 \arguments{
@@ -30,6 +31,9 @@ person-level counts}
 
 \item{ageGroup}{A list of ageGroup vectors of length two. Code use will be
 thus summarised by age groups.}
+
+\item{dateRange}{A list containing the minimum and the maximum dates
+defining the time range within which the analysis is performed.}
 }
 \value{
 A summarised_result object with results overall and, if specified, by

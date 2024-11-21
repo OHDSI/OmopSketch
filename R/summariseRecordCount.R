@@ -7,6 +7,8 @@
 #' @param interval Time interval to stratify by. It can either be "years", "quarters", "months" or "overall".
 #' @param ageGroup A list of age groups to stratify results by.
 #' @param sex Whether to stratify by sex (TRUE) or not (FALSE).
+#' @param dateRange A list containing the minimum and the maximum dates
+#' defining the time range within which the analysis is performed.
 #' @return A summarised_result object.
 #' @export
 #' @examples
@@ -32,7 +34,8 @@ summariseRecordCount <- function(cdm,
                                  omopTableName,
                                  interval = "overall",
                                  ageGroup = NULL,
-                                 sex = FALSE) {
+                                 sex = FALSE,
+                                 dateRange = NULL) {
 
   # Initial checks ----
   omopgenerics::validateCdmArgument(cdm)
@@ -43,21 +46,26 @@ summariseRecordCount <- function(cdm,
   unitInterval <- x$unitInterval
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "")[[1]]
   omopgenerics::assertLogical(sex, length = 1)
+  dateRange <- validateStudyPeriod(cdm, dateRange)
 
   result <- purrr::map(omopTableName,
                        function(x) {
                          omopgenerics::assertClass(cdm[[x]], "omop_table", call = parent.frame())
+                         cdm[[x]]<-restrictStudyPeriod(cdm[[x]], dateRange)
                          if(omopgenerics::isTableEmpty(cdm[[x]])) {
                            cli::cli_warn(paste0(x, " omop table is empty. Returning an empty summarised omop table."))
                            return(omopgenerics::emptySummarisedResult())
                          }
+
+
                          summariseRecordCountInternal(x,
                                                       cdm = cdm,
                                                       interval = interval,
                                                       unitInterval = unitInterval,
                                                       original_interval,
                                                       ageGroup = ageGroup,
-                                                      sex = sex)
+                                                      sex = sex,
+                                                      dateRange = dateRange)
                        }
   ) |>
     dplyr::bind_rows()
@@ -67,7 +75,7 @@ summariseRecordCount <- function(cdm,
 
 #' @noRd
 summariseRecordCountInternal <- function(omopTableName, cdm, interval, unitInterval,
-                                         original_interval, ageGroup, sex) {
+                                         original_interval, ageGroup, sex, dateRange) {
 
   prefix <- omopgenerics::tmpPrefix()
   omopTable <- cdm[[omopTableName]] |> dplyr::ungroup()
@@ -109,7 +117,7 @@ summariseRecordCountInternal <- function(omopTableName, cdm, interval, unitInter
   }
 
   # Create summarised result ----
-  result <- createSummarisedResultRecordCount(result, strata, omopTable, omopTableName, original_interval)
+  result <- createSummarisedResultRecordCount(result, strata, omopTable, omopTableName, original_interval, dateRange)
   omopgenerics::dropTable(cdm = cdm, name = dplyr::starts_with(prefix))
 
   return(result)
@@ -232,7 +240,7 @@ splitIncidenceBetweenIntervals <- function(cdm, omopTable, date, prefix){
     dplyr::select(-c("interval_start_date", "interval_end_date", "incidence_date"))
 }
 
-createSummarisedResultRecordCount <- function(result, strata, omopTable, omopTableName, original_interval){
+createSummarisedResultRecordCount <- function(result, strata, omopTable, omopTableName, original_interval, dateRange){
 
   result <- result |>
     dplyr::mutate(n = 1) |>
@@ -262,12 +270,7 @@ createSummarisedResultRecordCount <- function(result, strata, omopTable, omopTab
 
   result |>
     omopgenerics::newSummarisedResult(
-      settings = dplyr::tibble(
-        "result_id" = 1L,
-        "result_type" = "summarise_record_count",
-        "package_name" = "OmopSketch",
-        "package_version" = as.character(utils::packageVersion("OmopSketch")),
-        "interval" = .env$original_interval
-      )
+      settings = createSettings(result_type = "summarise_record_count", study_period = dateRange)|>
+        dplyr::mutate("interval" = .env$original_interval)
     )
 }

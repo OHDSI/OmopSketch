@@ -225,6 +225,26 @@ test_that("summariseClinicalRecords() sex and ageGroup argument work", {
   expect_true(records |> dplyr::filter(strata_level == "old &&& Male", estimate_name == "median") |> dplyr::pull(estimate_value) == "3")
 })
 
+test_that("dateRange argument works", {
+  skip_on_cran()
+  # Load mock database ----
+  cdm <- cdmEunomia()
+  expect_no_error(summariseClinicalRecords(cdm, "condition_occurrence", dateRange =  as.Date(c("2012-01-01", "2018-01-01"))))
+  expect_message(x<-summariseClinicalRecords(cdm, "drug_exposure", dateRange =  as.Date(c("2012-01-01", "2025-01-01"))))
+  observationRange <- cdm$observation_period |>
+    dplyr::summarise(minobs = min(.data$observation_period_start_date, na.rm = TRUE),
+                     maxobs = max(.data$observation_period_end_date, na.rm = TRUE))
+  expect_no_error(y<- summariseClinicalRecords(cdm, "drug_exposure", dateRange = as.Date(c("2012-01-01", observationRange |>dplyr::pull("maxobs")))))
+  expect_equal(x,y, ignore_attr = TRUE)
+  expect_false(settings(x)$study_period_end==settings(y)$study_period_end)
+  expect_error(summariseClinicalRecords(cdm, "drug_exposure", dateRange =  as.Date(c("2015-01-01", "2014-01-01"))))
+  expect_warning(z<-summariseClinicalRecords(cdm, "drug_exposure", dateRange =  as.Date(c("2020-01-01", "2021-01-01"))))
+  expect_equal(z, omopgenerics::emptySummarisedResult(), ignore_attr = TRUE)
+  expect_equal(summariseClinicalRecords(cdm, "drug_exposure",dateRange = as.Date(c("2012-01-01",NA))), y, ignore_attr = TRUE)
+
+
+})
+
 test_that("tableClinicalRecords() works", {
   skip_on_cran()
   # Load mock database ----
