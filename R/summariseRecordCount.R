@@ -52,6 +52,7 @@ summariseRecordCount <- function(cdm,
                        function(x) {
                          omopgenerics::assertClass(cdm[[x]], "omop_table", call = parent.frame())
                          cdm[[x]]<-restrictStudyPeriod(cdm[[x]], dateRange)
+
                          if(omopgenerics::isTableEmpty(cdm[[x]])) {
                            cli::cli_warn(paste0(x, " omop table is empty. Returning an empty summarised omop table."))
                            return(omopgenerics::emptySummarisedResult())
@@ -81,9 +82,15 @@ summariseRecordCountInternal <- function(omopTableName, cdm, interval, unitInter
   omopTable <- cdm[[omopTableName]] |> dplyr::ungroup()
 
   # Create initial variables ----
-  omopTable <- filterPersonId(omopTable)
 
+  omopTable <- filterPersonId(omopTable)
   result <- omopgenerics::emptySummarisedResult()
+  if (omopgenerics::isTableEmpty(omopTable)){
+    cli::cli_warn(paste0(omopTableName, " omop table is empty. Returning an empty summarised omop table."))
+    return(result)
+  }
+
+
   date   <- startDate(omopTableName)
 
   strata <- getStrataList(sex, ageGroup)
@@ -94,9 +101,11 @@ summariseRecordCountInternal <- function(omopTableName, cdm, interval, unitInter
 
   result <- addStrataToOmopTable(omopTable, date, ageGroup, sex)
 
+
   if(omopTableName != "observation_period") {
     result <- result |>
       filterInObservation(indexDate = date)
+
   }
 
   if(interval != "overall"){
