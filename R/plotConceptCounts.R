@@ -30,6 +30,9 @@
 plotConceptCounts <- function(result,
                               facet = NULL,
                               colour = NULL){
+
+  rlang::check_installed("ggplot2")
+
   # initial checks
   omopgenerics::validateResultArgument(result)
 

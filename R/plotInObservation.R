@@ -30,6 +30,9 @@
 plotInObservation <- function(result,
                               facet = NULL,
                               colour = NULL) {
+
+  rlang::check_installed("ggplot2")
+
   # initial checks
   omopgenerics::validateResultArgument(result)
   validateFacet(facet, result) # To remove when there's a version in omopgenerics

@@ -31,6 +31,9 @@ plotObservationPeriod <- function(result,
                                   plotType = "barplot",
                                   facet = NULL,
                                   colour = NULL) {
+
+  rlang::check_installed("ggplot2")
+
   # initial checks
   omopgenerics::validateResultArgument(result)
 
