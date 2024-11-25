@@ -289,9 +289,17 @@ test_that("dateRnge argument works", {
   expect_equal(z, omopgenerics::emptySummarisedResult(), ignore_attr = TRUE)
   expect_equal(summariseRecordCount(cdm, "drug_exposure",dateRange = as.Date(c("2012-01-01",NA))), y, ignore_attr = TRUE)
 
-
-
   PatientProfiles::mockDisconnect(cdm = cdm)
+
+  db <- DBI::dbConnect(duckdb::duckdb(), dbdir = CDMConnector::eunomia_dir())
+  cdm <- CDMConnector::cdmFromCon(con = db, cdmSchema = "main",writeSchema = "main")
+
+
+  expect_no_error(expect_warning(summariseRecordCount(cdm, "observation_period",
+                         interval = "years",
+                         dateRange =  as.Date(c("2012-01-01", NA)))))
+  PatientProfiles::mockDisconnect(cdm = cdm)
+
 })
 
 
