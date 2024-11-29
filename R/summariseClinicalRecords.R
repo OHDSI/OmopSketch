@@ -579,7 +579,7 @@ formatResults <- function(x, variableName, variableLevel, denominator, strata) {
   attr(denominator, "settings")$strata <- paste(unique(unlist(strata)), collapse = " &&& ")
   denominator <- denominator |>
     dplyr::select("strata_name", "strata_level", "denominator" = "estimate_value") |>
-    dplyr::filter(strata_name != "overall") |>
+    dplyr::filter(.data$strata_name != "overall") |>
     omopgenerics::splitStrata()
 
   strataCols <- unique(unlist(strata))
