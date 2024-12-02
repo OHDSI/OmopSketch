@@ -33,7 +33,7 @@ test_that("summarise code use - eunomia", {
           time_interval == "1909-01-01 to 1909-12-31",
           group_level == "acetiminophen") |>
         dplyr::pull("estimate_value"),
-      as.character(NA)
+     "-"
   )
 
   # check is a summarised result

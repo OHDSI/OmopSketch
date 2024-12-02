@@ -134,7 +134,7 @@ addOrdinalLevels <- function(x) {
   xx <- suppressWarnings(as.integer(x$id))
   desena <- (floor(xx/10)) %% 10
   unitat <- xx %% 10
-  val <- rep("overall", length(xx))
+  val <- rep("overall_", length(xx))
   id0 <- !is.na(xx)
   val[id0] <- paste0(xx[id0], "th")
   id <- id0 & desena != 1L & unitat == 1L
@@ -162,7 +162,7 @@ arrangeSr <- function(x, estimates) {
 
   order <- dplyr::tibble(
     "variable_name" = c("number records"),
-    "group_level"   = "overall",
+    "group_level"   = "overall_",
     "strata_level"  = "overall",
     "estimate_name" = "count"
   ) |>
