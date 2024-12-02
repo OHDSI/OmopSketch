@@ -68,7 +68,7 @@ test_that("check summariseObservationPeriod works", {
   # counts
   expect_identical(resAll$estimate_value[resAll$variable_name == "number records"], "8")
   x <- dplyr::tibble(
-    group_level = c("overall", "1st", "2nd", "3rd"),
+    group_level = c("overall_", "1st", "2nd", "3rd"),
     variable_name = "number subjects",
     estimate_value = c("4", "4", "3", "1"))
   expect_identical(nrow(x), resAll |> dplyr::inner_join(x, by = colnames(x)) |> nrow())
@@ -88,10 +88,20 @@ test_that("check summariseObservationPeriod works", {
       dplyr::filter(variable_name == "duration in days", estimate_name == "mean") |>
       dplyr::pull("estimate_value"),
     as.character(c(
-      mean(c(20, 6, 113, 144, 18, 9, 29, 276)), mean(c(20, 18, 9, 276)),
-      mean(c(6, 29, 144)), 113
+      mean(c(20, 18, 9, 276)),
+      mean(c(6, 29, 144)), 113,  mean(c(20, 6, 113, 144, 18, 9, 29, 276))
     ))
   )
+  # when it will be group_level = "overall"
+  # expect_identical(
+  #   resAll |>
+  #     dplyr::filter(variable_name == "duration in days", estimate_name == "mean") |>
+  #     dplyr::pull("estimate_value"),
+  #   as.character(c(
+  #     mean(c(20, 6, 113, 144, 18, 9, 29, 276)), mean(c(20, 18, 9, 276)),
+  #     mean(c(6, 29, 144)), 113
+  #   ))
+  # )
 
   # days to next observation period
   expect_identical(
@@ -99,10 +109,18 @@ test_that("check summariseObservationPeriod works", {
       dplyr::filter(variable_name == "days to next observation period", estimate_name == "mean") |>
       dplyr::pull("estimate_value"),
     as.character(c(
-      mean(c(5, 32, 136, 26)), mean(c(5, 32, 136)), 26, NA
+      mean(c(5, 32, 136)), 26, NA,  mean(c(5, 32, 136, 26))
     ))
   )
-
+  # when it will be group_level="overall"
+  # expect_identical(
+  #   resAll |>
+  #     dplyr::filter(variable_name == "days to next observation period", estimate_name == "mean") |>
+  #     dplyr::pull("estimate_value"),
+  #   as.character(c(
+  #     mean(c(5, 32, 136, 26)), mean(c(5, 32, 136)), 26, NA
+  #   ))
+  # )
   # duration - density
   xx <- resAllD |>
     dplyr::filter(variable_name == "duration in days", !is.na(variable_level)) |>
@@ -144,7 +162,7 @@ test_that("check summariseObservationPeriod works", {
   # counts
   expect_identical(resOne$estimate_value[resOne$variable_name == "number records"], "4")
   x <- dplyr::tibble(
-    group_level = c("overall", "1st"),
+    group_level = c("overall_", "1st"),
     variable_name = "number subjects",
     estimate_value = c("4", "4"))
   expect_identical(nrow(x), resOne |> dplyr::inner_join(x, by = colnames(x)) |> nrow())
