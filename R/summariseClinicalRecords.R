@@ -579,7 +579,7 @@ formatResults <- function(x, variableName, variableLevel, denominator, strata) {
 
   denominator <- denominator |>
     dplyr::select("strata_name", "strata_level", "denominator" = "estimate_value") |>
-    visOmopResults::splitStrata()
+    omopgenerics::splitStrata()
 
   strataCols <- unique(unlist(strata))
 
@@ -609,7 +609,7 @@ formatResults <- function(x, variableName, variableLevel, denominator, strata) {
           .data$estimate_name == "count", "integer", "percentage"
         )
       ) |>
-      visOmopResults::uniteStrata(cols = strataCols) |>
+      omopgenerics::uniteStrata(cols = strataCols) |>
       dplyr::select(
         "strata_name", "strata_level", "variable_name", "variable_level",
         "estimate_name", "estimate_type", "estimate_value"
