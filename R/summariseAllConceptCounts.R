@@ -159,7 +159,7 @@ summariseAllConceptCounts <- function(cdm,
     return(result)
   })
   if (rlang::is_empty(purrr::compact(result_tables))){
-    return(omopgenerics::emptySummarisedResult())
+    return(omopgenerics::emptySummarisedResult(settings = createSettings(result_type = "summarise_all_concept_counts", study_period = dateRange)))
   }
 
   sr <-purrr::compact(result_tables) |>

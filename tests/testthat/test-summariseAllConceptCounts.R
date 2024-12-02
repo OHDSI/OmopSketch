@@ -12,7 +12,7 @@ test_that("summariseAllConceptCount works", {
   expect_warning(summariseAllConceptCounts(cdm, "device_exposure"))
   expect_no_error(y <- summariseAllConceptCounts(cdm, "measurement"))
   expect_no_error(summariseAllConceptCounts(cdm, "observation", year = TRUE))
-  expect_warning(summariseAllConceptCounts(cdm, "death"))
+  expect_warning(p<-summariseAllConceptCounts(cdm, "death"))
 
   expect_no_error(all <- summariseAllConceptCounts(cdm, c("visit_occurrence", "measurement")))
   expect_equal(all, dplyr::bind_rows(x, y))
@@ -20,7 +20,7 @@ test_that("summariseAllConceptCount works", {
   expect_warning(summariseAllConceptCounts(cdm, "observation_period"))
   expect_error(summariseAllConceptCounts(cdm, omopTableName = ""))
   expect_error(summariseAllConceptCounts(cdm, omopTableName = "visit_occurrence", countBy = "dd"))
-
+  expect_equal(settings(y)$result_type, settings(p)$result_type)
   expect_true(summariseAllConceptCounts(cdm, "procedure_occurrence", sex = TRUE, ageGroup = list(c(0, 50), c(51, Inf))) |>
                 dplyr::distinct(.data$strata_level) |>
                 dplyr::tally() |>
@@ -72,6 +72,9 @@ test_that("dateRange argument works", {
   expect_error(summariseAllConceptCounts(cdm, "drug_exposure", dateRange =  as.Date(c("2015-01-01", "2014-01-01"))))
   expect_warning(y<-summariseAllConceptCounts(cdm, "drug_exposure", dateRange =  as.Date(c("2020-01-01", "2021-01-01"))))
   expect_equal(y, omopgenerics::emptySummarisedResult(), ignore_attr = TRUE)
+  expect_equal(settings(y)$result_type, settings(x)$result_type)
+  expect_equal(colnames(settings(y)), colnames(settings(x)))
+  PatientProfiles::mockDisconnect(cdm = cdm)
 })
 
 test_that("tableAllConceptCounts() works", {

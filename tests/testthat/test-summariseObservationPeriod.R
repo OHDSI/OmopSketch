@@ -455,7 +455,8 @@ test_that("dateRnge argument works", {
   expect_warning(z<- summariseObservationPeriod(cdm$observation_period, dateRange =  as.Date(c("2020-01-01", "2021-01-01"))))
   expect_equal(z, omopgenerics::emptySummarisedResult(), ignore_attr = TRUE)
   expect_equal( summariseObservationPeriod(cdm$observation_period,dateRange = as.Date(c("1940-01-01",NA)), estimates = "min"), y, ignore_attr = TRUE)
-
+  checkResultType(z, "summarise_observation_period")
+  expect_equal(colnames(settings(z)), colnames(settings(x)))
 
 
 
