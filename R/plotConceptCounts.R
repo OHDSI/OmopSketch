@@ -65,13 +65,13 @@ plotConceptCounts <- function(result,
                                   line   = TRUE,
                                   point  = TRUE,
                                   ribbon = TRUE,
-                                  group  = "standard_concept_name",
+                                  group  = c("standard_concept_name", "standard_concept_id"),
                                   facet  = facet,
                                   colour = colour)
   }else{
     if("standard_concept_name" %in% colnames(result1)){
       p <- result |>
-        visOmopResults::barPlot(x = "standard_concept_name",
+        visOmopResults::barPlot(x = c("standard_concept_name", "standard_concept_id"),
                                 y = "count",
                                 facet = facet,
                                 colour = colour)
