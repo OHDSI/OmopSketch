@@ -12,7 +12,8 @@ test_that("summariseRecordCount() works", {
   expect_no_error(summariseRecordCount(cdm, "drug_exposure"))
   expect_no_error(summariseRecordCount(cdm, "procedure_occurrence"))
   expect_no_error(summariseRecordCount(cdm, "measurement"))
-  expect_warning(summariseRecordCount(cdm, "death"))
+  expect_warning(de<-summariseRecordCount(cdm, "death"))
+  checkResultType(de, "summarise_record_count")
 
   expect_no_error(co <- summariseRecordCount(cdm, "condition_occurrence"))
   expect_warning(de  <- summariseRecordCount(cdm, "device_exposure"))
@@ -288,6 +289,7 @@ test_that("dateRnge argument works", {
   expect_message(expect_warning(z<-summariseRecordCount(cdm, "drug_exposure", dateRange =  as.Date(c("2020-01-01", "2021-01-01")))))
   expect_equal(z, omopgenerics::emptySummarisedResult(), ignore_attr = TRUE)
   expect_equal(summariseRecordCount(cdm, "drug_exposure",dateRange = as.Date(c("2012-01-01",NA))), y, ignore_attr = TRUE)
+  checkResultType(z, "summarise_record_count")
 
   PatientProfiles::mockDisconnect(cdm = cdm)
 

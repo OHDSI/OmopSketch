@@ -89,7 +89,7 @@ summariseConceptCounts <- function(cdm,
         cdm_name = omopgenerics::cdmName(cdm)
       )
   } else {
-    codeUse <- omopgenerics::emptySummarisedResult()
+    codeUse <- omopgenerics::emptySummarisedResult(settings = createSettings(result_type = "summarise_concept_counts", study_period = dateRange))
   }
 
   codeUse <- codeUse %>%
@@ -156,7 +156,7 @@ getCodeUse <- function(x,
     cli::cli_inform(c(
       "i" = "No records found in the cdm for the concepts provided."
     ))
-    return(omopgenerics::emptySummarisedResult())
+    return(omopgenerics::emptySummarisedResult(settings = createSettings(result_type = "summarise_concept_counts", study_period = dateRange)))
   }
 
   if (!is.null(dateRange))

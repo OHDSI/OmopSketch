@@ -270,6 +270,7 @@ test_that("dateRange argument works", {
   expect_warning(z<- summariseInObservation(cdm$observation_period, dateRange =  as.Date(c("2020-01-01", "2021-01-01"))))
   expect_equal(z, omopgenerics::emptySummarisedResult(), ignore_attr = TRUE)
   expect_equal( summariseInObservation(cdm$observation_period,dateRange = as.Date(c("1940-01-01",NA))), y, ignore_attr = TRUE)
-
+  checkResultType(z, "summarise_in_observation")
+  expect_equal(colnames(settings(z)), colnames(settings(x)))
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
