@@ -77,6 +77,11 @@ summariseObservationPeriod <- function(observationPeriod,
       dplyr::ungroup() |>
       dplyr::select("person_id", "id", "duration", "next_obs", dplyr::any_of(c("sex","age_group"))) |>
       dplyr::collect()
+    if (all(is.na(obs$next_obs))){
+      obs <- obs |>
+        dplyr::select(!"next_obs")
+    }
+
    if (dim(obs)[1]==0){
      return(omopgenerics::emptySummarisedResult()|>omopgenerics::newSummarisedResult(
        settings = createSettings(result_type = "summarise_observation_period", study_period = dateRange)))
@@ -106,6 +111,8 @@ summariseObservationPeriod <- function(observationPeriod,
             dplyr::filter(.data$variable_name != "number records" | .data$strata_level == "overall") |>
             addOrdinalLevels() |>
             arrangeSr(estimates)
+
+
   }
 
   obsSr <- obsSr |>
