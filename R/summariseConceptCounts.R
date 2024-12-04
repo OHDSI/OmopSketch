@@ -222,12 +222,12 @@ getCodeUse <- function(x,
 
   if(interval != "overall"){
     cc <- cc |>
-      visOmopResults::splitStrata() |>
+      omopgenerics::splitStrata() |>
       dplyr::mutate("additional_level" = dplyr::if_else(.data$interval_group == "overall", .data$additional_level, paste0(.data$interval_group, " &&& ", .data$additional_level))) |>
       dplyr::mutate("additional_name" = dplyr::if_else(.data$interval_group == "overall", .data$additional_name, paste0("time_interval &&& ", .data$additional_name))) |>
       dplyr::mutate("additional_level" = gsub(" &&& overall$", "", .data$additional_level)) |>
       dplyr::mutate("additional_name" = gsub(" &&& overall$", "", .data$additional_name)) |>
-      visOmopResults::uniteStrata(unique(unlist(strata))[unique(unlist(strata)) != "interval_group"]) |>
+      omopgenerics::uniteStrata(unique(unlist(strata))[unique(unlist(strata)) != "interval_group"]) |>
       dplyr::select(-"interval_group")
   }
   CDMConnector::dropTable(cdm = cdm, name = dplyr::starts_with(tablePrefix))

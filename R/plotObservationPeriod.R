@@ -33,13 +33,13 @@ plotObservationPeriod <- function(result,
                                   colour = NULL) {
 
   rlang::check_installed("ggplot2")
-
+  rlang::check_installed("visOmopResults")
   # initial checks
   omopgenerics::validateResultArgument(result)
 
   # subset to result_type of interest
   result <- result |>
-    visOmopResults::filterSettings(
+    omopgenerics::filterSettings(
       .data$result_type == "summarise_observation_period")
 
   # check if it is empty
@@ -61,7 +61,7 @@ plotObservationPeriod <- function(result,
   validateFacet(facet, result)
 
   optFacetColour <- c("cdm_name", "observation_period_ordinal",
-                      visOmopResults::strataColumns(result))
+                      omopgenerics::strataColumns(result))
   omopgenerics::assertChoice(facet, optFacetColour, null = TRUE)
 
   # this is due to bug in visOmopResults to remove in next release
@@ -69,7 +69,7 @@ plotObservationPeriod <- function(result,
   if (length(facet) == 0) facet <- NULL
   if (length(colour) == 0) colour <- NULL
 
-  if(length(visOmopResults::groupColumns(result)) == 0){
+  if(length(omopgenerics::groupColumns(result)) == 0){
     result <- result |>
       dplyr::mutate(group_name  = "observation_period_ordinal")
   }

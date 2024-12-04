@@ -270,10 +270,10 @@ createSummarisedResultRecordCount <- function(result, strata, omopTable, omopTab
 
   if(original_interval != "overall"){
     result <- result |>
-      visOmopResults::splitStrata() |>
+      omopgenerics::splitStrata() |>
       dplyr::mutate(additional_level = .data$interval_group) |>
       dplyr::mutate(additional_name = dplyr::if_else(.data$additional_level == "overall", "overall", "time_interval")) |>
-      visOmopResults::uniteStrata(unique(unlist(strata))[unique(unlist(strata)) != "interval_group"]) |>
+      omopgenerics::uniteStrata(unique(unlist(strata))[unique(unlist(strata)) != "interval_group"]) |>
       dplyr::select(-"interval_group")
   }
 

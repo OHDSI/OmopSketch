@@ -126,11 +126,11 @@ summariseObservationPeriod <- function(observationPeriod,
 }
 
 addOrdinalLevels <- function(x) {
-  strata_cols <- visOmopResults::strataColumns(x)
+  strata_cols <- omopgenerics::strataColumns(x)
   strata_cols <- strata_cols[strata_cols != "id"]
 
   x <- x |>
-    visOmopResults::splitStrata()
+    omopgenerics::splitStrata()
   xx <- suppressWarnings(as.integer(x$id))
   desena <- (floor(xx/10)) %% 10
   unitat <- xx %% 10
@@ -148,7 +148,7 @@ addOrdinalLevels <- function(x) {
     dplyr::mutate("group_level" = .env$val) |>
     dplyr::select(-c("id")) |>
     dplyr::mutate("group_name" = "observation_period_ordinal") |>
-    visOmopResults::uniteStrata(cols = strata_cols)
+    omopgenerics::uniteStrata(cols = strata_cols)
 
   return(x)
 }

@@ -8,12 +8,13 @@
 tableMissingData <- function(result,
                                  type = "gt") {
   # initial checks
+  rlang::check_installed("visOmopResults")
   omopgenerics::validateResultArgument(result)
   omopgenerics::assertChoice(type, choicesTables())
 
   # subset to result_type of interest
   result <- result |>
-    visOmopResults::filterSettings(
+    omopgenerics::filterSettings(
       .data$result_type == "summarise_missing_data")
 
   # check if it is empty
@@ -31,6 +32,6 @@ tableMissingData <- function(result,
         "N" = "<na_count>"),
       header = c("cdm_name"),
       rename = c("Database name" = "cdm_name"),
-      groupColumn = c("omop_table", visOmopResults::strataColumns(result))
+      groupColumn = c("omop_table", omopgenerics::strataColumns(result))
     )
 }

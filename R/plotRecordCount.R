@@ -27,6 +27,7 @@ plotRecordCount <- function(result,
                             colour = NULL){
 
   rlang::check_installed("ggplot2")
+  rlang::check_installed("visOmopResults")
 
   # initial checks
   omopgenerics::validateResultArgument(result)
@@ -34,7 +35,7 @@ plotRecordCount <- function(result,
 
   # subset to results of interest
   result <- result |>
-    visOmopResults::filterSettings(
+    omopgenerics::filterSettings(
       .data$result_type == "summarise_record_count")
   if (nrow(result) == 0) {
     cli::cli_abort(c("!" = "No records found with result_type == summarise_record_count"))
@@ -53,7 +54,7 @@ plotRecordCount <- function(result,
                                   ribbon = FALSE,
                                   facet  = facet,
                                   colour = colour,
-                                  group = c("cdm_name", "omop_table", visOmopResults::strataColumns(result))) +
+                                  group = c("cdm_name", "omop_table", omopgenerics::strataColumns(result))) +
       ggplot2::labs(
         y = "Number records",
         x = "Date"

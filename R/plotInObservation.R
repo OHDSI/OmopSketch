@@ -39,7 +39,7 @@ plotInObservation <- function(result,
 
   # subset to results of interest
   result <- result |>
-    visOmopResults::filterSettings(
+    omopgenerics::filterSettings(
       .data$result_type == "summarise_in_observation")
   if (nrow(result) == 0) {
     cli::cli_abort(c("!" = "No records found with result_type == summarise_in_observation"))
@@ -72,7 +72,7 @@ plotInObservation <- function(result,
         ymax = NULL,
         facet = facet,
         colour = colour,
-        group = c("cdm_name", "omop_table", visOmopResults::strataColumns(result))
+        group = c("cdm_name", "omop_table", omopgenerics::strataColumns(result))
       ) +
       ggplot2::labs(
         y = variable,

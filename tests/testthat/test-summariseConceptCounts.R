@@ -25,7 +25,7 @@ test_that("summarise code use - eunomia", {
   # min cell counts:
   expect_equal(
       omopgenerics::suppress(results, 5) |>
-        visOmopResults::splitAdditional() |>
+        omopgenerics::splitAdditional() |>
         dplyr::filter(
           strata_level == "overall",
           variable_name == "Number records",
@@ -77,7 +77,7 @@ test_that("summarise code use - eunomia", {
   # by year
   # overall record count
   expect_true(results %>%
-                visOmopResults::splitAdditional() |>
+                omopgenerics::splitAdditional() |>
                 dplyr::filter(group_name == "codelist_name" &
                                 strata_name == "overall" &
                                 time_interval == "2008-01-01 to 2008-12-31" &
@@ -94,7 +94,7 @@ test_that("summarise code use - eunomia", {
 
   # overall person count
   expect_true(results %>%
-                visOmopResults::splitAdditional() |>
+                omopgenerics::splitAdditional() |>
                 dplyr::filter(group_name == "codelist_name" &
                                 strata_name == "overall" &
                                 time_interval == "2008-01-01 to 2008-12-31" &
@@ -181,18 +181,18 @@ test_that("summarise code use - eunomia", {
 
   expect_equal(
     results1 |>
-      visOmopResults::splitAdditional() |>
+      omopgenerics::splitAdditional() |>
       dplyr::filter(variable_name == "Number records") |>
       dplyr::arrange(dplyr::across(dplyr::everything())),
     results |>
-      visOmopResults::splitAdditional() |>
+      omopgenerics::splitAdditional() |>
       dplyr::filter(variable_name == "Number records", standard_concept_name == "overall") |>
       dplyr::select(-c(starts_with("standard_"), starts_with("source_"), "domain_id")) |>
       dplyr::arrange(dplyr::across(dplyr::everything())),
     ignore_attr = TRUE
   )
   expect_true(results1 |>
-                visOmopResults::splitAdditional() |>
+                omopgenerics::splitAdditional() |>
                 dplyr::filter(variable_name  == "Number subjects",
                               group_level == "acetiminophen",
                               time_interval == "1909-01-01 to 1909-12-31",
@@ -424,7 +424,7 @@ test_that("summarise code use - mock data", {
 
   # Arthritis (codes 3 and 17), one record of 17 per ind and one record of 3 ind 1
   expect_equal(result |>
-                 visOmopResults::splitAdditional() |>
+                 omopgenerics::splitAdditional() |>
                  dplyr::filter(standard_concept_name == "Arthritis",
                                strata_level == "overall") |>
                  dplyr::arrange(standard_concept_id, variable_name) |>
@@ -433,7 +433,7 @@ test_that("summarise code use - mock data", {
 
   # Osteoarthritis (code 5), two records ind 2, one record ind 1
   expect_equal(result |>
-                 visOmopResults::splitAdditional() |>
+                 omopgenerics::splitAdditional() |>
                  dplyr::filter(standard_concept_name == "Osteoarthritis of hip",
                                strata_level == "overall") |>
                  dplyr::arrange(standard_concept_id, variable_name) |>
@@ -442,7 +442,7 @@ test_that("summarise code use - mock data", {
 
   # Musculoskeletal disorder (code 1), one record each ind
   expect_equal(result |>
-                 visOmopResults::splitAdditional() |>
+                 omopgenerics::splitAdditional() |>
                  dplyr::filter(standard_concept_name == "Musculoskeletal disorder",
                                strata_level == "overall") |>
                  dplyr::arrange(standard_concept_id, variable_name) |>
@@ -454,19 +454,19 @@ test_that("summarise code use - mock data", {
 
   # Arthritis (codes 3 and 17), one record of each per ind
   expect_equal(result |>
-                 visOmopResults::splitAdditional() |>
+                 omopgenerics::splitAdditional() |>
                  dplyr::filter(standard_concept_name == "Arthritis" & strata_level == "Male") |>
                  dplyr::arrange(standard_concept_id, variable_name) |>
                  dplyr::pull(estimate_value),
                c("2","1"))
   expect_equal(result |>
-                 visOmopResults::splitAdditional() |>
+                 omopgenerics::splitAdditional() |>
                  dplyr::filter(standard_concept_name =="Arthritis" & strata_level == "3 to 150 &&& Male") |>
                  dplyr::arrange(standard_concept_id, variable_name) |>
                  dplyr::pull(estimate_value),
                c("2","1"))
   expect_equal(result |>
-                 visOmopResults::splitAdditional() |>
+                 omopgenerics::splitAdditional() |>
                  dplyr::filter(standard_concept_name == "Arthritis" & strata_level == "3 to 150") |>
                  dplyr::arrange(standard_concept_id, variable_name) |>
                  dplyr::pull(estimate_value),
@@ -474,7 +474,7 @@ test_that("summarise code use - mock data", {
 
   # Osteoarthritis of hip (code 5), two records ind 2 and one ind 1
   expect_equal(result |>
-                 visOmopResults::splitAdditional() |>
+                 omopgenerics::splitAdditional() |>
                  dplyr::filter(standard_concept_name == "Osteoarthritis of hip" & strata_level == "Female") |>
                  dplyr::tally() |>
                  dplyr::pull(),
@@ -482,25 +482,25 @@ test_that("summarise code use - mock data", {
 
   # Musculoskeletal disorder (code 1), one record each ind
   expect_equal(result |>
-                 visOmopResults::splitAdditional() |>
+                 omopgenerics::splitAdditional() |>
                  dplyr::filter(standard_concept_name == "Musculoskeletal disorder" & strata_level == "3 to 150 &&& Female") |>
                  dplyr::arrange(standard_concept_id, variable_name) |>
                  dplyr::pull(estimate_value),
                c("1","1"))
   expect_equal(result |>
-                 visOmopResults::splitAdditional() |>
+                 omopgenerics::splitAdditional() |>
                  dplyr::filter(standard_concept_name == "Musculoskeletal disorder" & strata_level == "3 to 150 &&& Male") |>
                  dplyr::arrange(standard_concept_id, variable_name) |>
                  dplyr::pull(estimate_value),
                c("1","1"))
   expect_equal(result |>
-                 visOmopResults::splitAdditional() |>
+                 omopgenerics::splitAdditional() |>
                  dplyr::filter(standard_concept_name == "Musculoskeletal disorder" & strata_level == "3 to 150") |>
                  dplyr::arrange(standard_concept_id, variable_name) |>
                  dplyr::pull(estimate_value),
                c("2","2"))
   expect_equal(result |>
-                 visOmopResults::splitAdditional() |>
+                 omopgenerics::splitAdditional() |>
                  dplyr::filter(standard_concept_name == "Musculoskeletal disorder" & strata_level == "overall") |>
                  dplyr::arrange(standard_concept_id, variable_name) |>
                  dplyr::pull(estimate_value),

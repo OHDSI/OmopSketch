@@ -16,12 +16,13 @@
 tableOmopSnapshot <- function(result,
                               type = "gt") {
   # initial checks
+  rlang::check_installed("visOmopResults")
   omopgenerics::validateResultArgument(result)
   omopgenerics::assertChoice(type, choicesTables())
 
   # subset to result_type of interest
   result <- result |>
-    visOmopResults::filterSettings(
+    omopgenerics::filterSettings(
       .data$result_type == "summarise_omop_snapshot")
 
   # check if it is empty
