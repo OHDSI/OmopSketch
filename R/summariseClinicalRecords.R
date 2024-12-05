@@ -407,7 +407,7 @@ addVariables <- function(x, variables) {
   name <- omopgenerics::tableName(x)
 
   newNames <- c(
-    "person_id",
+    "person_id" = "person_id",
     "id" = tableId(name),
     "start_date" = startDate(name),
     "end_date"   = endDate(name),
@@ -474,8 +474,8 @@ addVariables <- function(x, variables) {
               .data$end_date <= .data$obs_end
           ) |>
           dplyr::mutate("in_observation" = 1L) |>
-          dplyr::select("in_observation", "id", "person_id"),
-        by = c("id", "person_id")
+          dplyr::select(any_of(c("in_observation", "id", "person_id"))),
+        by = c("person_id", "id")
       ) |>
       dplyr::distinct()
   }
