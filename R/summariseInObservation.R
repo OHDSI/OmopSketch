@@ -187,7 +187,8 @@ countRecords <- function(observationPeriod, cdm, start_date_name, end_date_name,
                         (.data$start_date >= .data$interval_start_date & .data$start_date <= .data$interval_end_date)) %>%
         dplyr::mutate(start_date = pmax(.data$interval_start_date, .data$start_date, na.rm = TRUE)) |>
         dplyr::mutate(end_date   = pmin(.data$interval_end_date, .data$end_date, na.rm = TRUE)) |>
-        dplyr::compute(temporary = FALSE, name = tablePrefix)
+        dplyr::compute(temporary = FALSE, name = tablePrefix)|>
+        dplyr::mutate("additional_name" = "time_interval")
     }else{
       x <- observationPeriod |>
         dplyr::rename("start_date" = "observation_period_start_date",
@@ -198,10 +199,9 @@ countRecords <- function(observationPeriod, cdm, start_date_name, end_date_name,
 
     personDays <- x %>%
       dplyr::mutate(estimate_value = !!CDMConnector::datediff("start_date","end_date", interval = "day")+1) |>
-      dplyr::group_by(dplyr::across(dplyr::any_of(c("additional_level", "sex", "age_group")))) |>
+      dplyr::group_by(dplyr::across(dplyr::any_of(c("additional_level", "sex", "age_group", "additional_name")))) |>
       dplyr::summarise(estimate_value = sum(.data$estimate_value, na.rm = TRUE), .groups = "drop") |>
-      dplyr::mutate("variable_name" = "Number person-days",
-                    "additional_name" = "time_interval") |>
+      dplyr::mutate("variable_name" = "Number person-days")|>
       dplyr::collect()
   }else{
     personDays <- createEmptyIntervalTable(interval)
@@ -344,10 +344,9 @@ addSexOverall <- function(result, sex){
   if(sex){
     result <- result |> rbind(
       result |>
-        dplyr::group_by(.data$age_group, .data$additional_level, .data$variable_name) |>
+        dplyr::group_by(.data$age_group, .data$additional_level, .data$variable_name, .data$additional_name) |>
         dplyr::summarise(estimate_value = sum(.data$estimate_value, na.rm = TRUE), .groups = "drop") |>
-        dplyr::mutate(sex = "overall",
-                      additional_name = dplyr::if_else(.data$additional_level == "overall", "overall", "time_interval"))
+        dplyr::mutate(sex = "overall")
     )
   }
   return(result)
