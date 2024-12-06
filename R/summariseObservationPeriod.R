@@ -48,8 +48,7 @@ summariseObservationPeriod <- function(observationPeriod,
     dplyr::pull("estimate_name")
   omopgenerics::assertChoice(estimates, opts, unique = TRUE)
   tablePrefix <-  omopgenerics::tmpPrefix()
-  strata   <- getStrataList(sex, ageGroup)
-  strataId <- c(list("id"),  strata |> purrr::map(\(x) c("id", x)))
+  strata <- omopgenerics::combineStrata(c("sex"[sex], "age_group"[!is.null(ageGroup)]))
 
   if (omopgenerics::isTableEmpty(observationPeriod)) {
     obsSr <- observationPeriod |>
@@ -84,7 +83,10 @@ summariseObservationPeriod <- function(observationPeriod,
     obsSr <- obs |>
       # dplyr::collect() |> # https://github.com/darwin-eu-dev/PatientProfiles/issues/706
       PatientProfiles::summariseResult(
-        strata = strataId,
+        strata = strata,
+        group = "id",
+        includeOverallGroup = TRUE,
+        includeOverallStrata = TRUE,
         variables = c("duration", "next_obs"),
         estimates = estimates
       ) |>
@@ -103,9 +105,9 @@ summariseObservationPeriod <- function(observationPeriod,
             ) |>
             suppressMessages()
           ) |>
-            dplyr::filter(.data$variable_name != "number records" | .data$strata_level == "overall") |>
-            addOrdinalLevels() |>
-            arrangeSr(estimates)
+      addOrdinalLevels() |>
+      dplyr::filter(.data$variable_name != "number records" | .data$group_level == "all") |>
+      arrangeSr(estimates)
   }
 
   obsSr <- obsSr |>
@@ -126,15 +128,14 @@ summariseObservationPeriod <- function(observationPeriod,
 }
 
 addOrdinalLevels <- function(x) {
-  strata_cols <- visOmopResults::strataColumns(x)
-  strata_cols <- strata_cols[strata_cols != "id"]
+  group_cols <- omopgenerics::groupColumns(x)
+  x<-x|>omopgenerics::splitGroup()
 
-  x <- x |>
-    visOmopResults::splitStrata()
+
   xx <- suppressWarnings(as.integer(x$id))
   desena <- (floor(xx/10)) %% 10
   unitat <- xx %% 10
-  val <- rep("overall_", length(xx))
+  val <- rep("all", length(xx))
   id0 <- !is.na(xx)
   val[id0] <- paste0(xx[id0], "th")
   id <- id0 & desena != 1L & unitat == 1L
@@ -145,10 +146,10 @@ addOrdinalLevels <- function(x) {
   val[id] <- paste0(xx[id], "rd")
 
   x <- x |>
-    dplyr::mutate("group_level" = .env$val) |>
-    dplyr::select(-c("id")) |>
-    dplyr::mutate("group_name" = "observation_period_ordinal") |>
-    visOmopResults::uniteStrata(cols = strata_cols)
+    dplyr::mutate("group_level" = .env$val,
+                  "group_name" = "observation_period_ordinal") |>
+    dplyr::select(-c("id"))
+
 
   return(x)
 }
@@ -158,12 +159,12 @@ arrangeSr <- function(x, estimates) {
   lev <- c("overall", sort(lev[lev != "overall"]))
 
   group <- x$group_level |> unique()
-  group <- c("overall", sort(group[group != "overall"]))
+  group <- c("all", sort(group[group != "all"]))
 
   order <- dplyr::tibble(
     "variable_name" = c("number records"),
-    "group_level"   = "overall_",
-    "strata_level"  = "overall",
+    "group_level"   = "all",
+    "strata_level"  = lev,
     "estimate_name" = "count"
   ) |>
     dplyr::union_all(
