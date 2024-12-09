@@ -140,7 +140,7 @@ summariseMissingData <- function(cdm,
     purrr::compact()
 
   if (rlang::is_empty(result)){
-    return(omopgenerics::emptySummarisedResult())
+    return(omopgenerics::emptySummarisedResult(settings = createSettings(result_type = "summarise_missing_data", study_period = dateRange)))
   }
 
   result <- result |>
