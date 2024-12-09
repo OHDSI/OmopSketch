@@ -474,7 +474,7 @@ addVariables <- function(x, variables) {
               .data$end_date <= .data$obs_end
           ) |>
           dplyr::mutate("in_observation" = 1L) |>
-          dplyr::select(any_of(c("in_observation", "id", "person_id"))),
+          dplyr::select(c("in_observation", "id", "person_id")),
         by = c("person_id", "id")
       ) |>
       dplyr::distinct()
