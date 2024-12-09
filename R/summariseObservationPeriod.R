@@ -76,6 +76,11 @@ summariseObservationPeriod <- function(observationPeriod,
       dplyr::ungroup() |>
       dplyr::select("person_id", "id", "duration", "next_obs", dplyr::any_of(c("sex","age_group"))) |>
       dplyr::collect()
+    if (all(is.na(obs$next_obs))){
+      obs <- obs |>
+        dplyr::select(!"next_obs")
+    }
+
    if (dim(obs)[1]==0){
      return(omopgenerics::emptySummarisedResult()|>omopgenerics::newSummarisedResult(
        settings = createSettings(result_type = "summarise_observation_period", study_period = dateRange)))
@@ -131,7 +136,6 @@ addOrdinalLevels <- function(x) {
   group_cols <- omopgenerics::groupColumns(x)
   x<-x|>omopgenerics::splitGroup()
 
-
   xx <- suppressWarnings(as.integer(x$id))
   desena <- (floor(xx/10)) %% 10
   unitat <- xx %% 10
@@ -149,7 +153,6 @@ addOrdinalLevels <- function(x) {
     dplyr::mutate("group_level" = .env$val,
                   "group_name" = "observation_period_ordinal") |>
     dplyr::select(-c("id"))
-
 
   return(x)
 }

@@ -53,7 +53,12 @@ summariseMissingData <- function(cdm,
     )
     col_table <- intersect(col, possibleColumns)
     if (rlang::is_empty(col_table)) col_table <- possibleColumns
+    discarded_cols <- setdiff(col_table,colnames(omopTable))
 
+    if (length(discarded_cols)) {
+      cli::cli_inform(c("i"="The columns {discarded_cols} are not present in {table} table"))
+      col_table <-setdiff(col_table, discarded_cols)
+    }
 
     if (sampling & omopTable |> dplyr::tally() |> dplyr::pull() <= sample) {
       sampling <- FALSE
@@ -96,7 +101,7 @@ summariseMissingData <- function(cdm,
       dplyr::group_by(dplyr::across(dplyr::all_of(strata))) |>
       dplyr::summarise(
         dplyr::across(
-            .cols = dplyr::all_of(col_table),
+            .cols = dplyr::any_of(col_table),
           ~ sum(as.integer(is.na(.x)), na.rm = TRUE)
         ),
         total_count = dplyr::n(),
@@ -154,9 +159,9 @@ summariseMissingData <- function(cdm,
       result_id = 1L,
       cdm_name = omopgenerics::cdmName(cdm),
     ) |>
-    visOmopResults::uniteGroup(cols = "omop_table") |>
-    visOmopResults::uniteStrata(cols = strata) |>
-    visOmopResults::uniteAdditional() |>
+    omopgenerics::uniteGroup(cols = "omop_table") |>
+    omopgenerics::uniteStrata(cols = strata) |>
+    omopgenerics::uniteAdditional() |>
     dplyr::mutate(
       "estimate_type" = "integer",
       "variable_level" = NA_character_

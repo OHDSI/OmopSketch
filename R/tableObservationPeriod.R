@@ -17,12 +17,13 @@
 tableObservationPeriod <- function(result,
                                    type = "gt") {
   # initial checks
+  rlang::check_installed("visOmopResults")
   omopgenerics::validateResultArgument(result)
   omopgenerics::assertChoice(type, choicesTables())
 
   # subset to result_type of interest
   result <- result |>
-    visOmopResults::filterSettings(
+    omopgenerics::filterSettings(
       .data$result_type == "summarise_observation_period")
 
   # check if it is empty
@@ -40,7 +41,7 @@ tableObservationPeriod <- function(result,
         "mean (sd)" = "<mean> (<sd>)",
         "median [Q25 - Q75]" = "<median> [<q25> - <q75>]"),
       header = "cdm_name",
-      groupColumn = visOmopResults::strataColumns(result),
+      groupColumn = omopgenerics::strataColumns(result),
       hide = c(
         "result_id", "estimate_type", "strata_name", "variable_level"),
       type = type,

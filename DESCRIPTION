@@ -52,7 +52,8 @@ Suggests:
     withr,
     omock (>= 0.3.0),
     covr,
-    ggplot2
+    ggplot2,
+    visOmopResults (>= 0.4.0)
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Imports: 
@@ -67,8 +68,7 @@ Imports:
     rlang,
     stringr,
     tibble,
-    tidyr,
-    visOmopResults (>= 0.4.0)
+    tidyr
 Depends: 
     R (>= 2.10)
 URL: https://OHDSI.github.io/OmopSketch/

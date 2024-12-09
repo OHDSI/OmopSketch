@@ -310,9 +310,7 @@ test_that("check it works with mockOmopSketch", {
   # days to next observation period
   expect_identical(
     sop |>
-      dplyr::filter(variable_name == "days to next observation period", estimate_name == "mean") |>
-      dplyr::pull("estimate_value"),
-    as.character(c(NA,NA))
+      dplyr::filter(variable_name == "days to next observation period")|>nrow(), 0L
   )
 
   # Check result type

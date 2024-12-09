@@ -168,9 +168,9 @@ summariseAllConceptCounts <- function(cdm,
       result_id = 1L,
       cdm_name = omopgenerics::cdmName(cdm)
     ) |>
-    visOmopResults::uniteGroup(cols = "omop_table") |>
-    visOmopResults::uniteStrata(cols = strata) |>
-    visOmopResults::uniteAdditional() |>
+    omopgenerics::uniteGroup(cols = "omop_table") |>
+    omopgenerics::uniteStrata(cols = strata) |>
+    omopgenerics::uniteAdditional() |>
     dplyr::mutate(
       "estimate_value" = as.character(.data$estimate_value),
       "estimate_type" = "integer"
