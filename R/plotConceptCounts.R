@@ -32,13 +32,14 @@ plotConceptCounts <- function(result,
                               colour = NULL){
 
   rlang::check_installed("ggplot2")
+  rlang::check_installed("visOmopResults")
 
   # initial checks
   omopgenerics::validateResultArgument(result)
 
   # subset to results of interest
   result <- result |>
-    visOmopResults::filterSettings(.data$result_type == "summarise_concept_counts")
+    omopgenerics::filterSettings(.data$result_type == "summarise_concept_counts")
 
   if (nrow(result) == 0) {
     cli::cli_abort(c("!" = "No records found with result_type == summarise_concept_counts"))
@@ -53,13 +54,13 @@ plotConceptCounts <- function(result,
     ))
   }
 
-  result1 <- result |> visOmopResults::splitAdditional()
+  result1 <- result |> omopgenerics::splitAdditional()
   # Detect if there are several time intervals
   if("time_interval" %in% colnames(result1)){
     # Line plot where each concept is a different line
     p <- result1 |>
       dplyr::filter(.data$time_interval != "overall") |>
-      visOmopResults::uniteAdditional(cols = c("time_interval", "standard_concept_name", "standard_concept_id", "source_concept_name", "source_concept_id", "domain_id")) |>
+      omopgenerics::uniteAdditional(cols = c("time_interval", "standard_concept_name", "standard_concept_id", "source_concept_name", "source_concept_id", "domain_id")) |>
       visOmopResults::scatterPlot(x = "time_interval",
                                   y = "count",
                                   line   = TRUE,

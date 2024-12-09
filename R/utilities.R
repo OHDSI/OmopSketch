@@ -29,7 +29,7 @@ warnFacetColour <- function(result, cols) {
       "variable_name", "variable_level"
     ) |>
     dplyr::distinct() |>
-    visOmopResults::splitAll() |>
+    omopgenerics::splitAll() |>
     dplyr::select(!dplyr::any_of(unique(unlist(cols)))) |>
     as.list() |>
     purrr::map(unique)

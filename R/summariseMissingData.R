@@ -154,9 +154,9 @@ summariseMissingData <- function(cdm,
       result_id = 1L,
       cdm_name = omopgenerics::cdmName(cdm),
     ) |>
-    visOmopResults::uniteGroup(cols = "omop_table") |>
-    visOmopResults::uniteStrata(cols = strata) |>
-    visOmopResults::uniteAdditional() |>
+    omopgenerics::uniteGroup(cols = "omop_table") |>
+    omopgenerics::uniteStrata(cols = strata) |>
+    omopgenerics::uniteAdditional() |>
     dplyr::mutate(
       "estimate_type" = "integer",
       "variable_level" = NA_character_

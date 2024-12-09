@@ -255,7 +255,7 @@ createSummarisedResultObservationPeriod <- function(result, observationPeriod, n
   }else{
   result <- result |>
     dplyr::mutate("estimate_value" = as.character(.data$estimate_value)) |>
-    visOmopResults::uniteStrata(cols = c("sex", "age_group")) |>
+    omopgenerics::uniteStrata(cols = c("sex", "age_group")) |>
     dplyr::mutate(
       "result_id" = as.integer(1),
       "cdm_name" = omopgenerics::cdmName(omopgenerics::cdmReference(observationPeriod)),
