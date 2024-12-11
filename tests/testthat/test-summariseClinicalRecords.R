@@ -13,10 +13,11 @@ test_that("summariseClinicalRecords() works", {
   expect_warning(summariseClinicalRecords(cdm, "device_exposure"))
   expect_no_error(m <- summariseClinicalRecords(cdm, "measurement"))
   expect_no_error(summariseClinicalRecords(cdm, "observation"))
-  expect_warning(summariseClinicalRecords(cdm, "death"))
+  expect_warning(de<-summariseClinicalRecords(cdm, "death"))
 
   #Check result type
   checkResultType(op, "summarise_clinical_records")
+  checkResultType(de, "summarise_clinical_records")
 
   expect_no_error(all <- summariseClinicalRecords(cdm, c("observation_period", "visit_occurrence", "measurement")))
   expect_equal(
@@ -241,7 +242,8 @@ test_that("dateRange argument works", {
   expect_warning(z<-summariseClinicalRecords(cdm, "drug_exposure", dateRange =  as.Date(c("2020-01-01", "2021-01-01"))))
   expect_equal(z, omopgenerics::emptySummarisedResult(), ignore_attr = TRUE)
   expect_equal(summariseClinicalRecords(cdm, "drug_exposure",dateRange = as.Date(c("2012-01-01",NA))), y, ignore_attr = TRUE)
-
+  checkResultType(z, "summarise_clinical_records")
+  expect_equal(colnames(settings(z)), colnames(settings(x)) )
 
 })
 

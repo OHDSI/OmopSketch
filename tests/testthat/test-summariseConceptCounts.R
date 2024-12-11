@@ -554,6 +554,7 @@ test_that("dateRange argument works", {
   expect_warning(z<-summariseConceptCounts(cdm,conceptId = list("polio" = c(40213160)), dateRange =  as.Date(c("2020-01-01", "2021-01-01"))))
   expect_equal(z, omopgenerics::emptySummarisedResult(), ignore_attr = TRUE)
   expect_equal(summariseConceptCounts(cdm,conceptId = list("polio" = c(40213160)),dateRange = as.Date(c("1930-01-01",NA))), y, ignore_attr = TRUE)
-
+  checkResultType(z, "summarise_concept_counts")
+  expect_equal(colnames(settings(z)), colnames(settings(x)))
   PatientProfiles::mockDisconnect(cdm = cdm)
 })

@@ -80,7 +80,7 @@ summariseClinicalRecords <- function(cdm,
   result <- purrr::map(omopTableName, \(x) {
     if(omopgenerics::isTableEmpty(cdm[[x]])) {
       cli::cli_warn(paste0(x, " omop table is empty. Returning an empty summarised omop table."))
-      return(omopgenerics::emptySummarisedResult())
+      return(omopgenerics::emptySummarisedResult(settings = createSettings(result_type = "summarise_clinical_records")))
     }
     summariseClinicalRecord(
       x,
@@ -127,7 +127,7 @@ summariseClinicalRecord <- function(omopTableName,
 
   omopTable <- restrictStudyPeriod(omopTable, dateRange)
   if(omopgenerics::isTableEmpty(omopTable)) {
-    return(omopgenerics::emptySummarisedResult())
+    return(omopgenerics::emptySummarisedResult(settings = createSettings(result_type = "summarise_clinical_records", study_period = dateRange)))
   }
 
   omopTable <- filterPersonId(omopTable) |>

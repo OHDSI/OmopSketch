@@ -82,8 +82,7 @@ summariseObservationPeriod <- function(observationPeriod,
     }
 
    if (dim(obs)[1]==0){
-     return(omopgenerics::emptySummarisedResult()|>omopgenerics::newSummarisedResult(
-       settings = createSettings(result_type = "summarise_observation_period", study_period = dateRange)))
+     return(omopgenerics::emptySummarisedResult(settings = createSettings(result_type = "summarise_observation_period", study_period = dateRange)))
    }
     obsSr <- obs |>
       # dplyr::collect() |> # https://github.com/darwin-eu-dev/PatientProfiles/issues/706
