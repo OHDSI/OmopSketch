@@ -161,8 +161,7 @@ summariseClinicalRecord <- function(omopTableName,
   cli::cli_inform(c("i" = "Summarising {.pkg {omopTableName}} counts and records per person"))
   result <- summariseRecordsPerPerson(
     omopTable, date, sex, ageGroup, recordsPerPerson)|>
-    omopgenerics::newSummarisedResult(settings = createSettings("")|>
-                                        dplyr::mutate("strata" = paste(unique(unlist(strata)), collapse = " &&& ")))
+    omopgenerics::newSummarisedResult(settings = createSettings(""))
 
   # Summary concepts ----
   if (inObservation | standardConcept | sourceVocabulary | domainId | typeConcept) {
