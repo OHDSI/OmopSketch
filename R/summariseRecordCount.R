@@ -202,33 +202,32 @@ getIntervalTibble <- function(omopTable, start_date_name, end_date_name, interva
   startDate <- getOmopTableStartDate(omopTable, start_date_name)
   endDate <- getOmopTableEndDate(omopTable, end_date_name)
 
-  tibble::tibble(
-    "group" = seq.Date(as.Date(startDate), as.Date(endDate), "month")
-  ) |>
-    dplyr::rowwise() |>
-    dplyr::mutate("interval" = max(which(
-      .data$group >= seq.Date(from = startDate, to = endDate, by = paste(.env$unitInterval, .env$interval))
-    ),
-    na.rm = TRUE)) |>
-    dplyr::ungroup() |>
-    dplyr::group_by(.data$interval) |>
+  date_groups <- tibble::tibble(
+    group = seq.Date(as.Date(startDate), as.Date(endDate), by = "month")
+  )
+
+  # Pre-compute interval sequence to avoid recalculating it repeatedly
+  interval_seq <- seq.Date(
+    from = startDate,
+    to = endDate,
+    by = paste(unitInterval, interval)
+  )
+
+  # Assign intervals and compute interval-related columns
+  result <- date_groups |>
     dplyr::mutate(
-      "interval_start_date" = min(.data$group),
-      "interval_end_date"   = dplyr::if_else(.env$interval == "year",
-                                             clock::add_years(min(.data$group),.env$unitInterval)-1,
-                                             clock::add_months(min(.data$group),.env$unitInterval)-1)
+      "interval" = findInterval(.data$group, interval_seq),
+      "interval_start_date" = interval_seq[interval],
+      "interval_end_date" = if (.env$interval == "year") {
+        clock::add_years(interval_seq[interval], .env$unitInterval) - 1
+      } else {
+        clock::add_months(interval_seq[interval], .env$unitInterval) - 1
+      },
+      my = paste0(clock::get_month(.data$group), "-", clock::get_year(.data$group)),
+      interval_group = paste(interval_start_date, "to", interval_end_date)
     ) |>
-    dplyr::mutate(
-      "interval_start_date" = as.Date(.data$interval_start_date),
-      "interval_end_date" = as.Date(.data$interval_end_date)
-    ) |>
-    dplyr::mutate(
-      "interval_group" = paste(.data$interval_start_date,"to",.data$interval_end_date)
-    ) |>
-    dplyr::ungroup() |>
-    dplyr::mutate("my" = paste0(clock::get_month(.data$group),"-",clock::get_year(.data$group))) |>
-    dplyr::select("interval_group", "my", "interval_start_date","interval_end_date") |>
-    dplyr::distinct()
+    dplyr::distinct(interval_group, my, interval_start_date, interval_end_date)
+
 }
 
 splitIncidenceBetweenIntervals <- function(cdm, omopTable, date, prefix){
