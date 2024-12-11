@@ -262,4 +262,22 @@ test_that("tableClinicalRecords() works", {
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
 
+test_that("summariseClinicalRecords() works with mock data", {
+  skip_on_cran()
+  # Load mock database ----
+  cdm <- mockOmopSketch()
+
+  # Check all tables work ----
+
+
+  expect_no_error(vo <- summariseClinicalRecords(cdm, "visit_occurrence"))
+
+  expect_no_error(summariseClinicalRecords(cdm, "drug_exposure"))
+  expect_no_error(summariseClinicalRecords(cdm, "procedure_occurrence"))
+
+  expect_warning(summariseClinicalRecords(cdm, "death"))
+
+
+  PatientProfiles::mockDisconnect(cdm = cdm)
+})
 
