@@ -49,7 +49,7 @@ summariseInObservation <- function(observationPeriod,
 
   if(omopgenerics::isTableEmpty(observationPeriod)){
     cli::cli_warn("observation_period table is empty. Returning an empty summarised result.")
-    return(omopgenerics::emptySummarisedResult())
+    return(omopgenerics::emptySummarisedResult(settings = createSettings(result_type = "summarise_in_observation")))
   }
 
   checkOutput(output)

@@ -1,10 +1,6 @@
 test_that("check summariseObservationPeriod works", {
   skip_on_cran()
-  # helper function
-  removeSettings <- function(x) {
-    attr(x, "settings") <- NULL
-    return(x)
-  }
+
   nPoints <- 512
 
   # Load mock database
@@ -49,9 +45,10 @@ test_that("check summariseObservationPeriod works", {
                                             "median", "q75", "q95", "max")))
   expect_equal(
     resAllD |> dplyr::filter(!is.na(variable_level)) |>
-      dplyr::mutate(estimate_value = as.numeric(estimate_value)) |> removeSettings(),
+      dplyr::mutate(estimate_value = as.numeric(estimate_value)),
     resAll |> dplyr::filter(!is.na(variable_level)) |>
-      dplyr::mutate(estimate_value = as.numeric(estimate_value)) |> removeSettings()
+      dplyr::mutate(estimate_value = as.numeric(estimate_value)),
+    ignore_attr = TRUE
   )
 
   # test estimates
@@ -68,7 +65,7 @@ test_that("check summariseObservationPeriod works", {
   # counts
   expect_identical(resAll$estimate_value[resAll$variable_name == "number records"], "8")
   x <- dplyr::tibble(
-    group_level = c("overall_", "1st", "2nd", "3rd"),
+    group_level = c("all", "1st", "2nd", "3rd"),
     variable_name = "number subjects",
     estimate_value = c("4", "4", "3", "1"))
   expect_identical(nrow(x), resAll |> dplyr::inner_join(x, by = colnames(x)) |> nrow())
@@ -87,40 +84,22 @@ test_that("check summariseObservationPeriod works", {
     resAll |>
       dplyr::filter(variable_name == "duration in days", estimate_name == "mean") |>
       dplyr::pull("estimate_value"),
-    as.character(c(
+    as.character(c( mean(c(20, 6, 113, 144, 18, 9, 29, 276)),
       mean(c(20, 18, 9, 276)),
-      mean(c(6, 29, 144)), 113,  mean(c(20, 6, 113, 144, 18, 9, 29, 276))
-    ))
+      mean(c(6, 29, 144)), 113)
+    )
   )
-  # when it will be group_level = "overall"
-  # expect_identical(
-  #   resAll |>
-  #     dplyr::filter(variable_name == "duration in days", estimate_name == "mean") |>
-  #     dplyr::pull("estimate_value"),
-  #   as.character(c(
-  #     mean(c(20, 6, 113, 144, 18, 9, 29, 276)), mean(c(20, 18, 9, 276)),
-  #     mean(c(6, 29, 144)), 113
-  #   ))
-  # )
 
   # days to next observation period
   expect_identical(
     resAll |>
       dplyr::filter(variable_name == "days to next observation period", estimate_name == "mean") |>
       dplyr::pull("estimate_value"),
-    as.character(c(
-      mean(c(5, 32, 136)), 26, NA,  mean(c(5, 32, 136, 26))
+    as.character(c( mean(c(5, 32, 136, 26)),
+      mean(c(5, 32, 136)), 26, NA
     ))
   )
-  # when it will be group_level="overall"
-  # expect_identical(
-  #   resAll |>
-  #     dplyr::filter(variable_name == "days to next observation period", estimate_name == "mean") |>
-  #     dplyr::pull("estimate_value"),
-  #   as.character(c(
-  #     mean(c(5, 32, 136, 26)), mean(c(5, 32, 136)), 26, NA
-  #   ))
-  # )
+
   # duration - density
   xx <- resAllD |>
     dplyr::filter(variable_name == "duration in days", !is.na(variable_level)) |>
@@ -162,7 +141,7 @@ test_that("check summariseObservationPeriod works", {
   # counts
   expect_identical(resOne$estimate_value[resOne$variable_name == "number records"], "4")
   x <- dplyr::tibble(
-    group_level = c("overall_", "1st"),
+    group_level = c("all", "1st"),
     variable_name = "number subjects",
     estimate_value = c("4", "4"))
   expect_identical(nrow(x), resOne |> dplyr::inner_join(x, by = colnames(x)) |> nrow())
@@ -350,10 +329,7 @@ test_that("check it works with mockOmopSketch", {
 test_that("check summariseObservationPeriod strata works", {
   skip_on_cran()
   # helper function
-  removeSettings <- function(x) {
-    attr(x, "settings") <- NULL
-    return(x)
-  }
+
   nPoints <- 512
 
   # Load mock database
@@ -398,6 +374,9 @@ test_that("check summariseObservationPeriod strata works", {
                                                        estimates = c("mean", "sd", "min", "max", "median", "density"),
                                                        ageGroup = list("<10" = c(0,9), ">=10" = c(10, Inf)),
                                                        sex = TRUE))
+  expect_equal(resStrata|>dplyr::filter(group_level == "all" & strata_level == "overall")|>dplyr::distinct(variable_name),
+               resStrata|>dplyr::filter(group_level == "all" & strata_level != "overall")|>dplyr::distinct(variable_name))
+
   # test overall
   x <- resStrata |>
     dplyr::filter(strata_name == "overall", strata_level == "overall") |>
@@ -416,8 +395,10 @@ test_that("check summariseObservationPeriod strata works", {
     dplyr::pull("estimate_value"),"2")
 
   expect_identical(resStrata |>
+                     omopgenerics::splitStrata() |>
                      dplyr::filter(variable_name == "number subjects",
-                                   strata_level == ">=10 &&& Male",
+                                   sex == "Male",
+                                   age_group == ">=10",
                                    group_level == "3rd") |>
                      dplyr::pull("estimate_value"),"1")
 
@@ -427,6 +408,7 @@ test_that("check summariseObservationPeriod strata works", {
       dplyr::filter(variable_name == "duration in days", estimate_name == "mean", strata_level == ">=10") |>
       dplyr::pull("estimate_value"),
     as.character(c(
+      mean(c(20, 18, 6, 144, 113)),
       mean(c(20, 18)),
       mean(c(6, 144)),
       mean(113)))
@@ -437,6 +419,7 @@ test_that("check summariseObservationPeriod strata works", {
       dplyr::filter(variable_name == "duration in days", estimate_name == "mean", strata_level == "<10") |>
       dplyr::pull("estimate_value"),
     as.character(c(
+      mean(c(9, 276, 29)),
       mean(c(9, 276)),
       mean(c(29))))
   )
@@ -444,8 +427,9 @@ test_that("check summariseObservationPeriod strata works", {
   # days to next observation period
   expect_identical(
     resStrata |>
+      omopgenerics::splitStrata() |>
       dplyr::filter(variable_name == "days to next observation period", estimate_name == "mean",
-                    strata_level == "<10 &&& Female", group_level == "1st") |>
+                    sex == "Female", age_group == "<10", group_level == "1st") |>
       dplyr::pull("estimate_value"), "32"
   )
 
@@ -471,7 +455,8 @@ test_that("dateRnge argument works", {
   expect_warning(z<- summariseObservationPeriod(cdm$observation_period, dateRange =  as.Date(c("2020-01-01", "2021-01-01"))))
   expect_equal(z, omopgenerics::emptySummarisedResult(), ignore_attr = TRUE)
   expect_equal( summariseObservationPeriod(cdm$observation_period,dateRange = as.Date(c("1940-01-01",NA)), estimates = "min"), y, ignore_attr = TRUE)
-
+  checkResultType(z, "summarise_observation_period")
+  expect_equal(colnames(settings(z)), colnames(settings(x)))
 
 
 

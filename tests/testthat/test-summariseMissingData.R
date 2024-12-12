@@ -6,6 +6,7 @@ test_that("summariseMissingData() works", {
   # Check all tables work ----
   expect_true(inherits(summariseMissingData(cdm, "drug_exposure"),"summarised_result"))
   expect_no_error(y<-summariseMissingData(cdm, "observation_period"))
+  checkResultType(y, "summarise_missing_data")
   expect_no_error(x<-summariseMissingData(cdm, "visit_occurrence"))
   expect_no_error(summariseMissingData(cdm, "condition_occurrence"))
   expect_no_error(summariseMissingData(cdm, "drug_exposure"))
@@ -15,8 +16,8 @@ test_that("summariseMissingData() works", {
   expect_no_error(z<-summariseMissingData(cdm, "measurement"))
   expect_no_error(s<-summariseMissingData(cdm, "observation"))
 
-  expect_warning(summariseMissingData(cdm, "death"))
-
+  expect_warning(de <-summariseMissingData(cdm, "death"))
+  checkResultType(de, "summarise_missing_data")
 
   expect_no_error(all <- summariseMissingData(cdm, c("observation_period", "visit_occurrence", "measurement")))
   expect_equal(all, dplyr::bind_rows(y, x, z))
@@ -69,7 +70,8 @@ test_that("summariseMissingData() works", {
   expect_warning(expect_warning(z<-summariseMissingData(cdm, "drug_exposure", dateRange =  as.Date(c("2020-01-01", "2021-01-01")))))
   expect_equal(z, omopgenerics::emptySummarisedResult(), ignore_attr = TRUE)
   expect_equal(summariseMissingData(cdm, "drug_exposure",dateRange = as.Date(c("2012-01-01",NA))), y, ignore_attr = TRUE)
-
+  checkResultType(z, "summarise_missing_data")
+  expect_equal(colnames(settings(z)), colnames(settings(x)))
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
 

@@ -80,7 +80,7 @@ summariseClinicalRecords <- function(cdm,
   result <- purrr::map(omopTableName, \(x) {
     if(omopgenerics::isTableEmpty(cdm[[x]])) {
       cli::cli_warn(paste0(x, " omop table is empty. Returning an empty summarised omop table."))
-      return(omopgenerics::emptySummarisedResult())
+      return(omopgenerics::emptySummarisedResult(settings = createSettings(result_type = "summarise_clinical_records")))
     }
     summariseClinicalRecord(
       x,
@@ -127,7 +127,7 @@ summariseClinicalRecord <- function(omopTableName,
 
   omopTable <- restrictStudyPeriod(omopTable, dateRange)
   if(omopgenerics::isTableEmpty(omopTable)) {
-    return(omopgenerics::emptySummarisedResult())
+    return(omopgenerics::emptySummarisedResult(settings = createSettings(result_type = "summarise_clinical_records", study_period = dateRange)))
   }
 
   omopTable <- filterPersonId(omopTable) |>
@@ -160,7 +160,8 @@ summariseClinicalRecord <- function(omopTableName,
   # Counts summary ----
   cli::cli_inform(c("i" = "Summarising {.pkg {omopTableName}} counts and records per person"))
   result <- summariseRecordsPerPerson(
-    omopTable, date, sex, ageGroup, recordsPerPerson)
+    omopTable, date, sex, ageGroup, recordsPerPerson)|>
+    omopgenerics::newSummarisedResult(settings = createSettings(""))
 
   # Summary concepts ----
   if (inObservation | standardConcept | sourceVocabulary | domainId | typeConcept) {
@@ -407,7 +408,7 @@ addVariables <- function(x, variables) {
   name <- omopgenerics::tableName(x)
 
   newNames <- c(
-    "person_id",
+    "person_id" = "person_id",
     "id" = tableId(name),
     "start_date" = startDate(name),
     "end_date"   = endDate(name),
@@ -474,8 +475,8 @@ addVariables <- function(x, variables) {
               .data$end_date <= .data$obs_end
           ) |>
           dplyr::mutate("in_observation" = 1L) |>
-          dplyr::select("in_observation", "id", "person_id"),
-        by = c("id", "person_id")
+          dplyr::select(c("in_observation", "id", "person_id")),
+        by = c("person_id", "id")
       ) |>
       dplyr::distinct()
   }
@@ -576,7 +577,6 @@ summaryData <- function(x, denominator, strata, cdm) {
 }
 
 formatResults <- function(x, variableName, variableLevel, denominator, strata) {
-  attr(denominator, "settings")$strata <- paste(unique(unlist(strata)), collapse = " &&& ")
   denominator <- denominator |>
     dplyr::select("strata_name", "strata_level", "denominator" = "estimate_value") |>
     dplyr::filter(.data$strata_name != "overall") |>
