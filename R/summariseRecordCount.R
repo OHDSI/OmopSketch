@@ -90,7 +90,7 @@ summariseRecordCountInternal <- function(omopTableName, cdm, interval, unitInter
 
   date   <- startDate(omopTableName)
 
-  strata <- getStrataList(sex, ageGroup)
+  strata <- my_getStrataList(sex, ageGroup)
 
   # Incidence counts ----
   omopTable <- omopTable |>
@@ -118,10 +118,11 @@ summariseRecordCountInternal <- function(omopTableName, cdm, interval, unitInter
 
     # Obtain record counts for each interval ----
     result <- splitIncidenceBetweenIntervals(cdm, result, date, prefix)
+    strata <- c(strata, "time_interval")
   }
 
   # Create summarised result ----
-  result <- createSummarisedResultRecordCount(result, strata, omopTable, omopTableName, original_interval, dateRange)
+  result <- createSummarisedResultRecordCount(result, strata, cdm, omopTableName, original_interval, dateRange)
   omopgenerics::dropTable(cdm = cdm, name = dplyr::starts_with(prefix))
 
   return(result)
@@ -224,9 +225,9 @@ getIntervalTibble <- function(omopTable, start_date_name, end_date_name, interva
         clock::add_months(interval_seq[interval], .env$unitInterval) - 1
       },
       my = paste0(clock::get_month(.data$group), "-", clock::get_year(.data$group)),
-      interval_group = paste(interval_start_date, "to", interval_end_date)
+      time_interval = paste(interval_start_date, "to", interval_end_date)
     ) |>
-    dplyr::distinct(interval_group, my, interval_start_date, interval_end_date)
+    dplyr::distinct(time_interval, my, interval_start_date, interval_end_date)
 
 }
 
@@ -243,47 +244,38 @@ splitIncidenceBetweenIntervals <- function(cdm, omopTable, date, prefix){
     dplyr::select(-c("interval_start_date", "interval_end_date", "incidence_date"))
 }
 
-createSummarisedResultRecordCount <- function(result, strata, omopTable, omopTableName, original_interval, dateRange){
-  if(original_interval != "overall"){
-    result <- result |>
-      dplyr::mutate(n = 1) |>
-      dplyr::select(-"person_id") |>
-      PatientProfiles::summariseResult(
-        variables = "n",
-        strata = strata,
-        includeOverallStrata = TRUE,
-        group = list("interval_group"),
-        includeOverallGroup = TRUE,
-        estimates = as.character(),
-        counts = TRUE
-      ) |>
-      suppressMessages()|>
-      dplyr::mutate(additional_level = .data$group_level) |>
-      dplyr::mutate(additional_name = dplyr::if_else(.data$additional_level == "overall", "overall", "time_interval"))|>
-      dplyr::arrange(additional_level)
+createSummarisedResultRecordCount <- function(result, strata, cdm, omopTableName, original_interval, dateRange){
+  if(original_interval != "overall") {
+    additional_column <- "time_interval"
+  }else{
+    additional_column <- character()
   }
-  else{
-    result <- result |>
-      dplyr::mutate(n = 1) |>
-      dplyr::select(-"person_id") |>
-      PatientProfiles::summariseResult(
-        variables = "n",
-        strata = strata,
-        includeOverallStrata = TRUE,
-        estimates = as.character(),
-        counts = TRUE,
-      ) |>
-      suppressMessages()
+  stratification <- c(omopgenerics::combineStrata(strata), list(character()))
 
-  }
-
-  result |>
-    dplyr::mutate("variable_name" = stringr::str_to_sentence(.data$variable_name),
+  sr <- purrr::map(stratification, function(g) {
+    result |>
+      dplyr::group_by(dplyr::across(dplyr::all_of(g))) |>
+      dplyr::summarise( estimate_value = dplyr::n(),
+                        .groups = "drop")|>
+      dplyr::collect()
+    }) |>
+    dplyr::bind_rows()|>
+    omopgenerics::uniteStrata(strata[strata!="time_interval"])|>
+    omopgenerics::uniteAdditional(additional_column)|>
+    dplyr::mutate("variable_name" = "Number records",
+                  "variable_level" = NA_character_,
+                  "estimate_name" = "count",
+                  "estimate_type" = "integer",
                   "group_name"  = "omop_table",
-                  "group_level" = omopTableName
+                  "group_level" = omopTableName,
+                  "cdm_name" = omopgenerics::cdmName(cdm) ,
+                  "result_id" = 1L,
+                  "estimate_value" = as.character(.data$estimate_value)
+
     )|>
     omopgenerics::newSummarisedResult(
       settings = createSettings(result_type = "summarise_record_count", study_period = dateRange)|>
         dplyr::mutate("interval" = .env$original_interval)
     )
+  return(sr)
 }
