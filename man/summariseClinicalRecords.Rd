@@ -13,7 +13,7 @@ summariseClinicalRecords(
   recordsPerPerson = c("mean", "sd", "median", "q25", "q75", "min", "max"),
   inObservation = TRUE,
   standardConcept = TRUE,
-  sourceVocabulary = FALSE,
+  sourceVocabulary = TRUE,
   domainId = TRUE,
   typeConcept = TRUE,
   sex = FALSE,
