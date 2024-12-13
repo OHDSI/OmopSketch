@@ -38,4 +38,5 @@ reference:
   - mockOmopSketch
 - subtitle: Deprecated functions
   desc: These functions have been deprecated
+- contents:
   - summariseConceptCounts
