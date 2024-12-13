@@ -1,6 +1,6 @@
-#' Plot the concept counts of a summariseConceptCounts output.
+#' Plot the concept counts of a summariseConceptSetCounts output.
 #'
-#' @param result A summarised_result object (output of summariseConceptCounts).
+#' @param result A summarised_result object (output of summariseConceptSetCounts).
 #' @param facet Columns to face by. Formula format can be provided. See possible
 #' columns to face by with: `visOmopResults::tidyColumns()`.
 #' @param colour Columns to colour by. See possible columns to colour by with:
@@ -14,8 +14,8 @@
 #' cdm <- mockOmopSketch()
 #'
 #' result <- cdm |>
-#'   summariseConceptCounts(
-#'     conceptId = list(
+#'   summariseConceptSetCounts(
+#'     conceptSet= list(
 #'       "Renal agenesis" = 194152,
 #'       "Manic mood" = c(4226696, 4304866, 37110496, 40371897)
 #'     )
@@ -23,11 +23,11 @@
 #'
 #' result |>
 #'   filter(variable_name == "Number subjects") |>
-#'   plotConceptCounts(facet = "codelist_name", colour = "standard_concept_name")
+#'   plotConceptSetCounts(facet = "codelist_name", colour = "standard_concept_name")
 #'
 #' PatientProfiles::mockDisconnect(cdm)
 #' }
-plotConceptCounts <- function(result,
+plotConceptSetCounts <- function(result,
                               facet = NULL,
                               colour = NULL){
 
@@ -39,10 +39,10 @@ plotConceptCounts <- function(result,
 
   # subset to results of interest
   result <- result |>
-    omopgenerics::filterSettings(.data$result_type == "summarise_concept_counts")
+    omopgenerics::filterSettings(.data$result_type == "summarise_concept_set_counts")
 
   if (nrow(result) == 0) {
-    cli::cli_abort(c("!" = "No records found with result_type == summarise_concept_counts"))
+    cli::cli_abort(c("!" = "No records found with result_type == summarise_concept_set_counts"))
   }
 
   # check only one estimate is contained
