@@ -57,7 +57,7 @@ summariseOmopSnapshot(cdm) |>
 
 
 ### Characterise the clinical tables
-Once we have collected the snapshot information, we can start characteristing the clinical tables of the CDM. By using `summariseClinicalRecords()` and `tableClinicalRecords()`, we can easily visualise the main characteristics of specific clinical tables. 
+Once we have collected the snapshot information, we can start characterising the clinical tables of the CDM. By using `summariseClinicalRecords()` and `tableClinicalRecords()`, we can easily visualise the main characteristics of specific clinical tables. 
 
 ```{r}
 summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
@@ -71,7 +71,7 @@ summariseRecordCount(cdm, c("condition_occurrence", "drug_exposure")) |>
   plotRecordCount(facet = "omop_table")
 ```
 ### Characterise the observation period
-After visualising the main characteristics of our clinical tables, we can explore the observation period details. OmopSketch provides several functions to have an overwied of the dataset study period.
+After visualising the main characteristics of our clinical tables, we can explore the observation period details. OmopSketch provides several functions to have an overview the dataset study period.
 
 Using `summariseInObservation()` and `plotInObservation()`, we can gather information on the number of records per year.
 
@@ -85,7 +85,7 @@ summariseObservationPeriod(cdm$observation_period) |>
   tableObservationPeriod(type = "flextable")
 ```
 
-Or if visualisation is prefered, you can easily build a histogram to explore how many participants have more than one observation period.
+Or if visualisation is preferred, you can easily build a histogram to explore how many participants have more than one observation period.
 ```{r}
 summariseObservationPeriod(cdm$observation_period) |>
   plotObservationPeriod()
