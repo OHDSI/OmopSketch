@@ -24,14 +24,12 @@ tableMissingData <- function(result,
   }
 
   result |>
-    formatColumn(c("variable_name", "variable_level")) |>
     visOmopResults::visOmopTable(
       type = type,
-      estimateName = c(
-        "N (%)" = "<na_percentage> (%)",
-        "N" = "<na_count>"),
+       estimateName = c("N missing data (%)" = "<na_count> (<na_percentage>%)"),
       header = c("cdm_name"),
-      rename = c("Database name" = "cdm_name"),
-      groupColumn = c("omop_table", omopgenerics::strataColumns(result))
+      rename = c("Database name" = "cdm_name", "Column name"= "variable_name"),
+      groupColumn = c("omop_table", omopgenerics::strataColumns(result)),
+      hide = c("variable_level")
     )
 }
