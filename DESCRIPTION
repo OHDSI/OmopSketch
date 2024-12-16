@@ -63,6 +63,7 @@ Imports:
     clock,
     CohortConstructor (>= 0.3.1),
     dplyr,
+    lifecycle,
     omopgenerics (>= 0.3.1),
     PatientProfiles (>= 1.2.1),
     purrr,
