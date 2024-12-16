@@ -33,7 +33,7 @@ summariseMissingData <- function(cdm,
   omopgenerics::assertChoice(omopTableName, choices = omopgenerics::omopTables(), unique = TRUE)
   omopgenerics::assertNumeric(sample, null = TRUE, integerish = TRUE, length = 1, min = 1)
   dateRange <- validateStudyPeriod(cdm, dateRange)
-  ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, multipleAgeGroup = FALSE, null = TRUE, ageGroupName = "age_group")$age_group
+  ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, multipleAgeGroup = FALSE, null = TRUE, ageGroupName = "age_group")
 
   strata <- my_getStrataList(sex = sex, ageGroup = ageGroup, year = year)
   stratification <- c(list(character()), omopgenerics::combineStrata(strata))
