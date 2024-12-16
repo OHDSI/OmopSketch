@@ -1,11 +1,8 @@
-restrictStudyPeriod <- function(omopTable, dateRange){
 
-
-  if(is.null(dateRange)){
-
+restrictStudyPeriod <- function(omopTable, dateRange) {
+  if (is.null(dateRange)) {
     return(omopTable)
   }
-
   start_date_table <- startDate(omopgenerics::tableName(omopTable))
   end_date_table <- endDate(omopgenerics::tableName(omopTable))
   start_date <- dateRange[1]
@@ -19,7 +16,6 @@ restrictStudyPeriod <- function(omopTable, dateRange){
   # maybe the end date check is not needed
 
   warningEmptyStudyPeriod(omopTable)
-
 
   return(omopTable)
 }

@@ -71,3 +71,7 @@ checkResultType <- function(result, result_type){
       dplyr::pull("result_type") == result_type
   )
 }
+sortTibble <- function(x) {
+  x |>
+    dplyr::arrange(dplyr::across(dplyr::everything()))
+}

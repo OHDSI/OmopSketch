@@ -40,3 +40,17 @@ strata.
 \description{
 Summarise concept use in patient-level data
 }
+\examples{
+\donttest{
+library(OmopSketch)
+library(CDMConnector)
+library(duckdb)
+
+requireEunomia()
+con <- dbConnect(duckdb(), eunomiaDir())
+cdm <- cdmFromCon(con = con, cdmSchema = "main", writeSchema = "main")
+
+summariseAllConceptCounts(cdm, "condition_occurrence")
+}
+
+}

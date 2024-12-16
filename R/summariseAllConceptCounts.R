@@ -1,23 +1,8 @@
 
 my_getStrataList <- function(sex = FALSE, ageGroup = NULL, year = FALSE){
-
-  strata <- as.character()
-
-  if(!is.null(ageGroup)){
-    strata <- append(strata, "age_group")
-  }
-
-  if(sex){
-    strata <- append(strata, "sex")
-  }
-  if(year){
-    strata <- append(strata, "year")
-  }
-  return(strata)
+  c(names(ageGroup), "sex"[sex], "year"[year])
 }
-
-
-checkFeasibility <- function(omopTable, tableName, conceptId){
+checkFeasibility <- function(omopTable, tableName, conceptId) {
 
   if (omopgenerics::isTableEmpty(omopTable)){
     cli::cli_warn(paste0(tableName, " omop table is empty."))
@@ -29,17 +14,8 @@ checkFeasibility <- function(omopTable, tableName, conceptId){
     return(NULL)
   }
 
-  y <- omopTable |>
-    dplyr::filter(!is.na(.data[[conceptId]]))
-
-  if (omopgenerics::isTableEmpty(y)){
-    cli::cli_warn(paste0(tableName, " omop table doesn't contain standard concepts."))
-    return(NULL)
-  }
   return(TRUE)
 }
-
-
 
 #' Summarise concept use in patient-level data
 #'
@@ -54,136 +30,137 @@ checkFeasibility <- function(omopTable, tableName, conceptId){
 #' thus summarised by age groups.
 #' @param dateRange A list containing the minimum and the maximum dates
 #' defining the time range within which the analysis is performed.
+#'
 #' @return A summarised_result object with results overall and, if specified, by
 #' strata.
+#'
 #' @export
+#'
+#' @examples
+#' \donttest{
+#' library(OmopSketch)
+#' library(CDMConnector)
+#' library(duckdb)
+#'
+#' requireEunomia()
+#' con <- dbConnect(duckdb(), eunomiaDir())
+#' cdm <- cdmFromCon(con = con, cdmSchema = "main", writeSchema = "main")
+#'
+#' summariseAllConceptCounts(cdm, "condition_occurrence")
+#' }
+#'
 summariseAllConceptCounts <- function(cdm,
-                            omopTableName,
-                            countBy = "record",
-                            year = FALSE,
-                            sex = FALSE,
-                            ageGroup = NULL,
-                            dateRange = NULL){
-
-  omopgenerics::validateCdmArgument(cdm)
+                                      omopTableName,
+                                      countBy = "record",
+                                      year = FALSE,
+                                      sex = FALSE,
+                                      ageGroup = NULL,
+                                      dateRange = NULL) {
+  # initial checks
+  cdm <- omopgenerics::validateCdmArgument(cdm)
   checkCountBy(countBy)
   omopgenerics::assertLogical(year, length = 1)
   omopgenerics::assertLogical(sex, length = 1)
-  omopgenerics::assertChoice(omopTableName,choices = omopgenerics::omopTables(), unique = TRUE)
-
-  ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "")[[1]]
+  omopgenerics::assertChoice(omopTableName, choices = omopgenerics::omopTables(), unique = TRUE)
+  ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup)
   dateRange <- validateStudyPeriod(cdm, dateRange)
-  strata <- my_getStrataList(sex = sex, year = year, ageGroup = ageGroup)
 
-  stratification <- omopgenerics::combineStrata(strata)
+  # settings for the created results
+  set <- createSettings(result_type = "summarise_all_concept_counts", study_period = dateRange)
 
-  result_tables <- purrr::map(omopTableName, function(table){
+  # get strata
+  strata <- my_getStrataList(sex = sex, year = year, ageGroup = ageGroup) |>
+    omopgenerics::combineStrata()
 
+  # how to count
+  counts <- c("records", "person_id")[c("record", "person") %in% countBy]
 
+  # summarise counts
+  resultTables <- purrr::map(omopTableName, function(table) {
+    # check that table is not empty
+    omopTable <- dplyr::ungroup(cdm[[table]])
+    conceptId <- standardConcept(table)
+    if (is.null(checkFeasibility(omopTable, table, conceptId))){
+      return(NULL)
+    }
 
+    # restrict study period
+    omopTable <- restrictStudyPeriod(omopTable, dateRange)
 
-  omopTable <- cdm[[table]] |>
-    dplyr::ungroup()
+    # add demographics
+    indexDate <- startDate(omopgenerics::tableName(omopTable))
+    x <- omopTable |>
+      dplyr::rename(concept_id = dplyr::all_of(conceptId)) |>
+      dplyr::left_join(
+        cdm$concept |>
+          dplyr::select("concept_id", "concept_name"),
+        by = "concept_id"
+      ) |>
+      PatientProfiles::addDemographicsQuery(
+        age = FALSE,
+        ageGroup = ageGroup,
+        sex = sex,
+        indexDate = indexDate,
+        priorObservation = FALSE,
+        futureObservation = FALSE,
+        dateOfBirth = FALSE
+      )
 
+    # add year strata if needed
+    if (year) {
+      x <- x |>
+        dplyr::mutate(year = as.character(clock::get_year(.data[[indexDate]])))
+    }
 
-  conceptId <- standardConcept(omopgenerics::tableName(omopTable))
+    # add concept id to stratification
+    concepts <- c("concept_id", "concept_name")
+    stratax <- c(list(concepts), purrr::map(strata, \(x) c(concepts, x)))
 
-  if (is.null(checkFeasibility(omopTable, table, conceptId))){
-    return(NULL)
-  }
+    # create table
+    if (sex | !is.null(ageGroup) | year) {
+      tempName <- omopgenerics::uniqueTableName()
+      x <- x |>
+        dplyr::select("person_id", dplyr::all_of(unique(unlist(stratax)))) |>
+        dplyr::compute(name = tempName, temporary = FALSE)
+      intermediate <- TRUE
+    } else {
+      intermediate <- FALSE
+    }
 
-  omopTable <- restrictStudyPeriod(omopTable, dateRange)
+    # summarise results
+    result <- summariseCountsInternal(x, stratax, counts) |>
+      dplyr::mutate(
+        omop_table = .env$table,
 
+      )
 
-  indexDate <- startDate(omopgenerics::tableName(omopTable))
+    if (intermediate) {
+      omopgenerics::dropSourceTable(cdm = cdm, name = tempName)
+    }
 
-  x <- omopTable |>
-    dplyr::filter(!is.na(.data[[conceptId]])) |>
-    dplyr::left_join(
-      cdm$concept |> dplyr::select("concept_id", "concept_name"),
-      by = stats::setNames("concept_id", conceptId)) |>
-    PatientProfiles::addDemographicsQuery(age = FALSE,
-                                          ageGroup = ageGroup,
-                                          sex = sex,
-                                          indexDate = indexDate, priorObservation = FALSE, futureObservation = FALSE)
-  if (year){
-    x <- x|> dplyr::mutate(year = as.character(clock::get_year(.data[[indexDate]])))
-  }
-
-
-  level <- c(conceptId, "concept_name")
-
-  groupings <- c(list(level), purrr::map(stratification, ~ c(level, .x)))
-
-  result <- list()
-  if ("record" %in% countBy){
-
-    stratified_result <- x |>
-      dplyr::group_by(dplyr::across(dplyr::all_of(c(level,strata)))) |>
-      dplyr::summarise("estimate_value" = as.integer(dplyr::n()), .groups = "drop")|>
-      dplyr::collect()
-
-
-    grouped_results <- purrr::map(groupings, \(g) {
-      stratified_result |>
-        dplyr::group_by(dplyr::across(dplyr::all_of(g))) |>
-        dplyr::summarise("estimate_value" = as.integer(sum(.data$estimate_value, na.rm = TRUE)), .groups = "drop")
-
-    })
-
-    result_record <- purrr::reduce(grouped_results, dplyr::bind_rows)|>
-      dplyr::mutate(dplyr::across(dplyr::all_of(strata), ~ dplyr::coalesce(., "overall")))|>
-      dplyr::mutate("estimate_name" = "record_count")
-    result<-dplyr::bind_rows(result,result_record)
-  }
-
-  if ("person" %in% countBy){
-
-    grouped_results <- purrr::map(groupings, \(g) {
-      x |>
-        dplyr::group_by(dplyr::across(dplyr::all_of(g))) |>
-        dplyr::summarise("estimate_value" = as.integer(dplyr::n()), .groups = "drop")|>
-        dplyr::collect()
-    })
-
-    result_person <- purrr::reduce(grouped_results, dplyr::bind_rows) |>
-      dplyr::mutate(dplyr::across(dplyr::all_of(strata), ~ dplyr::coalesce(., "overall"))) |>
-      dplyr::mutate("estimate_name" = "person_count")
-    result<-dplyr::bind_rows(result,result_person)
-  }
-  result<- result |>
-    dplyr::mutate("omop_table" = table,
-                  "variable_level" = as.character(.data[[conceptId]])) |>
-
-    dplyr::select(-dplyr::all_of(conceptId))
     return(result)
-  })
-  if (rlang::is_empty(purrr::compact(result_tables))){
-    return(omopgenerics::emptySummarisedResult(settings = createSettings(result_type = "summarise_all_concept_counts", study_period = dateRange)))
+  }) |>
+    purrr::compact()
+
+  if (length(resultTables) == 0) {
+    return(omopgenerics::emptySummarisedResult(settings = set))
   }
 
-  sr <-purrr::compact(result_tables) |>
-    purrr::reduce(dplyr::union)|>
+  resultTables |>
+    dplyr::bind_rows() |>
     dplyr::mutate(
       result_id = 1L,
       cdm_name = omopgenerics::cdmName(cdm)
     ) |>
     omopgenerics::uniteGroup(cols = "omop_table") |>
-    omopgenerics::uniteStrata(cols = strata) |>
+    omopgenerics::uniteStrata(cols = unique(unlist(strata)) %||% character()) |>
     omopgenerics::uniteAdditional() |>
     dplyr::mutate(
-      "estimate_value" = as.character(.data$estimate_value),
-      "estimate_type" = "integer"
+      estimate_value = as.character(.data$estimate_value),
+      estimate_type = "integer",
+      variable_level = as.character(.data$concept_id)
     ) |>
-    dplyr::rename("variable_name" = "concept_name")
-  # |>
-  #   dplyr::select(!c())
-
-
-  sr <- sr |>
-    omopgenerics::newSummarisedResult(settings = createSettings(result_type = "summarise_all_concept_counts", study_period = dateRange))
-
-  return(sr)
-
+    dplyr::rename("variable_name" = "concept_name") |>
+    dplyr::select(!"concept_id") |>
+    omopgenerics::newSummarisedResult(settings = set)
 }
-
