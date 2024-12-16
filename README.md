@@ -173,7 +173,7 @@ concepts in the dataset.
 ``` r
 acetaminophen <- c(1125315,  1127433, 1127078)
 
-summariseConceptCounts(cdm, conceptId = list("acetaminophen" = acetaminophen)) |>
+summariseConceptSetCounts(cdm, conceptSet = list("acetaminophen" = acetaminophen)) |>
   filter(estimate_name == "record_count") |> 
   plotConceptCounts()
 #> ℹ Getting use of codes from acetaminophen
