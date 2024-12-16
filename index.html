@@ -37,7 +37,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="articles/A-summarise_clinical_tables_records.html">Summarise clinical tables records</a></li>
-    <li><a class="dropdown-item" href="articles/B-summarise_concept_counts.html">Summarise concept counts</a></li>
+    <li><a class="dropdown-item" href="articles/B-summarise_concept_set_counts.html">Summarise concept counts</a></li>
   </ul>
 </li>
       </ul>
@@ -181,9 +181,9 @@
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">acetaminophen</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1125315</span>,  <span class="fl">1127433</span>, <span class="fl">1127078</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="reference/summariseConceptCounts.html">summariseConceptCounts</a></span><span class="op">(</span><span class="va">cdm</span>, conceptId <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"acetaminophen"</span> <span class="op">=</span> <span class="va">acetaminophen</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="fu"><a href="reference/summariseConceptSetCounts.html">summariseConceptSetCounts</a></span><span class="op">(</span><span class="va">cdm</span>, conceptSet <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"acetaminophen"</span> <span class="op">=</span> <span class="va">acetaminophen</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">estimate_name</span> <span class="op">==</span> <span class="st">"record_count"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="reference/plotConceptCounts.html">plotConceptCounts</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="fu">plotConceptCounts</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; ℹ Getting use of codes from acetaminophen</span></span>
 <span><span class="co">#&gt; ! The following column type were changed:</span></span>
 <span><span class="co">#&gt; • variable_name: from integer to character</span></span></code></pre></div>
