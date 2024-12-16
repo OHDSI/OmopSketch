@@ -579,18 +579,18 @@ test_that("interval argument works", {
 
 
   m_quarters <- m|>omopgenerics::splitAdditional()|>
-  omopgenerics::pivotEstimates()|>
-    dplyr::filter(time_interval != "overall" & variable_name == "Number records" & standard_concept_id == 21603444)|>
+    omopgenerics::pivotEstimates() |>
+    dplyr::filter(time_interval != "overall" & variable_name == "Number records" & standard_concept_id == 21603444) |>
     dplyr::mutate(
       start_date = as.Date(sub(" to .*", "", time_interval)),
-      quarter_start = lubridate::floor_date(start_date, "quarter"),
-      quarter_end = lubridate::ceiling_date(start_date, "quarter") - lubridate::days(1),
+      quarter_start = lubridate::quarter(start_date, type = "date_first"),
+      quarter_end = lubridate::quarter(start_date, type = "date_last"),
       quarter = paste(quarter_start, "to", quarter_end)
     ) |>
-    dplyr::select(!c("time_interval", "start_date", "quarter_start", "quarter_end"))|>
+    dplyr::select(!c("time_interval", "start_date", "quarter_start", "quarter_end")) |>
     dplyr::group_by(quarter,)|>
-    dplyr::summarise(count = sum(count), .groups = "drop")|>
-    dplyr::rename("time_interval" = quarter)|>
+    dplyr::summarise(count = sum(count), .groups = "drop") |>
+    dplyr::rename("time_interval" = quarter) |>
     dplyr::arrange(time_interval)
 
   q_quarters <- q|>omopgenerics::splitAdditional()|>
