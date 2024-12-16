@@ -8,7 +8,7 @@
 ^docs$
 ^pkgdown$
 ^codecov\.yml$
-^Extras
+^extras$
 ^doc$
 ^Meta$
 ^cran-comments\.md$
