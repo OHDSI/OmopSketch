@@ -243,7 +243,7 @@ test_that("summariseClinicalRecords() sex and ageGroup argument work", {
   # Check stats
   records <- result |>
     dplyr::filter(variable_name == "records_per_person")
-  expect_true(records |> dplyr::filter(strata_name == "overall", estimate_name == "mean") |> dplyr::pull(estimate_value) == "1.8")
+  expect_true(records |> dplyr::filter(strata_name == "overall", estimate_name == "mean") |> dplyr::pull(estimate_value) == "1.8000")
   expect_true(records |> dplyr::filter(strata_level == "old &&& Male", estimate_name == "median") |> dplyr::pull(estimate_value) == "3")
 })
 
