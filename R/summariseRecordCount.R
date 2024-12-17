@@ -204,15 +204,15 @@ getOmopTableEndDate   <- function(omopTable, date){
 }
 
 getIntervalTibble <- function(omopTable, start_date_name, end_date_name, interval, unitInterval){
-  startDate <- getOmopTableStartDate(omopTable, start_date_name)
-  endDate   <- getOmopTableEndDate(omopTable, end_date_name)
+    startDate <- getOmopTableStartDate(omopTable, start_date_name)
+    endDate <- getOmopTableEndDate(omopTable, end_date_name)
 
   tibble::tibble(
     "group" = seq.Date(as.Date(startDate), as.Date(endDate), "month")
   ) |>
     dplyr::rowwise() |>
     dplyr::mutate("interval" = max(which(
-      .data$group >= seq.Date(from = startDate, to = endDate, by = paste(.env$unitInterval, .env$interval))
+      .data$group >= seq.Date(from = startDate, to = endDate, by = paste(.env$interval))
     ),
     na.rm = TRUE)) |>
     dplyr::ungroup() |>
@@ -227,9 +227,9 @@ getIntervalTibble <- function(omopTable, start_date_name, end_date_name, interva
       "interval_start_date" = as.Date(.data$interval_start_date),
       "interval_end_date" = as.Date(.data$interval_end_date)
     ) |>
-    dplyr::mutate(
+      dplyr::mutate(
       "interval_group" = paste(.data$interval_start_date,"to",.data$interval_end_date)
-    ) |>
+      ) |>
     dplyr::ungroup() |>
     dplyr::mutate("my" = paste0(clock::get_month(.data$group),"-",clock::get_year(.data$group))) |>
     dplyr::select("interval_group", "my", "interval_start_date","interval_end_date") |>
