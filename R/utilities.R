@@ -83,4 +83,17 @@ createSettings <- function(result_type, result_id = 1L, study_period = NULL) {
   return(settings)
 }
 
+sampleOmopTable <- function(omopTable, sample){
+  sampling <- !is.null(sample) & !is.infinite(sample)
+
+  if (sampling & omopTable |> dplyr::tally() |> dplyr::pull() <= sample) {
+    sampling <- FALSE
+  }
+
+  if (sampling){
+    omopTable <- omopTable |>
+      dplyr::slice_sample(n = sample)
+  }
+  return(omopTable)
+}
 

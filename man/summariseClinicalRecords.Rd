@@ -13,11 +13,12 @@ summariseClinicalRecords(
   recordsPerPerson = c("mean", "sd", "median", "q25", "q75", "min", "max"),
   inObservation = TRUE,
   standardConcept = TRUE,
-  sourceVocabulary = FALSE,
+  sourceVocabulary = TRUE,
   domainId = TRUE,
   typeConcept = TRUE,
   sex = FALSE,
   ageGroup = NULL,
+  sample = 1e+06,
   dateRange = NULL
 )
 }
@@ -49,6 +50,9 @@ field information.}
 (FALSE).}
 
 \item{ageGroup}{A list of age groups to stratify results by.}
+
+\item{sample}{An integer to sample the tables to only that number of records.
+If NULL no sample is done.}
 
 \item{dateRange}{A list containing the minimum and the maximum dates
 defining the time range within which the analysis is performed.}

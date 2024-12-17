@@ -11,6 +11,7 @@ summariseRecordCount(
   interval = "overall",
   ageGroup = NULL,
   sex = FALSE,
+  sample = 1e+06,
   dateRange = NULL
 )
 }
@@ -24,6 +25,9 @@ summariseRecordCount(
 \item{ageGroup}{A list of age groups to stratify results by.}
 
 \item{sex}{Whether to stratify by sex (TRUE) or not (FALSE).}
+
+\item{sample}{An integer to sample the tables to only that number of records.
+If NULL no sample is done.}
 
 \item{dateRange}{A list containing the minimum and the maximum dates
 defining the time range within which the analysis is performed.}

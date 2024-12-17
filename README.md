@@ -77,7 +77,7 @@ summariseOmopSnapshot(cdm) |>
 ### Characterise the clinical tables
 
 Once we have collected the snapshot information, we can start
-characteristing the clinical tables of the CDM. By using
+characterising the clinical tables of the CDM. By using
 `summariseClinicalRecords()` and `tableClinicalRecords()`, we can easily
 visualise the main characteristics of specific clinical tables.
 
@@ -130,7 +130,7 @@ summariseRecordCount(cdm, c("condition_occurrence", "drug_exposure")) |>
 Characterise the observation period After visualising the main
 characteristics of our clinical tables, we can explore the observation
 period details. OmopSketch provides several functions to have an
-overwied of the dataset study period.
+overview of the dataset study period.
 
 Using `summariseInObservation()` and `plotInObservation()`, we can
 gather information on the number of records per year.
@@ -173,7 +173,7 @@ concepts in the dataset.
 ``` r
 acetaminophen <- c(1125315,  1127433, 1127078)
 
-summariseConceptCounts(cdm, conceptId = list("acetaminophen" = acetaminophen)) |>
+summariseConceptSetCounts(cdm, conceptSet = list("acetaminophen" = acetaminophen)) |>
   filter(estimate_name == "record_count") |> 
   plotConceptCounts()
 #> ℹ Getting use of codes from acetaminophen

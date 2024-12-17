@@ -7,8 +7,8 @@ test_that("summarise code use - eunomia", {
   cs <- list(acetiminophen = acetiminophen,
              poliovirus_vaccine = poliovirus_vaccine)
   startNames <- CDMConnector::listSourceTables(cdm)
-  results <- summariseConceptCounts(cdm = cdm,
-                                    conceptId = cs,
+  results <- summariseConceptSetCounts(cdm = cdm,
+                                    conceptSet = cs,
                                     interval = "years",
                                     countBy = c("record", "person"),
                                     concept = TRUE,
@@ -20,7 +20,7 @@ test_that("summarise code use - eunomia", {
   expect_true(length(setdiff(endNames, startNames)) == 0)
 
   #Check result type
-  checkResultType(results, "summarise_concept_counts")
+  checkResultType(results, "summarise_concept_set_counts")
 
   # min cell counts:
   expect_equal(
@@ -170,8 +170,8 @@ test_that("summarise code use - eunomia", {
                 dplyr::tally() %>%
                 dplyr::pull("n"))
 
-  results1 <- summariseConceptCounts(cdm = cdm,
-                                     conceptId = cs,
+  results1 <- summariseConceptSetCounts(cdm = cdm,
+                                     conceptSet = cs,
                                      interval = "years",
                                      concept = FALSE,
                                      sex = TRUE,
@@ -210,7 +210,7 @@ test_that("summarise code use - eunomia", {
                 dplyr::pull("n"))
   expect_true(results1$group_level |> unique() |> length() == 2)
 
-  results <- summariseConceptCounts(list("acetiminophen" = acetiminophen),
+  results <- summariseConceptSetCounts(list("acetiminophen" = acetiminophen),
                               cdm = cdm, countBy = "person",
                               interval = "years",
                               sex = FALSE,
@@ -221,7 +221,7 @@ test_that("summarise code use - eunomia", {
                      dplyr::filter(variable_name == "Number records")) == 0)
 
 
-  results <- summariseConceptCounts(list("acetiminophen" = acetiminophen),
+  results <- summariseConceptSetCounts(list("acetiminophen" = acetiminophen),
                               cdm = cdm, countBy = "record",
                               interval = "years",
                               sex = FALSE,
@@ -233,54 +233,54 @@ test_that("summarise code use - eunomia", {
 
   # domains covered
   # condition
-  expect_true(nrow(summariseConceptCounts(list(cs= c(4112343)),
+  expect_true(nrow(summariseConceptSetCounts(list(cs= c(4112343)),
                                     cdm = cdm,
                                     interval = "years",
                                     sex = FALSE,
                                     ageGroup = NULL))>1)
 
   # visit
-  expect_true(nrow(summariseConceptCounts(list(cs= c(9201)),
+  expect_true(nrow(summariseConceptSetCounts(list(cs= c(9201)),
                                     cdm = cdm,
                                     interval = "years",
                                     sex = FALSE,
                                     ageGroup = NULL))>1)
 
   # drug
-  expect_true(nrow(summariseConceptCounts(list(cs= c(40213160)),
+  expect_true(nrow(summariseConceptSetCounts(list(cs= c(40213160)),
                                     cdm = cdm,
                                     interval = "years",
                                     sex = FALSE,
                                     ageGroup = NULL))>1)
 
   # measurement
-  expect_true(nrow(summariseConceptCounts(list(cs= c(3006322)),
+  expect_true(nrow(summariseConceptSetCounts(list(cs= c(3006322)),
                                     cdm = cdm,
                                     interval = "years",
                                     sex = FALSE,
                                     ageGroup = NULL))>1)
 
   # procedure and condition
-  expect_true(nrow(summariseConceptCounts(list(cs= c(4107731,4112343)),
+  expect_true(nrow(summariseConceptSetCounts(list(cs= c(4107731,4112343)),
                                     cdm = cdm,
                                     interval = "years",
                                     sex = FALSE,
                                     ageGroup = NULL))>1)
 
   # no records
-  expect_message(results <- summariseConceptCounts(list(cs= c(999999)),
+  expect_message(results <- summariseConceptSetCounts(list(cs= c(999999)),
                                              cdm = cdm,
                                              interval = "years",
                                              sex = FALSE,
                                              ageGroup = NULL))
   expect_true(nrow(results) == 0)
 
-  # conceptId NULL (but reduce the computational time by filtering concepts first)
+  # conceptSet NULL (but reduce the computational time by filtering concepts first)
   # cdm$concept <- cdm$concept |>
   #   dplyr::filter(grepl("k", concept_name))
   #
-  # skip("conceptId = NULL not supported yet")
-  # results <- summariseConceptCounts(cdm = cdm,
+  # skip("conceptSet = NULL not supported yet")
+  # results <- summariseConceptSetCounts(cdm = cdm,
   #                                   year = FALSE,
   #                                   sex = FALSE,
   #                                   ageGroup = NULL)
@@ -297,8 +297,8 @@ test_that("summarise code use - eunomia", {
   # expect_true(all(results_concepts %in% c("overall",concepts)))
 
   # check attributes
-  results <- summariseConceptCounts(cdm = cdm,
-                                    conceptId = cs,
+  results <- summariseConceptSetCounts(cdm = cdm,
+                                    conceptSet = cs,
                                     interval = "years",
                                     sex = TRUE,
                                     ageGroup = list(c(0,17),
@@ -306,46 +306,46 @@ test_that("summarise code use - eunomia", {
                                                     c(66, 100)))
 
   expect_true(omopgenerics::settings(results)$package_name == "OmopSketch")
-  expect_true(omopgenerics::settings(results)$result_type == "summarise_concept_counts")
+  expect_true(omopgenerics::settings(results)$result_type == "summarise_concept_set_counts")
   expect_true(omopgenerics::settings(results)$package_version == packageVersion("OmopSketch"))
 
   # expected errors# expected errors
-  expect_error(summariseConceptCounts("not a concept",
+  expect_error(summariseConceptSetCounts("not a concept",
                                 cdm = cdm,
                                 interval = "years",
                                 sex = FALSE,
                                 ageGroup = NULL))
-  expect_error(summariseConceptCounts("123",
+  expect_error(summariseConceptSetCounts("123",
                                 cdm = cdm,
                                 interval = "years",
                                 sex = FALSE,
                                 ageGroup = NULL))
-  expect_error(summariseConceptCounts(list("123"), # not named
+  expect_error(summariseConceptSetCounts(list("123"), # not named
                                 cdm = cdm,
                                 interval = "years",
                                 sex = FALSE,
                                 ageGroup = NULL))
-  expect_error(summariseConceptCounts(list(a = 123),
+  expect_error(summariseConceptSetCounts(list(a = 123),
                                 cdm = "not a cdm",
                                 interval = "years",
                                 sex = FALSE,
                                 ageGroup = NULL))
-  expect_error(summariseConceptCounts(list(a = 123),
+  expect_error(summariseConceptSetCounts(list(a = 123),
                                 cdm = cdm,
                                 interval = "Maybe",
                                 sex = FALSE,
                                 ageGroup = NULL))
-  expect_error(summariseConceptCounts(list(a = 123),
+  expect_error(summariseConceptSetCounts(list(a = 123),
                                 cdm = cdm,
                                 interval = "years",
                                 sex = "Maybe",
                                 ageGroup = NULL))
-  expect_error(summariseConceptCounts(list(a = 123),
+  expect_error(summariseConceptSetCounts(list(a = 123),
                                 cdm = cdm,
                                 interval = "years",
                                 sex = FALSE,
                                 ageGroup = list(c(18,17))))
-  expect_error(summariseConceptCounts(list(a = 123),
+  expect_error(summariseConceptSetCounts(list(a = 123),
                                 cdm = cdm,
                                 interval = "years",
                                 sex = FALSE,
@@ -414,13 +414,13 @@ test_that("summarise code use - mock data", {
   cdm <- CDMConnector::copyCdmTo(
     con = connection(), cdm = cdm, schema = schema())
 
-  conceptId <- list(
+  conceptSet <- list(
     "Arthritis" = c(17,3),
     "Musculoskeletal disorder" = c(1),
     "Osteoarthritis of hip" = c(5)
   )
 
-  result <- summariseConceptCounts(cdm, conceptId)
+  result <- summariseConceptSetCounts(cdm, conceptSet)
 
   # Arthritis (codes 3 and 17), one record of 17 per ind and one record of 3 ind 1
   expect_equal(result |>
@@ -449,7 +449,7 @@ test_that("summarise code use - mock data", {
                  dplyr::pull(estimate_value),
                c("2","2"))
 
-  result <- summariseConceptCounts(cdm, conceptId, ageGroup = list(c(0,2), c(3,150)), sex = TRUE)
+  result <- summariseConceptSetCounts(cdm, conceptSet, ageGroup = list(c(0,2), c(3,150)), sex = TRUE)
   # Individuals belong to the same age group but to different sex groups
 
   # Arthritis (codes 3 and 17), one record of each per ind
@@ -509,27 +509,27 @@ test_that("summarise code use - mock data", {
   PatientProfiles::mockDisconnect(cdm)
 })
 
-test_that("plot concept counts works", {
+test_that("plot concept set counts works", {
   skip_on_cran()
   # Load mock database ----
   cdm <- cdmEunomia()
 
   # summariseInObservationPlot plot ----
-  x <- summariseConceptCounts(cdm, conceptId = list(codes = c(40213160)))
-  expect_error(plotConceptCounts(x))
+  x <- summariseConceptSetCounts(cdm, conceptSet = list(codes = c(40213160)))
+  expect_error(plotConceptSetCounts(x))
   x <- x |> dplyr::filter(variable_name == "Number records")
-  expect_no_error(plotConceptCounts(x))
-  expect_true(inherits(plotConceptCounts(x), "ggplot"))
+  expect_no_error(plotConceptSetCounts(x))
+  expect_true(inherits(plotConceptSetCounts(x), "ggplot"))
 
-  x <- summariseConceptCounts(cdm,
-                              conceptId = list("polio" = c(40213160),
+  x <- summariseConceptSetCounts(cdm,
+                              conceptSet = list("polio" = c(40213160),
                                                "acetaminophen" = c(1125315,  1127433, 40229134, 40231925, 40162522, 19133768,  1127078)))
-  expect_error(plotConceptCounts(x))
+  expect_error(plotConceptSetCounts(x))
   x <- x |> dplyr::filter(variable_name == "Number records")
-  expect_no_error(plotConceptCounts(x))
-  expect_message(plotConceptCounts(x))
-  expect_no_error(plotConceptCounts(x, facet = "codelist_name"))
-  expect_no_error(plotConceptCounts(x, colour = "codelist_name"))
+  expect_no_error(plotConceptSetCounts(x))
+  expect_message(plotConceptSetCounts(x))
+  expect_no_error(plotConceptSetCounts(x, facet = "codelist_name"))
+  expect_no_error(plotConceptSetCounts(x, colour = "codelist_name"))
 
   x <-  x |> dplyr::filter(result_id == -1)
   expect_error(plotInObservation(x))
@@ -542,19 +542,136 @@ test_that("dateRange argument works", {
   # Load mock database ----
   cdm <- cdmEunomia()
 
-  expect_no_error(summariseConceptCounts(cdm,conceptId = list("polio" = c(40213160)), dateRange =  as.Date(c("1930-01-01", "2018-01-01"))))
-  expect_message(x<-summariseConceptCounts(cdm,conceptId = list("polio" = c(40213160)), dateRange =  as.Date(c("1930-01-01", "2025-01-01"))))
+  expect_no_error(summariseConceptSetCounts(cdm,conceptSet = list("polio" = c(40213160)), dateRange =  as.Date(c("1930-01-01", "2018-01-01"))))
+  expect_message(x<-summariseConceptSetCounts(cdm,conceptSet = list("polio" = c(40213160)), dateRange =  as.Date(c("1930-01-01", "2025-01-01"))))
   observationRange <- cdm$observation_period |>
     dplyr::summarise(minobs = min(.data$observation_period_start_date, na.rm = TRUE),
                      maxobs = max(.data$observation_period_end_date, na.rm = TRUE))
-  expect_no_error(y<- summariseConceptCounts(cdm,conceptId = list("polio" = c(40213160)), dateRange = as.Date(c("1930-01-01", observationRange |>dplyr::pull("maxobs")))))
+  expect_no_error(y<- summariseConceptSetCounts(cdm,conceptSet = list("polio" = c(40213160)), dateRange = as.Date(c("1930-01-01", observationRange |>dplyr::pull("maxobs")))))
   expect_equal(x,y, ignore_attr = TRUE)
   expect_false(settings(x)$study_period_end==settings(y)$study_period_end)
-  expect_error(summariseConceptCounts(cdm,conceptId = list("polio" = c(40213160)), dateRange =  as.Date(c("2015-01-01", "2014-01-01"))))
-  expect_warning(z<-summariseConceptCounts(cdm,conceptId = list("polio" = c(40213160)), dateRange =  as.Date(c("2020-01-01", "2021-01-01"))))
+  expect_error(summariseConceptSetCounts(cdm,conceptSet = list("polio" = c(40213160)), dateRange =  as.Date(c("2015-01-01", "2014-01-01"))))
+  expect_warning(z<-summariseConceptSetCounts(cdm,conceptSet = list("polio" = c(40213160)), dateRange =  as.Date(c("2020-01-01", "2021-01-01"))))
   expect_equal(z, omopgenerics::emptySummarisedResult(), ignore_attr = TRUE)
-  expect_equal(summariseConceptCounts(cdm,conceptId = list("polio" = c(40213160)),dateRange = as.Date(c("1930-01-01",NA))), y, ignore_attr = TRUE)
-  checkResultType(z, "summarise_concept_counts")
+  expect_equal(summariseConceptSetCounts(cdm,conceptSet = list("polio" = c(40213160)),dateRange = as.Date(c("1930-01-01",NA))), y, ignore_attr = TRUE)
+  checkResultType(z, "summarise_concept_set_counts")
   expect_equal(colnames(settings(z)), colnames(settings(x)))
+  PatientProfiles::mockDisconnect(cdm = cdm)
+})
+
+test_that("sample argument works", {
+  skip_on_cran()
+  # Load mock database ----
+  cdm <- cdmEunomia()
+
+  expect_no_error(d<-summariseConceptSetCounts(cdm,conceptSet = list("zoster vax" = c(40213260)), sample = 50))
+  expect_no_error(y<-summariseConceptSetCounts(cdm,conceptSet = list("zoster vax" = c(40213260))))
+  n <- cdm$drug_exposure |>
+    dplyr::tally()|>
+    dplyr::pull(n)
+  expect_no_error(z<-summariseConceptSetCounts(cdm,conceptSet = list("zoster vax" = c(40213260)),sample = n))
+  expect_equal(y,z)
+  PatientProfiles::mockDisconnect(cdm = cdm)
+})
+          
+test_that("interval argument works", {
+  skip_on_cran()
+  # Load mock database ----
+  cdm <- mockOmopSketch()
+  expect_no_error(y<-summariseConceptCounts(list(ANTIHISTAMINES= c(21603444)),
+                         cdm = cdm,
+                         interval = "years"))
+
+  expect_no_error(o<-summariseConceptCounts(list(ANTIHISTAMINES= c(21603444)),
+                                            cdm = cdm,
+                                            interval = "overall"))
+  expect_no_error(q<-summariseConceptCounts(list(ANTIHISTAMINES= c(21603444)),
+                                            cdm = cdm,
+                                            interval = "quarters"))
+  expect_no_error(m<-summariseConceptCounts(list(ANTIHISTAMINES= c(21603444)),
+                                            cdm = cdm,
+                                            interval = "months"))
+
+
+
+  m_quarters <- m|>omopgenerics::splitAdditional()|>
+    omopgenerics::pivotEstimates() |>
+    dplyr::filter(time_interval != "overall" & variable_name == "Number records" & standard_concept_id == 21603444) |>
+    dplyr::mutate(
+      start_date = as.Date(sub(" to .*", "", time_interval)),
+      quarter_start = lubridate::quarter(start_date, type = "date_first"),
+      quarter_end = lubridate::quarter(start_date, type = "date_last"),
+      quarter = paste(quarter_start, "to", quarter_end)
+    ) |>
+    dplyr::select(!c("time_interval", "start_date", "quarter_start", "quarter_end")) |>
+    dplyr::group_by(quarter,)|>
+    dplyr::summarise(count = sum(count), .groups = "drop") |>
+    dplyr::rename("time_interval" = quarter) |>
+    dplyr::arrange(time_interval)
+
+  q_quarters <- q|>omopgenerics::splitAdditional()|>
+   omopgenerics::pivotEstimates()|>
+   dplyr::filter(time_interval != "overall" & variable_name == "Number records"& standard_concept_id == 21603444)|>
+   dplyr::select(time_interval, count)|>
+   dplyr::arrange(time_interval)
+
+  expect_equal(m_quarters, q_quarters)
+
+  m_year <- m|>
+   omopgenerics::splitAdditional()|>
+   dplyr::filter(time_interval != "overall" & variable_name == "Number records" & standard_concept_id == 21603444)|>
+   dplyr::mutate(
+     # Extract the start date
+     start_date = clock::date_parse(stringr::str_extract(time_interval, "^\\d{4}-\\d{2}-\\d{2}")),
+     # Convert start_date to a year-month-day object and extract the year
+     year = clock::get_year(clock::as_year_month_day(start_date))
+   )|>
+   omopgenerics::pivotEstimates()|>
+   dplyr::group_by(year) %>%
+   dplyr::summarise(
+     count = sum(count),
+     .groups = "drop"
+   )|>
+   dplyr::arrange(year)
+  y_year <- y|>
+   omopgenerics::splitAdditional()|>
+   dplyr::filter(time_interval != "overall" & variable_name == "Number records" & standard_concept_id == 21603444)|>
+   dplyr::mutate(
+     # Extract the start date
+     start_date = clock::date_parse(stringr::str_extract(time_interval, "^\\d{4}-\\d{2}-\\d{2}")),
+     # Convert start_date to a year-month-day object and extract the year
+     year = clock::get_year(clock::as_year_month_day(start_date))
+   )|>
+   omopgenerics::pivotEstimates()|>
+   dplyr::select(year, count)|>
+   dplyr::arrange(year)
+
+  expect_equal(m_year, y_year)
+  o <- o |> omopgenerics::splitAdditional()|>
+   dplyr::filter(variable_name == "Number records" & standard_concept_id == 21603444)|>
+   omopgenerics::pivotEstimates()|>
+   dplyr::select(count)
+
+  expect_equal(y_year|>dplyr::summarise(count = sum(count)), o)
+
+
+  q_year <- q|>
+   omopgenerics::splitAdditional()|>
+   dplyr::filter(time_interval != "overall" & variable_name == "Number records" & standard_concept_id == 21603444)|>
+   dplyr::mutate(
+     # Extract the start date
+     start_date = clock::date_parse(stringr::str_extract(time_interval, "^\\d{4}-\\d{2}-\\d{2}")),
+     # Convert start_date to a year-month-day object and extract the year
+     year = clock::get_year(clock::as_year_month_day(start_date))
+   )|>
+   omopgenerics::pivotEstimates()|>
+   dplyr::group_by(year) %>%
+   dplyr::summarise(
+     count = sum(count),
+     .groups = "drop"
+   )|>
+   dplyr::arrange(year)
+
+  expect_equal(q_year, y_year)
   PatientProfiles::mockDisconnect(cdm = cdm)
 })

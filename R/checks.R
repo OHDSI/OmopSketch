@@ -17,7 +17,7 @@ validateIntervals <- function(interval, call = parent.frame()){
 
   unitInterval <- dplyr::case_when(
     interval == "overall" ~ NA,
-    interval == "quarters" ~ 4,
+    interval == "quarters" ~ 3,
     interval == "months" ~ 1,
     interval == "years" ~ 1
   )

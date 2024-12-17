@@ -2,7 +2,7 @@
 #' Summarise concept counts in patient-level data. Only concepts recorded during observation period are counted.
 #'
 #' @param cdm A cdm object
-#' @param conceptId List of concept IDs to summarise.
+#' @param conceptSet List of concept IDs to summarise.
 #' @param countBy Either "record" for record-level counts or "person" for
 #' person-level counts
 #' @param concept TRUE or FALSE. If TRUE code use will be summarised by concept.
@@ -10,6 +10,8 @@
 #' @param sex TRUE or FALSE. If TRUE code use will be summarised by sex.
 #' @param ageGroup A list of ageGroup vectors of length two. Code use will be
 #' thus summarised by age groups.
+#' @param sample An integer to sample the tables in the cdm object to only that number of records.
+#' If NULL no sample is done.
 #' @param dateRange A list containing the minimum and the maximum dates
 #' defining the time range within which the analysis is performed.
 #' @return A summarised_result object with results overall and, if specified, by
@@ -23,33 +25,25 @@
 #'
 #' cs <- list(sumatriptan = c(35604883, 35604879, 35604880, 35604884))
 #'
-#' results <- summariseConceptCounts(cdm, conceptId = cs)
+#' results <- summariseConceptSetCounts(cdm, conceptSet = cs)
 #'
 #' results
 #'
 #' PatientProfiles::mockDisconnect(cdm)
 #'
 #' }
-summariseConceptCounts <- function(cdm,
-                                   conceptId,
+summariseConceptSetCounts <- function(cdm,
+                                   conceptSet,
                                    countBy = c("record", "person"),
                                    concept = TRUE,
                                    interval = "overall",
                                    sex = FALSE,
                                    ageGroup = NULL,
-                                   dateRange = NULL) {
-  lifecycle::deprecate_warn(when = "0.2.0", what = "summariseConceptCounts()", with = "summariseConceptSetCounts()")
-  return(summariseConceptSetCounts(cdm = cdm,
-                                   conceptSet = conceptId,
-                                   countBy = countBy,
-                                   concept = concept,
-                                   interval = interval,
-                                   sex = sex,
-                                   ageGroup = ageGroup,
-                                   dateRange = dateRange))
-  
+                                   sample = 1000000,
+                                   dateRange = NULL){
+
   omopgenerics::validateCdmArgument(cdm)
-  omopgenerics::assertList(conceptId, named = TRUE)
+  omopgenerics::assertList(conceptSet, named = TRUE)
   checkCountBy(countBy)
   omopgenerics::assertChoice(countBy, choices = c("record", "person"))
   countBy <- gsub("persons","subjects",paste0("number ",countBy,"s"))
@@ -61,12 +55,21 @@ summariseConceptCounts <- function(cdm,
   omopgenerics::assertLogical(sex, length = 1)
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "")[[1]]
   dateRange <- validateStudyPeriod(cdm, dateRange)
+  # Get all concepts in concept table if conceptSet is NULL
+  # if(is.null(conceptSet)) {
+  #   conceptSet <- cdm$concept |>
+  #     dplyr::select("concept_name", "concept_id") |>
+  #     dplyr::collect() |>
+  #     dplyr::group_by(.data$concept_name)  |>
+  #     dplyr::summarise(named_vec = list(.data$concept_id)) |>
+  #     tibble::deframe()
+  # }
 
   codeUse <- list()
-  cli::cli_progress_bar("Getting use of codes", total = length(conceptId))
-  for(i in 1:length(conceptId)) {
-    cli::cli_alert_info("Getting concept counts of {names(conceptId)[i]}")
-    codeUse[[i]] <- getCodeUse(conceptId[i],
+  cli::cli_progress_bar("Getting use of codes", total = length(conceptSet))
+  for(i in 1:length(conceptSet)) {
+    cli::cli_alert_info("Getting concept counts of {names(conceptSet)[i]}")
+    codeUse[[i]] <- getCodeUse(conceptSet[i],
                                cdm = cdm,
                                countBy = countBy,
                                concept = concept,
@@ -74,8 +77,9 @@ summariseConceptCounts <- function(cdm,
                                unitInterval = unitInterval,
                                sex = sex,
                                ageGroup = ageGroup,
+                               sample = sample,
                                dateRange = dateRange)
-    Sys.sleep(i/length(conceptId))
+    Sys.sleep(i/length(conceptSet))
     cli::cli_progress_update()
   }
   codeUse <- codeUse |>
@@ -89,12 +93,12 @@ summariseConceptCounts <- function(cdm,
         cdm_name = omopgenerics::cdmName(cdm)
       )
   } else {
-    codeUse <- omopgenerics::emptySummarisedResult(settings = createSettings(result_type = "summarise_concept_counts", study_period = dateRange))
+    codeUse <- omopgenerics::emptySummarisedResult(settings = createSettings(result_type = "summarise_concept_set_counts", study_period = dateRange))
   }
 
   codeUse <- codeUse %>%
     omopgenerics::newSummarisedResult(
-createSettings(result_type = "summarise_concept_counts", study_period = dateRange)
+      createSettings(result_type = "summarise_concept_set_counts", study_period = dateRange)
     )
   return(codeUse)
 }
@@ -107,6 +111,7 @@ getCodeUse <- function(x,
                        unitInterval,
                        sex,
                        ageGroup,
+                       sample,
                        dateRange,
                        call = parent.frame()){
 
@@ -150,26 +155,27 @@ getCodeUse <- function(x,
   records <- getRelevantRecords(cdm = cdm,
                                 tableCodelist = tableCodelist,
                                 intermediateTable = intermediateTable,
-                                tablePrefix = tablePrefix)
-  if(is.null(records)){
+                                tablePrefix = tablePrefix,
+                                sample = sample, dateRange = dateRange)
+
+  if(is.null(records) || omopgenerics::isTableEmpty(records)){
     cc <- dplyr::tibble()
     cli::cli_inform(c(
       "i" = "No records found in the cdm for the concepts provided."
     ))
-    return(omopgenerics::emptySummarisedResult(settings = createSettings(result_type = "summarise_concept_counts", study_period = dateRange)))
+    return(omopgenerics::emptySummarisedResult(settings = createSettings(result_type = "summarise_concept_set_counts", study_period = dateRange)))
   }
 
-  if (!is.null(dateRange))
-  {
-  records <- records |>
-    dplyr::filter(
-      as.Date(date) >= !!dateRange[1]& as.Date(date) <= !!dateRange[2]
-    )
-  if (is.null(warningEmptyStudyPeriod(records))){
-     return(tibble::tibble())
-  }
-
-  }
+  # if (!is.null(dateRange))
+  # {
+  #   records <- records |>
+  #     dplyr::filter(
+  #       as.Date(date) >= !!dateRange[1]& as.Date(date) <= !!dateRange[2]
+  #     )
+  #   if (is.null(warningEmptyStudyPeriod(records))){
+  #     return(tibble::tibble())
+  #   }
+  # }
   records <- addStrataToOmopTable(records, "date", ageGroup, sex)
   strata  <- getStrataList(sex, ageGroup)
 
@@ -196,7 +202,7 @@ getCodeUse <- function(x,
     group <- list()
     records <- records |>
       dplyr::mutate("standard_concept_name" = !!names(x))
-    }
+  }
 
   cc <- records |>
     PatientProfiles::summariseResult(strata = strata,
@@ -238,19 +244,22 @@ getCodeUse <- function(x,
 getRelevantRecords <- function(cdm,
                                tableCodelist,
                                intermediateTable,
-                               tablePrefix){
+                               tablePrefix,
+                               sample, dateRange){
 
   codes <- cdm[[tableCodelist]] |> dplyr::collect()
 
   tableName <- purrr::discard(unique(codes$table_name), is.na)
-  standardConceptIdName <- purrr::discard(unique(codes$standard_concept), is.na)
-  sourceConceptIdName   <- purrr::discard(unique(codes$source_concept), is.na)
+  standardconceptSetName <- purrr::discard(unique(codes$standard_concept), is.na)
+  sourceconceptSetName   <- purrr::discard(unique(codes$source_concept), is.na)
   dateName <- purrr::discard(unique(codes$start_date), is.na)
 
   if(length(tableName)>0){
-    codeRecords <- cdm[[tableName[[1]]]]
+    codeRecords <- cdm[[tableName[[1]]]]|>
+      restrictStudyPeriod(dateRange)|>
+      sampleOmopTable(sample)
 
-    if(is.null(codeRecords)){return(NULL)}
+    if(is.null(codeRecords) || omopgenerics::isTableEmpty(codeRecords)){return(NULL)}
 
     tableCodes <- paste0(tablePrefix, "table_codes")
 
@@ -265,11 +274,11 @@ getRelevantRecords <- function(cdm,
     codeRecords <- codeRecords %>%
       dplyr::mutate(date = !!dplyr::sym(dateName[[1]])) %>%
       dplyr::select(dplyr::all_of(c("person_id",
-                                    standardConceptIdName[[1]],
-                                    sourceConceptIdName[[1]],
+                                    standardconceptSetName[[1]],
+                                    sourceconceptSetName[[1]],
                                     "date"))) %>%
-      dplyr::rename("standard_concept_id" = .env$standardConceptIdName[[1]],
-                    "source_concept_id" = .env$sourceConceptIdName[[1]]) %>%
+      dplyr::rename("standard_concept_id" = .env$standardconceptSetName[[1]],
+                    "source_concept_id" = .env$sourceconceptSetName[[1]]) %>%
       dplyr::inner_join(cdm[[tableCodes]],
                         by = c("standard_concept_id"="concept_id")) %>%
       filterInObservation(indexDate = "date") |>
@@ -290,17 +299,20 @@ getRelevantRecords <- function(cdm,
   # get for any additional domains and union
   if(length(tableName) > 1) {
     for(i in 1:(length(tableName)-1)) {
-      workingRecords <-  cdm[[tableName[[i+1]]]]
+      workingRecords <-  cdm[[tableName[[i+1]]]] |>
+        restrictStudyPeriod(dateRange)|>
+        sampleOmopTable(sample)
+      if(is.null(workingRecords) || omopgenerics::isTableEmpty(workingRecords)){return(NULL)}
 
       workingRecords <-  workingRecords %>%
         dplyr::mutate(date = !!dplyr::sym(dateName[[i+1]])) %>%
         dplyr::mutate(year = clock::get_year(date)) %>%
         dplyr::select(dplyr::all_of(c("person_id",
-                                      standardConceptIdName[[i+1]],
-                                      sourceConceptIdName[[i+1]],
+                                      standardconceptSetName[[i+1]],
+                                      sourceconceptSetName[[i+1]],
                                       "date", "year"))) %>%
-        dplyr::rename("standard_concept_id" = .env$standardConceptIdName[[i+1]],
-                      "source_concept_id" = .env$sourceConceptIdName[[i+1]]) %>%
+        dplyr::rename("standard_concept_id" = .env$standardconceptSetName[[i+1]],
+                      "source_concept_id" = .env$sourceconceptSetName[[i+1]]) %>%
         dplyr::inner_join(codes %>%
                             dplyr::filter(.data$table_name == tableName[[i+1]]) %>%
                             dplyr::select("concept_id", "domain_id"),

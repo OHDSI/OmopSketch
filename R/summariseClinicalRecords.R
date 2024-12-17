@@ -22,6 +22,8 @@
 #' @param ageGroup A list of age groups to stratify results by.
 #' @param sex Boolean variable. Whether to stratify by sex (TRUE) or not
 #' (FALSE).
+#' @param sample An integer to sample the tables to only that number of records.
+#' If NULL no sample is done.
 #' @param dateRange A list containing the minimum and the maximum dates
 #' defining the time range within which the analysis is performed.
 #' @return A summarised_result object.
@@ -50,11 +52,12 @@ summariseClinicalRecords <- function(cdm,
                                      recordsPerPerson = c("mean", "sd", "median", "q25", "q75", "min", "max"),
                                      inObservation = TRUE,
                                      standardConcept = TRUE,
-                                     sourceVocabulary = FALSE,
+                                     sourceVocabulary = TRUE,
                                      domainId = TRUE,
                                      typeConcept = TRUE,
                                      sex = FALSE,
                                      ageGroup = NULL,
+                                     sample = 1000000,
                                      dateRange = NULL) {
   # Initial checks ----
   omopgenerics::validateCdmArgument(cdm)
