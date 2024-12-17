@@ -93,29 +93,26 @@ sampleTable <- function(x, sample, name) {
   omopgenerics::dropSourceTable(cdm = cdm, name = idName)
   return(x)
 }
-addStratifications <- function(x, indexDate, sex, ageGroup, interval, name) {
+addStratifications <- function(x, indexDate, sex, ageGroup, interval, intervalName, name) {
   # add sex and age_group if needed
   x <- x |>
     addSexAgeGroup(sex = sex, ageGroup = ageGroup, indexDate = indexDate)
 
-  if (interval == "years") {
+  if (interval != "overall") {
+    if (interval == "years") {
+      q <- 'as.character(clock::get_year(.data[[indexDate]]))'
+    } else if (interval == "months") {
+      q <- 'paste0(as.character(clock::get_year(.data[[indexDate]])), "_", as.character(clock::get_month(.data[[indexDate]])))'
+    } else if (interval == "quarters") {
+      q <- 'paste0(as.character(clock::get_year(.data[[indexDate]])), "_Q", as.character(as.integer(((clock::get_month(.data[[indexDate]]) - 1) %/% 3) + 1)))'
+    }
+    q <- q |>
+      rlang::set_names(intervalName) |>
+      rlang::parse_exprs()
     x <- x |>
-      dplyr::mutate(year = as.character(clock::get_year(.data[[indexDate]])))
-  } else if (interval == "months") {
-    x <- x |>
-      dplyr::mutate(month = paste0(
-        as.character(clock::get_year(.data[[indexDate]])),
-        "_",
-        as.character(clock::get_month(.data[[indexDate]]))
-      ))
-  } else if (interval == "quarters") {
-    x <- x |>
-      dplyr::mutate(quarter = paste0(
-        as.character(clock::get_year(.data[[indexDate]])),
-        "_Q",
-        as.character(as.integer(((clock::get_month(.data[[indexDate]]) - 1) %/% 3) + 1))
-      ))
+      dplyr::mutate(!!!q)
   }
+
 
   if (interval != "overall" | sex | !is.null(ageGroup)) {
     x <- x |>

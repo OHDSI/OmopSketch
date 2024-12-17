@@ -107,6 +107,7 @@ summariseAllConceptCounts <- function(cdm,
         sex = sex,
         ageGroup = ageGroup,
         interval = dplyr::if_else(year, "years", "overall"),
+        intervalName = "year",
         name = omopgenerics::uniqueTableName(prefix)
       ) |>
       # summarise results

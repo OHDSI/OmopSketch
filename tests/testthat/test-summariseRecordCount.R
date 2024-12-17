@@ -4,10 +4,10 @@ test_that("summariseRecordCount() works", {
   cdm <- cdmEunomia()
 
   # Check inputs ----
-  expect_warning(inherits(summariseRecordCount(cdm, "observation_period", interval = "months"),"summarised_result"))
-  expect_warning(inherits(summariseRecordCount(cdm, "observation_period"),"summarised_result"))
+  expect_no_error(inherits(summariseRecordCount(cdm, "observation_period", interval = "months"),"summarised_result"))
+  expect_no_error(inherits(summariseRecordCount(cdm, "observation_period"),"summarised_result"))
 
-  expect_warning(summariseRecordCount(cdm, "observation_period"))
+  expect_no_error(summariseRecordCount(cdm, "observation_period"))
   expect_no_error(summariseRecordCount(cdm, "visit_occurrence"))
   expect_no_error(summariseRecordCount(cdm, "drug_exposure"))
   expect_no_error(summariseRecordCount(cdm, "procedure_occurrence"))
@@ -39,18 +39,18 @@ test_that("summariseRecordCount() works", {
   )
 
   expect_true(
-  summariseRecordCount(cdm, "condition_occurrence", interval = "months") |>
-    dplyr::filter(additional_level == "1961-02-01 to 1961-02-28") |>
-    dplyr::pull("estimate_value") |>
-    as.numeric() ==
-  (cdm$condition_occurrence |>
-      dplyr::ungroup() |>
-     dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") |>
-      dplyr::mutate(year = clock::get_year(condition_start_date)) |>
-      dplyr::mutate(month = clock::get_month(condition_start_date)) |>
-      dplyr::filter(year == 1961, month == 2) |>
-      dplyr::tally() |>
-      dplyr::pull("n"))
+    summariseRecordCount(cdm, "condition_occurrence", interval = "months") |>
+      dplyr::filter(additional_level == "1961-02-01 to 1961-02-28") |>
+      dplyr::pull("estimate_value") |>
+      as.numeric() ==
+      (cdm$condition_occurrence |>
+         dplyr::ungroup() |>
+         dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") |>
+         dplyr::mutate(year = clock::get_year(condition_start_date)) |>
+         dplyr::mutate(month = clock::get_month(condition_start_date)) |>
+         dplyr::filter(year == 1961, month == 2) |>
+         dplyr::tally() |>
+         dplyr::pull("n"))
   )
 
   expect_true(
@@ -213,7 +213,7 @@ test_that("summariseRecordCount() sex argument works", {
     dplyr::pull("estimate_value")
   expect_equal(x,y)
 
-  expect_warning(t <- summariseRecordCount(cdm, "observation_period", sex = TRUE))
+  expect_no_error(t <- summariseRecordCount(cdm, "observation_period", sex = TRUE))
   x <- t |>
     dplyr::select("strata_level", "additional_level", "estimate_value") |>
     dplyr::filter(strata_level != "overall") |>
@@ -297,9 +297,9 @@ test_that("dateRnge argument works", {
   cdm <- CDMConnector::cdmFromCon(con = db, cdmSchema = "main",writeSchema = "main")
 
 
-  expect_no_error(expect_warning(summariseRecordCount(cdm, "observation_period",
-                         interval = "years",
-                         dateRange =  as.Date(c("2012-01-01", NA)))))
+  expect_no_error(summariseRecordCount(cdm, "observation_period",
+                                       interval = "years",
+                                       dateRange =  as.Date(c("2012-01-01", NA))))
   PatientProfiles::mockDisconnect(cdm = cdm)
 
 })

@@ -246,6 +246,9 @@ summariseClinicalRecords <- function(cdm,
       dplyr::mutate(omop_table = .env$table) |>
       omopgenerics::uniteGroup(cols = "omop_table")
 
+    # drop temp tables
+    omopgenerics::dropSourceTable(cdm = cdm, name = dplyr::starts_with(prefix))
+
     # order
     fullResult |>
       dplyr::select("strata_name", "strata_level") |>
@@ -265,6 +268,9 @@ summariseClinicalRecords <- function(cdm,
   }) |>
     dplyr::bind_rows() |>
     omopgenerics::newSummarisedResult(settings = set)
+
+  # drop temp tables
+  omopgenerics::dropSourceTable(cdm = cdm, name = dplyr::starts_with(prefix))
 
   return(result)
 }
@@ -323,7 +329,8 @@ summariseRecordsPerPerson <- function(x, den, strata, estimates) {
       ),
       estimate_name = dplyr::if_else(
         .data$variable_name == "number records", "count", .data$estimate_name
-      )
+      ),
+      estimate_value = reduceDemicals(.data$estimate_value, 4)
     )
 
   omopgenerics::dropTable(cdm = cdm, name = dplyr::starts_with(prefix))
@@ -466,4 +473,9 @@ addVariables <- function(x, inObservation, standardConcept, sourceVocabulary, do
 
   x |>
     dplyr::select(dplyr::all_of(variables))
+}
+reduceDemicals <- function(x, n) {
+  id <- grepl(pattern = ".", x = x, fixed = TRUE) & !is.na(suppressWarnings(as.numeric(x)))
+  x[id] <- sprintf(paste0("%.", n, "f"), as.numeric(x[id]))
+  return(x)
 }
