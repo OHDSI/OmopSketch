@@ -9,6 +9,8 @@
 #' @param sex Whether to stratify by sex (TRUE) or not (FALSE).
 #' @param dateRange A list containing the minimum and the maximum dates
 #' defining the time range within which the analysis is performed.
+#' @param sample An integer to sample the tables to only that number of records.
+#' If NULL no sample is done.
 #' @return A summarised_result object.
 #' @export
 #' @examples

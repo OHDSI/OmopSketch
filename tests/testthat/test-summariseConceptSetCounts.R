@@ -558,3 +558,19 @@ test_that("dateRange argument works", {
   expect_equal(colnames(settings(z)), colnames(settings(x)))
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
+
+
+test_that("sample argument works", {
+  skip_on_cran()
+  # Load mock database ----
+  cdm <- cdmEunomia()
+
+  expect_no_error(x<-summariseConceptSetCounts(cdm,conceptSet = list("x" = c(40213260)), sample = 50))
+  expect_no_error(y<-summariseConceptSetCounts(cdm,conceptSet = list("x" = c(40213260))))
+  n <- cdm$drug_exposure |>
+    dplyr::tally()|>
+    dplyr::pull(n)
+  expect_no_error(z<-summariseConceptSetCounts(cdm,conceptSet = list("x" = c(40213260)),sample = n))
+  expect_equal(y,z)
+  PatientProfiles::mockDisconnect(cdm = cdm)
+})
