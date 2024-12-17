@@ -565,12 +565,12 @@ test_that("sample argument works", {
   # Load mock database ----
   cdm <- cdmEunomia()
 
-  expect_no_error(x<-summariseConceptSetCounts(cdm,conceptSet = list("x" = c(40213260)), sample = 50))
-  expect_no_error(y<-summariseConceptSetCounts(cdm,conceptSet = list("x" = c(40213260))))
+  expect_no_error(d<-summariseConceptSetCounts(cdm,conceptSet = list("zoster vax" = c(40213260)), sample = 50))
+  expect_no_error(y<-summariseConceptSetCounts(cdm,conceptSet = list("zoster vax" = c(40213260))))
   n <- cdm$drug_exposure |>
     dplyr::tally()|>
     dplyr::pull(n)
-  expect_no_error(z<-summariseConceptSetCounts(cdm,conceptSet = list("x" = c(40213260)),sample = n))
+  expect_no_error(z<-summariseConceptSetCounts(cdm,conceptSet = list("zoster vax" = c(40213260)),sample = n))
   expect_equal(y,z)
   PatientProfiles::mockDisconnect(cdm = cdm)
 })

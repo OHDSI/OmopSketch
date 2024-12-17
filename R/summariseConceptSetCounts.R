@@ -158,7 +158,7 @@ getCodeUse <- function(x,
                                 tablePrefix = tablePrefix,
                                 sample = sample, dateRange = dateRange)
 
-  if(is.null(records)){
+  if(is.null(records) || omopgenerics::isTableEmpty(records)){
     cc <- dplyr::tibble()
     cli::cli_inform(c(
       "i" = "No records found in the cdm for the concepts provided."
