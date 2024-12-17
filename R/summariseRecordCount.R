@@ -35,7 +35,9 @@ summariseRecordCount <- function(cdm,
                                  interval = "overall",
                                  ageGroup = NULL,
                                  sex = FALSE,
-                                 dateRange = NULL) {
+                                 sample = 1000000,
+                                 dateRange = NULL
+                                 ) {
 
   # Initial checks ----
   omopgenerics::validateCdmArgument(cdm)
@@ -47,6 +49,7 @@ summariseRecordCount <- function(cdm,
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "")[[1]]
   omopgenerics::assertLogical(sex, length = 1)
   dateRange <- validateStudyPeriod(cdm, dateRange)
+
 
   result <- purrr::map(omopTableName,
                        function(x) {
@@ -66,7 +69,9 @@ summariseRecordCount <- function(cdm,
                                                       original_interval,
                                                       ageGroup = ageGroup,
                                                       sex = sex,
-                                                      dateRange = dateRange)
+                                                      sample = sample,
+                                                      dateRange = dateRange
+                                                      )
                        }
   ) |>
     dplyr::bind_rows()
@@ -76,10 +81,12 @@ summariseRecordCount <- function(cdm,
 
 #' @noRd
 summariseRecordCountInternal <- function(omopTableName, cdm, interval, unitInterval,
-                                         original_interval, ageGroup, sex, dateRange) {
+                                         original_interval, ageGroup, sex, sample, dateRange) {
 
   prefix <- omopgenerics::tmpPrefix()
   omopTable <- cdm[[omopTableName]] |> dplyr::ungroup()
+  omopTable <- restrictStudyPeriod(omopTable, dateRange)
+  omopTable <- sampleOmopTable(omopTable, sample)
 
   # Create initial variables ----
 

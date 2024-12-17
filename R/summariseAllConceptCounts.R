@@ -63,6 +63,7 @@ summariseAllConceptCounts <- function(cdm,
                             year = FALSE,
                             sex = FALSE,
                             ageGroup = NULL,
+                            sample = 1000000,
                             dateRange = NULL){
 
   omopgenerics::validateCdmArgument(cdm)
@@ -93,7 +94,7 @@ summariseAllConceptCounts <- function(cdm,
   }
 
   omopTable <- restrictStudyPeriod(omopTable, dateRange)
-
+  omopTable <- sampleOmopTable(omopTable, sample)
 
   indexDate <- startDate(omopgenerics::tableName(omopTable))
 

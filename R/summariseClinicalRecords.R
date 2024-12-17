@@ -55,6 +55,7 @@ summariseClinicalRecords <- function(cdm,
                                      typeConcept = TRUE,
                                      sex = FALSE,
                                      ageGroup = NULL,
+                                     sample = 1000000,
                                      dateRange = NULL) {
   # Initial checks ----
   omopgenerics::validateCdmArgument(cdm)
@@ -93,6 +94,7 @@ summariseClinicalRecords <- function(cdm,
       typeConcept = typeConcept,
       sex = sex,
       ageGroup = ageGroup,
+      sample = sample,
       dateRange = dateRange
     )
   }) |>
@@ -112,6 +114,7 @@ summariseClinicalRecord <- function(omopTableName,
                                     typeConcept,
                                     sex,
                                     ageGroup,
+                                    sample,
                                     dateRange,
                                     call = parent.frame(3)) {
 
@@ -124,8 +127,8 @@ summariseClinicalRecord <- function(omopTableName,
 
   omopTable <- cdm[[omopTableName]] |>
     dplyr::ungroup()
-
   omopTable <- restrictStudyPeriod(omopTable, dateRange)
+  omopTable <- sampleOmopTable(omopTable, sample)
   if(omopgenerics::isTableEmpty(omopTable)) {
     return(omopgenerics::emptySummarisedResult(settings = createSettings(result_type = "summarise_clinical_records", study_period = dateRange)))
   }

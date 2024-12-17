@@ -37,6 +37,7 @@ summariseConceptSetCounts <- function(cdm,
                                    interval = "overall",
                                    sex = FALSE,
                                    ageGroup = NULL,
+                                   sample = 1000000,
                                    dateRange = NULL){
 
   omopgenerics::validateCdmArgument(cdm)
@@ -74,6 +75,7 @@ summariseConceptSetCounts <- function(cdm,
                                unitInterval = unitInterval,
                                sex = sex,
                                ageGroup = ageGroup,
+                               sample = sample,
                                dateRange = dateRange)
     Sys.sleep(i/length(conceptSet))
     cli::cli_progress_update()
@@ -107,6 +109,7 @@ getCodeUse <- function(x,
                        unitInterval,
                        sex,
                        ageGroup,
+                       sample,
                        dateRange,
                        call = parent.frame()){
 
@@ -150,7 +153,9 @@ getCodeUse <- function(x,
   records <- getRelevantRecords(cdm = cdm,
                                 tableCodelist = tableCodelist,
                                 intermediateTable = intermediateTable,
-                                tablePrefix = tablePrefix)
+                                tablePrefix = tablePrefix,
+                                sample = sample, dateRange = dateRange)
+
   if(is.null(records)){
     cc <- dplyr::tibble()
     cli::cli_inform(c(
@@ -159,17 +164,16 @@ getCodeUse <- function(x,
     return(omopgenerics::emptySummarisedResult(settings = createSettings(result_type = "summarise_concept_set_counts", study_period = dateRange)))
   }
 
-  if (!is.null(dateRange))
-  {
-    records <- records |>
-      dplyr::filter(
-        as.Date(date) >= !!dateRange[1]& as.Date(date) <= !!dateRange[2]
-      )
-    if (is.null(warningEmptyStudyPeriod(records))){
-      return(tibble::tibble())
-    }
-
-  }
+  # if (!is.null(dateRange))
+  # {
+  #   records <- records |>
+  #     dplyr::filter(
+  #       as.Date(date) >= !!dateRange[1]& as.Date(date) <= !!dateRange[2]
+  #     )
+  #   if (is.null(warningEmptyStudyPeriod(records))){
+  #     return(tibble::tibble())
+  #   }
+  # }
   records <- addStrataToOmopTable(records, "date", ageGroup, sex)
   strata  <- getStrataList(sex, ageGroup)
 
@@ -238,7 +242,8 @@ getCodeUse <- function(x,
 getRelevantRecords <- function(cdm,
                                tableCodelist,
                                intermediateTable,
-                               tablePrefix){
+                               tablePrefix,
+                               sample, dateRange){
 
   codes <- cdm[[tableCodelist]] |> dplyr::collect()
 
@@ -248,9 +253,11 @@ getRelevantRecords <- function(cdm,
   dateName <- purrr::discard(unique(codes$start_date), is.na)
 
   if(length(tableName)>0){
-    codeRecords <- cdm[[tableName[[1]]]]
+    codeRecords <- cdm[[tableName[[1]]]]|>
+      restrictStudyPeriod(dateRange)|>
+      sampleOmopTable(sample)
 
-    if(is.null(codeRecords)){return(NULL)}
+    if(is.null(codeRecords) || omopgenerics::isTableEmpty(codeRecords)){return(NULL)}
 
     tableCodes <- paste0(tablePrefix, "table_codes")
 
@@ -290,7 +297,10 @@ getRelevantRecords <- function(cdm,
   # get for any additional domains and union
   if(length(tableName) > 1) {
     for(i in 1:(length(tableName)-1)) {
-      workingRecords <-  cdm[[tableName[[i+1]]]]
+      workingRecords <-  cdm[[tableName[[i+1]]]] |>
+        restrictStudyPeriod(dateRange)|>
+        sampleOmopTable(sample)
+      if(is.null(workingRecords) || omopgenerics::isTableEmpty(workingRecords)){return(NULL)}
 
       workingRecords <-  workingRecords %>%
         dplyr::mutate(date = !!dplyr::sym(dateName[[i+1]])) %>%
