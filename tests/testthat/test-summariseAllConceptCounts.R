@@ -76,6 +76,20 @@ test_that("dateRange argument works", {
   expect_equal(colnames(settings(y)), colnames(settings(x)))
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
+test_that("sample argument works", {
+  skip_on_cran()
+  # Load mock database ----
+  cdm <- cdmEunomia()
+
+  expect_no_error(x<-summariseAllConceptCounts(cdm,"drug_exposure", sample = 50))
+  expect_no_error(y<-summariseAllConceptCounts(cdm,"drug_exposure"))
+  n <- cdm$drug_exposure |>
+    dplyr::tally()|>
+    dplyr::pull(n)
+  expect_no_error(z<-summariseAllConceptCounts(cdm,"drug_exposure",sample = n))
+  expect_equal(y,z)
+  PatientProfiles::mockDisconnect(cdm = cdm)
+})
 
 test_that("tableAllConceptCounts() works", {
   skip_on_cran()

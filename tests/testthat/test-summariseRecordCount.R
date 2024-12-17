@@ -305,3 +305,17 @@ test_that("dateRnge argument works", {
 })
 
 
+test_that("sample argument works", {
+  skip_on_cran()
+  # Load mock database ----
+  cdm <- cdmEunomia()
+
+  expect_no_error(x<-summariseRecordCount(cdm,"drug_exposure", sample = 50))
+  expect_no_error(y<-summariseRecordCount(cdm,"drug_exposure"))
+  n <- cdm$drug_exposure |>
+    dplyr::tally()|>
+    dplyr::pull(n)
+  expect_no_error(z<-summariseRecordCount(cdm,"drug_exposure",sample = n))
+  expect_equal(y,z)
+  PatientProfiles::mockDisconnect(cdm = cdm)
+})
