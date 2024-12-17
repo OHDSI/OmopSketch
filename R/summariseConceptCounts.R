@@ -52,15 +52,6 @@ summariseConceptCounts <- function(cdm,
   omopgenerics::assertLogical(sex, length = 1)
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "")[[1]]
   dateRange <- validateStudyPeriod(cdm, dateRange)
-  # Get all concepts in concept table if conceptId is NULL
-  # if(is.null(conceptId)) {
-  #   conceptId <- cdm$concept |>
-  #     dplyr::select("concept_name", "concept_id") |>
-  #     dplyr::collect() |>
-  #     dplyr::group_by(.data$concept_name)  |>
-  #     dplyr::summarise(named_vec = list(.data$concept_id)) |>
-  #     tibble::deframe()
-  # }
 
   codeUse <- list()
   cli::cli_progress_bar("Getting use of codes", total = length(conceptId))
