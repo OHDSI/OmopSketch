@@ -67,7 +67,7 @@ test_that("dateRange argument works", {
   expect_equal(x,y, ignore_attr = TRUE)
   expect_false(settings(x)$study_period_end==settings(y)$study_period_end)
   expect_error(summariseMissingData(cdm, "drug_exposure", dateRange =  as.Date(c("2015-01-01", "2014-01-01"))))
-  expect_warning(expect_warning(z<-summariseMissingData(cdm, "drug_exposure", dateRange =  as.Date(c("2020-01-01", "2021-01-01")))))
+  expect_warning(z<-summariseMissingData(cdm, "drug_exposure", dateRange =  as.Date(c("2020-01-01", "2021-01-01"))))
   expect_equal(z, omopgenerics::emptySummarisedResult(), ignore_attr = TRUE)
   expect_equal(summariseMissingData(cdm, "drug_exposure",dateRange = as.Date(c("2012-01-01",NA))), y, ignore_attr = TRUE)
   checkResultType(z, "summarise_missing_data")

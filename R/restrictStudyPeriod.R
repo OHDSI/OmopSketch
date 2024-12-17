@@ -6,7 +6,7 @@ restrictStudyPeriod <- function(omopTable, dateRange) {
   start_date_table <- startDate(omopgenerics::tableName(omopTable))
   end_date_table <- endDate(omopgenerics::tableName(omopTable))
   start_date <- dateRange[1]
-  end_date <-dateRange[2]
+  end_date <- dateRange[2]
 
   omopTable <- omopTable |>
     dplyr::filter(

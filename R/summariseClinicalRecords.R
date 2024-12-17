@@ -87,7 +87,7 @@ summariseClinicalRecords <- function(cdm,
   # get strata
   strata <- c(
     list(character()),
-    omopgenerics::combineStrata(c("sex"[sex], names(ageGroup)))
+    omopgenerics::combineStrata(c(names(ageGroup), "sex"[sex]))
   )
 
   # create denominator for record count
@@ -114,15 +114,21 @@ summariseClinicalRecords <- function(cdm,
     # warn if observation_period
     if ("observation_period" == table) {
       if (warnStandardConcept) {
-        cli::cli_inform("standardConcept turned to FALSE for observation_period OMOP table")
+        "standardConcept turned to FALSE for observation_period OMOP table" |>
+          rlang::set_names("i") |>
+          cli::cli_inform()
       }
       standardConcept <- FALSE
       if (warnSourceVocabulary) {
-        cli::cli_inform("sourceVocabulary turned to FALSE for observation_period OMOP table")
+        "sourceVocabulary turned to FALSE for observation_period OMOP table" |>
+          rlang::set_names("i") |>
+          cli::cli_inform()
       }
       sourceVocabulary <- FALSE
       if (warnDomainId) {
-        cli::cli_inform("domainId turned to FALSE for observation_period OMOP table")
+        "domainId turned to FALSE for observation_period OMOP table" |>
+          rlang::set_names("i") |>
+          cli::cli_inform()
       }
       domainId <- FALSE
     }
@@ -236,9 +242,26 @@ summariseClinicalRecords <- function(cdm,
       resultVariables <- NULL
     }
 
-    dplyr::bind_rows(resultsRecordPerPerson, resultVariables) |>
+    fullResult <- dplyr::bind_rows(resultsRecordPerPerson, resultVariables) |>
       dplyr::mutate(omop_table = .env$table) |>
       omopgenerics::uniteGroup(cols = "omop_table")
+
+    # order
+    fullResult |>
+      dplyr::select("strata_name", "strata_level") |>
+      dplyr::distinct() |>
+      dplyr::cross_join(dplyr::tibble(variable_name = unique(c(
+        "number subjects", "number records", "records_per_person",
+        unique(fullResult$variable_name)
+      )))) |>
+      dplyr::mutate(order_id = dplyr::row_number()) |>
+      dplyr::right_join(
+        fullResult,
+        by = c("strata_name", "strata_level", "variable_name"),
+        relationship = "many-to-many"
+      ) |>
+      dplyr::arrange(.data$order_id, .data$variable_level, .data$estimate_name) |>
+      dplyr::select(!"order_id")
   }) |>
     dplyr::bind_rows() |>
     omopgenerics::newSummarisedResult(settings = set)
@@ -347,6 +370,7 @@ denominator <- function(cdm, sex, ageGroup, name) {
     ))) |>
     dplyr::inner_join(cdm[[nm]], by = "cohort_definition_id") |>
     dplyr::select(!"cohort_definition_id") |>
+    dplyr::distinct() |>
     dplyr::compute(name = name, temporary = FALSE)
 
   omopgenerics::dropSourceTable(cdm = cdm, name = nm)
@@ -358,7 +382,8 @@ addVariables <- function(x, inObservation, standardConcept, sourceVocabulary, do
   name <- omopgenerics::tableName(x)
 
   newNames <- c(
-    "person_id",
+    # here to support death table
+    person_id = "person_id",
     id = tableId(name),
     start_date = startDate(name),
     end_date = endDate(name),
@@ -377,9 +402,9 @@ addVariables <- function(x, inObservation, standardConcept, sourceVocabulary, do
   # In observation
   if (inObservation) {
     x <- x |>
-      dplyr::inner_join(
+      dplyr::left_join(
         x |>
-          dplyr::left_join(
+          dplyr::inner_join(
             cdm[["observation_period"]] |>
               dplyr::select(
                 "person_id",
@@ -395,7 +420,8 @@ addVariables <- function(x, inObservation, standardConcept, sourceVocabulary, do
           dplyr::mutate(in_observation = 1L) |>
           dplyr::select(c("in_observation", "id", "person_id")),
         by = c("person_id", "id")
-      )
+      ) |>
+      dplyr::mutate(in_observation = dplyr::coalesce(.data$in_observation, 0L))
   }
 
   # Domain and standard

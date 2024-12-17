@@ -126,12 +126,10 @@ addStratifications <- function(x, indexDate, sex, ageGroup, interval, name) {
 }
 addSexAgeGroup <- function(x, sex, ageGroup, indexDate) {
   age <- !is.null(ageGroup)
-  if (!sex & !age) return(x)
 
   person <- omopgenerics::cdmReference(x)$person
   q <- c(
-    sex = "dplyr::case_when(.data$gender_concept_id == 8532 ~ 'Female',
-    .data$gender_concept_id == 8507 ~ 'Male', .default = 'None')",
+    sex = ".data$gender_concept_id",
     birth_date = "as.Date(paste0(
     as.character(as.integer(.data$year_of_birth)), '-',
     as.character(as.integer(dplyr::coalesce(.data$month_of_birth, 1L))), '-',
@@ -143,7 +141,16 @@ addSexAgeGroup <- function(x, sex, ageGroup, indexDate) {
     dplyr::select(dplyr::any_of(c("person_id", "sex", "birth_date")))
 
   x <- x |>
-    dplyr::left_join(person, by = "person_id")
+    dplyr::inner_join(person, by = "person_id")
+
+  if (sex) {
+    x <- x |>
+      dplyr::mutate(sex = dplyr::case_when(
+        .data$sex == 8532 ~ 'Female',
+        .data$sex == 8507 ~ 'Male',
+        .default = 'None'
+      ))
+  }
 
   if (age) {
     qAge <- ageGroupQuery(ageGroup)

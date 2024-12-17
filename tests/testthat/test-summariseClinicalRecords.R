@@ -121,14 +121,35 @@ test_that("summariseClinicalRecords() sex and ageGroup argument work", {
   x <- cdm[["measurement"]] |>
     PatientProfiles::addAgeQuery(indexDate = "measurement_date", ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))) |>
     dplyr::select("person_id", "age_group")
-  n_records  <- x |> dplyr::group_by(age_group) |> dplyr::summarise(estimate_value = dplyr::n()) |> dplyr::collect() |> dplyr::arrange(age_group) |> dplyr::mutate(dplyr::across(dplyr::everything(), as.character))
-  n_subjects <- x |> dplyr::group_by(person_id,age_group) |> dplyr::ungroup() |> dplyr::distinct() |> dplyr::group_by(age_group) |> dplyr::summarise(estimate_value = dplyr::n()) |> dplyr::collect() |> dplyr::arrange(age_group) |> dplyr::mutate(dplyr::across(dplyr::everything(), as.character))
+  n_records  <- x |>
+    dplyr::group_by(age_group) |>
+    dplyr::summarise(estimate_value = dplyr::n()) |>
+    dplyr::collect() |>
+    dplyr::arrange(age_group) |>
+    dplyr::mutate(dplyr::across(dplyr::everything(), as.character))
+  n_subjects <- x |>
+    dplyr::group_by(person_id,age_group) |>
+    dplyr::ungroup() |>
+    dplyr::distinct() |>
+    dplyr::group_by(age_group) |>
+    dplyr::summarise(estimate_value = dplyr::n()) |>
+    dplyr::collect() |>
+    dplyr::arrange(age_group) |>
+    dplyr::mutate(dplyr::across(dplyr::everything(), as.character))
 
-  m_records  <- m |> dplyr::filter(variable_name == "number records", strata_level %in% c("<30", ">= 30"), estimate_name == "count")  |> dplyr::select("age_group" = "strata_level", "estimate_value") |> dplyr::collect() |> dplyr::arrange(age_group)
-  m_subjects <- m |> dplyr::filter(variable_name == "number subjects", strata_level %in% c("<30", ">= 30"), estimate_name == "count") |> dplyr::select("age_group" = "strata_level", "estimate_value") |> dplyr::collect() |> dplyr::arrange(age_group)
+  m_records  <- m |>
+    dplyr::filter(variable_name == "number records", strata_level %in% c("<30", ">= 30"), estimate_name == "count") |>
+    dplyr::select("age_group" = "strata_level", "estimate_value") |>
+    dplyr::collect() |>
+    dplyr::arrange(age_group)
+  m_subjects <- m |>
+    dplyr::filter(variable_name == "number subjects", strata_level %in% c("<30", ">= 30"), estimate_name == "count") |>
+    dplyr::select("age_group" = "strata_level", "estimate_value") |>
+    dplyr::collect() |>
+    dplyr::arrange(age_group)
 
-  expect_equal(list(m_records$age_group,  m_records$estimate_value),   list(n_records$age_group, n_records$estimate_value))
-  expect_equal(list(m_subjects$age_group, m_subjects$estimate_value), list(n_subjects$age_group, n_subjects$estimate_value))
+  expect_equal(m_records, n_records, ignore_attr = TRUE)
+  expect_equal(m_subjects, n_subjects, ignore_attr = TRUE)
 
   # Check sex and age group---
   x <- summariseClinicalRecords(cdm, "condition_occurrence", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))) |>
@@ -270,15 +291,10 @@ test_that("summariseClinicalRecords() works with mock data", {
   cdm <- mockOmopSketch()
 
   # Check all tables work ----
-
-
   expect_no_error(vo <- summariseClinicalRecords(cdm, "visit_occurrence"))
-
   expect_no_error(summariseClinicalRecords(cdm, "drug_exposure"))
   expect_no_error(summariseClinicalRecords(cdm, "procedure_occurrence"))
-
-  expect_warning(summariseClinicalRecords(cdm, "death"))
-
+  expect_no_error(summariseClinicalRecords(cdm, "death"))
 
   PatientProfiles::mockDisconnect(cdm = cdm)
 })

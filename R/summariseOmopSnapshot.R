@@ -18,7 +18,7 @@ summariseOmopSnapshot <- function(cdm) {
   summaryTable <- summaryTable |>
     internalTibble() |>
     omopgenerics::newSummarisedResult(settings = createSettings(
-      result_type = "summarise_omop_snapsjot"
+      result_type = "summarise_omop_snapshot"
     ))
 
 
