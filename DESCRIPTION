@@ -44,6 +44,7 @@ Suggests:
     gt,
     here,
     knitr,
+    lubridate,
     odbc,
     remotes,
     rmarkdown,

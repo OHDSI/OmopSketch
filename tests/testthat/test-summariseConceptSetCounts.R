@@ -559,7 +559,6 @@ test_that("dateRange argument works", {
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
 
-
 test_that("sample argument works", {
   skip_on_cran()
   # Load mock database ----
@@ -572,5 +571,107 @@ test_that("sample argument works", {
     dplyr::pull(n)
   expect_no_error(z<-summariseConceptSetCounts(cdm,conceptSet = list("zoster vax" = c(40213260)),sample = n))
   expect_equal(y,z)
+  PatientProfiles::mockDisconnect(cdm = cdm)
+})
+          
+test_that("interval argument works", {
+  skip_on_cran()
+  # Load mock database ----
+  cdm <- mockOmopSketch()
+  expect_no_error(y<-summariseConceptCounts(list(ANTIHISTAMINES= c(21603444)),
+                         cdm = cdm,
+                         interval = "years"))
+
+  expect_no_error(o<-summariseConceptCounts(list(ANTIHISTAMINES= c(21603444)),
+                                            cdm = cdm,
+                                            interval = "overall"))
+  expect_no_error(q<-summariseConceptCounts(list(ANTIHISTAMINES= c(21603444)),
+                                            cdm = cdm,
+                                            interval = "quarters"))
+  expect_no_error(m<-summariseConceptCounts(list(ANTIHISTAMINES= c(21603444)),
+                                            cdm = cdm,
+                                            interval = "months"))
+
+
+
+  m_quarters <- m|>omopgenerics::splitAdditional()|>
+    omopgenerics::pivotEstimates() |>
+    dplyr::filter(time_interval != "overall" & variable_name == "Number records" & standard_concept_id == 21603444) |>
+    dplyr::mutate(
+      start_date = as.Date(sub(" to .*", "", time_interval)),
+      quarter_start = lubridate::quarter(start_date, type = "date_first"),
+      quarter_end = lubridate::quarter(start_date, type = "date_last"),
+      quarter = paste(quarter_start, "to", quarter_end)
+    ) |>
+    dplyr::select(!c("time_interval", "start_date", "quarter_start", "quarter_end")) |>
+    dplyr::group_by(quarter,)|>
+    dplyr::summarise(count = sum(count), .groups = "drop") |>
+    dplyr::rename("time_interval" = quarter) |>
+    dplyr::arrange(time_interval)
+
+  q_quarters <- q|>omopgenerics::splitAdditional()|>
+   omopgenerics::pivotEstimates()|>
+   dplyr::filter(time_interval != "overall" & variable_name == "Number records"& standard_concept_id == 21603444)|>
+   dplyr::select(time_interval, count)|>
+   dplyr::arrange(time_interval)
+
+  expect_equal(m_quarters, q_quarters)
+
+  m_year <- m|>
+   omopgenerics::splitAdditional()|>
+   dplyr::filter(time_interval != "overall" & variable_name == "Number records" & standard_concept_id == 21603444)|>
+   dplyr::mutate(
+     # Extract the start date
+     start_date = clock::date_parse(stringr::str_extract(time_interval, "^\\d{4}-\\d{2}-\\d{2}")),
+     # Convert start_date to a year-month-day object and extract the year
+     year = clock::get_year(clock::as_year_month_day(start_date))
+   )|>
+   omopgenerics::pivotEstimates()|>
+   dplyr::group_by(year) %>%
+   dplyr::summarise(
+     count = sum(count),
+     .groups = "drop"
+   )|>
+   dplyr::arrange(year)
+  y_year <- y|>
+   omopgenerics::splitAdditional()|>
+   dplyr::filter(time_interval != "overall" & variable_name == "Number records" & standard_concept_id == 21603444)|>
+   dplyr::mutate(
+     # Extract the start date
+     start_date = clock::date_parse(stringr::str_extract(time_interval, "^\\d{4}-\\d{2}-\\d{2}")),
+     # Convert start_date to a year-month-day object and extract the year
+     year = clock::get_year(clock::as_year_month_day(start_date))
+   )|>
+   omopgenerics::pivotEstimates()|>
+   dplyr::select(year, count)|>
+   dplyr::arrange(year)
+
+  expect_equal(m_year, y_year)
+  o <- o |> omopgenerics::splitAdditional()|>
+   dplyr::filter(variable_name == "Number records" & standard_concept_id == 21603444)|>
+   omopgenerics::pivotEstimates()|>
+   dplyr::select(count)
+
+  expect_equal(y_year|>dplyr::summarise(count = sum(count)), o)
+
+
+  q_year <- q|>
+   omopgenerics::splitAdditional()|>
+   dplyr::filter(time_interval != "overall" & variable_name == "Number records" & standard_concept_id == 21603444)|>
+   dplyr::mutate(
+     # Extract the start date
+     start_date = clock::date_parse(stringr::str_extract(time_interval, "^\\d{4}-\\d{2}-\\d{2}")),
+     # Convert start_date to a year-month-day object and extract the year
+     year = clock::get_year(clock::as_year_month_day(start_date))
+   )|>
+   omopgenerics::pivotEstimates()|>
+   dplyr::group_by(year) %>%
+   dplyr::summarise(
+     count = sum(count),
+     .groups = "drop"
+   )|>
+   dplyr::arrange(year)
+
+  expect_equal(q_year, y_year)
   PatientProfiles::mockDisconnect(cdm = cdm)
 })

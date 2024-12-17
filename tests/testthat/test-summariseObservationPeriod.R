@@ -433,6 +433,34 @@ test_that("check summariseObservationPeriod strata works", {
       dplyr::pull("estimate_value"), "32"
   )
 
+  expect_no_error(x<-summariseObservationPeriod(cdm$observation_period, estimates = "density", sex = TRUE, ageGroup = list(c(0,9), c(10, Inf))))
+  expect_no_error(
+    x |>
+      plotObservationPeriod(
+        variableName = "duration in days", plotType = "densityplot", colour = "sex", facet = "age_group")
+  )
+
+  expect_no_error(
+    x |>
+      plotObservationPeriod(
+        variableName = "days to next observation period", plotType = "densityplot", colour = "sex", facet = "age_group")
+  )
+  expect_no_error(
+    x |>
+      plotObservationPeriod(
+        variableName = "records per person", plotType = "densityplot", colour = "sex", facet = "age_group")
+  )
+
+  expect_error(x |>
+                 plotObservationPeriod(
+                   variableName = "number records", plotType = "densityplot", colour = "sex", facet = "age_group"))
+  y<-summariseObservationPeriod(cdm$observation_period, estimates = "mean", sex = TRUE, ageGroup = list(c(0,9), c(10, Inf)))
+  expect_error(
+    y |>
+      plotObservationPeriod(
+        variableName = "records per person", plotType = "densityplot", colour = "sex", facet = "age_group")
+  )
+
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
 
