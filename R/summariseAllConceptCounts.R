@@ -80,63 +80,40 @@ summariseAllConceptCounts <- function(cdm,
     # check that table is not empty
     omopTable <- dplyr::ungroup(cdm[[table]])
     conceptId <- standardConcept(table)
-    if (is.null(checkFeasibility(omopTable, table, conceptId))){
+    if (is.null(checkFeasibility(omopTable, table, conceptId))) {
       return(NULL)
     }
+    prefix <- omopgenerics::tmpPrefix()
+
+    # add concept id to stratification
+    concepts <- c("concept_id", "concept_name")
+    stratax <- c(list(concepts), purrr::map(strata, \(x) c(concepts, x)))
 
     # restrict study period
     omopTable <- restrictStudyPeriod(omopTable, dateRange)
+    if (is.null(omopTable)) return(NULL)
 
-    # add demographics
-    indexDate <- startDate(omopgenerics::tableName(omopTable))
-    x <- omopTable |>
+    result <- omopTable |>
+      # add concept names
       dplyr::rename(concept_id = dplyr::all_of(conceptId)) |>
       dplyr::left_join(
         cdm$concept |>
           dplyr::select("concept_id", "concept_name"),
         by = "concept_id"
       ) |>
-      PatientProfiles::addDemographicsQuery(
-        age = FALSE,
-        ageGroup = ageGroup,
+      # add demographics and year
+      addStratifications(
+        indexDate = startDate(omopgenerics::tableName(omopTable)),
         sex = sex,
-        indexDate = indexDate,
-        priorObservation = FALSE,
-        futureObservation = FALSE,
-        dateOfBirth = FALSE
-      )
+        ageGroup = ageGroup,
+        interval = dplyr::if_else(year, "years", "overall"),
+        name = omopgenerics::uniqueTableName(prefix)
+      ) |>
+      # summarise results
+      summariseCountsInternal(stratax, counts) |>
+      dplyr::mutate(omop_table = .env$table)
 
-    # add year strata if needed
-    if (year) {
-      x <- x |>
-        dplyr::mutate(year = as.character(clock::get_year(.data[[indexDate]])))
-    }
-
-    # add concept id to stratification
-    concepts <- c("concept_id", "concept_name")
-    stratax <- c(list(concepts), purrr::map(strata, \(x) c(concepts, x)))
-
-    # create table
-    if (sex | !is.null(ageGroup) | year) {
-      tempName <- omopgenerics::uniqueTableName()
-      x <- x |>
-        dplyr::select("person_id", dplyr::all_of(unique(unlist(stratax)))) |>
-        dplyr::compute(name = tempName, temporary = FALSE)
-      intermediate <- TRUE
-    } else {
-      intermediate <- FALSE
-    }
-
-    # summarise results
-    result <- summariseCountsInternal(x, stratax, counts) |>
-      dplyr::mutate(
-        omop_table = .env$table,
-
-      )
-
-    if (intermediate) {
-      omopgenerics::dropSourceTable(cdm = cdm, name = tempName)
-    }
+    omopgenerics::dropSourceTable(cdm = cdm, name = dplyr::starts_with(prefix))
 
     return(result)
   }) |>

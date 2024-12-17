@@ -53,10 +53,10 @@ test_that("summariseMissingData() works", {
   expect_no_error(summariseMissingData(cdm, "procedure_occurrence", col="procedure_concept_id", ageGroup = list(c(0,50)), sample=100))
 })
 
-  test_that("dateRange argument works", {
-    skip_on_cran()
-    # Load mock database ----
-    cdm <- cdmEunomia()
+test_that("dateRange argument works", {
+  skip_on_cran()
+  # Load mock database ----
+  cdm <- cdmEunomia()
 
   expect_no_error(summariseMissingData(cdm, "condition_occurrence", dateRange =  as.Date(c("2012-01-01", "2018-01-01"))))
   expect_message(x<-summariseMissingData(cdm, "drug_exposure", dateRange =  as.Date(c("2012-01-01", "2025-01-01"))))
@@ -130,5 +130,3 @@ test_that("col not present in table", {
 
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
-
-

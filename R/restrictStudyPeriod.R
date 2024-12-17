@@ -16,14 +16,12 @@ restrictStudyPeriod <- function(omopTable, dateRange) {
   # maybe the end date check is not needed
 
   warningEmptyStudyPeriod(omopTable)
-
-  return(omopTable)
 }
 
-warningEmptyStudyPeriod <- function (omopTable) {
-  if (omopgenerics::isTableEmpty(omopTable)){
+warningEmptyStudyPeriod <- function(omopTable) {
+  if (omopgenerics::isTableEmpty(omopTable)) {
     cli::cli_warn(paste0(omopgenerics::tableName(omopTable), " omop table is empty after application of date range."))
     return(invisible(NULL))
   }
-  return(invisible(TRUE))
+  return(omopTable)
 }

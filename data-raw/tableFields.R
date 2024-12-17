@@ -14,6 +14,9 @@ tables <- dplyr::tribble(
 
 conceptTypes <- read.csv(here::here("data-raw", "conceptTypes.csv")) |>
   dplyr::as_tibble() |>
-  dplyr::mutate(dplyr::across(dplyr::everything(), as.character))
+  dplyr::mutate(
+    type_concept = as.integer(.data$type_concept),
+    type_name = as.character(.data$type_name)
+  )
 
 usethis::use_data(tables, conceptTypes, overwrite = TRUE, internal = TRUE)

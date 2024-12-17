@@ -46,9 +46,6 @@ summariseMissingData <- function(cdm,
     omopTable <- cdm[[table]]
     prefix <- omopgenerics::tmpPrefix()
 
-    # study period
-    omopTable <- restrictStudyPeriod(omopTable, dateRange)
-
     # check if table is empty
     if (omopgenerics::isTableEmpty(omopTable)){
       cli::cli_warn(paste0(table, " omop table is empty."))
@@ -59,6 +56,10 @@ summariseMissingData <- function(cdm,
     col_table <- columnsToSummarise(
       col, colnames(omopTable), table, omopgenerics::cdmVersion(cdm)
     )
+
+    # restrict study period
+    omopTable <- restrictStudyPeriod(omopTable, dateRange)
+    if (is.null(omopTable)) return(NULL)
 
     resultsOmopTable <- omopTable |>
       # sample if needed

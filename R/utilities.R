@@ -62,13 +62,13 @@ asCharacterFacet <- function(facet) {
 }
 
 
-createSettings <- function(result_type, result_id = 1L, package_name = "OmopSketch", study_period = NULL) {
+createSettings <- function(result_type, result_id = 1L, study_period = NULL) {
   # Create the initial settings tibble
   settings <- dplyr::tibble(
     "result_id" = result_id,
     "result_type" = result_type,
-    "package_name" = package_name,
-    "package_version" = as.character(utils::packageVersion(package_name))
+    "package_name" = "OmopSketch",
+    "package_version" = as.character(utils::packageVersion("OmopSketch"))
   )
 
   # Conditionally add study period columns

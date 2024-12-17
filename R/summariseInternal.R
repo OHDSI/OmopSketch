@@ -95,18 +95,8 @@ sampleTable <- function(x, sample, name) {
 }
 addStratifications <- function(x, indexDate, sex, ageGroup, interval, name) {
   # add sex and age_group if needed
-  if (sex | !is.null(ageGroup)) {
-    x <- x |>
-      PatientProfiles::addDemographicsQuery(
-        age = FALSE,
-        ageGroup = ageGroup,
-        sex = sex,
-        indexDate = indexDate,
-        priorObservation = FALSE,
-        futureObservation = FALSE,
-        dateOfBirth = FALSE
-      )
-  }
+  x <- x |>
+    addSexAgeGroup(sex = sex, ageGroup = ageGroup, indexDate = indexDate)
 
   if (interval == "years") {
     x <- x |>
@@ -133,4 +123,52 @@ addStratifications <- function(x, indexDate, sex, ageGroup, interval, name) {
   }
 
   return(x)
+}
+addSexAgeGroup <- function(x, sex, ageGroup, indexDate) {
+  age <- !is.null(ageGroup)
+  if (!sex & !age) return(x)
+
+  person <- omopgenerics::cdmReference(x)$person
+  q <- c(
+    sex = "dplyr::case_when(.data$gender_concept_id == 8532 ~ 'Female',
+    .data$gender_concept_id == 8507 ~ 'Male', .default = 'None')",
+    birth_date = "as.Date(paste0(
+    as.character(as.integer(.data$year_of_birth)), '-',
+    as.character(as.integer(dplyr::coalesce(.data$month_of_birth, 1L))), '-',
+    as.character(as.integer(dplyr::coalesce(.data$day_of_birth, 1L)))))"
+  )[c(sex, age)] |>
+    rlang::parse_exprs()
+  person <- person |>
+    dplyr::mutate(!!!q) |>
+    dplyr::select(dplyr::any_of(c("person_id", "sex", "birth_date")))
+
+  x <- x |>
+    dplyr::left_join(person, by = "person_id")
+
+  if (age) {
+    qAge <- ageGroupQuery(ageGroup)
+    x <- x %>%
+      dplyr::mutate(!!!qAge) |>
+      dplyr::select(!c("birth_date", "xyz_age"))
+  }
+
+  return(x)
+}
+ageGroupQuery <- function(ageGroup) {
+  x <- c(
+    purrr::imap_chr(ageGroup$age_group, \(x, nm) {
+      if (is.infinite(x[2])) {
+        paste0(".data$xyz_age >= ", x[1], "L ~ '", nm, "'")
+      } else {
+        paste0(".data$xyz_age >= ", x[1], "L && .data$xyz_age <= ", x[2], "L ~ '", nm, "'")
+      }
+    }),
+    '.default = "None"'
+  ) |>
+    paste0(collapse = ", ")
+  c(
+    xyz_age = 'as.integer(local(CDMConnector::datediff(start = "birth_date", end = indexDate, interval = "year")))',
+    age_group = paste0("dplyr::case_when(", x, ")")
+  ) |>
+    rlang::parse_exprs()
 }
