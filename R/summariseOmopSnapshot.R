@@ -11,7 +11,7 @@
 #' summariseOmopSnapshot(cdm)
 summariseOmopSnapshot <- function(cdm) {
 
-  omopgenerics::validateCdmArgument(cdm)
+  cdm <- omopgenerics::validateCdmArgument(cdm)
 
   summaryTable <- summary(cdm)
 

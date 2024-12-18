@@ -40,7 +40,7 @@ summariseRecordCount <- function(cdm,
                                  sample = NULL,
                                  dateRange = NULL) {
   # Initial checks
-  omopgenerics::validateCdmArgument(cdm)
+  cdm <- omopgenerics::validateCdmArgument(cdm)
   omopgenerics::assertCharacter(omopTableName)
   omopgenerics::assertChoice(interval, c("overall", "years", "quarters", "months"), length = 1)
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "age_group")

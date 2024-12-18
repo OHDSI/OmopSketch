@@ -26,7 +26,7 @@ summariseMissingData <- function(cdm,
                                  sample = 1000000,
                                  dateRange = NULL) {
   # initial checks
-  omopgenerics::validateCdmArgument(cdm)
+  cdm <- omopgenerics::validateCdmArgument(cdm)
   omopgenerics::assertCharacter(col, null = TRUE)
   omopgenerics::assertLogical(sex, length = 1)
   omopgenerics::assertLogical(year, length = 1)

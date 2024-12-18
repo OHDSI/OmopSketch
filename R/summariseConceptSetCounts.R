@@ -42,7 +42,7 @@ summariseConceptSetCounts <- function(cdm,
                                       sample = NULL,
                                       dateRange = NULL) {
   # initial check
-  omopgenerics::validateCdmArgument(cdm)
+  cdm <- omopgenerics::validateCdmArgument(cdm)
   omopgenerics::assertChoice(countBy, choices = c("record", "person"))
   omopgenerics::assertChoice(interval, c("overall", "years", "quarters", "months"), length = 1)
   omopgenerics::assertLogical(concept, length = 1)

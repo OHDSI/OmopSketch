@@ -60,7 +60,7 @@ summariseClinicalRecords <- function(cdm,
                                      sample = NULL,
                                      dateRange = NULL) {
   # Initial checks ----
-  omopgenerics::validateCdmArgument(cdm)
+  cdm <- omopgenerics::validateCdmArgument(cdm)
   opts <- omopgenerics::omopTables()
   opts <- opts[opts %in% names(cdm)]
   omopgenerics::assertChoice(omopTableName, choices = opts)
