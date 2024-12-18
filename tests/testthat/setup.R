@@ -24,6 +24,26 @@ cdmEunomia <- function() {
   cdmDuck <- CDMConnector::cdmFromCon(
     con = conDuck, cdmSchema = "main", writeSchema = "main"
   )
+  # correct eunomia problems
+  tabs <- c(
+    "observation_period", "visit_occurrence", "visit_detail", "specimen",
+    "note", "condition_occurrence", "drug_exposure", "procedure_occurrence",
+    "device_exposure", "measurement", "observation", "death"
+  )
+  for (tab in tabs) {
+    start <- omopgenerics::omopColumns(table = tab, field = "start_date")
+    id <- omopgenerics::omopColumns(table = tab, field = "unique_id")
+    cdmDuck[[tab]] <- cdmDuck[[tab]] |>
+      dplyr::inner_join(
+        cdmDuck$person |>
+          dplyr::select("person_id"),
+        by = "person_id"
+      ) |>
+      dplyr::group_by(dplyr::across(dplyr::all_of(id))) |>
+      dplyr::filter(.data[[start]] == min(.data[[start]], na.rm = TRUE)) |>
+      dplyr::ungroup() |>
+      dplyr::compute()
+  }
   cdm <- CDMConnector::copyCdmTo(con = con, cdm = cdmDuck, schema = schema)
   CDMConnector::cdmDisconnect(cdm = cdmDuck)
   return(cdm)
@@ -70,4 +90,8 @@ checkResultType <- function(result, result_type){
       omopgenerics::settings() |>
       dplyr::pull("result_type") == result_type
   )
+}
+sortTibble <- function(x) {
+  x |>
+    dplyr::arrange(dplyr::across(dplyr::everything()))
 }

@@ -1,26 +1,3 @@
-startDate <- function(name) {
-  tables$start_date[tables$table_name == name]
-}
-
-endDate <- function(name) {
-  tables$end_date[tables$table_name == name]
-}
-
-standardConcept <- function(name) {
-  tables$standard_concept[tables$table_name == name]
-}
-
-sourceConcept <- function(name) {
-  tables$source_concept[tables$table_name == name]
-}
-
-typeConcept <- function(name) {
-  tables$type_concept[tables$table_name == name]
-}
-
-tableId <- function(name) {
-  tables$id[tables$table_name == name]
-}
 
 warnFacetColour <- function(result, cols) {
   colsToWarn <- result |>
@@ -62,13 +39,13 @@ asCharacterFacet <- function(facet) {
 }
 
 
-createSettings <- function(result_type, result_id = 1L, package_name = "OmopSketch", study_period = NULL) {
+createSettings <- function(result_type, result_id = 1L, study_period = NULL) {
   # Create the initial settings tibble
   settings <- dplyr::tibble(
     "result_id" = result_id,
     "result_type" = result_type,
-    "package_name" = package_name,
-    "package_version" = as.character(utils::packageVersion(package_name))
+    "package_name" = "OmopSketch",
+    "package_version" = as.character(utils::packageVersion("OmopSketch"))
   )
 
   # Conditionally add study period columns
@@ -82,18 +59,3 @@ createSettings <- function(result_type, result_id = 1L, package_name = "OmopSket
   # Return the settings tibble
   return(settings)
 }
-
-sampleOmopTable <- function(omopTable, sample){
-  sampling <- !is.null(sample) & !is.infinite(sample)
-
-  if (sampling & omopTable |> dplyr::tally() |> dplyr::pull() <= sample) {
-    sampling <- FALSE
-  }
-
-  if (sampling){
-    omopTable <- omopTable |>
-      dplyr::slice_sample(n = sample)
-  }
-  return(omopTable)
-}
-

@@ -11,7 +11,7 @@ summariseAllConceptCounts(
   year = FALSE,
   sex = FALSE,
   ageGroup = NULL,
-  sample = 1e+06,
+  sample = NULL,
   dateRange = NULL
 )
 }
@@ -43,4 +43,18 @@ strata.
 }
 \description{
 Summarise concept use in patient-level data
+}
+\examples{
+\donttest{
+library(OmopSketch)
+library(CDMConnector)
+library(duckdb)
+
+requireEunomia()
+con <- dbConnect(duckdb(), eunomiaDir())
+cdm <- cdmFromCon(con = con, cdmSchema = "main", writeSchema = "main")
+
+summariseAllConceptCounts(cdm, "condition_occurrence")
+}
+
 }

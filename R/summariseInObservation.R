@@ -66,14 +66,13 @@ summariseInObservation <- function(observationPeriod,
   # Create initial variables ----
   cdm <- omopgenerics::cdmReference(observationPeriod)
   observationPeriod <- addStrataToPeopleInObservation(cdm, ageGroup, sex, tablePrefix, dateRange)
-  strata <- getStrataList(sex, ageGroup)
 
   # Calculate denominator ----
   denominator <- cdm |> getDenominator(output)
 
   name <- "observation_period"
-  start_date_name <- startDate(name)
-  end_date_name   <- endDate(name)
+  start_date_name <- omopgenerics::omopColumns(table = name, field = "start_date")
+  end_date_name   <- omopgenerics::omopColumns(table = name, field = "end_date")
 
   # Observation period ----
   if(interval != "overall"){
@@ -134,7 +133,7 @@ getDenominator <- function(cdm, output){
                           dplyr::summarise("n" = dplyr::n()) |>
                           dplyr::pull("n"),
                         y
-                        ),
+      ),
       "variable_name" = c("Number records in observation","Number person-days"))
   }
 }
@@ -205,7 +204,7 @@ countRecords <- function(observationPeriod, cdm, start_date_name, end_date_name,
     personDays <- createEmptyIntervalTable(interval)
   }
 
-if(output == "records" | output == "all"){
+  if(output == "records" | output == "all"){
 
     if(interval != "overall"){
       x <- observationPeriod |>
@@ -250,31 +249,31 @@ createSummarisedResultObservationPeriod <- function(result, observationPeriod, n
       omopgenerics::newSummarisedResult(settings = createSettings(result_type = "summarise_in_observation", study_period = dateRange)|>
                                           dplyr::mutate("interval" = .env$original_interval))
   }else{
-  result <- result |>
-    dplyr::mutate("estimate_value" = as.character(.data$estimate_value)) |>
-    omopgenerics::uniteStrata(cols = c("sex", "age_group")) |>
-    dplyr::mutate(
-      "result_id" = as.integer(1),
-      "cdm_name" = omopgenerics::cdmName(omopgenerics::cdmReference(observationPeriod)),
-      "group_name"  = "omop_table",
-      "group_level" = name,
-      "variable_level" = as.character(NA),
-      "estimate_name" = "count",
-      "estimate_type" = "integer"
-    )
+    result <- result |>
+      dplyr::mutate("estimate_value" = as.character(.data$estimate_value)) |>
+      omopgenerics::uniteStrata(cols = c("sex", "age_group")) |>
+      dplyr::mutate(
+        "result_id" = as.integer(1),
+        "cdm_name" = omopgenerics::cdmName(omopgenerics::cdmReference(observationPeriod)),
+        "group_name"  = "omop_table",
+        "group_level" = name,
+        "variable_level" = as.character(NA),
+        "estimate_name" = "count",
+        "estimate_type" = "integer"
+      )
 
-  result <- result |>
-    rbind(result) |>
-    dplyr::group_by(.data$additional_level, .data$strata_level, .data$variable_name) |>
-    dplyr::mutate(estimate_type = dplyr::if_else(dplyr::row_number() == 2, "percentage", .data$estimate_type)) |>
-    dplyr::inner_join(denominator, by = "variable_name") |>
-    dplyr::mutate(estimate_value = dplyr::if_else(.data$estimate_type == "percentage", as.character(as.numeric(.data$estimate_value)/denominator*100), .data$estimate_value)) |>
-    dplyr::select(-c("denominator")) |>
-    dplyr::mutate(estimate_name = dplyr::if_else(.data$estimate_type == "percentage", "percentage", .data$estimate_name)) |>
-    omopgenerics::newSummarisedResult(settings = createSettings(result_type = "summarise_in_observation", study_period = dateRange)|>
-                                        dplyr::mutate("interval" = .env$original_interval)
-    )
-}
+    result <- result |>
+      rbind(result) |>
+      dplyr::group_by(.data$additional_level, .data$strata_level, .data$variable_name) |>
+      dplyr::mutate(estimate_type = dplyr::if_else(dplyr::row_number() == 2, "percentage", .data$estimate_type)) |>
+      dplyr::inner_join(denominator, by = "variable_name") |>
+      dplyr::mutate(estimate_value = dplyr::if_else(.data$estimate_type == "percentage", as.character(as.numeric(.data$estimate_value)/denominator*100), .data$estimate_value)) |>
+      dplyr::select(-c("denominator")) |>
+      dplyr::mutate(estimate_name = dplyr::if_else(.data$estimate_type == "percentage", "percentage", .data$estimate_name)) |>
+      omopgenerics::newSummarisedResult(settings = createSettings(result_type = "summarise_in_observation", study_period = dateRange)|>
+                                          dplyr::mutate("interval" = .env$original_interval)
+      )
+  }
   return(result)
 }
 
@@ -366,4 +365,20 @@ createEmptyIntervalTable <- function(interval){
     )
   }
 
+}
+
+getOmopTableStartDate <- function(omopTable, date){
+  omopTable |>
+    dplyr::summarise("start_date" = min(.data[[date]], na.rm = TRUE)) |>
+    dplyr::collect() |>
+    dplyr::mutate("start_date" = as.Date(paste0(clock::get_year(.data$start_date),"-01-01"))) |>
+    dplyr::pull("start_date")
+}
+
+getOmopTableEndDate   <- function(omopTable, date){
+  omopTable |>
+    dplyr::summarise("end_date" = max(.data[[date]], na.rm = TRUE)) |>
+    dplyr::collect() |>
+    dplyr::mutate("end_date" = as.Date(paste0(clock::get_year(.data$end_date),"-12-31"))) |>
+    dplyr::pull("end_date")
 }

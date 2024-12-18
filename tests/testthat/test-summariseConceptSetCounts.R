@@ -268,7 +268,7 @@ test_that("summarise code use - eunomia", {
                                     ageGroup = NULL))>1)
 
   # no records
-  expect_message(results <- summariseConceptSetCounts(list(cs= c(999999)),
+  expect_warning(results <- summariseConceptSetCounts(list(cs= c(999999)),
                                              cdm = cdm,
                                              interval = "years",
                                              sex = FALSE,
@@ -573,7 +573,7 @@ test_that("sample argument works", {
   expect_equal(y,z)
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
-          
+
 test_that("interval argument works", {
   skip_on_cran()
   # Load mock database ----

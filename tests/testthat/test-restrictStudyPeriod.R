@@ -28,43 +28,36 @@ test_that("restrictStudyPeriod works", {
     ),
     cdmName = "mock data"
   )
+  dateRange <- as.Date(c("1999-01-01", "2005-01-01"))
 
-
-  dateRange = as.Date(c("1999-01-01", "2005-01-01"))
-
-  expect_no_error(x<-restrictStudyPeriod(cdm$observation_period, dateRange = dateRange))
-
-  y <- tibble::tibble(observation_period_id = c(1,2,9) |> as.integer(),
-                      person_id = c(1, 1, 5) |> as.integer(),
-                      observation_period_start_date = as.Date(c(
-                        "1999-01-01", "2001-01-01",
-                        "2004-01-01"
-                      )),
-                      observation_period_end_date = as.Date(c(
-                        "2000-01-01", "2003-01-01",
-                        "2005-01-01"
-                      )),
-                      period_type_concept_id = 0L
+  expect_no_error(
+    x <- restrictStudyPeriod(cdm$observation_period, dateRange = dateRange)
   )
 
-  expect_equal(x,y, ignore_attr = TRUE)
+  y <- tibble::tibble(
+    observation_period_id = c(1,2, 9) |> as.integer(),
+    person_id = c(1, 1, 5) |> as.integer(),
+    observation_period_start_date = as.Date(c(
+      "1999-01-01", "2001-01-01", "2004-01-01"
+    )),
+    observation_period_end_date = as.Date(c(
+      "2000-01-01", "2003-01-01", "2005-01-01"
+    )),
+    period_type_concept_id = 0L
+  )
+
+  expect_equal(x, y, ignore_attr = TRUE)
   expect_true(nrow(x) == 3)
 
-  dateRange =  as.Date(c("1999-01-01", "2025-01-01"))
+  dateRange <- as.Date(c("1999-01-01", "2025-01-01"))
+  expect_no_error(x <- restrictStudyPeriod(cdm$observation_period, dateRange = dateRange))
+  expect_equal(x, cdm$observation_period, ignore_attr = TRUE)
 
-  expect_no_error(x<-restrictStudyPeriod(cdm$observation_period, dateRange = dateRange))
+  dateRange <- as.Date(c("2001-01-01", "2002-01-01"))
+  expect_warning(x <- restrictStudyPeriod(cdm$observation_period, dateRange = dateRange))
+  expect_true(is.null(x))
 
-
-  expect_equal(x,cdm$observation_period, ignore_attr = TRUE)
-
-  dateRange = as.Date(c("2001-01-01", "2002-01-01"))
-  expect_warning(x<-restrictStudyPeriod(cdm$observation_period, dateRange = dateRange))
-  expect_true(nrow(x)==0)
-
-
-  dateRange =  as.Date(c("1999-01-01", "2002-12-31"))
+  dateRange <- as.Date(c("1999-01-01", "2002-12-31"))
   expect_equal(restrictStudyPeriod(cdm$observation_period, dateRange = dateRange)$person_id, 1)
-
-
 
 })

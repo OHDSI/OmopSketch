@@ -18,7 +18,7 @@ summariseClinicalRecords(
   typeConcept = TRUE,
   sex = FALSE,
   ageGroup = NULL,
-  sample = 1e+06,
+  sample = NULL,
   dateRange = NULL
 )
 }

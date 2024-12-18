@@ -1,4 +1,4 @@
-type_concept_id,type_name
+type_concept,type_name
 242,Other government reported or identified death
 254,EHR Record immediate cause of death
 255,EHR Record contributory cause of death

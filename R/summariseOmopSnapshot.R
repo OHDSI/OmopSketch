@@ -11,16 +11,13 @@
 #' summariseOmopSnapshot(cdm)
 summariseOmopSnapshot <- function(cdm) {
 
-  omopgenerics::validateCdmArgument(cdm)
+  cdm <- omopgenerics::validateCdmArgument(cdm)
 
   summaryTable <- summary(cdm)
 
   summaryTable <- summaryTable |>
     internalTibble() |>
-    omopgenerics::newSummarisedResult(settings = dplyr::tibble(
-      result_id = unique(summaryTable$result_id),
-      package_name = "OmopSketch",
-      package_version = as.character(utils::packageVersion("OmopSketch")),
+    omopgenerics::newSummarisedResult(settings = createSettings(
       result_type = "summarise_omop_snapshot"
     ))
 

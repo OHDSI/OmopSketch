@@ -15,8 +15,13 @@ test_that("summariseAllConceptCount works", {
   expect_warning(p<-summariseAllConceptCounts(cdm, "death"))
 
   expect_no_error(all <- summariseAllConceptCounts(cdm, c("visit_occurrence", "measurement")))
-  expect_equal(all, dplyr::bind_rows(x, y))
-  expect_equal(summariseAllConceptCounts(cdm, "procedure_occurrence", countBy = "record"), summariseAllConceptCounts(cdm, "procedure_occurrence"))
+  expect_equal(all |> sortTibble(), x |> dplyr::bind_rows(y) |> sortTibble())
+  expect_equal(
+    summariseAllConceptCounts(cdm, "procedure_occurrence", countBy = "record") |>
+      sortTibble(),
+    summariseAllConceptCounts(cdm, "procedure_occurrence") |>
+      sortTibble()
+  )
   expect_warning(summariseAllConceptCounts(cdm, "observation_period"))
   expect_error(summariseAllConceptCounts(cdm, omopTableName = ""))
   expect_error(summariseAllConceptCounts(cdm, omopTableName = "visit_occurrence", countBy = "dd"))
@@ -31,8 +36,10 @@ test_that("summariseAllConceptCount works", {
                 dplyr::tally() |>
                 dplyr::pull() == 3)
 
-  s <- summariseAllConceptCounts(cdm, "procedure_occurrence")
-  z <- summariseAllConceptCounts(cdm, "procedure_occurrence", sex = TRUE, year = TRUE, ageGroup = list(c(0, 50), c(51, Inf)))
+  s <- summariseAllConceptCounts(cdm, "procedure_occurrence") |>
+    sortTibble()
+  z <- summariseAllConceptCounts(cdm, "procedure_occurrence", sex = TRUE, year = TRUE, ageGroup = list(c(0, 50), c(51, Inf))) |>
+    sortTibble()
 
   x <- z |>
     dplyr::filter(strata_level == "overall") |>
@@ -57,6 +64,7 @@ test_that("summariseAllConceptCount works", {
   ))
 
 })
+
 test_that("dateRange argument works", {
   skip_on_cran()
   # Load mock database ----
@@ -67,7 +75,7 @@ test_that("dateRange argument works", {
     dplyr::summarise(minobs = min(.data$observation_period_start_date, na.rm = TRUE),
                      maxobs = max(.data$observation_period_end_date, na.rm = TRUE))
   expect_no_error(y<- summariseAllConceptCounts(cdm, "drug_exposure", dateRange = as.Date(c("2012-01-01", observationRange |>dplyr::pull("maxobs")))))
-  expect_equal(x,y, ignore_attr = TRUE)
+  expect_equal(x |> sortTibble(), y |> sortTibble(), ignore_attr = TRUE)
   expect_false(settings(x)$study_period_end==settings(y)$study_period_end)
   expect_error(summariseAllConceptCounts(cdm, "drug_exposure", dateRange =  as.Date(c("2015-01-01", "2014-01-01"))))
   expect_warning(y<-summariseAllConceptCounts(cdm, "drug_exposure", dateRange =  as.Date(c("2020-01-01", "2021-01-01"))))
@@ -87,7 +95,7 @@ test_that("sample argument works", {
     dplyr::tally()|>
     dplyr::pull(n)
   expect_no_error(z<-summariseAllConceptCounts(cdm,"drug_exposure",sample = n))
-  expect_equal(y,z)
+  expect_equal(y |> sortTibble(), z |> sortTibble())
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
 

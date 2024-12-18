@@ -1,6 +1,8 @@
 
 #' Summarise concept counts in patient-level data. Only concepts recorded during observation period are counted.
 #'
+#' `r lifecycle::badge('deprecated')`
+#'
 #' @param cdm A cdm object
 #' @param conceptId List of concept IDs to summarise.
 #' @param countBy Either "record" for record-level counts or "person" for
@@ -12,24 +14,11 @@
 #' thus summarised by age groups.
 #' @param dateRange A list containing the minimum and the maximum dates
 #' defining the time range within which the analysis is performed.
+#'
 #' @return A summarised_result object with results overall and, if specified, by
 #' strata.
 #' @export
-#' @examples
-#' \donttest{
-#' library(OmopSketch)
 #'
-#' cdm <- mockOmopSketch()
-#'
-#' cs <- list(sumatriptan = c(35604883, 35604879, 35604880, 35604884))
-#'
-#' results <- summariseConceptCounts(cdm, conceptId = cs)
-#'
-#' results
-#'
-#' PatientProfiles::mockDisconnect(cdm)
-#'
-#' }
 summariseConceptCounts <- function(cdm,
                                    conceptId,
                                    countBy = c("record", "person"),
@@ -37,15 +26,20 @@ summariseConceptCounts <- function(cdm,
                                    interval = "overall",
                                    sex = FALSE,
                                    ageGroup = NULL,
-                                   dateRange = NULL){
-
-  lifecycle::deprecate_warn(when = "0.2.0", what = "summariseConceptCounts()", with = "summariseConceptSetCounts()")
-  return(summariseConceptSetCounts(cdm = cdm,
-                                   conceptSet = conceptId,
-                                   countBy = countBy,
-                                   concept = concept,
-                                   interval = interval,
-                                   sex = sex,
-                                   ageGroup = ageGroup,
-                                   dateRange = dateRange))
+                                   dateRange = NULL) {
+  lifecycle::deprecate_warn(
+    when = "0.2.0",
+    what = "summariseConceptCounts()",
+    with = "summariseConceptSetCounts()"
+  )
+  summariseConceptSetCounts(
+    cdm = cdm,
+    conceptSet = conceptId,
+    countBy = countBy,
+    concept = concept,
+    interval = interval,
+    sex = sex,
+    ageGroup = ageGroup,
+    dateRange = dateRange
+  )
 }

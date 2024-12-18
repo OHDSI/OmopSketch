@@ -5,7 +5,6 @@
 .DS_Store
 docs
 
-extras/*
 Eunomia/*
 
 inst/doc

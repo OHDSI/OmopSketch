@@ -12,7 +12,7 @@ summariseConceptSetCounts(
   interval = "overall",
   sex = FALSE,
   ageGroup = NULL,
-  sample = 1e+06,
+  sample = NULL,
   dateRange = NULL
 )
 }

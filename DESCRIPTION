@@ -1,6 +1,6 @@
 Package: OmopSketch
 Title: Characterise Tables of an OMOP Common Data Model Instance
-Version: 0.1.1
+Version: 0.2.0
 Authors@R: c(
     person( 
         "Marta", "Alcalde-Herraiz", 
@@ -63,6 +63,7 @@ Imports:
     clock,
     CohortConstructor (>= 0.3.1),
     dplyr,
+    glue,
     lifecycle,
     omopgenerics (>= 0.3.1),
     PatientProfiles (>= 1.2.1),
