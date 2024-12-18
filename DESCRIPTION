@@ -54,7 +54,7 @@ Suggests:
     omock (>= 0.3.0),
     covr,
     ggplot2,
-    visOmopResults (>= 0.4.0)
+    visOmopResults (>= 0.5.0)
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Imports: 
@@ -65,7 +65,7 @@ Imports:
     dplyr,
     glue,
     lifecycle,
-    omopgenerics (>= 0.3.1),
+    omopgenerics (>= 0.4.1),
     PatientProfiles (>= 1.2.1),
     purrr,
     rlang,
@@ -78,4 +78,4 @@ URL: https://OHDSI.github.io/OmopSketch/
 BugReports: https://github.com/OHDSI/OmopSketch/issues
 VignetteBuilder: knitr
 Remotes: 
-    darwin-eu/omopgenerics
+    
