@@ -1,22 +1,4 @@
 
-my_getStrataList <- function(sex = FALSE, ageGroup = NULL, year = FALSE){
-  c(names(ageGroup), "sex"[sex], "year"[year])
-}
-checkFeasibility <- function(omopTable, tableName, conceptId) {
-
-  if (omopgenerics::isTableEmpty(omopTable)){
-    cli::cli_warn(paste0(tableName, " omop table is empty."))
-    return(NULL)
-  }
-
-  if (is.na(conceptId)){
-    cli::cli_warn(paste0(tableName, " omop table doesn't contain standard concepts."))
-    return(NULL)
-  }
-
-  return(TRUE)
-}
-
 #' Summarise concept use in patient-level data
 #'
 #' @param cdm A cdm object
@@ -67,34 +49,38 @@ summariseAllConceptCounts <- function(cdm,
   omopgenerics::assertChoice(omopTableName, choices = omopgenerics::omopTables(), unique = TRUE)
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup)
   dateRange <- validateStudyPeriod(cdm, dateRange)
+  omopgenerics::assertNumeric(sample, integerish = TRUE, min = 1, null = TRUE, length = 1)
 
   # settings for the created results
   set <- createSettings(result_type = "summarise_all_concept_counts", study_period = dateRange)
 
   # get strata
-  strata <- my_getStrataList(sex = sex, year = year, ageGroup = ageGroup) |>
-    omopgenerics::combineStrata()
+  strata <- omopgenerics::combineStrata(c(strataCols(sex = sex, ageGroup = ageGroup), "year"[year]))
+  concepts <- c("concept_id", "concept_name")
+  stratax <- c(list(concepts), purrr::map(strata, \(x) c(concepts, x)))
 
   # how to count
   counts <- c("records", "person_id")[c("record", "person") %in% countBy]
 
   # summarise counts
-  resultTables <- purrr::map(omopTableName, function(table) {
-    # check that table is not empty
+  resultTables <- purrr::map(omopTableName, \(table) {
+    # initial table
     omopTable <- dplyr::ungroup(cdm[[table]])
-    conceptId <- standardConcept(table)
-    if (is.null(checkFeasibility(omopTable, table, conceptId))) {
+    conceptId <- omopgenerics::omopColumns(table = table, field = "standard_concept")
+    if (is.na(conceptId)) {
+      cli::cli_warn(c("!" = "No standard concept identified for {table}."))
       return(NULL)
     }
-    prefix <- omopgenerics::tmpPrefix()
 
-    # add concept id to stratification
-    concepts <- c("concept_id", "concept_name")
-    stratax <- c(list(concepts), purrr::map(strata, \(x) c(concepts, x)))
+    prefix <- omopgenerics::tmpPrefix()
 
     # restrict study period
     omopTable <- restrictStudyPeriod(omopTable, dateRange)
     if (is.null(omopTable)) return(NULL)
+
+    # sample table
+    omopTable <- omopTable |>
+      sampleOmopTable(sample = sample, name = omopgenerics::uniqueTableName(prefix))
 
     result <- omopTable |>
       # add concept names
@@ -106,7 +92,7 @@ summariseAllConceptCounts <- function(cdm,
       ) |>
       # add demographics and year
       addStratifications(
-        indexDate = startDate(omopgenerics::tableName(omopTable)),
+        indexDate = omopgenerics::omopColumns(table = table, field = "start_date"),
         sex = sex,
         ageGroup = ageGroup,
         interval = dplyr::if_else(year, "years", "overall"),

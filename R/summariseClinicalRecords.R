@@ -57,7 +57,7 @@ summariseClinicalRecords <- function(cdm,
                                      typeConcept = TRUE,
                                      sex = FALSE,
                                      ageGroup = NULL,
-                                     sample = 1000000,
+                                     sample = NULL,
                                      dateRange = NULL) {
   # Initial checks ----
   omopgenerics::validateCdmArgument(cdm)
@@ -78,6 +78,7 @@ summariseClinicalRecords <- function(cdm,
   omopgenerics::assertLogical(typeConcept, length = 1)
   omopgenerics::assertLogical(sex, length = 1)
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, multipleAgeGroup = FALSE)
+  omopgenerics::assertNumeric(sample, integerish = TRUE, min = 1, null = TRUE, length = 1)
 
   # warnings for observation_period
   warnStandardConcept <- standardConcept & !missing(standardConcept)
@@ -90,7 +91,7 @@ summariseClinicalRecords <- function(cdm,
   # get strata
   strata <- c(
     list(character()),
-    omopgenerics::combineStrata(c(names(ageGroup), "sex"[sex]))
+    omopgenerics::combineStrata(strataCols(sex = sex, ageGroup = ageGroup))
   )
 
   # create denominator for record count
@@ -278,9 +279,6 @@ summariseClinicalRecords <- function(cdm,
   return(result)
 }
 
-getStrataList <- function(sex, ageGroup){
-  omopgenerics::combineStrata(c("age_group"[!is.null(ageGroup)], "sex"[sex]))
-}
 summariseRecordsPerPerson <- function(x, den, strata, estimates) {
   # strata
   strataCols <- unique(unlist(strata))
@@ -394,12 +392,12 @@ addVariables <- function(x, inObservation, standardConcept, sourceVocabulary, do
   newNames <- c(
     # here to support death table
     person_id = "person_id",
-    id = tableId(name),
-    start_date = startDate(name),
-    end_date = endDate(name),
-    standard = standardConcept(name),
-    source = sourceConcept(name),
-    type_concept = typeConcept(name)
+    id = omopgenerics::omopColumns(table = name, field = "unique_id"),
+    start_date = omopgenerics::omopColumns(table = name, field = "start_date"),
+    end_date = omopgenerics::omopColumns(table = name, field = "end_date"),
+    standard = omopgenerics::omopColumns(table = name, field = "standard_concept"),
+    source = omopgenerics::omopColumns(table = name, field = "source_concept"),
+    type_concept = omopgenerics::omopColumns(table = name, field = "type_concept")
   )
 
   newNames <- newNames[!is.na(newNames)]

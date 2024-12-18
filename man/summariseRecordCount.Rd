@@ -11,7 +11,7 @@ summariseRecordCount(
   interval = "overall",
   ageGroup = NULL,
   sex = FALSE,
-  sample = 1e+06,
+  sample = NULL,
   dateRange = NULL
 )
 }

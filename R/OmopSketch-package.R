@@ -2,10 +2,11 @@
 "_PACKAGE"
 
 ## usethis namespace: start
+#' @importFrom dplyr %>%
+#' @importFrom lifecycle deprecated
+#' @importFrom rlang :=
 #' @importFrom rlang .data
 #' @importFrom rlang .env
-#' @importFrom rlang :=
 #' @importFrom rlang %||%
-#' @importFrom dplyr %>%
 ## usethis namespace: end
 NULL

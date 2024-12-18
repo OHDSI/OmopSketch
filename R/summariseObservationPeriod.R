@@ -40,31 +40,29 @@ summariseObservationPeriod <- function(observationPeriod,
   omopgenerics::assertClass(observationPeriod, class = "omop_table")
   omopgenerics::assertTrue(omopgenerics::tableName(observationPeriod) == "observation_period")
   omopgenerics::assertLogical(sex)
-  ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "")[[1]]
+  ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup)
   cdm <- omopgenerics::cdmReference(observationPeriod)
   dateRange <- validateStudyPeriod(cdm, dateRange)
-  opts <- PatientProfiles::availableEstimates(variableType = "numeric",
-                                              fullQuantiles = TRUE) |>
+  opts <- PatientProfiles::availableEstimates(
+    variableType = "numeric", fullQuantiles = TRUE
+  ) |>
     dplyr::pull("estimate_name")
   omopgenerics::assertChoice(estimates, opts, unique = TRUE)
   tablePrefix <-  omopgenerics::tmpPrefix()
-  strata <- omopgenerics::combineStrata(c("sex"[sex], "age_group"[!is.null(ageGroup)]))
+  strata <- c(list(character()), omopgenerics::combineStrata(strataCols(sex = sex, ageGroup = ageGroup)))
+
+  set <- createSettings(result_type = "summarise_observation_period", study_period = dateRange)
 
   if (omopgenerics::isTableEmpty(observationPeriod)) {
     obsSr <- observationPeriod |>
-      # dplyr::collect() |> # https://github.com/darwin-eu-dev/PatientProfiles/issues/706
-      PatientProfiles::summariseResult(
-        variables = NULL, estimates = NULL, counts = TRUE)
+      PatientProfiles::summariseResult(variables = NULL, estimates = NULL, counts = TRUE)
   } else {
-
-    # prepare
-
-    obs <- addStrataToPeopleInObservation(cdm, ageGroup, sex, tablePrefix, dateRange) |>
-      filterPersonId() |>
+    obs <- addStrataToPeopleInObservation(cdm, ageGroup$age_group, sex, tablePrefix, dateRange) |>
       dplyr::select(
         "person_id", dplyr::any_of(c("sex","age_group")),
         "obs_start" = "observation_period_start_date",
-        "obs_end" = "observation_period_end_date") |>
+        "obs_end" = "observation_period_end_date"
+      ) |>
       dplyr::group_by(.data$person_id, dplyr::across(dplyr::any_of(c("sex","age_group")))) |>
       dplyr::arrange(.data$obs_start) |>
       dplyr::mutate("next_start" = dplyr::lead(.data$obs_start)) %>%
@@ -82,10 +80,10 @@ summariseObservationPeriod <- function(observationPeriod,
     }
 
    if (dim(obs)[1]==0){
-     return(omopgenerics::emptySummarisedResult(settings = createSettings(result_type = "summarise_observation_period", study_period = dateRange)))
+     return(omopgenerics::emptySummarisedResult(settings = set))
    }
+
     obsSr <- obs |>
-      # dplyr::collect() |> # https://github.com/darwin-eu-dev/PatientProfiles/issues/706
       PatientProfiles::summariseResult(
         strata = strata,
         group = "id",
@@ -100,7 +98,6 @@ summariseObservationPeriod <- function(observationPeriod,
             dplyr::group_by(.data$person_id, dplyr::across(dplyr::any_of(c("sex","age_group")))) |>
             dplyr::tally(name = "n") |>
             dplyr::ungroup() |>
-            # dplyr::collect() |> # https://github.com/darwin-eu-dev/PatientProfiles/issues/706
             PatientProfiles::summariseResult(
               variables = c("n"),
               estimates = estimates,
@@ -124,9 +121,7 @@ summariseObservationPeriod <- function(observationPeriod,
         .default = .data$variable_name
       )
     ) |>
-    omopgenerics::newSummarisedResult(
-      settings = createSettings(result_type = "summarise_observation_period", study_period = dateRange))
-
+    omopgenerics::newSummarisedResult(settings = set)
 
   return(obsSr)
 }
@@ -155,7 +150,6 @@ addOrdinalLevels <- function(x) {
 
   return(x)
 }
-
 arrangeSr <- function(x, estimates) {
   lev <- x$strata_level |> unique()
   lev <- c("overall", sort(lev[lev != "overall"]))

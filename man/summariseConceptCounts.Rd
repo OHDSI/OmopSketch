@@ -40,21 +40,5 @@ A summarised_result object with results overall and, if specified, by
 strata.
 }
 \description{
-Summarise concept counts in patient-level data. Only concepts recorded during observation period are counted.
-}
-\examples{
-\donttest{
-library(OmopSketch)
-
-cdm <- mockOmopSketch()
-
-cs <- list(sumatriptan = c(35604883, 35604879, 35604880, 35604884))
-
-results <- summariseConceptCounts(cdm, conceptId = cs)
-
-results
-
-PatientProfiles::mockDisconnect(cdm)
-
-}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 }

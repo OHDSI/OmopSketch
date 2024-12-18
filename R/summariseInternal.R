@@ -73,8 +73,9 @@ summariseMissingInternal <- function(x, strata, columns) {
   }) |>
     dplyr::bind_rows()
 }
-sampleTable <- function(x, sample, name) {
+sampleOmopTable <- function(x, sample, name) {
   if (is.null(sample)) return(x)
+  if (is.infinite(sample)) return(x)
   if (x |> dplyr::tally() |> dplyr::pull() <= sample) return(x)
 
   cdm <- omopgenerics::cdmReference(x)
@@ -175,4 +176,32 @@ ageGroupQuery <- function(ageGroup) {
     age_group = paste0("dplyr::case_when(", x, ")")
   ) |>
     rlang::parse_exprs()
+}
+restrictStudyPeriod <- function(omopTable, dateRange) {
+  if (!is.null(dateRange)) {
+    table <- omopgenerics::tableName(omopTable)
+    start_date_table <- omopgenerics::omopColumns(table = table, field = "start_date")
+    end_date_table <- omopgenerics::omopColumns(table = table, field = "end_date")
+    start_date <- dateRange[1]
+    end_date <- dateRange[2]
+
+    omopTable <- omopTable |>
+      dplyr::filter(
+        (.data[[start_date_table]]>= .env$start_date & .data[[start_date_table]] <= .env$end_date) &
+          (.data[[end_date_table]] >= .env$start_date & .data[[end_date_table]] <= .env$end_date)
+      )
+    # maybe the end date check is not needed
+  }
+
+  warningEmptyStudyPeriod(omopTable)
+}
+warningEmptyStudyPeriod <- function(omopTable) {
+  if (omopgenerics::isTableEmpty(omopTable)) {
+    cli::cli_warn(paste0(omopgenerics::tableName(omopTable), " omop table is empty after application of date range."))
+    return(invisible(NULL))
+  }
+  return(omopTable)
+}
+strataCols <- function(sex = FALSE, ageGroup = NULL, interval = "overall") {
+  c(names(ageGroup), "sex"[sex], "interval"[interval != "overall"])
 }

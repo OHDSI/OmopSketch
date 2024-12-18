@@ -37,8 +37,7 @@ summariseMissingData <- function(cdm,
 
   strata <- c(
     list(character()),
-    my_getStrataList(sex = sex, ageGroup = ageGroup, year = year) |>
-      omopgenerics::combineStrata()
+    omopgenerics::combineStrata(c(strataCols(sex = sex, ageGroup = ageGroup), "year"[year]))
   )
 
   result <- purrr::map(omopTableName, function(table) {
@@ -63,7 +62,7 @@ summariseMissingData <- function(cdm,
 
     resultsOmopTable <- omopTable |>
       # sample if needed
-      sampleTable(
+      sampleOmopTable(
         sample = sample,
         name = omopgenerics::uniqueTableName(prefix)
       ) |>

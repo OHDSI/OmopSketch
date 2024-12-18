@@ -1,26 +1,3 @@
-startDate <- function(name) {
-  tables$start_date[tables$table_name == name]
-}
-
-endDate <- function(name) {
-  tables$end_date[tables$table_name == name]
-}
-
-standardConcept <- function(name) {
-  tables$standard_concept[tables$table_name == name]
-}
-
-sourceConcept <- function(name) {
-  tables$source_concept[tables$table_name == name]
-}
-
-typeConcept <- function(name) {
-  tables$type_concept[tables$table_name == name]
-}
-
-tableId <- function(name) {
-  tables$id[tables$table_name == name]
-}
 
 warnFacetColour <- function(result, cols) {
   colsToWarn <- result |>
@@ -82,18 +59,3 @@ createSettings <- function(result_type, result_id = 1L, study_period = NULL) {
   # Return the settings tibble
   return(settings)
 }
-
-sampleOmopTable <- function(omopTable, sample){
-  sampling <- !is.null(sample) & !is.infinite(sample)
-
-  if (sampling & omopTable |> dplyr::tally() |> dplyr::pull() <= sample) {
-    sampling <- FALSE
-  }
-
-  if (sampling){
-    omopTable <- omopTable |>
-      dplyr::slice_sample(n = sample)
-  }
-  return(omopTable)
-}
-

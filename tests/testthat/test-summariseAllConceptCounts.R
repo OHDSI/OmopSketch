@@ -95,7 +95,7 @@ test_that("sample argument works", {
     dplyr::tally()|>
     dplyr::pull(n)
   expect_no_error(z<-summariseAllConceptCounts(cdm,"drug_exposure",sample = n))
-  expect_equal(y,z)
+  expect_equal(y |> sortTibble(), z |> sortTibble())
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
 
