@@ -123,6 +123,8 @@ summariseObservationPeriod <- function(observationPeriod,
     ) |>
     omopgenerics::newSummarisedResult(settings = set)
 
+  omopgenerics::dropSourceTable(cdm, name = dplyr::starts_with(tablePrefix))
+
   return(obsSr)
 }
 
@@ -204,5 +206,6 @@ arrangeSr <- function(x, estimates) {
     dplyr::left_join(order, by = c("variable_name", "group_level", "strata_level", "estimate_name")) |>
     dplyr::arrange(.data$order_id) |>
     dplyr::select(-"order_id")
+
   return(x)
 }

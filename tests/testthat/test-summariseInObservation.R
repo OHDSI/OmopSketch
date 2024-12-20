@@ -274,3 +274,28 @@ test_that("dateRange argument works", {
   expect_equal(colnames(settings(z)), colnames(settings(x)))
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
+
+test_that("no tables created", {
+  skip_on_cran()
+  # Load mock database ----
+  cdm <- cdmEunomia()
+
+  startNames <- CDMConnector::listSourceTables(cdm)
+
+  results <- summariseInObservation(cdm$observation_period,
+                                       output = c("records", "person-days"),
+                                       interval = "years",
+                                       sex = TRUE,
+                                       ageGroup = list(c(0,17),
+                                                       c(18,65),
+                                                       c(66, 100)),
+                                       dateRange = as.Date(c("2012-01-01", "2018-01-01")))
+
+
+  endNames <- CDMConnector::listSourceTables(cdm)
+
+  expect_true(length(setdiff(endNames, startNames)) == 0)
+
+  PatientProfiles::mockDisconnect(cdm = cdm)
+})
+
