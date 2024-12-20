@@ -54,13 +54,13 @@ plotConceptSetCounts <- function(result,
     ))
   }
 
-  result1 <- result |> omopgenerics::splitAdditional()
+  result1 <- result |> omopgenerics::splitAll()
   # Detect if there are several time intervals
   if("time_interval" %in% colnames(result1)){
     # Line plot where each concept is a different line
     p <- result1 |>
       dplyr::filter(.data$time_interval != "overall") |>
-      omopgenerics::uniteAdditional(cols = c("time_interval", "standard_concept_name", "standard_concept_id", "source_concept_name", "source_concept_id", "domain_id")) |>
+      omopgenerics::pivotEstimates() |>
       visOmopResults::scatterPlot(x = "time_interval",
                                   y = "count",
                                   line   = TRUE,
@@ -71,17 +71,28 @@ plotConceptSetCounts <- function(result,
                                   colour = colour)
   }else{
     if("standard_concept_name" %in% colnames(result1)){
-      p <- result |>
+      p <- result1 |>
+        omopgenerics::pivotEstimates() |>
         visOmopResults::barPlot(x = c("standard_concept_name", "standard_concept_id"),
                                 y = "count",
                                 facet = facet,
                                 colour = colour)
+      p$data <- p$data |>
+        dplyr::mutate(
+          standard_concept_name_standard_concept_id = factor(
+            .data$standard_concept_name_standard_concept_id,
+            levels = c("overall - overall", sort(setdiff(.data$standard_concept_name_standard_concept_id, "overall - overall")))
+          )
+        )
+
     }else{
-      p <- result |>
+      p <- result1 |>
         visOmopResults::barPlot(x = "codelist_name",
                                 y = "count",
                                 facet = facet,
                                 colour = colour)
+      p$data <- p$data |>
+       dplyr::arrange(.data$codelist_name)
     }
     p <- p +
       ggplot2::labs(
