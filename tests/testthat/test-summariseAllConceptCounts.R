@@ -115,3 +115,28 @@ test_that("tableAllConceptCounts() works", {
 
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
+test_that("no tables created", {
+  skip_on_cran()
+  # Load mock database ----
+  cdm <- cdmEunomia()
+
+  startNames <- CDMConnector::listSourceTables(cdm)
+
+  results <- summariseAllConceptCounts(cdm = cdm,
+                                       omopTableName = c("drug_exposure", "condition_occurrence"),
+                                       countBy = c("record", "person"),
+                                       year=TRUE,
+                                       sex = TRUE,
+                                       ageGroup = list(c(0,17),
+                                                       c(18,65),
+                                                       c(66, 100)),
+                                       dateRange = as.Date(c("2012-01-01", "2018-01-01")),
+                                       sample = 100)
+
+  endNames <- CDMConnector::listSourceTables(cdm)
+
+  expect_true(length(setdiff(endNames, startNames)) == 0)
+
+
+  PatientProfiles::mockDisconnect(cdm = cdm)
+})
