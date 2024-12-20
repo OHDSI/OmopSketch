@@ -112,7 +112,7 @@ summariseRecordCount <- function(cdm,
       dplyr::mutate(
         omop_table = .env$table,
         estimate_name = "count",
-        variable_name = "incident_counts",
+        variable_name = "Number records",
         variable_level = getVariableLevel(.data$additional_level),
         result_id = 1L,
         cdm_name = omopgenerics::cdmName(cdm)

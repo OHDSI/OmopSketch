@@ -6,7 +6,7 @@
 \usage{
 plotObservationPeriod(
   result,
-  variableName = "number subjects",
+  variableName = "Number subjects",
   plotType = "barplot",
   facet = NULL,
   colour = NULL
@@ -41,7 +41,7 @@ result <- summariseObservationPeriod(cdm$observation_period)
 
 result |>
   plotObservationPeriod(
-    variableName = "duration in days",
+    variableName = "Duration in days",
     plotType = "boxplot"
   )
 

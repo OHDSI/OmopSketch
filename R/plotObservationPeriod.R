@@ -20,14 +20,14 @@
 #'
 #' result |>
 #'   plotObservationPeriod(
-#'     variableName = "duration in days",
+#'     variableName = "Duration in days",
 #'     plotType = "boxplot"
 #'   )
 #'
 #' PatientProfiles::mockDisconnect(cdm)
 #' }
 plotObservationPeriod <- function(result,
-                                  variableName = "number subjects",
+                                  variableName = "Number subjects",
                                   plotType = "barplot",
                                   facet = NULL,
                                   colour = NULL) {
@@ -110,13 +110,13 @@ plotObservationPeriod <- function(result,
 availablePlotObservationPeriod <- function() {
   dplyr::tribble(
     ~variable_name, ~plot_type, ~facet,
-    "number subjects", "barplot", "cdm_name+observation_period_ordinal",
-    "records per person", "densityplot", "cdm_name",
-    "records per person", "boxplot", "cdm_name",
-    "duration in days", "densityplot", "cdm_name+observation_period_ordinal",
-    "duration in days", "boxplot", "cdm_name+observation_period_ordinal",
-    "days to next observation period", "densityplot", "cdm_name+observation_period_ordinal",
-    "days to next observation period", "boxplot", "cdm_name+observation_period_ordinal",
+    "Number subjects", "barplot", "cdm_name+observation_period_ordinal",
+    "Records per person", "densityplot", "cdm_name",
+    "Records per person", "boxplot", "cdm_name",
+    "Duration in days", "densityplot", "cdm_name+observation_period_ordinal",
+    "Duration in days", "boxplot", "cdm_name+observation_period_ordinal",
+    "Days to next observation period", "densityplot", "cdm_name+observation_period_ordinal",
+    "Days to next observation period", "boxplot", "cdm_name+observation_period_ordinal",
   )
 }
 needEstimates <- function(plotType) {
