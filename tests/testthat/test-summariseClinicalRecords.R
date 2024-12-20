@@ -138,12 +138,12 @@ test_that("summariseClinicalRecords() sex and ageGroup argument work", {
     dplyr::mutate(dplyr::across(dplyr::everything(), as.character))
 
   m_records  <- m |>
-    dplyr::filter(variable_name == "number records", strata_level %in% c("<30", ">= 30"), estimate_name == "count") |>
+    dplyr::filter(variable_name == "Number records", strata_level %in% c("<30", ">= 30"), estimate_name == "count") |>
     dplyr::select("age_group" = "strata_level", "estimate_value") |>
     dplyr::collect() |>
     dplyr::arrange(age_group)
   m_subjects <- m |>
-    dplyr::filter(variable_name == "number subjects", strata_level %in% c("<30", ">= 30"), estimate_name == "count") |>
+    dplyr::filter(variable_name == "Number subjects", strata_level %in% c("<30", ">= 30"), estimate_name == "count") |>
     dplyr::select("age_group" = "strata_level", "estimate_value") |>
     dplyr::collect() |>
     dplyr::arrange(age_group)
@@ -153,7 +153,7 @@ test_that("summariseClinicalRecords() sex and ageGroup argument work", {
 
   # Check sex and age group---
   x <- summariseClinicalRecords(cdm, "condition_occurrence", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))) |>
-    dplyr::filter(variable_name == "number subjects", estimate_name == "count",
+    dplyr::filter(variable_name == "Number subjects", estimate_name == "count",
                   strata_name == "sex" | strata_name == "overall") |>
     dplyr::select("strata_name", "strata_level", "estimate_value") |>
     dplyr::mutate(group = dplyr::if_else(strata_name == "overall",1, 2)) |>
@@ -162,7 +162,7 @@ test_that("summariseClinicalRecords() sex and ageGroup argument work", {
   expect_equal(x$n[[1]], x$n[[2]])
 
   x <- summariseClinicalRecords(cdm, "condition_occurrence", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))) |>
-    dplyr::filter(variable_name == "number records", estimate_name == "count",
+    dplyr::filter(variable_name == "Number records", estimate_name == "count",
                   strata_name == "sex" | strata_name == "overall") |>
     dplyr::select("strata_name", "strata_level", "estimate_value") |>
     dplyr::mutate(group = dplyr::if_else(strata_name == "overall",1, 2)) |>
@@ -171,7 +171,7 @@ test_that("summariseClinicalRecords() sex and ageGroup argument work", {
   expect_equal(x$n[[1]], x$n[[2]])
 
   x <- summariseClinicalRecords(cdm, "condition_occurrence", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))) |>
-    dplyr::filter(variable_name == "number records", estimate_name == "count",
+    dplyr::filter(variable_name == "Number records", estimate_name == "count",
                   strata_name == "age_group" | strata_name == "overall") |>
     dplyr::select("strata_name", "strata_level", "estimate_value") |>
     dplyr::mutate(group = dplyr::if_else(strata_name == "overall",1, 2)) |>
@@ -229,7 +229,7 @@ test_that("summariseClinicalRecords() sex and ageGroup argument work", {
 
   # Check num records
   records <- result |>
-    dplyr::filter(variable_name == "number records", estimate_name == "count")
+    dplyr::filter(variable_name == "Number records", estimate_name == "count")
   expect_identical(records |> dplyr::filter(strata_name == "overall") |> dplyr::pull(estimate_value), "9")
   expect_identical(records |> dplyr::filter(strata_level == "old") |> dplyr::pull(estimate_value), "5")
   expect_identical(records |> dplyr::filter(strata_level == "young") |> dplyr::pull(estimate_value), "4")

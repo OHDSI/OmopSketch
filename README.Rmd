@@ -97,7 +97,7 @@ OmopSketch also provides functions to explore some of (or all) the concepts in t
 acetaminophen <- c(1125315,  1127433, 1127078)
 
 summariseConceptSetCounts(cdm, conceptSet = list("acetaminophen" = acetaminophen)) |>
-  filter(estimate_name == "record_count") |> 
+  filter(variable_name == "Number records") |> 
   plotConceptSetCounts()
 ```
 

@@ -578,17 +578,17 @@ test_that("interval argument works", {
   skip_on_cran()
   # Load mock database ----
   cdm <- mockOmopSketch()
-  expect_no_error(y<-summariseConceptCounts(list(ANTIHISTAMINES= c(21603444)),
+  expect_no_error(y<-summariseConceptSetCounts(list(ANTIHISTAMINES= c(21603444)),
                          cdm = cdm,
                          interval = "years"))
 
-  expect_no_error(o<-summariseConceptCounts(list(ANTIHISTAMINES= c(21603444)),
+  expect_no_error(o<-summariseConceptSetCounts(list(ANTIHISTAMINES= c(21603444)),
                                             cdm = cdm,
                                             interval = "overall"))
-  expect_no_error(q<-summariseConceptCounts(list(ANTIHISTAMINES= c(21603444)),
+  expect_no_error(q<-summariseConceptSetCounts(list(ANTIHISTAMINES= c(21603444)),
                                             cdm = cdm,
                                             interval = "quarters"))
-  expect_no_error(m<-summariseConceptCounts(list(ANTIHISTAMINES= c(21603444)),
+  expect_no_error(m<-summariseConceptSetCounts(list(ANTIHISTAMINES= c(21603444)),
                                             cdm = cdm,
                                             interval = "months"))
 
