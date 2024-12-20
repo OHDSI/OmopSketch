@@ -60,11 +60,11 @@ plotRecordCount <- function(result,
         x = "Date"
       )
     p$data <- p$data |>
-      dplyr::arrange(time_interval) |>
-      dplyr::group_by(omop_table) |>
+      dplyr::arrange(.data$time_interval) |>
+      dplyr::group_by(.data$omop_table) |>
       dplyr::mutate(
         show_label = if (dplyr::cur_group_id() == 1) {
-          seq_along(time_interval) %% ceiling(n() / 20) == 0
+          seq_along(.data$time_interval) %% ceiling(dplyr::n() / 20) == 0
         } else {
           FALSE
         }

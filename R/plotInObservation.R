@@ -78,9 +78,9 @@ plotInObservation <- function(result,
         x = "Date"
       )
    p$data <- p$data |>
-     dplyr::arrange(time_interval) |>
+     dplyr::arrange(.data$time_interval) |>
      dplyr::mutate(
-       show_label = seq_along(time_interval) %% ceiling(nrow(p$data) / 20) == 0
+       show_label = seq_along(.data$time_interval) %% ceiling(nrow(p$data) / 20) == 0
      )
 
    p <- p +
