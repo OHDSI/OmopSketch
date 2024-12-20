@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   A-summarise_clinical_tables_records: A-summarise_clinical_tables_records.html
   B-summarise_concept_set_counts: B-summarise_concept_set_counts.html
-last_built: 2024-12-18T10:40Z
+last_built: 2024-12-20T16:44Z
 urls:
   reference: https://OHDSI.github.io/OmopSketch/reference
   article: https://OHDSI.github.io/OmopSketch/articles
