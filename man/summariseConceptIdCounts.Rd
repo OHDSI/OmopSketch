@@ -54,7 +54,7 @@ requireEunomia()
 con <- dbConnect(duckdb(), eunomiaDir())
 cdm <- cdmFromCon(con = con, cdmSchema = "main", writeSchema = "main")
 
-summariseAllConceptCounts(cdm, "condition_occurrence")
+summariseConceptIdCounts(cdm, "condition_occurrence")
 }
 
 }

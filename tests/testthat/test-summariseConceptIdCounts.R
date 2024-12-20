@@ -1,4 +1,4 @@
-test_that("summariseAllConceptCount works", {
+test_that("summariseConceptIdCount works", {
   skip_on_cran()
 
   cdm <- cdmEunomia()
@@ -99,19 +99,19 @@ test_that("sample argument works", {
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
 
-test_that("tableAllConceptCounts() works", {
+test_that("tableConceptIdCounts() works", {
   skip_on_cran()
   # Load mock database ----
   cdm <- cdmEunomia()
 
   # Check that works ----
-  expect_no_error(x <- tableAllConceptCounts(summariseConceptIdCounts(cdm, "condition_occurrence")))
+  expect_no_error(x <- tableConceptIdCounts(summariseConceptIdCounts(cdm, "condition_occurrence")))
   expect_true(inherits(x,"gt_tbl"))
-  expect_no_error(y <- tableAllConceptCounts(summariseConceptIdCounts(cdm, c("drug_exposure",
+  expect_no_error(y <- tableConceptIdCounts(summariseConceptIdCounts(cdm, c("drug_exposure",
                                                                     "measurement"))))
   expect_true(inherits(y,"gt_tbl"))
   expect_warning(t <- summariseConceptIdCounts(cdm, "death"))
-  expect_warning(inherits(tableAllConceptCounts(t),"gt_tbl"))
+  expect_warning(inherits(tableConceptIdCounts(t),"gt_tbl"))
 
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
