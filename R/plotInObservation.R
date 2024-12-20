@@ -60,7 +60,6 @@ plotInObservation <- function(result,
   # plot
   if(length(unique(result$additional_level)) > 1 ){
    p <- result |>
-      dplyr::mutate(additional_level = as.character(gsub("-01-01$","",as.Date(gsub(" to.*","",.data$additional_level))))) |>
       dplyr::filter(.data$estimate_name == "count") |>
       visOmopResults::scatterPlot(
         x = "time_interval",
@@ -81,8 +80,7 @@ plotInObservation <- function(result,
    p$data <- p$data |>
      dplyr::arrange(time_interval) |>
      dplyr::mutate(
-       show_label = seq_along(time_interval) %%
-         (10 * nrow(p$data|>dplyr::distinct(.data$omop_table))) == 0 # Show every 10th label
+       show_label = seq_along(time_interval) %% ceiling(nrow(p$data) / 20) == 0
      )
 
    p <- p +
