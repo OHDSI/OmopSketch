@@ -59,19 +59,31 @@ mockOmopSketch <- function(con = NULL,
 }
 
 checkColumns <- function(cdm_local){
-  info <- omopgenerics::omopTableFields()
+  info <- omopgenerics::omopTableFields() |>
+    dplyr::filter(.data$type == "cdm_table") |>
+    dplyr::mutate(cdm_datatype = dplyr::case_when(
+      .data$cdm_datatype == "integer" ~ "NA_integer_",
+      grepl("varchar", .data$cdm_datatype) ~ "NA_character_",
+      .default = "NA"
+    ))
   for (table in names(cdm_local)){
     cols <-  info |>
       dplyr::filter(.data$cdm_table_name == table)|>
-      dplyr::distinct(.data$cdm_field_name)|>
-      dplyr::pull()
+      dplyr::select(cdm_field_name,cdm_datatype)
 
-    missing_cols <- setdiff(cols, colnames(cdm_local[[table]]))
+    missing_cols <- cols|>
+      dplyr::filter(!(cdm_field_name %in% colnames(cdm_local[[table]])))
 
+    if (nrow(missing_cols) > 0) {
 
-    if (length(missing_cols) > 0) {
-
-      missing_tbl <- tibble::tibble(!!!rlang::set_names(rep(list(NA_character_), length(missing_cols)), missing_cols))
+      missing_tbl <- tibble::tibble(
+        !!!rlang::set_names(
+          lapply(missing_cols$cdm_datatype, function(datatype) {
+            eval(parse(text = datatype))
+          }),
+          missing_cols$cdm_field_name
+        )
+      )
 
       cdm_local[[table]] <- dplyr::bind_cols(cdm_local[[table]], missing_tbl)
 
@@ -79,3 +91,5 @@ checkColumns <- function(cdm_local){
   }
   return(cdm_local)
 }
+
+
