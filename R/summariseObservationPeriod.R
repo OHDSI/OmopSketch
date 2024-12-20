@@ -93,6 +93,8 @@ summariseObservationPeriod <- function(observationPeriod,
         estimates = estimates
       ) |>
       suppressMessages() |>
+      dplyr::mutate(variable_name = dplyr::if_else(.data$variable_name == "number records", "Number records",
+                                                   dplyr::if_else(.data$variable_name == "number subjects", "Number subjects" , .data$variable_name))) |>
         dplyr::union_all(
           obs |>
             dplyr::group_by(.data$person_id, dplyr::across(dplyr::any_of(c("sex","age_group")))) |>
@@ -107,7 +109,7 @@ summariseObservationPeriod <- function(observationPeriod,
             suppressMessages()
           ) |>
       addOrdinalLevels() |>
-      dplyr::filter(.data$variable_name != "number records" | .data$group_level == "all") |>
+      dplyr::filter(.data$variable_name != "Number records" | .data$group_level == "all") |>
       arrangeSr(estimates)
   }
 
@@ -115,13 +117,15 @@ summariseObservationPeriod <- function(observationPeriod,
     dplyr::mutate(
       "cdm_name" = omopgenerics::cdmName(cdm),
       "variable_name" = dplyr::case_when(
-        .data$variable_name == "n" ~ "records per person",
-        .data$variable_name == "next_obs" ~ "days to next observation period",
-        .data$variable_name == "duration" ~ "duration in days",
+        .data$variable_name == "n" ~ "Records per person",
+        .data$variable_name == "next_obs" ~ "Days to next observation period",
+        .data$variable_name == "duration" ~ "Duration in days",
         .default = .data$variable_name
       )
     ) |>
     omopgenerics::newSummarisedResult(settings = set)
+
+  omopgenerics::dropSourceTable(cdm, name = dplyr::starts_with(tablePrefix))
 
   return(obsSr)
 }
@@ -158,14 +162,14 @@ arrangeSr <- function(x, estimates) {
   group <- c("all", sort(group[group != "all"]))
 
   order <- dplyr::tibble(
-    "variable_name" = c("number records"),
+    "variable_name" = c("Number records"),
     "group_level"   = "all",
     "strata_level"  = lev,
     "estimate_name" = "count"
   ) |>
     dplyr::union_all(
       tidyr::expand_grid(
-        "variable_name" = c("number subjects"),
+        "variable_name" = c("Number subjects"),
         "group_level"   = group,
         "strata_level"  = lev,
         "estimate_name" = "count"
@@ -191,7 +195,7 @@ arrangeSr <- function(x, estimates) {
     ) |>
     dplyr::left_join(
       dplyr::tibble("variable_name" = c(
-        "number records", "number subjects", "n", "duration", "next_obs"
+        "Number records", "Number subjects", "n", "duration", "next_obs"
       )) |>
         dplyr::mutate("order_var" = dplyr::row_number()),
       by = "variable_name"
@@ -204,5 +208,6 @@ arrangeSr <- function(x, estimates) {
     dplyr::left_join(order, by = c("variable_name", "group_level", "strata_level", "estimate_name")) |>
     dplyr::arrange(.data$order_id) |>
     dplyr::select(-"order_id")
+
   return(x)
 }

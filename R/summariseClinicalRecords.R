@@ -163,7 +163,7 @@ summariseClinicalRecords <- function(cdm,
     # Summary
     if (inObservation | standardConcept | sourceVocabulary | domainId | typeConcept) {
       denominator <- resultsRecordPerPerson |>
-        dplyr::filter(.data$variable_name == "number records") |>
+        dplyr::filter(.data$variable_name == "Number records") |>
         dplyr::select("strata_name", "strata_level", den = "estimate_value")
       variables <- variablesToSummarise(
         inObservation, standardConcept, sourceVocabulary, domainId, typeConcept
@@ -258,7 +258,7 @@ summariseClinicalRecords <- function(cdm,
       dplyr::select("strata_name", "strata_level") |>
       dplyr::distinct() |>
       dplyr::cross_join(dplyr::tibble(variable_name = unique(c(
-        "number subjects", "number records", "records_per_person",
+        "Number subjects", "Number records", "records_per_person",
         unique(fullResult$variable_name)
       )))) |>
       dplyr::mutate(order_id = dplyr::row_number()) |>
@@ -319,17 +319,18 @@ summariseRecordsPerPerson <- function(x, den, strata, estimates) {
         variables = list("number_subjects", "n"),
         estimates = list(c("count", "percentage"), c(estimates, "sum"))
       ) |>
-      suppressMessages()
-  }) |>
+      suppressMessages() |>
+      dplyr::mutate(variable_name = dplyr::if_else(.data$variable_name == "number subjects", "Number subjects", .data$variable_name))
+}) |>
     dplyr::bind_rows() |>
     dplyr::mutate(
       variable_name = dplyr::if_else(
         .data$variable_name == "n",
-        dplyr::if_else(.data$estimate_name == "sum", "number records", "records_per_person"),
+        dplyr::if_else(.data$estimate_name == "sum", "Number records", "records_per_person"),
         .data$variable_name
       ),
       estimate_name = dplyr::if_else(
-        .data$variable_name == "number records", "count", .data$estimate_name
+        .data$variable_name == "Number records", "count", .data$estimate_name
       ),
       estimate_value = reduceDemicals(.data$estimate_value, 4)
     )

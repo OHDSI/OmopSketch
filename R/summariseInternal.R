@@ -5,7 +5,7 @@ summariseCountsInternal <- function(x, strata, counts) {
     'dplyr::n_distinct(.data$person_id)',
     'dplyr::n_distinct(.data$subject_id)'
   ) |>
-    rlang::set_names(c("count_records", "count_subjecst", "count_subjects")) |>
+    rlang::set_names(c("count_records", "count_subjects", "count_subjects")) |>
     purrr::keep(c("records", "person_id", "subject_id") %in% counts) |>
     rlang::parse_exprs()
   purrr::map(strata, \(stratak) {
