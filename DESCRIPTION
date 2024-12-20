@@ -4,7 +4,7 @@ Version: 0.2.0
 Authors@R: c(
     person( 
         "Marta", "Alcalde-Herraiz", 
-        email = "marta.alcaldeherraiz@ndorms.ox.ac.uk", role = c("aut", "cre"), 
+        email = "marta.alcaldeherraiz@ndorms.ox.ac.uk", role = c("aut"), 
         comment = c(ORCID = "0009-0002-4405-1814")
     ),
     person(
@@ -17,7 +17,7 @@ Authors@R: c(
     ),
     person(
         "Cecilia", "Campanile", email = "cecilia.campanile@ndorms.ox.ac.uk", 
-        role = c("aut"), comment = c(ORCID = "0009-0007-6629-4661")
+        role = c("aut", "cre"), comment = c(ORCID = "0009-0007-6629-4661")
     ),
     person(
         "Edward", "Burn", email = "edward.burn@ndorms.ox.ac.uk", 
