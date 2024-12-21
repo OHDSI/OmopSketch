@@ -48,10 +48,48 @@ mockOmopSketch <- function(con = NULL,
     omock::mockProcedureOccurrence(seed = seed) |>
     omock::mockVisitOccurrence(seed = seed) |>
     # Create device exposure table - empty (Eunomia also has it empty)
-    omopgenerics::emptyOmopTable("device_exposure")
+    omopgenerics::emptyOmopTable("device_exposure")|>
+    checkColumns()
+
 
   # WHEN WE SUPORT LOCAL CDMs WE WILL HAVE TO ACCOUNT FOR THAT HERE
   cdm <- CDMConnector::copy_cdm_to(con = con, cdm = cdm, schema = writeSchema)
 
   return(cdm)
 }
+
+checkColumns <- function(cdm_local){
+  info <- omopgenerics::omopTableFields() |>
+    dplyr::filter(.data$type == "cdm_table") |>
+    dplyr::mutate(cdm_datatype = dplyr::case_when(
+      .data$cdm_datatype == "integer" ~ "NA_integer_",
+      grepl("varchar", .data$cdm_datatype) ~ "NA_character_",
+      .default = "NA"
+    ))
+  for (table in names(cdm_local)){
+    cols <-  info |>
+      dplyr::filter(.data$cdm_table_name == table)|>
+      dplyr::select(cdm_field_name,cdm_datatype)
+
+    missing_cols <- cols|>
+      dplyr::filter(!(cdm_field_name %in% colnames(cdm_local[[table]])))
+
+    if (nrow(missing_cols) > 0) {
+
+      missing_tbl <- tibble::tibble(
+        !!!rlang::set_names(
+          lapply(missing_cols$cdm_datatype, function(datatype) {
+            eval(parse(text = datatype))
+          }),
+          missing_cols$cdm_field_name
+        )
+      )
+
+      cdm_local[[table]] <- dplyr::bind_cols(cdm_local[[table]], missing_tbl)
+
+    }
+  }
+  return(cdm_local)
+}
+
+

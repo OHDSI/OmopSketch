@@ -81,6 +81,7 @@ plotRecordCount <- function(result,
         axis.text.x = ggplot2::element_text(angle = 90, hjust = 1, size = 8),
         plot.margin = ggplot2::margin(t = 5, r = 5, b = 30, l = 5)
       )
+
   }else{
     p <- result |>
       visOmopResults::barPlot(x = "variable_name",
@@ -92,5 +93,7 @@ plotRecordCount <- function(result,
         x = ""
       )
   }
+
   p
 }
+

@@ -16,13 +16,10 @@ knitr::opts_chunk$set(
 # OmopSketch <a href="https://OHDSI.github.io/OmopSketch/"><img src="man/figures/logo.png" align="right" height="138" alt="OmopSketch website" /></a>
 
 <!-- badges: start -->
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![R-CMD-check](https://github.com/OHDSI/OmopSketch/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/OHDSI/OmopSketch/actions/workflows/R-CMD-check.yaml)
-[![CRAN status](https://www.r-pkg.org/badges/version/OmopSketch)](https://CRAN.R-project.org/package=OmopSketch)
-[![Codecov test coverage](https://codecov.io/gh/OHDSI/OmopSketch/branch/main/graph/badge.svg)](https://app.codecov.io/gh/OHDSI/OmopSketch?branch=main)
-<!-- badges: end -->
 
-### WARNING: this package is under-development and has only been tested using mock data
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental) [![R-CMD-check](https://github.com/OHDSI/OmopSketch/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/OHDSI/OmopSketch/actions/workflows/R-CMD-check.yaml) [![CRAN status](https://www.r-pkg.org/badges/version/OmopSketch)](https://CRAN.R-project.org/package=OmopSketch) [![Codecov test coverage](https://codecov.io/gh/OHDSI/OmopSketch/branch/main/graph/badge.svg)](https://app.codecov.io/gh/OHDSI/OmopSketch?branch=main)
+
+<!-- badges: end -->
 
 The goal of OmopSketch is to characterise and visualise an OMOP CDM instance to asses if it meets the necessary criteria to answer a specific clinical question and conduct a certain study.
 
@@ -48,16 +45,19 @@ con <- dbConnect(duckdb(), eunomia_dir())
 cdm <- cdmFromCon(con = con, cdmSchema = "main", writeSchema = "main")
 cdm
 ```
+
 ### Snapshot
+
 We first create a snapshot of our database. This will allow us to track when the analysis has been conducted and capture details about the CDM version or the data release.
+
 ```{r}
 summariseOmopSnapshot(cdm) |>
   tableOmopSnapshot(type = "flextable")
 ```
 
-
 ### Characterise the clinical tables
-Once we have collected the snapshot information, we can start characterising the clinical tables of the CDM. By using `summariseClinicalRecords()` and `tableClinicalRecords()`, we can easily visualise the main characteristics of specific clinical tables. 
+
+Once we have collected the snapshot information, we can start characterising the clinical tables of the CDM. By using `summariseClinicalRecords()` and `tableClinicalRecords()`, we can easily visualise the main characteristics of specific clinical tables.
 
 ```{r}
 summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
@@ -70,7 +70,9 @@ We can also explore trends in the clinical table records over time.
 summariseRecordCount(cdm, c("condition_occurrence", "drug_exposure"), interval = "years") |>
   plotRecordCount(facet = "omop_table", colour = "cdm_name")
 ```
+
 ### Characterise the observation period
+
 After visualising the main characteristics of our clinical tables, we can explore the observation period details. OmopSketch provides several functions to have an overview the dataset study period.
 
 Using `summariseInObservation()` and `plotInObservation()`, we can gather information on the number of records per year.
@@ -79,20 +81,25 @@ Using `summariseInObservation()` and `plotInObservation()`, we can gather inform
 summariseInObservation(cdm$observation_period, output = "records", interval = "years") |>
   plotInObservation(colour = "cdm_name")
 ```
-You can also visualise and explore the characteristics of the observation period per each individual in the database using `summariseObservationPeriod()`. 
+
+You can also visualise and explore the characteristics of the observation period per each individual in the database using `summariseObservationPeriod()`.
+
 ```{r}
 summariseObservationPeriod(cdm$observation_period) |>
   tableObservationPeriod(type = "flextable")
 ```
 
 Or if visualisation is preferred, you can easily build a histogram to explore how many participants have more than one observation period.
+
 ```{r}
 summariseObservationPeriod(cdm$observation_period) |>
   plotObservationPeriod(colour = "observation_period_ordinal")
 ```
 
 ### Characterise the concepts
+
 OmopSketch also provides functions to explore some of (or all) the concepts in the dataset.
+
 ```{r}
 acetaminophen <- c(1125315,  1127433, 1127078)
 
@@ -102,4 +109,3 @@ summariseConceptSetCounts(cdm, conceptSet = list("acetaminophen" = acetaminophen
 ```
 
 As seen, OmopSketch offers multiple functionalities to provide a general overview of a database. Additionally, it includes more tools and arguments that allow for deeper exploration, helping to assess the database's suitability for specific research studies. For further information, please refer to the vignettes.
-

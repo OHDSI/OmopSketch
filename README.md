@@ -12,9 +12,8 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 status](https://www.r-pkg.org/badges/version/OmopSketch)](https://CRAN.R-project.org/package=OmopSketch)
 [![Codecov test
 coverage](https://codecov.io/gh/OHDSI/OmopSketch/branch/main/graph/badge.svg)](https://app.codecov.io/gh/OHDSI/OmopSketch?branch=main)
-<!-- badges: end -->
 
-### WARNING: this package is under-development and has only been tested using mock data
+<!-- badges: end -->
 
 The goal of OmopSketch is to characterise and visualise an OMOP CDM
 instance to asses if it meets the necessary criteria to answer a
@@ -102,11 +101,13 @@ summariseRecordCount(cdm, c("condition_occurrence", "drug_exposure"), interval =
   plotRecordCount(facet = "omop_table", colour = "cdm_name")
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" /> \###
-Characterise the observation period After visualising the main
-characteristics of our clinical tables, we can explore the observation
-period details. OmopSketch provides several functions to have an
-overview the dataset study period.
+<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
+
+### Characterise the observation period
+
+After visualising the main characteristics of our clinical tables, we
+can explore the observation period details. OmopSketch provides several
+functions to have an overview the dataset study period.
 
 Using `summariseInObservation()` and `plotInObservation()`, we can
 gather information on the number of records per year.
@@ -118,9 +119,10 @@ summariseInObservation(cdm$observation_period, output = "records", interval = "y
 #> `result_id` is not present in result.
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" /> You
-can also visualise and explore the characteristics of the observation
-period per each individual in the database using
+<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
+
+You can also visualise and explore the characteristics of the
+observation period per each individual in the database using
 `summariseObservationPeriod()`.
 
 ``` r
