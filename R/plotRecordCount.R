@@ -59,6 +59,28 @@ plotRecordCount <- function(result,
         y = "Number records",
         x = "Date"
       )
+    p$data <- p$data |>
+      dplyr::arrange(.data$time_interval) |>
+      dplyr::group_by(.data$omop_table) |>
+      dplyr::mutate(
+        show_label = if (dplyr::cur_group_id() == 1) {
+          seq_along(.data$time_interval) %% ceiling(dplyr::n() / 20) == 0
+        } else {
+          FALSE
+        }
+      ) |>
+      dplyr::ungroup()
+
+    # Modify the plot
+    p <- p +
+      ggplot2::scale_x_discrete(
+        breaks = p$data$time_interval[p$data$show_label],
+        labels = p$data$time_interval[p$data$show_label]
+      ) +
+      ggplot2::theme(
+        axis.text.x = ggplot2::element_text(angle = 90, hjust = 1, size = 8),
+        plot.margin = ggplot2::margin(t = 5, r = 5, b = 30, l = 5)
+      )
   }else{
     p <- result |>
       visOmopResults::barPlot(x = "variable_name",

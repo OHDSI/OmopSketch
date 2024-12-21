@@ -59,8 +59,7 @@ plotInObservation <- function(result,
 
   # plot
   if(length(unique(result$additional_level)) > 1 ){
-    result |>
-      dplyr::mutate(additional_level = as.character(gsub("-01$","",as.Date(gsub(" to.*","",.data$additional_level))))) |>
+   p <- result |>
       dplyr::filter(.data$estimate_name == "count") |>
       visOmopResults::scatterPlot(
         x = "time_interval",
@@ -78,6 +77,21 @@ plotInObservation <- function(result,
         y = variable,
         x = "Date"
       )
+   p$data <- p$data |>
+     dplyr::arrange(.data$time_interval) |>
+     dplyr::mutate(
+       show_label = seq_along(.data$time_interval) %% ceiling(nrow(p$data) / 20) == 0
+     )
+
+   p <- p +
+     ggplot2::scale_x_discrete(
+       breaks = p$data$time_interval[p$data$show_label]
+     ) +
+     ggplot2::theme(
+       axis.text.x = ggplot2::element_text(angle = 90, hjust = 1, size = 8),
+       plot.margin = ggplot2::margin(t = 5, r = 5, b = 30, l = 5)
+     )
+   p
   }else{
     result |>
       dplyr::filter(.data$estimate_name == "count") |>
