@@ -1,11 +1,11 @@
-#' Create a visual table from a summariseAllConceptCounts() result.
+#' Create a visual table from a summariseConceptIdCounts() result.
 #' @param result A summarised_result object.
 #' @param type Type of formatting output table, either "gt" or "flextable".
 #' @return A gt or flextable object with the summarised data.
 #' @export
 #'
 #'
-tableAllConceptCounts <- function(result,
+tableConceptIdCounts <- function(result,
                              type = "gt") {
   # initial checks
   rlang::check_installed("visOmopResults")
