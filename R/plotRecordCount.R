@@ -82,7 +82,6 @@ plotRecordCount <- function(result,
         plot.margin = ggplot2::margin(t = 5, r = 5, b = 30, l = 5)
       )
 
-
   }else{
     p <- result |>
       visOmopResults::barPlot(x = "variable_name",

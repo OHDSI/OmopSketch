@@ -30,10 +30,10 @@
 #' con <- dbConnect(duckdb(), eunomiaDir())
 #' cdm <- cdmFromCon(con = con, cdmSchema = "main", writeSchema = "main")
 #'
-#' summariseAllConceptCounts(cdm, "condition_occurrence")
+#' summariseConceptIdCounts(cdm, "condition_occurrence")
 #' }
 #'
-summariseAllConceptCounts <- function(cdm,
+summariseConceptIdCounts <- function(cdm,
                                       omopTableName,
                                       countBy = "record",
                                       year = FALSE,
@@ -108,7 +108,7 @@ summariseAllConceptCounts <- function(cdm,
 
     omopgenerics::dropSourceTable(cdm = cdm, name = dplyr::starts_with(prefix))
 
-  return(result)
+    return(result)
   }) |>
     purrr::compact()
 
