@@ -69,7 +69,7 @@ checkColumns <- function(cdm_local){
   for (table in names(cdm_local)){
     cols <-  info |>
       dplyr::filter(.data$cdm_table_name == table)|>
-      dplyr::select(.data$cdm_field_name,.data$cdm_datatype)
+      dplyr::select("cdm_field_name","cdm_datatype")
 
     missing_cols <- cols|>
       dplyr::filter(!(.data$cdm_field_name %in% colnames(cdm_local[[table]])))
