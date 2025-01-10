@@ -52,7 +52,7 @@ summariseConceptIdCounts <- function(cdm,
   omopgenerics::assertNumeric(sample, integerish = TRUE, min = 1, null = TRUE, length = 1)
 
   # settings for the created results
-  set <- createSettings(result_type = "summarise_all_concept_counts", study_period = dateRange)
+  set <- createSettings(result_type = "summarise_concept_id_counts", study_period = dateRange)
 
   # get strata
   strata <- omopgenerics::combineStrata(c(strataCols(sex = sex, ageGroup = ageGroup), "year"[year]))

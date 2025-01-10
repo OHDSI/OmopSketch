@@ -6,6 +6,7 @@ test_that("summariseConceptIdCount works", {
   expect_true(inherits(summariseConceptIdCounts(cdm, "drug_exposure"), "summarised_result"))
   expect_warning(summariseConceptIdCounts(cdm, "observation_period"))
   expect_no_error(x <- summariseConceptIdCounts(cdm, "visit_occurrence"))
+  checkResultType(x, "summarise_concept_id_counts")
   expect_no_error(summariseConceptIdCounts(cdm, "condition_occurrence", countBy = c("record", "person")))
   expect_no_error(summariseConceptIdCounts(cdm, "drug_exposure"))
   expect_no_error(summariseConceptIdCounts(cdm, "procedure_occurrence", countBy = "person"))
