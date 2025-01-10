@@ -34,5 +34,8 @@ A mock cdm_reference object.
 Creates a mock database to test OmopSketch package.
 }
 \examples{
+if (!rlang::is_installed("duckdb")){
+install.packages("duckdb")
+}
 mockOmopSketch(numberIndividuals = 100)
 }
