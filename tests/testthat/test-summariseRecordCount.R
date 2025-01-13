@@ -293,7 +293,7 @@ test_that("dateRnge argument works", {
 
   PatientProfiles::mockDisconnect(cdm = cdm)
 
-  db <- DBI::dbConnect(duckdb::duckdb(), dbdir = CDMConnector::eunomia_dir())
+  db <- DBI::dbConnect(duckdb::duckdb(), dbdir = CDMConnector::eunomiaDir())
   cdm <- CDMConnector::cdmFromCon(con = db, cdmSchema = "main",writeSchema = "main")
 
 

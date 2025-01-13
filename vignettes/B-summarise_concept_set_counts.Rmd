@@ -42,7 +42,7 @@ library(OmopSketch)
 library(CodelistGenerator)
 
 # Connect to Eunomia database
-con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
+con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomiaDir())
 cdm <- CDMConnector::cdmFromCon(
   con = con, cdmSchema = "main", writeSchema = "main"
 )

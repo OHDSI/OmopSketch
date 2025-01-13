@@ -39,14 +39,15 @@ library(duckdb)
 library(CDMConnector)
 library(dplyr, warn.conflicts = FALSE)
 library(OmopSketch)
-con <- dbConnect(duckdb(), eunomia_dir())
+con <- dbConnect(duckdb(), eunomiaDir())
 cdm <- cdmFromCon(con = con, cdmSchema = "main", writeSchema = "main")
 #> Note: method with signature 'DBIConnection#Id' chosen for function 'dbExistsTable',
 #>  target signature 'duckdb_connection#Id'.
 #>  "duckdb_connection#ANY" would also be valid
+#> ! cdm name not specified and could not be inferred from the cdm source table
 cdm
 #> 
-#> ── # OMOP CDM reference (duckdb) of Synthea synthetic health database ──────────
+#> ── # OMOP CDM reference (duckdb) of An OMOP CDM database ───────────────────────
 #> • omop tables: person, observation_period, visit_occurrence, visit_detail,
 #> condition_occurrence, drug_exposure, procedure_occurrence, device_exposure,
 #> measurement, observation, death, note, note_nlp, specimen, fact_relationship,

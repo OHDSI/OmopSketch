@@ -20,7 +20,7 @@ schema <- function(type = Sys.getenv("DB_TO_TEST", "duckdb")) {
 cdmEunomia <- function() {
   con <- connection()
   schema <- schema()
-  conDuck <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
+  conDuck <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomiaDir())
   cdmDuck <- CDMConnector::cdmFromCon(
     con = conDuck, cdmSchema = "main", writeSchema = "main"
   )

@@ -53,7 +53,7 @@ mockOmopSketch <- function(con = NULL,
 
 
   # WHEN WE SUPORT LOCAL CDMs WE WILL HAVE TO ACCOUNT FOR THAT HERE
-  cdm <- CDMConnector::copy_cdm_to(con = con, cdm = cdm, schema = writeSchema)
+  cdm <- CDMConnector::copyCdmTo(con = con, cdm = cdm, schema = writeSchema)
 
   return(cdm)
 }
