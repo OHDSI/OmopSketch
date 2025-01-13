@@ -14,7 +14,9 @@
 #' @return A mock cdm_reference object.
 #' @export
 #' @examples
+#' if (rlang::is_installed("duckdb")){
 #' mockOmopSketch(numberIndividuals = 100)
+#' }
 mockOmopSketch <- function(con = NULL,
                            writeSchema = NULL,
                            numberIndividuals = 100,
