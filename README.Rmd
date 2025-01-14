@@ -41,7 +41,7 @@ library(duckdb)
 library(CDMConnector)
 library(dplyr, warn.conflicts = FALSE)
 library(OmopSketch)
-con <- dbConnect(duckdb(), eunomia_dir())
+con <- dbConnect(duckdb(), eunomiaDir())
 cdm <- cdmFromCon(con = con, cdmSchema = "main", writeSchema = "main")
 cdm
 ```
