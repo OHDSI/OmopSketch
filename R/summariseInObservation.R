@@ -183,8 +183,8 @@ countRecords <- function(observationPeriod, cdm, start_date_name, end_date_name,
         ) |>
         dplyr::filter((.data$start_date < .data$interval_start_date & .data$end_date >= .data$interval_start_date) |
                         (.data$start_date >= .data$interval_start_date & .data$start_date <= .data$interval_end_date)) %>%
-        dplyr::mutate(start_date = pmax(.data$interval_start_date, .data$start_date, na.rm = TRUE)) |>
-        dplyr::mutate(end_date   = pmin(.data$interval_end_date, .data$end_date, na.rm = TRUE)) |>
+        dplyr::mutate(start_date = dplyr::if_else(!is.na(.data$start_date) & .data$start_date >= .data$interval_start_date, .data$start_date, .data$interval_start_date)) |>
+        dplyr::mutate(end_date   = dplyr::if_else(!is.na(.data$end_date) & .data$end_date <= .data$interval_end_date, .data$end_date, .data$interval_end_date)) |>
         dplyr::compute(temporary = FALSE, name = tablePrefix)
       additional_column <- "time_interval"
     }else{
