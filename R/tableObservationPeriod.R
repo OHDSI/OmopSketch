@@ -35,6 +35,10 @@ tableObservationPeriod <- function(result,
   result |>
     dplyr::filter(is.na(.data$variable_level)) |> # to remove density
     formatColumn("variable_name") |>
+    # Arrange by observation period ordinal
+    dplyr::mutate(order = dplyr::coalesce(as.numeric(stringr::str_extract(.data$group_level, "\\d+")),0)) |>
+    dplyr::arrange(.data$order) |>
+    dplyr::select(-"order") |>
     visOmopResults::visOmopTable(
       estimateName = c(
         "N" = "<count>",
