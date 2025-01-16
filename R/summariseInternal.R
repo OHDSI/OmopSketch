@@ -78,20 +78,10 @@ sampleOmopTable <- function(x, sample, name) {
   if (is.infinite(sample)) return(x)
   if (x |> dplyr::tally() |> dplyr::pull() <= sample) return(x)
 
-  cdm <- omopgenerics::cdmReference(x)
-  id <- omopgenerics::omopColumns(table = omopgenerics::tableName(x), field = "unique_id")
-  idTibble <- x |>
-    dplyr::pull(dplyr::all_of(id)) |>
-    base::sample(size = sample) |>
-    list() |>
-    rlang::set_names(id) |>
-    dplyr::as_tibble()
-  idName <- "ids_sample"
-  cdm <- omopgenerics::insertTable(cdm = cdm, name = idName, table = idTibble)
   x <- x |>
-    dplyr::inner_join(cdm[[idName]], by = id) |>
+    dplyr::slice_sample(n = sample) |>
     dplyr::compute(name = name, temporary = FALSE)
-  omopgenerics::dropSourceTable(cdm = cdm, name = idName)
+
   return(x)
 }
 addStratifications <- function(x, indexDate, sex, ageGroup, interval, intervalName, name) {

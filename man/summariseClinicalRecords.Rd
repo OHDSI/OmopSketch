@@ -18,7 +18,6 @@ summariseClinicalRecords(
   typeConcept = TRUE,
   sex = FALSE,
   ageGroup = NULL,
-  sample = NULL,
   dateRange = NULL
 )
 }
@@ -50,9 +49,6 @@ field information.}
 (FALSE).}
 
 \item{ageGroup}{A list of age groups to stratify results by.}
-
-\item{sample}{An integer to sample the tables to only that number of records.
-If NULL no sample is done.}
 
 \item{dateRange}{A list containing the minimum and the maximum dates
 defining the time range within which the analysis is performed.}

@@ -97,6 +97,11 @@ test_that("sample argument works", {
     dplyr::pull(n)
   expect_no_error(z<-summariseConceptIdCounts(cdm,"drug_exposure",sample = n))
   expect_equal(y |> sortTibble(), z |> sortTibble())
+  expect_equal(summariseConceptIdCounts(cdm,"drug_exposure", sample = 1) |>
+                 dplyr::filter(.data$estimate_name == "Number records") |>
+                 dplyr::pull(.data$estimate_value) |>
+                 as.integer(), 1L)
+
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
 

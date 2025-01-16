@@ -10,8 +10,6 @@
 #' @param sex TRUE or FALSE. If TRUE code use will be summarised by sex.
 #' @param ageGroup A list of ageGroup vectors of length two. Code use will be
 #' thus summarised by age groups.
-#' @param sample An integer to sample the tables in the cdm object to only that number of records.
-#' If NULL no sample is done.
 #' @param dateRange A list containing the minimum and the maximum dates
 #' defining the time range within which the analysis is performed.
 #' @return A summarised_result object with results overall and, if specified, by
@@ -39,7 +37,6 @@ summariseConceptSetCounts <- function(cdm,
                                       interval = "overall",
                                       sex = FALSE,
                                       ageGroup = NULL,
-                                      sample = NULL,
                                       dateRange = NULL) {
   # initial check
   cdm <- omopgenerics::validateCdmArgument(cdm)
@@ -49,7 +46,6 @@ summariseConceptSetCounts <- function(cdm,
   omopgenerics::assertLogical(sex, length = 1)
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup)
   dateRange <- validateStudyPeriod(cdm, dateRange)
-  omopgenerics::assertNumeric(sample, integerish = TRUE, min = 0, null = TRUE, length = 1)
   conceptSet <- omopgenerics::validateConceptSetArgument(conceptSet = conceptSet)
 
   countBy[countBy == "record"] <- "records"
