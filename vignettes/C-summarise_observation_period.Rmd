@@ -1,0 +1,225 @@
+---
+title: "Summarise observation period"
+output: 
+  html_document:
+    pandoc_args: [
+      "--number-offset=1,0"
+      ]
+    number_sections: yes
+    toc: yes
+vignette: >
+  %\VignetteIndexEntry{C-summarise_observation_period}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Introduction
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+In this vignette, we will explore the *OmopSketch* functions designed to provide an overview of the `observation_period` table. Specifically, there are five key functions that facilitate this:
+
+-   `summariseObservationPeriod()`, `plotObservationPeriod()` and `tableObservationPeriod()`: Use them to get some overall statistics describing the `observation_period` table
+-   `summariseInObservation()` and `plotInObservation()`: Use them to summarise the number of individuals in observation during specific intervals of time.
+
+## Create a mock cdm
+
+Let's see an example of its functionalities. To start with, we will load essential packages and create a mock cdm using the mockOmopSketch() database.
+
+```{r, warning=FALSE}
+library(dplyr)
+library(OmopSketch)
+
+# Connect to mock database
+cdm <- mockOmopSketch()
+```
+
+# Summarise observation periods
+
+Let's now use the `summariseObservationPeriod()` function from the OmopSketch package to help us have an overview of one of the `observation_period` table, including some statistics such as the `Number uf subjects` and `Duration in days` for each observation period (e.g., 1st, 2nd)
+
+```{r, warning=FALSE}
+summarisedResult <- summariseObservationPeriod(cdm$observation_period)
+
+summarisedResult 
+```
+
+Notice that the output is in the summarised result format.
+
+We can use the arguments to specify which statistics we want to perform. For example, use the argument `estimates` to indicate which estimates you are interested regarding the `Duration in days` of the observation period.
+
+```{r, warning=FALSE}
+summarisedResult <- summariseObservationPeriod(cdm$observation_period,
+                                               estimates =  c("mean", "sd", "q05", "q95"))
+
+summarisedResult |> 
+  filter(variable_name == "Duration in days") |>
+  select(group_level, variable_name, estimate_name, estimate_value)
+```
+
+Additionally, you can stratify the results by sex and age groups, and specify a date range of interest:
+
+```{r, warning=FALSE}
+summarisedResult <- summariseObservationPeriod(cdm$observation_period,
+                                               estimates =  c("mean", "sd", "q05", "q95"),
+                                               sex = TRUE,
+                                               ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf)), 
+                                               dateRange = as.Date(c("1970-01-01", "2010-01-01")))
+
+summarisedResult |> 
+  select(group_level, variable_name, strata_level, estimate_name, estimate_value) |> 
+  glimpse()
+```
+
+Notice that, by default, the "overall" group will be also included, as well as crossed strata (that means, sex == "Female" and ageGroup == "\>35").
+
+## Tidy the summarised object
+
+`tableObservationPeriod()` will help you to create a table (see supported types with: visOmopResults::tableType()). By default it creates a [gt] (<https://gt.rstudio.com/>) table.
+
+```{r, warning=FALSE}
+summarisedResult <- summarisedResult <- summariseObservationPeriod(cdm$observation_period,
+                                               estimates =  c("mean", "sd", "q05", "q95"), 
+                                               sex = TRUE)
+
+summarisedResult |> 
+  tableObservationPeriod()
+```
+
+## Visualise the results
+
+Finally, we can visualise the concept counts using `plotObservationPeriod()`.
+
+```{r, warning=FALSE}
+summarisedResult <- summariseObservationPeriod(cdm$observation_period)  
+
+plotObservationPeriod(summarisedResult, 
+                      variableName = "Number subjects",
+                      plotType = "barplot")
+
+```
+
+Note that either `Number subjects` or `Duration in days` can be plotted. For `Number of subjects`, the plot type can be `barplot`, whereas for `Duration in days`, the plot type can be `barplot`, `boxplot`, or `densityplot`."
+
+```{r, warning=FALSE}
+summarisedResult <- summariseObservationPeriod(cdm$observation_period) 
+
+plotObservationPeriod(summarisedResult,
+                      variableName = "Duration in days",
+                      plotType = "densityplot", 
+                      facet = "observation_period_ordinal")
+```
+
+Additionally, if results were stratified by sex or age group, we can further use `facet` or `colour` arguments to highlight the different results in the plot. To help us identify by which variables we can colour or facet by, we can use [visOmopResult](https://darwin-eu.github.io/visOmopResults/) package.
+
+```{r, warning=FALSE}
+summarisedResult <- summariseObservationPeriod(cdm$observation_period,
+                           sex = TRUE)  
+plotObservationPeriod(summarisedResult,
+                      variableName = "Duration in days",
+                      plotType = "boxplot",
+                      facet = "sex")
+
+summarisedResult <- summariseObservationPeriod(cdm$observation_period,
+                           sex = TRUE,
+                           ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf))) 
+plotObservationPeriod(summarisedResult,
+                      colour = "sex", 
+                      facet = "age_group")
+
+
+```
+
+# Summarise in observation
+
+OmopSketch can also help you to summarise the number of individuals in observation during specific intervals of time.
+
+```{r, warning=FALSE}
+summarisedResult <- summariseInObservation(cdm$observation_period, 
+                                           interval = "years")                                        
+
+summarisedResult |>
+  select(variable_name, estimate_name, estimate_value, additional_name, additional_level)
+```
+
+Note that you can adjust the time interval period using the `interval` argument, which can be set to either "years", "quarters", "months" or "overall" (default value).
+
+```{r, warning=FALSE}
+summarisedResult <- summariseInObservation(cdm$observation_period, 
+                                           interval = "months")                                        
+
+summarisedResult |>
+  select(variable_name, estimate_name, estimate_value, additional_name, additional_level)
+```
+
+Along with the number of records in observation, you can also calculate the number of person-days by setting the `output` argument to c("records", "person-days").
+
+```{r, warning=FALSE}
+summarisedResult <- summariseInObservation(cdm$observation_period, 
+                                           output = c("records", "person-days"))                                        
+
+summarisedResult |>
+  select(variable_name, estimate_name, estimate_value, additional_name, additional_level)
+```
+
+We can further stratify our counts by sex (setting argument `sex = TRUE`) or by age (providing an age group). Notice that in both cases, the function will automatically create a group called *overall* with all the sex groups and all the age groups. We can also define a date range of interest to filter the `observation_period` table accordingly.
+
+```{r, warning=FALSE}
+summarisedResult <- summariseInObservation(cdm$observation_period, 
+                                           output = c("records", "person-days"),
+                                           interval = "quarters",
+                                           sex = TRUE, 
+                                           ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf)), 
+                                           dateRange = as.Date(c("1970-01-01", "2010-01-01")))                                        
+
+summarisedResult |>
+  select(strata_level, variable_name, estimate_name, estimate_value, additional_name, additional_level)
+```
+
+## Visualise the results
+
+Finally, we can visualise the concept counts using `plotInObservation()`.
+
+```{r, warning=FALSE}
+summarisedResult <- summariseInObservation(cdm$observation_period, 
+                       interval = "years")  
+plotInObservation(summarisedResult)
+
+```
+
+Notice that either `Number records in observation` and `Number person-days` can be plotted. If both have been included in the summarised result, you will have to filter to only include one variable at time:
+
+```{r, warning=FALSE}
+summarisedResult <- summariseInObservation(cdm$observation_period, 
+                       interval = "years",
+                       output = c("records", "person-days")) 
+plotInObservation(summarisedResult |> 
+  filter(variable_name == "Number person-days"))
+  
+```
+
+Additionally, if results were stratified by sex or age group, we can further use `facet` or `colour` arguments to highlight the different results in the plot. To help us identify by which variables we can colour or facet by, we can use [visOmopResult](https://darwin-eu.github.io/visOmopResults/) package.
+
+```{r, warning=FALSE}
+
+summarisedResult <- summariseInObservation(cdm$observation_period,
+                       interval = "years",
+                       sex = TRUE,
+                       ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf))) 
+plotInObservation(summarisedResult,
+                  colour = "sex", 
+                  facet = "age_group")
+
+
+```
+
+Finally, disconnect from the cdm
+
+```{r, warning=FALSE}
+  PatientProfiles::mockDisconnect(cdm = cdm)
+```
