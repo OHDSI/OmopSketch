@@ -70,6 +70,10 @@ summariseRecordCount <- function(cdm,
     # prefix for temp tables
     prefix <- omopgenerics::tmpPrefix()
 
+    # sample table
+    omopTable <- omopTable |>
+      sampleOmopTable(sample = sample, name = omopgenerics::uniqueTableName(prefix))
+
     startDate <- omopgenerics::omopColumns(table = table, field = "start_date")
 
     # Incidence counts

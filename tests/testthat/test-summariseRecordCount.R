@@ -317,6 +317,10 @@ test_that("sample argument works", {
     dplyr::pull(n)
   expect_no_error(z<-summariseRecordCount(cdm,"drug_exposure",sample = n))
   expect_equal(y,z)
+  expect_equal(summariseRecordCount(cdm,"drug_exposure", sample = 1) |>
+                 dplyr::filter(.data$variable_name == "Number records") |>
+                 dplyr::pull(.data$estimate_value) |>
+                 as.integer(), 1L)
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
 

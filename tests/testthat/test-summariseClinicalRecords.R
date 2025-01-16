@@ -268,20 +268,6 @@ test_that("dateRange argument works", {
 
 })
 
-test_that("sample argument works", {
-  skip_on_cran()
-  # Load mock database ----
-  cdm <- cdmEunomia()
-
-  expect_no_error(x<-summariseClinicalRecords(cdm,"drug_exposure", sample = 50))
-  expect_no_error(y<-summariseClinicalRecords(cdm,"drug_exposure"))
-  n <- cdm$drug_exposure |>
-    dplyr::tally()|>
-    dplyr::pull(n)
-  expect_no_error(z<-summariseClinicalRecords(cdm,"drug_exposure",sample = n))
-  expect_equal(y,z)
-  PatientProfiles::mockDisconnect(cdm = cdm)
-})
 
 test_that("tableClinicalRecords() works", {
   skip_on_cran()
@@ -327,8 +313,7 @@ test_that("no tables created", {
                                        ageGroup = list(c(0,17),
                                                        c(18,65),
                                                        c(66, 100)),
-                                       dateRange = as.Date(c("2012-01-01", "2018-01-01")),
-                                       sample = 100)
+                                       dateRange = as.Date(c("2012-01-01", "2018-01-01")))
 
   endNames <- CDMConnector::listSourceTables(cdm)
 
