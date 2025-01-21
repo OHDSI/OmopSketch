@@ -9,7 +9,7 @@ cdm_reference object."><meta property="og:image" content="https://OHDSI.github.i
 
     <a class="navbar-brand me-2" href="../index.html">OmopSketch</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1.900</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,7 +35,7 @@ cdm_reference object."><meta property="og:image" content="https://OHDSI.github.i
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Summarise a cdm_reference object creating a snapshot with the metadata of the cdm_reference object.</h1>
-      <small class="dont-index">Source: <a href="https://github.com/OHDSI/OmopSketch/blob/0.2.1/R/summariseOmopSnapshot.R" class="external-link"><code>R/summariseOmopSnapshot.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/OHDSI/OmopSketch/blob/main/R/summariseOmopSnapshot.R" class="external-link"><code>R/summariseOmopSnapshot.R</code></a></small>
       <div class="d-none name"><code>summariseOmopSnapshot.Rd</code></div>
     </div>
 
@@ -64,7 +64,8 @@ cdm_reference object.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="mockOmopSketch.html">mockOmopSketch</a></span><span class="op">(</span>numberIndividuals <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="mockOmopSketch.html">mockOmopSketch</a></span><span class="op">(</span>numberIndividuals <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">summariseOmopSnapshot</span><span class="op">(</span><span class="va">cdm</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 13 × 13</span></span>
@@ -86,6 +87,7 @@ cdm_reference object.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 7 more variables: variable_name &lt;chr&gt;, variable_level &lt;chr&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   estimate_name &lt;chr&gt;, estimate_type &lt;chr&gt;, estimate_value &lt;chr&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   additional_name &lt;chr&gt;, additional_level &lt;chr&gt;</span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
