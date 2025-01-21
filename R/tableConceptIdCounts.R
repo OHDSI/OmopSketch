@@ -15,11 +15,11 @@ tableConceptIdCounts <- function(result,
   # subset to result_type of interest
   result <- result |>
     omopgenerics::filterSettings(
-      .data$result_type == "summarise_all_concept_counts")
+      .data$result_type == "summarise_concept_id_counts")
 
   # check if it is empty
   if (nrow(result) == 0) {
-    warnEmpty("summarise_all_concept_counts")
+    warnEmpty("summarise_concept_id_counts")
     return(emptyTable(type))
   }
 
