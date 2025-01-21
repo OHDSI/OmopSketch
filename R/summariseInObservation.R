@@ -208,8 +208,8 @@ countRecords <- function(observationPeriod, cdm, start_date_name, end_date_name,
 
     if(interval != "overall"){
       x <- observationPeriod |>
-        dplyr::mutate("start_date" = as.Date(paste0(clock::get_year(.data[[start_date_name]]),"/",clock::get_month(.data[[start_date_name]]),"/01"))) |>
-        dplyr::mutate("end_date"   = as.Date(paste0(clock::get_year(.data[[end_date_name]]),"/",clock::get_month(.data[[end_date_name]]),"/01"))) |>
+        dplyr::mutate("start_date" = as.Date(paste0(as.character(as.integer(clock::get_year(.data[[start_date_name]]))),"-",as.character(as.integer(clock::get_month(.data[[start_date_name]]))),"-01"))) |>
+        dplyr::mutate("end_date" = as.Date(paste0(as.character(as.integer(clock::get_year(.data[[end_date_name]]))),"-",as.character(as.integer(clock::get_month(.data[[end_date_name]]))),"-01"))) |>
         dplyr::group_by(.data$start_date, .data$end_date, .data$age_group, .data$sex) |>
         dplyr::summarise(estimate_value = dplyr::n(), .groups = "drop") |>
         dplyr::compute(temporary = FALSE, name = tablePrefix)
@@ -371,7 +371,7 @@ getOmopTableStartDate <- function(omopTable, date){
   omopTable |>
     dplyr::summarise("start_date" = min(.data[[date]], na.rm = TRUE)) |>
     dplyr::collect() |>
-    dplyr::mutate("start_date" = as.Date(paste0(clock::get_year(.data$start_date),"-01-01"))) |>
+    dplyr::mutate("start_date" = as.Date(paste0(as.character(as.integer(clock::get_year(.data$start_date))),"-01-01"))) |>
     dplyr::pull("start_date")
 }
 
@@ -379,6 +379,6 @@ getOmopTableEndDate   <- function(omopTable, date){
   omopTable |>
     dplyr::summarise("end_date" = max(.data[[date]], na.rm = TRUE)) |>
     dplyr::collect() |>
-    dplyr::mutate("end_date" = as.Date(paste0(clock::get_year(.data$end_date),"-12-31"))) |>
+    dplyr::mutate("end_date" = as.Date(paste0(as.character(as.integer(clock::get_year(.data$end_date))),"-12-31"))) |>
     dplyr::pull("end_date")
 }
