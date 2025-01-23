@@ -177,10 +177,8 @@ restrictStudyPeriod <- function(omopTable, dateRange) {
 
     omopTable <- omopTable |>
       dplyr::filter(
-        (.data[[start_date_table]]>= .env$start_date & .data[[start_date_table]] <= .env$end_date) &
-          (.data[[end_date_table]] >= .env$start_date & .data[[end_date_table]] <= .env$end_date)
-      )
-    # maybe the end date check is not needed
+        (.data[[start_date_table]]>= .env$start_date & .data[[start_date_table]] <= .env$end_date)
+        )
   }
 
   warningEmptyStudyPeriod(omopTable)
