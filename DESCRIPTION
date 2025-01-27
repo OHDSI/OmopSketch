@@ -73,7 +73,7 @@ Imports:
     tibble,
     tidyr
 Depends: 
-    R (>= 2.10)
+    R (>= 4.1.0)
 URL: https://OHDSI.github.io/OmopSketch/
 BugReports: https://github.com/OHDSI/OmopSketch/issues
 VignetteBuilder: knitr
