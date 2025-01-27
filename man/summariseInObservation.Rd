@@ -29,8 +29,9 @@ number of person-days ("person-days"), or both c("records","person-days").}
 \item{sex}{Boolean variable. Whether to stratify by sex (TRUE) or not
 (FALSE).}
 
-\item{dateRange}{A list containing the minimum and the maximum dates
-defining the time range within which the analysis is performed.}
+\item{dateRange}{A vector of two dates defining the desired study period.
+Only the \code{start_date} column of the OMOP table is checked to ensure it falls within this range.
+If \code{dateRange} is \code{NULL}, no restriction is applied.}
 }
 \value{
 A summarised_result object.

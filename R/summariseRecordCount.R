@@ -7,8 +7,7 @@
 #' @param interval Time interval to stratify by. It can either be "years", "quarters", "months" or "overall".
 #' @param ageGroup A list of age groups to stratify results by.
 #' @param sex Whether to stratify by sex (TRUE) or not (FALSE).
-#' @param dateRange A list containing the minimum and the maximum dates
-#' defining the time range within which the analysis is performed.
+#' @inheritParams dateRange-startDate
 #' @param sample An integer to sample the tables to only that number of records.
 #' If NULL no sample is done.
 #' @return A summarised_result object.
