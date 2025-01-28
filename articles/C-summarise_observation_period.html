@@ -818,28 +818,20 @@ creates a [gt] (<a href="https://gt.rstudio.com/" class="external-link uri">http
 <code>barplot</code>, whereas for <code>Duration in days</code>, the
 plot type can be <code>barplot</code>, <code>boxplot</code>, or
 <code>densityplot</code>.”</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseObservationPeriod.html">summariseObservationPeriod</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span><span class="op">)</span> </span>
-<span></span>
-<span><span class="fu"><a href="../reference/plotObservationPeriod.html">plotObservationPeriod</a></span><span class="op">(</span><span class="va">summarisedResult</span>,</span>
-<span>                      variableName <span class="op">=</span> <span class="st">"Duration in days"</span>,</span>
-<span>                      plotType <span class="op">=</span> <span class="st">"densityplot"</span>, </span>
-<span>                      facet <span class="op">=</span> <span class="st">"observation_period_ordinal"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="C-summarise_observation_period_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 <p>Additionally, if results were stratified by sex or age group, we can
 further use <code>facet</code> or <code>colour</code> arguments to
 highlight the different results in the plot. To help us identify by
 which variables we can colour or facet by, we can use <a href="https://darwin-eu.github.io/visOmopResults/" class="external-link">visOmopResult</a>
 package.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseObservationPeriod.html">summariseObservationPeriod</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>,</span>
 <span>                           sex <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>  </span>
 <span><span class="fu"><a href="../reference/plotObservationPeriod.html">plotObservationPeriod</a></span><span class="op">(</span><span class="va">summarisedResult</span>,</span>
 <span>                      variableName <span class="op">=</span> <span class="st">"Duration in days"</span>,</span>
 <span>                      plotType <span class="op">=</span> <span class="st">"boxplot"</span>,</span>
 <span>                      facet <span class="op">=</span> <span class="st">"sex"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="C-summarise_observation_period_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<p><img src="C-summarise_observation_period_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseObservationPeriod.html">summariseObservationPeriod</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>,</span>
 <span>                           sex <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -847,7 +839,7 @@ package.</p>
 <span><span class="fu"><a href="../reference/plotObservationPeriod.html">plotObservationPeriod</a></span><span class="op">(</span><span class="va">summarisedResult</span>,</span>
 <span>                      colour <span class="op">=</span> <span class="st">"sex"</span>, </span>
 <span>                      facet <span class="op">=</span> <span class="st">"age_group"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="C-summarise_observation_period_files/figure-html/unnamed-chunk-9-2.png" width="700"></p>
+<p><img src="C-summarise_observation_period_files/figure-html/unnamed-chunk-8-2.png" width="700"></p>
 </div>
 </div>
 <div class="section level2">
@@ -855,7 +847,7 @@ package.</p>
 </h2>
 <p>OmopSketch can also help you to summarise the number of individuals
 in observation during specific intervals of time.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseInObservation.html">summariseInObservation</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>, </span>
 <span>                                           interval <span class="op">=</span> <span class="st">"years"</span><span class="op">)</span>                                        </span>
 <span></span>
@@ -878,7 +870,7 @@ in observation during specific intervals of time.</p>
 <p>Note that you can adjust the time interval period using the
 <code>interval</code> argument, which can be set to either “years”,
 “quarters”, “months” or “overall” (default value).</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseInObservation.html">summariseInObservation</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>, </span>
 <span>                                           interval <span class="op">=</span> <span class="st">"months"</span><span class="op">)</span>                                        </span>
 <span></span>
@@ -901,7 +893,7 @@ in observation during specific intervals of time.</p>
 <p>Along with the number of records in observation, you can also
 calculate the number of person-days by setting the <code>output</code>
 argument to c(“records”, “person-days”).</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseInObservation.html">summariseInObservation</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>, </span>
 <span>                                           output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"records"</span>, <span class="st">"person-days"</span><span class="op">)</span><span class="op">)</span>                                        </span>
 <span></span>
@@ -920,7 +912,7 @@ in both cases, the function will automatically create a group called
 <em>overall</em> with all the sex groups and all the age groups. We can
 also define a date range of interest to filter the
 <code>observation_period</code> table accordingly.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseInObservation.html">summariseInObservation</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>, </span>
 <span>                                           output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"records"</span>, <span class="st">"person-days"</span><span class="op">)</span>,</span>
 <span>                                           interval <span class="op">=</span> <span class="st">"quarters"</span>,</span>
@@ -941,8 +933,8 @@ also define a date range of interest to filter the
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Female         Number person-da… count         155            time_interval  </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Female &amp;&amp;&amp; &lt;35 Number records i… count         2              time_interval  </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Female         Number records i… count         2              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Male &amp;&amp;&amp; &lt;35   Number person-da… count         27             time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Female &amp;&amp;&amp; &lt;35 Number person-da… count         182            time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Female &amp;&amp;&amp; &lt;35 Number person-da… count         182            time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Female         Number person-da… count         182            time_interval  </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2,070 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: additional_level &lt;chr&gt;</span></span></span></code></pre></div>
 <div class="section level3">
@@ -950,45 +942,37 @@ also define a date range of interest to filter the
 </h3>
 <p>Finally, we can visualise the concept counts using
 <code><a href="../reference/plotInObservation.html">plotInObservation()</a></code>.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseInObservation.html">summariseInObservation</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>, </span>
 <span>                       interval <span class="op">=</span> <span class="st">"years"</span><span class="op">)</span>  </span>
 <span><span class="fu"><a href="../reference/plotInObservation.html">plotInObservation</a></span><span class="op">(</span><span class="va">summarisedResult</span><span class="op">)</span></span>
 <span><span class="co">#&gt; `result_id` is not present in <span style="color: #0000BB;">result</span>.</span></span>
 <span><span class="co">#&gt; `result_id` is not present in <span style="color: #0000BB;">result</span>.</span></span></code></pre></div>
-<p><img src="C-summarise_observation_period_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
+<p><img src="C-summarise_observation_period_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
 <p>Notice that either <code>Number records in observation</code> and
 <code>Number person-days</code> can be plotted. If both have been
 included in the summarised result, you will have to filter to only
-include one variable at time:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseInObservation.html">summariseInObservation</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>, </span>
-<span>                       interval <span class="op">=</span> <span class="st">"years"</span>,</span>
-<span>                       output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"records"</span>, <span class="st">"person-days"</span><span class="op">)</span><span class="op">)</span> </span>
-<span><span class="fu"><a href="../reference/plotInObservation.html">plotInObservation</a></span><span class="op">(</span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">variable_name</span> <span class="op">==</span> <span class="st">"Number person-days"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; `result_id` is not present in <span style="color: #0000BB;">result</span>.</span></span>
-<span><span class="co">#&gt; `result_id` is not present in <span style="color: #0000BB;">result</span>.</span></span></code></pre></div>
-<p><img src="C-summarise_observation_period_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
+include one variable at time.</p>
 <p>Additionally, if results were stratified by sex or age group, we can
 further use <code>facet</code> or <code>colour</code> arguments to
 highlight the different results in the plot. To help us identify by
 which variables we can colour or facet by, we can use <a href="https://darwin-eu.github.io/visOmopResults/" class="external-link">visOmopResult</a>
 package.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseInObservation.html">summariseInObservation</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>,</span>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseInObservation.html">summariseInObservation</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>, </span>
 <span>                       interval <span class="op">=</span> <span class="st">"years"</span>,</span>
+<span>                       output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"records"</span>, <span class="st">"person-days"</span><span class="op">)</span>,</span>
 <span>                       sex <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                       ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">34</span><span class="op">)</span>, <span class="st">"&gt;=35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> </span>
-<span><span class="fu"><a href="../reference/plotInObservation.html">plotInObservation</a></span><span class="op">(</span><span class="va">summarisedResult</span>,</span>
-<span>                  colour <span class="op">=</span> <span class="st">"sex"</span>, </span>
-<span>                  facet <span class="op">=</span> <span class="st">"age_group"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/plotInObservation.html">plotInObservation</a></span><span class="op">(</span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">variable_name</span> <span class="op">==</span> <span class="st">"Number person-days"</span><span class="op">)</span>,</span>
+<span>  colour <span class="op">=</span> <span class="st">"sex"</span>, </span>
+<span>  facet <span class="op">=</span> <span class="st">"age_group"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; `result_id` is not present in <span style="color: #0000BB;">result</span>.</span></span>
 <span><span class="co">#&gt; `result_id` is not present in <span style="color: #0000BB;">result</span>.</span></span></code></pre></div>
-<p><img src="C-summarise_observation_period_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
+<p><img src="C-summarise_observation_period_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
 <p>Finally, disconnect from the cdm</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="fu">PatientProfiles</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/PatientProfiles/reference/mockDisconnect.html" class="external-link">mockDisconnect</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
