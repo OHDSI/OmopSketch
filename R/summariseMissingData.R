@@ -11,8 +11,7 @@
 #' thus summarised by age groups.
 #' @param sample An integer to sample the table to only that number of records.
 #' If NULL no sample is done.
-#' @param dateRange A list containing the minimum and the maximum dates
-#' defining the time range within which the analysis is performed.
+#' @inheritParams dateRange-startDate
 #'
 #' @return A summarised_result object with results overall and, if specified, by
 #' strata.

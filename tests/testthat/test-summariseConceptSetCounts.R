@@ -562,18 +562,18 @@ test_that("dateRange argument works", {
 test_that("interval argument works", {
   skip_on_cran()
   # Load mock database ----
-  cdm <- mockOmopSketch()
-  expect_no_error(y<-summariseConceptSetCounts(list(ANTIHISTAMINES= c(21603444)),
+  cdm <- cdmEunomia()
+  expect_no_error(y<-summariseConceptSetCounts(list("polio" = c(40213160)),
                          cdm = cdm,
                          interval = "years"))
 
-  expect_no_error(o<-summariseConceptSetCounts(list(ANTIHISTAMINES= c(21603444)),
+  expect_no_error(o<-summariseConceptSetCounts(list("polio" = c(40213160)),
                                             cdm = cdm,
                                             interval = "overall"))
-  expect_no_error(q<-summariseConceptSetCounts(list(ANTIHISTAMINES= c(21603444)),
+  expect_no_error(q<-summariseConceptSetCounts(list("polio" = c(40213160)),
                                             cdm = cdm,
                                             interval = "quarters"))
-  expect_no_error(m<-summariseConceptSetCounts(list(ANTIHISTAMINES= c(21603444)),
+  expect_no_error(m<-summariseConceptSetCounts(list("polio" = c(40213160)),
                                             cdm = cdm,
                                             interval = "months"))
 
@@ -581,7 +581,7 @@ test_that("interval argument works", {
 
   m_quarters <- m|>omopgenerics::splitAdditional()|>
     omopgenerics::pivotEstimates() |>
-    dplyr::filter(time_interval != "overall" & variable_name == "Number records" & standard_concept_id == 21603444) |>
+    dplyr::filter(time_interval != "overall" & variable_name == "Number records" & standard_concept_id == 40213160) |>
     dplyr::mutate(
       start_date = as.Date(sub(" to .*", "", time_interval)),
       quarter_start = lubridate::quarter(start_date, type = "date_first"),
@@ -596,7 +596,7 @@ test_that("interval argument works", {
 
   q_quarters <- q|>omopgenerics::splitAdditional()|>
    omopgenerics::pivotEstimates()|>
-   dplyr::filter(time_interval != "overall" & variable_name == "Number records"& standard_concept_id == 21603444)|>
+   dplyr::filter(time_interval != "overall" & variable_name == "Number records"& standard_concept_id == 40213160)|>
    dplyr::select(time_interval, count)|>
    dplyr::arrange(time_interval)
 
@@ -604,7 +604,7 @@ test_that("interval argument works", {
 
   m_year <- m|>
    omopgenerics::splitAdditional()|>
-   dplyr::filter(time_interval != "overall" & variable_name == "Number records" & standard_concept_id == 21603444)|>
+   dplyr::filter(time_interval != "overall" & variable_name == "Number records" & standard_concept_id == 40213160)|>
    dplyr::mutate(
      # Extract the start date
      start_date = clock::date_parse(stringr::str_extract(time_interval, "^\\d{4}-\\d{2}-\\d{2}")),
@@ -620,7 +620,7 @@ test_that("interval argument works", {
    dplyr::arrange(year)
   y_year <- y|>
    omopgenerics::splitAdditional()|>
-   dplyr::filter(time_interval != "overall" & variable_name == "Number records" & standard_concept_id == 21603444)|>
+   dplyr::filter(time_interval != "overall" & variable_name == "Number records" & standard_concept_id == 40213160)|>
    dplyr::mutate(
      # Extract the start date
      start_date = clock::date_parse(stringr::str_extract(time_interval, "^\\d{4}-\\d{2}-\\d{2}")),
@@ -633,7 +633,7 @@ test_that("interval argument works", {
 
   expect_equal(m_year, y_year)
   o <- o |> omopgenerics::splitAdditional()|>
-   dplyr::filter(variable_name == "Number records" & standard_concept_id == 21603444)|>
+   dplyr::filter(variable_name == "Number records" & standard_concept_id == 40213160)|>
    omopgenerics::pivotEstimates()|>
    dplyr::select(count)
 
@@ -642,7 +642,7 @@ test_that("interval argument works", {
 
   q_year <- q|>
    omopgenerics::splitAdditional()|>
-   dplyr::filter(time_interval != "overall" & variable_name == "Number records" & standard_concept_id == 21603444)|>
+   dplyr::filter(time_interval != "overall" & variable_name == "Number records" & standard_concept_id == 40213160)|>
    dplyr::mutate(
      # Extract the start date
      start_date = clock::date_parse(stringr::str_extract(time_interval, "^\\d{4}-\\d{2}-\\d{2}")),

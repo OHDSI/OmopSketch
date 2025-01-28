@@ -8,8 +8,7 @@
 #' @param ageGroup A list of age groups to stratify results by.
 #' @param sex Boolean variable. Whether to stratify by sex (TRUE) or not
 #' (FALSE).
-#' @param dateRange A list containing the minimum and the maximum dates
-#' defining the time range within which the analysis is performed.
+#' @inheritParams dateRange-startDate
 #'
 #' @return A summarised_result object with the summarised data.
 #'
