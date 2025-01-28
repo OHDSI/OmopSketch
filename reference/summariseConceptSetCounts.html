@@ -90,8 +90,9 @@ thus summarised by age groups.</p></dd>
 
 
 <dt id="arg-daterange">dateRange<a class="anchor" aria-label="anchor" href="#arg-daterange"></a></dt>
-<dd><p>A list containing the minimum and the maximum dates
-defining the time range within which the analysis is performed.</p></dd>
+<dd><p>A vector of two dates defining the desired study period.
+Only the <code>start_date</code> column of the OMOP table is checked to ensure it falls within this range.
+If <code>dateRange</code> is <code>NULL</code>, no restriction is applied.</p></dd>
 
 </dl></div>
     <div class="section level2">
