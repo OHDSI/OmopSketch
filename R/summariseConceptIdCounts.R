@@ -100,10 +100,8 @@ summariseConceptIdCounts <- function(cdm,
       ) |>
       # summarise results
       summariseCountsInternal(stratax, counts) |>
-      dplyr::mutate(omop_table = .env$table,
-                    estimate_name = dplyr::if_else(.data$estimate_name == "count_records", "Number records",
-                                                   dplyr::if_else(.data$estimate_name == "count_subjects", "Number subjects", .data$estimate_name)
-                    ))
+       dplyr::mutate(omop_table = .env$table)
+
 
     omopgenerics::dropSourceTable(cdm = cdm, name = dplyr::starts_with(prefix))
 
