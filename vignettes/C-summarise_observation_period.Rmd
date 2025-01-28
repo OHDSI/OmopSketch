@@ -106,15 +106,6 @@ plotObservationPeriod(summarisedResult,
 
 Note that either `Number subjects` or `Duration in days` can be plotted. For `Number of subjects`, the plot type can be `barplot`, whereas for `Duration in days`, the plot type can be `barplot`, `boxplot`, or `densityplot`."
 
-```{r, warning=FALSE}
-summarisedResult <- summariseObservationPeriod(cdm$observation_period) 
-
-plotObservationPeriod(summarisedResult,
-                      variableName = "Duration in days",
-                      plotType = "densityplot", 
-                      facet = "observation_period_ordinal")
-```
-
 Additionally, if results were stratified by sex or age group, we can further use `facet` or `colour` arguments to highlight the different results in the plot. To help us identify by which variables we can colour or facet by, we can use [visOmopResult](https://darwin-eu.github.io/visOmopResults/) package.
 
 ```{r, warning=FALSE}
@@ -192,31 +183,23 @@ plotInObservation(summarisedResult)
 
 ```
 
-Notice that either `Number records in observation` and `Number person-days` can be plotted. If both have been included in the summarised result, you will have to filter to only include one variable at time:
-
-```{r, warning=FALSE}
-summarisedResult <- summariseInObservation(cdm$observation_period, 
-                       interval = "years",
-                       output = c("records", "person-days")) 
-plotInObservation(summarisedResult |> 
-  filter(variable_name == "Number person-days"))
-  
-```
+Notice that either `Number records in observation` and `Number person-days` can be plotted. If both have been included in the summarised result, you will have to filter to only include one variable at time.
 
 Additionally, if results were stratified by sex or age group, we can further use `facet` or `colour` arguments to highlight the different results in the plot. To help us identify by which variables we can colour or facet by, we can use [visOmopResult](https://darwin-eu.github.io/visOmopResults/) package.
 
 ```{r, warning=FALSE}
-
-summarisedResult <- summariseInObservation(cdm$observation_period,
+summarisedResult <- summariseInObservation(cdm$observation_period, 
                        interval = "years",
+                       output = c("records", "person-days"),
                        sex = TRUE,
                        ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf))) 
-plotInObservation(summarisedResult,
-                  colour = "sex", 
-                  facet = "age_group")
-
-
+plotInObservation(summarisedResult |> 
+  filter(variable_name == "Number person-days"),
+  colour = "sex", 
+  facet = "age_group")
+  
 ```
+
 
 Finally, disconnect from the cdm
 
