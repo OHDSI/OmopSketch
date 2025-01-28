@@ -18,6 +18,7 @@ A gt or flextable object with the summarised data.
 Create a visual table from a summarise_omop_snapshot result.
 }
 \examples{
+\donttest{
 cdm <- mockOmopSketch(numberIndividuals = 10)
 
 result <- summariseOmopSnapshot(cdm)
@@ -26,4 +27,5 @@ result |>
   tableOmopSnapshot()
 
 PatientProfiles::mockDisconnect(cdm)
+}
 }
