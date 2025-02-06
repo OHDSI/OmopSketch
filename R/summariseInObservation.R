@@ -235,6 +235,7 @@ countRecords <- function(observationPeriod, cdm, start_date_name, end_date_name,
   }
 
   x <- personDays |>
+    dplyr::mutate(estimate_value = as.integer(.data$estimate_value)) |>
     rbind(records) |>
     omopgenerics::uniteAdditional(additional_column)|>
     dplyr::arrange(dplyr::across(dplyr::any_of("additional_level")))
