@@ -31,7 +31,7 @@ tableClinicalRecords <- function(result,
   # initial checks
   rlang::check_installed("visOmopResults")
   omopgenerics::validateResultArgument(result)
-  omopgenerics::assertChoice(type, choicesTables())
+  omopgenerics::assertChoice(type, visOmopResults::tableType())
 
   # subset to result_type of interest
   result <- result |>

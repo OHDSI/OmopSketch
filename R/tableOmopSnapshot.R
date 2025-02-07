@@ -20,7 +20,7 @@ tableOmopSnapshot <- function(result,
   # initial checks
   rlang::check_installed("visOmopResults")
   omopgenerics::validateResultArgument(result)
-  omopgenerics::assertChoice(type, choicesTables())
+  omopgenerics::assertChoice(type, visOmopResults::tableType())
 
   # subset to result_type of interest
   result <- result |>
@@ -64,9 +64,7 @@ emptyTable <- function(type) {
     "flextable" = flextable::flextable(x)
   )
 }
-choicesTables <- function() {
-  c("tibble", "flextable", "gt")
-}
+
 formatColumn <- function(result, col) {
   for (x in col) {
     result <- result |>
