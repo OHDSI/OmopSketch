@@ -6,7 +6,8 @@
 #' @param col A character vector of column names to check for missing values.
 #' If `NULL`, all columns in the specified tables are checked. Default is `NULL`.
 #' @param sex TRUE or FALSE. If TRUE code use will be summarised by sex.
-#' @param year TRUE or FALSE. If TRUE code use will be summarised by year.
+#' @param year deprecated
+#' @param interval Time interval to stratify by. It can either be "years", "quarters", "months" or "overall".
 #' @param ageGroup A list of ageGroup vectors of length two. Code use will be
 #' thus summarised by age groups.
 #' @param sample An integer to sample the table to only that number of records.
@@ -21,14 +22,31 @@ summariseMissingData <- function(cdm,
                                  col = NULL,
                                  sex = FALSE,
                                  year = FALSE,
+                                 interval = "overall",
                                  ageGroup = NULL,
                                  sample = 1000000,
                                  dateRange = NULL) {
+  if (lifecycle::is_present(year)) {
+
+    lifecycle::deprecate_warn("0.2.3", "summariseMissingData(year)", "summariseMissingData(interval = 'years')")
+
+    if (year & interval == "overall") {
+
+      interval = "years"
+      cli::cli("interval argument set to 'years'")
+
+    } else if (year & interval != "overall" ){
+
+      cli::cli("year argument will be ignored")
+    }
+  }
+
   # initial checks
   cdm <- omopgenerics::validateCdmArgument(cdm)
   omopgenerics::assertCharacter(col, null = TRUE)
   omopgenerics::assertLogical(sex, length = 1)
-  omopgenerics::assertLogical(year, length = 1)
+  # should i still check the year argument
+  omopgenerics::assertChoice(interval, c("overall", "years", "quarters", "months"), length = 1)
   omopgenerics::assertChoice(omopTableName, choices = omopgenerics::omopTables(), unique = TRUE)
   omopgenerics::assertNumeric(sample, null = TRUE, integerish = TRUE, length = 1, min = 1)
   dateRange <- validateStudyPeriod(cdm, dateRange)
@@ -36,7 +54,7 @@ summariseMissingData <- function(cdm,
 
   strata <- c(
     list(character()),
-    omopgenerics::combineStrata(c(strataCols(sex = sex, ageGroup = ageGroup), "year"[year]))
+    omopgenerics::combineStrata(c(strataCols(sex = sex, ageGroup = ageGroup,  interval = interval)))
   )
 
   result <- purrr::map(omopTableName, function(table) {
@@ -70,8 +88,8 @@ summariseMissingData <- function(cdm,
         indexDate = omopgenerics::omopColumns(table, "start_date"),
         sex = sex,
         ageGroup = ageGroup,
-        interval = dplyr::if_else(year, "years", "overall"),
-        intervalName = "year",
+        interval = interval,
+        intervalName = "interval",
         name = omopgenerics::uniqueTableName(prefix)
       ) |>
       # summarise missing data
@@ -111,8 +129,9 @@ summariseMissingData <- function(cdm,
       cdm_name = omopgenerics::cdmName(cdm),
     ) |>
     omopgenerics::uniteGroup(cols = "omop_table") |>
-    omopgenerics::uniteStrata(cols = unique(unlist(strata))) |>
-    omopgenerics::uniteAdditional() |>
+    omopgenerics::uniteStrata(cols = c(names(ageGroup), "sex"[sex], character())) |>
+    addTimeInterval() |>
+    omopgenerics::uniteAdditional(cols = "time_interval") |>
     dplyr::mutate(variable_level = NA_character_) |>
     dplyr::rename(variable_name = "column_name") |>
     omopgenerics::newSummarisedResult(settings = createSettings(

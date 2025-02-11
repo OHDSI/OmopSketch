@@ -11,7 +11,7 @@ test_that("summariseMissingData() works", {
   expect_no_error(summariseMissingData(cdm, "condition_occurrence"))
   expect_no_error(summariseMissingData(cdm, "drug_exposure"))
 
-  expect_no_error(summariseMissingData(cdm, "procedure_occurrence", year = TRUE))
+  expect_no_error(summariseMissingData(cdm, "procedure_occurrence", interval = "years"))
   expect_warning(summariseMissingData(cdm, "device_exposure"))
   expect_no_error(z<-summariseMissingData(cdm, "measurement"))
   expect_no_error(s<-summariseMissingData(cdm, "observation"))
@@ -140,7 +140,7 @@ test_that("no tables created", {
 
   results <- summariseMissingData(cdm = cdm,
                                        omopTableName = c("drug_exposure", "condition_occurrence"),
-                                       year=TRUE,
+                                       interval = "years",
                                        sex = TRUE,
                                        ageGroup = list(c(0,17),
                                                        c(18,65),
@@ -156,3 +156,105 @@ test_that("no tables created", {
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
 
+test_that("interval argument works", {
+  skip_on_cran()
+  # Load mock database ----
+  cdm <- cdmEunomia()
+  expect_no_error(y<-summariseMissingData(cdm = cdm,
+                                              omopTableName = "drug_exposure",
+                                              interval = "years"))
+
+  expect_no_error(o<-summariseMissingData(omopTableName = "drug_exposure",
+                                              cdm = cdm,
+                                              interval = "overall"))
+  expect_no_error(q<-summariseMissingData(omopTableName = "drug_exposure",
+                                              cdm = cdm,
+                                              interval = "quarters"))
+  expect_no_error(m<-summariseMissingData(omopTableName = "drug_exposure",
+                                              cdm = cdm,
+                                              interval = "months"))
+
+
+
+  m_quarters <- m|>omopgenerics::splitAdditional()|>
+    omopgenerics::pivotEstimates() |>
+    dplyr::filter(time_interval != "overall") |>
+    dplyr::mutate(
+      start_date = as.Date(sub(" to .*", "", time_interval)),
+      quarter_start = lubridate::quarter(start_date, type = "date_first"),
+      quarter_end = lubridate::quarter(start_date, type = "date_last"),
+      quarter = paste(quarter_start, "to", quarter_end)
+    ) |>
+    dplyr::select(!c("time_interval", "start_date", "quarter_start", "quarter_end")) |>
+    dplyr::group_by(quarter, variable_name)|>
+    dplyr::summarise(na_count = sum(na_count), .groups = "drop") |>
+    dplyr::rename("time_interval" = quarter) |>
+    dplyr::arrange(time_interval)
+
+  q_quarters <- q|>omopgenerics::splitAdditional()|>
+    omopgenerics::pivotEstimates()|>
+    dplyr::filter(time_interval != "overall")|>
+    dplyr::select(time_interval, variable_name, na_count)|>
+    dplyr::arrange(time_interval)
+
+  expect_equal(m_quarters |>
+                 sortTibble(), q_quarters |> sortTibble())
+
+  m_year <- m|>
+    omopgenerics::splitAdditional()|>
+    dplyr::filter(time_interval != "overall")|>
+    dplyr::mutate(
+      # Extract the start date
+      start_date = clock::date_parse(stringr::str_extract(time_interval, "^\\d{4}-\\d{2}-\\d{2}")),
+      # Convert start_date to a year-month-day object and extract the year
+      year = clock::get_year(clock::as_year_month_day(start_date))
+    )|>
+    omopgenerics::pivotEstimates()|>
+    dplyr::group_by(year, variable_name) |>
+    dplyr::summarise(
+      na_count = sum(na_count),
+      .groups = "drop"
+    )|>
+    dplyr::arrange(year)
+  y_year <- y|>
+    omopgenerics::splitAdditional()|>
+    dplyr::filter(time_interval != "overall")|>
+    dplyr::mutate(
+      # Extract the start date
+      start_date = clock::date_parse(stringr::str_extract(time_interval, "^\\d{4}-\\d{2}-\\d{2}")),
+      # Convert start_date to a year-month-day object and extract the year
+      year = clock::get_year(clock::as_year_month_day(start_date))
+    )|>
+    omopgenerics::pivotEstimates()|>
+    dplyr::select(year, variable_name, na_count)|>
+    dplyr::arrange(year)
+
+  expect_equal(m_year |> sortTibble(), y_year |> sortTibble())
+
+  o <- o |> omopgenerics::splitAdditional() |>
+    omopgenerics::pivotEstimates() |>
+    dplyr::select(variable_name, na_count)
+
+  expect_equal(y_year|> dplyr::group_by(variable_name) |> dplyr::summarise(na_count = sum(na_count), .groups = "drop") |> sortTibble(), o |> sortTibble())
+
+
+  q_year <- q|>
+    omopgenerics::splitAdditional()|>
+    dplyr::filter(time_interval != "overall")|>
+    dplyr::mutate(
+      # Extract the start date
+      start_date = clock::date_parse(stringr::str_extract(time_interval, "^\\d{4}-\\d{2}-\\d{2}")),
+      # Convert start_date to a year-month-day object and extract the year
+      year = clock::get_year(clock::as_year_month_day(start_date))
+    )|>
+    omopgenerics::pivotEstimates()|>
+    dplyr::group_by(year, variable_name) |>
+    dplyr::summarise(
+      na_count = sum(na_count),
+      .groups = "drop"
+    )|>
+    dplyr::arrange(year)
+
+  expect_equal(q_year |> sortTibble(), y_year |> sortTibble())
+  PatientProfiles::mockDisconnect(cdm = cdm)
+})
