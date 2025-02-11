@@ -6,7 +6,8 @@
 #' summarise in the cdm object.
 #' @param countBy Either "record" for record-level counts or "person" for
 #' person-level counts
-#' @param year TRUE or FALSE. If TRUE code use will be summarised by year.
+#' @param year deprecated
+#' @param interval Time interval to stratify by. It can either be "years", "quarters", "months" or "overall".
 #' @param sex TRUE or FALSE. If TRUE code use will be summarised by sex.
 #' @param ageGroup A list of ageGroup vectors of length two. Code use will be
 #' thus summarised by age groups.
@@ -35,15 +36,35 @@
 summariseConceptIdCounts <- function(cdm,
                                       omopTableName,
                                       countBy = "record",
-                                      year = FALSE,
+                                      year = lifecycle::deprecated(),
+                                      interval = "overall",
                                       sex = FALSE,
                                       ageGroup = NULL,
                                       sample = NULL,
                                       dateRange = NULL) {
+
+  if (lifecycle::is_present(year)) {
+
+    lifecycle::deprecate_warn("0.2.3", "summariseConceptIdCounts(year)", "summariseConceptIdCounts(interval = 'years')")
+
+    if (year & interval == "overall") {
+
+      interval = "years"
+      cli::cli("interval argument set to 'years'")
+
+      } else if (year & interval != "overall" ){
+
+       cli::cli("year argument will be ignored")
+    }
+  }
+
   # initial checks
   cdm <- omopgenerics::validateCdmArgument(cdm)
   checkCountBy(countBy)
-  omopgenerics::assertLogical(year, length = 1)
+
+  #should i leave the check for year argument?
+
+  omopgenerics::assertChoice(interval, c("overall", "years", "quarters", "months"), length = 1)
   omopgenerics::assertLogical(sex, length = 1)
   omopgenerics::assertChoice(omopTableName, choices = omopgenerics::omopTables(), unique = TRUE)
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup)
@@ -54,10 +75,10 @@ summariseConceptIdCounts <- function(cdm,
   set <- createSettings(result_type = "summarise_concept_id_counts", study_period = dateRange)
 
   # get strata
-  strata <- omopgenerics::combineStrata(c(strataCols(sex = sex, ageGroup = ageGroup), "year"[year]))
+  strata <- omopgenerics::combineStrata(strataCols(sex = sex, ageGroup = ageGroup, interval = interval))
   concepts <- c("concept_id", "concept_name")
   stratax <- c(list(concepts), purrr::map(strata, \(x) c(concepts, x)))
-
+  additional <- "time_interval"
   # how to count
   counts <- c("records", "person_id")[c("record", "person") %in% countBy]
 
@@ -94,8 +115,8 @@ summariseConceptIdCounts <- function(cdm,
         indexDate = omopgenerics::omopColumns(table = table, field = "start_date"),
         sex = sex,
         ageGroup = ageGroup,
-        interval = dplyr::if_else(year, "years", "overall"),
-        intervalName = "year",
+        interval = interval,
+        intervalName = "interval",
         name = omopgenerics::uniqueTableName(prefix)
       ) |>
       # summarise results
@@ -120,8 +141,9 @@ summariseConceptIdCounts <- function(cdm,
       cdm_name = omopgenerics::cdmName(cdm)
     ) |>
     omopgenerics::uniteGroup(cols = "omop_table") |>
-    omopgenerics::uniteStrata(cols = unique(unlist(strata)) %||% character()) |>
-    omopgenerics::uniteAdditional() |>
+    omopgenerics::uniteStrata(cols = c(names(ageGroup), "sex"[sex], character())) |>
+    addTimeInterval() |>
+    omopgenerics::uniteAdditional(cols = additional) |>
     dplyr::mutate(
       estimate_value = as.character(.data$estimate_value),
       estimate_type = "integer",
