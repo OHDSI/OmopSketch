@@ -7,7 +7,7 @@
 #' If `NULL`, all columns in the specified tables are checked. Default is `NULL`.
 #' @param sex TRUE or FALSE. If TRUE code use will be summarised by sex.
 #' @param year deprecated
-#' @param interval Time interval to stratify by. It can either be "years", "quarters", "months" or "overall".
+#' @inheritParams interval
 #' @param ageGroup A list of ageGroup vectors of length two. Code use will be
 #' thus summarised by age groups.
 #' @param sample An integer to sample the table to only that number of records.
@@ -26,22 +26,22 @@ summariseMissingData <- function(cdm,
                                  ageGroup = NULL,
                                  sample = 1000000,
                                  dateRange = NULL) {
+
   if (lifecycle::is_present(year)) {
 
-    lifecycle::deprecate_warn("0.2.3", "summariseMissingData(year)", "summariseMissingData(interval = 'years')")
+    lifecycle::deprecate_warn("0.2.3", "summariseConceptIdCounts(year)", "summariseConceptIdCounts(interval = 'years')")
 
-    if (year & interval == "overall") {
+    if (isTRUE(year) & missing(interval)) {
 
       interval = "years"
-      cli::cli("interval argument set to 'years'")
+      cli::cli_inform("interval argument set to 'years'")
 
-    } else if (year & interval != "overall" ){
+    } else if (isTRUE(year) & !missing(interval)){
 
-      cli::cli("year argument will be ignored")
+      cli::cli_inform("year argument will be ignored")
     }
   }
 
-  # initial checks
   cdm <- omopgenerics::validateCdmArgument(cdm)
   omopgenerics::assertCharacter(col, null = TRUE)
   omopgenerics::assertLogical(sex, length = 1)

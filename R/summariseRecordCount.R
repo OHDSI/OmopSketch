@@ -4,7 +4,7 @@
 #'
 #' @param cdm A cdm_reference object.
 #' @param omopTableName A character vector of omop tables from the cdm.
-#' @param interval Time interval to stratify by. It can either be "years", "quarters", "months" or "overall".
+#' @inheritParams interval
 #' @param ageGroup A list of age groups to stratify results by.
 #' @param sex Whether to stratify by sex (TRUE) or not (FALSE).
 #' @inheritParams dateRange-startDate
