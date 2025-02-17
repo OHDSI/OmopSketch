@@ -32,14 +32,18 @@ tableOmopSnapshot <- function(result,
     warnEmpty("summarise_omop_snapshot")
     return(emptyTable(type))
   }
-
+  if (type == "datatable" && dplyr::n_distinct(result$cdm_name) == 1) {
+    header <- NULL
+  } else {
+    header <- c("cdm_name")
+  }
   result <- result |>
     formatColumn(c("variable_name", "estimate_name")) |>
     visOmopResults::visOmopTable(
       type = type,
       hide = c("variable_level"),
       estimateName = c("N" = "<Count>"),
-      header = c("cdm_name"),
+      header = header,
       rename = c(
         "Database name" = "cdm_name",
         "Estimate" = "estimate_name",
