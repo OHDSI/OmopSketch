@@ -235,7 +235,11 @@ countRecords <- function(observationPeriod, cdm, start_date_name, end_date_name,
   }
 
   x <- personDays |>
-    rbind(records) |>
+    dplyr::mutate(estimate_value = as.numeric(.data$estimate_value)) |>
+    rbind(
+      records |>
+        dplyr::mutate(estimate_value = as.numeric(.data$estimate_value))
+    ) |>
     omopgenerics::uniteAdditional(additional_column)|>
     dplyr::arrange(dplyr::across(dplyr::any_of("additional_level")))
 
@@ -249,7 +253,7 @@ createSummarisedResultObservationPeriod <- function(result, observationPeriod, n
                                           dplyr::mutate("interval" = .env$original_interval))
   }else{
     result <- result |>
-      dplyr::mutate("estimate_value" = as.character(.data$estimate_value)) |>
+      dplyr::mutate("estimate_value" = sprintf('%.0f', .data$estimate_value)) |>
       omopgenerics::uniteStrata(cols = c("sex", "age_group")) |>
       dplyr::mutate(
         "result_id" = as.integer(1),
