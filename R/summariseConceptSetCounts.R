@@ -136,7 +136,6 @@ summariseConceptSetCounts <- function(cdm,
       dplyr::filter(
         .data$index_date >= .data$obs_start & .data$index_date <= .data$obs_end
       ) |>
-      dplyr::select(!c("obs_start", "obs_end")) |>
       dplyr::select(!!columns) |>
       dplyr::inner_join(
         cdm[[nm]] |>
