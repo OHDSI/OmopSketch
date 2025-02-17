@@ -2,7 +2,7 @@
 % Please edit documentation in R/summariseConceptIdCounts.R
 \name{summariseConceptIdCounts}
 \alias{summariseConceptIdCounts}
-\title{Summarise concept use in patient-level data}
+\title{Summarise concept use in patient-level data. Only concepts recorded during observation period are counted.}
 \usage{
 summariseConceptIdCounts(
   cdm,
@@ -43,7 +43,7 @@ A summarised_result object with results overall and, if specified, by
 strata.
 }
 \description{
-Summarise concept use in patient-level data
+Summarise concept use in patient-level data. Only concepts recorded during observation period are counted.
 }
 \examples{
 \donttest{
