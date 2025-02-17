@@ -160,6 +160,7 @@ test_that("check summariseObservationPeriod works", {
 
   # table works
   expect_no_error(tableObservationPeriod(resAll))
+  expect_no_error(tableObservationPeriod(resAll, type = "datatable"))
   expect_no_error(tableObservationPeriod(resOne))
   expect_no_error(tableObservationPeriod(resEmpty))
 

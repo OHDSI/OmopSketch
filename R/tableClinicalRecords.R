@@ -31,7 +31,7 @@ tableClinicalRecords <- function(result,
   # initial checks
   rlang::check_installed("visOmopResults")
   omopgenerics::validateResultArgument(result)
-  omopgenerics::assertChoice(type, choicesTables())
+  omopgenerics::assertChoice(type, visOmopResults::tableType())
 
   # subset to result_type of interest
   result <- result |>
@@ -43,7 +43,11 @@ tableClinicalRecords <- function(result,
     warnEmpty("summarise_clinical_records")
     return(emptyTable(type))
   }
-
+  if (type == "datatable" && dplyr::n_distinct(result$cdm_name) == 1) {
+    header <- NULL
+  } else {
+    header <- c("cdm_name")
+  }
   result |>
     formatColumn(c("variable_name", "variable_level")) |>
     visOmopResults::visOmopTable(
@@ -52,7 +56,7 @@ tableClinicalRecords <- function(result,
         "N (%)" = "<count> (<percentage>%)",
         "N" = "<count>",
         "Mean (SD)" = "<mean> (<sd>)"),
-      header = c("cdm_name"),
+      header = header,
       rename = c("Database name" = "cdm_name"),
       groupColumn = c("omop_table", omopgenerics::strataColumns(result))
     )

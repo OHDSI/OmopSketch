@@ -19,7 +19,7 @@ tableObservationPeriod <- function(result,
   # initial checks
   rlang::check_installed("visOmopResults")
   omopgenerics::validateResultArgument(result)
-  omopgenerics::assertChoice(type, choicesTables())
+  omopgenerics::assertChoice(type, visOmopResults::tableType())
 
   # subset to result_type of interest
   result <- result |>
@@ -30,6 +30,11 @@ tableObservationPeriod <- function(result,
   if (nrow(result) == 0) {
     warnEmpty("summarise_observation_period")
     return(emptyTable(type))
+  }
+  if (type == "datatable" && dplyr::n_distinct(result$cdm_name) == 1) {
+    header <- NULL
+  } else {
+    header <- c("cdm_name")
   }
 
   result |>
@@ -44,7 +49,7 @@ tableObservationPeriod <- function(result,
         "N" = "<count>",
         "mean (sd)" = "<mean> (<sd>)",
         "median [Q25 - Q75]" = "<median> [<q25> - <q75>]"),
-      header = "cdm_name",
+      header = header,
       groupColumn = omopgenerics::strataColumns(result),
       hide = c(
         "result_id", "estimate_type", "strata_name", "variable_level"),
