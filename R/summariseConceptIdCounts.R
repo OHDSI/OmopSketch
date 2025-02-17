@@ -1,5 +1,5 @@
 
-#' Summarise concept use in patient-level data
+#' Summarise concept use in patient-level data. Only concepts recorded during observation period are counted.
 #'
 #' @param cdm A cdm object
 #' @param omopTableName A character vector of the names of the tables to
@@ -61,6 +61,8 @@ summariseConceptIdCounts <- function(cdm,
   # how to count
   counts <- c("records", "person_id")[c("record", "person") %in% countBy]
 
+
+
   # summarise counts
   resultTables <- purrr::map(omopTableName, \(table) {
     # initial table
@@ -81,7 +83,23 @@ summariseConceptIdCounts <- function(cdm,
     omopTable <- omopTable |>
       sampleOmopTable(sample = sample, name = omopgenerics::uniqueTableName(prefix))
 
+    startDate <- omopgenerics::omopColumns(table = table, field = "start_date")
+
     result <- omopTable |>
+      # restrct to counts in observation
+      dplyr::inner_join(
+        cdm[["observation_period"]] |>
+          dplyr::select(
+            "person_id",
+            obs_start = "observation_period_start_date",
+            obs_end = "observation_period_end_date"
+          ),
+        by = "person_id"
+      ) |>
+      dplyr::filter(
+        .data[[startDate]] >= .data$obs_start & .data[[startDate]] <= .data$obs_end
+      ) |>
+      dplyr::select(!c("obs_start", "obs_end")) |>
       # add concept names
       dplyr::rename(concept_id = dplyr::all_of(conceptId)) |>
       dplyr::left_join(

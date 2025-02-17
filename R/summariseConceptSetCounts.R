@@ -123,6 +123,19 @@ summariseConceptSetCounts <- function(cdm,
     if (is.null(omopTable)) return(NULL)
 
     res <- omopTable |>
+      # restrct to counts in observation
+      dplyr::inner_join(
+        cdm[["observation_period"]] |>
+          dplyr::select(
+            "person_id",
+            obs_start = "observation_period_start_date",
+            obs_end = "observation_period_end_date"
+          ),
+        by = "person_id"
+      ) |>
+      dplyr::filter(
+        .data$index_date >= .data$obs_start & .data$index_date <= .data$obs_end
+      ) |>
       dplyr::select(!!columns) |>
       dplyr::inner_join(
         cdm[[nm]] |>
