@@ -8,7 +8,7 @@
 #' @param countBy Either "record" for record-level counts or "person" for
 #' person-level counts
 #' @param concept TRUE or FALSE. If TRUE code use will be summarised by concept.
-#' @param interval Time interval to stratify by. It can either be "years", "quarters", "months" or "overall".
+#' @inheritParams interval
 #' @param sex TRUE or FALSE. If TRUE code use will be summarised by sex.
 #' @param ageGroup A list of ageGroup vectors of length two. Code use will be
 #' thus summarised by age groups.

@@ -8,7 +8,8 @@ summariseConceptIdCounts(
   cdm,
   omopTableName,
   countBy = "record",
-  year = FALSE,
+  year = lifecycle::deprecated(),
+  interval = "overall",
   sex = FALSE,
   ageGroup = NULL,
   sample = NULL,
@@ -24,7 +25,9 @@ summarise in the cdm object.}
 \item{countBy}{Either "record" for record-level counts or "person" for
 person-level counts}
 
-\item{year}{TRUE or FALSE. If TRUE code use will be summarised by year.}
+\item{year}{deprecated}
+
+\item{interval}{Time interval to stratify by. It can either be "years", "quarters", "months" or "overall".}
 
 \item{sex}{TRUE or FALSE. If TRUE code use will be summarised by sex.}
 
