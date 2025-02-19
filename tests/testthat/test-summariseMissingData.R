@@ -18,6 +18,8 @@ test_that("summariseMissingData() works", {
 
   expect_warning(de <-summariseMissingData(cdm, "death"))
   checkResultType(de, "summarise_missing_data")
+  expect_warning(p<-summariseMissingData(cdm, "person", ageGroup = list(c(0,50))))
+  expect_true(omopgenerics::settings(p)$strata == "")
 
   expect_no_error(all <- summariseMissingData(cdm, c("observation_period", "visit_occurrence", "measurement")))
   expect_equal(all, dplyr::bind_rows(y, x, z))
