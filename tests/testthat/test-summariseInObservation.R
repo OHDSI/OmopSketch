@@ -256,7 +256,6 @@ test_that("dateRange argument works", {
   skip_on_cran()
   # Load mock database ----
   cdm <- cdmEunomia()
-  expect_warning( summariseInObservation(cdm$observation_period, dateRange =  as.Date(c("2012-01-01", "2018-01-01"))))
 
   expect_no_error(summariseInObservation(cdm$observation_period, dateRange =  as.Date(c("1940-01-01", "2018-01-01"))))
   expect_message(x<-summariseInObservation(cdm$observation_period, dateRange =  as.Date(c("1940-01-01", "2024-01-01"))))

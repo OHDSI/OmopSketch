@@ -292,7 +292,7 @@ addStrataToPeopleInObservation <- function(cdm, ageGroup, sex, tablePrefix, date
 
   if (!is.null(dateRange)) {
     demographics <- demographics |>
-      CohortConstructor::requireInDateRange(dateRange = dateRange)
+      CohortConstructor::trimToDateRange(dateRange = dateRange)
     warningEmptyStudyPeriod(demographics)
   }
   if (sex) {

@@ -8,7 +8,7 @@ output:
     number_sections: yes
     toc: yes
 vignette: >
-  %\VignetteIndexEntry{C-summarise_observation_period}
+  %\VignetteIndexEntry{summarise_observation_period}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -41,7 +41,7 @@ cdm <- mockOmopSketch()
 
 # Summarise observation periods
 
-Let's now use the `summariseObservationPeriod()` function from the OmopSketch package to help us have an overview of one of the `observation_period` table, including some statistics such as the `Number uf subjects` and `Duration in days` for each observation period (e.g., 1st, 2nd)
+Let's now use the `summariseObservationPeriod()` function from the OmopSketch package to help us have an overview of one of the `observation_period` table, including some statistics such as the `Number of subjects` and `Duration in days` for each observation period (e.g., 1st, 2nd)
 
 ```{r, warning=FALSE}
 summarisedResult <- summariseObservationPeriod(cdm$observation_period)

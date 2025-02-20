@@ -1,0 +1,186 @@
+---
+title: "Characterisation of OMOP CDM"
+output: 
+  html_document:
+    pandoc_args: [
+      "--number-offset=1,0"
+      ]
+    number_sections: yes
+    toc: yes
+vignette: >
+  %\VignetteIndexEntry{D-characterisation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Introduction
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+library(CDMConnector)
+CDMConnector::requireEunomia()
+```
+
+In this vignette, we explore how *OmopSketch* functions can serve as a valuable tool for characterising databases containing electronic health records mapped to the OMOP Common Data Model.
+
+## Create a mock cdm
+
+Let's see an example of its functionalities. To start with, we will load essential packages and create a mock cdm using the mockOmopSketch() database.
+
+```{r, warning=FALSE}
+library(dplyr)
+library(DBI)
+library(duckdb)
+library(OmopSketch)
+
+
+# Connect to Eunomia database
+con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomiaDir())
+cdm <- CDMConnector::cdmFromCon(
+  con = con, cdmSchema = "main", writeSchema = "main", cdmName = "Eunomia"
+)
+
+cdm 
+```
+
+# Snapshot
+
+Let's start by using the `summariseOmopSnapshot()` function to summarise the available metadata of the cdm_reference object, including the vocabulary version and the time span covered by the `observation_period` table
+
+```{r, warning=FALSE}
+snapshot <- summariseOmopSnapshot(cdm) 
+snapshot |>
+  tableOmopSnapshot()
+```
+
+# Clinical tables characterisation
+
+Next, we define the tables of interest, specify the study period, and determine whether to stratify the analysis by sex, age groups, or time intervals.
+
+```{r, warning=FALSE}
+
+tableName <- c("observation_period", "visit_occurrence", "condition_occurrence", "drug_exposure", "procedure_occurrence", 
+               "device_exposure", "measurement" , "observation", "death")
+
+dateRange <- as.Date(c("2012-01-01", NA))
+
+sex <- TRUE 
+
+ageGroup <- list(c(0, 59), c(60, Inf)) 
+
+interval <- "years"
+
+```
+
+## Missing values
+
+We can now use the `summariseMissingData()` function to assess the presence of missing values in the tables.
+
+```{r, warning=FALSE}
+result_missingData <- summariseMissingData(cdm,
+                                           omopTableName = tableName,
+                                           sex = sex,
+                                           ageGroup = ageGroup,
+                                           interval = interval,
+                                           dateRange = dateRange)
+result_missingData |> glimpse()
+                                       
+```
+
+## Clinical tables overview
+
+The function `sumamriseClinicalRecords()` provides key insights into the clinical tables content, including the number of records, number of subjects, portion of records in observation, and the number of distinct domains and concepts.
+
+```{r, warning=FALSE}
+result_clinicalRecords <- summariseClinicalRecords(cdm, 
+                                                  omopTableName = tableName, 
+                                                  sex = sex, 
+                                                  ageGroup = ageGroup,
+                                                  dateRange = dateRange) 
+result_clinicalRecords |> tableClinicalRecords()
+```
+
+## Records in observation
+
+We can retrieve the number of records in observation for each table using the `summariseRecordCount()` function.
+
+```{r, warning=FALSE}
+result_recordCounts <- summariseRecordCount(cdm,
+                                            tableName,
+                                            sex = sex,
+                                            ageGroup = ageGroup,
+                                            interval = interval,
+                                            dateRange = dateRange)
+result_recordCounts |>
+  filter(group_level %in% c("drug_exposure", "condition_occurrence"))|>
+  plotRecordCount(colour = "omop_table", 
+                  facet = c("sex", "age_group"))
+```
+
+## Concept id counts
+
+We can then use the `summariseConceptIdCounts()` function to compute the record counts for each concept_id present in the analysed OMOP tables.
+
+```{r, warning=FALSE}
+result_conceptIdCount <- OmopSketch::summariseConceptIdCounts(cdm, 
+                                                              omopTableName = tableName, 
+                                                              sex = sex, 
+                                                              ageGroup = ageGroup, 
+                                                              interval = interval, 
+                                                              dateRange = dateRange)
+result_conceptIdCount |> glimpse()
+
+```
+
+# Observation period characterisation
+
+`OmopSketch` can also provide an overview of the `observation_period` table.
+
+## Subjects in observation
+
+The `summariseInObservation()` function calculates the number of subjects and the distribution of person-days in observation across specific time intervals.
+
+```{r, warning=FALSE}
+result_inObservation <-summariseInObservation(cdm$observation_period,
+                                              output = c("records","person-days"),
+                                              interval = interval,
+                                              sex = sex,
+                                              ageGroup = ageGroup,
+                                              dateRange = dateRange) 
+
+result_inObservation |>    
+  filter(variable_name == "Number person-days") |>
+  plotInObservation(colour = "sex", 
+                    facet = "age_group")
+
+```
+
+## Observation periods
+
+From the `observation_table`, we can extract information on the duration of observation periods, the time until the next observation period, and the number of subjects in each ordinal observation period (1st, 2nd, etc.). This can be done using the `summariseObservationPeriod()` function.
+
+```{r, warning=FALSE}
+result_observationPeriod <- summariseObservationPeriod(cdm$observation_period, 
+                                                       sex = sex, 
+                                                       ageGroup = ageGroup,
+                                                       dateRange = dateRange)
+
+result_observationPeriod |>
+  plotObservationPeriod(variableName = "Duration in days", 
+                        plotType = "boxplot", 
+                        colour = "sex", 
+                        facet = "age_group")
+```
+
+Finally, disconnect from the cdm
+
+```{r, warning=FALSE}
+  PatientProfiles::mockDisconnect(cdm = cdm)
+
+```
+
+The results of the characterisation using `OmopSketch` can be further explored through the ShinyApp at <https://dpa-pde-oxford.shinyapps.io/OmopSketch-vignette/>

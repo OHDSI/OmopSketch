@@ -1,6 +1,11 @@
 url: https://OHDSI.github.io/OmopSketch/
 template:
   bootstrap: 5
+articles:
+- summarise_clinical_tables_records
+- summarise_concept_set_counts
+- summarise_observation_period
+- characterisation
 
 reference:
 - subtitle: Snapshots
