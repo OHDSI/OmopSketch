@@ -3,7 +3,7 @@
 #'
 #' @param observationPeriod An observation_period omop table. It must be part of
 #' a cdm_reference object.
-#' @param interval Time interval to stratify by. It can either be "years", "quarters", "months" or "overall".
+#' @inheritParams interval
 #' @param output Output format. It can be either the number of records
 #' ("records") that are in observation in the specific interval of time, the
 #' number of person-days ("person-days"), or both c("records","person-days").
