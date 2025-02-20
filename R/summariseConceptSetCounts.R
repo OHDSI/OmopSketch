@@ -6,7 +6,7 @@
 #' @param countBy Either "record" for record-level counts or "person" for
 #' person-level counts
 #' @param concept TRUE or FALSE. If TRUE code use will be summarised by concept.
-#' @param interval Time interval to stratify by. It can either be "years", "quarters", "months" or "overall".
+#' @inheritParams interval
 #' @param sex TRUE or FALSE. If TRUE code use will be summarised by sex.
 #' @param ageGroup A list of ageGroup vectors of length two. Code use will be
 #' thus summarised by age groups.
@@ -123,6 +123,19 @@ summariseConceptSetCounts <- function(cdm,
     if (is.null(omopTable)) return(NULL)
 
     res <- omopTable |>
+      # restrct to counts in observation
+      dplyr::inner_join(
+        cdm[["observation_period"]] |>
+          dplyr::select(
+            "person_id",
+            obs_start = "observation_period_start_date",
+            obs_end = "observation_period_end_date"
+          ),
+        by = "person_id"
+      ) |>
+      dplyr::filter(
+        .data$index_date >= .data$obs_start & .data$index_date <= .data$obs_end
+      ) |>
       dplyr::select(!!columns) |>
       dplyr::inner_join(
         cdm[[nm]] |>

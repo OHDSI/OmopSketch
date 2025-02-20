@@ -2,13 +2,14 @@
 % Please edit documentation in R/summariseConceptIdCounts.R
 \name{summariseConceptIdCounts}
 \alias{summariseConceptIdCounts}
-\title{Summarise concept use in patient-level data}
+\title{Summarise concept use in patient-level data. Only concepts recorded during observation period are counted.}
 \usage{
 summariseConceptIdCounts(
   cdm,
   omopTableName,
   countBy = "record",
-  year = FALSE,
+  year = lifecycle::deprecated(),
+  interval = "overall",
   sex = FALSE,
   ageGroup = NULL,
   sample = NULL,
@@ -24,7 +25,9 @@ summarise in the cdm object.}
 \item{countBy}{Either "record" for record-level counts or "person" for
 person-level counts}
 
-\item{year}{TRUE or FALSE. If TRUE code use will be summarised by year.}
+\item{year}{deprecated}
+
+\item{interval}{Time interval to stratify by. It can either be "years", "quarters", "months" or "overall".}
 
 \item{sex}{TRUE or FALSE. If TRUE code use will be summarised by sex.}
 
@@ -43,7 +46,7 @@ A summarised_result object with results overall and, if specified, by
 strata.
 }
 \description{
-Summarise concept use in patient-level data
+Summarise concept use in patient-level data. Only concepts recorded during observation period are counted.
 }
 \examples{
 \donttest{

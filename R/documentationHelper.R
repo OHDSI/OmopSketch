@@ -10,3 +10,12 @@
 #' @name dateRange-startDate
 #' @keywords internal
 NULL
+
+#' Helper for consistent documentation of `interval`.
+#'
+#' @param interval Time interval to stratify by. It can either be "years", "quarters", "months" or "overall".
+#'
+#'
+#' @name interval
+#' @keywords internal
+NULL
