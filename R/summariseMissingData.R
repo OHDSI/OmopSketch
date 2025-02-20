@@ -29,7 +29,7 @@ summariseMissingData <- function(cdm,
 
   if (lifecycle::is_present(year)) {
 
-    lifecycle::deprecate_warn("0.2.3", "summariseConceptMissingData(year)", "summariseMissingData(interval = 'years')")
+    lifecycle::deprecate_warn("0.2.3", "summariseMissingData(year)", "summariseMissingData(interval = 'years')")
 
     if (isTRUE(year) & missing(interval)) {
 
