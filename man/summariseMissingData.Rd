@@ -9,7 +9,7 @@ summariseMissingData(
   omopTableName,
   col = NULL,
   sex = FALSE,
-  year = FALSE,
+  year = lifecycle::deprecated(),
   interval = "overall",
   ageGroup = NULL,
   sample = 1e+06,
