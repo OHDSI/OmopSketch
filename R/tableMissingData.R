@@ -10,7 +10,7 @@ tableMissingData <- function(result,
   # initial checks
   rlang::check_installed("visOmopResults")
   omopgenerics::validateResultArgument(result)
-  omopgenerics::assertChoice(type, choicesTables())
+  omopgenerics::assertChoice(type, visOmopResults::tableType())
 
   # subset to result_type of interest
   result <- result |>
@@ -22,12 +22,16 @@ tableMissingData <- function(result,
     warnEmpty("summarise_missing_data")
     return(emptyTable(type))
   }
-
+  if (type == "datatable" && dplyr::n_distinct(result$cdm_name) == 1) {
+    header <- NULL
+  } else {
+    header <- c("cdm_name")
+  }
   result |>
     visOmopResults::visOmopTable(
       type = type,
        estimateName = c("N missing data (%)" = "<na_count> (<na_percentage>%)"),
-      header = c("cdm_name"),
+      header = header,
       rename = c("Database name" = "cdm_name", "Column name"= "variable_name"),
       groupColumn = c("omop_table", omopgenerics::strataColumns(result)),
       hide = c("variable_level")
