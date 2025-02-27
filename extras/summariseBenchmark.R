@@ -29,7 +29,7 @@ summariseCompute <- function(x, strata) {
   }) |>
     dplyr::bind_rows()
 
-  omopgenerics::dropTable(cdm = cdm, name = nm)
+  omopgenerics::dropSourceTable(cdm = cdm, name = nm)
 
   return(result)
 }
@@ -231,7 +231,7 @@ for (nm in cdms) {
 
     # drop toy data
     t0 <- Sys.time()
-    cdm <- omopgenerics::dropTable(cdm = cdm, name = tempName)
+    cdm <- omopgenerics::dropSourceTable(cdm = cdm, name = tempName)
     result <- addTask(result, nm, "drop toy data", t0)
   }
 
@@ -282,7 +282,7 @@ for (nm in cdms) {
 
     # drop computed data
     t0 <- Sys.time()
-    cdm <- omopgenerics::dropTable(cdm = cdm, name = tempName)
+    cdm <- omopgenerics::dropSourceTable(cdm = cdm, name = tempName)
     result <- addTask(result, nm, "drop computed data", t0)
   }
 }

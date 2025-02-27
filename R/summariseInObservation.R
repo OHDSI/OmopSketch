@@ -92,7 +92,7 @@ summariseInObservation <- function(observationPeriod,
   # Create summarisedResult
   result <- createSummarisedResultObservationPeriod(result, observationPeriod, name, denominator,dateRange, original_interval)
 
-  CDMConnector::dropTable(cdm, name = dplyr::starts_with(tablePrefix))
+  CDMConnector::dropSourceTable(cdm, name = dplyr::starts_with(tablePrefix))
   return(result)
 }
 
