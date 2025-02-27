@@ -10,7 +10,7 @@ tableConceptIdCounts <- function(result,
   # initial checks
   rlang::check_installed("visOmopResults")
   omopgenerics::validateResultArgument(result)
-  omopgenerics::assertChoice(type, choicesTables())
+  omopgenerics::assertChoice(type, visOmopResults::tableType())
 
   # subset to result_type of interest
   result <- result |>
@@ -33,13 +33,17 @@ tableConceptIdCounts <- function(result,
   if ("person_count" %in% estimate_names) {
     estimateName <- c(estimateName, "N persons" = "<person_count>")
   }
-
+  if (type == "datatable" && dplyr::n_distinct(result$cdm_name) == 1) {
+    header <- NULL
+  } else {
+    header <- c("cdm_name")
+  }
   result |>
     formatColumn(c("variable_name", "variable_level")) |>
     visOmopResults::visOmopTable(
       type = type,
       estimateName = estimateName,
-        header = c("cdm_name"),
+        header = header,
         rename = c("Database name" = "cdm_name"),
         groupColumn = c("omop_table", omopgenerics::strataColumns(result))
       )
