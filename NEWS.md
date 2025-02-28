@@ -5,4 +5,5 @@
 -   Add "datatable" as possible table type by @cecicampanile #314
 -   Interval argument in summariseMissingData and summariseConceptIdCounts, year argument deprecated by @cecicampanile #317
 -   Only records in observation are accounted in summariseConceptIdCounts and summariseConceptSetCounts by @cecicampanile #319
-
+-   vignette with full characterisation and shiny by @cecicampanile #325
+-   in summariseInObservation and summariseObservationPeriod study range is now applied wih cohortConstructor::trimToDateRange instead of requireInDateRange by @cecicampanile #325

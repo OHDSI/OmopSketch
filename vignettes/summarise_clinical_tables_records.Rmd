@@ -8,7 +8,7 @@ output:
     number_sections: yes
     toc: yes
 vignette: >
-  %\VignetteIndexEntry{A-summarise_clinical_tables_records}
+  %\VignetteIndexEntry{summarise_clinical_tables_records}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

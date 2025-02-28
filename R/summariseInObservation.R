@@ -92,7 +92,7 @@ summariseInObservation <- function(observationPeriod,
   # Create summarisedResult
   result <- createSummarisedResultObservationPeriod(result, observationPeriod, name, denominator,dateRange, original_interval)
 
-  CDMConnector::dropTable(cdm, name = dplyr::starts_with(tablePrefix))
+  CDMConnector::dropSourceTable(cdm, name = dplyr::starts_with(tablePrefix))
   return(result)
 }
 
@@ -292,7 +292,7 @@ addStrataToPeopleInObservation <- function(cdm, ageGroup, sex, tablePrefix, date
 
   if (!is.null(dateRange)) {
     demographics <- demographics |>
-      CohortConstructor::requireInDateRange(dateRange = dateRange)
+      CohortConstructor::trimToDateRange(dateRange = dateRange)
     warningEmptyStudyPeriod(demographics)
   }
   if (sex) {

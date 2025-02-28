@@ -122,7 +122,7 @@ summariseRecordCount <- function(cdm,
       ) |>
       omopgenerics::uniteGroup(cols = "omop_table")
 
-    omopgenerics::dropTable(cdm = cdm, name = dplyr::starts_with(prefix))
+    omopgenerics::dropSourceTable(cdm = cdm, name = dplyr::starts_with(prefix))
 
     return(counts)
   }) |>
