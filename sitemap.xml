@@ -1,10 +1,11 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://OHDSI.github.io/OmopSketch/404.html</loc></url>
 <url><loc>https://OHDSI.github.io/OmopSketch/LICENSE.html</loc></url>
-<url><loc>https://OHDSI.github.io/OmopSketch/articles/A-summarise_clinical_tables_records.html</loc></url>
-<url><loc>https://OHDSI.github.io/OmopSketch/articles/B-summarise_concept_set_counts.html</loc></url>
-<url><loc>https://OHDSI.github.io/OmopSketch/articles/C-summarise_observation_period.html</loc></url>
+<url><loc>https://OHDSI.github.io/OmopSketch/articles/characterisation.html</loc></url>
 <url><loc>https://OHDSI.github.io/OmopSketch/articles/index.html</loc></url>
+<url><loc>https://OHDSI.github.io/OmopSketch/articles/summarise_clinical_tables_records.html</loc></url>
+<url><loc>https://OHDSI.github.io/OmopSketch/articles/summarise_concept_set_counts.html</loc></url>
+<url><loc>https://OHDSI.github.io/OmopSketch/articles/summarise_observation_period.html</loc></url>
 <url><loc>https://OHDSI.github.io/OmopSketch/authors.html</loc></url>
 <url><loc>https://OHDSI.github.io/OmopSketch/index.html</loc></url>
 <url><loc>https://OHDSI.github.io/OmopSketch/news/index.html</loc></url>
