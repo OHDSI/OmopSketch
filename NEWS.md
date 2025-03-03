@@ -1,4 +1,4 @@
-# OmopSketch 0.2.2.900
+# OmopSketch 0.3.0
 
 -   eunomiaIsAvailable instead of the deprecated eunomia_is_available by @cecicampanile #316
 -   Account for int64 in summariseInObservation by @cecicampanile #312
