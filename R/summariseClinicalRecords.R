@@ -306,7 +306,6 @@ summariseRecordsPerPerson <- function(x, den, strata, estimates) {
     resultx |>
       dplyr::mutate(number_subjects = dplyr::if_else(.data$n == 0, 0L, 1L)) |>
       dplyr::select(!"person_id") |>
-      dplyr::collect() |>
       PatientProfiles::summariseResult(
         group = list(),
         includeOverallGroup = FALSE,
