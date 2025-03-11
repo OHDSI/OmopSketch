@@ -8,6 +8,7 @@
 #' @param sex Logical; whether to stratify results by sex (`TRUE`) or not (`FALSE`).
 #' @inheritParams dateRange-startDate
 #' @param conceptIdCount Logical; whether to summarise concept ID counts (`TRUE`) or not (`FALSE`).
+#' @param ... additional arguments passed to the OmopSketch functions that are used internally.
 #' @return A `summarised_result` object containing the results of the characterisation.
 #' @export
 

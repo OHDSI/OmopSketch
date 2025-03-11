@@ -34,6 +34,8 @@ If \code{dateRange} is \code{NULL}, no restriction is applied.}
 \item{interval}{Time interval to stratify by. It can either be "years", "quarters", "months" or "overall".}
 
 \item{conceptIdCount}{Logical; whether to summarise concept ID counts (\code{TRUE}) or not (\code{FALSE}).}
+
+\item{...}{additional arguments passed to the OmopSketch functions that are used internally.}
 }
 \value{
 A \code{summarised_result} object containing the results of the characterisation.
