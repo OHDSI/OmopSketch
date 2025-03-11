@@ -44,6 +44,10 @@ reference:
   desc: Create a mock database to test the OmopSketch package
 - contents:
   - mockOmopSketch
+- subtitle: Characterisation
+  desc: Characterise the database
+- contents:
+  - databaseCharacteristics
 - subtitle: Deprecated functions
   desc: These functions have been deprecated
 - contents:
