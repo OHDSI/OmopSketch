@@ -203,5 +203,5 @@ filter_args <- function(fun, args) {
   if (length(x) > 0) {
     return(as.list(x))
   }
-  return(NULL)  # Ensure it returns a list instead of NULL
+  return(NULL)
 }
