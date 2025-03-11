@@ -13,7 +13,8 @@ databaseCharacteristics(
   ageGroup = NULL,
   dateRange = NULL,
   interval = "overall",
-  conceptIdCount = FALSE
+  conceptIdCount = FALSE,
+  ...
 )
 }
 \arguments{
