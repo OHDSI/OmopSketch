@@ -17,4 +17,12 @@ test_that("databaseCharacteristics works", {
                  sort(),
                c(0L, 1L))
 
+  expect_error(databaseCharacteristics(cdm, error = TRUE))
+
+  expect_no_error(x <- databaseCharacteristics(cdm, omopTableName = "drug_exposure", output = "person-days"))
+  expect_equal(x |> omopgenerics::filterSettings(result_type == "summarise_in_observation") |>
+    dplyr::distinct(.data$variable_name) |>
+    dplyr::pull(),
+    "Number person-days")
+
 })

@@ -20,7 +20,8 @@ databaseCharacteristics <- function(cdm,
                                     ageGroup = NULL,
                                     dateRange = NULL,
                                     interval = "overall",
-                                    conceptIdCount = FALSE, ...) {
+                                    conceptIdCount = FALSE,
+                                    ...) {
 
   cdm <- omopgenerics::validateCdmArgument(cdm)
   opts <- omopgenerics::omopTables()
@@ -32,15 +33,19 @@ databaseCharacteristics <- function(cdm,
   omopgenerics::assertChoice(interval, c("overall", "years", "quarters", "months"), length = 1)
   omopgenerics::assertLogical(conceptIdCount, length = 1)
 
+  args_list <- list(...)
+
+  cli::cli_inform(paste("The characterisation will focus on the following OMOP tables: {omopTableName}"))
+
   startTime <- Sys.time()
   startTables <- CDMConnector::listSourceTables(cdm)
   result <- list()
   # Snapshot
-  cli::cli_inform(c( "bullet" = "Getting cdm snapshot"))
+  cli::cli_inform(paste(cli::symbol$arrow_right,"Getting cdm snapshot"))
   result$snapshot <- summariseOmopSnapshot(cdm)
 
   # Population Characteristics
-  cli::cli_inform("Getting population characteristics")
+  cli::cli_inform(paste(cli::symbol$arrow_right,"Getting population characteristics"))
 
   sexCohort <- if (sex) "Both"
   dateRangeCohort <- dateRange %||% c(NA, NA)
@@ -88,91 +93,115 @@ databaseCharacteristics <- function(cdm,
     )
 
 
-
   # Summarise missing data
-  cli::cli_inform("Summarising missing data")
-  result$missingData <- summariseMissingData(cdm,
-    omopTableName = omopTableName,
-    sex = sex,
-    ageGroup = ageGroup,
-    interval = interval,
-    dateRange = dateRange,
-    ...
+  cli::cli_inform(paste(cli::symbol$arrow_right,"Summarising missing data"))
+  result$missingData <- do.call(
+    summariseMissingData,
+    c(list(
+      cdm,
+      omopTableName = omopTableName,
+      sex = sex,
+      ageGroup = ageGroup,
+      interval = interval,
+      dateRange = dateRange
+    ), filter_args(summariseMissingData, args_list))
   )
 
   omopTableName <- omopTableName[omopTableName != "person"]
 
   if (conceptIdCount) {
-    cli::cli_inform("Summarising concept id counts")
-    result$conceptIdCount <- summariseConceptIdCounts(cdm,
+    cli::cli_inform(paste(cli::symbol$arrow_right,"Summarising concept id counts"))
+    result$conceptIdCount <- do.call(
+      summariseConceptIdCounts,
+      c(list(
+        cdm,
+        omopTableName = omopTableName,
+        sex = sex,
+        ageGroup = ageGroup,
+        interval = interval,
+        dateRange = dateRange
+      ), filter_args(summariseConceptIdCounts, args_list))
+    )
+  }
+
+  # Summarise clinical records
+  cli::cli_inform(paste(cli::symbol$arrow_right,"Summarising clinical records"))
+  result$clinicalRecords <- do.call(
+    summariseClinicalRecords,
+    c(list(
+      cdm,
       omopTableName = omopTableName,
       sex = sex,
       ageGroup = ageGroup,
-      interval = interval,
-      dateRange = dateRange,
-      ...
-    )
-  }
-  # Summarise clinical records
-  cli::cli_inform("Summarising clinical records")
-  result$clinicalRecords <- summariseClinicalRecords(cdm,
-    omopTableName = omopTableName,
-    sex = sex,
-    ageGroup = ageGroup,
-    dateRange = dateRange,
-    ...
+      dateRange = dateRange
+    ), filter_args(summariseClinicalRecords, args_list))
   )
 
   # Summarize record counts
-  cli::cli_inform("Summarising record counts")
-  result$recordCounts <- summariseRecordCount(cdm, omopTableName,
-    sex = sex,
-    ageGroup = ageGroup,
-    interval = interval,
-    dateRange = dateRange,
-    ...
+  cli::cli_inform(paste(cli::symbol$arrow_right,"Summarising record counts"))
+  result$recordCounts <- do.call(
+    summariseRecordCount,
+    c(list(
+      cdm,
+      omopTableName,
+      sex = sex,
+      ageGroup = ageGroup,
+      interval = interval,
+      dateRange = dateRange
+    ), filter_args(summariseRecordCount, args_list))
   )
-
-
-
 
   # Summarize in observation records
-  cli::cli_inform("Summarising in observation records and person-days")
-  result$inObservation <- summariseInObservation(cdm$observation_period,
-    output = c("records", "person-days"),
-    interval = interval,
-    sex = sex,
-    ageGroup = ageGroup,
-    dateRange = dateRange,
-    ...
+  cli::cli_inform(paste(cli::symbol$arrow_right,"Summarising in observation records and person-days"))
+  result$inObservation <- do.call(
+    summariseInObservation,
+    c(list(
+      cdm$observation_period,
+      interval = interval,
+      sex = sex,
+      ageGroup = ageGroup,
+      dateRange = dateRange
+    ), filter_args(summariseInObservation, args_list))
   )
-
-
-
 
   # Summarise observation period
-  cli::cli_inform("Summarising observation period")
-  result$observationPeriod <- summariseObservationPeriod(cdm$observation_period,
-    sex = sex,
-    ageGroup = ageGroup,
-    dateRange = dateRange,
-    ...
+  cli::cli_inform(paste(cli::symbol$arrow_right, "Summarising observation period"))
+  result$observationPeriod <- do.call(
+    summariseObservationPeriod,
+    c(list(
+      cdm$observation_period,
+      sex = sex,
+      ageGroup = ageGroup,
+      dateRange = dateRange
+    ), filter_args(summariseObservationPeriod, args_list))
   )
-
 
   # Combine results and export
   result <- result |>
     omopgenerics::bind()
 
 
-
-
   # Calculate duration and log
   dur <- abs(as.numeric(Sys.time() - startTime, units = "secs"))
-  cli::cli_inform(paste("Database characterisation finished. Code ran in", floor(dur / 60), "min and", dur %% 60 %/% 1, "sec"))
-
+  cli::cli_inform(
+    paste(
+      cli::symbol$smiley,
+      "Database characterisation finished. Code ran in",
+      floor(dur / 60), "min and",
+      dur %% 60 %/% 1, "sec"
+    )
+  )
   endTables <- CDMConnector::listSourceTables(cdm)
   omopgenerics::dropSourceTable(cdm = cdm,endTables[!(endTables %in% startTables)])
 
   return(result)
+}
+
+
+filter_args <- function(fun, args) {
+  x <- args[names(args) %in% names(formals(fun))]
+  if (length(x) > 0) {
+    return(as.list(x))
+  }
+  return(NULL)  # Ensure it returns a list instead of NULL
 }
