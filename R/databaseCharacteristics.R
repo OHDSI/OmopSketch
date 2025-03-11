@@ -23,6 +23,8 @@ databaseCharacteristics <- function(cdm,
                                     conceptIdCount = FALSE,
                                     ...) {
 
+  rlang::check_installed("CohortCharacteristics")
+
   cdm <- omopgenerics::validateCdmArgument(cdm)
   opts <- omopgenerics::omopTables()
   opts <- opts[opts %in% names(cdm)]
