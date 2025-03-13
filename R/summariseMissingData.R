@@ -90,7 +90,7 @@ summariseMissingData <- function(cdm,
       cdm_name = omopgenerics::cdmName(cdm),
     ) |>
     omopgenerics::uniteGroup(cols = "omop_table") |>
-    omopgenerics::uniteStrata(cols = unique(unlist(strata[strata != "interval"]))) |>
+    omopgenerics::uniteStrata(cols = setdiff(unique(unlist(strata)), "interval") ) |>
     addTimeInterval() |>
     omopgenerics::uniteAdditional(cols = "time_interval") |>
     dplyr::mutate(variable_level = NA_character_) |>

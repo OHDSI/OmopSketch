@@ -258,5 +258,8 @@ test_that("interval argument works", {
     dplyr::arrange(year)
 
   expect_equal(q_year |> sortTibble(), y_year |> sortTibble())
+
+  expect_no_error(x<-summariseMissingData(cdm, "drug_exposure", sex = TRUE, interval = "years"))
+  expect_true(x|>dplyr::distinct(.data$additional_level)|>dplyr::tally()>1)
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
