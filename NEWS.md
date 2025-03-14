@@ -1,6 +1,7 @@
 # OmopSketch 0.3.0.900
 
 -   remove dplyr::collect() from summariseClinicalRecords() by @cecicampanile #328
+-   bug with time_interval fixed in summariseMissingData() by @cecicampanile #335
 
 # OmopSketch 0.3.0
 
