@@ -1,6 +1,7 @@
 # OmopSketch 0.3.0.900
 
 -   remove dplyr::collect() from summariseClinicalRecords() by @cecicampanile #328
+-   improved tableConceptIdCounts by @cecicampanile #336
 
 # OmopSketch 0.3.0
 
