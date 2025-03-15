@@ -43,13 +43,12 @@ tableClinicalRecords <- function(result,
     warnEmpty("summarise_clinical_records")
     return(emptyTable(type))
   }
-  if (type == "datatable" && dplyr::n_distinct(result$cdm_name) == 1) {
-    header <- NULL
-  } else {
-    header <- c("cdm_name")
-  }
+
+  header <- c("cdm_name")
+
   result |>
     formatColumn(c("variable_name", "variable_level")) |>
+    dplyr::arrange(.data$variable_name, .data$variable_level) |>
     visOmopResults::visOmopTable(
       type = type,
       estimateName = c(
