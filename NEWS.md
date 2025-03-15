@@ -2,6 +2,8 @@
 
 -   remove dplyr::collect() from summariseClinicalRecords() by @cecicampanile #328
 -   improved tableConceptIdCounts by @cecicampanile #336
+-   arranged variable_name and variable_level in tableClinicalRecords by @cecicampanile #337
+
 
 # OmopSketch 0.3.0
 
