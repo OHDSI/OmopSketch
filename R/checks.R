@@ -101,7 +101,7 @@ checkOutput <- function(output, call = parent.frame()){
 
   for(i in output){
     if(!i %in% c("person-days","records")){
-      cli::cli_abort("output argument is not valid. It must be either `person-days`, `records`, or c(`person-days`,`records`).", call = call())
+      cli::cli_abort("output argument is not valid. It must be either `person-days`, `records`, or c(`person-days`,`records`).", call = call)
     }
   }
 }
