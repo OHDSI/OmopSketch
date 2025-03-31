@@ -198,7 +198,7 @@ test_that("check output argument works", {
   cdm <- cdmEunomia()
 
   # check value
-  x <- summariseInObservation(cdm$observation_period, interval = "years", output = c("records","person-days"), ageGroup = NULL, sex = FALSE) |>
+  x <- summariseInObservation(cdm$observation_period, interval = "years", output = c("record","person-days"), ageGroup = NULL, sex = FALSE) |>
     dplyr::filter(variable_name == "Number person-days", additional_level == "1970-01-01 to 1970-12-31", estimate_type == "integer") |>
     dplyr::pull("estimate_value") |> as.numeric()
   y <- cdm$observation_period |>
@@ -282,7 +282,7 @@ test_that("no tables created", {
   startNames <- CDMConnector::listSourceTables(cdm)
 
   results <- summariseInObservation(cdm$observation_period,
-                                       output = c("records", "person-days"),
+                                       output = c("record", "person-days"),
                                        interval = "years",
                                        sex = TRUE,
                                        ageGroup = list(c(0,17),
