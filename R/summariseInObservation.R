@@ -122,7 +122,7 @@ getDenominator <- function(cdm, output){
   if("person-days" %in% output){
     y <- cdm[["observation_period"]] |>
       dplyr::ungroup() |>
-      dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") |>
+      dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
       dplyr::mutate(n = !!CDMConnector::datediff("observation_period_start_date", "observation_period_end_date",interval = "day")+1) |>
       dplyr::summarise("n" = sum(.data$n, na.rm = TRUE)) |>
       dplyr::pull("n")
