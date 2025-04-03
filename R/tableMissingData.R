@@ -31,7 +31,8 @@ tableMissingData <- function(result,
   result |>
     visOmopResults::visOmopTable(
       type = type,
-      estimateName = c("N missing data (%)" = "<na_count> (<na_percentage>%)"),
+      estimateName = c("N missing data (%)" = "<na_count> (<na_percentage>%)",
+                       "N zeros (%)" = "<zero_count> (<zero_percentage>%)"),
       header = header,
       rename = c("Database name" = "cdm_name", "Column name" = "variable_name"),
       groupColumn = c("omop_table", omopgenerics::strataColumns(result)),
