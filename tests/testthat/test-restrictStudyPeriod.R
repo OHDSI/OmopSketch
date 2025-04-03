@@ -35,7 +35,7 @@ test_that("restrictStudyPeriod works", {
   )
 
   y <- tibble::tibble(
-    observation_period_id = c(1,2, 9) |> as.integer(),
+    observation_period_id = c(1, 2, 9) |> as.integer(),
     person_id = c(1, 1, 5) |> as.integer(),
     observation_period_start_date = as.Date(c(
       "1999-01-01", "2001-01-01", "2004-01-01"
@@ -59,5 +59,4 @@ test_that("restrictStudyPeriod works", {
 
   dateRange <- as.Date(c("1999-01-01", "2000-12-31"))
   expect_equal(restrictStudyPeriod(cdm$observation_period, dateRange = dateRange)$person_id, 1)
-
 })

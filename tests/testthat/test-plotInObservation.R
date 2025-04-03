@@ -6,7 +6,7 @@ test_that("plotInObservation works", {
   # summariseInObservationPlot plot ----
   x <- summariseInObservation(cdm$observation_period, interval = "years")
   expect_no_error(inherits(plotInObservation(x), "ggplot"))
-  x <-  x |> dplyr::filter(result_id == -1)
+  x <- x |> dplyr::filter(result_id == -1)
   expect_error(plotInObservation(x))
 
   expect_error(plotInObservation(summariseInObservation(cdm$observation_period, interval = "years", output = c("person-days", "records"), ageGroup = NULL, sex = FALSE)))
@@ -23,7 +23,8 @@ test_that("plotInObservation works", {
       sex = TRUE,
       ageGroup = list(
         "0-19" = c(0, 19), "20-39" = c(20, 39), "40-59" = c(40, 59),
-        "60-79" = c(60, 79), "80 or above" = c(80, Inf))
+        "60-79" = c(60, 79), "80 or above" = c(80, Inf)
+      )
     )
 
   expect_error(plotInObservation(result))

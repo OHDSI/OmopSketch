@@ -55,48 +55,51 @@ Notice that the output is in the summarised result format.
 We can use the arguments to specify which statistics we want to perform. For example, use the argument `recordsPerPerson` to indicate which estimates you are interested regarding the number of records per person.
 
 ```{r, warning=FALSE}
-summarisedResult <- summariseClinicalRecords(cdm, 
-                                             "condition_occurrence",
-                                             recordsPerPerson =  c("mean", "sd", "q05", "q95"))
+summarisedResult <- summariseClinicalRecords(cdm,
+  "condition_occurrence",
+  recordsPerPerson = c("mean", "sd", "q05", "q95")
+)
 
-summarisedResult |> 
-    filter(variable_name == "records_per_person") |>
-    select(variable_name, estimate_name, estimate_value)
+summarisedResult |>
+  filter(variable_name == "records_per_person") |>
+  select(variable_name, estimate_name, estimate_value)
 ```
 
 You can further specify if you want to include the number of records in observation (`inObservation = TRUE`), the number of concepts mapped (`standardConcept = TRUE`), which types of source vocabulary does the table contain (`sourceVocabulary = TRUE`), which types of domain does the vocabulary have (`domainId = TRUE`) or the concept's type (`typeConcept = TRUE`).
 
 ```{r, warning=FALSE}
-summarisedResult <- summariseClinicalRecords(cdm, 
-                                             "condition_occurrence",
-                                             recordsPerPerson =  c("mean", "sd", "q05", "q95"),
-                                             inObservation = TRUE,
-                                             standardConcept = TRUE,
-                                             sourceVocabulary = TRUE,
-                                             domainId = TRUE,
-                                             typeConcept = TRUE)
+summarisedResult <- summariseClinicalRecords(cdm,
+  "condition_occurrence",
+  recordsPerPerson = c("mean", "sd", "q05", "q95"),
+  inObservation = TRUE,
+  standardConcept = TRUE,
+  sourceVocabulary = TRUE,
+  domainId = TRUE,
+  typeConcept = TRUE
+)
 
-summarisedResult |> 
-  select(variable_name, estimate_name, estimate_value) |> 
+summarisedResult |>
+  select(variable_name, estimate_name, estimate_value) |>
   glimpse()
 ```
 
 Additionally, you can also stratify the previous results by sex and age groups:
 
 ```{r, warning=FALSE}
-summarisedResult <- summariseClinicalRecords(cdm, 
-                                             "condition_occurrence",
-                                             recordsPerPerson =  c("mean", "sd", "q05", "q95"),
-                                             inObservation = TRUE,
-                                             standardConcept = TRUE,
-                                             sourceVocabulary = TRUE,
-                                             domainId = TRUE,
-                                             typeConcept = TRUE,
-                                             sex = TRUE,
-                                             ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf)))
+summarisedResult <- summariseClinicalRecords(cdm,
+  "condition_occurrence",
+  recordsPerPerson = c("mean", "sd", "q05", "q95"),
+  inObservation = TRUE,
+  standardConcept = TRUE,
+  sourceVocabulary = TRUE,
+  domainId = TRUE,
+  typeConcept = TRUE,
+  sex = TRUE,
+  ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf))
+)
 
-summarisedResult |> 
-  select(variable_name, strata_level, estimate_name, estimate_value) |> 
+summarisedResult |>
+  select(variable_name, strata_level, estimate_name, estimate_value) |>
   glimpse()
 ```
 
@@ -105,17 +108,18 @@ Notice that, by default, the "overall" group will be also included, as well as c
 Also, see that the analysis can be conducted for multiple OMOP tables at the same time:
 
 ```{r, warning=FALSE}
-summarisedResult <- summariseClinicalRecords(cdm, 
-                                             c("observation_period","drug_exposure"),
-                                             recordsPerPerson =  c("mean","sd"),
-                                             inObservation = FALSE,
-                                             standardConcept = FALSE,
-                                             sourceVocabulary = FALSE,
-                                             domainId = FALSE,
-                                             typeConcept = FALSE)
+summarisedResult <- summariseClinicalRecords(cdm,
+  c("observation_period", "drug_exposure"),
+  recordsPerPerson = c("mean", "sd"),
+  inObservation = FALSE,
+  standardConcept = FALSE,
+  sourceVocabulary = FALSE,
+  domainId = FALSE,
+  typeConcept = FALSE
+)
 
-summarisedResult |> 
-  select(group_level, variable_name, estimate_name, estimate_value) |> 
+summarisedResult |>
+  select(group_level, variable_name, estimate_name, estimate_value) |>
   glimpse()
 ```
 
@@ -124,17 +128,18 @@ summarisedResult |>
 `tableClinicalRecords()` will help you to tidy the previous results and create a gt table.
 
 ```{r, warning=FALSE}
-summarisedResult <- summariseClinicalRecords(cdm, 
-                                             "condition_occurrence",
-                                             recordsPerPerson =  c("mean", "sd", "q05", "q95"),
-                                             inObservation = TRUE,
-                                             standardConcept = TRUE,
-                                             sourceVocabulary = TRUE,
-                                             domainId = TRUE,
-                                             typeConcept = TRUE, 
-                                             sex = TRUE)
+summarisedResult <- summariseClinicalRecords(cdm,
+  "condition_occurrence",
+  recordsPerPerson = c("mean", "sd", "q05", "q95"),
+  inObservation = TRUE,
+  standardConcept = TRUE,
+  sourceVocabulary = TRUE,
+  domainId = TRUE,
+  typeConcept = TRUE,
+  sex = TRUE
+)
 
-summarisedResult |> 
+summarisedResult |>
   tableClinicalRecords()
 ```
 
@@ -153,7 +158,7 @@ summarisedResult |> plotRecordCount()
 Note that you can adjust the time interval period using the `interval` argument, which can be set to either "years" or "months". See the example below, where it shows the number of records every 18 months:
 
 ```{r, warning=FALSE}
-summariseRecordCount(cdm, "drug_exposure", interval = "months") |> 
+summariseRecordCount(cdm, "drug_exposure", interval = "months") |>
   plotRecordCount()
 ```
 
@@ -161,10 +166,13 @@ We can further stratify our counts by sex (setting argument `sex = TRUE`) or by 
 
 ```{r, warning=FALSE}
 summariseRecordCount(cdm, "drug_exposure",
-                      interval = "months",
-                      sex = TRUE, 
-                      ageGroup = list("<30" = c(0,29),
-                                     ">=30" = c(30,Inf))) |> 
+  interval = "months",
+  sex = TRUE,
+  ageGroup = list(
+    "<30" = c(0, 29),
+    ">=30" = c(30, Inf)
+  )
+) |>
   plotRecordCount()
 ```
 
@@ -172,10 +180,13 @@ By default, `plotRecordCount()` does not apply faceting or colour to any variabl
 
 ```{r, warning=FALSE}
 summariseRecordCount(cdm, "drug_exposure",
-                     interval = "months", 
-                     sex = TRUE,
-                     ageGroup = list("0-29" = c(0,29),
-                                     "30-Inf" = c(30,Inf)))  |>
+  interval = "months",
+  sex = TRUE,
+  ageGroup = list(
+    "0-29" = c(0, 29),
+    "30-Inf" = c(30, Inf)
+  )
+) |>
   visOmopResults::tidyColumns()
 ```
 
@@ -183,15 +194,18 @@ Then, we can simply specify this by using the `facet` and `colour` arguments fro
 
 ```{r, warning=FALSE}
 summariseRecordCount(cdm, "drug_exposure",
-                     interval = "months",
-                     sex = TRUE,
-                     ageGroup = list("0-29" = c(0,29),
-                                     "30-Inf" = c(30,Inf))) |>
-    plotRecordCount(facet = omop_table ~ age_group, colour = "sex")
+  interval = "months",
+  sex = TRUE,
+  ageGroup = list(
+    "0-29" = c(0, 29),
+    "30-Inf" = c(30, Inf)
+  )
+) |>
+  plotRecordCount(facet = omop_table ~ age_group, colour = "sex")
 ```
 
 Finally, disconnect from the cdm
 
 ```{r, warning=FALSE}
-  PatientProfiles::mockDisconnect(cdm = cdm)
+PatientProfiles::mockDisconnect(cdm = cdm)
 ```

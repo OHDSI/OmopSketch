@@ -1,4 +1,3 @@
-
 #' Summarise concept counts in patient-level data. Only concepts recorded during observation period are counted.
 #'
 #' `r lifecycle::badge('deprecated')`

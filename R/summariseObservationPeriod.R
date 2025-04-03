@@ -31,7 +31,8 @@ summariseObservationPeriod <- function(observationPeriod,
                                        estimates = c(
                                          "mean", "sd", "min", "q05", "q25",
                                          "median", "q75", "q95", "max",
-                                         "density"),
+                                         "density"
+                                       ),
                                        ageGroup = NULL,
                                        sex = FALSE,
                                        dateRange = NULL) {
@@ -47,7 +48,7 @@ summariseObservationPeriod <- function(observationPeriod,
   ) |>
     dplyr::pull("estimate_name")
   omopgenerics::assertChoice(estimates, opts, unique = TRUE)
-  tablePrefix <-  omopgenerics::tmpPrefix()
+  tablePrefix <- omopgenerics::tmpPrefix()
   strata <- c(list(character()), omopgenerics::combineStrata(strataCols(sex = sex, ageGroup = ageGroup)))
 
   set <- createSettings(result_type = "summarise_observation_period", study_period = dateRange)
@@ -58,11 +59,11 @@ summariseObservationPeriod <- function(observationPeriod,
   } else {
     obs <- addStrataToPeopleInObservation(cdm, ageGroup$age_group, sex, tablePrefix, dateRange) |>
       dplyr::select(
-        "person_id", dplyr::any_of(c("sex","age_group")),
+        "person_id", dplyr::any_of(c("sex", "age_group")),
         "obs_start" = "observation_period_start_date",
         "obs_end" = "observation_period_end_date"
       ) |>
-      dplyr::group_by(.data$person_id, dplyr::across(dplyr::any_of(c("sex","age_group")))) |>
+      dplyr::group_by(.data$person_id, dplyr::across(dplyr::any_of(c("sex", "age_group")))) |>
       dplyr::arrange(.data$obs_start) |>
       dplyr::mutate("next_start" = dplyr::lead(.data$obs_start)) %>%
       dplyr::mutate(
@@ -71,16 +72,16 @@ summariseObservationPeriod <- function(observationPeriod,
         "id" = as.integer(dplyr::row_number())
       ) |>
       dplyr::ungroup() |>
-      dplyr::select("person_id", "id", "duration", "next_obs", dplyr::any_of(c("sex","age_group"))) |>
+      dplyr::select("person_id", "id", "duration", "next_obs", dplyr::any_of(c("sex", "age_group"))) |>
       dplyr::collect()
-    if (all(is.na(obs$next_obs))){
+    if (all(is.na(obs$next_obs))) {
       obs <- obs |>
         dplyr::select(!"next_obs")
     }
 
-   if (dim(obs)[1]==0){
-     return(omopgenerics::emptySummarisedResult(settings = set))
-   }
+    if (dim(obs)[1] == 0) {
+      return(omopgenerics::emptySummarisedResult(settings = set))
+    }
 
     obsSr <- obs |>
       PatientProfiles::summariseResult(
@@ -93,20 +94,21 @@ summariseObservationPeriod <- function(observationPeriod,
       ) |>
       suppressMessages() |>
       dplyr::mutate(variable_name = dplyr::if_else(.data$variable_name == "number records", "Number records",
-                                                   dplyr::if_else(.data$variable_name == "number subjects", "Number subjects" , .data$variable_name))) |>
-        dplyr::union_all(
-          obs |>
-            dplyr::group_by(.data$person_id, dplyr::across(dplyr::any_of(c("sex","age_group")))) |>
-            dplyr::tally(name = "n") |>
-            dplyr::ungroup() |>
-            PatientProfiles::summariseResult(
-              variables = c("n"),
-              estimates = estimates,
-              counts = F,
-              strata = strata
-            ) |>
-            suppressMessages()
+        dplyr::if_else(.data$variable_name == "number subjects", "Number subjects", .data$variable_name)
+      )) |>
+      dplyr::union_all(
+        obs |>
+          dplyr::group_by(.data$person_id, dplyr::across(dplyr::any_of(c("sex", "age_group")))) |>
+          dplyr::tally(name = "n") |>
+          dplyr::ungroup() |>
+          PatientProfiles::summariseResult(
+            variables = c("n"),
+            estimates = estimates,
+            counts = F,
+            strata = strata
           ) |>
+          suppressMessages()
+      ) |>
       addOrdinalLevels() |>
       dplyr::filter(.data$variable_name != "Number records" | .data$group_level == "all") |>
       arrangeSr(estimates)
@@ -131,10 +133,10 @@ summariseObservationPeriod <- function(observationPeriod,
 
 addOrdinalLevels <- function(x) {
   group_cols <- omopgenerics::groupColumns(x)
-  x<-x|>omopgenerics::splitGroup()
+  x <- x |> omopgenerics::splitGroup()
 
   xx <- suppressWarnings(as.integer(x$id))
-  desena <- (floor(xx/10)) %% 10
+  desena <- (floor(xx / 10)) %% 10
   unitat <- xx %% 10
   val <- rep("all", length(xx))
   id0 <- !is.na(xx)
@@ -147,8 +149,10 @@ addOrdinalLevels <- function(x) {
   val[id] <- paste0(xx[id], "rd")
 
   x <- x |>
-    dplyr::mutate("group_level" = .env$val,
-                  "group_name" = "observation_period_ordinal") |>
+    dplyr::mutate(
+      "group_level" = .env$val,
+      "group_name" = "observation_period_ordinal"
+    ) |>
     dplyr::select(-c("id"))
 
   return(x)
@@ -177,7 +181,7 @@ arrangeSr <- function(x, estimates) {
     dplyr::union_all(
       tidyr::expand_grid(
         "variable_name" = c("n", "duration", "next_obs"),
-        "group_level"   = group,
+        "group_level" = group,
         "strata_level" = lev,
         "estimate_name" = estimates
       )

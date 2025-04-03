@@ -1,4 +1,3 @@
-
 #' Create a visual table from a summariseClinicalRecord() output.
 #'
 #' @param result Output from summariseClinicalRecords().
@@ -25,7 +24,7 @@
 #'   tableClinicalRecords()
 #'
 #' PatientProfiles::mockDisconnect(cdm)
-#'}
+#' }
 tableClinicalRecords <- function(result,
                                  type = "gt") {
   # initial checks
@@ -36,7 +35,8 @@ tableClinicalRecords <- function(result,
   # subset to result_type of interest
   result <- result |>
     omopgenerics::filterSettings(
-      .data$result_type == "summarise_clinical_records")
+      .data$result_type == "summarise_clinical_records"
+    )
 
   # check if it is empty
   if (nrow(result) == 0) {
@@ -54,7 +54,8 @@ tableClinicalRecords <- function(result,
       estimateName = c(
         "N (%)" = "<count> (<percentage>%)",
         "N" = "<count>",
-        "Mean (SD)" = "<mean> (<sd>)"),
+        "Mean (SD)" = "<mean> (<sd>)"
+      ),
       header = header,
       rename = c("Database name" = "cdm_name"),
       groupColumn = c("omop_table", omopgenerics::strataColumns(result))

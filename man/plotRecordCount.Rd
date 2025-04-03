@@ -28,7 +28,7 @@ cdm <- mockOmopSketch()
 summarisedResult <- summariseRecordCount(
   cdm = cdm,
   omopTableName = "condition_occurrence",
-  ageGroup = list("<=20" = c(0,20), ">20" = c(21, Inf)),
+  ageGroup = list("<=20" = c(0, 20), ">20" = c(21, Inf)),
   sex = TRUE
 )
 

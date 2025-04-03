@@ -1,4 +1,3 @@
-
 #' Summarise concept counts in patient-level data. Only concepts recorded during observation period are counted.
 #'
 #' @param cdm A cdm object
@@ -27,7 +26,6 @@
 #' results
 #'
 #' PatientProfiles::mockDisconnect(cdm)
-#'
 #' }
 summariseConceptSetCounts <- function(cdm,
                                       conceptSet,
@@ -120,7 +118,9 @@ summariseConceptSetCounts <- function(cdm,
 
     # restrict study period
     omopTable <- restrictStudyPeriod(omopTable, dateRange)
-    if (is.null(omopTable)) return(NULL)
+    if (is.null(omopTable)) {
+      return(NULL)
+    }
 
     res <- omopTable |>
       # restrct to counts in observation
