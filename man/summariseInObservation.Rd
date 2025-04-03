@@ -49,7 +49,7 @@ cdm <- mockOmopSketch()
 result <- summariseInObservation(
   cdm$observation_period,
   interval = "months",
-  output = c("person-days","records"),
+  output = c("person-days","record"),
   ageGroup = list("<=60" = c(0,60), ">60" = c(61, Inf)),
   sex = TRUE
 )

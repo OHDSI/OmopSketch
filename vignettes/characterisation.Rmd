@@ -146,7 +146,7 @@ The `summariseInObservation()` function calculates the number of subjects and th
 
 ```{r, warning=FALSE}
 result_inObservation <-summariseInObservation(cdm$observation_period,
-                                              output = c("records","person-days"),
+                                              output = c("record","person-days"),
                                               interval = interval,
                                               sex = sex,
                                               ageGroup = ageGroup,

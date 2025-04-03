@@ -43,6 +43,24 @@ test_that("check summariseInObservation works", {
     dplyr::pull("n") |> as.numeric()
   expect_equal(x,y)
 
+  x <- summariseInObservation(cdm$observation_period, output = "person", interval = "years") |>
+    dplyr::filter(additional_level == c("1996-01-01 to 1996-12-31"), estimate_name == "count") |>
+    dplyr::pull("estimate_value") |>
+    as.numeric()
+  y <- cdm$observation_period %>%
+    dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
+    dplyr::mutate(start = !!CDMConnector::datepart("observation_period_start_date", "year")) %>%
+    dplyr::mutate(end = !!CDMConnector::datepart("observation_period_end_date", "year")) %>%
+    dplyr::filter((.data$start < 1996 & .data$end >= 1996) |
+                    (.data$start >= 1996 & .data$start <= 1996))  |>
+    dplyr::distinct(.data$person_id) |>
+    dplyr::tally() |>
+    dplyr::pull("n") |> as.numeric()
+  expect_equal(x,y)
+
+
+
+
   x <- summariseInObservation(cdm$observation_period, interval = "years") |>
     dplyr::filter(additional_level == c("1998-01-01 to 1998-12-31"), estimate_name == "count") |>
     dplyr::pull("estimate_value") |>

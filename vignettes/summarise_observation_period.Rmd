@@ -148,11 +148,11 @@ summarisedResult |>
   select(variable_name, estimate_name, estimate_value, additional_name, additional_level)
 ```
 
-Along with the number of records in observation, you can also calculate the number of person-days by setting the `output` argument to c("records", "person-days").
+Along with the number of records in observation, you can also calculate the number of person-days by setting the `output` argument to c("record", "person-days").
 
 ```{r, warning=FALSE}
 summarisedResult <- summariseInObservation(cdm$observation_period, 
-                                           output = c("records", "person-days"))                                        
+                                           output = c("record", "person-days"))                                        
 
 summarisedResult |>
   select(variable_name, estimate_name, estimate_value, additional_name, additional_level)
@@ -162,7 +162,7 @@ We can further stratify our counts by sex (setting argument `sex = TRUE`) or by 
 
 ```{r, warning=FALSE}
 summarisedResult <- summariseInObservation(cdm$observation_period, 
-                                           output = c("records", "person-days"),
+                                           output = c("record", "person-days"),
                                            interval = "quarters",
                                            sex = TRUE, 
                                            ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf)), 
@@ -190,7 +190,7 @@ Additionally, if results were stratified by sex or age group, we can further use
 ```{r, warning=FALSE}
 summarisedResult <- summariseInObservation(cdm$observation_period, 
                        interval = "years",
-                       output = c("records", "person-days"),
+                       output = c("record", "person-days"),
                        sex = TRUE,
                        ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf))) 
 plotInObservation(summarisedResult |> 
