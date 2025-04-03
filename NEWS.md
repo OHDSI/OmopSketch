@@ -1,3 +1,6 @@
+# OmopSketch 0.3.1.900
+- remove dplyr::compute() from sampleOmopTable() by @cecicampanile #344
+
 # OmopSketch 0.3.1
 
 -   remove dplyr::collect() from summariseClinicalRecords() by @cecicampanile #328
