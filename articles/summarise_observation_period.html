@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">OmopSketch</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.1.900</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,7 +63,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Summarise observation period</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/OHDSI/OmopSketch/blob/0.3.1/vignettes/summarise_observation_period.Rmd" class="external-link"><code>vignettes/summarise_observation_period.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/OHDSI/OmopSketch/blob/main/vignettes/summarise_observation_period.Rmd" class="external-link"><code>vignettes/summarise_observation_period.Rmd</code></a></small>
       <div class="d-none name"><code>summarise_observation_period.Rmd</code></div>
     </div>
 
@@ -175,11 +175,11 @@ specify a date range of interest:</p>
 <span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 135</span></span>
 <span><span class="co">#&gt; Columns: 5</span></span>
-<span><span class="co">#&gt; $ group_level    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "all", "all", "all", "all", "all", "all", "all", "all",…</span></span>
-<span><span class="co">#&gt; $ variable_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Number records", "Number subjects", "Records per perso…</span></span>
-<span><span class="co">#&gt; $ strata_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall", "overall", "overall", "overall", "overall", …</span></span>
-<span><span class="co">#&gt; $ estimate_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count", "count", "mean", "sd", "q05", "q95", "mean", "…</span></span>
-<span><span class="co">#&gt; $ estimate_value <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "94", "80", "1", "0", "1", "1", "3587.54255319149", "27…</span></span></code></pre></div>
+<span><span class="co">#&gt; $ group_level    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "all"<span style="color: #949494;">, </span>"all"<span style="color: #949494;">, </span>"all"<span style="color: #949494;">, </span>"all"<span style="color: #949494;">, </span>"all"<span style="color: #949494;">, </span>"all"<span style="color: #949494;">, </span>"all"<span style="color: #949494;">, </span>"all"<span style="color: #949494;">,</span>…</span></span>
+<span><span class="co">#&gt; $ variable_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Number records"<span style="color: #949494;">, </span>"Number subjects"<span style="color: #949494;">, </span>"Records per perso…</span></span>
+<span><span class="co">#&gt; $ strata_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>…</span></span>
+<span><span class="co">#&gt; $ estimate_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count"<span style="color: #949494;">, </span>"count"<span style="color: #949494;">, </span>"mean"<span style="color: #949494;">, </span>"sd"<span style="color: #949494;">, </span>"q05"<span style="color: #949494;">, </span>"q95"<span style="color: #949494;">, </span>"mean"<span style="color: #949494;">, </span>"…</span></span>
+<span><span class="co">#&gt; $ estimate_value <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "94"<span style="color: #949494;">, </span>"80"<span style="color: #949494;">, </span>"1"<span style="color: #949494;">, </span>"0"<span style="color: #949494;">, </span>"1"<span style="color: #949494;">, </span>"1"<span style="color: #949494;">, </span>"3587.54255319149"<span style="color: #949494;">, </span>"27…</span></span></code></pre></div>
 <p>Notice that, by default, the “overall” group will be also included,
 as well as crossed strata (that means, sex == “Female” and ageGroup ==
 “&gt;35”).</p>
@@ -926,16 +926,16 @@ also define a date range of interest to filter the
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1,664 × 6</span></span></span>
 <span><span class="co">#&gt;    strata_level   variable_name     estimate_name estimate_value additional_name</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Male           Number person-da… count         270            time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Male &amp;&amp;&amp; &lt;35   Number person-da… count         270            time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Male &amp;&amp;&amp; &lt;35   Number person-da… count         270            time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Male           Number person-da… count         270            time_interval  </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Female         Number person-da… count         270            time_interval  </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Female &amp;&amp;&amp; &lt;35 Number person-da… count         270            time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Male           Number records i… count         3              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Female         Number records i… count         3              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Male &amp;&amp;&amp; &lt;35   Number records i… count         3              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Female &amp;&amp;&amp; &lt;35 Number records i… count         3              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Male           Number person-da… count         276            time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Male &amp;&amp;&amp; &lt;35   Number person-da… count         276            time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Male &amp;&amp;&amp; &lt;35   Number records i… count         3              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Female &amp;&amp;&amp; &lt;35 Number records i… count         3              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Female         Number records i… count         3              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Male           Number records i… count         3              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Male &amp;&amp;&amp; &lt;35   Number person-da… count         276            time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Male           Number person-da… count         276            time_interval  </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1,654 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: additional_level &lt;chr&gt;</span></span></span></code></pre></div>
 <div class="section level3">
