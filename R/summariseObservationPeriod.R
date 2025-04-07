@@ -5,6 +5,7 @@
 #' @param estimates Estimates to summarise the variables of interest (
 #' `records per person`, `duration in days` and
 #' `days to next observation period`).
+#' @param byOrdinal Boolean variable. Whether to stratify by the ordinal observation period (e.g., 1st, 2nd, etc.) (TRUE) or simply analyze overall data (FALSE)
 #' @param ageGroup A list of age groups to stratify results by.
 #' @param sex Boolean variable. Whether to stratify by sex (TRUE) or not
 #' (FALSE).
@@ -32,6 +33,7 @@ summariseObservationPeriod <- function(observationPeriod,
                                          "mean", "sd", "min", "q05", "q25",
                                          "median", "q75", "q95", "max",
                                          "density"),
+                                       byOrdinal = TRUE,
                                        ageGroup = NULL,
                                        sex = FALSE,
                                        dateRange = NULL) {
@@ -85,7 +87,7 @@ summariseObservationPeriod <- function(observationPeriod,
     obsSr <- obs |>
       PatientProfiles::summariseResult(
         strata = strata,
-        group = "id",
+        group = "id"[byOrdinal],
         includeOverallGroup = TRUE,
         includeOverallStrata = TRUE,
         variables = c("duration", "next_obs"),
@@ -107,7 +109,7 @@ summariseObservationPeriod <- function(observationPeriod,
             ) |>
             suppressMessages()
           ) |>
-      addOrdinalLevels() |>
+      addOrdinalLevels(byOrdinal = byOrdinal) |>
       dplyr::filter(.data$variable_name != "Number records" | .data$group_level == "all") |>
       arrangeSr(estimates)
   }
@@ -129,7 +131,8 @@ summariseObservationPeriod <- function(observationPeriod,
   return(obsSr)
 }
 
-addOrdinalLevels <- function(x) {
+addOrdinalLevels <- function(x, byOrdinal) {
+  if (byOrdinal) {
   group_cols <- omopgenerics::groupColumns(x)
   x<-x|>omopgenerics::splitGroup()
 
@@ -150,7 +153,11 @@ addOrdinalLevels <- function(x) {
     dplyr::mutate("group_level" = .env$val,
                   "group_name" = "observation_period_ordinal") |>
     dplyr::select(-c("id"))
-
+  } else {
+  x <- x |>
+      dplyr::mutate("group_level" = "all",
+                    "group_name" = "observation_period_ordinal")
+}
   return(x)
 }
 arrangeSr <- function(x, estimates) {
