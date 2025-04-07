@@ -199,7 +199,7 @@ summariseClinicalRecords <- function(cdm,
                 variable_name = "In observation",
                 variable_level = dplyr::if_else(.data[[var]] == 1, "Yes", "No")
               )
-          } else if (var == "doamin_id") {
+          } else if (var == "domain_id") {
             res <- res |>
               dplyr::mutate(
                 variable_name = "Domain",
