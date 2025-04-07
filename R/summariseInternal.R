@@ -79,8 +79,8 @@ sampleOmopTable <- function(x, sample, name) {
   if (x |> dplyr::tally() |> dplyr::pull() <= sample) return(x)
 
   x <- x |>
-    dplyr::slice_sample(n = sample) |>
-    dplyr::compute(name = name, temporary = FALSE)
+    dplyr::slice_sample(n = sample)
+
 
   return(x)
 }
