@@ -27,4 +27,3 @@ test_that("databaseCharacteristics works", {
 
 })
 
-res<-databaseCharacteristics(cdm, sex = TRUE, ageGroup = list(c(0,50), c(51,Inf)), dateRange = as.Date(c("1970-01-01", NA)), conceptIdCount = TRUE)
