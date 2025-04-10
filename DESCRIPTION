@@ -48,6 +48,7 @@ Suggests:
     knitr,
     lubridate,
     odbc,
+    OmopViewer,
     remotes,
     rmarkdown,
     RPostgres,
