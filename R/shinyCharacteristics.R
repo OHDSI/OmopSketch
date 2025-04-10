@@ -55,7 +55,7 @@ shinyCharacteristics <- function(result, directory, logo = "ohdsi", theme = "bsl
   panelDetails$summarise_observation_period$content$tidy <- NULL
 
   variable_names <- result |>
-    omopgenerics::filterSettings(result_type == "summarise_observation_period") |>
+    omopgenerics::filterSettings(.data$result_type == "summarise_observation_period") |>
     dplyr::distinct(.data$variable_name) |>
     dplyr::pull()
 

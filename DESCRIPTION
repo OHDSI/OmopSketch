@@ -75,7 +75,7 @@ Imports:
     tibble,
     tidyr
 Remotes:
-  ohdsi/OmopViewer
+  github::OHDSI/OmopViewer
 Depends: 
     R (>= 4.1)
 URL: https://OHDSI.github.io/OmopSketch/
