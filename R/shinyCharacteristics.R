@@ -71,7 +71,7 @@ shinyCharacteristics <- function(result, directory, logo = "ohdsi", theme = "bsl
   panelDetails$summarise_characteristics$title <- "Population Characteristics"
 
   variable_names <- result |>
-    omopgenerics::filterSettings(result_type == "summarise_characteristics") |>
+    omopgenerics::filterSettings(.data$result_type == "summarise_characteristics") |>
     dplyr::distinct(.data$variable_name) |>
     dplyr::pull()
   panelDetails$summarise_characteristics$content$plot$render <- "<filtered_data> |>\n dplyr::filter(.data$variable_name == input$variable) |> \n    CohortCharacteristics::plotCharacteristics(\n      plotType = input$plot_type,\n      facet = input$facet,\n      colour = input$colour\n      )"
@@ -93,7 +93,7 @@ shinyCharacteristics <- function(result, directory, logo = "ohdsi", theme = "bsl
   )
 
   OmopViewer::exportStaticApp(
-    result = res,
+    result = result,
     directory = directory,
     logo = logo,
     title = "Characterisation",
