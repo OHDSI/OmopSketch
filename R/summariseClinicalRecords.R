@@ -284,7 +284,7 @@ summariseRecordsPerPerson <- function(x, den, strata, estimates) {
   nm <- omopgenerics::uniqueTableName(prefix = prefix)
 
   res <- den |>
-    dplyr::left_join(
+    dplyr::full_join(
       x |>
         dplyr::group_by(dplyr::across(dplyr::all_of(c("person_id", strataCols)))) |>
         dplyr::summarise(n = as.integer(dplyr::n()), .groups = "drop"),
