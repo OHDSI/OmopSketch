@@ -52,7 +52,7 @@ summariseInObservation <- function(observationPeriod,
   }
 
   checkOutput(output)
-  ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "")
+  ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "")[[1]]
   omopgenerics::assertLogical(sex, length = 1)
   original_interval <- interval
   x <- validateIntervals(interval)
