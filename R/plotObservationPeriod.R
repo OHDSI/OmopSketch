@@ -106,7 +106,20 @@ plotObservationPeriod <- function(result,
       ggplot2::xlab(stringr::str_to_sentence(unique(result$variable_name))) +
       ggplot2::ylab("Density")
   }
-
+  p$data <- p$data |>
+    dplyr::mutate(
+      observation_period_order = dplyr::if_else(
+        .data$observation_period_ordinal == "all",
+        0,
+        as.numeric(gsub("\\D", "", .data$observation_period_ordinal))
+      )
+    ) |>
+    dplyr::mutate(
+      observation_period_ordinal = factor(
+        .data$observation_period_ordinal,
+        levels = unique(.data$observation_period_ordinal[order(.data$observation_period_order)])
+      )
+    )
   return(p)
 }
 
