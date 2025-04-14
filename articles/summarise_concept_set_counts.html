@@ -107,7 +107,7 @@ database.</p>
 <span>  con <span class="op">=</span> <span class="va">con</span>, cdmSchema <span class="op">=</span> <span class="st">"main"</span>, writeSchema <span class="op">=</span> <span class="st">"main"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">cdm</span> </span>
+<span><span class="va">cdm</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;"># OMOP CDM reference (duckdb) of Synthea</span> <span style="color: #00BBBB;">────────────────────────────────────</span></span></span>
 <span><span class="co">#&gt; • <span style="font-weight: bold;">omop tables:</span> person, observation_period, visit_occurrence, visit_detail,</span></span>
@@ -163,10 +163,13 @@ database. For that, we can use <code><a href="../reference/summariseConceptSetCo
 from OmopSketch:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/summariseConceptSetCounts.html">summariseConceptSetCounts</a></span><span class="op">(</span><span class="va">cdm</span>,</span>
-<span>                       conceptSet <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"acetaminophen"</span> <span class="op">=</span> <span class="va">acetaminophen</span>,                          </span>
-<span>                                        <span class="st">"sinusitis"</span> <span class="op">=</span> <span class="va">sinusitis</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span>   </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span>, <span class="va">variable_level</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span><span class="op">)</span> <span class="op">|&gt;</span>   </span>
-<span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span> </span>
+<span>  conceptSet <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    <span class="st">"acetaminophen"</span> <span class="op">=</span> <span class="va">acetaminophen</span>,</span>
+<span>    <span class="st">"sinusitis"</span> <span class="op">=</span> <span class="va">sinusitis</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span>, <span class="va">variable_level</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Searching concepts from domain <span style="color: #0000BB;">drug</span> in <span style="color: #0000BB;">drug_exposure</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Searching concepts from domain <span style="color: #0000BB;">condition</span> in <span style="color: #0000BB;">condition_occurrence</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Counting concepts</span></span>
@@ -176,16 +179,19 @@ from OmopSketch:</p>
 <span><span class="co">#&gt; $ variable_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Number records"<span style="color: #949494;">, </span>"Number subjects"<span style="color: #949494;">, </span>"Number records"<span style="color: #949494;">, </span>…</span></span>
 <span><span class="co">#&gt; $ variable_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">,</span>…</span></span>
 <span><span class="co">#&gt; $ estimate_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count"<span style="color: #949494;">, </span>"count"<span style="color: #949494;">, </span>"count"<span style="color: #949494;">, </span>"count"<span style="color: #949494;">, </span>"count"<span style="color: #949494;">, </span>"count"<span style="color: #949494;">, </span>"…</span></span>
-<span><span class="co">#&gt; $ estimate_value <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "14205"<span style="color: #949494;">, </span>"2679"<span style="color: #949494;">, </span>"20033"<span style="color: #949494;">, </span>"2689"<span style="color: #949494;">, </span>"1993"<span style="color: #949494;">, </span>"1393"<span style="color: #949494;">, </span>"2158…</span></span></code></pre></div>
+<span><span class="co">#&gt; $ estimate_value <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "14205"<span style="color: #949494;">, </span>"2679"<span style="color: #949494;">, </span>"20033"<span style="color: #949494;">, </span>"2689"<span style="color: #949494;">, </span>"9365"<span style="color: #949494;">, </span>"2580"<span style="color: #949494;">, </span>"71"<span style="color: #949494;">,</span>…</span></span></code></pre></div>
 <p>By default, the function will provide information about either the
 number of records (<code>estimate_name == "record_count"</code>) for
 each concept_id or the number of people
 (<code>estimate_name == "person_count"</code>):</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/summariseConceptSetCounts.html">summariseConceptSetCounts</a></span><span class="op">(</span><span class="va">cdm</span>, </span>
-<span>                       conceptSet <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"acetaminophen"</span> <span class="op">=</span> <span class="va">acetaminophen</span>, </span>
-<span>                                        <span class="st">"sinusitis"</span> <span class="op">=</span> <span class="va">sinusitis</span><span class="op">)</span>, </span>
-<span>                       countBy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"record"</span>,<span class="st">"person"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/summariseConceptSetCounts.html">summariseConceptSetCounts</a></span><span class="op">(</span><span class="va">cdm</span>,</span>
+<span>  conceptSet <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    <span class="st">"acetaminophen"</span> <span class="op">=</span> <span class="va">acetaminophen</span>,</span>
+<span>    <span class="st">"sinusitis"</span> <span class="op">=</span> <span class="va">sinusitis</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  countBy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"record"</span>, <span class="st">"person"</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span>, <span class="va">estimate_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span><span class="op">)</span></span>
@@ -202,13 +208,16 @@ each concept_id or the number of people
 <p>However, we can specify which one is of interest using
 <code>countBy</code> argument:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/summariseConceptSetCounts.html">summariseConceptSetCounts</a></span><span class="op">(</span><span class="va">cdm</span>, </span>
-<span>                       conceptSet <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"acetaminophen"</span> <span class="op">=</span> <span class="va">acetaminophen</span>,</span>
-<span>                                        <span class="st">"sinusitis"</span> <span class="op">=</span> <span class="va">sinusitis</span><span class="op">)</span>,</span>
-<span>                       countBy <span class="op">=</span> <span class="st">"record"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/summariseConceptSetCounts.html">summariseConceptSetCounts</a></span><span class="op">(</span><span class="va">cdm</span>,</span>
+<span>  conceptSet <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    <span class="st">"acetaminophen"</span> <span class="op">=</span> <span class="va">acetaminophen</span>,</span>
+<span>    <span class="st">"sinusitis"</span> <span class="op">=</span> <span class="va">sinusitis</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  countBy <span class="op">=</span> <span class="st">"record"</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span>, <span class="va">estimate_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span><span class="op">)</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Searching concepts from domain <span style="color: #0000BB;">drug</span> in <span style="color: #0000BB;">drug_exposure</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Searching concepts from domain <span style="color: #0000BB;">condition</span> in <span style="color: #0000BB;">condition_occurrence</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Counting concepts</span></span>
@@ -222,20 +231,24 @@ each concept_id or the number of people
 arguments.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/summariseConceptSetCounts.html">summariseConceptSetCounts</a></span><span class="op">(</span><span class="va">cdm</span>,</span>
-<span>                       conceptSet <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"acetaminophen"</span> <span class="op">=</span> <span class="va">acetaminophen</span>,</span>
-<span>                                        <span class="st">"sinusitis"</span> <span class="op">=</span> <span class="va">sinusitis</span><span class="op">)</span>,</span>
-<span>                       countBy <span class="op">=</span> <span class="st">"person"</span>,</span>
-<span>                       interval <span class="op">=</span> <span class="st">"years"</span>,</span>
-<span>                       sex  <span class="op">=</span> <span class="cn">TRUE</span>,  </span>
-<span>                       ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;=50"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">50</span><span class="op">)</span>, <span class="st">"&gt;50"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">51</span>,<span class="cn">Inf</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span>   </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">strata_level</span>, <span class="va">variable_name</span>, <span class="va">estimate_name</span><span class="op">)</span> <span class="op">|&gt;</span>   <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span> </span>
+<span>  conceptSet <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    <span class="st">"acetaminophen"</span> <span class="op">=</span> <span class="va">acetaminophen</span>,</span>
+<span>    <span class="st">"sinusitis"</span> <span class="op">=</span> <span class="va">sinusitis</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  countBy <span class="op">=</span> <span class="st">"person"</span>,</span>
+<span>  interval <span class="op">=</span> <span class="st">"years"</span>,</span>
+<span>  sex <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;=50"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">50</span><span class="op">)</span>, <span class="st">"&gt;50"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">51</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">strata_level</span>, <span class="va">variable_name</span>, <span class="va">estimate_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Searching concepts from domain <span style="color: #0000BB;">drug</span> in <span style="color: #0000BB;">drug_exposure</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Searching concepts from domain <span style="color: #0000BB;">condition</span> in <span style="color: #0000BB;">condition_occurrence</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Counting concepts</span></span>
 <span><span class="co">#&gt; Rows: 7,545</span></span>
 <span><span class="co">#&gt; Columns: 4</span></span>
-<span><span class="co">#&gt; $ group_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "acetaminophen"<span style="color: #949494;">, </span>"sinusitis"<span style="color: #949494;">, </span>"acetaminophen"<span style="color: #949494;">, </span>"sinusiti…</span></span>
-<span><span class="co">#&gt; $ strata_level  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"&lt;=50"<span style="color: #949494;">, </span>"&gt;50"<span style="color: #949494;">, </span>"&gt;50"<span style="color: #949494;">, </span>"&lt;=50"<span style="color: #949494;">, </span>"Fem…</span></span>
+<span><span class="co">#&gt; $ group_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "sinusitis"<span style="color: #949494;">, </span>"acetaminophen"<span style="color: #949494;">, </span>"acetaminophen"<span style="color: #949494;">, </span>"sinusiti…</span></span>
+<span><span class="co">#&gt; $ strata_level  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"&gt;50"<span style="color: #949494;">, </span>"&lt;=50"<span style="color: #949494;">, </span>"&lt;=50"<span style="color: #949494;">, </span>"&gt;50"<span style="color: #949494;">, </span>"Mal…</span></span>
 <span><span class="co">#&gt; $ variable_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Number subjects"<span style="color: #949494;">, </span>"Number subjects"<span style="color: #949494;">, </span>"Number subjects"<span style="color: #949494;">,</span>…</span></span>
 <span><span class="co">#&gt; $ estimate_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count"<span style="color: #949494;">, </span>"count"<span style="color: #949494;">, </span>"count"<span style="color: #949494;">, </span>"count"<span style="color: #949494;">, </span>"count"<span style="color: #949494;">, </span>"count"<span style="color: #949494;">, </span>"c…</span></span></code></pre></div>
 <div class="section level3">
@@ -244,9 +257,10 @@ arguments.</p>
 <p>Finally, we can visualise the concept counts using
 <code>plotRecordCounts()</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/summariseConceptSetCounts.html">summariseConceptSetCounts</a></span><span class="op">(</span><span class="va">cdm</span>, </span>
-<span>                       conceptSet <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"sinusitis"</span> <span class="op">=</span> <span class="va">sinusitis</span><span class="op">)</span>, </span>
-<span>                       countBy <span class="op">=</span> <span class="st">"person"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/summariseConceptSetCounts.html">summariseConceptSetCounts</a></span><span class="op">(</span><span class="va">cdm</span>,</span>
+<span>  conceptSet <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"sinusitis"</span> <span class="op">=</span> <span class="va">sinusitis</span><span class="op">)</span>,</span>
+<span>  countBy <span class="op">=</span> <span class="st">"person"</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/plotConceptSetCounts.html">plotConceptSetCounts</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Searching concepts from domain <span style="color: #0000BB;">condition</span> in <span style="color: #0000BB;">condition_occurrence</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Counting concepts</span></span></code></pre></div>
@@ -255,9 +269,10 @@ Notice that either person counts or record counts can be plotted. If
 both have been included in the summarised result, you will have to
 filter to only include one variable at time:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/summariseConceptSetCounts.html">summariseConceptSetCounts</a></span><span class="op">(</span><span class="va">cdm</span>, </span>
-<span>                       conceptSet <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"sinusitis"</span> <span class="op">=</span> <span class="va">sinusitis</span><span class="op">)</span>,</span>
-<span>                       countBy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"person"</span>,<span class="st">"record"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/summariseConceptSetCounts.html">summariseConceptSetCounts</a></span><span class="op">(</span><span class="va">cdm</span>,</span>
+<span>  conceptSet <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"sinusitis"</span> <span class="op">=</span> <span class="va">sinusitis</span><span class="op">)</span>,</span>
+<span>  countBy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"person"</span>, <span class="st">"record"</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">variable_name</span> <span class="op">==</span> <span class="st">"Number subjects"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/plotConceptSetCounts.html">plotConceptSetCounts</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Searching concepts from domain <span style="color: #0000BB;">condition</span> in <span style="color: #0000BB;">condition_occurrence</span>.</span></span>
@@ -269,11 +284,12 @@ to highlight the different results in the plot. To help us identify by
 which variables we can colour or facet by, we can use <a href="https://darwin-eu.github.io/visOmopResults/" class="external-link">visOmopResult</a>
 package.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/summariseConceptSetCounts.html">summariseConceptSetCounts</a></span><span class="op">(</span><span class="va">cdm</span>, </span>
-<span>                       conceptSet <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"sinusitis"</span> <span class="op">=</span> <span class="va">sinusitis</span><span class="op">)</span>,</span>
-<span>                       countBy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"person"</span><span class="op">)</span>,</span>
-<span>                       sex <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>                       ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;=50"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">50</span><span class="op">)</span>, <span class="st">"&gt;50"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">51</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/summariseConceptSetCounts.html">summariseConceptSetCounts</a></span><span class="op">(</span><span class="va">cdm</span>,</span>
+<span>  conceptSet <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"sinusitis"</span> <span class="op">=</span> <span class="va">sinusitis</span><span class="op">)</span>,</span>
+<span>  countBy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"person"</span><span class="op">)</span>,</span>
+<span>  sex <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;=50"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">50</span><span class="op">)</span>, <span class="st">"&gt;50"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">51</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">visOmopResults</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/omopgenerics/reference/tidyColumns.html" class="external-link">tidyColumns</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Searching concepts from domain <span style="color: #0000BB;">condition</span> in <span style="color: #0000BB;">condition_occurrence</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Counting concepts</span></span>
@@ -282,11 +298,12 @@ package.</p>
 <span><span class="co">#&gt;  [7] "count"                 "standard_concept_name" "standard_concept_id"  </span></span>
 <span><span class="co">#&gt; [10] "source_concept_name"   "source_concept_id"     "domain_id"</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/summariseConceptSetCounts.html">summariseConceptSetCounts</a></span><span class="op">(</span><span class="va">cdm</span>, </span>
-<span>                       conceptSet <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"sinusitis"</span> <span class="op">=</span> <span class="va">sinusitis</span><span class="op">)</span>,</span>
-<span>                       countBy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"person"</span><span class="op">)</span>,</span>
-<span>                       sex <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>                       ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;=50"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">50</span><span class="op">)</span>, <span class="st">"&gt;50"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">51</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="fu"><a href="../reference/summariseConceptSetCounts.html">summariseConceptSetCounts</a></span><span class="op">(</span><span class="va">cdm</span>,</span>
+<span>  conceptSet <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"sinusitis"</span> <span class="op">=</span> <span class="va">sinusitis</span><span class="op">)</span>,</span>
+<span>  countBy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"person"</span><span class="op">)</span>,</span>
+<span>  sex <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;=50"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">50</span><span class="op">)</span>, <span class="st">"&gt;50"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">51</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/plotConceptSetCounts.html">plotConceptSetCounts</a></span><span class="op">(</span>facet <span class="op">=</span> <span class="st">"sex"</span>, colour <span class="op">=</span> <span class="st">"age_group"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Searching concepts from domain <span style="color: #0000BB;">condition</span> in <span style="color: #0000BB;">condition_occurrence</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Counting concepts</span></span></code></pre></div>

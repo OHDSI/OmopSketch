@@ -102,7 +102,7 @@ database.</p>
 <span>  con <span class="op">=</span> <span class="va">con</span>, cdmSchema <span class="op">=</span> <span class="st">"main"</span>, writeSchema <span class="op">=</span> <span class="st">"main"</span>, cdmName <span class="op">=</span> <span class="st">"Eunomia"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">cdm</span> </span>
+<span><span class="va">cdm</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;"># OMOP CDM reference (duckdb) of Eunomia</span> <span style="color: #00BBBB;">────────────────────────────────────</span></span></span>
 <span><span class="co">#&gt; • <span style="font-weight: bold;">omop tables:</span> person, observation_period, visit_occurrence, visit_detail,</span></span>
@@ -125,7 +125,7 @@ function to summarise the available metadata of the cdm_reference
 object, including the vocabulary version and the time span covered by
 the <code>observation_period</code> table</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">snapshot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseOmopSnapshot.html">summariseOmopSnapshot</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">)</span> </span>
+<code class="sourceCode R"><span><span class="va">snapshot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseOmopSnapshot.html">summariseOmopSnapshot</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">)</span></span>
 <span><span class="va">snapshot</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/tableOmopSnapshot.html">tableOmopSnapshot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div id="bfdpbcyvkg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -597,7 +597,7 @@ the <code>observation_period</code> table</p>
 <tr class="gt_row_group_first">
 <td headers="General  Estimate" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Snapshot date</td>
 <td headers="General  [header_name]Database name
-[header_level]Eunomia" class="gt_row gt_left" style="text-align: right;">2025-04-07</td>
+[header_level]Eunomia" class="gt_row gt_left" style="text-align: right;">2025-04-14</td>
 </tr>
 <tr>
 <td headers="General  Estimate" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Person count</td>
@@ -676,15 +676,16 @@ the <code>observation_period</code> table</p>
 determine whether to stratify the analysis by sex, age groups, or time
 intervals.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="va">tableName</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"observation_period"</span>, <span class="st">"visit_occurrence"</span>, <span class="st">"condition_occurrence"</span>, <span class="st">"drug_exposure"</span>, <span class="st">"procedure_occurrence"</span>, </span>
-<span>               <span class="st">"device_exposure"</span>, <span class="st">"measurement"</span> , <span class="st">"observation"</span>, <span class="st">"death"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">tableName</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  <span class="st">"observation_period"</span>, <span class="st">"visit_occurrence"</span>, <span class="st">"condition_occurrence"</span>, <span class="st">"drug_exposure"</span>, <span class="st">"procedure_occurrence"</span>,</span>
+<span>  <span class="st">"device_exposure"</span>, <span class="st">"measurement"</span>, <span class="st">"observation"</span>, <span class="st">"death"</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">dateRange</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2012-01-01"</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">sex</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span> </span>
+<span><span class="va">sex</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span></span>
 <span></span>
-<span><span class="va">ageGroup</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">59</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">60</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span> </span>
+<span><span class="va">ageGroup</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">59</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">60</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">interval</span> <span class="op">&lt;-</span> <span class="st">"years"</span></span></code></pre></div>
 <div class="section level3">
@@ -694,13 +695,14 @@ intervals.</p>
 assess the presence of missing values in the tables.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result_missingData</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseMissingData.html">summariseMissingData</a></span><span class="op">(</span><span class="va">cdm</span>,</span>
-<span>                                           omopTableName <span class="op">=</span> <span class="va">tableName</span>,</span>
-<span>                                           sex <span class="op">=</span> <span class="va">sex</span>,</span>
-<span>                                           ageGroup <span class="op">=</span> <span class="va">ageGroup</span>,</span>
-<span>                                           interval <span class="op">=</span> <span class="va">interval</span>,</span>
-<span>                                           dateRange <span class="op">=</span> <span class="va">dateRange</span><span class="op">)</span></span>
+<span>  omopTableName <span class="op">=</span> <span class="va">tableName</span>,</span>
+<span>  sex <span class="op">=</span> <span class="va">sex</span>,</span>
+<span>  ageGroup <span class="op">=</span> <span class="va">ageGroup</span>,</span>
+<span>  interval <span class="op">=</span> <span class="va">interval</span>,</span>
+<span>  dateRange <span class="op">=</span> <span class="va">dateRange</span></span>
+<span><span class="op">)</span></span>
 <span><span class="va">result_missingData</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rows: 17,292</span></span>
+<span><span class="co">#&gt; Rows: 26,726</span></span>
 <span><span class="co">#&gt; Columns: 13</span></span>
 <span><span class="co">#&gt; $ result_id        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">,</span>…</span></span>
 <span><span class="co">#&gt; $ cdm_name         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Eunomia"<span style="color: #949494;">, </span>"Eunomia"<span style="color: #949494;">, </span>"Eunomia"<span style="color: #949494;">, </span>"Eunomia"<span style="color: #949494;">, </span>"Eunomia"…</span></span>
@@ -708,9 +710,9 @@ assess the presence of missing values in the tables.</p>
 <span><span class="co">#&gt; $ group_level      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "observation_period"<span style="color: #949494;">, </span>"observation_period"<span style="color: #949494;">, </span>"observat…</span></span>
 <span><span class="co">#&gt; $ strata_name      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"…</span></span>
 <span><span class="co">#&gt; $ strata_level     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"…</span></span>
-<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "observation_period_id"<span style="color: #949494;">, </span>"observation_period_id"<span style="color: #949494;">, </span>"pe…</span></span>
+<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "observation_period_id"<span style="color: #949494;">, </span>"observation_period_id"<span style="color: #949494;">, </span>"ob…</span></span>
 <span><span class="co">#&gt; $ variable_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">N</span>…</span></span>
-<span><span class="co">#&gt; $ estimate_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "na_count"<span style="color: #949494;">, </span>"na_percentage"<span style="color: #949494;">, </span>"na_count"<span style="color: #949494;">, </span>"na_percenta…</span></span>
+<span><span class="co">#&gt; $ estimate_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "na_count"<span style="color: #949494;">, </span>"na_percentage"<span style="color: #949494;">, </span>"zero_count"<span style="color: #949494;">, </span>"zero_perc…</span></span>
 <span><span class="co">#&gt; $ estimate_type    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "integer"<span style="color: #949494;">, </span>"percentage"<span style="color: #949494;">, </span>"integer"<span style="color: #949494;">, </span>"percentage"<span style="color: #949494;">, </span>"in…</span></span>
 <span><span class="co">#&gt; $ estimate_value   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "NA"<span style="color: #949494;">, </span>"NA"<span style="color: #949494;">, </span>"NA"<span style="color: #949494;">, </span>"NA"<span style="color: #949494;">, </span>"NA"<span style="color: #949494;">, </span>"NA"<span style="color: #949494;">, </span>"NA"<span style="color: #949494;">, </span>"NA"<span style="color: #949494;">, </span>"NA"<span style="color: #949494;">,</span>…</span></span>
 <span><span class="co">#&gt; $ additional_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"…</span></span>
@@ -724,11 +726,12 @@ insights into the clinical tables content, including the number of
 records, number of subjects, portion of records in observation, and the
 number of distinct domains and concepts.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">result_clinicalRecords</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseClinicalRecords.html">summariseClinicalRecords</a></span><span class="op">(</span><span class="va">cdm</span>, </span>
-<span>                                                  omopTableName <span class="op">=</span> <span class="va">tableName</span>, </span>
-<span>                                                  sex <span class="op">=</span> <span class="va">sex</span>, </span>
-<span>                                                  ageGroup <span class="op">=</span> <span class="va">ageGroup</span>,</span>
-<span>                                                  dateRange <span class="op">=</span> <span class="va">dateRange</span><span class="op">)</span> </span>
+<code class="sourceCode R"><span><span class="va">result_clinicalRecords</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseClinicalRecords.html">summariseClinicalRecords</a></span><span class="op">(</span><span class="va">cdm</span>,</span>
+<span>  omopTableName <span class="op">=</span> <span class="va">tableName</span>,</span>
+<span>  sex <span class="op">=</span> <span class="va">sex</span>,</span>
+<span>  ageGroup <span class="op">=</span> <span class="va">ageGroup</span>,</span>
+<span>  dateRange <span class="op">=</span> <span class="va">dateRange</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Adding variables of interest to <span style="color: #0000BB;">observation_period</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person in <span style="color: #0000BB;">observation_period</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">observation_period</span>: `in_observation` and `type_concept`.</span></span>
@@ -7036,15 +7039,18 @@ number of distinct domains and concepts.</p>
 using the <code><a href="../reference/summariseRecordCount.html">summariseRecordCount()</a></code> function.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result_recordCounts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseRecordCount.html">summariseRecordCount</a></span><span class="op">(</span><span class="va">cdm</span>,</span>
-<span>                                            <span class="va">tableName</span>,</span>
-<span>                                            sex <span class="op">=</span> <span class="va">sex</span>,</span>
-<span>                                            ageGroup <span class="op">=</span> <span class="va">ageGroup</span>,</span>
-<span>                                            interval <span class="op">=</span> <span class="va">interval</span>,</span>
-<span>                                            dateRange <span class="op">=</span> <span class="va">dateRange</span><span class="op">)</span></span>
+<span>  <span class="va">tableName</span>,</span>
+<span>  sex <span class="op">=</span> <span class="va">sex</span>,</span>
+<span>  ageGroup <span class="op">=</span> <span class="va">ageGroup</span>,</span>
+<span>  interval <span class="op">=</span> <span class="va">interval</span>,</span>
+<span>  dateRange <span class="op">=</span> <span class="va">dateRange</span></span>
+<span><span class="op">)</span></span>
 <span><span class="va">result_recordCounts</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">group_level</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"drug_exposure"</span>, <span class="st">"condition_occurrence"</span><span class="op">)</span><span class="op">)</span><span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/plotRecordCount.html">plotRecordCount</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"omop_table"</span>, </span>
-<span>                  facet <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sex"</span>, <span class="st">"age_group"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">group_level</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"drug_exposure"</span>, <span class="st">"condition_occurrence"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/plotRecordCount.html">plotRecordCount</a></span><span class="op">(</span></span>
+<span>    colour <span class="op">=</span> <span class="st">"omop_table"</span>,</span>
+<span>    facet <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sex"</span>, <span class="st">"age_group"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="characterisation_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 </div>
 <div class="section level3">
@@ -7054,12 +7060,13 @@ using the <code><a href="../reference/summariseRecordCount.html">summariseRecord
 to compute the record counts for each concept_id present in the analysed
 OMOP tables.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">result_conceptIdCount</span> <span class="op">&lt;-</span> <span class="fu">OmopSketch</span><span class="fu">::</span><span class="fu"><a href="../reference/summariseConceptIdCounts.html">summariseConceptIdCounts</a></span><span class="op">(</span><span class="va">cdm</span>, </span>
-<span>                                                              omopTableName <span class="op">=</span> <span class="va">tableName</span>, </span>
-<span>                                                              sex <span class="op">=</span> <span class="va">sex</span>, </span>
-<span>                                                              ageGroup <span class="op">=</span> <span class="va">ageGroup</span>, </span>
-<span>                                                              interval <span class="op">=</span> <span class="va">interval</span>, </span>
-<span>                                                              dateRange <span class="op">=</span> <span class="va">dateRange</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">result_conceptIdCount</span> <span class="op">&lt;-</span> <span class="fu">OmopSketch</span><span class="fu">::</span><span class="fu"><a href="../reference/summariseConceptIdCounts.html">summariseConceptIdCounts</a></span><span class="op">(</span><span class="va">cdm</span>,</span>
+<span>  omopTableName <span class="op">=</span> <span class="va">tableName</span>,</span>
+<span>  sex <span class="op">=</span> <span class="va">sex</span>,</span>
+<span>  ageGroup <span class="op">=</span> <span class="va">ageGroup</span>,</span>
+<span>  interval <span class="op">=</span> <span class="va">interval</span>,</span>
+<span>  dateRange <span class="op">=</span> <span class="va">dateRange</span></span>
+<span><span class="op">)</span></span>
 <span><span class="va">result_conceptIdCount</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 10,614</span></span>
 <span><span class="co">#&gt; Columns: 13</span></span>
@@ -7090,17 +7097,20 @@ OMOP tables.</p>
 number of subjects and the distribution of person-days in observation
 across specific time intervals.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">result_inObservation</span> <span class="op">&lt;-</span><span class="fu"><a href="../reference/summariseInObservation.html">summariseInObservation</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>,</span>
-<span>                                              output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"records"</span>,<span class="st">"person-days"</span><span class="op">)</span>,</span>
-<span>                                              interval <span class="op">=</span> <span class="va">interval</span>,</span>
-<span>                                              sex <span class="op">=</span> <span class="va">sex</span>,</span>
-<span>                                              ageGroup <span class="op">=</span> <span class="va">ageGroup</span>,</span>
-<span>                                              dateRange <span class="op">=</span> <span class="va">dateRange</span><span class="op">)</span> </span>
+<code class="sourceCode R"><span><span class="va">result_inObservation</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseInObservation.html">summariseInObservation</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>,</span>
+<span>  output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"records"</span>, <span class="st">"person-days"</span><span class="op">)</span>,</span>
+<span>  interval <span class="op">=</span> <span class="va">interval</span>,</span>
+<span>  sex <span class="op">=</span> <span class="va">sex</span>,</span>
+<span>  ageGroup <span class="op">=</span> <span class="va">ageGroup</span>,</span>
+<span>  dateRange <span class="op">=</span> <span class="va">dateRange</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">result_inObservation</span> <span class="op">|&gt;</span>    </span>
+<span><span class="va">result_inObservation</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">variable_name</span> <span class="op">==</span> <span class="st">"Number person-days"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/plotInObservation.html">plotInObservation</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"sex"</span>, </span>
-<span>                    facet <span class="op">=</span> <span class="st">"age_group"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/plotInObservation.html">plotInObservation</a></span><span class="op">(</span></span>
+<span>    colour <span class="op">=</span> <span class="st">"sex"</span>,</span>
+<span>    facet <span class="op">=</span> <span class="st">"age_group"</span></span>
+<span>  <span class="op">)</span></span>
 <span><span class="co">#&gt; `result_id` is not present in <span style="color: #0000BB;">result</span>.</span></span>
 <span><span class="co">#&gt; `result_id` is not present in <span style="color: #0000BB;">result</span>.</span></span></code></pre></div>
 <p><img src="characterisation_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
@@ -7114,20 +7124,23 @@ observation period, and the number of subjects in each ordinal
 observation period (1st, 2nd, etc.). This can be done using the
 <code><a href="../reference/summariseObservationPeriod.html">summariseObservationPeriod()</a></code> function.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">result_observationPeriod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseObservationPeriod.html">summariseObservationPeriod</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>, </span>
-<span>                                                       sex <span class="op">=</span> <span class="va">sex</span>, </span>
-<span>                                                       ageGroup <span class="op">=</span> <span class="va">ageGroup</span>,</span>
-<span>                                                       dateRange <span class="op">=</span> <span class="va">dateRange</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">result_observationPeriod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseObservationPeriod.html">summariseObservationPeriod</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>,</span>
+<span>  sex <span class="op">=</span> <span class="va">sex</span>,</span>
+<span>  ageGroup <span class="op">=</span> <span class="va">ageGroup</span>,</span>
+<span>  dateRange <span class="op">=</span> <span class="va">dateRange</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">result_observationPeriod</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/plotObservationPeriod.html">plotObservationPeriod</a></span><span class="op">(</span>variableName <span class="op">=</span> <span class="st">"Duration in days"</span>, </span>
-<span>                        plotType <span class="op">=</span> <span class="st">"boxplot"</span>, </span>
-<span>                        colour <span class="op">=</span> <span class="st">"sex"</span>, </span>
-<span>                        facet <span class="op">=</span> <span class="st">"age_group"</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="../reference/plotObservationPeriod.html">plotObservationPeriod</a></span><span class="op">(</span></span>
+<span>    variableName <span class="op">=</span> <span class="st">"Duration in days"</span>,</span>
+<span>    plotType <span class="op">=</span> <span class="st">"boxplot"</span>,</span>
+<span>    colour <span class="op">=</span> <span class="st">"sex"</span>,</span>
+<span>    facet <span class="op">=</span> <span class="st">"age_group"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="characterisation_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
 <p>Finally, disconnect from the cdm</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span>  <span class="fu">PatientProfiles</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/PatientProfiles/reference/mockDisconnect.html" class="external-link">mockDisconnect</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">PatientProfiles</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/PatientProfiles/reference/mockDisconnect.html" class="external-link">mockDisconnect</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span><span class="op">)</span></span></code></pre></div>
 <p>The results of the characterisation using <code>OmopSketch</code> can
 be further explored through the ShinyApp at <a href="https://dpa-pde-oxford.shinyapps.io/OmopSketch-vignette/" class="external-link uri">https://dpa-pde-oxford.shinyapps.io/OmopSketch-vignette/</a></p>
 </div>

@@ -154,17 +154,18 @@ perform. For example, use the argument <code>recordsPerPerson</code> to
 indicate which estimates you are interested regarding the number of
 records per person.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseClinicalRecords.html">summariseClinicalRecords</a></span><span class="op">(</span><span class="va">cdm</span>, </span>
-<span>                                             <span class="st">"condition_occurrence"</span>,</span>
-<span>                                             recordsPerPerson <span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span>, <span class="st">"sd"</span>, <span class="st">"q05"</span>, <span class="st">"q95"</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseClinicalRecords.html">summariseClinicalRecords</a></span><span class="op">(</span><span class="va">cdm</span>,</span>
+<span>  <span class="st">"condition_occurrence"</span>,</span>
+<span>  recordsPerPerson <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span>, <span class="st">"sd"</span>, <span class="st">"q05"</span>, <span class="st">"q95"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Adding variables of interest to <span style="color: #0000BB;">condition_occurrence</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person in <span style="color: #0000BB;">condition_occurrence</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">condition_occurrence</span>: `in_observation`, `standard_concept`,</span></span>
 <span><span class="co">#&gt;   `source_vocabulary`, `domain_id`, and `type_concept`.</span></span>
 <span></span>
-<span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
-<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">variable_name</span> <span class="op">==</span> <span class="st">"records_per_person"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">variable_name</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span><span class="op">)</span></span>
+<span><span class="va">summarisedResult</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">variable_name</span> <span class="op">==</span> <span class="st">"records_per_person"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">variable_name</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 3</span></span></span>
 <span><span class="co">#&gt;   variable_name      estimate_name estimate_value</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         </span></span>
@@ -180,21 +181,22 @@ source vocabulary does the table contain
 vocabulary have (<code>domainId = TRUE</code>) or the concept’s type
 (<code>typeConcept = TRUE</code>).</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseClinicalRecords.html">summariseClinicalRecords</a></span><span class="op">(</span><span class="va">cdm</span>, </span>
-<span>                                             <span class="st">"condition_occurrence"</span>,</span>
-<span>                                             recordsPerPerson <span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span>, <span class="st">"sd"</span>, <span class="st">"q05"</span>, <span class="st">"q95"</span><span class="op">)</span>,</span>
-<span>                                             inObservation <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                                             standardConcept <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                                             sourceVocabulary <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                                             domainId <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                                             typeConcept <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseClinicalRecords.html">summariseClinicalRecords</a></span><span class="op">(</span><span class="va">cdm</span>,</span>
+<span>  <span class="st">"condition_occurrence"</span>,</span>
+<span>  recordsPerPerson <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span>, <span class="st">"sd"</span>, <span class="st">"q05"</span>, <span class="st">"q95"</span><span class="op">)</span>,</span>
+<span>  inObservation <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  standardConcept <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  sourceVocabulary <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  domainId <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  typeConcept <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Adding variables of interest to <span style="color: #0000BB;">condition_occurrence</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person in <span style="color: #0000BB;">condition_occurrence</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">condition_occurrence</span>: `in_observation`, `standard_concept`,</span></span>
 <span><span class="co">#&gt;   `source_vocabulary`, `domain_id`, and `type_concept`.</span></span>
 <span></span>
-<span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">variable_name</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">summarisedResult</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">variable_name</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 15</span></span>
 <span><span class="co">#&gt; Columns: 3</span></span>
@@ -204,23 +206,24 @@ vocabulary have (<code>domainId = TRUE</code>) or the concept’s type
 <p>Additionally, you can also stratify the previous results by sex and
 age groups:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseClinicalRecords.html">summariseClinicalRecords</a></span><span class="op">(</span><span class="va">cdm</span>, </span>
-<span>                                             <span class="st">"condition_occurrence"</span>,</span>
-<span>                                             recordsPerPerson <span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span>, <span class="st">"sd"</span>, <span class="st">"q05"</span>, <span class="st">"q95"</span><span class="op">)</span>,</span>
-<span>                                             inObservation <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                                             standardConcept <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                                             sourceVocabulary <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                                             domainId <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                                             typeConcept <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                                             sex <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                                             ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">34</span><span class="op">)</span>, <span class="st">"&gt;=35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseClinicalRecords.html">summariseClinicalRecords</a></span><span class="op">(</span><span class="va">cdm</span>,</span>
+<span>  <span class="st">"condition_occurrence"</span>,</span>
+<span>  recordsPerPerson <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span>, <span class="st">"sd"</span>, <span class="st">"q05"</span>, <span class="st">"q95"</span><span class="op">)</span>,</span>
+<span>  inObservation <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  standardConcept <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  sourceVocabulary <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  domainId <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  typeConcept <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  sex <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">34</span><span class="op">)</span>, <span class="st">"&gt;=35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Adding variables of interest to <span style="color: #0000BB;">condition_occurrence</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person in <span style="color: #0000BB;">condition_occurrence</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">condition_occurrence</span>: `in_observation`, `standard_concept`,</span></span>
 <span><span class="co">#&gt;   `source_vocabulary`, `domain_id`, and `type_concept`.</span></span>
 <span></span>
-<span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">variable_name</span>, <span class="va">strata_level</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">summarisedResult</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">variable_name</span>, <span class="va">strata_level</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 135</span></span>
 <span><span class="co">#&gt; Columns: 4</span></span>
@@ -234,21 +237,22 @@ as well as crossed strata (that means, sex == “Female” and ageGroup ==
 <p>Also, see that the analysis can be conducted for multiple OMOP tables
 at the same time:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseClinicalRecords.html">summariseClinicalRecords</a></span><span class="op">(</span><span class="va">cdm</span>, </span>
-<span>                                             <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"observation_period"</span>,<span class="st">"drug_exposure"</span><span class="op">)</span>,</span>
-<span>                                             recordsPerPerson <span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span>,<span class="st">"sd"</span><span class="op">)</span>,</span>
-<span>                                             inObservation <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>                                             standardConcept <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>                                             sourceVocabulary <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>                                             domainId <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>                                             typeConcept <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseClinicalRecords.html">summariseClinicalRecords</a></span><span class="op">(</span><span class="va">cdm</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"observation_period"</span>, <span class="st">"drug_exposure"</span><span class="op">)</span>,</span>
+<span>  recordsPerPerson <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span>, <span class="st">"sd"</span><span class="op">)</span>,</span>
+<span>  inObservation <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  standardConcept <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  sourceVocabulary <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  domainId <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  typeConcept <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Adding variables of interest to <span style="color: #0000BB;">observation_period</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person in <span style="color: #0000BB;">observation_period</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Adding variables of interest to <span style="color: #0000BB;">drug_exposure</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person in <span style="color: #0000BB;">drug_exposure</span>.</span></span>
 <span></span>
-<span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">summarisedResult</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 10</span></span>
 <span><span class="co">#&gt; Columns: 4</span></span>
@@ -262,21 +266,22 @@ at the same time:</p>
 <p><code><a href="../reference/tableClinicalRecords.html">tableClinicalRecords()</a></code> will help you to tidy the
 previous results and create a gt table.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseClinicalRecords.html">summariseClinicalRecords</a></span><span class="op">(</span><span class="va">cdm</span>, </span>
-<span>                                             <span class="st">"condition_occurrence"</span>,</span>
-<span>                                             recordsPerPerson <span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span>, <span class="st">"sd"</span>, <span class="st">"q05"</span>, <span class="st">"q95"</span><span class="op">)</span>,</span>
-<span>                                             inObservation <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                                             standardConcept <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                                             sourceVocabulary <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                                             domainId <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                                             typeConcept <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>                                             sex <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseClinicalRecords.html">summariseClinicalRecords</a></span><span class="op">(</span><span class="va">cdm</span>,</span>
+<span>  <span class="st">"condition_occurrence"</span>,</span>
+<span>  recordsPerPerson <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span>, <span class="st">"sd"</span>, <span class="st">"q05"</span>, <span class="st">"q95"</span><span class="op">)</span>,</span>
+<span>  inObservation <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  standardConcept <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  sourceVocabulary <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  domainId <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  typeConcept <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  sex <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Adding variables of interest to <span style="color: #0000BB;">condition_occurrence</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person in <span style="color: #0000BB;">condition_occurrence</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">condition_occurrence</span>: `in_observation`, `standard_concept`,</span></span>
 <span><span class="co">#&gt;   `source_vocabulary`, `domain_id`, and `type_concept`.</span></span>
 <span></span>
-<span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">summarisedResult</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/tableClinicalRecords.html">tableClinicalRecords</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div id="hxzooertyt" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#hxzooertyt table {
@@ -983,7 +988,7 @@ create a ggplot with the trend.</p>
 “months”. See the example below, where it shows the number of records
 every 18 months:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/summariseRecordCount.html">summariseRecordCount</a></span><span class="op">(</span><span class="va">cdm</span>, <span class="st">"drug_exposure"</span>, interval <span class="op">=</span> <span class="st">"months"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/summariseRecordCount.html">summariseRecordCount</a></span><span class="op">(</span><span class="va">cdm</span>, <span class="st">"drug_exposure"</span>, interval <span class="op">=</span> <span class="st">"months"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/plotRecordCount.html">plotRecordCount</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="summarise_clinical_tables_records_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
 <p>We can further stratify our counts by sex (setting argument
@@ -992,10 +997,13 @@ in both cases, the function will automatically create a group called
 <em>overall</em> with all the sex groups and all the age groups.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/summariseRecordCount.html">summariseRecordCount</a></span><span class="op">(</span><span class="va">cdm</span>, <span class="st">"drug_exposure"</span>,</span>
-<span>                      interval <span class="op">=</span> <span class="st">"months"</span>,</span>
-<span>                      sex <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>                      ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;30"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">29</span><span class="op">)</span>,</span>
-<span>                                     <span class="st">"&gt;=30"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">30</span>,<span class="cn">Inf</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  interval <span class="op">=</span> <span class="st">"months"</span>,</span>
+<span>  sex <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    <span class="st">"&lt;30"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">29</span><span class="op">)</span>,</span>
+<span>    <span class="st">"&gt;=30"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">30</span>, <span class="cn">Inf</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/plotRecordCount.html">plotRecordCount</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="summarise_clinical_tables_records_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
 <p>By default, <code><a href="../reference/plotRecordCount.html">plotRecordCount()</a></code> does not apply faceting or
@@ -1004,10 +1012,13 @@ different variables, as seen in the previous picture. We can use <a href="https:
 package to help us know by which columns we can colour or face by:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/summariseRecordCount.html">summariseRecordCount</a></span><span class="op">(</span><span class="va">cdm</span>, <span class="st">"drug_exposure"</span>,</span>
-<span>                     interval <span class="op">=</span> <span class="st">"months"</span>, </span>
-<span>                     sex <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                     ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"0-29"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">29</span><span class="op">)</span>,</span>
-<span>                                     <span class="st">"30-Inf"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">30</span>,<span class="cn">Inf</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>  <span class="op">|&gt;</span></span>
+<span>  interval <span class="op">=</span> <span class="st">"months"</span>,</span>
+<span>  sex <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    <span class="st">"0-29"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">29</span><span class="op">)</span>,</span>
+<span>    <span class="st">"30-Inf"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">30</span>, <span class="cn">Inf</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">visOmopResults</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/omopgenerics/reference/tidyColumns.html" class="external-link">tidyColumns</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "cdm_name"       "omop_table"     "age_group"      "sex"           </span></span>
 <span><span class="co">#&gt; [5] "variable_name"  "variable_level" "count"          "time_interval" </span></span>
@@ -1016,15 +1027,18 @@ package to help us know by which columns we can colour or face by:</p>
 <code>colour</code> arguments from <code><a href="../reference/plotRecordCount.html">plotRecordCount()</a></code></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/summariseRecordCount.html">summariseRecordCount</a></span><span class="op">(</span><span class="va">cdm</span>, <span class="st">"drug_exposure"</span>,</span>
-<span>                     interval <span class="op">=</span> <span class="st">"months"</span>,</span>
-<span>                     sex <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                     ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"0-29"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">29</span><span class="op">)</span>,</span>
-<span>                                     <span class="st">"30-Inf"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">30</span>,<span class="cn">Inf</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="../reference/plotRecordCount.html">plotRecordCount</a></span><span class="op">(</span>facet <span class="op">=</span> <span class="va">omop_table</span> <span class="op">~</span> <span class="va">age_group</span>, colour <span class="op">=</span> <span class="st">"sex"</span><span class="op">)</span></span></code></pre></div>
+<span>  interval <span class="op">=</span> <span class="st">"months"</span>,</span>
+<span>  sex <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    <span class="st">"0-29"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">29</span><span class="op">)</span>,</span>
+<span>    <span class="st">"30-Inf"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">30</span>, <span class="cn">Inf</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/plotRecordCount.html">plotRecordCount</a></span><span class="op">(</span>facet <span class="op">=</span> <span class="va">omop_table</span> <span class="op">~</span> <span class="va">age_group</span>, colour <span class="op">=</span> <span class="st">"sex"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="summarise_clinical_tables_records_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
 <p>Finally, disconnect from the cdm</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span>  <span class="fu">PatientProfiles</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/PatientProfiles/reference/mockDisconnect.html" class="external-link">mockDisconnect</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">PatientProfiles</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/PatientProfiles/reference/mockDisconnect.html" class="external-link">mockDisconnect</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

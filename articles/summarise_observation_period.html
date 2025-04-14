@@ -120,7 +120,7 @@ for each observation period (e.g., 1st, 2nd)</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseObservationPeriod.html">summariseObservationPeriod</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">summarisedResult</span> </span>
+<span><span class="va">summarisedResult</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3,102 × 13</span></span></span>
 <span><span class="co">#&gt;    result_id cdm_name       group_name      group_level strata_name strata_level</span></span>
 <span><span class="co">#&gt;        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       </span></span>
@@ -145,9 +145,10 @@ indicate which estimates you are interested regarding the
 <code>Duration in days</code> of the observation period.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseObservationPeriod.html">summariseObservationPeriod</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>,</span>
-<span>                                               estimates <span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span>, <span class="st">"sd"</span>, <span class="st">"q05"</span>, <span class="st">"q95"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  estimates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span>, <span class="st">"sd"</span>, <span class="st">"q05"</span>, <span class="st">"q95"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">summarisedResult</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">variable_name</span> <span class="op">==</span> <span class="st">"Duration in days"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 8 × 4</span></span></span>
@@ -165,13 +166,14 @@ indicate which estimates you are interested regarding the
 specify a date range of interest:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseObservationPeriod.html">summariseObservationPeriod</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>,</span>
-<span>                                               estimates <span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span>, <span class="st">"sd"</span>, <span class="st">"q05"</span>, <span class="st">"q95"</span><span class="op">)</span>,</span>
-<span>                                               sex <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                                               ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">34</span><span class="op">)</span>, <span class="st">"&gt;=35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span>, </span>
-<span>                                               dateRange <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1970-01-01"</span>, <span class="st">"2010-01-01"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>  estimates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span>, <span class="st">"sd"</span>, <span class="st">"q05"</span>, <span class="st">"q95"</span><span class="op">)</span>,</span>
+<span>  sex <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">34</span><span class="op">)</span>, <span class="st">"&gt;=35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  dateRange <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1970-01-01"</span>, <span class="st">"2010-01-01"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span>, <span class="va">strata_level</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">summarisedResult</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span>, <span class="va">strata_level</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 135</span></span>
 <span><span class="co">#&gt; Columns: 5</span></span>
@@ -191,10 +193,11 @@ as well as crossed strata (that means, sex == “Female” and ageGroup ==
 creates a [gt] (<a href="https://gt.rstudio.com/" class="external-link uri">https://gt.rstudio.com/</a>) table.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseObservationPeriod.html">summariseObservationPeriod</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>,</span>
-<span>                                               estimates <span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span>, <span class="st">"sd"</span>, <span class="st">"q05"</span>, <span class="st">"q95"</span><span class="op">)</span>, </span>
-<span>                                               sex <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  estimates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span>, <span class="st">"sd"</span>, <span class="st">"q05"</span>, <span class="st">"q95"</span><span class="op">)</span>,</span>
+<span>  sex <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">summarisedResult</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/tableObservationPeriod.html">tableObservationPeriod</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> &lt;median&gt; [&lt;q25&gt; - &lt;q75&gt;] has not been formatted.</span></span></code></pre></div>
 <div id="qcxnzdlzbt" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -807,11 +810,12 @@ creates a [gt] (<a href="https://gt.rstudio.com/" class="external-link uri">http
 <p>Finally, we can visualise the concept counts using
 <code><a href="../reference/plotObservationPeriod.html">plotObservationPeriod()</a></code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseObservationPeriod.html">summariseObservationPeriod</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span><span class="op">)</span>  </span>
+<code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseObservationPeriod.html">summariseObservationPeriod</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/plotObservationPeriod.html">plotObservationPeriod</a></span><span class="op">(</span><span class="va">summarisedResult</span>, </span>
-<span>                      variableName <span class="op">=</span> <span class="st">"Number subjects"</span>,</span>
-<span>                      plotType <span class="op">=</span> <span class="st">"barplot"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/plotObservationPeriod.html">plotObservationPeriod</a></span><span class="op">(</span><span class="va">summarisedResult</span>,</span>
+<span>  variableName <span class="op">=</span> <span class="st">"Number subjects"</span>,</span>
+<span>  plotType <span class="op">=</span> <span class="st">"barplot"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p><img src="summarise_observation_period_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 <p>Note that either <code>Number subjects</code> or
 <code>Duration in days</code> can be plotted. For
@@ -826,20 +830,24 @@ which variables we can colour or facet by, we can use <a href="https://darwin-eu
 package.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseObservationPeriod.html">summariseObservationPeriod</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>,</span>
-<span>                           sex <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>  </span>
+<span>  sex <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plotObservationPeriod.html">plotObservationPeriod</a></span><span class="op">(</span><span class="va">summarisedResult</span>,</span>
-<span>                      variableName <span class="op">=</span> <span class="st">"Duration in days"</span>,</span>
-<span>                      plotType <span class="op">=</span> <span class="st">"boxplot"</span>,</span>
-<span>                      facet <span class="op">=</span> <span class="st">"sex"</span><span class="op">)</span></span></code></pre></div>
+<span>  variableName <span class="op">=</span> <span class="st">"Duration in days"</span>,</span>
+<span>  plotType <span class="op">=</span> <span class="st">"boxplot"</span>,</span>
+<span>  facet <span class="op">=</span> <span class="st">"sex"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p><img src="summarise_observation_period_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseObservationPeriod.html">summariseObservationPeriod</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>,</span>
-<span>                           sex <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                           ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">34</span><span class="op">)</span>, <span class="st">"&gt;=35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> </span>
+<span>  sex <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">34</span><span class="op">)</span>, <span class="st">"&gt;=35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plotObservationPeriod.html">plotObservationPeriod</a></span><span class="op">(</span><span class="va">summarisedResult</span>,</span>
-<span>                      colour <span class="op">=</span> <span class="st">"sex"</span>, </span>
-<span>                      facet <span class="op">=</span> <span class="st">"age_group"</span><span class="op">)</span></span></code></pre></div>
+<span>  colour <span class="op">=</span> <span class="st">"sex"</span>,</span>
+<span>  facet <span class="op">=</span> <span class="st">"age_group"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p><img src="summarise_observation_period_files/figure-html/unnamed-chunk-8-2.png" width="700"></p>
 </div>
 </div>
@@ -849,8 +857,9 @@ package.</p>
 <p>OmopSketch can also help you to summarise the number of individuals
 in observation during specific intervals of time.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseInObservation.html">summariseInObservation</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>, </span>
-<span>                                           interval <span class="op">=</span> <span class="st">"years"</span><span class="op">)</span>                                        </span>
+<code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseInObservation.html">summariseInObservation</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>,</span>
+<span>  interval <span class="op">=</span> <span class="st">"years"</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">variable_name</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span>, <span class="va">additional_name</span>, <span class="va">additional_level</span><span class="op">)</span></span>
@@ -872,8 +881,9 @@ in observation during specific intervals of time.</p>
 <code>interval</code> argument, which can be set to either “years”,
 “quarters”, “months” or “overall” (default value).</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseInObservation.html">summariseInObservation</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>, </span>
-<span>                                           interval <span class="op">=</span> <span class="st">"months"</span><span class="op">)</span>                                        </span>
+<code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseInObservation.html">summariseInObservation</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>,</span>
+<span>  interval <span class="op">=</span> <span class="st">"months"</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">variable_name</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span>, <span class="va">additional_name</span>, <span class="va">additional_level</span><span class="op">)</span></span>
@@ -895,8 +905,9 @@ in observation during specific intervals of time.</p>
 calculate the number of person-days by setting the <code>output</code>
 argument to c(“records”, “person-days”).</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseInObservation.html">summariseInObservation</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>, </span>
-<span>                                           output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"records"</span>, <span class="st">"person-days"</span><span class="op">)</span><span class="op">)</span>                                        </span>
+<code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseInObservation.html">summariseInObservation</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>,</span>
+<span>  output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"records"</span>, <span class="st">"person-days"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">variable_name</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span>, <span class="va">additional_name</span>, <span class="va">additional_level</span><span class="op">)</span></span>
@@ -914,12 +925,13 @@ in both cases, the function will automatically create a group called
 also define a date range of interest to filter the
 <code>observation_period</code> table accordingly.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseInObservation.html">summariseInObservation</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>, </span>
-<span>                                           output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"records"</span>, <span class="st">"person-days"</span><span class="op">)</span>,</span>
-<span>                                           interval <span class="op">=</span> <span class="st">"quarters"</span>,</span>
-<span>                                           sex <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>                                           ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">34</span><span class="op">)</span>, <span class="st">"&gt;=35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span>, </span>
-<span>                                           dateRange <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1970-01-01"</span>, <span class="st">"2010-01-01"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>                                        </span>
+<code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseInObservation.html">summariseInObservation</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>,</span>
+<span>  output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"records"</span>, <span class="st">"person-days"</span><span class="op">)</span>,</span>
+<span>  interval <span class="op">=</span> <span class="st">"quarters"</span>,</span>
+<span>  sex <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">34</span><span class="op">)</span>, <span class="st">"&gt;=35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  dateRange <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1970-01-01"</span>, <span class="st">"2010-01-01"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">strata_level</span>, <span class="va">variable_name</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span>, <span class="va">additional_name</span>, <span class="va">additional_level</span><span class="op">)</span></span>
@@ -927,15 +939,15 @@ also define a date range of interest to filter the
 <span><span class="co">#&gt;    strata_level   variable_name     estimate_name estimate_value additional_name</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Male &amp;&amp;&amp; &lt;35   Number person-da… count         270            time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Male           Number person-da… count         270            time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Female         Number person-da… count         270            time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Female &amp;&amp;&amp; &lt;35 Number person-da… count         270            time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Male &amp;&amp;&amp; &lt;35   Number records i… count         3              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Female &amp;&amp;&amp; &lt;35 Number records i… count         3              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Female         Number records i… count         3              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Male           Number records i… count         3              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Female         Number person-da… count         270            time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Female &amp;&amp;&amp; &lt;35 Number person-da… count         270            time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Male           Number person-da… count         270            time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Male           Number records i… count         3              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Female         Number records i… count         3              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Male &amp;&amp;&amp; &lt;35   Number records i… count         3              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Female &amp;&amp;&amp; &lt;35 Number records i… count         3              time_interval  </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Male &amp;&amp;&amp; &lt;35   Number person-da… count         276            time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Male           Number person-da… count         276            time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Female         Number person-da… count         281            time_interval  </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1,654 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: additional_level &lt;chr&gt;</span></span></span></code></pre></div>
 <div class="section level3">
@@ -944,8 +956,9 @@ also define a date range of interest to filter the
 <p>Finally, we can visualise the concept counts using
 <code><a href="../reference/plotInObservation.html">plotInObservation()</a></code>.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseInObservation.html">summariseInObservation</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>, </span>
-<span>                       interval <span class="op">=</span> <span class="st">"years"</span><span class="op">)</span>  </span>
+<code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseInObservation.html">summariseInObservation</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>,</span>
+<span>  interval <span class="op">=</span> <span class="st">"years"</span></span>
+<span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plotInObservation.html">plotInObservation</a></span><span class="op">(</span><span class="va">summarisedResult</span><span class="op">)</span></span>
 <span><span class="co">#&gt; `result_id` is not present in <span style="color: #0000BB;">result</span>.</span></span>
 <span><span class="co">#&gt; `result_id` is not present in <span style="color: #0000BB;">result</span>.</span></span></code></pre></div>
@@ -960,21 +973,24 @@ highlight the different results in the plot. To help us identify by
 which variables we can colour or facet by, we can use <a href="https://darwin-eu.github.io/visOmopResults/" class="external-link">visOmopResult</a>
 package.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseInObservation.html">summariseInObservation</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>, </span>
-<span>                       interval <span class="op">=</span> <span class="st">"years"</span>,</span>
-<span>                       output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"records"</span>, <span class="st">"person-days"</span><span class="op">)</span>,</span>
-<span>                       sex <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                       ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">34</span><span class="op">)</span>, <span class="st">"&gt;=35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> </span>
-<span><span class="fu"><a href="../reference/plotInObservation.html">plotInObservation</a></span><span class="op">(</span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">variable_name</span> <span class="op">==</span> <span class="st">"Number person-days"</span><span class="op">)</span>,</span>
-<span>  colour <span class="op">=</span> <span class="st">"sex"</span>, </span>
-<span>  facet <span class="op">=</span> <span class="st">"age_group"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseInObservation.html">summariseInObservation</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>,</span>
+<span>  interval <span class="op">=</span> <span class="st">"years"</span>,</span>
+<span>  output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"records"</span>, <span class="st">"person-days"</span><span class="op">)</span>,</span>
+<span>  sex <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">34</span><span class="op">)</span>, <span class="st">"&gt;=35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/plotInObservation.html">plotInObservation</a></span><span class="op">(</span></span>
+<span>  <span class="va">summarisedResult</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">variable_name</span> <span class="op">==</span> <span class="st">"Number person-days"</span><span class="op">)</span>,</span>
+<span>  colour <span class="op">=</span> <span class="st">"sex"</span>,</span>
+<span>  facet <span class="op">=</span> <span class="st">"age_group"</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co">#&gt; `result_id` is not present in <span style="color: #0000BB;">result</span>.</span></span>
 <span><span class="co">#&gt; `result_id` is not present in <span style="color: #0000BB;">result</span>.</span></span></code></pre></div>
 <p><img src="summarise_observation_period_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
 <p>Finally, disconnect from the cdm</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span>  <span class="fu">PatientProfiles</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/PatientProfiles/reference/mockDisconnect.html" class="external-link">mockDisconnect</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">PatientProfiles</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/PatientProfiles/reference/mockDisconnect.html" class="external-link">mockDisconnect</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
