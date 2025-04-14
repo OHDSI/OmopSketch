@@ -56,6 +56,5 @@ results <- summariseConceptSetCounts(cdm, conceptSet = cs)
 results
 
 PatientProfiles::mockDisconnect(cdm)
-
 }
 }
