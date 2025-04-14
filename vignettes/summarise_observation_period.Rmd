@@ -155,12 +155,13 @@ summarisedResult |>
   select(variable_name, estimate_name, estimate_value, additional_name, additional_level)
 ```
 
-Along with the number of records in observation, you can also calculate the number of person-days by setting the `output` argument to c("records", "person-days").
+Along with the number of records in observation, you can also calculate the number of person-days by setting the `output` argument to c("record", "person-days").
 
 ```{r, warning=FALSE}
-summarisedResult <- summariseInObservation(cdm$observation_period,
-  output = c("records", "person-days")
-)
+
+summarisedResult <- summariseInObservation(cdm$observation_period, 
+                                           output = c("record", "person-days"))                                        
+
 
 summarisedResult |>
   select(variable_name, estimate_name, estimate_value, additional_name, additional_level)
@@ -169,13 +170,14 @@ summarisedResult |>
 We can further stratify our counts by sex (setting argument `sex = TRUE`) or by age (providing an age group). Notice that in both cases, the function will automatically create a group called *overall* with all the sex groups and all the age groups. We can also define a date range of interest to filter the `observation_period` table accordingly.
 
 ```{r, warning=FALSE}
-summarisedResult <- summariseInObservation(cdm$observation_period,
-  output = c("records", "person-days"),
-  interval = "quarters",
-  sex = TRUE,
-  ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf)),
-  dateRange = as.Date(c("1970-01-01", "2010-01-01"))
-)
+
+summarisedResult <- summariseInObservation(cdm$observation_period, 
+                                           output = c("record", "person-days"),
+                                           interval = "quarters",
+                                           sex = TRUE, 
+                                           ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf)), 
+                                           dateRange = as.Date(c("1970-01-01", "2010-01-01")))                                        
+
 
 summarisedResult |>
   select(strata_level, variable_name, estimate_name, estimate_value, additional_name, additional_level)
@@ -197,18 +199,18 @@ Notice that either `Number records in observation` and `Number person-days` can 
 Additionally, if results were stratified by sex or age group, we can further use `facet` or `colour` arguments to highlight the different results in the plot. To help us identify by which variables we can colour or facet by, we can use [visOmopResult](https://darwin-eu.github.io/visOmopResults/) package.
 
 ```{r, warning=FALSE}
-summarisedResult <- summariseInObservation(cdm$observation_period,
-  interval = "years",
-  output = c("records", "person-days"),
-  sex = TRUE,
-  ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf))
-)
-plotInObservation(
-  summarisedResult |>
-    filter(variable_name == "Number person-days"),
-  colour = "sex",
-  facet = "age_group"
-)
+
+summarisedResult <- summariseInObservation(cdm$observation_period, 
+                       interval = "years",
+                       output = c("record", "person-days"),
+                       sex = TRUE,
+                       ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf))) 
+plotInObservation(summarisedResult |> 
+  filter(variable_name == "Number person-days"),
+  colour = "sex", 
+  facet = "age_group")
+  
+
 ```
 
 

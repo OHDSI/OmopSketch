@@ -45,6 +45,24 @@ test_that("check summariseInObservation works", {
     as.numeric()
   expect_equal(x, y)
 
+  x <- summariseInObservation(cdm$observation_period, output = "person", interval = "years") |>
+    dplyr::filter(additional_level == c("1996-01-01 to 1996-12-31"), estimate_name == "count") |>
+    dplyr::pull("estimate_value") |>
+    as.numeric()
+  y <- cdm$observation_period %>%
+    dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
+    dplyr::mutate(start = !!CDMConnector::datepart("observation_period_start_date", "year")) %>%
+    dplyr::mutate(end = !!CDMConnector::datepart("observation_period_end_date", "year")) %>%
+    dplyr::filter((.data$start < 1996 & .data$end >= 1996) |
+                    (.data$start >= 1996 & .data$start <= 1996))  |>
+    dplyr::distinct(.data$person_id) |>
+    dplyr::tally() |>
+    dplyr::pull("n") |> as.numeric()
+  expect_equal(x,y)
+
+
+
+
   x <- summariseInObservation(cdm$observation_period, interval = "years") |>
     dplyr::filter(additional_level == c("1998-01-01 to 1998-12-31"), estimate_name == "count") |>
     dplyr::pull("estimate_value") |>
@@ -159,14 +177,33 @@ test_that("check sex argument works", {
     dplyr::pull(estimate_value) |>
     as.numeric()
   y <- (cdm$observation_period |>
+          dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
+          PatientProfiles::addSexQuery() |>
+          dplyr::filter(sex == "Male") |>
+          dplyr::filter(observation_period_start_date < as.Date("1915-01-01") & observation_period_end_date >= as.Date("1915-01-01") |
+                          (observation_period_start_date >= as.Date("1915-01-01") & observation_period_start_date <= as.Date("1915-12-31"))) |>
+          dplyr::tally() |>
+          dplyr::pull())/(cdm[["person"]] |> dplyr::tally() |> dplyr::pull() |> as.numeric())*100
+  expect_equal(x,y)
+
+  expect_no_error(x <- summariseInObservation(cdm$observation_period, output = "person", interval = "years", sex = TRUE))
+  x <- x |>
+    dplyr::filter(strata_level == "Male", additional_level == "1915-01-01 to 1915-12-31", estimate_name == "percentage") |>
+    dplyr::pull(estimate_value) |>
+    as.numeric()
+  y <- cdm$observation_period |>
     dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
     PatientProfiles::addSexQuery() |>
     dplyr::filter(sex == "Male") |>
     dplyr::filter(observation_period_start_date < as.Date("1915-01-01") & observation_period_end_date >= as.Date("1915-01-01") |
       (observation_period_start_date >= as.Date("1915-01-01") & observation_period_start_date <= as.Date("1915-12-31"))) |>
-    dplyr::tally() |>
-    dplyr::pull()) / (cdm[["person"]] |> dplyr::tally() |> dplyr::pull() |> as.numeric()) * 100
+    dplyr::summarise(p = dplyr::n_distinct(.data$person_id)) |>
+    dplyr::pull()
+  y <- y / (cdm[["person"]] |> dplyr::tally() |> dplyr::pull()) * 100
+
   expect_equal(x, y)
+
+
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
 
@@ -208,6 +245,23 @@ test_that("check ageGroup argument works", {
     dplyr::pull()) / (cdm[["person"]] |> dplyr::tally() |> dplyr::pull() |> as.numeric()) * 100
   expect_equal(x, y)
 
+  expect_no_error(x <- summariseInObservation(cdm$observation_period, output = "person", ageGroup = list(c(0,20), c(21, Inf)), interval = "years"))
+
+  x <- x |>
+    dplyr::filter(additional_level == "1928-01-01 to 1928-12-31", estimate_name == "count", strata_level == "0 to 20") |>
+    dplyr::pull(estimate_value) |> as.numeric()
+  y <- cdm$observation_period |>
+    dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
+    dplyr::filter(observation_period_start_date < as.Date("1928-01-01") & observation_period_end_date >= as.Date("1928-01-01") |
+                    (observation_period_start_date >= as.Date("1928-01-01") & observation_period_start_date <= as.Date("1928-12-31"))) |>
+    dplyr::mutate("start" = as.Date("1928-01-01"), "end" = as.Date("1928-12-31")) |>
+    PatientProfiles::addAgeQuery(indexDate = "start", ageName = "age_start") %>%
+    dplyr::mutate(age_end = age_start+10) |>
+    dplyr::filter((age_end <= 20 & age_end >= 0) | (age_start >= 0 & age_start <= 20)) |>
+    dplyr::summarise(dplyr::n_distinct(person_id)) |>
+    dplyr::pull()
+  expect_equal(x,y)
+
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
 
@@ -217,7 +271,8 @@ test_that("check output argument works", {
   cdm <- cdmEunomia()
 
   # check value
-  x <- summariseInObservation(cdm$observation_period, interval = "years", output = c("records", "person-days"), ageGroup = NULL, sex = FALSE) |>
+
+  x <- summariseInObservation(cdm$observation_period, interval = "years", output = c("record","person-days"), ageGroup = NULL, sex = FALSE) |>
     dplyr::filter(variable_name == "Number person-days", additional_level == "1970-01-01 to 1970-12-31", estimate_type == "integer") |>
     dplyr::pull("estimate_value") |>
     as.numeric()
@@ -239,10 +294,10 @@ test_that("check output argument works", {
   # Check percentage
   den <- cdm$observation_period |>
     dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
-    dplyr::mutate(days = !!CDMConnector::datediff("observation_period_start_date", "observation_period_end_date", interval = "day") + 1) |>
-    dplyr::summarise(n = sum(days, na.rm = TRUE)) |>
-    dplyr::pull("n")
-  x <- summariseInObservation(cdm$observation_period, interval = "years", output = c("records", "person-days"), ageGroup = NULL, sex = FALSE) |>
+    dplyr::mutate(days = !!CDMConnector::datediff("observation_period_start_date","observation_period_end_date", interval = "day")+1) |>
+    dplyr::summarise(n = sum(days, na.rm = TRUE)) |> dplyr::pull("n")
+  x <- summariseInObservation(cdm$observation_period, interval = "years", output = c("record","person-days"), ageGroup = NULL, sex = FALSE) |>
+
     dplyr::filter(variable_name == "Number person-days", additional_level == "1964-01-01 to 1964-12-31", estimate_type == "percentage") |>
     dplyr::pull("estimate_value") |>
     as.numeric()
@@ -324,16 +379,14 @@ test_that("no tables created", {
   startNames <- CDMConnector::listSourceTables(cdm)
 
   results <- summariseInObservation(cdm$observation_period,
-    output = c("records", "person-days"),
-    interval = "years",
-    sex = TRUE,
-    ageGroup = list(
-      c(0, 17),
-      c(18, 65),
-      c(66, 100)
-    ),
-    dateRange = as.Date(c("2012-01-01", "2018-01-01"))
-  )
+                                       output = c("record", "person-days"),
+                                       interval = "years",
+                                       sex = TRUE,
+                                       ageGroup = list(c(0,17),
+                                                       c(18,65),
+                                                       c(66, 100)),
+                                       dateRange = as.Date(c("2012-01-01", "2018-01-01")))
+
 
 
   endNames <- CDMConnector::listSourceTables(cdm)

@@ -149,13 +149,19 @@ result_conceptIdCount |> glimpse()
 The `summariseInObservation()` function calculates the number of subjects and the distribution of person-days in observation across specific time intervals.
 
 ```{r, warning=FALSE}
-result_inObservation <- summariseInObservation(cdm$observation_period,
-  output = c("records", "person-days"),
-  interval = interval,
-  sex = sex,
-  ageGroup = ageGroup,
-  dateRange = dateRange
-)
+
+result_inObservation <-summariseInObservation(cdm$observation_period,
+                                              output = c("record","person-days"),
+                                              interval = interval,
+                                              sex = sex,
+                                              ageGroup = ageGroup,
+                                              dateRange = dateRange) 
+
+result_inObservation |>    
+  filter(variable_name == "Number person-days") |>
+  plotInObservation(colour = "sex", 
+                    facet = "age_group")
+
 
 result_inObservation |>
   filter(variable_name == "Number person-days") |>

@@ -8,7 +8,7 @@ time.}
 summariseInObservation(
   observationPeriod,
   interval = "overall",
-  output = "records",
+  output = "record",
   ageGroup = NULL,
   sex = FALSE,
   dateRange = NULL
@@ -21,8 +21,8 @@ a cdm_reference object.}
 \item{interval}{Time interval to stratify by. It can either be "years", "quarters", "months" or "overall".}
 
 \item{output}{Output format. It can be either the number of records
-("records") that are in observation in the specific interval of time, the
-number of person-days ("person-days"), or both c("records","person-days").}
+("record") that are in observation in the specific interval of time, the
+number of person-days ("person-days"), the number of subjects ("person").}
 
 \item{ageGroup}{A list of age groups to stratify results by.}
 
@@ -49,8 +49,8 @@ cdm <- mockOmopSketch()
 result <- summariseInObservation(
   cdm$observation_period,
   interval = "months",
-  output = c("person-days", "records"),
-  ageGroup = list("<=60" = c(0, 60), ">60" = c(61, Inf)),
+  output = c("person-days","record"),
+  ageGroup = list("<=60" = c(0,60), ">60" = c(61, Inf)),
   sex = TRUE
 )
 

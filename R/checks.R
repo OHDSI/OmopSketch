@@ -99,28 +99,6 @@ checkCategory <- function(category, overlap = FALSE, type = "numeric", call = pa
 }
 
 #' @noRd
-checkOutput <- function(output, call = parent.frame()) {
-  omopgenerics::assertCharacter(output, call = call)
-
-  for (i in output) {
-    if (!i %in% c("person-days", "records")) {
-      cli::cli_abort("output argument is not valid. It must be either `person-days`, `records`, or c(`person-days`,`records`).", call = call())
-    }
-  }
-}
-
-#' @noRd
-checkCountBy <- function(countBy, call = parent.frame()) {
-  omopgenerics::assertCharacter(countBy, call = call)
-
-  for (i in countBy) {
-    if (!i %in% c("record", "person")) {
-      cli::cli_abort("countBy argument is not valid. It must be either `record`, `person`, or c(`record`,`person`).", call = call)
-    }
-  }
-}
-
-#' @noRd
 validateStudyPeriod <- function(cdm, studyPeriod, call = parent.frame()) {
   if (is.null(studyPeriod)) {
     return(NULL)

@@ -54,7 +54,7 @@ summariseConceptIdCounts <- function(cdm,
 
   # initial checks
   cdm <- omopgenerics::validateCdmArgument(cdm)
-  checkCountBy(countBy)
+  omopgenerics::assertChoice(countBy, choices = c("record", "person"))
   omopgenerics::assertChoice(interval, c("overall", "years", "quarters", "months"), length = 1)
   omopgenerics::assertLogical(sex, length = 1)
   omopgenerics::assertChoice(omopTableName, choices = omopgenerics::omopTables(), unique = TRUE)
