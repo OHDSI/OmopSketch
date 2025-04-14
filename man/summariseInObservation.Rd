@@ -58,6 +58,5 @@ result |>
   glimpse()
 
 PatientProfiles::mockDisconnect(cdm)
-
 }
 }

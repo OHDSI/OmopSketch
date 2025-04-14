@@ -1,4 +1,3 @@
-
 #' Summarise an omop table from a cdm object. You will obtain
 #' information related to the number of records, number of subjects, whether the
 #' records are in observation, number of present domains and number of present
@@ -62,7 +61,8 @@ summariseClinicalRecords <- function(cdm,
   omopgenerics::assertChoice(omopTableName, choices = opts)
   dateRange <- validateStudyPeriod(cdm, dateRange)
   estimates <- PatientProfiles::availableEstimates(
-    variableType = "numeric", fullQuantiles = TRUE) |>
+    variableType = "numeric", fullQuantiles = TRUE
+  ) |>
     dplyr::pull("estimate_name")
   omopgenerics::assertChoice(recordsPerPerson, choices = estimates, null = TRUE)
   recordsPerPerson <- unique(recordsPerPerson)
@@ -135,7 +135,9 @@ summariseClinicalRecords <- function(cdm,
 
     # restrict study period
     omopTable <- restrictStudyPeriod(omopTable, dateRange)
-    if (is.null(omopTable)) return(omopgenerics::emptySummarisedResult())
+    if (is.null(omopTable)) {
+      return(omopgenerics::emptySummarisedResult())
+    }
 
     cli::cli_inform(c("i" = "Adding variables of interest to {.pkg {table}}."))
     omopTable <- omopTable |>
@@ -176,9 +178,10 @@ summariseClinicalRecords <- function(cdm,
             dplyr::group_by(dplyr::across(dplyr::all_of(c(
               "strata_name", "strata_level", var
             )))) |>
-            dplyr::summarise(count = sum(.data$n), .groups = "drop")|>
+            dplyr::summarise(count = sum(.data$n), .groups = "drop") |>
             dplyr::inner_join(
-              denominator, by = c("strata_name", "strata_level")
+              denominator,
+              by = c("strata_name", "strata_level")
             ) |>
             dplyr::mutate(
               percentage = sprintf("%.2f", 100 * as.numeric(.data$count) / as.numeric(.data$den)),
@@ -199,7 +202,7 @@ summariseClinicalRecords <- function(cdm,
                 variable_name = "In observation",
                 variable_level = dplyr::if_else(.data[[var]] == 1, "Yes", "No")
               )
-          } else if (var == "doamin_id") {
+          } else if (var == "domain_id") {
             res <- res |>
               dplyr::mutate(
                 variable_name = "Domain",
@@ -284,7 +287,7 @@ summariseRecordsPerPerson <- function(x, den, strata, estimates) {
   nm <- omopgenerics::uniqueTableName(prefix = prefix)
 
   res <- den |>
-    dplyr::left_join(
+    dplyr::full_join(
       x |>
         dplyr::group_by(dplyr::across(dplyr::all_of(c("person_id", strataCols)))) |>
         dplyr::summarise(n = as.integer(dplyr::n()), .groups = "drop"),
@@ -311,13 +314,13 @@ summariseRecordsPerPerson <- function(x, den, strata, estimates) {
         includeOverallGroup = FALSE,
         strata = list(stratax),
         includeOverallStrata = FALSE,
-        counts =  FALSE,
+        counts = FALSE,
         variables = list("number_subjects", "n"),
         estimates = list(c("count", "percentage"), c(estimates, "sum"))
       ) |>
       suppressMessages() |>
       dplyr::mutate(variable_name = dplyr::if_else(.data$variable_name == "number subjects", "Number subjects", .data$variable_name))
-}) |>
+  }) |>
     dplyr::bind_rows() |>
     dplyr::mutate(
       variable_name = dplyr::if_else(
@@ -336,9 +339,11 @@ summariseRecordsPerPerson <- function(x, den, strata, estimates) {
   return(result)
 }
 variablesToSummarise <- function(inObservation, standardConcept, sourceVocabulary, domainId, typeConcept) {
-  c("in_observation"[inObservation], "standard_concept"[standardConcept],
+  c(
+    "in_observation"[inObservation], "standard_concept"[standardConcept],
     "source_vocabulary"[sourceVocabulary], "domain_id"[domainId],
-    "type_concept"[typeConcept])
+    "type_concept"[typeConcept]
+  )
 }
 denominator <- function(cdm, sex, ageGroup, name) {
   ageGroup <- ageGroup$age_group
@@ -371,7 +376,8 @@ denominator <- function(cdm, sex, ageGroup, name) {
 
   demographics <- demographics |>
     dplyr::select(dplyr::any_of(c(
-      "cohort_definition_id", "person_id" = "subject_id", "sex"
+      "cohort_definition_id",
+      "person_id" = "subject_id", "sex"
     ))) |>
     dplyr::inner_join(cdm[[nm]], by = "cohort_definition_id") |>
     dplyr::select(!"cohort_definition_id") |>
@@ -383,7 +389,6 @@ denominator <- function(cdm, sex, ageGroup, name) {
   return(demographics)
 }
 addVariables <- function(x, inObservation, standardConcept, sourceVocabulary, domainId, typeConcept) {
-
   name <- omopgenerics::tableName(x)
 
   newNames <- c(

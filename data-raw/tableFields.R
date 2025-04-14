@@ -1,4 +1,3 @@
-
 domainsTibble <- dplyr::tribble(
   ~"domain_id", ~"table",
   "visit", "visit_occurrence",

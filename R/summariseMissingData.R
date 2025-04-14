@@ -26,18 +26,13 @@ summariseMissingData <- function(cdm,
                                  ageGroup = NULL,
                                  sample = 1000000,
                                  dateRange = NULL) {
-
   if (lifecycle::is_present(year)) {
-
     lifecycle::deprecate_warn("0.2.3", "summariseMissingData(year)", "summariseMissingData(interval = 'years')")
 
     if (isTRUE(year) & missing(interval)) {
-
-      interval = "years"
+      interval <- "years"
       cli::cli_inform("interval argument set to 'years'")
-
-    } else if (isTRUE(year) & !missing(interval)){
-
+    } else if (isTRUE(year) & !missing(interval)) {
       cli::cli_inform("year argument will be ignored")
     }
   }
@@ -52,7 +47,7 @@ summariseMissingData <- function(cdm,
   dateRange <- validateStudyPeriod(cdm, dateRange)
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, multipleAgeGroup = FALSE, null = TRUE, ageGroupName = "age_group")
 
-  if ("person" %in% omopTableName){
+  if ("person" %in% omopTableName) {
     if (!is.null(ageGroup)) cli::cli_warn("ageGroup stratification is not applied for person table")
     if (interval != "overall") cli::cli_warn("time interval stratification is not applied for person table")
     if (!is.null(dateRange)) cli::cli_warn("dateRange restriction is not applied for person table")
@@ -60,19 +55,22 @@ summariseMissingData <- function(cdm,
     omopTableName <- omopTableName[omopTableName != "person"]
     strata <- c(list(character()), list("sex"[sex]))
     result_person <- summariseMissingDataFromTable(table = "person", cdm = cdm, col = col, dateRange = NULL, sample = sample, sex = sex, ageGroup = NULL, interval = "overall", strata = strata)
+  } else {
+    result_person <- tibble::tibble()
+  }
 
-  } else result_person <- tibble::tibble()
-
-  if (!rlang::is_empty(omopTableName)){
+  if (!rlang::is_empty(omopTableName)) {
     strata <- c(
       list(character()),
-      omopgenerics::combineStrata(c(strataCols(sex = sex, ageGroup = ageGroup,  interval = interval)))
+      omopgenerics::combineStrata(c(strataCols(sex = sex, ageGroup = ageGroup, interval = interval)))
     )
     result <- purrr::map(omopTableName, function(table) {
-      summariseMissingDataFromTable(table = table, cdm = cdm, col = col, dateRange = dateRange, sample = sample, sex = sex, ageGroup= ageGroup, interval = interval, strata = strata)
-  }) |>
-    purrr::compact()
-  } else result <- tibble::tibble()
+      summariseMissingDataFromTable(table = table, cdm = cdm, col = col, dateRange = dateRange, sample = sample, sex = sex, ageGroup = ageGroup, interval = interval, strata = strata)
+    }) |>
+      purrr::compact()
+  } else {
+    result <- tibble::tibble()
+  }
 
   result <- purrr::compact(list(result, result_person))
 
@@ -90,7 +88,7 @@ summariseMissingData <- function(cdm,
       cdm_name = omopgenerics::cdmName(cdm),
     ) |>
     omopgenerics::uniteGroup(cols = "omop_table") |>
-    omopgenerics::uniteStrata(cols = setdiff(unique(unlist(strata)), "interval") ) |>
+    omopgenerics::uniteStrata(cols = setdiff(unique(unlist(strata)), "interval")) |>
     addTimeInterval() |>
     omopgenerics::uniteAdditional(cols = "time_interval") |>
     dplyr::mutate(variable_level = NA_character_) |>
@@ -129,7 +127,7 @@ columnsToSummarise <- function(col, cols, table, version) {
   if (rlang::is_empty(col_table)) col_table <- possibleColumns
   discarded_cols <- setdiff(col_table, cols)
   if (length(discarded_cols)) {
-    cli::cli_inform(c("i"="The columns {discarded_cols} are not present in {table} table"))
+    cli::cli_inform(c("i" = "The columns {discarded_cols} are not present in {table} table"))
     col_table <- setdiff(col_table, discarded_cols)
   }
   return(col_table)
@@ -138,56 +136,58 @@ columnsToSummarise <- function(col, cols, table, version) {
 
 
 
-summariseMissingDataFromTable <- function(table, cdm, col, dateRange, sample, sex, ageGroup, interval, strata){
+summariseMissingDataFromTable <- function(table, cdm, col, dateRange, sample, sex, ageGroup, interval, strata) {
   omopTable <- cdm[[table]]
   prefix <- omopgenerics::tmpPrefix()
 
   # check if table is empty
-  if (omopgenerics::isTableEmpty(omopTable)){
+  if (omopgenerics::isTableEmpty(omopTable)) {
     cli::cli_warn(paste0(table, "omop table is empty."))
     return(NULL)
   }
   col_table <- columnsToSummarise(
-  col, colnames(omopTable), table, omopgenerics::cdmVersion(cdm)
-)
+    col, colnames(omopTable), table, omopgenerics::cdmVersion(cdm)
+  )
 
-# restrict study period
-omopTable <- restrictStudyPeriod(omopTable, dateRange)
-if (is.null(omopTable)) return(NULL)
+  # restrict study period
+  omopTable <- restrictStudyPeriod(omopTable, dateRange)
+  if (is.null(omopTable)) {
+    return(NULL)
+  }
 
-resultsOmopTable <- omopTable |>
-  # sample if needed
-  sampleOmopTable(
-    sample = sample,
-    name = omopgenerics::uniqueTableName(prefix)
-  ) |>
-  # add stratifications
-  addStratifications(
-    indexDate = omopgenerics::omopColumns(table, "start_date"),
-    sex = sex,
-    ageGroup = ageGroup,
-    interval = interval,
-    intervalName = "interval",
-    name = omopgenerics::uniqueTableName(prefix)
-  ) |>
-  # summarise missing data
-  summariseMissingInternal(
-    strata = strata,
-    columns = col_table
-  ) |>
-  dplyr::mutate(omop_table = table) |>
-  # order columns
-  dplyr::inner_join(
-    dplyr::tibble(column_name = col_table, order = seq_along(col_table)),
-    by = "column_name"
-  ) |>
-  dplyr::arrange(.data$order, .data$estimate_name) |>
-  dplyr::select(!"order")
+  resultsOmopTable <- omopTable |>
+    # sample if needed
+    sampleOmopTable(
+      sample = sample,
+      name = omopgenerics::uniqueTableName(prefix)
+    ) |>
+    # add stratifications
+    addStratifications(
+      indexDate = omopgenerics::omopColumns(table, "start_date"),
+      sex = sex,
+      ageGroup = ageGroup,
+      interval = interval,
+      intervalName = "interval",
+      name = omopgenerics::uniqueTableName(prefix)
+    ) |>
+    # summarise missing data
+    summariseMissingInternal(
+      strata = strata,
+      columns = col_table
+    ) |>
+    dplyr::mutate(omop_table = table) |>
+    # order columns
+    dplyr::inner_join(
+      dplyr::tibble(column_name = col_table, order = seq_along(col_table)),
+      by = "column_name"
+    ) |>
+    dplyr::arrange(.data$order, .data$estimate_name) |>
+    dplyr::select(!"order")
 
-# drop tables
-omopgenerics::dropSourceTable(cdm = cdm, name = dplyr::starts_with(prefix))
+  # drop tables
+  omopgenerics::dropSourceTable(cdm = cdm, name = dplyr::starts_with(prefix))
 
-warningDataRequire(cdm = cdm, res = resultsOmopTable, table = table)
+  warningDataRequire(cdm = cdm, res = resultsOmopTable, table = table)
 
-return(resultsOmopTable)
+  return(resultsOmopTable)
 }
