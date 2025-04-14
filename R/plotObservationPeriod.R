@@ -113,8 +113,8 @@ plotObservationPeriod <- function(result,
     ) |>
     dplyr::mutate(
       observation_period_ordinal = factor(
-        observation_period_ordinal,
-        levels = unique(observation_period_ordinal[order(observation_period_order)])
+        .data$observation_period_ordinal,
+        levels = unique(.data$observation_period_ordinal[order(.data$observation_period_order)])
       )
     )
   return(p)
