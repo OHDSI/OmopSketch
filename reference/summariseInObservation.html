@@ -53,7 +53,7 @@ time.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">summariseInObservation</span><span class="op">(</span></span>
 <span>  <span class="va">observationPeriod</span>,</span>
 <span>  interval <span class="op">=</span> <span class="st">"overall"</span>,</span>
-<span>  output <span class="op">=</span> <span class="st">"records"</span>,</span>
+<span>  output <span class="op">=</span> <span class="st">"record"</span>,</span>
 <span>  ageGroup <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  sex <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  dateRange <span class="op">=</span> <span class="cn">NULL</span></span>
@@ -75,8 +75,8 @@ a cdm_reference object.</p></dd>
 
 <dt id="arg-output">output<a class="anchor" aria-label="anchor" href="#arg-output"></a></dt>
 <dd><p>Output format. It can be either the number of records
-("records") that are in observation in the specific interval of time, the
-number of person-days ("person-days"), or both c("records","person-days").</p></dd>
+("record") that are in observation in the specific interval of time, the
+number of person-days ("person-days"), the number of subjects ("person").</p></dd>
 
 
 <dt id="arg-agegroup">ageGroup<a class="anchor" aria-label="anchor" href="#arg-agegroup"></a></dt>
@@ -109,8 +109,8 @@ If <code>dateRange</code> is <code>NULL</code>, no restriction is applied.</p></
 <span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">summariseInObservation</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>,</span></span>
 <span class="r-in"><span>  interval <span class="op">=</span> <span class="st">"months"</span>,</span></span>
-<span class="r-in"><span>  output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"person-days"</span>, <span class="st">"records"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;=60"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">60</span><span class="op">)</span>, <span class="st">"&gt;60"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">61</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"person-days"</span>,<span class="st">"record"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;=60"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">60</span><span class="op">)</span>, <span class="st">"&gt;60"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">61</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  sex <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
