@@ -202,7 +202,7 @@ summariseClinicalRecords <- function(cdm,
                 variable_name = "In observation",
                 variable_level = dplyr::if_else(.data[[var]] == 1, "Yes", "No")
               )
-          } else if (var == "doamin_id") {
+          } else if (var == "domain_id") {
             res <- res |>
               dplyr::mutate(
                 variable_name = "Domain",
@@ -287,7 +287,7 @@ summariseRecordsPerPerson <- function(x, den, strata, estimates) {
   nm <- omopgenerics::uniqueTableName(prefix = prefix)
 
   res <- den |>
-    dplyr::left_join(
+    dplyr::full_join(
       x |>
         dplyr::group_by(dplyr::across(dplyr::all_of(c("person_id", strataCols)))) |>
         dplyr::summarise(n = as.integer(dplyr::n()), .groups = "drop"),

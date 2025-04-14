@@ -344,3 +344,57 @@ test_that("no tables created", {
 
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
+
+test_that("record outside observaton period", {
+  skip_on_cran()
+
+  cdm <- mockOmopSketch()
+
+  drug_exposure <- dplyr::tibble(
+    drug_exposure_id = c(1, 2, 3),
+    person_id = c(1, 2, 5) |> as.integer(),
+    drug_exposure_start_date = as.Date(c(
+      "2020-03-10", "2020-08-11", "2021-03-25"
+    )),
+    drug_exposure_end_date = as.Date(c(
+      "2020-03-11", "2020-08-12", "2021-03-30"
+    )),
+    drug_concept_id = 0L,
+    drug_type_concept_id = 1L,
+    drug_source_concept_id = 2L
+  )
+
+  observation_period <- dplyr::tibble(
+    observation_period_id = as.integer(1:9),
+    person_id = c(1, 1, 1, 2, 2, 3, 3, 4, 5) |> as.integer(),
+    observation_period_start_date = as.Date(c(
+      "2020-03-01", "2020-03-25", "2020-04-25", "2020-08-10",
+      "2020-03-10", "2020-03-01", "2020-04-10", "2020-03-10",
+      "2020-03-10"
+    )),
+    observation_period_end_date = as.Date(c(
+      "2020-03-20", "2020-03-30", "2020-08-15", "2020-12-31",
+      "2020-03-27", "2020-03-09", "2020-05-08", "2020-12-10",
+      "2020-03-10"
+    )),
+    period_type_concept_id = 0L
+  )
+
+  cdm <- omopgenerics::insertTable(cdm, name = "drug_exposure", table = drug_exposure)
+  cdm <- omopgenerics::insertTable(cdm, name = "observation_period", table = observation_period)
+
+  age_groups <- list()
+  for (i in seq(0, 100, by = 2)) {
+    age_groups <- c(age_groups, list(c(i, i + 1)))
+  }
+  r <- summariseClinicalRecords(cdm, "drug_exposure", ageGroup = age_groups)
+  percentages <- r |>
+    dplyr::filter(estimate_name == "percentage" & strata_level == "overall") |>
+    dplyr::mutate(estimate_value = as.numeric(.data$estimate_value)) |>
+    dplyr::group_by(variable_name) |>
+    dplyr::summarise(summ = sum(.data$estimate_value), .groups = "drop") |>
+    dplyr::pull(summ)
+  expect_true(sum(percentages > 100) == 0)
+
+  PatientProfiles::mockDisconnect(cdm = cdm)
+})
