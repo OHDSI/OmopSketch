@@ -1,6 +1,12 @@
 # OmopSketch 0.3.1.900
-- remove dplyr::compute() from sampleOmopTable() by @cecicampanile #344
 
+- remove dplyr::compute() from sampleOmopTable() by @cecicampanile #344
+- option to summarise by person in summariseInObservation by @cecicampanile #345
+- counts of 0 in summariseMissingData by @cecicampanile #346
+- x ax ordered by observation period ordinal in plotObservationPeriod by @cecicampanile #348
+- byOrdinal boolean argument in summariseObservationPeriod by @cecicampanile #349
+- bug that was showing percentages over 100 fixed in summariseClinicalRecords by @cecicampanile #350
+  
 # OmopSketch 0.3.1
 
 -   remove dplyr::collect() from summariseClinicalRecords() by @cecicampanile #328
