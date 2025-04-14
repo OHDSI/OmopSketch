@@ -1,4 +1,4 @@
-# OmopSketch 0.3.1.900
+# OmopSketch 0.3.2
 
 - remove dplyr::compute() from sampleOmopTable() by @cecicampanile #344
 - option to summarise by person in summariseInObservation by @cecicampanile #345
