@@ -168,6 +168,24 @@ test_that("check sex argument works", {
           dplyr::tally() |>
           dplyr::pull())/(cdm[["person"]] |> dplyr::tally() |> dplyr::pull() |> as.numeric())*100
   expect_equal(x,y)
+
+  expect_no_error(x <- summariseInObservation(cdm$observation_period, output = "person", interval = "years", sex = TRUE))
+  x <- x |>
+    dplyr::filter(strata_level == "Male", additional_level == "1915-01-01 to 1915-12-31", estimate_name == "percentage") |>
+    dplyr::pull(estimate_value) |>
+    as.numeric()
+  y <- cdm$observation_period |>
+    dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
+    PatientProfiles::addSexQuery() |>
+    dplyr::filter(sex == "Male") |>
+    dplyr::filter(observation_period_start_date < as.Date("1915-01-01") & observation_period_end_date >= as.Date("1915-01-01") |
+      (observation_period_start_date >= as.Date("1915-01-01") & observation_period_start_date <= as.Date("1915-12-31"))) |>
+    dplyr::summarise(p = dplyr::n_distinct(.data$person_id)) |>
+    dplyr::pull()
+  y <- y / (cdm[["person"]] |> dplyr::tally() |> dplyr::pull()) * 100
+
+  expect_equal(x, y)
+
   PatientProfiles::mockDisconnect(cdm = cdm)
 
 })
@@ -205,6 +223,23 @@ test_that("check ageGroup argument works", {
                           (observation_period_start_date >= as.Date("1918-01-01") & observation_period_start_date <= as.Date("1918-12-31"))) |>
           dplyr::tally() |>
           dplyr::pull())/(cdm[["person"]] |> dplyr::tally() |> dplyr::pull() |> as.numeric())*100
+  expect_equal(x,y)
+
+  expect_no_error(x <- summariseInObservation(cdm$observation_period, output = "person", ageGroup = list(c(0,20), c(21, Inf)), interval = "years"))
+
+  x <- x |>
+    dplyr::filter(additional_level == "1928-01-01 to 1928-12-31", estimate_name == "count", strata_level == "0 to 20") |>
+    dplyr::pull(estimate_value) |> as.numeric()
+  y <- cdm$observation_period |>
+    dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
+    dplyr::filter(observation_period_start_date < as.Date("1928-01-01") & observation_period_end_date >= as.Date("1928-01-01") |
+                    (observation_period_start_date >= as.Date("1928-01-01") & observation_period_start_date <= as.Date("1928-12-31"))) |>
+    dplyr::mutate("start" = as.Date("1928-01-01"), "end" = as.Date("1928-12-31")) |>
+    PatientProfiles::addAgeQuery(indexDate = "start", ageName = "age_start") %>%
+    dplyr::mutate(age_end = age_start+10) |>
+    dplyr::filter((age_end <= 20 & age_end >= 0) | (age_start >= 0 & age_start <= 20)) |>
+    dplyr::summarise(dplyr::n_distinct(person_id)) |>
+    dplyr::pull()
   expect_equal(x,y)
 
   PatientProfiles::mockDisconnect(cdm = cdm)
