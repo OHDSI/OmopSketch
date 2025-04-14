@@ -4,7 +4,7 @@ test_that("summariseClinicalRecords() works", {
   cdm <- cdmEunomia()
 
   # Check all tables work ----
-  expect_true(inherits(summariseClinicalRecords(cdm, "observation_period"),"summarised_result"))
+  expect_true(inherits(summariseClinicalRecords(cdm, "observation_period"), "summarised_result"))
   expect_no_error(op <- summariseClinicalRecords(cdm, "observation_period"))
   expect_no_error(vo <- summariseClinicalRecords(cdm, "visit_occurrence"))
   expect_no_error(summariseClinicalRecords(cdm, "condition_occurrence"))
@@ -13,15 +13,15 @@ test_that("summariseClinicalRecords() works", {
   expect_warning(summariseClinicalRecords(cdm, "device_exposure"))
   expect_no_error(m <- summariseClinicalRecords(cdm, "measurement"))
   expect_no_error(summariseClinicalRecords(cdm, "observation"))
-  expect_warning(de<-summariseClinicalRecords(cdm, "death"))
+  expect_warning(de <- summariseClinicalRecords(cdm, "death"))
 
-  #Check result type
+  # Check result type
   checkResultType(op, "summarise_clinical_records")
   checkResultType(de, "summarise_clinical_records")
 
   expect_no_error(all <- summariseClinicalRecords(cdm, c("observation_period", "visit_occurrence", "measurement")))
   expect_equal(
-    dplyr::bind_rows(op, vo,m) |>
+    dplyr::bind_rows(op, vo, m) |>
       dplyr::mutate(estimate_value = dplyr::if_else(
         .data$variable_name == "records_per_person",
         as.character(round(as.numeric(.data$estimate_value), 3)),
@@ -37,43 +37,50 @@ test_that("summariseClinicalRecords() works", {
 
   # Check inputs ----
   expect_true(summariseClinicalRecords(cdm, "condition_occurrence",
-                                 recordsPerPerson = NULL) |>
-                dplyr::filter(variable_name %in% "records_per_person") |>
-                dplyr::tally() |>
-                dplyr::pull() == 0)
+    recordsPerPerson = NULL
+  ) |>
+    dplyr::filter(variable_name %in% "records_per_person") |>
+    dplyr::tally() |>
+    dplyr::pull() == 0)
   expect_true(summariseClinicalRecords(cdm, "condition_occurrence",
-                                 inObservation = FALSE) |>
-                dplyr::filter(variable_name %in% "In observation") |>
-                dplyr::tally() |>
-                dplyr::pull() == 0)
+    inObservation = FALSE
+  ) |>
+    dplyr::filter(variable_name %in% "In observation") |>
+    dplyr::tally() |>
+    dplyr::pull() == 0)
   expect_true(summariseClinicalRecords(cdm, "condition_occurrence",
-                                 standardConcept = FALSE) |>
-                dplyr::filter(variable_name %in% "Standard concept") |>
-                dplyr::tally() |>
-                dplyr::pull() == 0)
+    standardConcept = FALSE
+  ) |>
+    dplyr::filter(variable_name %in% "Standard concept") |>
+    dplyr::tally() |>
+    dplyr::pull() == 0)
   expect_true(summariseClinicalRecords(cdm, "condition_occurrence",
-                                 sourceVocabulary = FALSE) |>
-                dplyr::filter(variable_name %in% "Source vocabulary") |>
-                dplyr::tally() |>
-                dplyr::pull() == 0)
+    sourceVocabulary = FALSE
+  ) |>
+    dplyr::filter(variable_name %in% "Source vocabulary") |>
+    dplyr::tally() |>
+    dplyr::pull() == 0)
   expect_true(summariseClinicalRecords(cdm, "condition_occurrence",
-                                 domainId = FALSE) |>
-                dplyr::filter(variable_name %in% "Domain") |>
-                dplyr::tally() |>
-                dplyr::pull() == 0)
+    domainId = FALSE
+  ) |>
+    dplyr::filter(variable_name %in% "Domain") |>
+    dplyr::tally() |>
+    dplyr::pull() == 0)
   expect_true(summariseClinicalRecords(cdm, "condition_occurrence",
-                                 typeConcept = FALSE) |>
-                dplyr::filter(variable_name %in% "Type concept id") |>
-                dplyr::tally() |>
-                dplyr::pull() == 0)
+    typeConcept = FALSE
+  ) |>
+    dplyr::filter(variable_name %in% "Type concept id") |>
+    dplyr::tally() |>
+    dplyr::pull() == 0)
   expect_true(summariseClinicalRecords(cdm, "condition_occurrence",
-                                 recordsPerPerson = NULL,
-                                 inObservation = FALSE,
-                                 standardConcept = FALSE,
-                                 sourceVocabulary = FALSE,
-                                 domainId = FALSE,
-                                 typeConcept = FALSE) |>
-                dplyr::tally() |> dplyr::pull() == 3)
+    recordsPerPerson = NULL,
+    inObservation = FALSE,
+    standardConcept = FALSE,
+    sourceVocabulary = FALSE,
+    domainId = FALSE,
+    typeConcept = FALSE
+  ) |>
+    dplyr::tally() |> dplyr::pull() == 3)
 
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
@@ -84,7 +91,7 @@ test_that("summariseClinicalRecords() sex and ageGroup argument work", {
   cdm <- cdmEunomia()
 
   # Check all tables work ----
-  expect_true(inherits(summariseClinicalRecords(cdm, "observation_period", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))),"summarised_result"))
+  expect_true(inherits(summariseClinicalRecords(cdm, "observation_period", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))), "summarised_result"))
   expect_no_error(op <- summariseClinicalRecords(cdm, "observation_period", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
   expect_no_error(vo <- summariseClinicalRecords(cdm, "visit_occurrence", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
   expect_no_error(m <- summariseClinicalRecords(cdm, "measurement", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
@@ -95,9 +102,10 @@ test_that("summariseClinicalRecords() sex and ageGroup argument work", {
   # expect_warning(summariseClinicalRecords(cdm,c("device_exposure","observation","death"), sex = FALSE,ageGroup = list(c(30, Inf))))
 
   expect_no_error(all <- summariseClinicalRecords(cdm,
-                                                  c("observation_period", "visit_occurrence", "measurement"),
-                                                  sex = TRUE,
-                                                  ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
+    c("observation_period", "visit_occurrence", "measurement"),
+    sex = TRUE,
+    ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))
+  ))
 
   expect_identical(
     dplyr::bind_rows(op, vo, m) |>
@@ -121,14 +129,14 @@ test_that("summariseClinicalRecords() sex and ageGroup argument work", {
   x <- cdm[["measurement"]] |>
     PatientProfiles::addAgeQuery(indexDate = "measurement_date", ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))) |>
     dplyr::select("person_id", "age_group")
-  n_records  <- x |>
+  n_records <- x |>
     dplyr::group_by(age_group) |>
     dplyr::summarise(estimate_value = dplyr::n()) |>
     dplyr::collect() |>
     dplyr::arrange(age_group) |>
     dplyr::mutate(dplyr::across(dplyr::everything(), as.character))
   n_subjects <- x |>
-    dplyr::group_by(person_id,age_group) |>
+    dplyr::group_by(person_id, age_group) |>
     dplyr::ungroup() |>
     dplyr::distinct() |>
     dplyr::group_by(age_group) |>
@@ -137,7 +145,7 @@ test_that("summariseClinicalRecords() sex and ageGroup argument work", {
     dplyr::arrange(age_group) |>
     dplyr::mutate(dplyr::across(dplyr::everything(), as.character))
 
-  m_records  <- m |>
+  m_records <- m |>
     dplyr::filter(variable_name == "Number records", strata_level %in% c("<30", ">= 30"), estimate_name == "count") |>
     dplyr::select("age_group" = "strata_level", "estimate_value") |>
     dplyr::collect() |>
@@ -153,28 +161,34 @@ test_that("summariseClinicalRecords() sex and ageGroup argument work", {
 
   # Check sex and age group---
   x <- summariseClinicalRecords(cdm, "condition_occurrence", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))) |>
-    dplyr::filter(variable_name == "Number subjects", estimate_name == "count",
-                  strata_name == "sex" | strata_name == "overall") |>
+    dplyr::filter(
+      variable_name == "Number subjects", estimate_name == "count",
+      strata_name == "sex" | strata_name == "overall"
+    ) |>
     dplyr::select("strata_name", "strata_level", "estimate_value") |>
-    dplyr::mutate(group = dplyr::if_else(strata_name == "overall",1, 2)) |>
+    dplyr::mutate(group = dplyr::if_else(strata_name == "overall", 1, 2)) |>
     dplyr::summarise(n = sum(as.numeric(estimate_value), na.rm = TRUE), .by = group)
 
   expect_equal(x$n[[1]], x$n[[2]])
 
   x <- summariseClinicalRecords(cdm, "condition_occurrence", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))) |>
-    dplyr::filter(variable_name == "Number records", estimate_name == "count",
-                  strata_name == "sex" | strata_name == "overall") |>
+    dplyr::filter(
+      variable_name == "Number records", estimate_name == "count",
+      strata_name == "sex" | strata_name == "overall"
+    ) |>
     dplyr::select("strata_name", "strata_level", "estimate_value") |>
-    dplyr::mutate(group = dplyr::if_else(strata_name == "overall",1, 2)) |>
+    dplyr::mutate(group = dplyr::if_else(strata_name == "overall", 1, 2)) |>
     dplyr::summarise(n = sum(as.numeric(estimate_value), na.rm = TRUE), .by = group)
 
   expect_equal(x$n[[1]], x$n[[2]])
 
   x <- summariseClinicalRecords(cdm, "condition_occurrence", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))) |>
-    dplyr::filter(variable_name == "Number records", estimate_name == "count",
-                  strata_name == "age_group" | strata_name == "overall") |>
+    dplyr::filter(
+      variable_name == "Number records", estimate_name == "count",
+      strata_name == "age_group" | strata_name == "overall"
+    ) |>
     dplyr::select("strata_name", "strata_level", "estimate_value") |>
-    dplyr::mutate(group = dplyr::if_else(strata_name == "overall",1, 2)) |>
+    dplyr::mutate(group = dplyr::if_else(strata_name == "overall", 1, 2)) |>
     dplyr::summarise(n = sum(as.numeric(estimate_value), na.rm = TRUE), .by = group)
 
   expect_equal(x$n[[1]], x$n[[2]])
@@ -213,7 +227,8 @@ test_that("summariseClinicalRecords() sex and ageGroup argument work", {
   )
 
   cdm <- CDMConnector::copyCdmTo(
-    con = connection(), cdm = cdm, schema = schema())
+    con = connection(), cdm = cdm, schema = schema()
+  )
 
   result <- summariseClinicalRecords(
     cdm = cdm,
@@ -251,21 +266,22 @@ test_that("dateRange argument works", {
   skip_on_cran()
   # Load mock database ----
   cdm <- cdmEunomia()
-  expect_no_error(summariseClinicalRecords(cdm, "condition_occurrence", dateRange =  as.Date(c("2012-01-01", "2018-01-01"))))
-  expect_message(x<-summariseClinicalRecords(cdm, "drug_exposure", dateRange =  as.Date(c("2012-01-01", "2025-01-01"))))
+  expect_no_error(summariseClinicalRecords(cdm, "condition_occurrence", dateRange = as.Date(c("2012-01-01", "2018-01-01"))))
+  expect_message(x <- summariseClinicalRecords(cdm, "drug_exposure", dateRange = as.Date(c("2012-01-01", "2025-01-01"))))
   observationRange <- cdm$observation_period |>
-    dplyr::summarise(minobs = min(.data$observation_period_start_date, na.rm = TRUE),
-                     maxobs = max(.data$observation_period_end_date, na.rm = TRUE))
-  expect_no_error(y<- summariseClinicalRecords(cdm, "drug_exposure", dateRange = as.Date(c("2012-01-01", observationRange |>dplyr::pull("maxobs")))))
-  expect_equal(x,y, ignore_attr = TRUE)
-  expect_false(settings(x)$study_period_end==settings(y)$study_period_end)
-  expect_error(summariseClinicalRecords(cdm, "drug_exposure", dateRange =  as.Date(c("2015-01-01", "2014-01-01"))))
-  expect_warning(z<-summariseClinicalRecords(cdm, "drug_exposure", dateRange =  as.Date(c("2020-01-01", "2021-01-01"))))
+    dplyr::summarise(
+      minobs = min(.data$observation_period_start_date, na.rm = TRUE),
+      maxobs = max(.data$observation_period_end_date, na.rm = TRUE)
+    )
+  expect_no_error(y <- summariseClinicalRecords(cdm, "drug_exposure", dateRange = as.Date(c("2012-01-01", observationRange |> dplyr::pull("maxobs")))))
+  expect_equal(x, y, ignore_attr = TRUE)
+  expect_false(settings(x)$study_period_end == settings(y)$study_period_end)
+  expect_error(summariseClinicalRecords(cdm, "drug_exposure", dateRange = as.Date(c("2015-01-01", "2014-01-01"))))
+  expect_warning(z <- summariseClinicalRecords(cdm, "drug_exposure", dateRange = as.Date(c("2020-01-01", "2021-01-01"))))
   expect_equal(z, omopgenerics::emptySummarisedResult(), ignore_attr = TRUE)
-  expect_equal(summariseClinicalRecords(cdm, "drug_exposure",dateRange = as.Date(c("2012-01-01",NA))), y, ignore_attr = TRUE)
+  expect_equal(summariseClinicalRecords(cdm, "drug_exposure", dateRange = as.Date(c("2012-01-01", NA))), y, ignore_attr = TRUE)
   checkResultType(z, "summarise_clinical_records")
-  expect_equal(colnames(settings(z)), colnames(settings(x)) )
-
+  expect_equal(colnames(settings(z)), colnames(settings(x)))
 })
 
 
@@ -276,12 +292,14 @@ test_that("tableClinicalRecords() works", {
 
   # Check that works ----
   expect_no_error(x <- tableClinicalRecords(summariseClinicalRecords(cdm, "condition_occurrence")))
-  expect_true(inherits(x,"gt_tbl"))
-  expect_no_error(y <- tableClinicalRecords(summariseClinicalRecords(cdm, c("observation_period",
-                                                                            "measurement"))))
-  expect_true(inherits(y,"gt_tbl"))
+  expect_true(inherits(x, "gt_tbl"))
+  expect_no_error(y <- tableClinicalRecords(summariseClinicalRecords(cdm, c(
+    "observation_period",
+    "measurement"
+  ))))
+  expect_true(inherits(y, "gt_tbl"))
   expect_warning(t <- summariseClinicalRecords(cdm, "death"))
-  expect_warning(inherits(tableClinicalRecords(t),"gt_tbl"))
+  expect_warning(inherits(tableClinicalRecords(t), "gt_tbl"))
   expect_no_error(x <- tableClinicalRecords(summariseClinicalRecords(cdm, "condition_occurrence"), type = "datatable"))
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
@@ -307,13 +325,17 @@ test_that("no tables created", {
 
   startNames <- CDMConnector::listSourceTables(cdm)
 
-  results <- summariseClinicalRecords(cdm = cdm,
-                                       omopTableName = c("drug_exposure", "condition_occurrence"),
-                                       sex = TRUE,
-                                       ageGroup = list(c(0,17),
-                                                       c(18,65),
-                                                       c(66, 100)),
-                                       dateRange = as.Date(c("2012-01-01", "2018-01-01")))
+  results <- summariseClinicalRecords(
+    cdm = cdm,
+    omopTableName = c("drug_exposure", "condition_occurrence"),
+    sex = TRUE,
+    ageGroup = list(
+      c(0, 17),
+      c(18, 65),
+      c(66, 100)
+    ),
+    dateRange = as.Date(c("2012-01-01", "2018-01-01"))
+  )
 
   endNames <- CDMConnector::listSourceTables(cdm)
 

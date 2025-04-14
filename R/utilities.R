@@ -1,4 +1,3 @@
-
 warnFacetColour <- function(result, cols) {
   colsToWarn <- result |>
     dplyr::select(
@@ -21,7 +20,9 @@ warnFacetColour <- function(result, cols) {
 
 collapseStr <- function(x, sep) {
   x <- x[x != ""]
-  if (length(x) == 1) return(x)
+  if (length(x) == 1) {
+    return(x)
+  }
   len <- length(x)
   paste0(paste0(x[-len], collapse = ", "), " ", sep, " ", x[len])
 }

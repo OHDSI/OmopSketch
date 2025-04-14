@@ -35,6 +35,6 @@ Creates a mock database to test OmopSketch package.
 }
 \examples{
 \donttest{
-  mockOmopSketch(numberIndividuals = 100)
+mockOmopSketch(numberIndividuals = 100)
 }
 }
