@@ -54,6 +54,7 @@ summarised_result object.</p>
 <span>  <span class="va">observationPeriod</span>,</span>
 <span>  estimates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span>, <span class="st">"sd"</span>, <span class="st">"min"</span>, <span class="st">"q05"</span>, <span class="st">"q25"</span>, <span class="st">"median"</span>, <span class="st">"q75"</span>, <span class="st">"q95"</span>, <span class="st">"max"</span>,</span>
 <span>    <span class="st">"density"</span><span class="op">)</span>,</span>
+<span>  byOrdinal <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  ageGroup <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  sex <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  dateRange <span class="op">=</span> <span class="cn">NULL</span></span>
@@ -72,6 +73,10 @@ summarised_result object.</p>
 <dd><p>Estimates to summarise the variables of interest (
 <code>records per person</code>, <code>duration in days</code> and
 <code>days to next observation period</code>).</p></dd>
+
+
+<dt id="arg-byordinal">byOrdinal<a class="anchor" aria-label="anchor" href="#arg-byordinal"></a></dt>
+<dd><p>Boolean variable. Whether to stratify by the ordinal observation period (e.g., 1st, 2nd, etc.) (TRUE) or simply analyze overall data (FALSE)</p></dd>
 
 
 <dt id="arg-agegroup">ageGroup<a class="anchor" aria-label="anchor" href="#arg-agegroup"></a></dt>
