@@ -67,9 +67,9 @@ summariseConceptIdCounts <- function(cdm,
 
   # get strata
   strata <- omopgenerics::combineStrata(strataCols(sex = sex, ageGroup = ageGroup, interval = interval))
-  concepts <- c("concept_id", "concept_name")
+  concepts <- c("concept_id", "concept_name", "source_concept")
   stratax <- c(list(concepts), purrr::map(strata, \(x) c(concepts, x)))
-  additional <- "time_interval"
+  additional <- c("time_interval", "source_concept")
   # how to count
   counts <- c("records", "person_id")[c("record", "person") %in% countBy]
 
@@ -80,6 +80,8 @@ summariseConceptIdCounts <- function(cdm,
     # initial table
     omopTable <- dplyr::ungroup(cdm[[table]])
     conceptId <- omopgenerics::omopColumns(table = table, field = "standard_concept")
+    sourceConceptId <- omopgenerics::omopColumns(table = table, field = "source_concept")
+
     if (is.na(conceptId)) {
       cli::cli_warn(c("!" = "No standard concept identified for {table}."))
       return(NULL)
@@ -115,7 +117,7 @@ summariseConceptIdCounts <- function(cdm,
       ) |>
       dplyr::select(!c("obs_start", "obs_end")) |>
       # add concept names
-      dplyr::rename(concept_id = dplyr::all_of(conceptId)) |>
+      dplyr::rename(concept_id = dplyr::all_of(conceptId), source_concept = dplyr::all_of(sourceConceptId) ) |>
       dplyr::left_join(
         cdm$concept |>
           dplyr::select("concept_id", "concept_name"),
