@@ -17,7 +17,7 @@ tableConceptIdCounts(result, filter = "overall", type = "reactable")
 \item \code{"missing standard"}: Show only source codes that are missing a mapped standard concept.
 }}
 
-\item{type}{Type of formatting output table, either "gt" or "flextable".}
+\item{type}{Type of formatting output table, either "reactable" or "datatable".}
 }
 \value{
 A gt or flextable object with the summarised data.

@@ -5,7 +5,7 @@
 #'   - `"standard"`: Show only standard concepts.
 #'   - `"source"`: Show only source codes.
 #'   - `"missing standard"`: Show only source codes that are missing a mapped standard concept.
-#' @param type Type of formatting output table, either "gt" or "flextable".
+#' @param type Type of formatting output table, either "reactable" or "datatable".
 #' @return A gt or flextable object with the summarised data.
 #' @export
 #'
