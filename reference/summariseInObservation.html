@@ -76,7 +76,8 @@ a cdm_reference object.</p></dd>
 <dt id="arg-output">output<a class="anchor" aria-label="anchor" href="#arg-output"></a></dt>
 <dd><p>Output format. It can be either the number of records
 ("record") that are in observation in the specific interval of time, the
-number of person-days ("person-days"), the number of subjects ("person").</p></dd>
+number of person-days ("person-days"), the number of subjects ("person"),
+the number of females ("sex") or the median age of population in observation ("age").</p></dd>
 
 
 <dt id="arg-agegroup">ageGroup<a class="anchor" aria-label="anchor" href="#arg-agegroup"></a></dt>
@@ -85,7 +86,7 @@ number of person-days ("person-days"), the number of subjects ("person").</p></d
 
 <dt id="arg-sex">sex<a class="anchor" aria-label="anchor" href="#arg-sex"></a></dt>
 <dd><p>Boolean variable. Whether to stratify by sex (TRUE) or not
-(FALSE).</p></dd>
+(FALSE). For output = "sex" this stratification is not applied.</p></dd>
 
 
 <dt id="arg-daterange">dateRange<a class="anchor" aria-label="anchor" href="#arg-daterange"></a></dt>
@@ -145,7 +146,7 @@ If <code>dateRange</code> is <code>NULL</code>, no restriction is applied.</p></
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
 </div>
 
     </footer></div>

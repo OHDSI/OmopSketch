@@ -1,12 +1,12 @@
 pandoc: 3.1.11
-pkgdown: 2.1.1
+pkgdown: 2.1.2
 pkgdown_sha: ~
 articles:
   characterisation: characterisation.html
   summarise_clinical_tables_records: summarise_clinical_tables_records.html
   summarise_concept_set_counts: summarise_concept_set_counts.html
   summarise_observation_period: summarise_observation_period.html
-last_built: 2025-04-14T11:59Z
+last_built: 2025-04-30T10:08Z
 urls:
   reference: https://OHDSI.github.io/OmopSketch/reference
   article: https://OHDSI.github.io/OmopSketch/articles
