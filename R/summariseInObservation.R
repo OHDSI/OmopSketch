@@ -387,6 +387,7 @@ createSummarisedResultObservationPeriod <- function(result, observationPeriod, s
   return(result)
 }
 createSummarisedResultAge <- function(observationPeriod, cdm, start_date_name, end_date_name, interval, tablePrefix) {
+
   if (interval != "overall") {
     x <- observationPeriod |>
       dplyr::mutate("start_date" = as.Date(paste0(as.character(as.integer(clock::get_year(.data[[start_date_name]]))), "-", as.character(as.integer(clock::get_month(.data[[start_date_name]]))), "-01"))) |>
@@ -413,16 +414,15 @@ createSummarisedResultAge <- function(observationPeriod, cdm, start_date_name, e
   }
 
   overall <- x |>
-    dplyr::filter(.data$age_group == "overall") |>
-    dplyr::group_by(dplyr::across(dplyr::all_of(strata))) |>
+    dplyr::group_by(dplyr::across(c("age_group", dplyr::all_of(strata[strata!="sex"])))) |>
     dplyr::summarise("estimate_value" = stats::median(.data$age), .groups = "drop") |>
+    dplyr::mutate("sex" = "overall") |>
     dplyr::collect()
-  byGroup <- x |>
-    dplyr::filter(.data$age_group != "overall") |>
+  bySex <- x |>
     dplyr::group_by(dplyr::across(c("age_group", dplyr::all_of(strata)))) |>
     dplyr::summarise("estimate_value" = stats::median(.data$age), .groups = "drop") |>
     dplyr::collect()
-  res <- dplyr::bind_rows(overall, byGroup) |>
+  res <- dplyr::bind_rows(overall, bySex) |>
     dplyr::mutate(
       "variable_name" = "Median age in observation",
       "estimate_name" = "median",

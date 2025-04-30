@@ -23,6 +23,7 @@ reference:
   - tableClinicalRecords
   - summariseRecordCount
   - plotRecordCount
+  - tableRecordCount
   - summariseMissingData
   - tableMissingData
 - subtitle: Observation Periods
@@ -33,6 +34,7 @@ reference:
   - tableObservationPeriod
   - summariseInObservation
   - plotInObservation
+  - tableInObservation
 - subtitle: Counts
   desc: Summarise concept code use in the OMOP Common Data Model
 - contents:

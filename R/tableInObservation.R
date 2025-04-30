@@ -33,17 +33,17 @@ tableInObservation <- function(result,
   if (type %in% c("gt","datatable")) {
     formatEstimates <- c(
       "N (%)" = "<count> (<percentage>%)",
-      "median" = "<median>")
+      "Median" = "<median>")
     result |>
       visOmopResults::visOmopTable(
         type = type,
         estimateName = formatEstimates,
-        header = c("cdm_name", "estimate_name"),
+        header = c("cdm_name"),
         hide = c("interval",	"study_period_end",	"study_period_start", "variable_level", "omop_table"),
         rename = c("Database name" = "cdm_name"),
-        columnOrder = c(additional_cols, strata_cols, "variable_name"),
+        columnOrder = c(additional_cols, strata_cols, "variable_name", "estimate_name"),
         groupColumn = c(additional_cols),
-        .options = list(groupAsColumn = TRUE, merge = "all_columns", includeHeaderName = FALSE
+        .options = list(groupAsColumn = TRUE, merge = "all_columns", includeHeaderName = TRUE
         )
       )|>
       suppressMessages()
@@ -53,6 +53,9 @@ tableInObservation <- function(result,
     rlang::check_installed("reactable")
 
     result |>
+      visOmopResults::formatEstimateName(estimateName = c(
+        "N (%)" = "<count> (<percentage>%)", "Median" = "<median>"
+      )) |>
       omopgenerics::splitAll() |>
       dplyr::select(
         dplyr::any_of(c(
@@ -64,10 +67,6 @@ tableInObservation <- function(result,
           strata_cols
         ))
       ) |>
-      tidyr::pivot_wider(
-        names_from = .data$estimate_name,
-        values_from = .data$estimate_value
-      ) |>
       reactable::reactable(
         columns = list(
           time_interval = reactable::colDef(name = "Time Interval"),
@@ -75,8 +74,9 @@ tableInObservation <- function(result,
           age_group = reactable::colDef(name = "Age Group"),
           cdm_name = reactable::colDef(name = "Database name"),
           variable_name = reactable::colDef(name = "Variable name"),
-          count = reactable::colDef(name = "Count"),
-          percentage = reactable::colDef(name = "Percentage (%)")
+          estimate_name = reactable::colDef(name = "Estimate name"),
+          estimate_value = reactable::colDef(name = "Estimate value")
+
         ),
         defaultColDef = reactable::colDef(
           sortable = TRUE,
@@ -91,7 +91,8 @@ tableInObservation <- function(result,
         striped = TRUE,
         defaultPageSize = 20,
         paginationType = "simple"
-      )
+      ) |>
+      suppressMessages()
   }
 
 
