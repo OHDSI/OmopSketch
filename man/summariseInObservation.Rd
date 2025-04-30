@@ -22,12 +22,13 @@ a cdm_reference object.}
 
 \item{output}{Output format. It can be either the number of records
 ("record") that are in observation in the specific interval of time, the
-number of person-days ("person-days"), the number of subjects ("person").}
+number of person-days ("person-days"), the number of subjects ("person"),
+the number of females ("sex") or the median age of population in observation ("age").}
 
 \item{ageGroup}{A list of age groups to stratify results by.}
 
 \item{sex}{Boolean variable. Whether to stratify by sex (TRUE) or not
-(FALSE).}
+(FALSE). For output = "sex" this stratification is not applied.}
 
 \item{dateRange}{A vector of two dates defining the desired study period.
 Only the \code{start_date} column of the OMOP table is checked to ensure it falls within this range.
