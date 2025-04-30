@@ -1,6 +1,6 @@
 #' Create a visual table from a summariseConceptIdCounts() result.
 #' @param result A summarised_result object.
-#' @param filter A character string indicating which subset of the data to display. Options are:
+#' @param display A character string indicating which subset of the data to display. Options are:
 #'   - `"overall"`: Show all source and standard concepts.
 #'   - `"standard"`: Show only standard concepts.
 #'   - `"source"`: Show only source codes.
@@ -11,13 +11,13 @@
 #'
 #'
 tableConceptIdCounts <- function(result,
-                                 filter = "overall",
+                                 display = "overall",
                                  type = "reactable") {
   # initial checks
   rlang::check_installed("visOmopResults")
   omopgenerics::validateResultArgument(result)
   omopgenerics::assertChoice(type, c("reactable", "datatable"))
-  omopgenerics::assertChoice(filter, c("overall", "standard", "source", "missing standard", "missing source"))
+  omopgenerics::assertChoice(display, c("overall", "standard", "source", "missing standard", "missing source"))
   strata_cols <- omopgenerics::strataColumns(result)
   additional_cols <- omopgenerics::additionalColumns(result)
   additional_cols <- additional_cols[!grepl("source_concept", additional_cols)]
@@ -31,22 +31,22 @@ tableConceptIdCounts <- function(result,
     dplyr::arrange(dplyr::across(dplyr::all_of(additional_cols)), .data$variable_name, dplyr::across(dplyr::all_of(strata_cols))) |>
     dplyr::rename("standard_concept_id" = "variable_level", "standard_concept_name" = "variable_name")
 
-  if (filter == "overall") {
+  if (display == "overall") {
     cols_to_format <- c("standard_concept_name", "standard_concept_id","source_concept_name", "source_concept_id")
-  } else if (filter == "standard") {
+  } else if (display == "standard") {
     cols_to_format <- c("standard_concept_name", "standard_concept_id")
     result <- result |>
       dplyr::select(!c("source_concept_id", "source_concept_name"))
-  } else if (filter == "source") {
+  } else if (display == "source") {
     cols_to_format <- c("source_concept_name", "source_concept_id")
     result <- result |>
       dplyr::select(!c("standard_concept_id", "standard_concept_name"))
-  } else if (filter == "missing standard") {
+  } else if (display == "missing standard") {
     result <- result |>
       dplyr::filter(as.integer(.data$standard_concept_id) == 0L) |>
       dplyr::select(!c("standard_concept_id", "standard_concept_name"))
     cols_to_format <- c("source_concept_name", "source_concept_id")
-  } else if (filter == "missing source") {
+  } else if (display == "missing source") {
     result <- result |>
       dplyr::filter(as.integer(.data$source_concept_id) == 0L | is.na(.data$source_concept_id)) |>
       dplyr::select(!c("source_concept_id", "source_concept_name"))

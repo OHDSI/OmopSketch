@@ -4,12 +4,12 @@
 \alias{tableConceptIdCounts}
 \title{Create a visual table from a summariseConceptIdCounts() result.}
 \usage{
-tableConceptIdCounts(result, filter = "overall", type = "reactable")
+tableConceptIdCounts(result, display = "overall", type = "reactable")
 }
 \arguments{
 \item{result}{A summarised_result object.}
 
-\item{filter}{A character string indicating which subset of the data to display. Options are:
+\item{display}{A character string indicating which subset of the data to display. Options are:
 \itemize{
 \item \code{"overall"}: Show all source and standard concepts.
 \item \code{"standard"}: Show only standard concepts.
