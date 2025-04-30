@@ -20,7 +20,7 @@ tableConceptIdCounts <- function(result,
   omopgenerics::assertChoice(filter, c("overall", "standard", "source", "missing standard", "missing source"))
   strata_cols <- omopgenerics::strataColumns(result)
   additional_cols <- omopgenerics::additionalColumns(result)
-  additional_cols <- additional_cols[additional_cols != "source_concept"]
+  additional_cols <- additional_cols[!grepl("source_concept", additional_cols)]
   # subset to result_type of interest
   result <- result |>
     omopgenerics::filterSettings(
@@ -29,30 +29,29 @@ tableConceptIdCounts <- function(result,
     omopgenerics::splitStrata() |>
     omopgenerics::splitAdditional() |>
     dplyr::arrange(dplyr::across(dplyr::all_of(additional_cols)), .data$variable_name, dplyr::across(dplyr::all_of(strata_cols))) |>
-    dplyr::rename("standard_concept" = "variable_level", "concept_name" = "variable_name")
+    dplyr::rename("standard_concept_id" = "variable_level", "standard_concept_name" = "variable_name")
 
   if (filter == "overall") {
-    cols_to_format <- c("concept_name", "standard_concept", "source_concept")
-    variableLevel <- "standard_concept"
+    cols_to_format <- c("standard_concept_name", "standard_concept_id","source_concept_name", "source_concept_id")
   } else if (filter == "standard") {
-    cols_to_format <- c("concept_name", "standard_concept")
+    cols_to_format <- c("standard_concept_name", "standard_concept_id")
     result <- result |>
-      dplyr::select(!"source_concept")
+      dplyr::select(!c("source_concept_id", "source_concept_name"))
   } else if (filter == "source") {
-    cols_to_format <- c("concept_name", "source_concept")
+    cols_to_format <- c("source_concept_name", "source_concept_id")
     result <- result |>
-      dplyr::select(!"standard_concept")
+      dplyr::select(!c("standard_concept_id", "standard_concept_name"))
   } else if (filter == "missing standard") {
     result <- result |>
-      dplyr::filter(as.integer(.data$standard_concept) == 0L) |>
-      dplyr::select(!"standard_concept")
-    cols_to_format <- c("concept_name", "source_concept")
+      dplyr::filter(as.integer(.data$standard_concept_id) == 0L) |>
+      dplyr::select(!c("standard_concept_id", "standard_concept_name"))
+    cols_to_format <- c("source_concept_name", "source_concept_id")
   } else if (filter == "missing source") {
     result <- result |>
-      dplyr::filter(as.integer(.data$source_concept) == 0L | is.na(.data$source_concept)) |>
-      dplyr::select(!"source_concept")
+      dplyr::filter(as.integer(.data$source_concept_id) == 0L | is.na(.data$source_concept_id)) |>
+      dplyr::select(!c("source_concept_id", "source_concept_name"))
 
-    cols_to_format <- c("concept_name", "standard_concept")
+    cols_to_format <- c("standard_concept_name", "standard_concept_id")
   }
 
   # check if it is empty
@@ -67,9 +66,10 @@ tableConceptIdCounts <- function(result,
       dplyr::any_of(c(
         "cdm_name",
         "group_level",
-        "concept_name",
-        "standard_concept",
-        "source_concept",
+        "standard_concept_name",
+        "standard_concept_id",
+        "source_concept_name",
+        "source_concept_id",
         "estimate_name",
         "estimate_value"
       )),
@@ -94,10 +94,11 @@ tableConceptIdCounts <- function(result,
 
     rename_vec <- c(
       "Database name" = "cdm_name",
-      "OMOP Table" = "group_level",
-      "Concept Name" = "concept_name",
-      "Standard Concept ID" = "standard_concept",
-      "Source Concept ID" = "source_concept",
+      "OMOP table" = "group_level",
+      "Standard concept name" = "standard_concept_name",
+      "Standard concept id" = "standard_concept_id",
+      "Source concept name" = "source_concept_name",
+      "Source concept id" = "source_concept_id",
       "Sex" = "sex",
       "Age group" = "age_group"
     )
@@ -113,7 +114,7 @@ tableConceptIdCounts <- function(result,
         includeHeaderName = FALSE
       ) |>
       dplyr::select(!"estimate_type") |>
-      visOmopResults::formatTable(type = "datatable", groupColumn = list(" " = c("OMOP Table", additional_cols)))
+      visOmopResults::formatTable(type = "datatable", groupColumn = list(" " = c("OMOP table", additional_cols)))
 
   } else if (type == "reactable") {
 
@@ -134,9 +135,10 @@ tableConceptIdCounts <- function(result,
           age_group = reactable::colDef(name = "Age Group"),
           cdm_name = reactable::colDef(name = "Database name"),
           group_level = reactable::colDef(name = "OMOP table"),
-          concept_name = reactable::colDef(name = "Concept name"),
-          standard_concept = reactable::colDef(name = "Standard concept id"),
-          source_concept = reactable::colDef(name = "Source concept id"),
+          standard_concept_name = reactable::colDef(name = "Standard concept name"),
+          standard_concept_id = reactable::colDef(name = "Standard concept id"),
+          source_concept_name = reactable::colDef(name = "Source concept name"),
+          source_concept_id = reactable::colDef(name = "Source concept id"),
           count_records = reactable::colDef(name = "N records"),
           count_subjects = reactable::colDef(name = "N subjects")
         ),
@@ -145,7 +147,7 @@ tableConceptIdCounts <- function(result,
           filterable = TRUE,
           resizable = TRUE
         ),
-        groupBy = c("group_level", additional_cols, strata_cols),
+        groupBy = c("cdm_name", "group_level", additional_cols, strata_cols),
         defaultExpanded = TRUE,
         searchable = TRUE,
         highlight = TRUE,

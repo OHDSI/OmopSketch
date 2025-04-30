@@ -30,7 +30,7 @@ test_that("summariseConceptIdCount works", {
     summariseConceptIdCounts(cdm, "procedure_occurrence", countBy = "record", interval = "months") |>
       omopgenerics::splitAdditional() |>
       dplyr::filter(.data$time_interval == "overall") |>
-      omopgenerics::uniteAdditional(cols = c("time_interval", "source_concept")) |>
+      omopgenerics::uniteAdditional(cols = c("time_interval", "source_concept_id", "source_concept_name")) |>
       sortTibble(),
     ignore_attr = TRUE
   )
@@ -137,6 +137,19 @@ test_that("tableConceptIdCounts() works", {
   expect_true(inherits(y, "reactable"))
   expect_warning(t <- summariseConceptIdCounts(cdm, "death"))
   expect_warning(inherits(tableConceptIdCounts(t), "reactable"))
+  expect_no_error(tableConceptIdCounts(summariseConceptIdCounts(cdm, "condition_occurrence"), filter = "overall", type = "datatable"))
+  expect_no_error(tableConceptIdCounts(summariseConceptIdCounts(cdm, "condition_occurrence"), filter = "standard", type = "datatable"))
+  expect_no_error(tableConceptIdCounts(summariseConceptIdCounts(cdm, "condition_occurrence"), filter = "source", type = "datatable"))
+  expect_warning(tableConceptIdCounts(summariseConceptIdCounts(cdm, "condition_occurrence"), filter = "missing source", type = "datatable"))
+  expect_warning(tableConceptIdCounts(summariseConceptIdCounts(cdm, "condition_occurrence"), filter = "missing standard", type = "datatable"))
+  expect_no_error(tableConceptIdCounts(summariseConceptIdCounts(cdm, "condition_occurrence"), filter = "overall", type = "reactable"))
+  expect_no_error(tableConceptIdCounts(summariseConceptIdCounts(cdm, "condition_occurrence"), filter = "standard", type = "reactable"))
+  expect_no_error(tableConceptIdCounts(summariseConceptIdCounts(cdm, "condition_occurrence"), filter = "source", type = "reactable"))
+  expect_warning(tableConceptIdCounts(summariseConceptIdCounts(cdm, "condition_occurrence"), filter = "missing source", type = "reactable"))
+  expect_warning(tableConceptIdCounts(summariseConceptIdCounts(cdm, "condition_occurrence"), filter = "missing standard", type = "reactable"))
+
+
+
 
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
