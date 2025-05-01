@@ -6,77 +6,102 @@
 #'
 #'
 tableInObservation <- function(result,
-                             type = "gt") {
+                               type = "gt") {
   # initial checks
   rlang::check_installed("visOmopResults")
   omopgenerics::validateResultArgument(result)
-  omopgenerics::assertChoice(type, c("gt","reactable", "datatable"))
+  omopgenerics::assertChoice(type, c("gt", "reactable", "datatable"))
   strata_cols <- omopgenerics::strataColumns(result)
   additional_cols <- omopgenerics::additionalColumns(result)
 
   # subset to result_type of interest
-  result <- result |>
+  formatted_result <- result |>
     omopgenerics::filterSettings(
       .data$result_type == "summarise_in_observation"
     ) |>
-    omopgenerics::splitStrata() |>
-    dplyr::arrange(.data$additional_level, !!!rlang::syms(strata_cols), .data$variable_name) |>
-    omopgenerics::uniteStrata(cols = strata_cols)
-
+    omopgenerics::splitAll() |>
+    dplyr::arrange(!!!rlang::syms(additional_cols), !!!rlang::syms(strata_cols), .data$variable_name)
 
   # check if it is empty
-  if (nrow(result) == 0) {
+  if (nrow(formatted_result) == 0) {
     warnEmpty("summarise_in_observation")
     return(emptyTable(type))
   }
 
-  if (type %in% c("gt","datatable")) {
+
+  rename_vec <- c(
+    "Database name" = "cdm_name",
+    "Sex" = "sex",
+    "Age group" = "age_group",
+    "Variable name" = "variable_name"
+  )
+
+  rename_vec <- rename_vec[rename_vec %in% names(formatted_result)]
+
+  if (type == "gt") {
     formatEstimates <- c(
       "N (%)" = "<count> (<percentage>%)",
-      "Median" = "<median>")
-    result |>
-      visOmopResults::visOmopTable(
-        type = type,
-        estimateName = formatEstimates,
-        header = c("cdm_name"),
-        hide = c("interval",	"study_period_end",	"study_period_start", "variable_level", "omop_table"),
-        rename = c("Database name" = "cdm_name"),
-        columnOrder = c(additional_cols, strata_cols, "variable_name", "estimate_name"),
-        groupColumn = c(additional_cols),
-        .options = list(groupAsColumn = TRUE, merge = "all_columns", includeHeaderName = TRUE
-        )
-      )|>
-      suppressMessages()
-
+      "Median" = "<median>"
+    )
+    formatted_result |>
+      dplyr::rename(!!!rename_vec) |>
+      visOmopResults::formatEstimateName(estimateName = formatEstimates) |>
+      dplyr::rename("Estimate name" = estimate_name) |>
+      dplyr::select(dplyr::any_of(c(
+        "Database name",
+        "Variable name",
+        "Estimate name",
+        "estimate_value",
+        "Sex",
+        "Age group",
+        additional_cols
+      ))) |>
+      visOmopResults::formatHeader(
+        header = c("Database name"),
+        includeHeaderName = TRUE
+      ) |>
+      visOmopResults::formatTable(type = "gt", groupColumn = additional_cols, groupAsColumn = TRUE, merge = "all_columns")
+  } else if (type == "datatable") {
+    formatted_result |>
+      dplyr::rename(!!!rename_vec) |>
+      dplyr::rename("Estimate name" = estimate_name) |>
+      dplyr::mutate(estimate_value = as.numeric(.data$estimate_value)) |>
+      dplyr::select(dplyr::any_of(c(
+        "Database name",
+        "Variable name",
+        "Estimate name",
+        "estimate_value",
+        "Sex",
+        "Age group",
+        additional_cols
+      ))) |>
+      visOmopResults::formatHeader(
+        header = c("Database name"),
+        includeHeaderName = TRUE
+      ) |>
+      visOmopResults::formatTable(type = "datatable", groupColumn = list(" " = additional_cols))
   } else if (type == "reactable") {
-
     rlang::check_installed("reactable")
 
-    result |>
-      visOmopResults::formatEstimateName(estimateName = c(
-        "N (%)" = "<count> (<percentage>%)", "Median" = "<median>"
-      )) |>
-      omopgenerics::splitAll() |>
-      dplyr::select(
-        dplyr::any_of(c(
-          "cdm_name",
-          "variable_name",
-          "estimate_name",
-          "estimate_value",
-          additional_cols,
-          strata_cols
-        ))
-      ) |>
+    formatted_result |>
+      dplyr::mutate(estimate_value = as.numeric(.data$estimate_value)) |>
+      dplyr::select(dplyr::any_of(c(
+        "cdm_name",
+        "variable_name",
+        "estimate_name",
+        "estimate_value",
+        strata_cols,
+        additional_cols
+      ))) |>
       reactable::reactable(
         columns = list(
-          time_interval = reactable::colDef(name = "Time Interval"),
+          time_interval = reactable::colDef(name = "Time interval"),
           sex = reactable::colDef(name = "Sex"),
-          age_group = reactable::colDef(name = "Age Group"),
+          age_group = reactable::colDef(name = "Age group"),
           cdm_name = reactable::colDef(name = "Database name"),
           variable_name = reactable::colDef(name = "Variable name"),
           estimate_name = reactable::colDef(name = "Estimate name"),
           estimate_value = reactable::colDef(name = "Estimate value")
-
         ),
         defaultColDef = reactable::colDef(
           sortable = TRUE,
@@ -94,6 +119,4 @@ tableInObservation <- function(result,
       ) |>
       suppressMessages()
   }
-
-
 }

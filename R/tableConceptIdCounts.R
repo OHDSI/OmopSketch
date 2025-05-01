@@ -62,6 +62,14 @@ tableConceptIdCounts <- function(result,
 
   formatted_result <- result |>
     formatColumn(cols_to_format) |>
+    dplyr::mutate(
+      estimate_value = as.numeric(.data$estimate_value),
+      estimate_name = dplyr::case_when(
+        .data$estimate_name == "count_subjects" ~ "N subjects",
+        .data$estimate_name == "count_records" ~ "N records",
+        TRUE ~ .data$estimate_name
+      )
+    ) |>
     dplyr::select(
       dplyr::any_of(c(
         "cdm_name",
@@ -78,18 +86,6 @@ tableConceptIdCounts <- function(result,
 
   if (type == "datatable") {
 
-    estimateNames <- formatted_result |>
-      dplyr::distinct(.data$estimate_name) |>
-      dplyr::pull()
-
-    estimateName <- c()
-    if ("count_records" %in% estimateNames) {
-      estimateName <- c(estimateName, "N records" = "<count_records>")
-    }
-
-    if ("count_subjects" %in% estimateNames) {
-      estimateName <- c(estimateName, "N persons" = "<count_subjects>")
-    }
 
 
     rename_vec <- c(
@@ -108,7 +104,6 @@ tableConceptIdCounts <- function(result,
     formatted_result |>
       dplyr::rename(!!!rename_vec) |>
       dplyr::select(!c("group_name", "result_id")) |>
-      visOmopResults::formatEstimateName(estimateName = estimateName) |>
       visOmopResults::formatHeader(
         header = c("Database name", "estimate_name"),
         includeHeaderName = FALSE
@@ -138,9 +133,7 @@ tableConceptIdCounts <- function(result,
           standard_concept_name = reactable::colDef(name = "Standard concept name"),
           standard_concept_id = reactable::colDef(name = "Standard concept id"),
           source_concept_name = reactable::colDef(name = "Source concept name"),
-          source_concept_id = reactable::colDef(name = "Source concept id"),
-          count_records = reactable::colDef(name = "N records"),
-          count_subjects = reactable::colDef(name = "N subjects")
+          source_concept_id = reactable::colDef(name = "Source concept id")
         ),
         defaultColDef = reactable::colDef(
           sortable = TRUE,
