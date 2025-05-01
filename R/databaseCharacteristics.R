@@ -155,11 +155,12 @@ databaseCharacteristics <- function(cdm,
   )
 
   # Summarize in observation records
-  cli::cli_inform(paste(cli::symbol$arrow_right,"Summarising in observation records and person-days"))
+  cli::cli_inform(paste(cli::symbol$arrow_right,"Summarising in observation records, subjects, person-days, age and sex"))
   result$inObservation <- do.call(
     summariseInObservation,
     c(list(
       cdm$observation_period,
+      output = c("record", "person", "person-days", "age", "sex"),
       interval = interval,
       sex = sex,
       ageGroup = ageGroup,

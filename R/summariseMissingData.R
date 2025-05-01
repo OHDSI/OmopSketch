@@ -174,7 +174,10 @@ summariseMissingDataFromTable <- function(table, cdm, col, dateRange, sample, se
     # summarise missing data
     summariseMissingInternal(
       strata = strata,
-      columns = col_table
+      columns = col_table,
+      cdm = cdm,
+      table = table
+
     ) |>
     dplyr::mutate(omop_table = table) |>
     # order columns
