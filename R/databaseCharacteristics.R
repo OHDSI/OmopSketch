@@ -95,6 +95,8 @@ databaseCharacteristics <- function(cdm,
       )
     )
 
+  omopgenerics::dropSourceTable(cdm = cdm, c("population_1", "population_2", "population"))
+
 
   # Summarise missing data
   cli::cli_inform(paste(cli::symbol$arrow_right,"Summarising missing data"))
@@ -196,7 +198,13 @@ databaseCharacteristics <- function(cdm,
     )
   )
   endTables <- CDMConnector::listSourceTables(cdm)
-  omopgenerics::dropSourceTable(cdm = cdm,endTables[!(endTables %in% startTables)])
+  newTables <- setdiff(endTables, startTables)
+
+  if(length(newTables)) {
+    cli::cli_inform(c(
+      "i" = "{length(newTables)} table{?s} created: {.val {newTables}}."
+    ))
+  }
 
   return(result)
 }

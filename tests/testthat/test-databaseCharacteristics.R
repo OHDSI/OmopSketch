@@ -18,5 +18,7 @@ test_that("databaseCharacteristics works", {
                c(0L, 1L))
 
 
+
+
 })
 
