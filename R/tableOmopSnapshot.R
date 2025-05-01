@@ -61,12 +61,15 @@ warnEmpty <- function(resultType) {
 emptyTable <- function(type) {
   pkg <- type
   pkg[pkg == "tibble"] <- "dplyr"
+  pkg[pkg == "datatable"] <- "DT"
   rlang::check_installed(pkg = pkg)
   x <- dplyr::tibble(`Table has no data` = character())
   switch(type,
     "tibble" = x,
     "gt" = gt::gt(x),
-    "flextable" = flextable::flextable(x)
+    "flextable" = flextable::flextable(x),
+    "DT" = DT::datatable(x),
+    "reactable" = reactable::reactable(x)
   )
 }
 
