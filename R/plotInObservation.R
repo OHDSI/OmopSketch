@@ -52,17 +52,18 @@ plotInObservation <- function(result,
       "i" = "result |> dplyr::filter(variable_name == '{variable[1]}')"
     ))
   }
-
+  estimate <- unique(result$estimate_name)
+  estimate <- estimate[estimate != "percentage"]
   # warn
   warnFacetColour(result, list(facet = asCharacterFacet(facet), colour = colour, "additional_level"))
 
   # plot
   if (length(unique(result$additional_level)) > 1) {
     p <- result |>
-      dplyr::filter(.data$estimate_name == "count") |>
+      dplyr::filter(.data$estimate_name == estimate) |>
       visOmopResults::scatterPlot(
         x = "time_interval",
-        y = "count",
+        y = estimate,
         line = TRUE,
         point = TRUE,
         ribbon = FALSE,
@@ -93,10 +94,10 @@ plotInObservation <- function(result,
     p
   } else {
     result |>
-      dplyr::filter(.data$estimate_name == "count") |>
+      dplyr::filter(.data$estimate_name == estimate) |>
       visOmopResults::barPlot(
         x = "variable_name",
-        y = "count",
+        y = estimate,
         facet = facet,
         colour = colour
       )
