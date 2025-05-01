@@ -1,3 +1,9 @@
+# OmopSketch 0.3.2.900
+- "sex" and "ade" output in summariseInObservation by @cecicampanile #358
+- source concept in summariseConceptIdCount and tableConceptIdCounts by @cecicampanile #362
+- tableInObservation and tableRecordCount by @cecicampanile #363
+- databaseCharacteristics() function by @cecicampanile #330
+  
 # OmopSketch 0.3.2
 
 - remove dplyr::compute() from sampleOmopTable() by @cecicampanile #344
