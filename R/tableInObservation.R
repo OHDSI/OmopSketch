@@ -38,7 +38,7 @@ tableInObservation <- function(result,
   )
 
   rename_vec <- rename_vec[rename_vec %in% names(formatted_result)]
-  group <- if ("time_additional" %in% additional_cols) "Time additional" else NULL
+  group <- if ("time_interval" %in% additional_cols) "Time interval" else NULL
   if (type == "gt") {
     formatEstimates <- c(
       "N (%)" = "<count> (<percentage>%)",
