@@ -38,6 +38,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Suggests:
     CodelistGenerator,
+    CohortCharacteristics,
     DBI,
     duckdb,
     DT,
@@ -47,6 +48,7 @@ Suggests:
     knitr,
     lubridate,
     odbc,
+    OmopViewer,
     reactable,
     remotes,
     rmarkdown,

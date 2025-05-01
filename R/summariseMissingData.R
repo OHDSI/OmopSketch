@@ -141,6 +141,7 @@ summariseMissingDataFromTable <- function(table, cdm, col, dateRange, sample, se
   prefix <- omopgenerics::tmpPrefix()
 
   # check if table is empty
+
   if (omopgenerics::isTableEmpty(omopTable)) {
     cli::cli_warn(paste0(table, "omop table is empty."))
     return(NULL)
@@ -173,7 +174,10 @@ summariseMissingDataFromTable <- function(table, cdm, col, dateRange, sample, se
     # summarise missing data
     summariseMissingInternal(
       strata = strata,
-      columns = col_table
+      columns = col_table,
+      cdm = cdm,
+      table = table
+
     ) |>
     dplyr::mutate(omop_table = table) |>
     # order columns
