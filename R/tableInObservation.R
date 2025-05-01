@@ -33,11 +33,12 @@ tableInObservation <- function(result,
     "Database name" = "cdm_name",
     "Sex" = "sex",
     "Age group" = "age_group",
-    "Variable name" = "variable_name"
+    "Variable name" = "variable_name",
+    "Time interval" = "time_interval"
   )
 
   rename_vec <- rename_vec[rename_vec %in% names(formatted_result)]
-
+  group <- if ("time_additional" %in% additional_cols) "Time additional" else NULL
   if (type == "gt") {
     formatEstimates <- c(
       "N (%)" = "<count> (<percentage>%)",
@@ -54,14 +55,16 @@ tableInObservation <- function(result,
         "estimate_value",
         "Sex",
         "Age group",
-        additional_cols
+        "Time interval"
       ))) |>
       visOmopResults::formatHeader(
         header = c("Database name"),
         includeHeaderName = TRUE
       ) |>
-      visOmopResults::formatTable(type = "gt", groupColumn = additional_cols, groupAsColumn = TRUE, merge = "all_columns")
+      visOmopResults::formatTable(type = "gt", groupColumn = group, groupAsColumn = TRUE, merge = "all_columns") |>
+      suppressMessages()
   } else if (type == "datatable") {
+
     formatted_result |>
       dplyr::rename(!!!rename_vec) |>
       dplyr::rename("Estimate name" = estimate_name) |>
@@ -79,7 +82,7 @@ tableInObservation <- function(result,
         header = c("Database name"),
         includeHeaderName = TRUE
       ) |>
-      visOmopResults::formatTable(type = "datatable", groupColumn = list(" " = additional_cols))
+      visOmopResults::formatTable(type = "datatable", groupColumn = group)
   } else if (type == "reactable") {
     rlang::check_installed("reactable")
 
