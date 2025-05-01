@@ -471,3 +471,19 @@ test_that("age and sex output work", {
  expect_equal(sprintf("%.2f", 100 * z$n_females / z$n_tot), y)
  PatientProfiles::mockDisconnect(cdm = cdm)
 })
+
+test_that("tableInObservation works", {
+  skip_on_cran()
+  # Load mock database ----
+  cdm <- cdmEunomia()
+expect_no_error(x <- tableInObservation(summariseInObservation(cdm$observation_period)))
+expect_true(inherits(x, "gt_tbl"))
+
+
+expect_no_error(tableInObservation(summariseInObservation(cdm$observation_period), type = "datatable"))
+expect_no_error(tableInObservation(summariseInObservation(cdm$observation_period), type = "reactable"))
+
+
+
+PatientProfiles::mockDisconnect(cdm = cdm)
+})

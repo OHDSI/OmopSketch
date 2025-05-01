@@ -370,3 +370,18 @@ test_that("no tables created", {
 
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
+test_that("tableRecordCount works", {
+  skip_on_cran()
+  # Load mock database ----
+  cdm <- cdmEunomia()
+  expect_no_error(x <- tableRecordCount(summariseRecordCount(cdm, "drug_exposure")))
+  expect_true(inherits(x, "gt_tbl"))
+
+
+  expect_no_error(tableRecordCount(summariseRecordCount(cdm, "drug_exposure"), type = "datatable"))
+  expect_no_error(tableRecordCount(summariseRecordCount(cdm, "drug_exposure"), type = "reactable"))
+
+
+
+  PatientProfiles::mockDisconnect(cdm = cdm)
+})

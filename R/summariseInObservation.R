@@ -100,7 +100,7 @@ summariseInObservation <- function(observationPeriod,
     result$count <- createSummarisedResultObservationPeriod(result$count, observationPeriod, sex, name, denominator, dateRange, original_interval)
   }
   if ("age" %in% output) {
-    result$age <- createSummarisedResultAge(observationPeriod, cdm, start_date_name, end_date_name, interval, tablePrefix)
+    result$age <- createSummarisedResultAge(observationPeriod, cdm, start_date_name, end_date_name, interval, tablePrefix, sex)
   }
   result <- result |> dplyr::bind_rows()
   result <- result |>
@@ -386,7 +386,8 @@ createSummarisedResultObservationPeriod <- function(result, observationPeriod, s
   }
   return(result)
 }
-createSummarisedResultAge <- function(observationPeriod, cdm, start_date_name, end_date_name, interval, tablePrefix) {
+createSummarisedResultAge <- function(observationPeriod, cdm, start_date_name, end_date_name, interval, tablePrefix, sex) {
+  strata <- list(character(), "sex")[c(TRUE, sex)]
   if (interval != "overall") {
     x <- observationPeriod |>
       dplyr::mutate("start_date" = as.Date(paste0(as.character(as.integer(clock::get_year(.data[[start_date_name]]))), "-", as.character(as.integer(clock::get_month(.data[[start_date_name]]))), "-01"))) |>
@@ -402,27 +403,22 @@ createSummarisedResultAge <- function(observationPeriod, cdm, start_date_name, e
       PatientProfiles::addAgeQuery(indexDate = "index_date") |>
       dplyr::compute(temporary = FALSE, name = tablePrefix)
 
-    strata <- c("time_interval", "sex")
     additional_column <- "time_interval"
   } else {
     x <- observationPeriod |>
       PatientProfiles::addAgeQuery(indexDate = start_date_name) |>
       dplyr::compute(temporary = FALSE, name = tablePrefix)
-    strata <- c("sex")
+
     additional_column <- character()
   }
 
-  overall <- x |>
-    dplyr::filter(.data$age_group == "overall") |>
-    dplyr::group_by(dplyr::across(dplyr::all_of(strata))) |>
-    dplyr::summarise("estimate_value" = stats::median(.data$age), .groups = "drop") |>
-    dplyr::collect()
-  byGroup <- x |>
-    dplyr::filter(.data$age_group != "overall") |>
-    dplyr::group_by(dplyr::across(c("age_group", dplyr::all_of(strata)))) |>
-    dplyr::summarise("estimate_value" = stats::median(.data$age), .groups = "drop") |>
-    dplyr::collect()
-  res <- dplyr::bind_rows(overall, byGroup) |>
+  res <- purrr::map(strata, \(stratax) {
+    x |>
+      dplyr::group_by(dplyr::across(dplyr::all_of(c("age_group", stratax, additional_column)))) |>
+      dplyr::summarise(estimate_value = stats::median(.data$age), .groups = "drop") |>
+      dplyr::collect()
+  }) |>
+    dplyr::bind_rows() |>
     dplyr::mutate(
       "variable_name" = "Median age in observation",
       "estimate_name" = "median",
@@ -431,7 +427,7 @@ createSummarisedResultAge <- function(observationPeriod, cdm, start_date_name, e
     ) |>
     omopgenerics::uniteAdditional(additional_column) |>
     dplyr::arrange(dplyr::across(dplyr::any_of("additional_level"))) |>
-    omopgenerics::uniteStrata(cols = c("sex", "age_group")) |>
+    omopgenerics::uniteStrata(cols = c("sex"[sex], "age_group")) |>
     dplyr::mutate(
       "result_id" = as.integer(1),
       "cdm_name" = omopgenerics::cdmName(omopgenerics::cdmReference(observationPeriod)),
