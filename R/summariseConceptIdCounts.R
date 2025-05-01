@@ -1,4 +1,3 @@
-
 #' Summarise concept use in patient-level data. Only concepts recorded during observation period are counted.
 #'
 #' @param cdm A cdm object
@@ -34,33 +33,28 @@
 #' }
 #'
 summariseConceptIdCounts <- function(cdm,
-                                      omopTableName,
-                                      countBy = "record",
-                                      year = lifecycle::deprecated(),
-                                      interval = "overall",
-                                      sex = FALSE,
-                                      ageGroup = NULL,
-                                      sample = NULL,
-                                      dateRange = NULL) {
-
+                                     omopTableName,
+                                     countBy = "record",
+                                     year = lifecycle::deprecated(),
+                                     interval = "overall",
+                                     sex = FALSE,
+                                     ageGroup = NULL,
+                                     sample = NULL,
+                                     dateRange = NULL) {
   if (lifecycle::is_present(year)) {
-
     lifecycle::deprecate_warn("0.2.3", "summariseConceptIdCounts(year)", "summariseConceptIdCounts(interval = 'years')")
 
     if (isTRUE(year) & missing(interval)) {
-
-      interval = "years"
+      interval <- "years"
       cli::cli_inform("interval argument set to 'years'")
-
-      } else if (isTRUE(year) & !missing(interval)){
-
-       cli::cli_inform("year argument will be ignored")
+    } else if (isTRUE(year) & !missing(interval)) {
+      cli::cli_inform("year argument will be ignored")
     }
   }
 
   # initial checks
   cdm <- omopgenerics::validateCdmArgument(cdm)
-  checkCountBy(countBy)
+  omopgenerics::assertChoice(countBy, choices = c("record", "person"))
   omopgenerics::assertChoice(interval, c("overall", "years", "quarters", "months"), length = 1)
   omopgenerics::assertLogical(sex, length = 1)
   omopgenerics::assertChoice(omopTableName, choices = omopgenerics::omopTables(), unique = TRUE)
@@ -95,7 +89,9 @@ summariseConceptIdCounts <- function(cdm,
 
     # restrict study period
     omopTable <- restrictStudyPeriod(omopTable, dateRange)
-    if (is.null(omopTable)) return(NULL)
+    if (is.null(omopTable)) {
+      return(NULL)
+    }
 
     # sample table
     omopTable <- omopTable |>
@@ -136,7 +132,7 @@ summariseConceptIdCounts <- function(cdm,
       ) |>
       # summarise results
       summariseCountsInternal(stratax, counts) |>
-       dplyr::mutate(omop_table = .env$table)
+      dplyr::mutate(omop_table = .env$table)
 
 
     omopgenerics::dropSourceTable(cdm = cdm, name = dplyr::starts_with(prefix))

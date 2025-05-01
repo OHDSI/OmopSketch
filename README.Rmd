@@ -78,7 +78,7 @@ After visualising the main characteristics of our clinical tables, we can explor
 Using `summariseInObservation()` and `plotInObservation()`, we can gather information on the number of records per year.
 
 ```{r}
-summariseInObservation(cdm$observation_period, output = "records", interval = "years") |>
+summariseInObservation(cdm$observation_period, output = "record", interval = "years") |>
   plotInObservation(colour = "cdm_name")
 ```
 
@@ -101,10 +101,10 @@ summariseObservationPeriod(cdm$observation_period) |>
 OmopSketch also provides functions to explore some of (or all) the concepts in the dataset.
 
 ```{r}
-acetaminophen <- c(1125315,  1127433, 1127078)
+acetaminophen <- c(1125315, 1127433, 1127078)
 
 summariseConceptSetCounts(cdm, conceptSet = list("acetaminophen" = acetaminophen)) |>
-  filter(variable_name == "Number records") |> 
+  filter(variable_name == "Number records") |>
   plotConceptSetCounts(colour = "codelist_name")
 ```
 

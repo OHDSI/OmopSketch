@@ -1,4 +1,3 @@
-
 #' Create a visual table from a summarise_omop_snapshot result.
 #' @param result  Output from summariseOmopSnapshot().
 #' @param type Type of formatting output table, either "gt" or "flextable".
@@ -25,7 +24,8 @@ tableOmopSnapshot <- function(result,
   # subset to result_type of interest
   result <- result |>
     omopgenerics::filterSettings(
-      .data$result_type == "summarise_omop_snapshot")
+      .data$result_type == "summarise_omop_snapshot"
+    )
 
   # check if it is empty
   if (nrow(result) == 0) {
@@ -47,7 +47,8 @@ tableOmopSnapshot <- function(result,
       rename = c(
         "Database name" = "cdm_name",
         "Estimate" = "estimate_name",
-        "Variable" = "variable_name"),
+        "Variable" = "variable_name"
+      ),
       groupColumn = "variable_name"
     )
 
@@ -62,7 +63,7 @@ emptyTable <- function(type) {
   pkg[pkg == "tibble"] <- "dplyr"
   rlang::check_installed(pkg = pkg)
   x <- dplyr::tibble(`Table has no data` = character())
-  switch (type,
+  switch(type,
     "tibble" = x,
     "gt" = gt::gt(x),
     "flextable" = flextable::flextable(x)

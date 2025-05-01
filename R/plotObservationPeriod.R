@@ -1,4 +1,3 @@
-
 #' Create a plot from the output of summariseObservationPeriod().
 #'
 #' @param result A summarised_result object.
@@ -31,7 +30,6 @@ plotObservationPeriod <- function(result,
                                   plotType = "barplot",
                                   facet = NULL,
                                   colour = NULL) {
-
   rlang::check_installed("ggplot2")
   rlang::check_installed("visOmopResults")
   # initial checks
@@ -40,7 +38,8 @@ plotObservationPeriod <- function(result,
   # subset to result_type of interest
   result <- result |>
     omopgenerics::filterSettings(
-      .data$result_type == "summarise_observation_period")
+      .data$result_type == "summarise_observation_period"
+    )
 
   # check if it is empty
   if (nrow(result) == 0) {
@@ -60,8 +59,10 @@ plotObservationPeriod <- function(result,
 
   validateFacet(facet, result)
 
-  optFacetColour <- c("cdm_name", "observation_period_ordinal",
-                      omopgenerics::strataColumns(result))
+  optFacetColour <- c(
+    "cdm_name", "observation_period_ordinal",
+    omopgenerics::strataColumns(result)
+  )
   omopgenerics::assertChoice(facet, optFacetColour, null = TRUE)
 
   # this is due to bug in visOmopResults to remove in next release
@@ -69,9 +70,9 @@ plotObservationPeriod <- function(result,
   if (length(facet) == 0) facet <- NULL
   if (length(colour) == 0) colour <- NULL
 
-  if(length(omopgenerics::groupColumns(result)) == 0){
+  if (length(omopgenerics::groupColumns(result)) == 0) {
     result <- result |>
-      dplyr::mutate(group_name  = "observation_period_ordinal")
+      dplyr::mutate(group_name = "observation_period_ordinal")
   }
 
   if (plotType == "barplot") {
@@ -80,14 +81,16 @@ plotObservationPeriod <- function(result,
       x = "observation_period_ordinal",
       y = "count",
       facet = facet,
-      colour = colour) +
+      colour = colour
+    ) +
       ggplot2::ylab(stringr::str_to_sentence(unique(result$variable_name)))
   } else if (plotType == "boxplot") {
     p <- visOmopResults::boxPlot(
       result = result,
       x = "observation_period_ordinal",
       facet = facet,
-      colour = colour)
+      colour = colour
+    )
   } else if (plotType == "densityplot") {
     p <- visOmopResults::scatterPlot(
       result = result,
@@ -103,7 +106,20 @@ plotObservationPeriod <- function(result,
       ggplot2::xlab(stringr::str_to_sentence(unique(result$variable_name))) +
       ggplot2::ylab("Density")
   }
-
+  p$data <- p$data |>
+    dplyr::mutate(
+      observation_period_order = dplyr::if_else(
+        .data$observation_period_ordinal == "all",
+        0,
+        as.numeric(gsub("\\D", "", .data$observation_period_ordinal))
+      )
+    ) |>
+    dplyr::mutate(
+      observation_period_ordinal = factor(
+        .data$observation_period_ordinal,
+        levels = unique(.data$observation_period_ordinal[order(.data$observation_period_order)])
+      )
+    )
   return(p)
 }
 
@@ -138,7 +154,8 @@ uniteVariable <- function(res, cols, colname, def) {
   if (length(cols) > 0) {
     res <- res |>
       tidyr::unite(
-        col = !!colname, dplyr::all_of(cols), sep = " - ", remove = FALSE)
+        col = !!colname, dplyr::all_of(cols), sep = " - ", remove = FALSE
+      )
   } else {
     res <- res |> dplyr::mutate(!!colname := !!def)
   }

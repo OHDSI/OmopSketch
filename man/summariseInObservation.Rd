@@ -8,7 +8,7 @@ time.}
 summariseInObservation(
   observationPeriod,
   interval = "overall",
-  output = "records",
+  output = "record",
   ageGroup = NULL,
   sex = FALSE,
   dateRange = NULL
@@ -21,13 +21,14 @@ a cdm_reference object.}
 \item{interval}{Time interval to stratify by. It can either be "years", "quarters", "months" or "overall".}
 
 \item{output}{Output format. It can be either the number of records
-("records") that are in observation in the specific interval of time, the
-number of person-days ("person-days"), or both c("records","person-days").}
+("record") that are in observation in the specific interval of time, the
+number of person-days ("person-days"), the number of subjects ("person"),
+the number of females ("sex") or the median age of population in observation ("age").}
 
 \item{ageGroup}{A list of age groups to stratify results by.}
 
 \item{sex}{Boolean variable. Whether to stratify by sex (TRUE) or not
-(FALSE).}
+(FALSE). For output = "sex" this stratification is not applied.}
 
 \item{dateRange}{A vector of two dates defining the desired study period.
 Only the \code{start_date} column of the OMOP table is checked to ensure it falls within this range.
@@ -49,7 +50,7 @@ cdm <- mockOmopSketch()
 result <- summariseInObservation(
   cdm$observation_period,
   interval = "months",
-  output = c("person-days","records"),
+  output = c("person-days","record"),
   ageGroup = list("<=60" = c(0,60), ">60" = c(61, Inf)),
   sex = TRUE
 )
@@ -58,6 +59,5 @@ result |>
   glimpse()
 
 PatientProfiles::mockDisconnect(cdm)
-
 }
 }

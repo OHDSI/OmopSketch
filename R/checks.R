@@ -1,17 +1,16 @@
 #' @noRd
-checkInterval <- function(interval, call = parent.frame()){
+checkInterval <- function(interval, call = parent.frame()) {
   omopgenerics::assertCharacter(interval, length = 1, na = FALSE, null = FALSE, call = call)
 
-  if(!interval %in% c("year","month")){
+  if (!interval %in% c("year", "month")) {
     cli::cli_abort("Interval argument {interval} is not valid. Valid options are either `year` or `month`.", call = call)
   }
 }
 
-validateIntervals <- function(interval, call = parent.frame()){
-
+validateIntervals <- function(interval, call = parent.frame()) {
   omopgenerics::assertCharacter(interval, length = 1, na = FALSE, null = FALSE, call = call)
 
-  if(!interval %in% c("overall","years","months","quarters")){
+  if (!interval %in% c("overall", "years", "months", "quarters")) {
     cli::cli_abort("Interval argument {interval} is not valid. Valid options are either `overall`, `years`, `quarters` or `months`.", call = call)
   }
 
@@ -22,7 +21,11 @@ validateIntervals <- function(interval, call = parent.frame()){
     interval == "years" ~ 1
   )
 
-  if(interval == "quarters"){quarters <- "month"}else{interval <- gsub("s$","",interval)}
+  if (interval == "quarters") {
+    quarters <- "month"
+  } else {
+    interval <- gsub("s$", "", interval)
+  }
 
   return(list("interval" = interval, "unitInterval" = unitInterval))
 }
@@ -96,76 +99,56 @@ checkCategory <- function(category, overlap = FALSE, type = "numeric", call = pa
 }
 
 #' @noRd
-checkOutput <- function(output, call = parent.frame()){
-  omopgenerics::assertCharacter(output, call = call)
-
-  for(i in output){
-    if(!i %in% c("person-days","records")){
-      cli::cli_abort("output argument is not valid. It must be either `person-days`, `records`, or c(`person-days`,`records`).", call = call())
-    }
-  }
-}
-
-#' @noRd
-checkCountBy <- function(countBy, call = parent.frame()){
-  omopgenerics::assertCharacter(countBy, call = call)
-
-  for(i in countBy){
-    if(!i %in% c("record","person")){
-      cli::cli_abort("countBy argument is not valid. It must be either `record`, `person`, or c(`record`,`person`).", call = call)
-    }
-  }
-}
-
-#' @noRd
 validateStudyPeriod <- function(cdm, studyPeriod, call = parent.frame()) {
-  if(is.null(studyPeriod)) {
+  if (is.null(studyPeriod)) {
     return(NULL)
   }
   # First date checks
-  if(!is.na(studyPeriod[1]) & !is.na(studyPeriod[2]) & studyPeriod[1] > studyPeriod[2]) {
+  if (!is.na(studyPeriod[1]) & !is.na(studyPeriod[2]) & studyPeriod[1] > studyPeriod[2]) {
     cli::cli_abort("The studyPeriod ends at a date earlier than the start provided.", call = call)
   }
-  if(!is.na(studyPeriod[1]) & is.na(as.Date(studyPeriod[1], format="%d/%m/%Y")) && is.na(as.Date(studyPeriod[1], format="%Y-%m-%d"))) {
+  if (!is.na(studyPeriod[1]) & is.na(as.Date(studyPeriod[1], format = "%d/%m/%Y")) && is.na(as.Date(studyPeriod[1], format = "%Y-%m-%d"))) {
     cli::cli_abort("Please ensure that dates provided are in the correct format.", call = call)
   }
-  if(!is.na(studyPeriod[2]) & is.na(as.Date(studyPeriod[2], format="%d/%m/%Y")) && is.na(as.Date(studyPeriod[2], format="%Y-%m-%d"))) {
+  if (!is.na(studyPeriod[2]) & is.na(as.Date(studyPeriod[2], format = "%d/%m/%Y")) && is.na(as.Date(studyPeriod[2], format = "%Y-%m-%d"))) {
     cli::cli_abort("Please ensure that dates provided are in the correct format.", call = call)
   }
 
   studyPeriod <- as.character(studyPeriod)
   omopgenerics::assertCharacter(studyPeriod, length = 2, na = TRUE)
   observationRange <- cdm$observation_period |>
-    dplyr::summarise(minobs = min(.data$observation_period_start_date, na.rm = TRUE),
-                     maxobs = max(.data$observation_period_end_date, na.rm = TRUE)) |>
+    dplyr::summarise(
+      minobs = min(.data$observation_period_start_date, na.rm = TRUE),
+      maxobs = max(.data$observation_period_end_date, na.rm = TRUE)
+    ) |>
     dplyr::collect()
 
-  if(is.na(studyPeriod[1])){
+  if (is.na(studyPeriod[1])) {
     studyPeriod[1] <- observationRange |>
       dplyr::pull("minobs") |>
       as.character()
   } else {
-    if(observationRange |>
-       dplyr::pull("minobs") > studyPeriod[1]) {
-      cli::cli_alert(paste0("The observation period in the cdm starts in ",observationRange |>
-                              dplyr::pull("minobs")))
+    if (observationRange |>
+      dplyr::pull("minobs") > studyPeriod[1]) {
+      cli::cli_alert(paste0("The observation period in the cdm starts in ", observationRange |>
+        dplyr::pull("minobs")))
     }
-    if(studyPeriod[1] < "1800-01-01") {
+    if (studyPeriod[1] < "1800-01-01") {
       cli::cli_alert(paste0("The observation period in the cdm starts at a very early date."))
     }
   }
 
-  if(is.na(studyPeriod[2])){
+  if (is.na(studyPeriod[2])) {
     studyPeriod[2] <- observationRange |>
       dplyr::pull("maxobs") |>
       as.character()
   } else {
-    if(observationRange |>
-       dplyr::pull("maxobs") < studyPeriod[2]) {
-      cli::cli_alert(paste0("The observation period in the cdm ends in ",observationRange |>
-                              dplyr::pull("maxobs")))
+    if (observationRange |>
+      dplyr::pull("maxobs") < studyPeriod[2]) {
+      cli::cli_alert(paste0("The observation period in the cdm ends in ", observationRange |>
+        dplyr::pull("maxobs")))
     }
-    if(studyPeriod[2] > clock::date_today(zone = "GMT")) {
+    if (studyPeriod[2] > clock::date_today(zone = "GMT")) {
       cli::cli_alert(paste0("The given date range ends after current date."))
     }
   }
@@ -175,15 +158,14 @@ validateStudyPeriod <- function(cdm, studyPeriod, call = parent.frame()) {
 
 #' @noRd
 validateFacet <- function(facet, result, call = parent.frame()) {
-
-  if(rlang::is_formula(facet)){
+  if (rlang::is_formula(facet)) {
     facet <- as.character(facet)
     facet <- unlist(strsplit(facet, " \\+ "))
     facet <- facet[facet != "~" & facet != "+" & facet != "."]
   }
 
-    facet <- as.character(facet)
-    omopgenerics::assertChoice(facet, visOmopResults::tidyColumns(result), null = TRUE, call = call)
+  facet <- as.character(facet)
+  omopgenerics::assertChoice(facet, visOmopResults::tidyColumns(result), null = TRUE, call = call)
 
   return(invisible(NULL))
 }

@@ -9,6 +9,7 @@ summariseObservationPeriod(
   observationPeriod,
   estimates = c("mean", "sd", "min", "q05", "q25", "median", "q75", "q95", "max",
     "density"),
+  byOrdinal = TRUE,
   ageGroup = NULL,
   sex = FALSE,
   dateRange = NULL
@@ -20,6 +21,8 @@ summariseObservationPeriod(
 \item{estimates}{Estimates to summarise the variables of interest (
 \verb{records per person}, \verb{duration in days} and
 \verb{days to next observation period}).}
+
+\item{byOrdinal}{Boolean variable. Whether to stratify by the ordinal observation period (e.g., 1st, 2nd, etc.) (TRUE) or simply analyze overall data (FALSE)}
 
 \item{ageGroup}{A list of age groups to stratify results by.}
 

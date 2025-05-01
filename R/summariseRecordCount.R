@@ -1,4 +1,3 @@
-
 #' Summarise record counts of an omop_table using a specific time interval. Only
 #' records that fall within the observation period are considered.
 #'
@@ -22,7 +21,7 @@
 #'   cdm = cdm,
 #'   omopTableName = c("condition_occurrence", "drug_exposure"),
 #'   interval = "years",
-#'   ageGroup = list("<=20" = c(0,20), ">20" = c(21, Inf)),
+#'   ageGroup = list("<=20" = c(0, 20), ">20" = c(21, Inf)),
 #'   sex = TRUE
 #' )
 #'
@@ -64,7 +63,9 @@ summariseRecordCount <- function(cdm,
 
     # restrict study period
     omopTable <- restrictStudyPeriod(omopTable, dateRange)
-    if (is.null(omopTable)) return(omopgenerics::emptySummarisedResult())
+    if (is.null(omopTable)) {
+      return(omopgenerics::emptySummarisedResult())
+    }
 
     # prefix for temp tables
     prefix <- omopgenerics::tmpPrefix()

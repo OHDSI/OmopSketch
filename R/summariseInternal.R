@@ -1,9 +1,8 @@
-
 summariseCountsInternal <- function(x, strata, counts) {
   q <- c(
-    'dplyr::n()',
-    'dplyr::n_distinct(.data$person_id)',
-    'dplyr::n_distinct(.data$subject_id)'
+    "dplyr::n()",
+    "dplyr::n_distinct(.data$person_id)",
+    "dplyr::n_distinct(.data$subject_id)"
   ) |>
     rlang::set_names(c("count_records", "count_subjects", "count_subjects")) |>
     purrr::keep(c("records", "person_id", "subject_id") %in% counts) |>
@@ -30,24 +29,31 @@ summariseCountsInternal <- function(x, strata, counts) {
     dplyr::bind_rows()
 }
 summariseMissingInternal <- function(x, strata, columns) {
-  q <- 'sum(as.integer(is.na(.data${columns})), na.rm = TRUE)' |>
+  q_na <- "sum(as.integer(is.na(.data${columns})), na.rm = TRUE)" |>
     glue::glue() |>
     rlang::set_names(columns) |>
     rlang::parse_exprs()
+  columns_zero <- columns[grepl("_id$", columns)]
+  q_zero <- "sum(as.integer(.data${columns_zero}==0), na.rm = TRUE)" |>
+    glue::glue() |>
+    rlang::set_names(columns_zero) |>
+    rlang::parse_exprs()
+
+
   purrr::map(strata, \(stratak) {
-    x |>
+    na <- x |>
       dplyr::group_by(dplyr::across(dplyr::all_of(stratak))) |>
-      dplyr::summarise(total_counts = dplyr::n(), !!!q, .groups = "drop") |>
+      dplyr::summarise(total_counts = dplyr::n(), !!!q_na, .groups = "drop") |>
       dplyr::collect() |>
       dplyr::mutate(dplyr::across(
-        dplyr::all_of(names(q)),
+        dplyr::all_of(names(q_na)),
         \(x) sprintf("%.2f", 100 * as.numeric(x) / as.numeric(.data$total_counts)),
-        .names = 'percentage_{.col}'
+        .names = "percentage_{.col}"
       )) |>
       dplyr::mutate(dplyr::across(
-        dplyr::all_of(names(q)), \(x) sprintf("%i", as.integer(x))
+        dplyr::all_of(names(q_na)), \(x) sprintf("%i", as.integer(x))
       )) |>
-      dplyr::rename_with(\(x) paste0("count_", x), .cols = dplyr::all_of(names(q))) |>
+      dplyr::rename_with(\(x) paste0("count_", x), .cols = dplyr::all_of(names(q_na))) |>
       dplyr::select(!"total_counts") |>
       tidyr::pivot_longer(
         cols = !dplyr::all_of(stratak),
@@ -70,17 +76,63 @@ summariseMissingInternal <- function(x, strata, columns) {
         stratak, "column_name", "estimate_name", "estimate_type",
         "estimate_value"
       )))
+    if (length(columns_zero)) {
+      zero <- x |>
+        dplyr::group_by(dplyr::across(dplyr::all_of(stratak))) |>
+        dplyr::summarise(total_counts = dplyr::n(), !!!q_zero, .groups = "drop") |>
+        dplyr::collect() |>
+        dplyr::mutate(dplyr::across(
+          dplyr::all_of(names(q_zero)),
+          \(x) sprintf("%.2f", 100 * as.numeric(x) / as.numeric(.data$total_counts)),
+          .names = "percentage_{.col}"
+        )) |>
+        dplyr::mutate(dplyr::across(
+          dplyr::all_of(names(q_zero)), \(x) sprintf("%i", as.integer(x))
+        )) |>
+        dplyr::rename_with(\(x) paste0("count_", x), .cols = dplyr::all_of(names(q_zero))) |>
+        dplyr::select(!"total_counts") |>
+        tidyr::pivot_longer(
+          cols = !dplyr::all_of(stratak),
+          names_to = "estimate_name",
+          values_to = "estimate_value"
+        ) |>
+        tidyr::separate(
+          col = "estimate_name",
+          into = c("estimate_name", "column_name"),
+          sep = "_",
+          extra = "merge"
+        ) |>
+        dplyr::mutate(
+          estimate_type = dplyr::if_else(
+            .data$estimate_name == "count", "integer", "percentage"
+          ),
+          estimate_name = paste0("zero_", .data$estimate_name)
+        ) |>
+        dplyr::select(dplyr::all_of(c(
+          stratak, "column_name", "estimate_name", "estimate_type",
+          "estimate_value"
+        )))
+    } else {
+      zero <- tibble::tibble()
+    }
+    dplyr::bind_rows(na, zero)
   }) |>
     dplyr::bind_rows()
 }
 sampleOmopTable <- function(x, sample, name) {
-  if (is.null(sample)) return(x)
-  if (is.infinite(sample)) return(x)
-  if (x |> dplyr::tally() |> dplyr::pull() <= sample) return(x)
+  if (is.null(sample)) {
+    return(x)
+  }
+  if (is.infinite(sample)) {
+    return(x)
+  }
+  if (x |> dplyr::tally() |> dplyr::pull() <= sample) {
+    return(x)
+  }
 
   x <- x |>
-    dplyr::slice_sample(n = sample) |>
-    dplyr::compute(name = name, temporary = FALSE)
+    dplyr::slice_sample(n = sample)
+
 
   return(x)
 }
@@ -91,7 +143,7 @@ addStratifications <- function(x, indexDate, sex, ageGroup, interval, intervalNa
 
   if (interval != "overall") {
     if (interval == "years") {
-      q <- 'as.character(clock::get_year(.data[[indexDate]]))'
+      q <- "as.character(clock::get_year(.data[[indexDate]]))"
     } else if (interval == "months") {
       q <- 'paste0(as.character(clock::get_year(.data[[indexDate]])), "_", as.character(clock::get_month(.data[[indexDate]])))'
     } else if (interval == "quarters") {
@@ -134,9 +186,9 @@ addSexAgeGroup <- function(x, sex, ageGroup, indexDate) {
   if (sex) {
     x <- x |>
       dplyr::mutate(sex = dplyr::case_when(
-        .data$sex == 8532 ~ 'Female',
-        .data$sex == 8507 ~ 'Male',
-        .default = 'None'
+        .data$sex == 8532 ~ "Female",
+        .data$sex == 8507 ~ "Male",
+        .default = "None"
       ))
   }
 
@@ -177,8 +229,8 @@ restrictStudyPeriod <- function(omopTable, dateRange) {
 
     omopTable <- omopTable |>
       dplyr::filter(
-        (.data[[start_date_table]]>= .env$start_date & .data[[start_date_table]] <= .env$end_date)
-        )
+        (.data[[start_date_table]] >= .env$start_date & .data[[start_date_table]] <= .env$end_date)
+      )
   }
 
   warningEmptyStudyPeriod(omopTable)
