@@ -28,7 +28,9 @@ test_that("summariseConceptIdCount works", {
     summariseConceptIdCounts(cdm, "procedure_occurrence", countBy = "record", interval = "overall") |>
       sortTibble(),
     summariseConceptIdCounts(cdm, "procedure_occurrence", countBy = "record", interval = "months") |>
-      dplyr::filter(additional_name == "overall") |>
+      omopgenerics::splitAdditional() |>
+      dplyr::filter(.data$time_interval == "overall") |>
+      omopgenerics::uniteAdditional(cols = c("time_interval", "source_concept_id", "source_concept_name")) |>
       sortTibble(),
     ignore_attr = TRUE
   )
@@ -55,14 +57,16 @@ test_that("summariseConceptIdCount works", {
     sortTibble()
 
   x <- z |>
-    dplyr::filter(strata_level == "overall" & additional_name == "overall") |>
+    omopgenerics::splitAdditional() |>
+    dplyr::filter(strata_level == "overall" & time_interval == "overall") |>
     dplyr::select(variable_level, estimate_value)
   s <- s |>
     dplyr::select(variable_level, estimate_value)
   expect_equal(x, s, ignore_attr = TRUE)
 
   x <- z |>
-    dplyr::filter(strata_name == "age_group" & additional_name == "overall") |>
+    omopgenerics::splitAdditional() |>
+    dplyr::filter(strata_name == "age_group" & time_interval == "overall") |>
     dplyr::group_by(variable_level) |>
     dplyr::summarise(estimate_value = sum(as.numeric(estimate_value), na.rm = TRUE), .groups = "drop") |>
     dplyr::mutate(estimate_value = as.character(estimate_value))
@@ -125,14 +129,27 @@ test_that("tableConceptIdCounts() works", {
 
   # Check that works ----
   expect_no_error(x <- tableConceptIdCounts(summariseConceptIdCounts(cdm, "condition_occurrence")))
-  expect_true(inherits(x, "gt_tbl"))
+  expect_true(inherits(x, "reactable"))
   expect_no_error(y <- tableConceptIdCounts(summariseConceptIdCounts(cdm, c(
     "drug_exposure",
     "measurement"
   ))))
-  expect_true(inherits(y, "gt_tbl"))
+  expect_true(inherits(y, "reactable"))
   expect_warning(t <- summariseConceptIdCounts(cdm, "death"))
-  expect_warning(inherits(tableConceptIdCounts(t), "gt_tbl"))
+  expect_warning(inherits(tableConceptIdCounts(t), "reactable"))
+  expect_no_error(tableConceptIdCounts(summariseConceptIdCounts(cdm, "condition_occurrence"), display = "overall", type = "datatable"))
+  expect_no_error(tableConceptIdCounts(summariseConceptIdCounts(cdm, "condition_occurrence"), display = "standard", type = "datatable"))
+  expect_no_error(tableConceptIdCounts(summariseConceptIdCounts(cdm, "condition_occurrence"), display = "source", type = "datatable"))
+  expect_warning(tableConceptIdCounts(summariseConceptIdCounts(cdm, "condition_occurrence"), display = "missing source", type = "datatable"))
+  expect_warning(tableConceptIdCounts(summariseConceptIdCounts(cdm, "condition_occurrence"), display = "missing standard", type = "datatable"))
+  expect_no_error(tableConceptIdCounts(summariseConceptIdCounts(cdm, "condition_occurrence"), display = "overall", type = "reactable"))
+  expect_no_error(tableConceptIdCounts(summariseConceptIdCounts(cdm, "condition_occurrence"), display = "standard", type = "reactable"))
+  expect_no_error(tableConceptIdCounts(summariseConceptIdCounts(cdm, "condition_occurrence"), display = "source", type = "reactable"))
+  expect_warning(tableConceptIdCounts(summariseConceptIdCounts(cdm, "condition_occurrence"), display = "missing source", type = "reactable"))
+  expect_warning(tableConceptIdCounts(summariseConceptIdCounts(cdm, "condition_occurrence"), display = "missing standard", type = "reactable"))
+
+
+
 
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
