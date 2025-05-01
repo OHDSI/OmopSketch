@@ -49,6 +49,7 @@ Suggests:
     lubridate,
     odbc,
     OmopViewer,
+    reactable,
     remotes,
     rmarkdown,
     RPostgres,

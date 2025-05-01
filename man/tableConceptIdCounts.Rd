@@ -4,12 +4,20 @@
 \alias{tableConceptIdCounts}
 \title{Create a visual table from a summariseConceptIdCounts() result.}
 \usage{
-tableConceptIdCounts(result, type = "gt")
+tableConceptIdCounts(result, display = "overall", type = "reactable")
 }
 \arguments{
 \item{result}{A summarised_result object.}
 
-\item{type}{Type of formatting output table, either "gt" or "flextable".}
+\item{display}{A character string indicating which subset of the data to display. Options are:
+\itemize{
+\item \code{"overall"}: Show all source and standard concepts.
+\item \code{"standard"}: Show only standard concepts.
+\item \code{"source"}: Show only source codes.
+\item \code{"missing standard"}: Show only source codes that are missing a mapped standard concept.
+}}
+
+\item{type}{Type of formatting output table, either "reactable" or "datatable".}
 }
 \value{
 A gt or flextable object with the summarised data.
