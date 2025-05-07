@@ -8,8 +8,19 @@
 #' @param type Type of formatting output table, either "reactable" or "datatable".
 #' @return A gt or flextable object with the summarised data.
 #' @export
+#' @examples
+#' \donttest{
+#' library(OmopSketch)
+#' library(CDMConnector)
+#' library(duckdb)
 #'
+#' requireEunomia()
+#' con <- dbConnect(duckdb(), eunomiaDir())
+#' cdm <- cdmFromCon(con = con, cdmSchema = "main", writeSchema = "main")
 #'
+#' result <- summariseConceptIdCounts(cdm, "condition_occurrence")
+#' result |> tableConceptIdCounts()
+#' }
 tableConceptIdCounts <- function(result,
                                  display = "overall",
                                  type = "reactable") {

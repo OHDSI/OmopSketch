@@ -11,6 +11,14 @@
 #' @param ... additional arguments passed to the OmopSketch functions that are used internally.
 #' @return A `summarised_result` object containing the results of the characterisation.
 #' @export
+#' @examples
+#' \donttest{
+#' cdm <- mockOmopSketch(numberIndividuals = 100)
+#'
+#' result <- databaseCharacteristics(cdm)
+#'
+#' PatientProfiles::mockDisconnect(cdm)
+#' }
 
 databaseCharacteristics <- function(cdm,
                                     omopTableName = c(

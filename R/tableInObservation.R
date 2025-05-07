@@ -3,8 +3,25 @@
 #' @param type Type of formatting output table, either "gt", "reactable" or "datatable".
 #' @return A gt or flextable object with the summarised data.
 #' @export
+#' @examples
+#' \donttest{
+#' library(dplyr, warn.conflicts = FALSE)
 #'
+#' cdm <- mockOmopSketch()
 #'
+#' result <- summariseInObservation(
+#'   cdm$observation_period,
+#'   interval = "months",
+#'   output = c("person-days", "record"),
+#'   ageGroup = list("<=60" = c(0, 60), ">60" = c(61, Inf)),
+#'   sex = TRUE
+#' )
+#'
+#' result |>
+#'   tableInObservation()
+#'
+#' PatientProfiles::mockDisconnect(cdm)
+#' }
 tableInObservation <- function(result,
                                type = "gt") {
   # initial checks

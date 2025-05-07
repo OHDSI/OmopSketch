@@ -3,8 +3,25 @@
 #' @param type Type of formatting output table, either "gt", "reactable" or "datatable".
 #' @return A gt or flextable object with the summarised data.
 #' @export
+#' @examples
+#' \donttest{
+#' library(dplyr, warn.conflicts = FALSE)
 #'
+#' cdm <- mockOmopSketch()
 #'
+#' summarisedResult <- summariseRecordCount(
+#'   cdm = cdm,
+#'   omopTableName = c("condition_occurrence", "drug_exposure"),
+#'   interval = "years",
+#'   ageGroup = list("<=20" = c(0, 20), ">20" = c(21, Inf)),
+#'   sex = TRUE
+#' )
+#'
+#' summarisedResult |>
+#'   tableRecordCount()
+#'
+#' PatientProfiles::mockDisconnect(cdm = cdm)
+#' }
 tableRecordCount <- function(result,
                              type = "gt") {
   # initial checks

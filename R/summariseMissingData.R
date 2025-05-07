@@ -17,6 +17,14 @@
 #' @return A summarised_result object with results overall and, if specified, by
 #' strata.
 #' @export
+#' @examples
+#' \donttest{
+#' cdm <- mockOmopSketch(numberIndividuals = 100)
+#'
+#' result <- summariseMissingData (cdm = cdm, omopTableName = c("condition_occurrence", "visit_occurrence"))
+#'
+#' PatientProfiles::mockDisconnect(cdm)
+#' }
 summariseMissingData <- function(cdm,
                                  omopTableName,
                                  col = NULL,

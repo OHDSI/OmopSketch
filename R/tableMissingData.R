@@ -3,8 +3,16 @@
 #' @param type Type of formatting output table, either "gt" or "flextable".
 #' @return A gt or flextable object with the summarised data.
 #' @export
+#' @examples
+#' \donttest{
+#' cdm <- mockOmopSketch(numberIndividuals = 100)
 #'
+#' result <- summariseMissingData(cdm = cdm, omopTableName = c("condition_occurrence", "visit_occurrence"))
 #'
+#' result |> tableMissingData()
+#'
+#' PatientProfiles::mockDisconnect(cdm)
+#' }
 tableMissingData <- function(result,
                              type = "gt") {
   # initial checks
