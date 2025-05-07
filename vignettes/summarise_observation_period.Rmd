@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-In this vignette, we will explore the *OmopSketch* functions designed to provide an overview of the `observation_period` table. Specifically, there are five key functions that facilitate this:
+In this vignette, we will explore the *OmopSketch* functions designed to provide an overview of the `observation_period` table. Specifically, there are six key functions that facilitate this:
 
 -   `summariseObservationPeriod()`, `plotObservationPeriod()` and `tableObservationPeriod()`: Use them to get some overall statistics describing the `observation_period` table
 -   `summariseInObservation()`, `plotInObservation()`, `tableInObservation()`: Use them to summarise the trend in the number of records, individuals, person-days and females in observation during specific intervals of time and how the median age varies.
