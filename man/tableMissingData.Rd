@@ -17,3 +17,14 @@ A gt or flextable object with the summarised data.
 \description{
 Create a visual table from a summariseMissingData() result.
 }
+\examples{
+\donttest{
+cdm <- mockOmopSketch(numberIndividuals = 100)
+
+result <- summariseMissingData(cdm = cdm, omopTableName = c("condition_occurrence", "visit_occurrence"))
+
+result |> tableMissingData()
+
+PatientProfiles::mockDisconnect(cdm)
+}
+}

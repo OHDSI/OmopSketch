@@ -43,3 +43,12 @@ A \code{summarised_result} object containing the results of the characterisation
 \description{
 Summarise Database Characteristics for OMOP CDM
 }
+\examples{
+\donttest{
+cdm <- mockOmopSketch(numberIndividuals = 100)
+
+result <- databaseCharacteristics(cdm)
+
+PatientProfiles::mockDisconnect(cdm)
+}
+}

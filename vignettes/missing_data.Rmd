@@ -1,0 +1,161 @@
+---
+title: "Summarise missing data"
+output: 
+  html_document:
+    pandoc_args: [
+      "--number-offset=1,0"
+      ]
+    number_sections: yes
+    toc: yes
+vignette: >
+  %\VignetteIndexEntry{D-characterisation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Introduction
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+library(CDMConnector)
+CDMConnector::requireEunomia()
+```
+
+In this vignette, we explore how *OmopSketch* functions can serve as a valuable tool for summarising missing data in databases containing electronic health records mapped to the OMOP Common Data Model. In this context, missing data is defined as entries with NA values or concept IDs equal to 0.
+
+## Create a mock cdm
+
+Let's see an example of its functionalities. To start with, we will load essential packages and create a mock cdm using the mockOmopSketch() database.
+
+```{r, warning=FALSE}
+library(dplyr)
+library(DBI)
+library(duckdb)
+library(OmopSketch)
+
+
+# Connect to Eunomia database
+con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomiaDir())
+cdm <- CDMConnector::cdmFromCon(
+  con = con, cdmSchema = "main", writeSchema = "main", cdmName = "Eunomia"
+)
+
+cdm
+```
+
+## Summary of missing data
+
+We can now use the `summariseMissingData()` function to assess the presence of missing values in the tables.
+
+```{r, warning=FALSE}
+result_missingData <- summariseMissingData(cdm,
+  omopTableName = "observation_period")
+
+result_missingData |> glimpse()
+```
+
+### Summarise by OMOP CDM table
+
+You can choose to summarise missing data for specific OMOP CDM tables using the argument `omopTableName`.
+
+```{r, warning=FALSE}
+result_missingData <- summariseMissingData(cdm = cdm, 
+                                           omopTableName = c("observation_period", "visit_occurrence", "condition_occurrence", "drug_exposure", "procedure_occurrence","device_exposure", "measurement", "observation", "death"))
+
+result_missingData |> glimpse()
+```
+
+### Summarise by sex
+
+You can choose to summarise missing data by sex by setting the argument `sex` to `TRUE`.
+
+```{r, warning=FALSE}
+result_missingData <- summariseMissingData(cdm = cdm, 
+                                           omopTableName = c("observation_period", "visit_occurrence", "condition_occurrence", "drug_exposure", "procedure_occurrence","device_exposure", "measurement", "observation", "death"),
+                                           sex = TRUE)
+
+result_missingData |> glimpse()
+```
+
+### Summarise by age group
+
+You can choose to summarise missing data by age group by creating a list defining the age groups you want to use.
+
+```{r, warning=FALSE}
+result_missingData <- summariseMissingData(cdm = cdm, 
+                                           omopTableName = c("observation_period", "visit_occurrence", "condition_occurrence", "drug_exposure", "procedure_occurrence","device_exposure", "measurement", "observation", "death"), 
+                                           ageGroup = list(c(0, 17), c(18, 64), c(65, 150)))
+
+result_missingData |> glimpse()
+```
+
+### Summarise by date and/or time interval
+
+You can also choose to summarise missing data within a specific date range, or for specific intervals of time. You can do this using the arguments `interval` and `dateRange`.
+
+```{r, warning=FALSE}
+result_missingData <- summariseMissingData(cdm = cdm, 
+                                           omopTableName = c("observation_period", "visit_occurrence", "condition_occurrence", "drug_exposure", "procedure_occurrence","device_exposure", "measurement", "observation", "death"), 
+                                           interval = "years",
+                                           dateRange = as.Date(c("2012-01-01", "2019-01-01")))
+
+result_missingData |> glimpse()
+```
+
+### Summarise by column
+
+You can also choose to summarise missing data for specific columns in the OMOP CDM tables using the argument `col`.
+
+```{r, warning=FALSE}
+result_missingData <- summariseMissingData(cdm = cdm, 
+                                           omopTableName = c("observation_period", "visit_occurrence", "condition_occurrence", "drug_exposure", "procedure_occurrence","device_exposure", "measurement", "observation", "death"),
+                                           col = c("observation_period_start_date",
+                                                   "observation_period_end_date"))
+
+result_missingData |> glimpse()
+```
+
+## Summarise in sample of OMOP CDM
+
+Finally, you can choose to summarise missing data for a sample of individuals from the OMOP CDM using the argument `sample` to define the number of records required.
+
+```{r, warning=FALSE}
+result_missingData <- summariseMissingData(cdm = cdm, 
+                                           omopTableName = c("observation_period", "visit_occurrence", "condition_occurrence", "drug_exposure", "procedure_occurrence","device_exposure", "measurement", "observation", "death"),
+                                           sample = 1000)
+
+result_missingData |> glimpse()
+```
+
+## Visualise summary results
+
+You can present these results using the function `tableMissingData()`.
+
+```{r, warning = FALSE}
+result_missingData <- summariseMissingData(cdm,
+  omopTableName = c("condition_occurrence", "drug_exposure", "procedure_occurrence"),
+  sex = TRUE,
+  ageGroup = list(c(0, 17), c(18, 64), c(65, 150)),
+  interval = "years",
+  dateRange = as.Date(c("2012-01-01", "2019-01-01")),
+  sample = 100000
+)
+result_missingData |> tableMissingData()
+```
+This table can either be of type `gt` (default) or `flextable`.
+
+```{r, warning = FALSE}
+result_missingData |> tableMissingData(type = "flextable")
+```
+
+Finally, disconnect from the cdm
+
+```{r, warning=FALSE}
+PatientProfiles::mockDisconnect(cdm = cdm)
+```
+
+The results of the characterisation using `OmopSketch` can be further explored through the ShinyApp at <https://dpa-pde-oxford.shinyapps.io/OmopSketch-vignette/>

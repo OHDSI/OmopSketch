@@ -25,3 +25,17 @@ A gt or flextable object with the summarised data.
 \description{
 Create a visual table from a summariseConceptIdCounts() result.
 }
+\examples{
+\donttest{
+library(OmopSketch)
+library(CDMConnector)
+library(duckdb)
+
+requireEunomia()
+con <- dbConnect(duckdb(), eunomiaDir())
+cdm <- cdmFromCon(con = con, cdmSchema = "main", writeSchema = "main")
+
+result <- summariseConceptIdCounts(cdm, "condition_occurrence")
+result |> tableConceptIdCounts()
+}
+}
