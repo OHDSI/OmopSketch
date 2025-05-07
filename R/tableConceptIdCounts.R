@@ -72,7 +72,7 @@ tableConceptIdCounts <- function(result,
   }
 
   formatted_result <- result |>
-   # formatColumn(cols_to_format) |>
+    formatColumn(cols_to_format) |>
     dplyr::mutate(
       estimate_value = as.numeric(.data$estimate_value),
       estimate_name = dplyr::case_when(
