@@ -72,7 +72,7 @@ tableConceptIdCounts <- function(result,
   }
 
   formatted_result <- result |>
-    formatColumn(cols_to_format) |>
+   # formatColumn(cols_to_format) |>
     dplyr::mutate(
       estimate_value = as.numeric(.data$estimate_value),
       estimate_name = dplyr::case_when(
@@ -128,8 +128,8 @@ tableConceptIdCounts <- function(result,
 
     formatted_result |>
       tidyr::pivot_wider(
-        names_from = .data$estimate_name,
-        values_from = .data$estimate_value
+        names_from = "estimate_name",
+        values_from = "estimate_value"
       ) |>
       reactable::reactable(
         columns = list(

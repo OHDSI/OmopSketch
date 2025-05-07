@@ -74,6 +74,7 @@ emptyTable <- function(type) {
 }
 
 formatColumn <- function(result, col) {
+  col <- intersect(col, colnames(result))
   for (x in col) {
     result <- result |>
       dplyr::mutate(!!x := gsub("_", " ", stringr::str_to_sentence(.data[[x]])))

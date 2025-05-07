@@ -25,7 +25,7 @@ CDMConnector::requireEunomia()
 
 # Introduction
 
-In this vignette, we will explore the *OmopSketch* functions designed to provide information about the number of counts of specific concepts. Specifically, there are two key functions that facilitate this, `summariseConceptSetCounts()` and `plotConceptCounts()`. The former one creates a summary statistics results with the number of counts per each concept, and the latter one creates a histogram plot.
+In this vignette, we will explore the *OmopSketch* functions designed to provide information about the number of counts of specific concepts. Specifically, there are two key functions that facilitate this, `summariseConceptSetCounts()` and `plotConceptSetCounts()`. The former one creates a summary statistics results with the number of counts per each concept, and the latter one creates a histogram plot.
 
 ## Create a mock cdm
 

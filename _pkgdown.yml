@@ -7,6 +7,7 @@ articles:
   contents:
   - summarise_clinical_tables_records
   - summarise_concept_set_counts
+  - summarise_concept_id_counts
   - summarise_observation_period
   - characterisation
   - missing_data

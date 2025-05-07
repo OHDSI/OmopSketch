@@ -165,12 +165,13 @@ summariseConceptIdCounts <- function(cdm,
     omopgenerics::uniteGroup(cols = "omop_table") |>
     omopgenerics::uniteStrata(cols = c(names(ageGroup), "sex"[sex], character())) |>
     addTimeInterval() |>
-    omopgenerics::uniteAdditional(cols = additional) |>
     dplyr::mutate(
       estimate_value = as.character(.data$estimate_value),
       estimate_type = "integer",
-      variable_level = as.character(.data$concept_id)
+      variable_level = as.character(.data$concept_id),
+      time_interval = dplyr::if_else(is.na(.data$time_interval), "overall", .data$time_interval)
     ) |>
+    omopgenerics::uniteAdditional(cols = additional, ignore = "overall") |>
     dplyr::rename("variable_name" = "concept_name") |>
     dplyr::select(!"concept_id") |>
     omopgenerics::newSummarisedResult(settings = set)
