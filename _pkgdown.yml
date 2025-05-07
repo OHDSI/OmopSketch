@@ -9,6 +9,7 @@ articles:
   - summarise_concept_set_counts
   - summarise_observation_period
   - characterisation
+  - missing_data
 
 reference:
 - subtitle: Snapshots
