@@ -40,7 +40,9 @@ tableConceptIdCounts <- function(result,
     omopgenerics::splitStrata() |>
     omopgenerics::splitAdditional() |>
     dplyr::arrange(dplyr::across(dplyr::all_of(additional_cols)), .data$variable_name, dplyr::across(dplyr::all_of(strata_cols))) |>
-    dplyr::rename("standard_concept_id" = "variable_level", "standard_concept_name" = "variable_name")
+    dplyr::rename("standard_concept_id" = "variable_level", "standard_concept_name" = "variable_name") |>
+    dplyr::mutate("source_concept_id" = as.integer(dplyr::if_else(.data$source_concept_id == "NA", NA_character_, .data$source_concept_id)),
+                  "source_concept_name" = dplyr::if_else(.data$source_concept_name == "NA", NA_character_, .data$source_concept_name))
 
   if (display == "overall") {
     cols_to_format <- c("standard_concept_name", "standard_concept_id","source_concept_name", "source_concept_id")
@@ -72,7 +74,7 @@ tableConceptIdCounts <- function(result,
   }
 
   formatted_result <- result |>
-   # formatColumn(cols_to_format) |>
+    formatColumn(cols_to_format) |>
     dplyr::mutate(
       estimate_value = as.numeric(.data$estimate_value),
       estimate_name = dplyr::case_when(
