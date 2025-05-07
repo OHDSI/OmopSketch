@@ -146,6 +146,11 @@ result_missingData <- summariseMissingData(cdm,
 )
 result_missingData |> tableMissingData()
 ```
+This table can either be of type `gt` (default) or `flextable`.
+
+```{r, warning = FALSE}
+result_missingData |> tableMissingData(type = "flextable")
+```
 
 Finally, disconnect from the cdm
 
