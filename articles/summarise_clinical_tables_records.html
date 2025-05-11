@@ -85,9 +85,10 @@ Specifically, there are four key functions that facilitate this:</p>
 <code><a href="../reference/tableClinicalRecords.html">tableClinicalRecords()</a></code>: Use them to create a summary
 statistics with key basic information of the clinical table (e.g.,
 number of records, number of concepts mapped, etc.)</p></li>
-<li><p><code><a href="../reference/summariseRecordCount.html">summariseRecordCount()</a></code> and
-<code><a href="../reference/plotRecordCount.html">plotRecordCount()</a></code>: Use them to summarise the number of
-records within a specific time interval.</p></li>
+<li><p><code><a href="../reference/summariseRecordCount.html">summariseRecordCount()</a></code>,
+<code><a href="../reference/plotRecordCount.html">plotRecordCount()</a></code> and <code><a href="../reference/tableRecordCount.html">tableRecordCount()</a></code>: Use
+them to summarise the number of records within specific time
+intervals.</p></li>
 </ul>
 <div class="section level3">
 <h3 id="create-a-mock-cdm">Create a mock cdm<a class="anchor" aria-label="anchor" href="#create-a-mock-cdm"></a>
@@ -263,12 +264,37 @@ at the same time:</p>
 <span><span class="co">#&gt; $ variable_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Number subjects"<span style="color: #949494;">, </span>"Number subjects"<span style="color: #949494;">, </span>"Number records"<span style="color: #949494;">,</span>…</span></span>
 <span><span class="co">#&gt; $ estimate_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count"<span style="color: #949494;">, </span>"percentage"<span style="color: #949494;">, </span>"count"<span style="color: #949494;">, </span>"mean"<span style="color: #949494;">, </span>"sd"<span style="color: #949494;">, </span>"count"<span style="color: #949494;">, </span>…</span></span>
 <span><span class="co">#&gt; $ estimate_value <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "100"<span style="color: #949494;">, </span>"100"<span style="color: #949494;">, </span>"100"<span style="color: #949494;">, </span>"1"<span style="color: #949494;">, </span>"0"<span style="color: #949494;">, </span>"100"<span style="color: #949494;">, </span>"100"<span style="color: #949494;">, </span>"3100"<span style="color: #949494;">, </span>"3…</span></span></code></pre></div>
+<p>We can also filter the clinical table to a specific time window by
+setting the dateRange argument.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseClinicalRecords.html">summariseClinicalRecords</a></span><span class="op">(</span><span class="va">cdm</span>, <span class="st">"drug_exposure"</span>,</span>
+<span>  dateRange <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1990-01-01"</span>, <span class="st">"2010-01-01"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> </span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Adding variables of interest to <span style="color: #0000BB;">drug_exposure</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person in <span style="color: #0000BB;">drug_exposure</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">drug_exposure</span>: `in_observation`, `standard_concept`,</span></span>
+<span><span class="co">#&gt;   `source_vocabulary`, `domain_id`, and `type_concept`.</span></span>
+<span></span>
+<span><span class="va">summarisedResult</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">omopgenerics</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/omopgenerics/reference/settings.html" class="external-link">settings</a></span><span class="op">(</span><span class="op">)</span><span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rows: 1</span></span>
+<span><span class="co">#&gt; Columns: 10</span></span>
+<span><span class="co">#&gt; $ result_id          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1</span></span>
+<span><span class="co">#&gt; $ result_type        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "summarise_clinical_records"</span></span>
+<span><span class="co">#&gt; $ package_name       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "OmopSketch"</span></span>
+<span><span class="co">#&gt; $ package_version    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "0.3.2.900"</span></span>
+<span><span class="co">#&gt; $ group              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "omop_table"</span></span>
+<span><span class="co">#&gt; $ strata             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> ""</span></span>
+<span><span class="co">#&gt; $ additional         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> ""</span></span>
+<span><span class="co">#&gt; $ min_cell_count     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "0"</span></span>
+<span><span class="co">#&gt; $ study_period_end   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "2010-01-01"</span></span>
+<span><span class="co">#&gt; $ study_period_start <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "1990-01-01"</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="tidy-the-summarised-object">Tidy the summarised object<a class="anchor" aria-label="anchor" href="#tidy-the-summarised-object"></a>
 </h3>
 <p><code><a href="../reference/tableClinicalRecords.html">tableClinicalRecords()</a></code> will help you to tidy the
 previous results and create a gt table.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseClinicalRecords.html">summariseClinicalRecords</a></span><span class="op">(</span><span class="va">cdm</span>,</span>
 <span>  <span class="st">"condition_occurrence"</span>,</span>
 <span>  recordsPerPerson <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span>, <span class="st">"sd"</span>, <span class="st">"q05"</span>, <span class="st">"q95"</span><span class="op">)</span>,</span>
@@ -286,23 +312,23 @@ previous results and create a gt table.</p>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/tableClinicalRecords.html">tableClinicalRecords</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div id="hxzooertyt" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#hxzooertyt table {
+<div id="rshcufuzgn" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#rshcufuzgn table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#hxzooertyt thead, #hxzooertyt tbody, #hxzooertyt tfoot, #hxzooertyt tr, #hxzooertyt td, #hxzooertyt th {
+#rshcufuzgn thead, #rshcufuzgn tbody, #rshcufuzgn tfoot, #rshcufuzgn tr, #rshcufuzgn td, #rshcufuzgn th {
   border-style: none;
 }
 
-#hxzooertyt p {
+#rshcufuzgn p {
   margin: 0;
   padding: 0;
 }
 
-#hxzooertyt .gt_table {
+#rshcufuzgn .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -328,12 +354,12 @@ previous results and create a gt table.</p>
   border-left-color: #D3D3D3;
 }
 
-#hxzooertyt .gt_caption {
+#rshcufuzgn .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#hxzooertyt .gt_title {
+#rshcufuzgn .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -345,7 +371,7 @@ previous results and create a gt table.</p>
   border-bottom-width: 0;
 }
 
-#hxzooertyt .gt_subtitle {
+#rshcufuzgn .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -357,7 +383,7 @@ previous results and create a gt table.</p>
   border-top-width: 0;
 }
 
-#hxzooertyt .gt_heading {
+#rshcufuzgn .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -369,13 +395,13 @@ previous results and create a gt table.</p>
   border-right-color: #D3D3D3;
 }
 
-#hxzooertyt .gt_bottom_border {
+#rshcufuzgn .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#hxzooertyt .gt_col_headings {
+#rshcufuzgn .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -390,7 +416,7 @@ previous results and create a gt table.</p>
   border-right-color: #D3D3D3;
 }
 
-#hxzooertyt .gt_col_heading {
+#rshcufuzgn .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -410,7 +436,7 @@ previous results and create a gt table.</p>
   overflow-x: hidden;
 }
 
-#hxzooertyt .gt_column_spanner_outer {
+#rshcufuzgn .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -422,15 +448,15 @@ previous results and create a gt table.</p>
   padding-right: 4px;
 }
 
-#hxzooertyt .gt_column_spanner_outer:first-child {
+#rshcufuzgn .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#hxzooertyt .gt_column_spanner_outer:last-child {
+#rshcufuzgn .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#hxzooertyt .gt_column_spanner {
+#rshcufuzgn .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -442,11 +468,11 @@ previous results and create a gt table.</p>
   width: 100%;
 }
 
-#hxzooertyt .gt_spanner_row {
+#rshcufuzgn .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#hxzooertyt .gt_group_heading {
+#rshcufuzgn .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -472,7 +498,7 @@ previous results and create a gt table.</p>
   text-align: left;
 }
 
-#hxzooertyt .gt_empty_group_heading {
+#rshcufuzgn .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -487,15 +513,15 @@ previous results and create a gt table.</p>
   vertical-align: middle;
 }
 
-#hxzooertyt .gt_from_md > :first-child {
+#rshcufuzgn .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#hxzooertyt .gt_from_md > :last-child {
+#rshcufuzgn .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#hxzooertyt .gt_row {
+#rshcufuzgn .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -514,7 +540,7 @@ previous results and create a gt table.</p>
   overflow-x: hidden;
 }
 
-#hxzooertyt .gt_stub {
+#rshcufuzgn .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -527,7 +553,7 @@ previous results and create a gt table.</p>
   padding-right: 5px;
 }
 
-#hxzooertyt .gt_stub_row_group {
+#rshcufuzgn .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -541,15 +567,15 @@ previous results and create a gt table.</p>
   vertical-align: top;
 }
 
-#hxzooertyt .gt_row_group_first td {
+#rshcufuzgn .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#hxzooertyt .gt_row_group_first th {
+#rshcufuzgn .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#hxzooertyt .gt_summary_row {
+#rshcufuzgn .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -559,16 +585,16 @@ previous results and create a gt table.</p>
   padding-right: 5px;
 }
 
-#hxzooertyt .gt_first_summary_row {
+#rshcufuzgn .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#hxzooertyt .gt_first_summary_row.thick {
+#rshcufuzgn .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#hxzooertyt .gt_last_summary_row {
+#rshcufuzgn .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -578,7 +604,7 @@ previous results and create a gt table.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#hxzooertyt .gt_grand_summary_row {
+#rshcufuzgn .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -588,7 +614,7 @@ previous results and create a gt table.</p>
   padding-right: 5px;
 }
 
-#hxzooertyt .gt_first_grand_summary_row {
+#rshcufuzgn .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -598,7 +624,7 @@ previous results and create a gt table.</p>
   border-top-color: #D3D3D3;
 }
 
-#hxzooertyt .gt_last_grand_summary_row_top {
+#rshcufuzgn .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -608,11 +634,11 @@ previous results and create a gt table.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#hxzooertyt .gt_striped {
+#rshcufuzgn .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#hxzooertyt .gt_table_body {
+#rshcufuzgn .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -621,7 +647,7 @@ previous results and create a gt table.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#hxzooertyt .gt_footnotes {
+#rshcufuzgn .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -635,7 +661,7 @@ previous results and create a gt table.</p>
   border-right-color: #D3D3D3;
 }
 
-#hxzooertyt .gt_footnote {
+#rshcufuzgn .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -644,7 +670,7 @@ previous results and create a gt table.</p>
   padding-right: 5px;
 }
 
-#hxzooertyt .gt_sourcenotes {
+#rshcufuzgn .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -658,7 +684,7 @@ previous results and create a gt table.</p>
   border-right-color: #D3D3D3;
 }
 
-#hxzooertyt .gt_sourcenote {
+#rshcufuzgn .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -666,72 +692,72 @@ previous results and create a gt table.</p>
   padding-right: 5px;
 }
 
-#hxzooertyt .gt_left {
+#rshcufuzgn .gt_left {
   text-align: left;
 }
 
-#hxzooertyt .gt_center {
+#rshcufuzgn .gt_center {
   text-align: center;
 }
 
-#hxzooertyt .gt_right {
+#rshcufuzgn .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#hxzooertyt .gt_font_normal {
+#rshcufuzgn .gt_font_normal {
   font-weight: normal;
 }
 
-#hxzooertyt .gt_font_bold {
+#rshcufuzgn .gt_font_bold {
   font-weight: bold;
 }
 
-#hxzooertyt .gt_font_italic {
+#rshcufuzgn .gt_font_italic {
   font-style: italic;
 }
 
-#hxzooertyt .gt_super {
+#rshcufuzgn .gt_super {
   font-size: 65%;
 }
 
-#hxzooertyt .gt_footnote_marks {
+#rshcufuzgn .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#hxzooertyt .gt_asterisk {
+#rshcufuzgn .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#hxzooertyt .gt_indent_1 {
+#rshcufuzgn .gt_indent_1 {
   text-indent: 5px;
 }
 
-#hxzooertyt .gt_indent_2 {
+#rshcufuzgn .gt_indent_2 {
   text-indent: 10px;
 }
 
-#hxzooertyt .gt_indent_3 {
+#rshcufuzgn .gt_indent_3 {
   text-indent: 15px;
 }
 
-#hxzooertyt .gt_indent_4 {
+#rshcufuzgn .gt_indent_4 {
   text-indent: 20px;
 }
 
-#hxzooertyt .gt_indent_5 {
+#rshcufuzgn .gt_indent_5 {
   text-indent: 25px;
 }
 
-#hxzooertyt .katex-display {
+#rshcufuzgn .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#hxzooertyt div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#rshcufuzgn div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -982,44 +1008,829 @@ previous results and create a gt table.</p>
 an OMOP table. See the example below, where we use
 <code><a href="../reference/summariseRecordCount.html">summariseRecordCount()</a></code> to count the number of records
 within each year, and then, we use <code><a href="../reference/plotRecordCount.html">plotRecordCount()</a></code> to
-create a ggplot with the trend.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+create a ggplot with the trend. We can also use
+<code><a href="../reference/tableRecordCount.html">tableRecordCount()</a></code> to display results in a table of type <a href="https://gt.rstudio.com/" class="external-link">gt</a>, <a href="https://glin.github.io/reactable/" class="external-link">reactable</a> or <a href="https://rstudio.github.io/DT/" class="external-link">datatable</a>. By default it
+creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseRecordCount.html">summariseRecordCount</a></span><span class="op">(</span><span class="va">cdm</span>, <span class="st">"drug_exposure"</span>, interval <span class="op">=</span> <span class="st">"years"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 67 × 13</span></span></span>
-<span><span class="co">#&gt;    result_id cdm_name       group_name group_level   strata_name strata_level</span></span>
-<span><span class="co">#&gt;        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>         1 mockOmopSketch omop_table drug_exposure overall     overall     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>         1 mockOmopSketch omop_table drug_exposure overall     overall     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>         1 mockOmopSketch omop_table drug_exposure overall     overall     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>         1 mockOmopSketch omop_table drug_exposure overall     overall     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>         1 mockOmopSketch omop_table drug_exposure overall     overall     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>         1 mockOmopSketch omop_table drug_exposure overall     overall     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>         1 mockOmopSketch omop_table drug_exposure overall     overall     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>         1 mockOmopSketch omop_table drug_exposure overall     overall     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>         1 mockOmopSketch omop_table drug_exposure overall     overall     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>         1 mockOmopSketch omop_table drug_exposure overall     overall     </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 57 more rows</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 7 more variables: variable_name &lt;chr&gt;, variable_level &lt;chr&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   estimate_name &lt;chr&gt;, estimate_type &lt;chr&gt;, estimate_value &lt;chr&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   additional_name &lt;chr&gt;, additional_level &lt;chr&gt;</span></span></span>
-<span></span>
-<span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/plotRecordCount.html">plotRecordCount</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="summarise_clinical_tables_records_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
+<span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/tableRecordCount.html">tableRecordCount</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"gt"</span><span class="op">)</span></span></code></pre></div>
+<div id="twiievnomb" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#twiievnomb table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#twiievnomb thead, #twiievnomb tbody, #twiievnomb tfoot, #twiievnomb tr, #twiievnomb td, #twiievnomb th {
+  border-style: none;
+}
+
+#twiievnomb p {
+  margin: 0;
+  padding: 0;
+}
+
+#twiievnomb .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#twiievnomb .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#twiievnomb .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#twiievnomb .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#twiievnomb .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#twiievnomb .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#twiievnomb .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#twiievnomb .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#twiievnomb .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#twiievnomb .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#twiievnomb .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#twiievnomb .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#twiievnomb .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#twiievnomb .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#twiievnomb .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#twiievnomb .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#twiievnomb .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#twiievnomb .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#twiievnomb .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#twiievnomb .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#twiievnomb .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#twiievnomb .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#twiievnomb .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#twiievnomb .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#twiievnomb .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#twiievnomb .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#twiievnomb .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#twiievnomb .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#twiievnomb .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#twiievnomb .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#twiievnomb .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#twiievnomb .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#twiievnomb .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#twiievnomb .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#twiievnomb .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#twiievnomb .gt_left {
+  text-align: left;
+}
+
+#twiievnomb .gt_center {
+  text-align: center;
+}
+
+#twiievnomb .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#twiievnomb .gt_font_normal {
+  font-weight: normal;
+}
+
+#twiievnomb .gt_font_bold {
+  font-weight: bold;
+}
+
+#twiievnomb .gt_font_italic {
+  font-style: italic;
+}
+
+#twiievnomb .gt_super {
+  font-size: 65%;
+}
+
+#twiievnomb .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#twiievnomb .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#twiievnomb .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#twiievnomb .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#twiievnomb .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#twiievnomb .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#twiievnomb .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#twiievnomb .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#twiievnomb div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_col_headings gt_spanner_row">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="2" colspan="1" scope="col" id="a::stub"></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="2" colspan="1" style="text-align: center; font-weight: bold;" scope="col" id="Time-interval">Time interval</th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="1" style="background-color: #E1E1E1; text-align: center; font-weight: bold;" scope="col" id="spanner-[header_level]mockOmopSketch
+[header_level]Number records">
+        <div class="gt_column_spanner">mockOmopSketch</div>
+      </th>
+    </tr>
+<tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="background-color: #E1E1E1; text-align: center; font-weight: bold;" scope="col" id="[header_level]mockOmopSketch-[header_level]Number-records">Number records</th>
+    </tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="gt_row_group_first">
+<td headers="drug_exposure stub_1_1 stub_1" rowspan="67" class="gt_row gt_left gt_stub_row_group" style="background-color: #E9E9E9; font-weight: bold;">drug_exposure</td>
+<td headers="drug_exposure stub_1_1 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1954-01-01 to 1954-12-31</td>
+<td headers="drug_exposure stub_1_1 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">5</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_2 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1955-01-01 to 1955-12-31</td>
+<td headers="drug_exposure Time interval_2 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">14</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_3 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1956-01-01 to 1956-12-31</td>
+<td headers="drug_exposure Time interval_3 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">28</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_4 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1957-01-01 to 1957-12-31</td>
+<td headers="drug_exposure Time interval_4 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">15</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_5 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1958-01-01 to 1958-12-31</td>
+<td headers="drug_exposure Time interval_5 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">9</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_6 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1959-01-01 to 1959-12-31</td>
+<td headers="drug_exposure Time interval_6 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">4</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_7 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1960-01-01 to 1960-12-31</td>
+<td headers="drug_exposure Time interval_7 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">11</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_8 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1961-01-01 to 1961-12-31</td>
+<td headers="drug_exposure Time interval_8 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">10</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_9 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1962-01-01 to 1962-12-31</td>
+<td headers="drug_exposure Time interval_9 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">16</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_10 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1963-01-01 to 1963-12-31</td>
+<td headers="drug_exposure Time interval_10 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">13</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_11 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1964-01-01 to 1964-12-31</td>
+<td headers="drug_exposure Time interval_11 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">11</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_12 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1965-01-01 to 1965-12-31</td>
+<td headers="drug_exposure Time interval_12 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">14</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_13 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1966-01-01 to 1966-12-31</td>
+<td headers="drug_exposure Time interval_13 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">11</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_14 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1967-01-01 to 1967-12-31</td>
+<td headers="drug_exposure Time interval_14 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">18</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_15 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1968-01-01 to 1968-12-31</td>
+<td headers="drug_exposure Time interval_15 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">8</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_16 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1969-01-01 to 1969-12-31</td>
+<td headers="drug_exposure Time interval_16 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">11</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_17 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1970-01-01 to 1970-12-31</td>
+<td headers="drug_exposure Time interval_17 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">11</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_18 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1971-01-01 to 1971-12-31</td>
+<td headers="drug_exposure Time interval_18 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">9</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_19 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1972-01-01 to 1972-12-31</td>
+<td headers="drug_exposure Time interval_19 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">21</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_20 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1973-01-01 to 1973-12-31</td>
+<td headers="drug_exposure Time interval_20 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">12</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_21 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1974-01-01 to 1974-12-31</td>
+<td headers="drug_exposure Time interval_21 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">22</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_22 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1975-01-01 to 1975-12-31</td>
+<td headers="drug_exposure Time interval_22 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">34</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_23 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1976-01-01 to 1976-12-31</td>
+<td headers="drug_exposure Time interval_23 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">39</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_24 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1977-01-01 to 1977-12-31</td>
+<td headers="drug_exposure Time interval_24 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">28</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_25 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1978-01-01 to 1978-12-31</td>
+<td headers="drug_exposure Time interval_25 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">35</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_26 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1979-01-01 to 1979-12-31</td>
+<td headers="drug_exposure Time interval_26 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">33</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_27 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1980-01-01 to 1980-12-31</td>
+<td headers="drug_exposure Time interval_27 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">27</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_28 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1981-01-01 to 1981-12-31</td>
+<td headers="drug_exposure Time interval_28 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">18</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_29 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1982-01-01 to 1982-12-31</td>
+<td headers="drug_exposure Time interval_29 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">57</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_30 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1983-01-01 to 1983-12-31</td>
+<td headers="drug_exposure Time interval_30 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">15</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_31 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1984-01-01 to 1984-12-31</td>
+<td headers="drug_exposure Time interval_31 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">71</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_32 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1985-01-01 to 1985-12-31</td>
+<td headers="drug_exposure Time interval_32 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">20</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_33 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1986-01-01 to 1986-12-31</td>
+<td headers="drug_exposure Time interval_33 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">33</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_34 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1987-01-01 to 1987-12-31</td>
+<td headers="drug_exposure Time interval_34 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">41</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_35 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1988-01-01 to 1988-12-31</td>
+<td headers="drug_exposure Time interval_35 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">15</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_36 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1989-01-01 to 1989-12-31</td>
+<td headers="drug_exposure Time interval_36 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">59</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_37 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1990-01-01 to 1990-12-31</td>
+<td headers="drug_exposure Time interval_37 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">44</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_38 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1991-01-01 to 1991-12-31</td>
+<td headers="drug_exposure Time interval_38 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">18</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_39 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1992-01-01 to 1992-12-31</td>
+<td headers="drug_exposure Time interval_39 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">37</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_40 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1993-01-01 to 1993-12-31</td>
+<td headers="drug_exposure Time interval_40 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">71</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_41 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1994-01-01 to 1994-12-31</td>
+<td headers="drug_exposure Time interval_41 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">54</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_42 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1995-01-01 to 1995-12-31</td>
+<td headers="drug_exposure Time interval_42 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">75</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_43 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1996-01-01 to 1996-12-31</td>
+<td headers="drug_exposure Time interval_43 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">68</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_44 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1997-01-01 to 1997-12-31</td>
+<td headers="drug_exposure Time interval_44 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">76</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_45 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1998-01-01 to 1998-12-31</td>
+<td headers="drug_exposure Time interval_45 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">66</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_46 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1999-01-01 to 1999-12-31</td>
+<td headers="drug_exposure Time interval_46 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">96</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_47 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">2000-01-01 to 2000-12-31</td>
+<td headers="drug_exposure Time interval_47 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">113</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_48 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">2001-01-01 to 2001-12-31</td>
+<td headers="drug_exposure Time interval_48 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">128</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_49 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">2002-01-01 to 2002-12-31</td>
+<td headers="drug_exposure Time interval_49 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">73</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_50 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">2003-01-01 to 2003-12-31</td>
+<td headers="drug_exposure Time interval_50 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">91</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_51 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">2004-01-01 to 2004-12-31</td>
+<td headers="drug_exposure Time interval_51 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">158</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_52 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">2005-01-01 to 2005-12-31</td>
+<td headers="drug_exposure Time interval_52 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">143</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_53 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">2006-01-01 to 2006-12-31</td>
+<td headers="drug_exposure Time interval_53 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">81</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_54 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">2007-01-01 to 2007-12-31</td>
+<td headers="drug_exposure Time interval_54 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">119</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_55 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">2008-01-01 to 2008-12-31</td>
+<td headers="drug_exposure Time interval_55 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">136</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_56 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">2009-01-01 to 2009-12-31</td>
+<td headers="drug_exposure Time interval_56 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">45</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_57 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">2010-01-01 to 2010-12-31</td>
+<td headers="drug_exposure Time interval_57 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">38</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_58 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">2011-01-01 to 2011-12-31</td>
+<td headers="drug_exposure Time interval_58 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">37</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_59 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">2012-01-01 to 2012-12-31</td>
+<td headers="drug_exposure Time interval_59 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">14</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_60 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">2013-01-01 to 2013-12-31</td>
+<td headers="drug_exposure Time interval_60 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">98</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_61 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">2014-01-01 to 2014-12-31</td>
+<td headers="drug_exposure Time interval_61 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">113</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_62 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">2015-01-01 to 2015-12-31</td>
+<td headers="drug_exposure Time interval_62 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">18</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_63 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">2016-01-01 to 2016-12-31</td>
+<td headers="drug_exposure Time interval_63 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">83</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_64 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">2017-01-01 to 2017-12-31</td>
+<td headers="drug_exposure Time interval_64 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">86</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_65 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">2018-01-01 to 2018-12-31</td>
+<td headers="drug_exposure Time interval_65 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">41</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_66 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">2019-01-01 to 2019-12-31</td>
+<td headers="drug_exposure Time interval_66 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">82</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_67 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">overall</td>
+<td headers="drug_exposure Time interval_67 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">3100</td>
+</tr>
+</tbody>
+</table>
+</div>
 <p>Note that you can adjust the time interval period using the
-<code>interval</code> argument, which can be set to either “years” or
-“months”. See the example below, where it shows the number of records
-every 18 months:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/summariseRecordCount.html">summariseRecordCount</a></span><span class="op">(</span><span class="va">cdm</span>, <span class="st">"drug_exposure"</span>, interval <span class="op">=</span> <span class="st">"months"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<code>interval</code> argument, which can be set to either “years”,
+“months” or “quarters”. See the example below, where it shows the number
+of records every 18 months:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/summariseRecordCount.html">summariseRecordCount</a></span><span class="op">(</span><span class="va">cdm</span>, <span class="st">"drug_exposure"</span>, interval <span class="op">=</span> <span class="st">"quarters"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/plotRecordCount.html">plotRecordCount</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="summarise_clinical_tables_records_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
+<p><img src="summarise_clinical_tables_records_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
 <p>We can further stratify our counts by sex (setting argument
 <code>sex = TRUE</code>) or by age (providing an age group). Notice that
 in both cases, the function will automatically create a group called
 <em>overall</em> with all the sex groups and all the age groups.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/summariseRecordCount.html">summariseRecordCount</a></span><span class="op">(</span><span class="va">cdm</span>, <span class="st">"drug_exposure"</span>,</span>
 <span>  interval <span class="op">=</span> <span class="st">"months"</span>,</span>
 <span>  sex <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -1029,12 +1840,12 @@ in both cases, the function will automatically create a group called
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/plotRecordCount.html">plotRecordCount</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="summarise_clinical_tables_records_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
+<p><img src="summarise_clinical_tables_records_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
 <p>By default, <code><a href="../reference/plotRecordCount.html">plotRecordCount()</a></code> does not apply faceting or
 colour to any variables. This can result confusing when stratifying by
 different variables, as seen in the previous picture. We can use <a href="https://darwin-eu.github.io/visOmopResults/" class="external-link">VisOmopResults</a>
 package to help us know by which columns we can colour or face by:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/summariseRecordCount.html">summariseRecordCount</a></span><span class="op">(</span><span class="va">cdm</span>, <span class="st">"drug_exposure"</span>,</span>
 <span>  interval <span class="op">=</span> <span class="st">"months"</span>,</span>
 <span>  sex <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -1049,7 +1860,7 @@ package to help us know by which columns we can colour or face by:</p>
 <span><span class="co">#&gt; [9] "interval"</span></span></code></pre></div>
 <p>Then, we can simply specify this by using the <code>facet</code> and
 <code>colour</code> arguments from <code><a href="../reference/plotRecordCount.html">plotRecordCount()</a></code></p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/summariseRecordCount.html">summariseRecordCount</a></span><span class="op">(</span><span class="va">cdm</span>, <span class="st">"drug_exposure"</span>,</span>
 <span>  interval <span class="op">=</span> <span class="st">"months"</span>,</span>
 <span>  sex <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -1059,9 +1870,864 @@ package to help us know by which columns we can colour or face by:</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/plotRecordCount.html">plotRecordCount</a></span><span class="op">(</span>facet <span class="op">=</span> <span class="va">omop_table</span> <span class="op">~</span> <span class="va">age_group</span>, colour <span class="op">=</span> <span class="st">"sex"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="summarise_clinical_tables_records_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
+<p><img src="summarise_clinical_tables_records_files/figure-html/unnamed-chunk-14-1.png" width="700">
+We can also filter the clinical table to a specific time window by
+setting the dateRange argument.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/summariseRecordCount.html">summariseRecordCount</a></span><span class="op">(</span><span class="va">cdm</span>, <span class="st">"drug_exposure"</span>,</span>
+<span>  interval <span class="op">=</span> <span class="st">"years"</span>,</span>
+<span>  sex <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>  dateRange <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1990-01-01"</span>, <span class="st">"2010-01-01"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/tableRecordCount.html">tableRecordCount</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"gt"</span><span class="op">)</span></span></code></pre></div>
+<div id="taneynnflm" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#taneynnflm table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#taneynnflm thead, #taneynnflm tbody, #taneynnflm tfoot, #taneynnflm tr, #taneynnflm td, #taneynnflm th {
+  border-style: none;
+}
+
+#taneynnflm p {
+  margin: 0;
+  padding: 0;
+}
+
+#taneynnflm .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#taneynnflm .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#taneynnflm .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#taneynnflm .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#taneynnflm .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#taneynnflm .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#taneynnflm .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#taneynnflm .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#taneynnflm .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#taneynnflm .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#taneynnflm .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#taneynnflm .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#taneynnflm .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#taneynnflm .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#taneynnflm .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#taneynnflm .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#taneynnflm .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#taneynnflm .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#taneynnflm .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#taneynnflm .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#taneynnflm .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#taneynnflm .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#taneynnflm .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#taneynnflm .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#taneynnflm .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#taneynnflm .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#taneynnflm .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#taneynnflm .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#taneynnflm .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#taneynnflm .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#taneynnflm .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#taneynnflm .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#taneynnflm .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#taneynnflm .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#taneynnflm .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#taneynnflm .gt_left {
+  text-align: left;
+}
+
+#taneynnflm .gt_center {
+  text-align: center;
+}
+
+#taneynnflm .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#taneynnflm .gt_font_normal {
+  font-weight: normal;
+}
+
+#taneynnflm .gt_font_bold {
+  font-weight: bold;
+}
+
+#taneynnflm .gt_font_italic {
+  font-style: italic;
+}
+
+#taneynnflm .gt_super {
+  font-size: 65%;
+}
+
+#taneynnflm .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#taneynnflm .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#taneynnflm .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#taneynnflm .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#taneynnflm .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#taneynnflm .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#taneynnflm .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#taneynnflm .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#taneynnflm div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_col_headings gt_spanner_row">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="2" colspan="1" scope="col" id="a::stub"></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="2" colspan="1" style="text-align: center; font-weight: bold;" scope="col" id="Time-interval">Time interval</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="2" colspan="1" style="text-align: center; font-weight: bold;" scope="col" id="Sex">Sex</th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="1" style="background-color: #E1E1E1; text-align: center; font-weight: bold;" scope="col" id="spanner-[header_level]mockOmopSketch
+[header_level]Number records">
+        <div class="gt_column_spanner">mockOmopSketch</div>
+      </th>
+    </tr>
+<tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="background-color: #E1E1E1; text-align: center; font-weight: bold;" scope="col" id="[header_level]mockOmopSketch-[header_level]Number-records">Number records</th>
+    </tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="gt_row_group_first">
+<td headers="drug_exposure stub_1_1 stub_1" rowspan="63" class="gt_row gt_left gt_stub_row_group" style="background-color: #E9E9E9; font-weight: bold;">drug_exposure</td>
+<td headers="drug_exposure stub_1_1 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1990-01-01 to 1990-12-31</td>
+<td headers="drug_exposure stub_1_1 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">overall</td>
+<td headers="drug_exposure stub_1_1 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">44</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_2 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_2 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Male</td>
+<td headers="drug_exposure Time interval_2 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">3</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_3 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_3 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Female</td>
+<td headers="drug_exposure Time interval_3 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">41</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_4 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1991-01-01 to 1991-12-31</td>
+<td headers="drug_exposure Time interval_4 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">overall</td>
+<td headers="drug_exposure Time interval_4 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">18</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_5 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_5 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Female</td>
+<td headers="drug_exposure Time interval_5 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">16</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_6 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_6 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Male</td>
+<td headers="drug_exposure Time interval_6 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">2</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_7 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1992-01-01 to 1992-12-31</td>
+<td headers="drug_exposure Time interval_7 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">overall</td>
+<td headers="drug_exposure Time interval_7 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">37</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_8 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_8 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Male</td>
+<td headers="drug_exposure Time interval_8 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">18</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_9 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_9 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Female</td>
+<td headers="drug_exposure Time interval_9 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">19</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_10 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1993-01-01 to 1993-12-31</td>
+<td headers="drug_exposure Time interval_10 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">overall</td>
+<td headers="drug_exposure Time interval_10 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">71</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_11 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_11 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Male</td>
+<td headers="drug_exposure Time interval_11 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">18</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_12 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_12 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Female</td>
+<td headers="drug_exposure Time interval_12 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">53</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_13 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1994-01-01 to 1994-12-31</td>
+<td headers="drug_exposure Time interval_13 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">overall</td>
+<td headers="drug_exposure Time interval_13 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">54</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_14 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_14 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Female</td>
+<td headers="drug_exposure Time interval_14 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">39</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_15 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_15 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Male</td>
+<td headers="drug_exposure Time interval_15 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">15</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_16 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1995-01-01 to 1995-12-31</td>
+<td headers="drug_exposure Time interval_16 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">overall</td>
+<td headers="drug_exposure Time interval_16 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">75</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_17 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_17 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Male</td>
+<td headers="drug_exposure Time interval_17 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">30</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_18 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_18 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Female</td>
+<td headers="drug_exposure Time interval_18 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">45</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_19 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1996-01-01 to 1996-12-31</td>
+<td headers="drug_exposure Time interval_19 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">overall</td>
+<td headers="drug_exposure Time interval_19 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">68</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_20 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_20 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Male</td>
+<td headers="drug_exposure Time interval_20 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">40</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_21 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_21 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Female</td>
+<td headers="drug_exposure Time interval_21 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">28</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_22 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1997-01-01 to 1997-12-31</td>
+<td headers="drug_exposure Time interval_22 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">overall</td>
+<td headers="drug_exposure Time interval_22 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">76</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_23 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_23 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Male</td>
+<td headers="drug_exposure Time interval_23 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">33</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_24 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_24 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Female</td>
+<td headers="drug_exposure Time interval_24 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">43</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_25 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1998-01-01 to 1998-12-31</td>
+<td headers="drug_exposure Time interval_25 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">overall</td>
+<td headers="drug_exposure Time interval_25 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">66</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_26 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_26 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Male</td>
+<td headers="drug_exposure Time interval_26 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">31</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_27 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_27 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Female</td>
+<td headers="drug_exposure Time interval_27 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">35</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_28 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1999-01-01 to 1999-12-31</td>
+<td headers="drug_exposure Time interval_28 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">overall</td>
+<td headers="drug_exposure Time interval_28 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">96</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_29 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_29 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Female</td>
+<td headers="drug_exposure Time interval_29 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">62</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_30 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_30 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Male</td>
+<td headers="drug_exposure Time interval_30 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">34</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_31 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">2000-01-01 to 2000-12-31</td>
+<td headers="drug_exposure Time interval_31 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">overall</td>
+<td headers="drug_exposure Time interval_31 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">113</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_32 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_32 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Male</td>
+<td headers="drug_exposure Time interval_32 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">73</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_33 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_33 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Female</td>
+<td headers="drug_exposure Time interval_33 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">40</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_34 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">2001-01-01 to 2001-12-31</td>
+<td headers="drug_exposure Time interval_34 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">overall</td>
+<td headers="drug_exposure Time interval_34 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">128</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_35 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_35 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Male</td>
+<td headers="drug_exposure Time interval_35 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">71</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_36 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_36 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Female</td>
+<td headers="drug_exposure Time interval_36 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">57</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_37 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">2002-01-01 to 2002-12-31</td>
+<td headers="drug_exposure Time interval_37 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">overall</td>
+<td headers="drug_exposure Time interval_37 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">73</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_38 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_38 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Female</td>
+<td headers="drug_exposure Time interval_38 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">48</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_39 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_39 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Male</td>
+<td headers="drug_exposure Time interval_39 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">25</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_40 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">2003-01-01 to 2003-12-31</td>
+<td headers="drug_exposure Time interval_40 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">overall</td>
+<td headers="drug_exposure Time interval_40 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">91</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_41 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_41 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Male</td>
+<td headers="drug_exposure Time interval_41 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">20</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_42 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_42 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Female</td>
+<td headers="drug_exposure Time interval_42 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">71</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_43 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">2004-01-01 to 2004-12-31</td>
+<td headers="drug_exposure Time interval_43 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">overall</td>
+<td headers="drug_exposure Time interval_43 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">158</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_44 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_44 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Female</td>
+<td headers="drug_exposure Time interval_44 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">89</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_45 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_45 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Male</td>
+<td headers="drug_exposure Time interval_45 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">69</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_46 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">2005-01-01 to 2005-12-31</td>
+<td headers="drug_exposure Time interval_46 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">overall</td>
+<td headers="drug_exposure Time interval_46 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">143</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_47 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_47 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Male</td>
+<td headers="drug_exposure Time interval_47 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">107</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_48 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_48 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Female</td>
+<td headers="drug_exposure Time interval_48 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">36</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_49 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">2006-01-01 to 2006-12-31</td>
+<td headers="drug_exposure Time interval_49 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">overall</td>
+<td headers="drug_exposure Time interval_49 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">81</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_50 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_50 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Female</td>
+<td headers="drug_exposure Time interval_50 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">6</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_51 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_51 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Male</td>
+<td headers="drug_exposure Time interval_51 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">75</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_52 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">2007-01-01 to 2007-12-31</td>
+<td headers="drug_exposure Time interval_52 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">overall</td>
+<td headers="drug_exposure Time interval_52 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">119</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_53 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_53 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Female</td>
+<td headers="drug_exposure Time interval_53 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">27</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_54 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_54 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Male</td>
+<td headers="drug_exposure Time interval_54 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">92</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_55 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">2008-01-01 to 2008-12-31</td>
+<td headers="drug_exposure Time interval_55 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">overall</td>
+<td headers="drug_exposure Time interval_55 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">136</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_56 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_56 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Male</td>
+<td headers="drug_exposure Time interval_56 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">46</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_57 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_57 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Female</td>
+<td headers="drug_exposure Time interval_57 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">90</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_58 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">2009-01-01 to 2009-12-31</td>
+<td headers="drug_exposure Time interval_58 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">overall</td>
+<td headers="drug_exposure Time interval_58 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">45</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_59 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_59 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Male</td>
+<td headers="drug_exposure Time interval_59 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">16</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_60 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_60 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Female</td>
+<td headers="drug_exposure Time interval_60 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">29</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_61 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">overall</td>
+<td headers="drug_exposure Time interval_61 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">overall</td>
+<td headers="drug_exposure Time interval_61 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">1692</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_62 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_62 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Female</td>
+<td headers="drug_exposure Time interval_62 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">874</td>
+</tr>
+<tr>
+<td headers="drug_exposure Time interval_63 Time interval" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="drug_exposure Time interval_63 Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Male</td>
+<td headers="drug_exposure Time interval_63 [header_level]mockOmopSketch
+[header_level]Number records" class="gt_row gt_right" style="text-align: right;">818</td>
+</tr>
+</tbody>
+</table>
+</div>
 <p>Finally, disconnect from the cdm</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">PatientProfiles</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/PatientProfiles/reference/mockDisconnect.html" class="external-link">mockDisconnect</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
