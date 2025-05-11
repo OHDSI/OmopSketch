@@ -26,7 +26,7 @@ In this vignette, we will explore the *OmopSketch* functions designed to provide
 
 -   `summariseClinicalRecords()` and `tableClinicalRecords()`: Use them to create a summary statistics with key basic information of the clinical table (e.g., number of records, number of concepts mapped, etc.)
 
--   `summariseRecordCount()` and `plotRecordCount()`: Use them to summarise the number of records within a specific time interval.
+-   `summariseRecordCount()`, `plotRecordCount()` and `tableRecordCount()`: Use them to summarise the number of records within specific time intervals.
 
 ## Create a mock cdm
 
@@ -123,6 +123,18 @@ summarisedResult |>
   glimpse()
 ```
 
+We can also filter the clinical table to a specific time window by setting the dateRange argument.
+
+```{r}
+summarisedResult <- summariseClinicalRecords(cdm, "drug_exposure",
+  dateRange = as.Date(c("1990-01-01", "2010-01-01"))) 
+
+summarisedResult |>
+  omopgenerics::settings()|>
+  glimpse()
+```
+
+
 ## Tidy the summarised object
 
 `tableClinicalRecords()` will help you to tidy the previous results and create a gt table.
@@ -146,19 +158,19 @@ summarisedResult |>
 # Summarise record counts
 
 OmopSketch can also help you to summarise the trend of the records of an OMOP table. See the example below, where we use `summariseRecordCount()` to count the number of records within each year, and then, we use `plotRecordCount()` to create a ggplot with the trend.
+We can also use `tableRecordCount()` to display results in a table of type [gt](https://gt.rstudio.com/), [reactable](https://glin.github.io/reactable/) or [datatable](https://rstudio.github.io/DT/). By default it creates a [gt](https://gt.rstudio.com/) table.
 
 ```{r, warning=FALSE}
 summarisedResult <- summariseRecordCount(cdm, "drug_exposure", interval = "years")
 
-summarisedResult |> print()
+summarisedResult |> tableRecordCount(type = "gt")
 
-summarisedResult |> plotRecordCount()
 ```
 
-Note that you can adjust the time interval period using the `interval` argument, which can be set to either "years" or "months". See the example below, where it shows the number of records every 18 months:
+Note that you can adjust the time interval period using the `interval` argument, which can be set to either "years", "months" or "quarters". See the example below, where it shows the number of records every 18 months:
 
 ```{r, warning=FALSE}
-summariseRecordCount(cdm, "drug_exposure", interval = "months") |>
+summariseRecordCount(cdm, "drug_exposure", interval = "quarters") |>
   plotRecordCount()
 ```
 
@@ -203,6 +215,17 @@ summariseRecordCount(cdm, "drug_exposure",
 ) |>
   plotRecordCount(facet = omop_table ~ age_group, colour = "sex")
 ```
+We can also filter the clinical table to a specific time window by setting the dateRange argument.
+
+```{r}
+summariseRecordCount(cdm, "drug_exposure",
+  interval = "years",
+  sex = TRUE, 
+  dateRange = as.Date(c("1990-01-01", "2010-01-01"))) |>
+  tableRecordCount(type = "gt")
+
+```
+
 
 Finally, disconnect from the cdm
 
