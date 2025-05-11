@@ -39,7 +39,7 @@ jobs:
           needs: check
 
       - name: Install OmopViewer Suggests
-        run: Rscript -e 'devtools::install("OmopViewer", dependencies = TRUE)'
+        run: Rscript extras/OmopViewerSuggests.R
 
       - name: Create shiny app
         run: Rscript extras/createShiny.R
