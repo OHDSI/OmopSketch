@@ -38,6 +38,9 @@ jobs:
           extra-packages: any::rcmdcheck
           needs: check
 
+      - name: Install OmopViewer Suggests
+        run: Rscript -e 'devtools::install("OmopViewer", dependencies = TRUE)'
+
       - name: Create shiny app
         run: Rscript extras/createShiny.R
 
