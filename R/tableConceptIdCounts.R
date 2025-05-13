@@ -40,29 +40,27 @@ tableConceptIdCounts <- function(result,
     omopgenerics::splitStrata() |>
     omopgenerics::splitAdditional() |>
     dplyr::arrange(dplyr::across(dplyr::all_of(additional_cols)), .data$variable_name, dplyr::across(dplyr::all_of(strata_cols))) |>
-    dplyr::rename("standard_concept_id" = "variable_level", "standard_concept_name" = "variable_name") |>
-    dplyr::mutate("source_concept_id" = as.integer(dplyr::if_else(.data$source_concept_id == "NA", NA_character_, .data$source_concept_id)),
-                  "source_concept_name" = dplyr::if_else(.data$source_concept_name == "NA", NA_character_, .data$source_concept_name))
+    dplyr::rename("standard_concept_id" = "variable_level", "standard_concept_name" = "variable_name")
 
   if (display == "overall") {
     cols_to_format <- c("standard_concept_name", "standard_concept_id","source_concept_name", "source_concept_id")
   } else if (display == "standard") {
     cols_to_format <- c("standard_concept_name", "standard_concept_id")
     result <- result |>
-      dplyr::select(!c("source_concept_id", "source_concept_name"))
+      dplyr::select(!dplyr::any_of(c("source_concept_id", "source_concept_name")))
   } else if (display == "source") {
     cols_to_format <- c("source_concept_name", "source_concept_id")
     result <- result |>
-      dplyr::select(!c("standard_concept_id", "standard_concept_name"))
+      dplyr::select(!dplyr::any_of(c("standard_concept_id", "standard_concept_name")))
   } else if (display == "missing standard") {
     result <- result |>
       dplyr::filter(as.integer(.data$standard_concept_id) == 0L) |>
-      dplyr::select(!c("standard_concept_id", "standard_concept_name"))
+      dplyr::select(!dplyr::any_of(c("standard_concept_id", "standard_concept_name")))
     cols_to_format <- c("source_concept_name", "source_concept_id")
   } else if (display == "missing source") {
     result <- result |>
       dplyr::filter(as.integer(.data$source_concept_id) == 0L | is.na(.data$source_concept_id)) |>
-      dplyr::select(!c("source_concept_id", "source_concept_name"))
+      dplyr::select(!dplyr::any_of(c("source_concept_id", "source_concept_name")))
 
     cols_to_format <- c("standard_concept_name", "standard_concept_id")
   }
@@ -96,7 +94,6 @@ tableConceptIdCounts <- function(result,
       )),
       dplyr::everything()
     )
-
   if (type == "datatable") {
 
 

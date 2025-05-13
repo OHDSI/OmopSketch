@@ -119,6 +119,7 @@ summariseConceptIdCounts <- function(cdm,
       dplyr::select(!c("obs_start", "obs_end")) |>
       # add concept names
       dplyr::rename(concept_id = dplyr::all_of(conceptId), source_concept_id = dplyr::all_of(sourceConceptId) ) |>
+      dplyr::mutate(source_concept_id = dplyr::coalesce(.data$source_concept_id, 0L)) |>
       dplyr::left_join(
         cdm$concept |>
           dplyr::select("concept_id", "concept_name"),
@@ -168,10 +169,9 @@ summariseConceptIdCounts <- function(cdm,
     dplyr::mutate(
       estimate_value = as.character(.data$estimate_value),
       estimate_type = "integer",
-      variable_level = as.character(.data$concept_id),
-      time_interval = dplyr::if_else(is.na(.data$time_interval), "overall", .data$time_interval)
+      variable_level = as.character(.data$concept_id)
     ) |>
-    omopgenerics::uniteAdditional(cols = additional, ignore = "overall") |>
+    omopgenerics::uniteAdditional(cols = additional) |>
     dplyr::rename("variable_name" = "concept_name") |>
     dplyr::select(!"concept_id") |>
     omopgenerics::newSummarisedResult(settings = set)
