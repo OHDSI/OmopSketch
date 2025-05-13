@@ -49,7 +49,7 @@ jobs:
         working-directory: extras/shiny
 
       - name: Deploy to shinyapps.io
-        if: github.event_name == 'pull_request'
+        if: github.event_name != 'pull_request'
         env:
           SHINYAPPS_TOKEN: ${{ secrets.SHINYAPPS_TOKEN }}
           SHINYAPPS_SECRET: ${{ secrets.SHINYAPPS_SECRET }}
