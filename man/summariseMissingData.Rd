@@ -52,7 +52,8 @@ Summarise missing data in omop tables
 \donttest{
 cdm <- mockOmopSketch(numberIndividuals = 100)
 
-result <- summariseMissingData (cdm = cdm, omopTableName = c("condition_occurrence", "visit_occurrence"))
+result <- summariseMissingData (cdm = cdm,
+omopTableName = c("condition_occurrence", "visit_occurrence"))
 
 PatientProfiles::mockDisconnect(cdm)
 }

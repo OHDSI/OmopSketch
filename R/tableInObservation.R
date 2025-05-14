@@ -64,7 +64,7 @@ tableInObservation <- function(result,
     formatted_result |>
       dplyr::rename(!!!rename_vec) |>
       visOmopResults::formatEstimateName(estimateName = formatEstimates) |>
-      dplyr::rename("Estimate name" = estimate_name) |>
+      dplyr::rename("Estimate name" = .data$estimate_name) |>
       dplyr::select(dplyr::any_of(c(
         "Database name",
         "Variable name",
@@ -84,7 +84,7 @@ tableInObservation <- function(result,
 
     formatted_result |>
       dplyr::rename(!!!rename_vec) |>
-      dplyr::rename("Estimate name" = estimate_name) |>
+      dplyr::rename("Estimate name" = .data$estimate_name) |>
       dplyr::mutate(estimate_value = as.numeric(.data$estimate_value)) |>
       dplyr::select(dplyr::any_of(c(
         "Database name",

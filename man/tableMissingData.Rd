@@ -21,7 +21,8 @@ Create a visual table from a summariseMissingData() result.
 \donttest{
 cdm <- mockOmopSketch(numberIndividuals = 100)
 
-result <- summariseMissingData(cdm = cdm, omopTableName = c("condition_occurrence", "visit_occurrence"))
+result <- summariseMissingData(cdm = cdm,
+omopTableName = c("condition_occurrence", "visit_occurrence"))
 
 result |> tableMissingData()
 

@@ -8,7 +8,7 @@ output:
     number_sections: yes
     toc: yes
 vignette: >
-  %\VignetteIndexEntry{D-characterisation}
+  %\VignetteIndexEntry{missing_data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -95,7 +95,7 @@ result_missingData |> glimpse()
 
 ### Summarise by date and/or time interval
 
-You can also choose to summarise missing data within a specific date range, or for specific intervals of time. You can do this using the arguments `interval` and `dateRange`.
+You can also summarise missing data within a specific date range or across defined time intervals using the `dateRange` and `interval` arguments. The `interval` argument supports "overall" (no time stratification), "years", "quarters", or "months".
 
 ```{r, warning=FALSE}
 result_missingData <- summariseMissingData(cdm = cdm, 
@@ -121,7 +121,7 @@ result_missingData |> glimpse()
 
 ## Summarise in sample of OMOP CDM
 
-Finally, you can choose to summarise missing data for a sample of individuals from the OMOP CDM using the argument `sample` to define the number of records required.
+Finally, you can summarise missing data on a sample of records from the OMOP CDM tables by specifying the desired number of records with the `sample` argument.
 
 ```{r, warning=FALSE}
 result_missingData <- summariseMissingData(cdm = cdm, 

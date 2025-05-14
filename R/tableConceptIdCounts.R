@@ -47,20 +47,20 @@ tableConceptIdCounts <- function(result,
   } else if (display == "standard") {
     cols_to_format <- c("standard_concept_name", "standard_concept_id")
     result <- result |>
-      dplyr::select(!c("source_concept_id", "source_concept_name"))
+      dplyr::select(!dplyr::any_of(c("source_concept_id", "source_concept_name")))
   } else if (display == "source") {
     cols_to_format <- c("source_concept_name", "source_concept_id")
     result <- result |>
-      dplyr::select(!c("standard_concept_id", "standard_concept_name"))
+      dplyr::select(!dplyr::any_of(c("standard_concept_id", "standard_concept_name")))
   } else if (display == "missing standard") {
     result <- result |>
       dplyr::filter(as.integer(.data$standard_concept_id) == 0L) |>
-      dplyr::select(!c("standard_concept_id", "standard_concept_name"))
+      dplyr::select(!dplyr::any_of(c("standard_concept_id", "standard_concept_name")))
     cols_to_format <- c("source_concept_name", "source_concept_id")
   } else if (display == "missing source") {
     result <- result |>
       dplyr::filter(as.integer(.data$source_concept_id) == 0L | is.na(.data$source_concept_id)) |>
-      dplyr::select(!c("source_concept_id", "source_concept_name"))
+      dplyr::select(!dplyr::any_of(c("source_concept_id", "source_concept_name")))
 
     cols_to_format <- c("standard_concept_name", "standard_concept_id")
   }
@@ -94,7 +94,6 @@ tableConceptIdCounts <- function(result,
       )),
       dplyr::everything()
     )
-
   if (type == "datatable") {
 
 
@@ -128,8 +127,8 @@ tableConceptIdCounts <- function(result,
 
     formatted_result |>
       tidyr::pivot_wider(
-        names_from = .data$estimate_name,
-        values_from = .data$estimate_value
+        names_from = "estimate_name",
+        values_from = "estimate_value"
       ) |>
       reactable::reactable(
         columns = list(

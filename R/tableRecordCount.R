@@ -84,8 +84,8 @@ tableRecordCount <- function(result,
 
     result |>
       tidyr::pivot_wider(
-        names_from = .data$variable_name,
-        values_from = .data$estimate_value
+        names_from = "variable_name",
+        values_from = "estimate_value"
       ) |>
       reactable::reactable(
         columns = list(
