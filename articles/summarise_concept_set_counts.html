@@ -37,6 +37,7 @@
     <li><h6 class="dropdown-header" data-toc-skip>Package functionalities</h6></li>
     <li><a class="dropdown-item" href="../articles/summarise_clinical_tables_records.html">Summarise clinical tables records</a></li>
     <li><a class="dropdown-item" href="../articles/summarise_concept_set_counts.html">Summarise concept counts</a></li>
+    <li><a class="dropdown-item" href="../articles/summarise_concept_id_counts.html">Summarise concept id counts</a></li>
     <li><a class="dropdown-item" href="../articles/summarise_observation_period.html">Summarise observation period</a></li>
     <li><a class="dropdown-item" href="../articles/characterisation.html">Characterisation of OMOP CDM</a></li>
     <li><a class="dropdown-item" href="../articles/missing_data.html">Summarise missing data</a></li>
@@ -77,7 +78,7 @@
 designed to provide information about the number of counts of specific
 concepts. Specifically, there are two key functions that facilitate
 this, <code><a href="../reference/summariseConceptSetCounts.html">summariseConceptSetCounts()</a></code> and
-<code>plotConceptCounts()</code>. The former one creates a summary
+<code><a href="../reference/plotConceptSetCounts.html">plotConceptSetCounts()</a></code>. The former one creates a summary
 statistics results with the number of counts per each concept, and the
 latter one creates a histogram plot.</p>
 <div class="section level3">
@@ -180,7 +181,7 @@ from OmopSketch:</p>
 <span><span class="co">#&gt; $ variable_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Number records"<span style="color: #949494;">, </span>"Number subjects"<span style="color: #949494;">, </span>"Number records"<span style="color: #949494;">, </span>…</span></span>
 <span><span class="co">#&gt; $ variable_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">,</span>…</span></span>
 <span><span class="co">#&gt; $ estimate_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count"<span style="color: #949494;">, </span>"count"<span style="color: #949494;">, </span>"count"<span style="color: #949494;">, </span>"count"<span style="color: #949494;">, </span>"count"<span style="color: #949494;">, </span>"count"<span style="color: #949494;">, </span>"…</span></span>
-<span><span class="co">#&gt; $ estimate_value <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "20033"<span style="color: #949494;">, </span>"2689"<span style="color: #949494;">, </span>"14205"<span style="color: #949494;">, </span>"2679"<span style="color: #949494;">, </span>"306"<span style="color: #949494;">, </span>"306"<span style="color: #949494;">, </span>"17268"…</span></span></code></pre></div>
+<span><span class="co">#&gt; $ estimate_value <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "20033"<span style="color: #949494;">, </span>"2689"<span style="color: #949494;">, </span>"14205"<span style="color: #949494;">, </span>"2679"<span style="color: #949494;">, </span>"1993"<span style="color: #949494;">, </span>"1393"<span style="color: #949494;">, </span>"2158…</span></span></code></pre></div>
 <p>By default, the function will provide information about either the
 number of records (<code>estimate_name == "record_count"</code>) for
 each concept_id or the number of people
@@ -248,8 +249,8 @@ arguments.</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Counting concepts</span></span>
 <span><span class="co">#&gt; Rows: 7,545</span></span>
 <span><span class="co">#&gt; Columns: 4</span></span>
-<span><span class="co">#&gt; $ group_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "sinusitis"<span style="color: #949494;">, </span>"acetaminophen"<span style="color: #949494;">, </span>"acetaminophen"<span style="color: #949494;">, </span>"sinusiti…</span></span>
-<span><span class="co">#&gt; $ strata_level  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"&gt;50"<span style="color: #949494;">, </span>"&lt;=50"<span style="color: #949494;">, </span>"&lt;=50"<span style="color: #949494;">, </span>"&gt;50"<span style="color: #949494;">, </span>"Mal…</span></span>
+<span><span class="co">#&gt; $ group_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "acetaminophen"<span style="color: #949494;">, </span>"sinusitis"<span style="color: #949494;">, </span>"acetaminophen"<span style="color: #949494;">, </span>"sinusiti…</span></span>
+<span><span class="co">#&gt; $ strata_level  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"&lt;=50"<span style="color: #949494;">, </span>"&gt;50"<span style="color: #949494;">, </span>"&gt;50"<span style="color: #949494;">, </span>"&lt;=50"<span style="color: #949494;">, </span>"Mal…</span></span>
 <span><span class="co">#&gt; $ variable_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Number subjects"<span style="color: #949494;">, </span>"Number subjects"<span style="color: #949494;">, </span>"Number subjects"<span style="color: #949494;">,</span>…</span></span>
 <span><span class="co">#&gt; $ estimate_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count"<span style="color: #949494;">, </span>"count"<span style="color: #949494;">, </span>"count"<span style="color: #949494;">, </span>"count"<span style="color: #949494;">, </span>"count"<span style="color: #949494;">, </span>"count"<span style="color: #949494;">, </span>"c…</span></span></code></pre></div>
 <div class="section level3">

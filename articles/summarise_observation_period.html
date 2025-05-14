@@ -37,6 +37,7 @@
     <li><h6 class="dropdown-header" data-toc-skip>Package functionalities</h6></li>
     <li><a class="dropdown-item" href="../articles/summarise_clinical_tables_records.html">Summarise clinical tables records</a></li>
     <li><a class="dropdown-item" href="../articles/summarise_concept_set_counts.html">Summarise concept counts</a></li>
+    <li><a class="dropdown-item" href="../articles/summarise_concept_id_counts.html">Summarise concept id counts</a></li>
     <li><a class="dropdown-item" href="../articles/summarise_observation_period.html">Summarise observation period</a></li>
     <li><a class="dropdown-item" href="../articles/characterisation.html">Characterisation of OMOP CDM</a></li>
     <li><a class="dropdown-item" href="../articles/missing_data.html">Summarise missing data</a></li>
@@ -943,16 +944,16 @@ also define a date range of interest to filter the
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1,664 × 6</span></span></span>
 <span><span class="co">#&gt;    strata_level   variable_name     estimate_name estimate_value additional_name</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Male &amp;&amp;&amp; &lt;35   Number person-da… count         270            time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Male           Number person-da… count         270            time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Female         Number person-da… count         270            time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Female &amp;&amp;&amp; &lt;35 Number person-da… count         270            time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Female &amp;&amp;&amp; &lt;35 Number records i… count         3              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Male &amp;&amp;&amp; &lt;35   Number records i… count         3              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Female         Number records i… count         3              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Male           Number records i… count         3              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Male &amp;&amp;&amp; &lt;35   Number person-da… count         276            time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Male           Number person-da… count         276            time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Female         Number person-da… count         270            time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Female &amp;&amp;&amp; &lt;35 Number person-da… count         270            time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Male &amp;&amp;&amp; &lt;35   Number person-da… count         270            time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Male           Number person-da… count         270            time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Male           Number records i… count         3              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Female         Number records i… count         3              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Male &amp;&amp;&amp; &lt;35   Number records i… count         3              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Female &amp;&amp;&amp; &lt;35 Number records i… count         3              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Female         Number person-da… count         281            time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Female &amp;&amp;&amp; &lt;35 Number person-da… count         281            time_interval  </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1,654 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: additional_level &lt;chr&gt;</span></span></span></code></pre></div>
 <p>You can include additional output metrics by them to the output
@@ -975,14 +976,14 @@ individuals in observation is returned.</p>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Female         Number subjects … count         1              time_interval  </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Female &amp;&amp;&amp; &lt;35 Number subjects … count         1              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Female &amp;&amp;&amp; &lt;35 Number subjects … count         2              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Female         Number subjects … count         2              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Female         Number subjects … count         2              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Female &amp;&amp;&amp; &lt;35 Number subjects … count         2              time_interval  </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Female         Number subjects … count         2              time_interval  </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Female &amp;&amp;&amp; &lt;35 Number subjects … count         2              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Female         Number subjects … count         2              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Female &amp;&amp;&amp; &lt;35 Number subjects … count         2              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Female &amp;&amp;&amp; &lt;35 Number subjects … count         3              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Female         Number subjects … count         3              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Female &amp;&amp;&amp; &lt;35 Number subjects … count         2              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Female         Number subjects … count         2              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Female         Number subjects … count         3              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Female &amp;&amp;&amp; &lt;35 Number subjects … count         3              time_interval  </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 962 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: additional_level &lt;chr&gt;</span></span></span></code></pre></div>
 <p>If <code>output = "sex"</code>, the trend in the number of females in
