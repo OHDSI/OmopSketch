@@ -7,6 +7,8 @@ docs
 
 Eunomia/*
 
+extras/shiny/*
+
 inst/doc
 /doc/
 /Meta/

@@ -1,6 +1,20 @@
 url: https://OHDSI.github.io/OmopSketch/
 template:
   bootstrap: 5
+
+navbar:
+  structure:
+    left:
+    - home
+    - reference
+    - articles
+    - changelog
+    - example-app
+  components:
+    example-app:
+      text: "Characterisation synthetic datasets"
+      href: https://dpa-pde-oxford.shinyapps.io/OmopSketchCharacterisation/
+
 articles:
 - title: Package functionalities
   navbar: Package functionalities
