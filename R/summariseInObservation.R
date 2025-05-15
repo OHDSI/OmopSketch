@@ -225,15 +225,17 @@ countRecords <- function(observationPeriod, cdm, start_date_name, end_date_name,
         dplyr::compute(temporary = FALSE, name = tablePrefix)
       additional_column <- "time_interval"
     } else {
-      x <- observationPeriod |>
-        dplyr::rename(
-          "start_date" = "observation_period_start_date",
-          "end_date" = "observation_period_end_date"
-        )
+      cdm <- omopgenerics::insertTable(cdm = cdm, name = paste0(tablePrefix, "empty_table"), table = createEmptyIntervalTable("overall"))
+      x <- cdm[[paste0(tablePrefix, "empty_table")]]
       additional_column <- character()
     }
 
-    personDays <- x %>%
+    personDays <- x |>
+      dplyr::union(observationPeriod |>
+                         dplyr::rename(
+                           "start_date" = "observation_period_start_date",
+                           "end_date" = "observation_period_end_date"
+                           )) %>%
       dplyr::mutate(estimate_value = !!CDMConnector::datediff("start_date", "end_date", interval = "day") + 1) |>
       dplyr::group_by(dplyr::across(dplyr::any_of(c("sex", "age_group", "time_interval")))) |>
       dplyr::summarise(estimate_value = sum(.data$estimate_value, na.rm = TRUE), .groups = "drop") |>
@@ -262,13 +264,17 @@ countRecords <- function(observationPeriod, cdm, start_date_name, end_date_name,
         dplyr::collect()
       additional_column <- "time_interval"
     } else {
-      records <- observationPeriod |>
-        dplyr::group_by(.data$age_group, .data$sex) |>
-        dplyr::summarise(estimate_value = dplyr::n(), .groups = "drop") |>
-        dplyr::mutate("variable_name" = "Number records in observation") |>
-        dplyr::collect()
+      records <- tibble::tibble()
       additional_column <- character()
     }
+
+   records <- records |>
+     dplyr::bind_rows(observationPeriod |>
+                        dplyr::group_by(.data$age_group, .data$sex) |>
+                        dplyr::summarise(estimate_value = dplyr::n(), .groups = "drop") |>
+                        dplyr::mutate("variable_name" = "Number records in observation") |>
+                        dplyr::collect()
+                      )
   } else {
     records <- createEmptyIntervalTable(interval)
   }
@@ -292,13 +298,15 @@ countRecords <- function(observationPeriod, cdm, start_date_name, end_date_name,
         dplyr::collect()
       additional_column <- "time_interval"
     } else {
-      subjects <- observationPeriod |>
-        dplyr::group_by(.data$age_group, .data$sex) |>
-        dplyr::summarise(estimate_value = dplyr::n_distinct("person_id"), .groups = "drop") |>
-        dplyr::mutate("variable_name" = "Number subjects in observation") |>
-        dplyr::collect()
+      subjects <- tibble::tibble()
       additional_column <- character()
     }
+    subjects <- subjects |> dplyr::bind_rows(observationPeriod |>
+      dplyr::group_by(.data$age_group, .data$sex) |>
+      dplyr::summarise(estimate_value = dplyr::n_distinct("person_id"), .groups = "drop") |>
+      dplyr::mutate("variable_name" = "Number subjects in observation") |>
+      dplyr::collect()
+    )
   } else {
     subjects <- createEmptyIntervalTable(interval)
   }
@@ -313,25 +321,32 @@ countRecords <- function(observationPeriod, cdm, start_date_name, end_date_name,
           (.data$start_date >= .data$interval_start_date & .data$start_date <= .data$interval_end_date)) |>
         PatientProfiles::addSexQuery() |>
         suppressWarnings() |>
+        dplyr::select(dplyr::any_of(c("person_id", "age_group", "sex", "time_interval"))) |>
         dplyr::compute(temporary = FALSE, name = tablePrefix)
 
       strata <- c("time_interval", "age_group")
       additional_column <- "time_interval"
     } else {
-      x <- observationPeriod |>
-        PatientProfiles::addSexQuery() |>
-        suppressWarnings() |>
-        dplyr::compute(temporary = FALSE, name = tablePrefix)
-      strata <- "age_group"
+      cdm <- omopgenerics::insertTable(cdm = cdm, name = paste0(tablePrefix, "empty_table"), table = createEmptyIntervalTable("overall"))
+      x <- cdm[[paste0(tablePrefix, "empty_table")]]
+
       additional_column <- character()
     }
-
+    strata <- c("time_interval", "age_group")
     sex <- x |>
-      dplyr::group_by(dplyr::across(dplyr::all_of(strata))) |>
+      dplyr::group_by(dplyr::across(dplyr::any_of(strata))) |>
       dplyr::filter(.data$sex == "Female") |>
       dplyr::summarise("estimate_value" = dplyr::n(), .groups = "drop") |>
       dplyr::collect() |>
-      dplyr::bind_rows() |>
+      dplyr::bind_rows(observationPeriod |>
+                         PatientProfiles::addSexQuery() |>
+                         suppressWarnings() |>
+                         dplyr::select(dplyr::any_of(c("person_id", "age_group", "sex"))) |>
+                         dplyr::compute(temporary = FALSE, name = tablePrefix) |>
+                         dplyr::group_by(dplyr::across(dplyr::any_of(strata))) |>
+                         dplyr::filter(.data$sex == "Female") |>
+                         dplyr::summarise("estimate_value" = dplyr::n(), .groups = "drop") |>
+                         dplyr::collect()) |>
       dplyr::mutate(
         "variable_name" = "Number females in observation",
         "sex" = "overall"
@@ -401,22 +416,30 @@ createSummarisedResultAge <- function(observationPeriod, cdm, start_date_name, e
         .data$interval_start_date
       )) |>
       PatientProfiles::addAgeQuery(indexDate = "index_date") |>
+      dplyr::select(dplyr::any_of(c("person_id", "age_group", "sex", "time_interval", "age"))) |>
       dplyr::compute(temporary = FALSE, name = tablePrefix)
 
     additional_column <- "time_interval"
   } else {
-    x <- observationPeriod |>
-      PatientProfiles::addAgeQuery(indexDate = start_date_name) |>
-      dplyr::compute(temporary = FALSE, name = tablePrefix)
-
+    cdm <- omopgenerics::insertTable(cdm = cdm, name = paste0(tablePrefix, "empty_table"), table = createEmptyIntervalTable("overall") |> dplyr::mutate("age" = NA_integer_))
+    x <- cdm[[paste0(tablePrefix, "empty_table")]]
     additional_column <- character()
-  }
+}
+  y <- observationPeriod |>
+    PatientProfiles::addAgeQuery(indexDate = start_date_name) |>
+    dplyr::select(dplyr::any_of(c("person_id", "age_group", "sex", "age"))) |>
+    dplyr::compute(temporary = FALSE, name = paste0(tablePrefix, "interval_overall"))
 
   res <- purrr::map(strata, \(stratax) {
     x |>
-      dplyr::group_by(dplyr::across(dplyr::all_of(c("age_group", stratax, additional_column)))) |>
+      dplyr::group_by(dplyr::across(dplyr::any_of(c("age_group", stratax, additional_column)))) |>
       dplyr::summarise(estimate_value = stats::median(.data$age), .groups = "drop") |>
-      dplyr::collect()
+      dplyr::collect() |>
+      dplyr::bind_rows(y |>
+                         dplyr::group_by(dplyr::across(dplyr::any_of(c("age_group", stratax)))) |>
+                         dplyr::summarise(estimate_value = stats::median(.data$age), .groups = "drop") |>
+                         dplyr::collect()
+                         )
   }) |>
     dplyr::bind_rows() |>
     dplyr::mutate(
