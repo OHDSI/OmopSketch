@@ -13,6 +13,8 @@
 ^Meta$
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
-^vignettes\characterisation.Rmd$
+^vignettes/characterisation.Rmd$
+^vignettes/summarise_concept_set_counts.Rmd$
+^vignettes/missing_data.Rmd$
 ^doc$
 

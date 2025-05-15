@@ -19,8 +19,6 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-library(CDMConnector)
-CDMConnector::requireEunomia()
 ```
 
 # Introduction

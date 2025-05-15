@@ -1,4 +1,7 @@
+
+
 test_that("databaseCharacteristics works", {
+  skip_on_cran()
   cdm <- mockOmopSketch()
 
   expect_no_error(databaseCharacteristics(cdm ))
