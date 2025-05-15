@@ -21,6 +21,21 @@ summariseOmopSnapshot <- function(cdm) {
       result_type = "summarise_omop_snapshot"
     ))
 
+  vocab_version <- cdm$vocabulary |>
+    dplyr::filter(.data$vocabulary_id == "None") |>
+    dplyr::pull(.data$vocabulary_version)
+
+  vocab_from_source <- summaryTable |>
+    dplyr::filter(.data$estimate_name == "vocabulary_version") |>
+    dplyr::pull(.data$estimate_value)
+
+  if (!(isTRUE(vocab_version == vocab_from_source) ||
+        (is.na(vocab_version) && is.na(vocab_from_source)))) {
+    cli::cli_warn("Vocabulary version in cdm_source ({vocab_from_source}) doesn't match the one in the vocabulary table ({vocab_version})")
+  }
+
+  summaryTable <- summaryTable |>
+    dplyr::mutate(estimate_value = dplyr::if_else(.data$estimate_name == "vocabulary_version", vocab_version, .data$estimate_value))
 
   return(summaryTable)
 }
