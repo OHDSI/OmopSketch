@@ -1,6 +1,6 @@
 Package: OmopSketch
 Title: Characterise Tables of an OMOP Common Data Model Instance
-Version: 0.3.2.900
+Version: 0.4.0
 Authors@R: c(
     person( 
         "Marta", "Alcalde-Herraiz", 
