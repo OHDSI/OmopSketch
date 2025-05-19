@@ -469,8 +469,50 @@ test_that("age and sex output work", {
    dplyr::collect()
 
  expect_equal(sprintf("%.2f", 100 * z$n_females / z$n_tot), y)
+
  PatientProfiles::mockDisconnect(cdm = cdm)
 })
+
+test_that("overall time interval work", {
+  skip_on_cran()
+  # Load mock database ----
+  cdm <- cdmEunomia()
+
+  expect_no_error(x <- summariseInObservation(cdm$observation_period, output = c("record", "person", "sex", "age"), interval = "years"))
+  x <- x |>
+    dplyr::filter(.data$additional_level == "overall" & estimate_type != "percentage")
+
+  records <- cdm$observation_period |>
+    dplyr::tally() |>
+    dplyr::pull(.data$n)
+
+  person <- cdm$observation_period %>%
+    dplyr::distinct(.data$person_id) |>
+    dplyr::tally() |>
+    dplyr::pull(.data$n)
+
+  sex <- cdm$observation_period |>
+    PatientProfiles::addSexQuery() |>
+    dplyr::filter(.data$sex == "Female") |>
+    dplyr::distinct(.data$person_id) |>
+    dplyr::tally() |>
+    dplyr::pull(.data$n)
+
+  age <-cdm$observation_period |>
+    PatientProfiles::addAgeQuery(indexDate = "observation_period_start_date") |>
+    dplyr::summarise(median = stats::median(.data$age)) |>
+    dplyr::pull(.data$median)
+
+  expect_equal(x |> dplyr::filter(variable_name == "Number records in observation")|> dplyr::pull(.data$estimate_value), as.character(records))
+  expect_equal(x |> dplyr::filter(variable_name == "Number subjects in observation")|> dplyr::pull(.data$estimate_value), as.character(person))
+  expect_equal(x |> dplyr::filter(variable_name == "Number females in observation")|> dplyr::pull(.data$estimate_value), as.character(sex))
+  expect_equal(x |> dplyr::filter(variable_name == "Median age in observation")|> dplyr::pull(.data$estimate_value), as.character(age))
+
+
+
+  PatientProfiles::mockDisconnect(cdm = cdm)
+})
+
 
 test_that("tableInObservation works", {
   skip_on_cran()
