@@ -267,3 +267,22 @@ test_that("interval argument works", {
   expect_equal(q_year |> sortTibble(), y_year |> sortTibble())
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
+
+
+test_that("tableTopConceptCounts works", {
+  skip_on_cran()
+  cdm <- mockOmopSketch()
+
+  expect_no_error(result <- summariseConceptIdCounts(cdm, "drug_exposure", sex = TRUE, ageGroup = list(c(0,50))))
+  expect_no_error(tableTopConceptCounts(result))
+  expect_no_error(tableTopConceptCounts(result, top = 5))
+  expect_error(tableTopConceptCounts(result, top = 0.5))
+  expect_no_error(tableTopConceptCounts(result, top = 10000000))
+  expect_no_error(result <- summariseConceptIdCounts(cdm, "drug_exposure"))
+  expect_no_error(tableTopConceptCounts(result))
+  expect_no_error(tableTopConceptCounts(result, type = "datatable"))
+  expect_no_error(tableTopConceptCounts(result, type = "flextable"))
+  expect_no_error(result <- summariseConceptIdCounts(cdm, "drug_exposure", interval = "months"))
+  expect_no_error(tableTopConceptCounts(result))
+
+  })
