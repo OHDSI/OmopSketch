@@ -271,7 +271,8 @@ test_that("interval argument works", {
 
 test_that("tableTopConceptCounts works", {
   skip_on_cran()
-  cdm <- mockOmopSketch()
+  cdm <- cdmEunomia()
+
 
   expect_no_error(result <- summariseConceptIdCounts(cdm, "drug_exposure", sex = TRUE, ageGroup = list(c(0,50))))
   expect_no_error(tableTopConceptCounts(result))

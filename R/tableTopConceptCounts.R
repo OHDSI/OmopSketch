@@ -44,20 +44,11 @@ tableTopConceptCounts <- function(result, top = 10, type = "gt") {
 
   res <- result |>
     omopgenerics::splitAll() |>
-    dplyr::group_by(dplyr::across(dplyr::any_of(c("time_interval", "sex", "age_group", "estimate_name")))) |>
     dplyr::mutate(estimate_value = as.numeric(.data$estimate_value)) |>
-    dplyr::arrange(dplyr::desc(.data$estimate_value)) |>
-    dplyr::slice_head(n = top) |>
-    dplyr::mutate("top" = dplyr::row_number()) |>
-    dplyr::select(dplyr::any_of(c("estimate_name", "omop_table", "top", strata_cols, "variable_name", "variable_level", "source_concept_name", "source_concept_id")), dplyr::everything()) |>
-    dplyr::select(!"result_id") |>
-    dplyr::ungroup() |>
     tidyr::pivot_wider(
       names_from = "estimate_name",
       values_from = "estimate_value"
     )
-
-
     estimateForm <- "Standard: %s (%s); Source: %s (%s); %i"
     if (type == "gt") {
       estimateForm <- stringr::str_replace_all(estimateForm, ";", " <br>")
@@ -65,6 +56,11 @@ tableTopConceptCounts <- function(result, top = 10, type = "gt") {
 
   if ("count_records" %in% colnames(res)) {
     records <- res |>
+      dplyr::group_by(dplyr::across(dplyr::any_of(c("time_interval", "sex", "age_group")))) |>
+      dplyr::arrange(dplyr::desc(.data$count_records)) |>
+      dplyr::slice_head(n = top) |>
+      dplyr::mutate("top" = dplyr::row_number()) |>
+      dplyr::ungroup() |>
       dplyr::mutate(estimate_value = sprintf(
         .env$estimateForm, .data$variable_name, .data$variable_level,
         .data$source_concept_name, .data$source_concept_id, .data$count_records
@@ -76,6 +72,11 @@ tableTopConceptCounts <- function(result, top = 10, type = "gt") {
   }
   if ("count_subjects" %in% colnames(res)) {
     subjects <- res |>
+      dplyr::group_by(dplyr::across(dplyr::any_of(c("time_interval", "sex", "age_group", "estimate_name")))) |>
+      dplyr::arrange(dplyr::desc(.data$count_subjects)) |>
+      dplyr::slice_head(n = top) |>
+      dplyr::mutate("top" = dplyr::row_number()) |>
+      dplyr::ungroup() |>
       dplyr::mutate(estimate_value = sprintf(
         .env$estimateForm, .data$variable_name, .data$variable_level,
         .data$source_concept_name, .data$source_concept_id, .data$count_subjects
@@ -85,16 +86,17 @@ tableTopConceptCounts <- function(result, top = 10, type = "gt") {
     subjects <- tibble::tibble()
   }
   res <- dplyr::bind_rows(records, subjects) |>
+    dplyr::mutate(estimate_type = "character") |>
     dplyr::select(dplyr::any_of(c("estimate_name","cdm_name", "omop_table", additional_cols, strata_cols, "estimate_value", "estimate_type", "top")))
 
   header <- c("cdm_name", additional_cols)
-  group <- c("omop_table", strata_cols, "estimate_name")
+  group <- c("omop_table", strata_cols)
 
   tab <- visOmopResults::visTable(res,
                            header = header,
                            hide = "estimate_type",
                            group = group,
-                           .options = list( groupAsColumn = TRUE,merge = "all_columns"),
+                           .options = list(merge = "all_columns"),
                            type = type)
   if (type == "gt") {
     tab <- gt::fmt_markdown(tab)
