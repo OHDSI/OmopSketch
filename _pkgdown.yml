@@ -58,6 +58,7 @@ reference:
   - plotConceptSetCounts
   - summariseConceptIdCounts
   - tableConceptIdCounts
+  - tableTopConceptCounts
 - subtitle: Mock Database
   desc: Create a mock database to test the OmopSketch package
 - contents:
