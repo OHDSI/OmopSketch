@@ -58,23 +58,18 @@ summariseInObservation <- function(observationPeriod,
   cdm <- omopgenerics::cdmReference(observationPeriod)
   start_date_name <- omopgenerics::omopColumns(table = "observation_period", field = "start_date")
   end_date_name <- omopgenerics::omopColumns(table = "observation_period", field = "end_date")
-  observationPeriod <- restrictStudyPeriod(observationPeriod, dateRange)
+
+   observationPeriod <- observationPeriod |>
+     trimStudyPeriod(dateRange = dateRange)
 
   if (is.null(observationPeriod)) {
     return(omopgenerics::emptySummarisedResult(settings = set))
   }
-
   denominator <- cdm |> getDenominator(output)
 
-  observationPeriodOverall <- addStratifications(
-    observationPeriod,
-    indexDate = start_date_name,
-    sex = sex,
-    ageGroup = ageGroup,
-    interval = "overall",
-    intervalName = "interval",
-    name = omopgenerics::uniqueTableName(tablePrefix)
-  )
+  observationPeriodOverall <- observationPeriod |>
+    addSexAgeGroup(sex = sex, ageGroup = ageGroup, indexDate = start_date_name) |>
+    dplyr::compute(name = omopgenerics::uniqueTableName(prefix = tablePrefix), temporary = FALSE)
 
   strata <- c(list(character()), omopgenerics::combineStrata(c("sex"[sex], "age_group"[!is.null(ageGroup)])))
 
@@ -117,16 +112,12 @@ summariseInObservation <- function(observationPeriod,
       ) |>
       dplyr::compute(name = omopgenerics::uniqueTableName(prefix = tablePrefix))
 
-    observationPeriodInterval <- addStratifications(
-      observationPeriodInterval,
-      indexDate = "start_date",
-      sex = sex,
-      ageGroup = ageGroup,
-      interval = "overall",
-      intervalName = "interval",
-      name = omopgenerics::uniqueTableName(tablePrefix)
-    )
+    observationPeriodInterval <- observationPeriodInterval |>
+      addSexAgeGroup(sex = sex, ageGroup = ageGroup, indexDate = "start_date") |>
+      dplyr::compute(name = omopgenerics::uniqueTableName(prefix = tablePrefix), temporary = FALSE)
+
     strata <- purrr::map(strata, \(x) c("time_interval", x))
+
     result$interval <- summariseInObservationInternal(observationPeriodInterval,
       start_date_name = "start_date",
       end_date_name = "end_date",

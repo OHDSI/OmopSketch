@@ -238,6 +238,26 @@ restrictStudyPeriod <- function(omopTable, dateRange) {
 
   warningEmptyStudyPeriod(omopTable)
 }
+
+trimStudyPeriod <- function(omopTable, dateRange) {
+  if (!is.null(dateRange)) {
+    table <- omopgenerics::tableName(omopTable)
+    start_date_col <- omopgenerics::omopColumns(table = table, field = "start_date")
+    end_date_col <- omopgenerics::omopColumns(table = table, field = "end_date")
+    start_date <- dateRange[1]
+    end_date <- dateRange[2]
+
+    omopTable <- omopTable |>
+      dplyr::mutate(
+        !!start_date_col := dplyr::if_else(.data[[start_date_col]] < .env$start_date, .env$start_date, .data[[start_date_col]]),
+        !!end_date_col := dplyr::if_else(.data[[end_date_col]] > .env$end_date, .env$end_date, .data[[end_date_col]])
+      ) |>
+      dplyr::filter(.data[[start_date_col]] <= .data[[end_date_col]])
+  }
+  omopTable
+}
+
+
 warningEmptyStudyPeriod <- function(omopTable) {
   if (omopgenerics::isTableEmpty(omopTable)) {
     cli::cli_warn(paste0(omopgenerics::tableName(omopTable), " omop table is empty after application of date range."))
