@@ -254,7 +254,7 @@ trimStudyPeriod <- function(omopTable, dateRange) {
       ) |>
       dplyr::filter(.data[[start_date_col]] <= .data[[end_date_col]])
   }
-  omopTable
+  warningEmptyStudyPeriod(omopTable)
 }
 
 
