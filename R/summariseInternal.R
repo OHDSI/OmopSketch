@@ -160,10 +160,10 @@ addStratifications <- function(x, indexDate, sex, ageGroup, interval, intervalNa
   }
 
 
-  if (interval != "overall" | sex | !is.null(ageGroup)) {
-    x <- x |>
-      dplyr::compute(name = name, temporary = FALSE)
-  }
+  # if (interval != "overall" | sex | !is.null(ageGroup)) {
+  #   x <- x |>
+  #     dplyr::compute(name = name, temporary = FALSE)
+  # }
 
   return(x)
 }
