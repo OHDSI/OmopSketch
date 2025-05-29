@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">OmopSketch</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0.900</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,6 +43,7 @@
     <li><a class="dropdown-item" href="../articles/missing_data.html">Summarise missing data</a></li>
   </ul>
 </li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://dpa-pde-oxford.shinyapps.io/OmopSketchCharacterisation/">Characterisation synthetic datasets</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -78,7 +79,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Summarise concept id counts</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/OHDSI/OmopSketch/blob/0.4.0/vignettes/summarise_concept_id_counts.Rmd" class="external-link"><code>vignettes/summarise_concept_id_counts.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/OHDSI/OmopSketch/blob/main/vignettes/summarise_concept_id_counts.Rmd" class="external-link"><code>vignettes/summarise_concept_id_counts.Rmd</code></a></small>
       <div class="d-none name"><code>summarise_concept_id_counts.Rmd</code></div>
     </div>
 
@@ -143,8 +144,8 @@ tables.</p>
 <span><span class="co">#&gt; Rows: 31</span></span>
 <span><span class="co">#&gt; Columns: 7</span></span>
 <span><span class="co">#&gt; $ group_level      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "drug_exposure"<span style="color: #949494;">, </span>"drug_exposure"<span style="color: #949494;">, </span>"drug_exposure"<span style="color: #949494;">, </span>"d…</span></span>
-<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Sisymbrium officianale whole extract Nasal Powder [E…</span></span>
-<span><span class="co">#&gt; $ variable_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "1830279"<span style="color: #949494;">, </span>"1830283"<span style="color: #949494;">, </span>"35774678"<span style="color: #949494;">, </span>"40741270"<span style="color: #949494;">, </span>"360347…</span></span>
+<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "nitrogen 99.2 % Topical Liquefied Gas"<span style="color: #949494;">, </span>"nitrogen 99…</span></span>
+<span><span class="co">#&gt; $ variable_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "35604435"<span style="color: #949494;">, </span>"35604439"<span style="color: #949494;">, </span>"35604879"<span style="color: #949494;">, </span>"36034751"<span style="color: #949494;">, </span>"4289…</span></span>
 <span><span class="co">#&gt; $ estimate_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"c…</span></span>
 <span><span class="co">#&gt; $ estimate_value   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "100"<span style="color: #949494;">, </span>"100"<span style="color: #949494;">, </span>"100"<span style="color: #949494;">, </span>"100"<span style="color: #949494;">, </span>"100"<span style="color: #949494;">, </span>"100"<span style="color: #949494;">, </span>"100"<span style="color: #949494;">, </span>"100…</span></span>
 <span><span class="co">#&gt; $ additional_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "source_concept_id"<span style="color: #949494;">, </span>"source_concept_id"<span style="color: #949494;">, </span>"source_con…</span></span>
@@ -163,16 +164,16 @@ obtain both record and person counts.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 62 × 3</span></span></span>
 <span><span class="co">#&gt;    variable_name                                    estimate_name estimate_value</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Sisymbrium officianale whole extract Nasal Powd… count_records 100           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Sisymbrium officianale whole extract Nasal Powd… count_subjec… 63            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> glucagon 3 MG Nasal Powder [Baqsimi]             count_records 100           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> glucagon 3 MG Nasal Powder [Baqsimi]             count_subjec… 65            </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Sisymbrium officianale whole extract 10 MG Nasa… count_records 100           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Sisymbrium officianale whole extract 10 MG Nasa… count_subjec… 64            </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> POTASSIUM SODIUM TARTRATE / Sodium Bicarbonate … count_records 100           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> POTASSIUM SODIUM TARTRATE / Sodium Bicarbonate … count_subjec… 66            </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> POTASSIUM SODIUM TARTRATE / Sodium Bicarbonate … count_records 100           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> POTASSIUM SODIUM TARTRATE / Sodium Bicarbonate … count_subjec… 66            </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> sodium chloride Nasal Powder                     count_records 100           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> sodium chloride Nasal Powder                     count_subjec… 61            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Sisymbrium officianale whole extract 10 MG Nasa… count_subjec… 61            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Sisymbrium officianale whole extract Nasal Powd… count_records 100           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Sisymbrium officianale whole extract Nasal Powd… count_subjec… 61            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Sisymbrium officianale whole extract 10 MG Nasa… count_records 100           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Sisymbrium officianale whole extract 10 MG Nasa… count_subjec… 63            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> glucose / potassium / sodium Nasal Powder        count_records 100           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> glucose / potassium / sodium Nasal Powder        count_subjec… 62            </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 52 more rows</span></span></span></code></pre></div>
 <p>Further stratification can be applied using the
 <code>interval</code>, <code>sex</code>, and <code>ageGroup</code>
@@ -192,7 +193,7 @@ stratification), “years”, “quarters”, or “months”.</p>
 <span><span class="co">#&gt; Columns: 5</span></span>
 <span><span class="co">#&gt; $ group_level      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "condition_occurrence"<span style="color: #949494;">, </span>"condition_occurrence"<span style="color: #949494;">, </span>"cond…</span></span>
 <span><span class="co">#&gt; $ strata_level     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"…</span></span>
-<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Alkaline phosphatase bone isoenzyme raised"<span style="color: #949494;">, </span>"Victim…</span></span>
+<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Elevated mood"<span style="color: #949494;">, </span>"Manic symptoms co-occurrent and due…</span></span>
 <span><span class="co">#&gt; $ estimate_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_subjects"<span style="color: #949494;">, </span>"count_subjects"<span style="color: #949494;">, </span>"count_subjects"<span style="color: #949494;">,</span>…</span></span>
 <span><span class="co">#&gt; $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "0"<span style="color: #949494;">, </span>"0"<span style="color: #949494;">, </span>"0"<span style="color: #949494;">, </span>"0"<span style="color: #949494;">, </span>"0"<span style="color: #949494;">, </span>"0"<span style="color: #949494;">, </span>"0"<span style="color: #949494;">, </span>"0"<span style="color: #949494;">, </span>"0"<span style="color: #949494;">, </span>"0"<span style="color: #949494;">, </span>"0"…</span></span></code></pre></div>
 <p>We can also filter the clinical table to a specific time window by
@@ -209,7 +210,7 @@ setting the dateRange argument.</p>
 <span><span class="co">#&gt; $ result_id          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1</span></span>
 <span><span class="co">#&gt; $ result_type        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "summarise_concept_id_counts"</span></span>
 <span><span class="co">#&gt; $ package_name       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "OmopSketch"</span></span>
-<span><span class="co">#&gt; $ package_version    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "0.4.0"</span></span>
+<span><span class="co">#&gt; $ package_version    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "0.4.0.900"</span></span>
 <span><span class="co">#&gt; $ group              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "omop_table"</span></span>
 <span><span class="co">#&gt; $ strata             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> ""</span></span>
 <span><span class="co">#&gt; $ additional         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "source_concept_id"</span></span>
