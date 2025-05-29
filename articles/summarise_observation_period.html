@@ -43,7 +43,6 @@
     <li><a class="dropdown-item" href="../articles/missing_data.html">Summarise missing data</a></li>
   </ul>
 </li>
-<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://dpa-pde-oxford.shinyapps.io/OmopSketchCharacterisation/">Characterisation synthetic datasets</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -66,7 +65,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Summarise observation period</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/OHDSI/OmopSketch/blob/main/vignettes/summarise_observation_period.Rmd" class="external-link"><code>vignettes/summarise_observation_period.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/OHDSI/OmopSketch/blob/0.4.0/vignettes/summarise_observation_period.Rmd" class="external-link"><code>vignettes/summarise_observation_period.Rmd</code></a></small>
       <div class="d-none name"><code>summarise_observation_period.Rmd</code></div>
     </div>
 
@@ -945,16 +944,16 @@ also define a date range of interest to filter the
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1,664 × 6</span></span></span>
 <span><span class="co">#&gt;    strata_level   variable_name     estimate_name estimate_value additional_name</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Male &amp;&amp;&amp; &lt;35   Number person-da… count         270            time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Female         Number person-da… count         270            time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Female &amp;&amp;&amp; &lt;35 Number person-da… count         270            time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Female         Number person-da… count         270            time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Female &amp;&amp;&amp; &lt;35 Number person-da… count         270            time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Male &amp;&amp;&amp; &lt;35   Number person-da… count         270            time_interval  </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Male           Number person-da… count         270            time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Female         Number records i… count         3              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Male           Number records i… count         3              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Female &amp;&amp;&amp; &lt;35 Number records i… count         3              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Male &amp;&amp;&amp; &lt;35   Number records i… count         3              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Male &amp;&amp;&amp; &lt;35   Number person-da… count         276            time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Female         Number person-da… count         281            time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Male           Number records i… count         3              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Female         Number records i… count         3              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Male &amp;&amp;&amp; &lt;35   Number records i… count         3              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Female &amp;&amp;&amp; &lt;35 Number records i… count         3              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Female         Number person-da… count         281            time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Female &amp;&amp;&amp; &lt;35 Number person-da… count         281            time_interval  </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1,654 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: additional_level &lt;chr&gt;</span></span></span></code></pre></div>
 <p>You can include additional output metrics by them to the output
@@ -981,10 +980,10 @@ individuals in observation is returned.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Female &amp;&amp;&amp; &lt;35 Number subjects … count         2              time_interval  </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Female &amp;&amp;&amp; &lt;35 Number subjects … count         2              time_interval  </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Female         Number subjects … count         2              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Female         Number subjects … count         2              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Female &amp;&amp;&amp; &lt;35 Number subjects … count         2              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Female &amp;&amp;&amp; &lt;35 Number subjects … count         3              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Female         Number subjects … count         3              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Female &amp;&amp;&amp; &lt;35 Number subjects … count         2              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Female         Number subjects … count         2              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Female         Number subjects … count         3              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Female &amp;&amp;&amp; &lt;35 Number subjects … count         3              time_interval  </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 962 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: additional_level &lt;chr&gt;</span></span></span></code></pre></div>
 <p>If <code>output = "sex"</code>, the trend in the number of females in

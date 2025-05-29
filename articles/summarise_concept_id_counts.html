@@ -43,7 +43,6 @@
     <li><a class="dropdown-item" href="../articles/missing_data.html">Summarise missing data</a></li>
   </ul>
 </li>
-<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://dpa-pde-oxford.shinyapps.io/OmopSketchCharacterisation/">Characterisation synthetic datasets</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -79,7 +78,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Summarise concept id counts</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/OHDSI/OmopSketch/blob/main/vignettes/summarise_concept_id_counts.Rmd" class="external-link"><code>vignettes/summarise_concept_id_counts.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/OHDSI/OmopSketch/blob/0.4.0/vignettes/summarise_concept_id_counts.Rmd" class="external-link"><code>vignettes/summarise_concept_id_counts.Rmd</code></a></small>
       <div class="d-none name"><code>summarise_concept_id_counts.Rmd</code></div>
     </div>
 
@@ -164,16 +163,16 @@ obtain both record and person counts.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 62 × 3</span></span></span>
 <span><span class="co">#&gt;    variable_name                                    estimate_name estimate_value</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> glucagon Nasal Powder                            count_records 100           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> glucagon Nasal Powder                            count_subjec… 59            </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> glucagon 3 MG Nasal Powder                       count_records 100           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> glucagon 3 MG Nasal Powder                       count_subjec… 57            </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> glucagon Nasal Powder [Baqsimi]                  count_records 100           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> glucagon Nasal Powder [Baqsimi]                  count_subjec… 62            </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Sisymbrium officianale whole extract 10 MG Nasa… count_records 100           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Sisymbrium officianale whole extract 10 MG Nasa… count_subjec… 61            </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Sisymbrium officianale whole extract 10 MG Nasa… count_records 100           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Sisymbrium officianale whole extract 10 MG Nasa… count_subjec… 61            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Sisymbrium officianale whole extract Nasal Powd… count_records 100           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Sisymbrium officianale whole extract Nasal Powd… count_subjec… 63            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Sisymbrium officianale whole extract 10 MG Nasa… count_records 100           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Sisymbrium officianale whole extract 10 MG Nasa… count_subjec… 64            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> POTASSIUM SODIUM TARTRATE / Sodium Bicarbonate … count_records 100           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> POTASSIUM SODIUM TARTRATE / Sodium Bicarbonate … count_subjec… 66            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> POTASSIUM SODIUM TARTRATE / Sodium Bicarbonate … count_records 100           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> POTASSIUM SODIUM TARTRATE / Sodium Bicarbonate … count_subjec… 66            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> sodium chloride Nasal Powder                     count_records 100           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> sodium chloride Nasal Powder                     count_subjec… 61            </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 52 more rows</span></span></span></code></pre></div>
 <p>Further stratification can be applied using the
 <code>interval</code>, <code>sex</code>, and <code>ageGroup</code>
@@ -193,7 +192,7 @@ stratification), “years”, “quarters”, or “months”.</p>
 <span><span class="co">#&gt; Columns: 5</span></span>
 <span><span class="co">#&gt; $ group_level      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "condition_occurrence"<span style="color: #949494;">, </span>"condition_occurrence"<span style="color: #949494;">, </span>"cond…</span></span>
 <span><span class="co">#&gt; $ strata_level     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"…</span></span>
-<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Renal agenesis and dysgenesis"<span style="color: #949494;">, </span>"Alkaline phosphatas…</span></span>
+<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Alkaline phosphatase bone isoenzyme raised"<span style="color: #949494;">, </span>"Victim…</span></span>
 <span><span class="co">#&gt; $ estimate_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_subjects"<span style="color: #949494;">, </span>"count_subjects"<span style="color: #949494;">, </span>"count_subjects"<span style="color: #949494;">,</span>…</span></span>
 <span><span class="co">#&gt; $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "0"<span style="color: #949494;">, </span>"0"<span style="color: #949494;">, </span>"0"<span style="color: #949494;">, </span>"0"<span style="color: #949494;">, </span>"0"<span style="color: #949494;">, </span>"0"<span style="color: #949494;">, </span>"0"<span style="color: #949494;">, </span>"0"<span style="color: #949494;">, </span>"0"<span style="color: #949494;">, </span>"0"<span style="color: #949494;">, </span>"0"…</span></span></code></pre></div>
 <p>We can also filter the clinical table to a specific time window by
