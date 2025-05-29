@@ -5,12 +5,15 @@
 \title{Create a visual table of the most common concepts from \code{summariseConceptIdCounts()} output.
 This function takes a \code{summarised_result} object and generates a formatted table highlighting the most frequent concepts.}
 \usage{
-tableTopConceptCounts(result, top = 10, type = "gt")
+tableTopConceptCounts(result, top = 10, countBy = NULL, type = "gt")
 }
 \arguments{
 \item{result}{A \code{summarised_result} object, typically returned by \code{summariseConceptIdCounts()}.}
 
 \item{top}{Integer. The number of top concepts to display. Defaults to \code{10}.}
+
+\item{countBy}{Either 'person' or 'record'. If NULL whatever is in the data
+is used.}
 
 \item{type}{Character. The output table format. Defaults to \code{"gt"}. Use \code{visOmopResults::tableType()} to see all supported formats.}
 }
@@ -28,10 +31,11 @@ library(CDMConnector)
 library(duckdb)
 
 requireEunomia()
-con <- dbConnect(duckdb(), eunomiaDir())
+con <- dbConnect(drv = duckdb(dbdir = eunomiaDir()))
 cdm <- cdmFromCon(con = con, cdmSchema = "main", writeSchema = "main")
 
-result <- summariseConceptIdCounts(cdm, "condition_occurrence")
-result |> tableTopConceptCounts(top = 5)
+result <- summariseConceptIdCounts(cdm = cdm, omopTableName = "condition_occurrence")
+
+tableTopConceptCounts(result = result, top = 5)
 }
 }
