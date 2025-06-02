@@ -59,7 +59,7 @@ summariseTableQuality <- function(cdm,
   dateRange <- validateStudyPeriod(cdm, dateRange)
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, multipleAgeGroup = FALSE, null = TRUE, ageGroupName = "age_group")
   omopgenerics::assertLogical(endBeforeStart, length = 1)
-  omopgenerics::assertLogical(birthDate, length = 1)
+  omopgenerics::assertLogical(startBeforeBirth, length = 1)
 
   set <- createSettings(result_type = "summarise_table_quality", result_id = 1L, study_period = dateRange)
   tablePrefix <- omopgenerics::tmpPrefix()
@@ -91,7 +91,7 @@ summariseTableQuality <- function(cdm,
       res$endBeforeStart <- summariseEndBeforeStart(omopTable = omopTable, strata = stratification, start_date_name = start_date_name, end_date_name = end_date_name)
     }
     if (startBeforeBirth) {
-      res$birthDate <- summariseBirthDate(cdm = cdm, omopTable = omopTable, strata = stratification, start_date_name = start_date_name)
+      res$startBeforeBirth <- summariseStartBeforeBirth(cdm = cdm, omopTable = omopTable, strata = stratification, start_date_name = start_date_name)
     }
     res <- dplyr::bind_rows(res)
 
@@ -136,7 +136,7 @@ summariseEndBeforeStart <- function(omopTable, strata, start_date_name, end_date
   return(result)
 }
 
-summariseBirthDate <- function(cdm, omopTable, strata, start_date_name) {
+summariseStartBeforeBirth <- function(cdm, omopTable, strata, start_date_name) {
 
   result <- omopTable |> dplyr::left_join(cdm$person |> dplyr::select("person_id", "birth_datetime" ), by = "person_id") |>
     dplyr::filter(as.Date(.data[[start_date_name]]) < as.Date(.data$birth_datetime)) |>
