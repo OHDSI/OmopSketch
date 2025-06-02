@@ -1,3 +1,6 @@
+# OmopSketch 0.4.0.900
+- Table top concept counts by @cecicampanile @catalamarti #392
+  
 # OmopSketch 0.4.0
 
 -   "sex" and "age" output in summariseInObservation by @cecicampanile #358

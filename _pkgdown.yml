@@ -11,6 +11,9 @@ navbar:
       - changelog
       - example-app
   components:
+    changelog:
+      text: "Changelog"
+      href: news/index.html
     example-app:
       text: "Characterisation synthetic datasets"
       href: https://dpa-pde-oxford.shinyapps.io/OmopSketchCharacterisation/
