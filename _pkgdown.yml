@@ -40,8 +40,6 @@ reference:
   - summariseRecordCount
   - plotRecordCount
   - tableRecordCount
-  - summariseMissingData
-  - tableMissingData
 - subtitle: Observation Periods
   desc: Summarise and plot the observation period table in the OMOP Common Data Model
 - contents:
@@ -58,6 +56,12 @@ reference:
   - plotConceptSetCounts
   - summariseConceptIdCounts
   - tableConceptIdCounts
+- subtitle: Quality
+  desc: Summarise data quality of the tables in the OMOP Common Data Model
+- contents:
+ - summariseMissingData
+ - tableMissingData
+ - summariseTableQuality
 - subtitle: Mock Database
   desc: Create a mock database to test the OmopSketch package
 - contents:

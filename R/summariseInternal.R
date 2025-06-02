@@ -249,6 +249,4 @@ strataCols <- function(sex = FALSE, ageGroup = NULL, interval = "overall") {
   c(names(ageGroup), "sex"[sex], "interval"[interval != "overall"])
 }
 
-summariseEndBeforeStart <- function(omopTable,  interval = "overall", sex = FALSE, ageGroup = NULL) {
 
-}
