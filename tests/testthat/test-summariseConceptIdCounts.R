@@ -102,6 +102,7 @@ test_that("dateRange argument works", {
   expect_equal(colnames(settings(y)), colnames(settings(x)))
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
+
 test_that("sample argument works", {
   skip_on_cran()
   # Load mock database ----
@@ -148,9 +149,6 @@ test_that("tableConceptIdCounts() works", {
   expect_warning(tableConceptIdCounts(summariseConceptIdCounts(cdm, "condition_occurrence"), display = "missing source", type = "reactable"))
   expect_warning(tableConceptIdCounts(summariseConceptIdCounts(cdm, "condition_occurrence"), display = "missing standard", type = "reactable"))
 
-
-
-
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
 
@@ -179,8 +177,6 @@ test_that("interval argument works", {
     cdm = cdm,
     interval = "months"
   ))
-
-
 
   m_quarters <- m |>
     omopgenerics::splitAdditional() |>
@@ -266,4 +262,25 @@ test_that("interval argument works", {
 
   expect_equal(q_year |> sortTibble(), y_year |> sortTibble())
   PatientProfiles::mockDisconnect(cdm = cdm)
+})
+
+test_that("tableTopConceptCounts works", {
+  skip_on_cran()
+  cdm <- cdmEunomia()
+
+  expect_no_error(result <- summariseConceptIdCounts(cdm, "drug_exposure", sex = TRUE, ageGroup = list(c(0,50))))
+  expect_no_error(tableTopConceptCounts(result))
+  expect_no_error(tableTopConceptCounts(result, top = 5))
+  expect_error(tableTopConceptCounts(result, top = 0.5))
+  expect_no_error(tableTopConceptCounts(result, top = 10000000))
+
+  result <- summariseConceptIdCounts(cdm, "drug_exposure")
+  result <- bind(result, result |> dplyr::mutate(cdm_name = "mock"))
+
+  expect_no_error(tableTopConceptCounts(result))
+  expect_no_error(tableTopConceptCounts(result, type = "datatable"))
+  expect_no_error(tableTopConceptCounts(result, type = "flextable"))
+  expect_no_error(result <- summariseConceptIdCounts(cdm, "drug_exposure", interval = "months"))
+  expect_no_error(tableTopConceptCounts(result))
+
 })

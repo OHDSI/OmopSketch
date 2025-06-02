@@ -33,6 +33,8 @@ databaseCharacteristics <- function(cdm,
                                     ...) {
 
   rlang::check_installed("CohortCharacteristics")
+  rlang::check_installed("CohortConstructor")
+
 
   cdm <- omopgenerics::validateCdmArgument(cdm)
   opts <- omopgenerics::omopTables()

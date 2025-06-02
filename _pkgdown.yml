@@ -10,7 +10,11 @@ navbar:
     - articles
     - changelog
     - example-app
+
   components:
+    changelog:
+      text: "Changelog"
+      href: news/index.html
     example-app:
       text: "Characterisation synthetic datasets"
       href: https://dpa-pde-oxford.shinyapps.io/OmopSketchCharacterisation/
@@ -56,6 +60,7 @@ reference:
   - plotConceptSetCounts
   - summariseConceptIdCounts
   - tableConceptIdCounts
+  - tableTopConceptCounts
 - subtitle: Quality
   desc: Summarise data quality of the tables in the OMOP Common Data Model
 - contents:

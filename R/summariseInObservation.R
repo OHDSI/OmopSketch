@@ -413,6 +413,7 @@ createSummarisedResultAge <- function(observationPeriod, cdm, start_date_name, e
   }
 
   res <- purrr::map(strata, \(stratax) {
+
     x |>
       dplyr::group_by(dplyr::across(dplyr::all_of(c("age_group", stratax, additional_column)))) |>
       dplyr::summarise(estimate_value = stats::median(.data$age), .groups = "drop") |>
