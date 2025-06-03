@@ -50,6 +50,10 @@ summariseMissingInternal <- function(x, strata, columns, cdm, table) {
       dplyr::collect() |>
       dplyr::mutate(dplyr::across(
         dplyr::all_of(names(q_na)),
+        ~ tidyr::replace_na(.x, 0L)
+      )) |>
+      dplyr::mutate(dplyr::across(
+        dplyr::all_of(names(q_na)),
         \(x) sprintf("%.2f", 100 * as.numeric(x) / as.numeric(.data$total_counts)),
         .names = "percentage_{.col}"
       )) |>
@@ -84,6 +88,10 @@ summariseMissingInternal <- function(x, strata, columns, cdm, table) {
         dplyr::group_by(dplyr::across(dplyr::all_of(stratak))) |>
         dplyr::summarise(total_counts = dplyr::n(), !!!q_zero, .groups = "drop") |>
         dplyr::collect() |>
+        dplyr::mutate(dplyr::across(
+          dplyr::all_of(names(q_zero)),
+          ~ tidyr::replace_na(.x, 0L)
+        )) |>
         dplyr::mutate(dplyr::across(
           dplyr::all_of(names(q_zero)),
           \(x) sprintf("%.2f", 100 * as.numeric(x) / as.numeric(.data$total_counts)),
