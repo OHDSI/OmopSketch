@@ -58,8 +58,6 @@ reference:
 - subtitle: Counts
   desc: Summarise concept code use in the OMOP Common Data Model
 - contents:
-  - summariseConceptSetCounts
-  - plotConceptSetCounts
   - summariseConceptIdCounts
   - tableConceptIdCounts
   - tableTopConceptCounts
@@ -75,3 +73,5 @@ reference:
   desc: These functions have been deprecated
 - contents:
   - summariseConceptCounts
+  - summariseConceptSetCounts
+  - plotConceptSetCounts

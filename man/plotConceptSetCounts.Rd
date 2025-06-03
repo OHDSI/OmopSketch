@@ -27,8 +27,7 @@ library(dplyr)
 
 cdm <- mockOmopSketch()
 
-result <- cdm |>
-  summariseConceptSetCounts(
+result <- summariseConceptSetCounts(cdm = cdm,
     conceptSet = list(
       "Renal agenesis" = 194152,
       "Manic mood" = c(4226696, 4304866, 37110496, 40371897)

@@ -8,7 +8,7 @@
 #' \donttest{
 #' cdm <- mockOmopSketch(numberIndividuals = 10)
 #'
-#' summariseOmopSnapshot(cdm)
+#' summariseOmopSnapshot(cdm = cdm)
 #' }
 summariseOmopSnapshot <- function(cdm) {
   cdm <- omopgenerics::validateCdmArgument(cdm)
