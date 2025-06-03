@@ -169,8 +169,7 @@ summariseMissingDataFromTable <- function(table, cdm, col, dateRange, sample, se
   resultsOmopTable <- omopTable |>
     # sample if needed
     sampleOmopTable(
-      sample = sample,
-      name = omopgenerics::uniqueTableName(prefix)
+      sample = sample
     ) |>
     # add stratifications
     addStratifications(

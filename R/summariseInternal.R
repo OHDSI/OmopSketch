@@ -122,7 +122,7 @@ summariseMissingInternal <- function(x, strata, columns, cdm, table) {
   }) |>
     dplyr::bind_rows()
 }
-sampleOmopTable <- function(x, sample, name) {
+sampleOmopTable <- function(x, sample) {
   if (is.null(sample)) {
     return(x)
   }
@@ -248,3 +248,5 @@ warningEmptyStudyPeriod <- function(omopTable) {
 strataCols <- function(sex = FALSE, ageGroup = NULL, interval = "overall") {
   c(names(ageGroup), "sex"[sex], "interval"[interval != "overall"])
 }
+
+
