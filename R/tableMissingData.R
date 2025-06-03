@@ -46,5 +46,5 @@ tableMissingData <- function(result,
       rename = c("Database name" = "cdm_name", "Column name" = "variable_name"),
       groupColumn = c("omop_table", omopgenerics::strataColumns(result)),
       hide = c("variable_level")
-    )
+    ) |> suppressMessages()
 }

@@ -53,7 +53,7 @@ test_that("summariseMissingData() works", {
     dplyr::compute(name = "procedure_occurrence", temporary = FALSE)
 
   expect_warning(summariseMissingData(cdm, "procedure_occurrence", col = "procedure_concept_id", ageGroup = list(c(0, 50))))
-  expect_no_error(summariseMissingData(cdm, "procedure_occurrence", col = "procedure_concept_id", ageGroup = list(c(0, 50)), sample = 100))
+  expect_warning(summariseMissingData(cdm, "procedure_occurrence", col = "procedure_concept_id", ageGroup = list(c(0, 50)), sample = 100))
 })
 
 test_that("dateRange argument works", {
@@ -340,7 +340,7 @@ test_that("summariseMissingData() works", {
     dplyr::compute(name = "procedure_occurrence", temporary = FALSE)
 
   expect_warning(summariseMissingData(cdm, "procedure_occurrence", col = "procedure_concept_id", ageGroup = list(c(0, 50))))
-  expect_no_error(summariseMissingData(cdm, "procedure_occurrence", col = "procedure_concept_id", ageGroup = list(c(0, 50)), sample = 100))
+  expect_warning(summariseMissingData(cdm, "procedure_occurrence", col = "procedure_concept_id", ageGroup = list(c(0, 50)), sample = 100))
 })
 
 test_that("dateRange argument works", {

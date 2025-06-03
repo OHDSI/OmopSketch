@@ -19,7 +19,7 @@ test_that("summariseRecordCount() works", {
   expect_warning(de <- summariseRecordCount(cdm, "device_exposure"))
   expect_no_error(o <- summariseRecordCount(cdm, "observation"))
 
-  expect_no_error(all <- summariseRecordCount(cdm, c(
+  expect_warning(all <- summariseRecordCount(cdm, c(
     "condition_occurrence",
     "device_exposure", "observation"
   )))
