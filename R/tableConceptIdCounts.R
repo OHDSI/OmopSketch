@@ -18,8 +18,8 @@
 #' con <- dbConnect(duckdb(), eunomiaDir())
 #' cdm <- cdmFromCon(con = con, cdmSchema = "main", writeSchema = "main")
 #'
-#' result <- summariseConceptIdCounts(cdm, "condition_occurrence")
-#' result |> tableConceptIdCounts()
+#' result <- summariseConceptIdCounts(cdm = cdm, omopTableName = "condition_occurrence")
+#' tableConceptIdCounts(result = result, display = "standard")
 #' }
 tableConceptIdCounts <- function(result,
                                  display = "overall",

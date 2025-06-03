@@ -35,6 +35,11 @@ summariseConceptSetCounts <- function(cdm,
                                       sex = FALSE,
                                       ageGroup = NULL,
                                       dateRange = NULL) {
+  lifecycle::deprecate_warn(
+    when = "0.5.0",
+    what = "summariseConceptSetCounts()",
+    with = NULL
+  )
   # initial check
   cdm <- omopgenerics::validateCdmArgument(cdm)
   omopgenerics::assertChoice(countBy, choices = c("record", "person"))

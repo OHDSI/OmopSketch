@@ -31,8 +31,7 @@ summarisedResult <- summariseRecordCount(
   sex = TRUE
 )
 
-summarisedResult |>
-  tableRecordCount()
+tableRecordCount(result = summarisedResult)
 
 PatientProfiles::mockDisconnect(cdm = cdm)
 }
