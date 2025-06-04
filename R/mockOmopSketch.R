@@ -37,10 +37,9 @@ mockOmopSketch <- function(con = NULL,
     writeSchema <- "main"
   }
 
-  cdm <- omock::emptyCdmReference(cdmName = "mockOmopSketch") |>
+  cdm <- omock::mockCdmReference(cdmName = "mockOmopSketch", vocabularySet = "eunomia") |>
     omock::mockPerson(nPerson = numberIndividuals, seed = seed) |>
     omock::mockObservationPeriod(seed = seed) |>
-    omock::mockVocabularyTables() |>
     omock::mockConditionOccurrence(seed = seed) |>
     omock::mockDeath(seed = seed) |>
     omock::mockDrugExposure(seed = seed) |>
