@@ -301,8 +301,9 @@ summariseRecordsPerPerson <- function(x, den, strata, estimates) {
       nm <- omopgenerics::uniqueTableName(prefix = prefix)
       resultx <- res |>
         dplyr::group_by(dplyr::across(dplyr::all_of(c("person_id", stratax)))) |>
-        dplyr::summarise(n = sum(.data$n, na.rm = TRUE), .groups = "drop") |>
-        dplyr::compute(name = nm, temporary = FALSE)
+        dplyr::summarise(n = sum(.data$n, na.rm = TRUE), .groups = "drop")  |>
+        dplyr::collect()
+        # dplyr::compute(name = nm, temporary = FALSE)
     } else {
       resultx <- res
     }
