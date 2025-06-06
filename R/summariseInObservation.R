@@ -38,11 +38,12 @@ summariseInObservation <- function(observationPeriod,
                                    output = "record",
                                    ageGroup = NULL,
                                    sex = FALSE, dateRange = NULL) {
-  tablePrefix <- omopgenerics::tmpPrefix()
 
-  # Initial checks ----
-  omopgenerics::assertClass(observationPeriod, "omop_table")
-  omopgenerics::assertTrue(omopgenerics::tableName(observationPeriod) == "observation_period")
+  tablePrefix <- omopgenerics::tmpPrefix()
+  cdm <- omopgenerics::cdmReference(observationPeriod)
+  omopgenerics::assertTrue(all(omopgenerics::omopColumns(table = "observation_period", version = omopgenerics::cdmVersion(cdm)) %in% colnames(observationPeriod)))
+  observationPeriod <- omopgenerics::validateCdmTable(observationPeriod)
+
   dateRange <- validateStudyPeriod(omopgenerics::cdmReference(observationPeriod), dateRange)
 
   if (omopgenerics::isTableEmpty(observationPeriod)) {
@@ -66,7 +67,7 @@ summariseInObservation <- function(observationPeriod,
 
 
   # Create initial variables ----
-  cdm <- omopgenerics::cdmReference(observationPeriod)
+
   observationPeriod <- addStrataToPeopleInObservation(cdm, ageGroup, sex, tablePrefix, dateRange)
 
   # Calculate denominator ----
