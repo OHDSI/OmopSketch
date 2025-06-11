@@ -80,6 +80,7 @@ reference:
     desc: Characterise the database
     contents:
       - databaseCharacteristics
+      - shinyCharacteristics
 
   - subtitle: Deprecated functions
     desc: These functions have been deprecated
