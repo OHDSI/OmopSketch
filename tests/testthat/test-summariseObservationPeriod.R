@@ -168,14 +168,14 @@ test_that("check summariseObservationPeriod works", {
     dplyr::compute(name = "observation_period", temporary = FALSE)
 
   expect_no_error(resEmpty <- summariseObservationPeriod(cdm$observation_period))
-  expect_true(nrow(resEmpty) == 2)
-  expect_identical(unique(resEmpty$estimate_value), "0")
+  expect_true(nrow(resEmpty) == 0)
+
 
   # table works
   expect_no_error(tableObservationPeriod(resAll))
   expect_no_error(tableObservationPeriod(resAll, type = "datatable"))
   expect_no_error(tableObservationPeriod(resOne))
-  expect_no_error(tableObservationPeriod(resEmpty))
+  expect_warning(tableObservationPeriod(resEmpty))
 
   # plot works
   expect_no_error(plotObservationPeriod(resAll))
