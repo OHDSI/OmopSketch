@@ -238,6 +238,26 @@ restrictStudyPeriod <- function(omopTable, dateRange) {
 
   warningEmptyStudyPeriod(omopTable)
 }
+
+trimStudyPeriod <- function(omopTable, dateRange) {
+  if (!is.null(dateRange)) {
+    table <- omopgenerics::tableName(omopTable)
+    start_date_col <- omopgenerics::omopColumns(table = table, field = "start_date")
+    end_date_col <- omopgenerics::omopColumns(table = table, field = "end_date")
+    start_date <- dateRange[1]
+    end_date <- dateRange[2]
+
+    omopTable <- omopTable |>
+      dplyr::mutate(
+        !!start_date_col := dplyr::if_else(.data[[start_date_col]] < .env$start_date, .env$start_date, .data[[start_date_col]]),
+        !!end_date_col := dplyr::if_else(.data[[end_date_col]] > .env$end_date, .env$end_date, .data[[end_date_col]])
+      ) |>
+      dplyr::filter(.data[[start_date_col]] <= .data[[end_date_col]])
+  }
+  warningEmptyStudyPeriod(omopTable)
+}
+
+
 warningEmptyStudyPeriod <- function(omopTable) {
   if (omopgenerics::isTableEmpty(omopTable)) {
     cli::cli_warn(paste0(omopgenerics::tableName(omopTable), " omop table is empty after application of date range."))
@@ -249,4 +269,78 @@ strataCols <- function(sex = FALSE, ageGroup = NULL, interval = "overall") {
   c(names(ageGroup), "sex"[sex], "interval"[interval != "overall"])
 }
 
+summariseSumInternal <- function(x, strata, variable) {
+
+  purrr::map(strata, \(stratak) {
+    x |>
+      dplyr::group_by(dplyr::across(dplyr::all_of(stratak))) |>
+      dplyr::summarise(estimate_value = sum(.data[[variable]], na.rm = TRUE), .groups = "drop") |>
+      dplyr::collect() |>
+      dplyr::mutate(estimate_value =  sprintf("%i", as.integer(.data$estimate_value))) |>
+      dplyr::mutate(estimate_type = "integer", estimate_name = "count") |>
+      dplyr::select(dplyr::all_of(c(
+        stratak, "estimate_name", "estimate_type",
+        "estimate_value"
+      )))
+  }) |>
+    dplyr::bind_rows()
+}
+addStrataToPeopleInObservation <- function(cdm, ageGroup, sex, tablePrefix, dateRange) {
+  demographics <- cdm |>
+    CohortConstructor::demographicsCohort(
+      name = paste0(tablePrefix, "demographics_table"),
+      sex = NULL,
+      ageRange = ageGroup,
+      minPriorObservation = NULL
+    ) |>
+    suppressMessages()
+
+  if (!is.null(dateRange)) {
+    demographics <- demographics |>
+      CohortConstructor::trimToDateRange(dateRange = dateRange)
+    warningEmptyStudyPeriod(demographics)
+  }
+  if (sex) {
+    demographics <- demographics |>
+      PatientProfiles::addSexQuery()
+  } else {
+    demographics <- demographics |>
+      dplyr::mutate("sex" = "overall")
+  }
+
+  if (!is.null(ageGroup)) {
+    set <- omopgenerics::settings(demographics) |>
+      dplyr::select("cohort_definition_id", dplyr::any_of("age_range"))
+    set <- set |>
+      dplyr::left_join(
+        dplyr::tibble(
+          "age_range" = purrr::map_chr(ageGroup, \(x) paste0(x[1], "_", x[2])),
+          "age_group" = names(ageGroup)
+        ),
+        by = "age_range"
+      ) |>
+      dplyr::mutate("age_group" = dplyr::if_else(
+        is.na(.data$age_group), .data$age_range, .data$age_group
+      )) |>
+      dplyr::select(!"age_range")
+    nm <- paste0(tablePrefix, "_settings")
+    cdm <- omopgenerics::insertTable(cdm = cdm, name = nm, table = set)
+    demographics <- demographics |>
+      dplyr::left_join(cdm[[nm]], by = "cohort_definition_id")
+  } else {
+    demographics <- demographics |>
+      dplyr::mutate("age_group" = "overall")
+  }
+
+  nm <- paste0(tablePrefix, "_demographics")
+  demographics <- demographics |>
+    dplyr::select(
+      "observation_period_start_date" = "cohort_start_date",
+      "observation_period_end_date" = "cohort_end_date",
+      "person_id" = "subject_id", "age_group", "sex"
+    ) |>
+    dplyr::compute(name = nm, temporary = FALSE)
+
+  return(demographics)
+}
 
