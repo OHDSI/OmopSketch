@@ -41,8 +41,8 @@ summariseInObservation <- function(observationPeriod,
 
   tablePrefix <- omopgenerics::tmpPrefix()
   cdm <- omopgenerics::cdmReference(observationPeriod)
-  omopgenerics::assertTrue(all(omopgenerics::omopColumns(table = "observation_period", version = omopgenerics::cdmVersion(cdm)) %in% colnames(observationPeriod)))
   observationPeriod <- omopgenerics::validateCdmTable(observationPeriod)
+  omopgenerics::assertTrue(all(omopgenerics::omopColumns(table = "observation_period", version = omopgenerics::cdmVersion(cdm)) %in% colnames(observationPeriod)))
 
   dateRange <- validateStudyPeriod(omopgenerics::cdmReference(observationPeriod), dateRange)
 
