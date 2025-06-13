@@ -53,6 +53,7 @@ Suggests:
     remotes,
     rmarkdown,
     RPostgres,
+    shinyWidgets,
     testthat (>= 3.0.0),
     withr,
     omock (>= 0.3.0),
