@@ -40,10 +40,10 @@ summariseObservationPeriod <- function(observationPeriod,
                                        dateRange = NULL) {
   # input checks
 
-  omopgenerics::assertTable(observationPeriod,
-    class = "cdm_table",
-    columns = omopgenerics::omopColumns(table = "observation_period", version = omopgenerics::cdmVersion(cdm))
-  )
+  omopgenerics::validateCdmTable(observationPeriod)
+  cdm <- omopgenerics::cdmReference(observationPeriod)
+  omopgenerics::assertTable(observationPeriod, class = "cdm_table",
+                            columns = omopgenerics::omopColumns(table = "observation_period", version = omopgenerics::cdmVersion(cdm)))
   omopgenerics::assertLogical(sex)
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup)
   dateRange <- validateStudyPeriod(cdm, dateRange)
@@ -65,7 +65,6 @@ summariseObservationPeriod <- function(observationPeriod,
     return(omopgenerics::emptySummarisedResult(settings = set))
   }
 
-  cdm <- omopgenerics::cdmReference(observationPeriod)
 
   start_date_name <- omopgenerics::omopColumns(table = "observation_period", field = "start_date")
 
