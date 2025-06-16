@@ -111,108 +111,60 @@ If <code>dateRange</code> is <code>NULL</code>, no restriction is applied.</p></
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="mockOmopSketch.html">mockOmopSketch</a></span><span class="op">(</span>numberIndividuals <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">databaseCharacteristics</span><span class="op">(</span><span class="va">cdm</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The characterisation will focus on the following OMOP tables: person,</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> observation_period, visit_occurrence, condition_occurrence, drug_exposure,</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> procedure_occurrence, device_exposure, measurement, observation, and death</span>
+<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">databaseCharacteristics</span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span>, omopTableNam <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"drug_exposure"</span>, <span class="st">"condition_occurrence"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>sex <span class="op">=</span> <span class="cn">TRUE</span>, ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">50</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">51</span>,<span class="fl">100</span><span class="op">)</span><span class="op">)</span>, interval <span class="op">=</span> <span class="st">"years"</span>, conceptIdCount <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The characterisation will focus on the following OMOP tables: drug_exposure and</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> condition_occurrence</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → Getting cdm snapshot</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Vocabulary version in cdm_source (NA) doesn't match the one in the vocabulary</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> table (mock)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → Getting population characteristics</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Building new trimmed cohort</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding demographics information</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Creating initial cohort</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Trim sex</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Cohort trimmed</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Building new trimmed cohort</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding demographics information</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Creating initial cohort</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Trim sex</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Trim age</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Cohort trimmed</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> adding demographics columns</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> summarising data</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> summarising cohort <span style="color: #0000BB;">general_population</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> summarising cohort <span style="color: #0000BB;">age_group_0_50</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> summarising cohort <span style="color: #0000BB;">age_group_51_100</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> summariseCharacteristics finished!</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → Summarising missing data</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There was 1 warning in `dplyr::filter()`.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> In argument: `as.integer(.data$estimate_value) &gt; 0`.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Caused by warning:</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> NAs introduced by coercion</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>These columns contain missing values, which are not permitted:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">"race_concept_id"</span> and <span style="color: #0000BB;">"ethnicity_concept_id"</span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There was 1 warning in `dplyr::filter()`.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> In argument: `as.integer(.data$estimate_value) &gt; 0`.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Caused by warning:</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> NAs introduced by coercion</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>These columns contain missing values, which are not permitted:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">"period_type_concept_id"</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There was 1 warning in `dplyr::filter()`.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> In argument: `as.integer(.data$estimate_value) &gt; 0`.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Caused by warning:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> NAs introduced by coercion</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There was 1 warning in `dplyr::filter()`.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> In argument: `as.integer(.data$estimate_value) &gt; 0`.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Caused by warning:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> NAs introduced by coercion</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There was 1 warning in `dplyr::filter()`.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> In argument: `as.integer(.data$estimate_value) &gt; 0`.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Caused by warning:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> NAs introduced by coercion</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There was 1 warning in `dplyr::filter()`.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> In argument: `as.integer(.data$estimate_value) &gt; 0`.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Caused by warning:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> NAs introduced by coercion</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>device_exposureomop table is empty.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There was 1 warning in `dplyr::filter()`.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> In argument: `as.integer(.data$estimate_value) &gt; 0`.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Caused by warning:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> NAs introduced by coercion</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There was 1 warning in `dplyr::filter()`.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> In argument: `as.integer(.data$estimate_value) &gt; 0`.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Caused by warning:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> NAs introduced by coercion</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There was 1 warning in `dplyr::filter()`.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> In argument: `as.integer(.data$estimate_value) &gt; 0`.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Caused by warning:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> NAs introduced by coercion</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> 56 duplicated rows eliminated.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → Summarising clinical records</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Adding variables of interest to <span style="color: #0000BB;">observation_period</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising records per person in <span style="color: #0000BB;">observation_period</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">observation_period</span>: `in_observation` and `type_concept`.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Adding variables of interest to <span style="color: #0000BB;">visit_occurrence</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising records per person in <span style="color: #0000BB;">visit_occurrence</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">visit_occurrence</span>: `in_observation`, `standard_concept`,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Adding variables of interest to <span style="color: #0000BB;">drug_exposure</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising records per person in <span style="color: #0000BB;">drug_exposure</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">drug_exposure</span>: `in_observation`, `standard_concept`,</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   `source_vocabulary`, `domain_id`, and `type_concept`.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Adding variables of interest to <span style="color: #0000BB;">condition_occurrence</span>.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising records per person in <span style="color: #0000BB;">condition_occurrence</span>.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">condition_occurrence</span>: `in_observation`, `standard_concept`,</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   `source_vocabulary`, `domain_id`, and `type_concept`.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Adding variables of interest to <span style="color: #0000BB;">drug_exposure</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising records per person in <span style="color: #0000BB;">drug_exposure</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">drug_exposure</span>: `in_observation`, `standard_concept`,</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   `source_vocabulary`, `domain_id`, and `type_concept`.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Adding variables of interest to <span style="color: #0000BB;">procedure_occurrence</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising records per person in <span style="color: #0000BB;">procedure_occurrence</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">procedure_occurrence</span>: `in_observation`, `standard_concept`,</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   `source_vocabulary`, `domain_id`, and `type_concept`.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>device_exposure is empty.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Adding variables of interest to <span style="color: #0000BB;">measurement</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising records per person in <span style="color: #0000BB;">measurement</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">measurement</span>: `in_observation`, `standard_concept`,</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   `source_vocabulary`, `domain_id`, and `type_concept`.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Adding variables of interest to <span style="color: #0000BB;">observation</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising records per person in <span style="color: #0000BB;">observation</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">observation</span>: `in_observation`, `standard_concept`,</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   `source_vocabulary`, `domain_id`, and `type_concept`.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Adding variables of interest to <span style="color: #0000BB;">death</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising records per person in <span style="color: #0000BB;">death</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">death</span>: `in_observation`, `standard_concept`, `source_vocabulary`,</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   `domain_id`, and `type_concept`.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → Summarising record counts</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>device_exposure omop table is empty after application of date range.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → Summarising in observation records, subjects, person-days, age and sex</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Missing values are always removed in SQL aggregation functions.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Use `na.rm = TRUE` to silence this warning</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → Summarising observation period</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ☺ Database characterisation finished. Code ran in 0 min and 41 sec</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> 1 table created: <span style="color: #0000BB;">"og_005_1748966220"</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ☺ Database characterisation finished. Code ran in 1 min and 0 sec</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> 1 table created: <span style="color: #0000BB;">"og_008_1750079414"</span>.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">PatientProfiles</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/PatientProfiles/reference/mockDisconnect.html" class="external-link">mockDisconnect</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
