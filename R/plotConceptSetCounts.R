@@ -16,8 +16,8 @@
 #' result <- summariseConceptSetCounts(
 #'   cdm = cdm,
 #'   conceptSet = list(
-#'     "Renal agenesis" = 194152L,
-#'     "Manic mood" = c(4226696L, 4304866L, 37110496L, 40371897L)
+#'     "asthma" = c(4051466, 317009) ,
+#'     "rhinitis" = c(4280726, 4048171, 40486433)
 #'   )
 #' )
 #'
