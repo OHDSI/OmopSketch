@@ -22,7 +22,8 @@
 #' cdm <- mockOmopSketch(numberIndividuals = 100)
 #'
 #' result <- summariseMissingData (cdm = cdm,
-#' omopTableName = c("condition_occurrence", "visit_occurrence"))
+#' omopTableName = c("condition_occurrence", "visit_occurrence"),
+#' sample = 10000)
 #'
 #' PatientProfiles::mockDisconnect(cdm)
 #' }
@@ -168,8 +169,7 @@ summariseMissingDataFromTable <- function(table, cdm, col, dateRange, sample, se
   resultsOmopTable <- omopTable |>
     # sample if needed
     sampleOmopTable(
-      sample = sample,
-      name = omopgenerics::uniqueTableName(prefix)
+      sample = sample
     ) |>
     # add stratifications
     addStratifications(

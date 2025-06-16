@@ -5,12 +5,11 @@ template:
 navbar:
   structure:
     left:
-    - home
-    - reference
-    - articles
-    - changelog
-    - example-app
-
+      - home
+      - reference
+      - articles
+      - changelog
+      - example-app
   components:
     changelog:
       text: "Changelog"
@@ -20,58 +19,69 @@ navbar:
       href: https://dpa-pde-oxford.shinyapps.io/OmopSketchCharacterisation/
 
 articles:
-- title: Package functionalities
-  navbar: Package functionalities
-  contents:
-  - summarise_clinical_tables_records
-  - summarise_concept_set_counts
-  - summarise_concept_id_counts
-  - summarise_observation_period
-  - characterisation
-  - missing_data
+  - title: Package functionalities
+    navbar: Package functionalities
+    contents:
+      - summarise_clinical_tables_records
+      - summarise_concept_set_counts
+      - summarise_concept_id_counts
+      - summarise_observation_period
+      - characterisation
+      - missing_data
 
 reference:
-- subtitle: Snapshots
-  desc: Create snapshots of OMOP databases
-- contents:
-  - summariseOmopSnapshot
-  - tableOmopSnapshot
-- subtitle: Clinical Tables
-  desc: Summarise and plot tables in the OMOP Common Data Model
-- contents:
-  - summariseClinicalRecords
-  - tableClinicalRecords
-  - summariseRecordCount
-  - plotRecordCount
-  - tableRecordCount
-  - summariseMissingData
-  - tableMissingData
-- subtitle: Observation Periods
-  desc: Summarise and plot the observation period table in the OMOP Common Data Model
-- contents:
-  - summariseObservationPeriod
-  - plotObservationPeriod
-  - tableObservationPeriod
-  - summariseInObservation
-  - plotInObservation
-  - tableInObservation
-- subtitle: Counts
-  desc: Summarise concept code use in the OMOP Common Data Model
-- contents:
-  - summariseConceptSetCounts
-  - plotConceptSetCounts
-  - summariseConceptIdCounts
-  - tableConceptIdCounts
-  - tableTopConceptCounts
-- subtitle: Mock Database
-  desc: Create a mock database to test the OmopSketch package
-- contents:
-  - mockOmopSketch
-- subtitle: Characterisation
-  desc: Characterise the database
-- contents:
-  - databaseCharacteristics
-- subtitle: Deprecated functions
-  desc: These functions have been deprecated
-- contents:
-  - summariseConceptCounts
+  - subtitle: Snapshots
+    desc: Create snapshots of OMOP databases
+    contents:
+      - summariseOmopSnapshot
+      - tableOmopSnapshot
+
+  - subtitle: Clinical Tables
+    desc: Summarise and plot tables in the OMOP Common Data Model
+    contents:
+      - summariseClinicalRecords
+      - tableClinicalRecords
+      - summariseRecordCount
+      - plotRecordCount
+      - tableRecordCount
+
+  - subtitle: Observation Periods
+    desc: Summarise and plot the observation period table in the OMOP Common Data Model
+    contents:
+      - summariseObservationPeriod
+      - plotObservationPeriod
+      - tableObservationPeriod
+      - summariseInObservation
+      - plotInObservation
+      - tableInObservation
+
+  - subtitle: Counts
+    desc: Summarise concept code use in the OMOP Common Data Model
+    contents:
+      - summariseConceptSetCounts
+      - plotConceptSetCounts
+      - summariseConceptIdCounts
+      - tableConceptIdCounts
+      - tableTopConceptCounts
+
+  - subtitle: Quality
+    desc: Summarise data quality of the tables in the OMOP Common Data Model
+    contents:
+      - summariseMissingData
+      - tableMissingData
+      - summariseTableQuality
+
+  - subtitle: Mock Database
+    desc: Create a mock database to test the OmopSketch package
+    contents:
+      - mockOmopSketch
+
+  - subtitle: Characterisation
+    desc: Characterise the database
+    contents:
+      - databaseCharacteristics
+
+  - subtitle: Deprecated functions
+    desc: These functions have been deprecated
+    contents:
+      - summariseConceptCounts

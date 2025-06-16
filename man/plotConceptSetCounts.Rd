@@ -26,13 +26,15 @@ Plot the concept counts of a summariseConceptSetCounts output.
 library(dplyr)
 
 cdm <- mockOmopSketch()
-result <- cdm |>
-summariseConceptSetCounts(
-conceptSet = list(
-"Sinusitis" = c(4283893, 257012, 40481087, 4294548),
-"Infection" = c(4056621, 4116491, 433125)
+
+result <- summariseConceptSetCounts(
+  cdm = cdm,
+  conceptSet = list(
+    "Renal agenesis" = 194152L,
+    "Manic mood" = c(4226696L, 4304866L, 37110496L, 40371897L)
+  )
 )
-)
+
 result |>
   filter(variable_name == "Number subjects") |>
   plotConceptSetCounts(facet = "codelist_name", colour = "standard_concept_name")

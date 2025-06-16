@@ -46,7 +46,7 @@ library(dplyr, warn.conflicts = FALSE)
 
 cdm <- mockOmopSketch(numberIndividuals = 100)
 
-result <- summariseObservationPeriod(cdm$observation_period)
+result <- summariseObservationPeriod(observationPeriod = cdm$observation_period)
 
 result |>
   glimpse()
