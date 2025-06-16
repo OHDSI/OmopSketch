@@ -50,7 +50,7 @@ summariseMissingInternal <- function(x, strata, columns, cdm, table) {
       dplyr::collect() |>
       dplyr::mutate(dplyr::across(
         dplyr::all_of(names(q_na)),
-        ~ tidyr::replace_na(.x, 0L)
+        ~ dplyr::coalesce(.x, 0L)
       )) |>
       dplyr::mutate(dplyr::across(
         dplyr::all_of(names(q_na)),
@@ -90,7 +90,7 @@ summariseMissingInternal <- function(x, strata, columns, cdm, table) {
         dplyr::collect() |>
         dplyr::mutate(dplyr::across(
           dplyr::all_of(names(q_zero)),
-          ~ tidyr::replace_na(.x, 0L)
+          ~ dplyr::coalesce(.x, 0L)
         )) |>
         dplyr::mutate(dplyr::across(
           dplyr::all_of(names(q_zero)),
@@ -130,7 +130,7 @@ summariseMissingInternal <- function(x, strata, columns, cdm, table) {
   }) |>
     dplyr::bind_rows()
 }
-sampleOmopTable <- function(x, sample, name) {
+sampleOmopTable <- function(x, sample) {
   if (is.null(sample)) {
     return(x)
   }

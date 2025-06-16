@@ -72,7 +72,7 @@ summariseRecordCount <- function(cdm,
 
     # sample table
     omopTable <- omopTable |>
-      sampleOmopTable(sample = sample, name = omopgenerics::uniqueTableName(prefix))
+      sampleOmopTable(sample = sample)
 
     startDate <- omopgenerics::omopColumns(table = table, field = "start_date")
 
