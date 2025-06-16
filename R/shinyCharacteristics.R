@@ -24,7 +24,7 @@
 #' }
 #'
 #' @export
-shinyCharacteristics <- function(result, directory, title = "Characterisation", logo = "ohdsi", theme = "bslib::bs_theme(bootswatch = 'flatly')") {
+shinyCharacteristics <- function(result, directory, title = "Database characterisation", logo = "ohdsi", theme = "bslib::bs_theme(bootswatch = 'flatly')") {
 
   rlang::check_installed("OmopViewer")
 
@@ -38,7 +38,7 @@ shinyCharacteristics <- function(result, directory, title = "Characterisation", 
   # subset to result_type of interest
   result <- result |>
     omopgenerics::filterSettings(
-      .data$result_type %in% result_types
+      .data$result_type %in% .env$result_types
     )
 
   # check if it is empty
@@ -47,7 +47,7 @@ shinyCharacteristics <- function(result, directory, title = "Characterisation", 
     return(emptyPlot())
   }
 
-  conceptIdCounts <- "summarise_concept_id_counts" %in% dplyr::pull(omopgenerics::settings(result), .data$result_type)
+  conceptIdCounts <- "summarise_concept_id_counts" %in% dplyr::pull(omopgenerics::settings(result), "result_type")
 
   panelDetails <- OmopViewer::panelDetailsFromResult(result = result)
 
