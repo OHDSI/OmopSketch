@@ -39,27 +39,21 @@ summariseInObservation <- function(observationPeriod,
                                    ageGroup = NULL,
                                    sex = FALSE, dateRange = NULL) {
 
-  tablePrefix <- omopgenerics::tmpPrefix()
-
-  observationPeriod <- omopgenerics::validateCdmTable(observationPeriod)
-
-  omopgenerics::assertTrue(all(omopgenerics::omopColumns(table = "observation_period", version = omopgenerics::cdmVersion(cdm)) %in% colnames(observationPeriod)))
-
+  omopgenerics::assertTable(observationPeriod, class = "cdm_table",
+                            columns = omopgenerics::omopColumns(table = "observation_period", version = omopgenerics::cdmVersion(cdm)))
+  omopgenerics::assertChoice(interval, c("overall", "years", "quarters", "months"), length = 1)
   dateRange <- validateStudyPeriod(omopgenerics::cdmReference(observationPeriod), dateRange)
-
-  if (omopgenerics::isTableEmpty(observationPeriod)) {
-    cli::cli_warn("observation_period table is empty. Returning an empty summarised result.")
-    return(omopgenerics::emptySummarisedResult(settings = createSettings(result_type = "summarise_in_observation")))
-  }
-
   omopgenerics::assertChoice(output, choices = c("person-days", "record", "person", "age", "sex"), call = parent.frame())
-
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, multipleAgeGroup = FALSE)
-
   omopgenerics::assertLogical(sex, length = 1)
 
   set <- createSettings(result_type = "summarise_in_observation", study_period = dateRange) |>
     dplyr::mutate("interval" = .env$interval)
+
+  if (omopgenerics::isTableEmpty(observationPeriod)) {
+    cli::cli_warn("observation_period table is empty. Returning an empty summarised result.")
+    return(omopgenerics::emptySummarisedResult(settings = set))
+  }
 
   cdm <- omopgenerics::cdmReference(observationPeriod)
 
@@ -67,6 +61,7 @@ summariseInObservation <- function(observationPeriod,
 
   end_date_name <- omopgenerics::omopColumns(table = "observation_period", field = "end_date")
 
+  tablePrefix <- omopgenerics::tmpPrefix()
 
    observationPeriod <- observationPeriod |>
      trimStudyPeriod(dateRange = dateRange)

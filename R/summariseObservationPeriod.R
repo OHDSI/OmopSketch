@@ -39,93 +39,100 @@ summariseObservationPeriod <- function(observationPeriod,
                                        sex = FALSE,
                                        dateRange = NULL) {
   # input checks
-  cdm <- omopgenerics::cdmReference(observationPeriod)
-  observationPeriod <- omopgenerics::validateCdmTable(observationPeriod)
-  omopgenerics::assertTrue(all(omopgenerics::omopColumns(table = "observation_period", version = omopgenerics::cdmVersion(cdm)) %in% colnames(observationPeriod)))
+
+  omopgenerics::assertTable(observationPeriod,
+    class = "cdm_table",
+    columns = omopgenerics::omopColumns(table = "observation_period", version = omopgenerics::cdmVersion(cdm))
+  )
   omopgenerics::assertLogical(sex)
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup)
-
   dateRange <- validateStudyPeriod(cdm, dateRange)
   opts <- PatientProfiles::availableEstimates(
     variableType = "numeric", fullQuantiles = TRUE
   ) |>
     dplyr::pull("estimate_name")
   omopgenerics::assertChoice(estimates, opts, unique = TRUE)
+  omopgenerics::assertLogical(byOrdinal)
+
+
   tablePrefix <- omopgenerics::tmpPrefix()
 
   strata <- c(list(character()), omopgenerics::combineStrata(strataCols(sex = sex, ageGroup = ageGroup)))
 
   set <- createSettings(result_type = "summarise_observation_period", study_period = dateRange)
-  start_date_name <- omopgenerics::omopColumns(table = "observation_period", field = "start_date")
 
   if (omopgenerics::isTableEmpty(observationPeriod)) {
     return(omopgenerics::emptySummarisedResult(settings = set))
   }
 
-    observationPeriod <- observationPeriod |>
-      trimStudyPeriod(dateRange = dateRange)
+  cdm <- omopgenerics::cdmReference(observationPeriod)
 
-    if (is.null(observationPeriod)){
-      return(omopgenerics::emptySummarisedResult(settings = set))
-    }
+  start_date_name <- omopgenerics::omopColumns(table = "observation_period", field = "start_date")
 
-    obs <- observationPeriod |>
-      addSexAgeGroup(sex = sex, ageGroup = ageGroup, indexDate = start_date_name) |>
-      dplyr::compute(name = omopgenerics::uniqueTableName(prefix = tablePrefix), temporary = FALSE) |>
-      dplyr::select(
-        "person_id", dplyr::any_of(c("sex", "age_group")),
-        "obs_start" = "observation_period_start_date",
-        "obs_end" = "observation_period_end_date"
-      ) |>
-      dplyr::group_by(.data$person_id, dplyr::across(dplyr::any_of(c("sex", "age_group")))) |>
-      dplyr::arrange(.data$obs_start) |>
-      dplyr::mutate("next_start" = dplyr::lead(.data$obs_start)) %>%
-      dplyr::mutate(
-        "duration" = as.integer(!!CDMConnector::datediff("obs_start", "obs_end")) + 1L,
-        "next_obs" = as.integer(!!CDMConnector::datediff("obs_end", "next_start")),
-        "id" = as.integer(dplyr::row_number())
-      ) |>
-      dplyr::ungroup() |>
-      dplyr::select("person_id", "id", "duration", "next_obs", dplyr::any_of(c("sex", "age_group"))) |>
-      dplyr::collect()
-    if (all(is.na(obs$next_obs))) {
-      obs <- obs |>
-        dplyr::select(!"next_obs")
-    }
+  observationPeriod <- observationPeriod |>
+    trimStudyPeriod(dateRange = dateRange)
 
-    if (dim(obs)[1] == 0) {
-      return(omopgenerics::emptySummarisedResult(settings = set))
-    }
+  if (is.null(observationPeriod)) {
+    return(omopgenerics::emptySummarisedResult(settings = set))
+  }
 
-    obsSr <- obs |>
-      PatientProfiles::summariseResult(
-        strata = strata,
-        group = "id"[byOrdinal],
-        includeOverallGroup = TRUE,
-        includeOverallStrata = TRUE,
-        variables = c("duration", "next_obs"),
-        estimates = estimates
-      ) |>
-      suppressMessages() |>
-      dplyr::mutate(variable_name = dplyr::if_else(.data$variable_name == "number records", "Number records",
-        dplyr::if_else(.data$variable_name == "number subjects", "Number subjects", .data$variable_name)
-      )) |>
-      dplyr::union_all(
-        obs |>
-          dplyr::group_by(.data$person_id, dplyr::across(dplyr::any_of(c("sex", "age_group")))) |>
-          dplyr::tally(name = "n") |>
-          dplyr::ungroup() |>
-          PatientProfiles::summariseResult(
-            variables = c("n"),
-            estimates = estimates,
-            counts = F,
-            strata = strata
-          ) |>
-          suppressMessages()
-      ) |>
-      addOrdinalLevels(byOrdinal = byOrdinal) |>
-      dplyr::filter(.data$variable_name != "Number records" | .data$group_level == "all") |>
-      arrangeSr(estimates)
+  obs <- observationPeriod |>
+    addSexAgeGroup(sex = sex, ageGroup = ageGroup, indexDate = start_date_name) |>
+    dplyr::compute(name = omopgenerics::uniqueTableName(prefix = tablePrefix), temporary = FALSE) |>
+    dplyr::select(
+      "person_id", dplyr::any_of(c("sex", "age_group")),
+      "obs_start" = "observation_period_start_date",
+      "obs_end" = "observation_period_end_date"
+    ) |>
+    dplyr::group_by(.data$person_id, dplyr::across(dplyr::any_of(c("sex", "age_group")))) |>
+    dplyr::arrange(.data$obs_start) |>
+    dplyr::mutate("next_start" = dplyr::lead(.data$obs_start)) %>%
+    dplyr::mutate(
+      "duration" = as.integer(!!CDMConnector::datediff("obs_start", "obs_end")) + 1L,
+      "next_obs" = as.integer(!!CDMConnector::datediff("obs_end", "next_start")),
+      "id" = as.integer(dplyr::row_number())
+    ) |>
+    dplyr::ungroup() |>
+    dplyr::select("person_id", "id", "duration", "next_obs", dplyr::any_of(c("sex", "age_group"))) |>
+    dplyr::collect()
+  if (all(is.na(obs$next_obs))) {
+    obs <- obs |>
+      dplyr::select(!"next_obs")
+  }
+
+  if (dim(obs)[1] == 0) {
+    return(omopgenerics::emptySummarisedResult(settings = set))
+  }
+
+  obsSr <- obs |>
+    PatientProfiles::summariseResult(
+      strata = strata,
+      group = "id"[byOrdinal],
+      includeOverallGroup = TRUE,
+      includeOverallStrata = TRUE,
+      variables = c("duration", "next_obs"),
+      estimates = estimates
+    ) |>
+    suppressMessages() |>
+    dplyr::mutate(variable_name = dplyr::if_else(.data$variable_name == "number records", "Number records",
+      dplyr::if_else(.data$variable_name == "number subjects", "Number subjects", .data$variable_name)
+    )) |>
+    dplyr::union_all(
+      obs |>
+        dplyr::group_by(.data$person_id, dplyr::across(dplyr::any_of(c("sex", "age_group")))) |>
+        dplyr::tally(name = "n") |>
+        dplyr::ungroup() |>
+        PatientProfiles::summariseResult(
+          variables = c("n"),
+          estimates = estimates,
+          counts = F,
+          strata = strata
+        ) |>
+        suppressMessages()
+    ) |>
+    addOrdinalLevels(byOrdinal = byOrdinal) |>
+    dplyr::filter(.data$variable_name != "Number records" | .data$group_level == "all") |>
+    arrangeSr(estimates)
 
   obsSr <- obsSr |>
     dplyr::mutate(
@@ -146,33 +153,35 @@ summariseObservationPeriod <- function(observationPeriod,
 
 addOrdinalLevels <- function(x, byOrdinal) {
   if (byOrdinal) {
-  group_cols <- omopgenerics::groupColumns(x)
-  x <- x |> omopgenerics::splitGroup()
+    group_cols <- omopgenerics::groupColumns(x)
+    x <- x |> omopgenerics::splitGroup()
 
-  xx <- suppressWarnings(as.integer(x$id))
-  desena <- (floor(xx / 10)) %% 10
-  unitat <- xx %% 10
-  val <- rep("all", length(xx))
-  id0 <- !is.na(xx)
-  val[id0] <- paste0(xx[id0], "th")
-  id <- id0 & desena != 1L & unitat == 1L
-  val[id] <- paste0(xx[id], "st")
-  id <- id0 & desena != 1L & unitat == 2L
-  val[id] <- paste0(xx[id], "nd")
-  id <- id0 & desena != 1L & unitat == 3L
-  val[id] <- paste0(xx[id], "rd")
+    xx <- suppressWarnings(as.integer(x$id))
+    desena <- (floor(xx / 10)) %% 10
+    unitat <- xx %% 10
+    val <- rep("all", length(xx))
+    id0 <- !is.na(xx)
+    val[id0] <- paste0(xx[id0], "th")
+    id <- id0 & desena != 1L & unitat == 1L
+    val[id] <- paste0(xx[id], "st")
+    id <- id0 & desena != 1L & unitat == 2L
+    val[id] <- paste0(xx[id], "nd")
+    id <- id0 & desena != 1L & unitat == 3L
+    val[id] <- paste0(xx[id], "rd")
 
-  x <- x |>
-    dplyr::mutate(
-      "group_level" = .env$val,
-      "group_name" = "observation_period_ordinal"
-    ) |>
-    dplyr::select(-c("id"))
+    x <- x |>
+      dplyr::mutate(
+        "group_level" = .env$val,
+        "group_name" = "observation_period_ordinal"
+      ) |>
+      dplyr::select(-c("id"))
   } else {
-  x <- x |>
-      dplyr::mutate("group_level" = "all",
-                    "group_name" = "observation_period_ordinal")
-}
+    x <- x |>
+      dplyr::mutate(
+        "group_level" = "all",
+        "group_name" = "observation_period_ordinal"
+      )
+  }
   return(x)
 }
 arrangeSr <- function(x, estimates) {
