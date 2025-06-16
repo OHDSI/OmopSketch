@@ -1,7 +1,7 @@
 #' Create a visual table from a summariseInObservation() result.
 #' @param result A summarised_result object.
-#' @param type Type of formatting output table, either "gt", "reactable" or "datatable".
-#' @return A gt or flextable object with the summarised data.
+#' @param  type Type of formatting output table. See `visOmopResults::tableType()` for allowed options. Default is `"gt"`
+#' @return A formatted table object with the summarised data.
 #' @export
 #' @examples
 #' \donttest{
