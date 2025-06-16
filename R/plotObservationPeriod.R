@@ -15,10 +15,9 @@
 #' \donttest{
 #' cdm <- mockOmopSketch(numberIndividuals = 100)
 #'
-#' result <- summariseObservationPeriod(cdm$observation_period)
+#' result <- summariseObservationPeriod(observationPeriod = cdm$observation_period)
 #'
-#' result |>
-#'   plotObservationPeriod(
+#' plotObservationPeriod(result = result,
 #'     variableName = "Duration in days",
 #'     plotType = "boxplot"
 #'   )

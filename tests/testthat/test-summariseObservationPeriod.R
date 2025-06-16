@@ -168,14 +168,14 @@ test_that("check summariseObservationPeriod works", {
     dplyr::compute(name = "observation_period", temporary = FALSE)
 
   expect_no_error(resEmpty <- summariseObservationPeriod(cdm$observation_period))
-  expect_true(nrow(resEmpty) == 2)
-  expect_identical(unique(resEmpty$estimate_value), "0")
+  expect_true(nrow(resEmpty) == 0)
+
 
   # table works
   expect_no_error(tableObservationPeriod(resAll))
   expect_no_error(tableObservationPeriod(resAll, type = "datatable"))
   expect_no_error(tableObservationPeriod(resOne))
-  expect_no_error(tableObservationPeriod(resEmpty))
+  expect_warning(tableObservationPeriod(resEmpty))
 
   # plot works
   expect_no_error(plotObservationPeriod(resAll))
@@ -541,8 +541,12 @@ test_that("dateRnge argument works", {
   checkResultType(z, "summarise_observation_period")
   expect_equal(colnames(settings(z)), colnames(settings(x)))
 
-
-
+  ageGroup <- lapply(split(0:99, (0:99) %/% 2), c)
+  expect_no_error(result <- summariseObservationPeriod(cdm$observation_period, ageGroup = ageGroup, dateRange = as.Date(c("2015-01-01", "2018-01-01"))))
+  x <- result |> omopgenerics::splitStrata() |> dplyr::filter(age_group == "overall", variable_name == "Number records") |> dplyr::pull(estimate_value) |> as.numeric()
+  y <- cdm$observation_period |> dplyr::filter(.data$observation_period_end_date >= as.Date("2015-01-01") & .data$observation_period_start_date <= as.Date("2018-01-01") ) |>
+    dplyr::tally() |> dplyr::pull(n)
+  expect_equal(x,y)
 
   PatientProfiles::mockDisconnect(cdm = cdm)
 })

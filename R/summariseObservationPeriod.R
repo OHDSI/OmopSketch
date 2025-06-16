@@ -21,7 +21,7 @@
 #'
 #' cdm <- mockOmopSketch(numberIndividuals = 100)
 #'
-#' result <- summariseObservationPeriod(cdm$observation_period)
+#' result <- summariseObservationPeriod(observationPeriod = cdm$observation_period)
 #'
 #' result |>
 #'   glimpse()
@@ -52,15 +52,26 @@ summariseObservationPeriod <- function(observationPeriod,
     dplyr::pull("estimate_name")
   omopgenerics::assertChoice(estimates, opts, unique = TRUE)
   tablePrefix <- omopgenerics::tmpPrefix()
+
   strata <- c(list(character()), omopgenerics::combineStrata(strataCols(sex = sex, ageGroup = ageGroup)))
 
   set <- createSettings(result_type = "summarise_observation_period", study_period = dateRange)
+  start_date_name <- omopgenerics::omopColumns(table = "observation_period", field = "start_date")
 
   if (omopgenerics::isTableEmpty(observationPeriod)) {
-    obsSr <- observationPeriod |>
-      PatientProfiles::summariseResult(variables = NULL, estimates = NULL, counts = TRUE)
-  } else {
-    obs <- addStrataToPeopleInObservation(cdm, ageGroup$age_group, sex, tablePrefix, dateRange) |>
+    return(omopgenerics::emptySummarisedResult(settings = set))
+  }
+
+    observationPeriod <- observationPeriod |>
+      trimStudyPeriod(dateRange = dateRange)
+
+    if (is.null(observationPeriod)){
+      return(omopgenerics::emptySummarisedResult(settings = set))
+    }
+
+    obs <- observationPeriod |>
+      addSexAgeGroup(sex = sex, ageGroup = ageGroup, indexDate = start_date_name) |>
+      dplyr::compute(name = omopgenerics::uniqueTableName(prefix = tablePrefix), temporary = FALSE) |>
       dplyr::select(
         "person_id", dplyr::any_of(c("sex", "age_group")),
         "obs_start" = "observation_period_start_date",
@@ -115,7 +126,6 @@ summariseObservationPeriod <- function(observationPeriod,
       addOrdinalLevels(byOrdinal = byOrdinal) |>
       dplyr::filter(.data$variable_name != "Number records" | .data$group_level == "all") |>
       arrangeSr(estimates)
-  }
 
   obsSr <- obsSr |>
     dplyr::mutate(

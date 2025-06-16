@@ -7,10 +7,9 @@
 #' \donttest{
 #' cdm <- mockOmopSketch(numberIndividuals = 10)
 #'
-#' result <- summariseOmopSnapshot(cdm)
+#' result <- summariseOmopSnapshot(cdm = cdm)
 #'
-#' result |>
-#'   tableOmopSnapshot()
+#' tableOmopSnapshot(result = result)
 #'
 #' PatientProfiles::mockDisconnect(cdm)
 #' }
