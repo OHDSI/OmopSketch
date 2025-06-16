@@ -7,7 +7,7 @@
 shinyCharacteristics(
   result,
   directory,
-  title = "Characterisation",
+  title = "Database characterisation",
   logo = "ohdsi",
   theme = "bslib::bs_theme(bootswatch = 'flatly')"
 )
