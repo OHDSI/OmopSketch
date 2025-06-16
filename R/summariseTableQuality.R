@@ -99,7 +99,7 @@ summariseTableQuality <- function(cdm,
       return(omopgenerics::emptySummarisedResult(settings = set))
     }
 
-    res <- res |> dplyr::bind_rows(res |> dplyr::left_join(denominator |> dplyr::select(dplyr::any_of(strata), estimate_type, denominator = estimate_value), by = c("estimate_type", strata)) |>
+    res <- res |> dplyr::bind_rows(res |> dplyr::left_join(denominator |> dplyr::select(dplyr::any_of(strata), "estimate_type", "denominator" = "estimate_value"), by = c("estimate_type", strata)) |>
                                      dplyr::mutate(estimate_value = sprintf("%.2f", as.numeric(.data$estimate_value) / as.numeric(denominator) * 100),
                                                    estimate_name = "percentage",
                                                    estimate_type = "percentage") |>

@@ -65,7 +65,7 @@ tableTopConceptCounts <- function(result,
   result <- result |>
     omopgenerics::splitAll() |>
     omopgenerics::pivotEstimates() |>
-    dplyr::select(!"result_id") |>
+    dplyr::select(!c("result_id", opts[opts!=countBy])) |>
     dplyr::rename(
       count = dplyr::all_of(countBy),
       standard_concept_name = "variable_name",

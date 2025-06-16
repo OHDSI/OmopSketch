@@ -20,8 +20,25 @@ test_that("databaseCharacteristics works", {
                  sort(),
                c(0L, 1L))
 
+})
 
+test_that("shinyCharacteristics works", {
 
+  skip_on_cran()
+  cdm <- mockOmopSketch()
+  dir <- tempdir()
+  expect_no_error(result <- databaseCharacteristics(cdm, sex = TRUE, conceptIdCount = TRUE ) |> suppressWarnings())
+  expect_warning(shinyCharacteristics(
+    result = omopgenerics::emptySummarisedResult(),
+    directory = dir,
+  ))
+  expect_false("shiny" %in% list.files(dir))
+  expect_no_error(shinyCharacteristics(
+    result = result,
+    directory = dir
+  ))
+  expect_true("shiny" %in% list.files(dir))
 
+  unlink(file.path(dir, "shiny"), recursive = TRUE)
 })
 

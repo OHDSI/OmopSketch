@@ -283,4 +283,9 @@ test_that("tableTopConceptCounts works", {
   expect_no_error(result <- summariseConceptIdCounts(cdm, "drug_exposure", interval = "months"))
   expect_no_error(tableTopConceptCounts(result))
 
+  expect_no_error(result <- summariseConceptIdCounts(cdm, "drug_exposure", countBy = c("record", "person")))
+  expect_no_error(tableTopConceptCounts(result, countBy = "record" ))
+
+
+
 })
