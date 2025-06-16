@@ -49,7 +49,7 @@ library(OmopSketch)
 
 cdm <- mockOmopSketch()
 
-cs <- list(sumatriptan = c(35604883, 35604879, 35604880, 35604884))
+cs <- list(sinusitis = c(4283893, 257012, 40481087, 4294548))
 
 results <- summariseConceptSetCounts(cdm, conceptSet = cs)
 

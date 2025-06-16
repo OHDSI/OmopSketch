@@ -13,12 +13,13 @@
 #'
 #' cdm <- mockOmopSketch()
 #'
-#' result <- summariseConceptSetCounts(cdm = cdm,
-#'     conceptSet = list(
-#'       "Renal agenesis" = 194152,
-#'       "Manic mood" = c(4226696, 4304866, 37110496, 40371897)
-#'     )
+#' result <- summariseConceptSetCounts(
+#'   cdm = cdm,
+#'   conceptSet = list(
+#'     "asthma" = c(4051466, 317009) ,
+#'     "rhinitis" = c(4280726, 4048171, 40486433)
 #'   )
+#' )
 #'
 #' result |>
 #'   filter(variable_name == "Number subjects") |>
@@ -29,6 +30,13 @@
 plotConceptSetCounts <- function(result,
                                  facet = NULL,
                                  colour = NULL) {
+
+  lifecycle::deprecate_warn(
+    when = "0.5.0",
+    what = "plotConceptSetCounts()",
+    with = NULL
+  )
+
   rlang::check_installed("ggplot2")
   rlang::check_installed("visOmopResults")
 
