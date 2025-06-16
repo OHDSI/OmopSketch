@@ -21,10 +21,9 @@ Create a visual table from a summarise_omop_snapshot result.
 \donttest{
 cdm <- mockOmopSketch(numberIndividuals = 10)
 
-result <- summariseOmopSnapshot(cdm)
+result <- summariseOmopSnapshot(cdm = cdm)
 
-result |>
-  tableOmopSnapshot()
+tableOmopSnapshot(result = result)
 
 PatientProfiles::mockDisconnect(cdm)
 }
