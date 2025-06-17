@@ -122,6 +122,10 @@ result <- result |>
                 cdm_name = omopgenerics::cdmName(cdm),
                 variable_level = NA_character_) |>
   omopgenerics::newSummarisedResult(settings = set)
+
+# drop temp tables
+omopgenerics::dropSourceTable(cdm = cdm, name = dplyr::starts_with(tablePrefix))
+
 return(result)
 }
 
