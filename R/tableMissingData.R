@@ -1,7 +1,7 @@
 #' Create a visual table from a summariseMissingData() result.
 #' @param result A summarised_result object.
-#' @param type Type of formatting output table, either "gt" or "flextable".
-#' @return A gt or flextable object with the summarised data.
+#' @param  type Type of formatting output table. See `visOmopResults::tableType()` for allowed options. Default is `"gt"`.
+#' @return A formatted table object with the summarised data.
 #' @export
 #' @examples
 #' \donttest{
@@ -32,11 +32,9 @@ tableMissingData <- function(result,
     warnEmpty("summarise_missing_data")
     return(emptyTable(type))
   }
-  if (type == "datatable" && dplyr::n_distinct(result$cdm_name) == 1) {
-    header <- NULL
-  } else {
-    header <- c("cdm_name")
-  }
+
+  header <- c("cdm_name")
+
   result |>
     visOmopResults::visOmopTable(
       type = type,

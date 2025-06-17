@@ -1,7 +1,7 @@
 #' Create a visual table from a summarise_omop_snapshot result.
 #' @param result  Output from summariseOmopSnapshot().
-#' @param type Type of formatting output table, either "gt" or "flextable".
-#' @return A gt or flextable object with the summarised data.
+#' @param  type Type of formatting output table. See `visOmopResults::tableType()` for allowed options. Default is `"gt"`.
+#' @return A formatted table object with the summarised data.
 #' @export
 #' @examples
 #' \donttest{
@@ -31,11 +31,9 @@ tableOmopSnapshot <- function(result,
     warnEmpty("summarise_omop_snapshot")
     return(emptyTable(type))
   }
-  if (type == "datatable" && dplyr::n_distinct(result$cdm_name) == 1) {
-    header <- NULL
-  } else {
-    header <- c("cdm_name")
-  }
+
+  header <- c("cdm_name")
+
   result <- result |>
     formatColumn(c("variable_name", "estimate_name")) |>
     visOmopResults::visOmopTable(

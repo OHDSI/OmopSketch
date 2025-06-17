@@ -112,3 +112,20 @@ test_that("summariseTableQuality works", {
 
 
 })
+
+
+
+
+test_that("tableQuality works", {
+
+  cdm <- mockOmopSketch()
+  expect_no_error(result <- summariseTableQuality(cdm, "drug_exposure", sex = TRUE))
+  expect_no_error(tableQuality(result, type = "gt"))
+  expect_no_error(tableQuality(result, type = "reactable"))
+  expect_no_error(tableQuality(result, type = "flextable"))
+
+  CDMConnector::cdmDisconnect(cdm)
+
+
+})
+

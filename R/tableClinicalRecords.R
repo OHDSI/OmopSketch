@@ -1,8 +1,8 @@
 #' Create a visual table from a summariseClinicalRecord() output.
 #'
 #' @param result Output from summariseClinicalRecords().
-#' @param type Type of formatting output table, either "gt" or "flextable".
-#' @return A gt or flextable object with the summarised data.
+#' @param type Type of formatting output table. See `visOmopResults::tableType()` for allowed options.
+#' @return A formatted table object with the summarised data.
 #' @export
 #' @examples
 #' \donttest{
