@@ -3,12 +3,13 @@ pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   characterisation: characterisation.html
+  database_characteristics: database_characteristics.html
   missing_data: missing_data.html
   summarise_clinical_tables_records: summarise_clinical_tables_records.html
   summarise_concept_id_counts: summarise_concept_id_counts.html
   summarise_concept_set_counts: summarise_concept_set_counts.html
   summarise_observation_period: summarise_observation_period.html
-last_built: 2025-06-18T15:06Z
+last_built: 2025-06-18T15:32Z
 urls:
   reference: https://OHDSI.github.io/OmopSketch/reference
   article: https://OHDSI.github.io/OmopSketch/articles

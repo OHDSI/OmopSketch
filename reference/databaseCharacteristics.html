@@ -26,6 +26,7 @@
     <li><a class="dropdown-item" href="../articles/summarise_observation_period.html">Summarise observation period</a></li>
     <li><a class="dropdown-item" href="../articles/characterisation.html">Characterisation of OMOP CDM</a></li>
     <li><a class="dropdown-item" href="../articles/missing_data.html">Summarise missing data</a></li>
+    <li><a class="dropdown-item" href="../articles/database_characteristics.html">Summarise database characteristics</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://dpa-pde-oxford.shinyapps.io/OmopSketchCharacterisation/">Characterisation synthetic datasets</a></li>
@@ -59,7 +60,7 @@
 <span>  ageGroup <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  dateRange <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  interval <span class="op">=</span> <span class="st">"overall"</span>,</span>
-<span>  conceptIdCount <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  conceptIdCounts <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -95,7 +96,7 @@ If <code>dateRange</code> is <code>NULL</code>, no restriction is applied.</p></
 <dd><p>Time interval to stratify by. It can either be "years", "quarters", "months" or "overall".</p></dd>
 
 
-<dt id="arg-conceptidcount">conceptIdCount<a class="anchor" aria-label="anchor" href="#arg-conceptidcount"></a></dt>
+<dt id="arg-conceptidcounts">conceptIdCounts<a class="anchor" aria-label="anchor" href="#arg-conceptidcounts"></a></dt>
 <dd><p>Logical; whether to summarise concept ID counts (<code>TRUE</code>) or not (<code>FALSE</code>).</p></dd>
 
 
@@ -154,15 +155,15 @@ If <code>dateRange</code> is <code>NULL</code>, no restriction is applied.</p></
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → Summarising in observation records, subjects, person-days, age and sex</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> age: median</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → Start summary of data, at 2025-06-18 15:07:58.145301</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Summary finished, at 2025-06-18 15:07:58.488406</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → Start summary of data, at 2025-06-18 15:33:56.596136</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Summary finished, at 2025-06-18 15:33:56.941638</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> age: median</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → Start summary of data, at 2025-06-18 15:08:00.931922</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Summary finished, at 2025-06-18 15:08:01.356829</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → Start summary of data, at 2025-06-18 15:33:59.357403</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Summary finished, at 2025-06-18 15:33:59.771426</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → Summarising observation period</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ☺ Database characterisation finished. Code ran in 1 min and 2 sec</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> 1 table created: <span style="color: #0000BB;">"og_008_1750259234"</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ☺ Database characterisation finished. Code ran in 1 min and 0 sec</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> 1 table created: <span style="color: #0000BB;">"og_008_1750260793"</span>.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">PatientProfiles</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/PatientProfiles/reference/mockDisconnect.html" class="external-link">mockDisconnect</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>

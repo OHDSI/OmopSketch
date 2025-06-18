@@ -41,6 +41,7 @@
     <li><a class="dropdown-item" href="../articles/summarise_observation_period.html">Summarise observation period</a></li>
     <li><a class="dropdown-item" href="../articles/characterisation.html">Characterisation of OMOP CDM</a></li>
     <li><a class="dropdown-item" href="../articles/missing_data.html">Summarise missing data</a></li>
+    <li><a class="dropdown-item" href="../articles/database_characteristics.html">Summarise database characteristics</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -164,16 +165,16 @@ obtain both record and person counts.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 432 × 3</span></span></span>
 <span><span class="co">#&gt;    variable_name                                    estimate_name estimate_value</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> pneumococcal polysaccharide vaccine, 23 valent   count_records 100           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> pneumococcal polysaccharide vaccine, 23 valent   count_subjec… 59            </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Alendronate                                      count_records 100           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Alendronate                                      count_subjec… 61            </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> poliovirus vaccine, inactivated                  count_records 100           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> poliovirus vaccine, inactivated                  count_subjec… 65            </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> fluticasone                                      count_records 100           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> fluticasone                                      count_subjec… 63            </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> diphtheria, tetanus toxoids and acellular pertu… count_records 100           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> diphtheria, tetanus toxoids and acellular pertu… count_subjec… 58            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> celecoxib 200 MG Oral Capsule [Celebrex]         count_records 100           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> celecoxib 200 MG Oral Capsule [Celebrex]         count_subjec… 62            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Ampicillin 100 MG/ML Injectable Solution         count_records 100           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Ampicillin 100 MG/ML Injectable Solution         count_subjec… 62            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> rotavirus, live, monovalent vaccine              count_records 100           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> rotavirus, live, monovalent vaccine              count_subjec… 63            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Memantine                                        count_records 100           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Memantine                                        count_subjec… 61            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> tetanus toxoid, reduced diphtheria toxoid, and … count_records 100           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> tetanus toxoid, reduced diphtheria toxoid, and … count_subjec… 63            </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 422 more rows</span></span></span></code></pre></div>
 <p>Further stratification can be applied using the
 <code>interval</code>, <code>sex</code>, and <code>ageGroup</code>
@@ -225,10 +226,10 @@ specifying the <code>sample</code> argument.</p>
 <span>                         sample <span class="op">=</span> <span class="fl">50</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span>, <span class="va">estimate_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rows: 41</span></span>
+<span><span class="co">#&gt; Rows: 38</span></span>
 <span><span class="co">#&gt; Columns: 3</span></span>
 <span><span class="co">#&gt; $ group_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "condition_occurrence"<span style="color: #949494;">, </span>"condition_occurrence"<span style="color: #949494;">, </span>"conditi…</span></span>
-<span><span class="co">#&gt; $ variable_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Diabetes mellitus due to cystic fibrosis"<span style="color: #949494;">, </span>"Whiplash in…</span></span>
+<span><span class="co">#&gt; $ variable_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Closed fracture of hip"<span style="color: #949494;">, </span>"Female infertility due to cys…</span></span>
 <span><span class="co">#&gt; $ estimate_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"coun…</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="display-the-results">Display the results<a class="anchor" aria-label="anchor" href="#display-the-results"></a>
@@ -248,8 +249,8 @@ also supported.</p>
 <script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"cdm_name":["mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch","mockOmopSketch"],"group_level":["measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement"],"standard_concept_name":["Alanine aminotransferase serum/plasma","Albumin serum/plasma","Alkaline phosphatase serum/plasma","American house dust mite ige ab [units/volume] in serum","Anion gap serum/plasma","Are you covered by health insurance or some other kind of health care plan [phenx]","Aspartate aminotransferase serum/plasma","Bilirubin.total [mass/volume] in blood","Calcium serum/plasma serum/plasma","Carbon dioxide serum/plasma","Cat dander ige ab [units/volume] in serum","Chloride serum/plasma","Cladosporium herbarum ige ab [units/volume] in serum","Codfish ige ab [units/volume] in serum","Common ragweed ige ab [units/volume] in serum","Cow milk ige ab [units/volume] in serum","Creatinine serum/plasma","Cystic fibrosis 20 common mutation test","Cystic fibrosis sweat test","Dxa radius and ulna [t-score] bone density","Egg white ige ab [units/volume] in serum","Erythrocyte distribution width [ratio]","Fev1/fvc","Globulin [mass/volume] in serum by calculation","Glucose lab","Glucose tolerance test","Hiv status","Hematocrit","Hemoglobin","History of hospitalizations+outpatient visits narrative","Honey bee ige ab [units/volume] in serum","Latex ige ab [units/volume] in serum","Mcv","Measurement of respiratory function","Microbial culture of sputum","Oral temperature","Peanut ige ab [units/volume] in serum","Percentage area affected by eczema head and neck [phenx]","Percentage area affected by eczema lower extremity - bilateral [phenx]","Percentage area affected by eczema trunk [phenx]","Percentage area affected by eczema upper extremity - bilateral [phenx]","Physical findings of abdomen by palpation","Platelet count","Potassium serum/plasma","Protein serum/plasma","Red blood cell (rbc) count","Sexual orientation","Shrimp ige ab [units/volume] in serum","Sodium serum/plasma","Soybean ige ab [units/volume] in serum","Spirometry","Throat culture","Thyrotropin [units/volume] in serum or plasma","Thyroxine (t4) free [mass/volume] in serum or plasma","Urea nitrogen serum/plasma","Walnut ige ab [units/volume] in serum","Wheat ige ab [units/volume] in serum","White blood cell (wbc) count (leukocyte)","White oak ige ab [units/volume] in serum"],"standard_concept_id":["3006923","3024561","3035995","3036780","3045716","40766240","3013721","3028833","3006906","3015632","3023430","3014576","3005136","3000876","3001247","3001488","3016723","40478878","4314290","3049273","3014599","3002385","3011505","3027970","3004501","4012477","40758406","3009542","3000963","3051031","3020655","3019406","3024731","4052083","4015189","3006322","3012494","40769179","40769194","40769189","40769184","21494966","3007461","3023103","3020630","3026361","46235214","3021226","3019550","3015076","4133840","4024958","3009201","3008598","3013682","3006451","3027231","3010813","3006734"],"source_concept_name":["No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept"],"source_concept_id":["0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0"],"result_id":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],"group_name":["omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table","omop_table"],"estimate_type":["integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer","integer"],"N records":[100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100]},"columns":[{"id":"cdm_name","name":"Database name","type":"character","sortable":true,"resizable":true,"filterable":true},{"id":"group_level","name":"OMOP table","type":"character","sortable":true,"resizable":true,"filterable":true},{"id":"standard_concept_name","name":"Standard concept name","type":"character","sortable":true,"resizable":true,"filterable":true},{"id":"standard_concept_id","name":"Standard concept id","type":"character","sortable":true,"resizable":true,"filterable":true},{"id":"source_concept_name","name":"Source concept name","type":"character","sortable":true,"resizable":true,"filterable":true},{"id":"source_concept_id","name":"Source concept id","type":"character","sortable":true,"resizable":true,"filterable":true},{"id":"result_id","name":"result_id","type":"numeric","sortable":true,"resizable":true,"filterable":true,"show":false},{"id":"group_name","name":"group_name","type":"character","sortable":true,"resizable":true,"filterable":true,"show":false},{"id":"estimate_type","name":"estimate_type","type":"character","sortable":true,"resizable":true,"filterable":true,"show":false},{"id":"N records","name":"N records","type":"numeric","sortable":true,"resizable":true,"filterable":true}],"groupBy":["cdm_name","group_level"],"searchable":true,"defaultPageSize":20,"paginationType":"simple","defaultExpanded":true,"highlight":true,"bordered":true,"striped":true,"dataKey":"31c095b865f69e73b465ce339e850424"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tableConceptIdCounts.html">tableConceptIdCounts</a></span><span class="op">(</span><span class="va">result</span>, type <span class="op">=</span> <span class="st">"datatable"</span><span class="op">)</span></span></code></pre></div>
 <div class="datatables html-widget html-fill-item" id="htmlwidget-e5c8c404fe174e4c81bd" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-e5c8c404fe174e4c81bd">{"x":{"filter":"bottom","vertical":false,"filterHTML":"<tr>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\" disabled=\"\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\" disabled=\"\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\" disabled=\"\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\" disabled=\"\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"0\" data-max=\"1\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","class":"display","extensions":["FixedColumns","FixedHeader","Responsive","RowGroup","Scroller"],"data":[["measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement"],["Alanine aminotransferase serum/plasma","Albumin serum/plasma","Alkaline phosphatase serum/plasma","American house dust mite ige ab [units/volume] in serum","Anion gap serum/plasma","Are you covered by health insurance or some other kind of health care plan [phenx]","Aspartate aminotransferase serum/plasma","Bilirubin.total [mass/volume] in blood","Calcium serum/plasma serum/plasma","Carbon dioxide serum/plasma","Cat dander ige ab [units/volume] in serum","Chloride serum/plasma","Cladosporium herbarum ige ab [units/volume] in serum","Codfish ige ab [units/volume] in serum","Common ragweed ige ab [units/volume] in serum","Cow milk ige ab [units/volume] in serum","Creatinine serum/plasma","Cystic fibrosis 20 common mutation test","Cystic fibrosis sweat test","Dxa radius and ulna [t-score] bone density","Egg white ige ab [units/volume] in serum","Erythrocyte distribution width [ratio]","Fev1/fvc","Globulin [mass/volume] in serum by calculation","Glucose lab","Glucose tolerance test","Hiv status","Hematocrit","Hemoglobin","History of hospitalizations+outpatient visits narrative","Honey bee ige ab [units/volume] in serum","Latex ige ab [units/volume] in serum","Mcv","Measurement of respiratory function","Microbial culture of sputum","Oral temperature","Peanut ige ab [units/volume] in serum","Percentage area affected by eczema head and neck [phenx]","Percentage area affected by eczema lower extremity - bilateral [phenx]","Percentage area affected by eczema trunk [phenx]","Percentage area affected by eczema upper extremity - bilateral [phenx]","Physical findings of abdomen by palpation","Platelet count","Potassium serum/plasma","Protein serum/plasma","Red blood cell (rbc) count","Sexual orientation","Shrimp ige ab [units/volume] in serum","Sodium serum/plasma","Soybean ige ab [units/volume] in serum","Spirometry","Throat culture","Thyrotropin [units/volume] in serum or plasma","Thyroxine (t4) free [mass/volume] in serum or plasma","Urea nitrogen serum/plasma","Walnut ige ab [units/volume] in serum","Wheat ige ab [units/volume] in serum","White blood cell (wbc) count (leukocyte)","White oak ige ab [units/volume] in serum"],["3006923","3024561","3035995","3036780","3045716","40766240","3013721","3028833","3006906","3015632","3023430","3014576","3005136","3000876","3001247","3001488","3016723","40478878","4314290","3049273","3014599","3002385","3011505","3027970","3004501","4012477","40758406","3009542","3000963","3051031","3020655","3019406","3024731","4052083","4015189","3006322","3012494","40769179","40769194","40769189","40769184","21494966","3007461","3023103","3020630","3026361","46235214","3021226","3019550","3015076","4133840","4024958","3009201","3008598","3013682","3006451","3027231","3010813","3006734"],["No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept"],["0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0"],[100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100]],"container":"<table class='display'>\n<thead>\n<tr><th rowspan='2' style='text-align:center;'> <\/th><th rowspan='2' style='text-align:center;'>Standard concept name<\/th><th rowspan='2' style='text-align:center;'>Standard concept id<\/th><th rowspan='2' style='text-align:center;'>Source concept name<\/th><th rowspan='2' style='text-align:center;'>Source concept id<\/th><th style='text-align:center;'>mockOmopSketch<\/th><\/tr>\n<tr><th style='text-align:center;'>N records<\/th><\/tr>\n<\/thead>\n<\/table>","options":{"scrollX":true,"scrollY":400,"scrollCollapse":true,"pageLength":10,"lengthMenu":[5,10,20,50,100],"searchHighlight":true,"scroller":true,"deferRender":true,"fixedColumns":{"leftColumns":0,"rightColumns":0},"fixedHeader":true,"rowGroup":{"dataSrc":0},"columnDefs":[{"className":"dt-right","targets":5},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"Standard concept name","targets":1},{"name":"Standard concept id","targets":2},{"name":"Source concept name","targets":3},{"name":"Source concept id","targets":4},{"name":"mockOmopSketch\nN records","targets":5}],"order":[],"autoWidth":false,"orderClasses":false,"responsive":true}},"evals":[],"jsHooks":[]}</script><p>The display argument in tableConceptIdCounts() controls which concept
-counts are shown. Available options include
+<script type="application/json" data-for="htmlwidget-e5c8c404fe174e4c81bd">{"x":{"filter":"bottom","vertical":false,"filterHTML":"<tr>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\" disabled=\"\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\" disabled=\"\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\" disabled=\"\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\" disabled=\"\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"0\" data-max=\"1\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","class":"display","extensions":["FixedColumns","FixedHeader","Responsive","RowGroup","Scroller"],"data":[["measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement","measurement"],["Alanine aminotransferase serum/plasma","Albumin serum/plasma","Alkaline phosphatase serum/plasma","American house dust mite ige ab [units/volume] in serum","Anion gap serum/plasma","Are you covered by health insurance or some other kind of health care plan [phenx]","Aspartate aminotransferase serum/plasma","Bilirubin.total [mass/volume] in blood","Calcium serum/plasma serum/plasma","Carbon dioxide serum/plasma","Cat dander ige ab [units/volume] in serum","Chloride serum/plasma","Cladosporium herbarum ige ab [units/volume] in serum","Codfish ige ab [units/volume] in serum","Common ragweed ige ab [units/volume] in serum","Cow milk ige ab [units/volume] in serum","Creatinine serum/plasma","Cystic fibrosis 20 common mutation test","Cystic fibrosis sweat test","Dxa radius and ulna [t-score] bone density","Egg white ige ab [units/volume] in serum","Erythrocyte distribution width [ratio]","Fev1/fvc","Globulin [mass/volume] in serum by calculation","Glucose lab","Glucose tolerance test","Hiv status","Hematocrit","Hemoglobin","History of hospitalizations+outpatient visits narrative","Honey bee ige ab [units/volume] in serum","Latex ige ab [units/volume] in serum","Mcv","Measurement of respiratory function","Microbial culture of sputum","Oral temperature","Peanut ige ab [units/volume] in serum","Percentage area affected by eczema head and neck [phenx]","Percentage area affected by eczema lower extremity - bilateral [phenx]","Percentage area affected by eczema trunk [phenx]","Percentage area affected by eczema upper extremity - bilateral [phenx]","Physical findings of abdomen by palpation","Platelet count","Potassium serum/plasma","Protein serum/plasma","Red blood cell (rbc) count","Sexual orientation","Shrimp ige ab [units/volume] in serum","Sodium serum/plasma","Soybean ige ab [units/volume] in serum","Spirometry","Throat culture","Thyrotropin [units/volume] in serum or plasma","Thyroxine (t4) free [mass/volume] in serum or plasma","Urea nitrogen serum/plasma","Walnut ige ab [units/volume] in serum","Wheat ige ab [units/volume] in serum","White blood cell (wbc) count (leukocyte)","White oak ige ab [units/volume] in serum"],["3006923","3024561","3035995","3036780","3045716","40766240","3013721","3028833","3006906","3015632","3023430","3014576","3005136","3000876","3001247","3001488","3016723","40478878","4314290","3049273","3014599","3002385","3011505","3027970","3004501","4012477","40758406","3009542","3000963","3051031","3020655","3019406","3024731","4052083","4015189","3006322","3012494","40769179","40769194","40769189","40769184","21494966","3007461","3023103","3020630","3026361","46235214","3021226","3019550","3015076","4133840","4024958","3009201","3008598","3013682","3006451","3027231","3010813","3006734"],["No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept","No matching concept"],["0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0"],[100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100]],"container":"<table class='display'>\n<thead>\n<tr><th rowspan='2' style='text-align:center;'> <\/th><th rowspan='2' style='text-align:center;'>Standard concept name<\/th><th rowspan='2' style='text-align:center;'>Standard concept id<\/th><th rowspan='2' style='text-align:center;'>Source concept name<\/th><th rowspan='2' style='text-align:center;'>Source concept id<\/th><th style='text-align:center;'>mockOmopSketch<\/th><\/tr>\n<tr><th style='text-align:center;'>N records<\/th><\/tr>\n<\/thead>\n<\/table>","options":{"scrollX":true,"scrollY":400,"scrollCollapse":true,"pageLength":10,"lengthMenu":[5,10,20,50,100],"searchHighlight":true,"scroller":true,"deferRender":true,"fixedColumns":{"leftColumns":0,"rightColumns":0},"fixedHeader":true,"rowGroup":{"dataSrc":0},"columnDefs":[{"className":"dt-right","targets":5},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"Standard concept name","targets":1},{"name":"Standard concept id","targets":2},{"name":"Source concept name","targets":3},{"name":"Source concept id","targets":4},{"name":"mockOmopSketch\nN records","targets":5}],"order":[],"autoWidth":false,"orderClasses":false,"responsive":true}},"evals":[],"jsHooks":[]}</script><p>The <code>display</code> argument in tableConceptIdCounts() controls
+which concept counts are shown. Available options include
 <code>display = "overall"</code>. It is the default option and it shows
 both standard and source concept counts.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
@@ -290,6 +291,1573 @@ id.</p>
 <span><span class="co">#&gt; data.</span></span></code></pre></div>
 <div class="reactable html-widget html-fill-item" id="htmlwidget-4018eef1a407a0df6b52" style="width:auto;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-4018eef1a407a0df6b52">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"Table has no data":[]},"columns":[{"id":"Table has no data","name":"Table has no data","type":"character"}],"dataKey":"71e54eea3db5647004f94626158b6785"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+</div>
+<div class="section level3">
+<h3 id="display-the-most-frequent-concepts">Display the most frequent concepts<a class="anchor" aria-label="anchor" href="#display-the-most-frequent-concepts"></a>
+</h3>
+<p>You can use the <code><a href="../reference/tableTopConceptCounts.html">tableTopConceptCounts()</a></code> function to
+display the most frequent concepts in a OMOP CDM table in formatted
+table. By default, the function returns a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table, but you can also choose
+from other output formats, including <a href="https://davidgohel.github.io/flextable/" class="external-link">flextable</a>, <a href="https://rstudio.github.io/DT/" class="external-link">datatable</a>, and <a href="https://glin.github.io/reactable/" class="external-link">reactable</a>.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseConceptIdCounts.html">summariseConceptIdCounts</a></span><span class="op">(</span><span class="va">cdm</span>,</span>
+<span>  omopTableName <span class="op">=</span> <span class="st">"drug_exposure"</span>,</span>
+<span>  countBy <span class="op">=</span> <span class="st">"record"</span></span>
+<span><span class="op">)</span> </span>
+<span><span class="fu"><a href="../reference/tableTopConceptCounts.html">tableTopConceptCounts</a></span><span class="op">(</span><span class="va">result</span>, type <span class="op">=</span> <span class="st">"gt"</span><span class="op">)</span></span></code></pre></div>
+<div id="psbibbfzjq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#psbibbfzjq table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#psbibbfzjq thead, #psbibbfzjq tbody, #psbibbfzjq tfoot, #psbibbfzjq tr, #psbibbfzjq td, #psbibbfzjq th {
+  border-style: none;
+}
+
+#psbibbfzjq p {
+  margin: 0;
+  padding: 0;
+}
+
+#psbibbfzjq .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 3px;
+  border-top-color: #D9D9D9;
+  border-right-style: solid;
+  border-right-width: 3px;
+  border-right-color: #D9D9D9;
+  border-bottom-style: solid;
+  border-bottom-width: 3px;
+  border-bottom-color: #D9D9D9;
+  border-left-style: solid;
+  border-left-width: 3px;
+  border-left-color: #D9D9D9;
+}
+
+#psbibbfzjq .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#psbibbfzjq .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#psbibbfzjq .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#psbibbfzjq .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#psbibbfzjq .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#psbibbfzjq .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#psbibbfzjq .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#psbibbfzjq .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#psbibbfzjq .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#psbibbfzjq .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#psbibbfzjq .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#psbibbfzjq .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#psbibbfzjq .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#psbibbfzjq .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#psbibbfzjq .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#psbibbfzjq .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#psbibbfzjq .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#psbibbfzjq .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#psbibbfzjq .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#psbibbfzjq .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#psbibbfzjq .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#psbibbfzjq .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#psbibbfzjq .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#psbibbfzjq .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#psbibbfzjq .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#psbibbfzjq .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#psbibbfzjq .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#psbibbfzjq .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#psbibbfzjq .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#psbibbfzjq .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 3px;
+  border-top-color: #D9D9D9;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#psbibbfzjq .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#psbibbfzjq .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#psbibbfzjq .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#psbibbfzjq .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#psbibbfzjq .gt_left {
+  text-align: left;
+}
+
+#psbibbfzjq .gt_center {
+  text-align: center;
+}
+
+#psbibbfzjq .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#psbibbfzjq .gt_font_normal {
+  font-weight: normal;
+}
+
+#psbibbfzjq .gt_font_bold {
+  font-weight: bold;
+}
+
+#psbibbfzjq .gt_font_italic {
+  font-style: italic;
+}
+
+#psbibbfzjq .gt_super {
+  font-size: 65%;
+}
+
+#psbibbfzjq .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#psbibbfzjq .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#psbibbfzjq .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#psbibbfzjq .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#psbibbfzjq .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#psbibbfzjq .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#psbibbfzjq .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#psbibbfzjq .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#psbibbfzjq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_col_headings gt_spanner_row">
+<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="2" colspan="1" style="text-align: center; font-weight: bold; border-left-width: 1px; border-left-style: solid; border-left-color: White; border-right-width: 1px; border-right-style: solid; border-right-color: White; border-top-width: 1px; border-top-style: solid; border-top-color: White; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: White;" scope="col" id="Top">Top</th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="1" style="background-color: #D9D9D9; text-align: center; font-weight: bold; border-left-width: 1px; border-left-style: solid; border-left-color: White; border-right-width: 1px; border-right-style: solid; border-right-color: White; border-top-width: 1px; border-top-style: solid; border-top-color: White; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: White;" scope="col" id="spanner-[header_name]Cdm name
+[header_level]mockOmopSketch">
+        <div class="gt_column_spanner">Cdm name</div>
+      </th>
+    </tr>
+<tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="background-color: #E1E1E1; text-align: center; font-weight: bold; border-left-width: 1px; border-left-style: solid; border-left-color: White; border-right-width: 1px; border-right-style: solid; border-right-color: White; border-top-width: 1px; border-top-style: solid; border-top-color: White; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: White;" scope="col" id="[header_name]Cdm-name-[header_level]mockOmopSketch">mockOmopSketch</th>
+    </tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="gt_group_heading_row">
+<th colspan="2" class="gt_group_heading" style="background-color: #E9E9E9; font-weight: bold;" scope="colgroup" id="drug_exposure">drug_exposure</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">1</span></td>
+<td headers="drug_exposure  [header_name]Cdm name
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: pneumococcal polysaccharide vaccine, 23 valent (40213201) <br> Source: No matching concept (0) <br> 100</span></td>
+</tr>
+<tr>
+<td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">2</span></td>
+<td headers="drug_exposure  [header_name]Cdm name
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Alendronate (1557272) <br> Source: No matching concept (0) <br> 100</span></td>
+</tr>
+<tr>
+<td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">3</span></td>
+<td headers="drug_exposure  [header_name]Cdm name
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: poliovirus vaccine, inactivated (40213160) <br> Source: No matching concept (0) <br> 100</span></td>
+</tr>
+<tr>
+<td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">4</span></td>
+<td headers="drug_exposure  [header_name]Cdm name
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: fluticasone (1149380) <br> Source: No matching concept (0) <br> 100</span></td>
+</tr>
+<tr>
+<td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">5</span></td>
+<td headers="drug_exposure  [header_name]Cdm name
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: diphtheria, tetanus toxoids and acellular pertussis vaccine (40213281) <br> Source: No matching concept (0) <br> 100</span></td>
+</tr>
+<tr>
+<td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">6</span></td>
+<td headers="drug_exposure  [header_name]Cdm name
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Diclofenac (1124300) <br> Source: No matching concept (0) <br> 100</span></td>
+</tr>
+<tr>
+<td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">7</span></td>
+<td headers="drug_exposure  [header_name]Cdm name
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: hepatitis A vaccine, pediatric/adolescent dosage, 2 dose schedule (40213299) <br> Source: No matching concept (0) <br> 100</span></td>
+</tr>
+<tr>
+<td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">8</span></td>
+<td headers="drug_exposure  [header_name]Cdm name
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: fexofenadine (1153428) <br> Source: No matching concept (0) <br> 100</span></td>
+</tr>
+<tr>
+<td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">9</span></td>
+<td headers="drug_exposure  [header_name]Cdm name
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Haemophilus influenzae type b vaccine, PRP-OMP conjugate (40213314) <br> Source: No matching concept (0) <br> 100</span></td>
+</tr>
+<tr>
+<td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">10</span></td>
+<td headers="drug_exposure  [header_name]Cdm name
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Propofol (753626) <br> Source: No matching concept (0) <br> 100</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level4">
+<h4 id="customising-the-number-of-top-concepts">Customising the number of top concepts<a class="anchor" aria-label="anchor" href="#customising-the-number-of-top-concepts"></a>
+</h4>
+<p>By default, the function shows the top 10 concepts. You can change
+this using the <code>top</code> argument:</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/tableTopConceptCounts.html">tableTopConceptCounts</a></span><span class="op">(</span><span class="va">result</span>, top <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
+<div id="ixqgnjgdef" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ixqgnjgdef table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#ixqgnjgdef thead, #ixqgnjgdef tbody, #ixqgnjgdef tfoot, #ixqgnjgdef tr, #ixqgnjgdef td, #ixqgnjgdef th {
+  border-style: none;
+}
+
+#ixqgnjgdef p {
+  margin: 0;
+  padding: 0;
+}
+
+#ixqgnjgdef .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 3px;
+  border-top-color: #D9D9D9;
+  border-right-style: solid;
+  border-right-width: 3px;
+  border-right-color: #D9D9D9;
+  border-bottom-style: solid;
+  border-bottom-width: 3px;
+  border-bottom-color: #D9D9D9;
+  border-left-style: solid;
+  border-left-width: 3px;
+  border-left-color: #D9D9D9;
+}
+
+#ixqgnjgdef .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#ixqgnjgdef .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#ixqgnjgdef .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#ixqgnjgdef .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ixqgnjgdef .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ixqgnjgdef .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ixqgnjgdef .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#ixqgnjgdef .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#ixqgnjgdef .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#ixqgnjgdef .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#ixqgnjgdef .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#ixqgnjgdef .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#ixqgnjgdef .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#ixqgnjgdef .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#ixqgnjgdef .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#ixqgnjgdef .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#ixqgnjgdef .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#ixqgnjgdef .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ixqgnjgdef .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#ixqgnjgdef .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#ixqgnjgdef .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#ixqgnjgdef .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ixqgnjgdef .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#ixqgnjgdef .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#ixqgnjgdef .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ixqgnjgdef .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ixqgnjgdef .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#ixqgnjgdef .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ixqgnjgdef .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#ixqgnjgdef .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 3px;
+  border-top-color: #D9D9D9;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ixqgnjgdef .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ixqgnjgdef .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ixqgnjgdef .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ixqgnjgdef .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ixqgnjgdef .gt_left {
+  text-align: left;
+}
+
+#ixqgnjgdef .gt_center {
+  text-align: center;
+}
+
+#ixqgnjgdef .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#ixqgnjgdef .gt_font_normal {
+  font-weight: normal;
+}
+
+#ixqgnjgdef .gt_font_bold {
+  font-weight: bold;
+}
+
+#ixqgnjgdef .gt_font_italic {
+  font-style: italic;
+}
+
+#ixqgnjgdef .gt_super {
+  font-size: 65%;
+}
+
+#ixqgnjgdef .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#ixqgnjgdef .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#ixqgnjgdef .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#ixqgnjgdef .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#ixqgnjgdef .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#ixqgnjgdef .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#ixqgnjgdef .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#ixqgnjgdef .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#ixqgnjgdef div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_col_headings gt_spanner_row">
+<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="2" colspan="1" style="text-align: center; font-weight: bold; border-left-width: 1px; border-left-style: solid; border-left-color: White; border-right-width: 1px; border-right-style: solid; border-right-color: White; border-top-width: 1px; border-top-style: solid; border-top-color: White; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: White;" scope="col" id="Top">Top</th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="1" style="background-color: #D9D9D9; text-align: center; font-weight: bold; border-left-width: 1px; border-left-style: solid; border-left-color: White; border-right-width: 1px; border-right-style: solid; border-right-color: White; border-top-width: 1px; border-top-style: solid; border-top-color: White; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: White;" scope="col" id="spanner-[header_name]Cdm name
+[header_level]mockOmopSketch">
+        <div class="gt_column_spanner">Cdm name</div>
+      </th>
+    </tr>
+<tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="background-color: #E1E1E1; text-align: center; font-weight: bold; border-left-width: 1px; border-left-style: solid; border-left-color: White; border-right-width: 1px; border-right-style: solid; border-right-color: White; border-top-width: 1px; border-top-style: solid; border-top-color: White; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: White;" scope="col" id="[header_name]Cdm-name-[header_level]mockOmopSketch">mockOmopSketch</th>
+    </tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="gt_group_heading_row">
+<th colspan="2" class="gt_group_heading" style="background-color: #E9E9E9; font-weight: bold;" scope="colgroup" id="drug_exposure">drug_exposure</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">1</span></td>
+<td headers="drug_exposure  [header_name]Cdm name
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: pneumococcal polysaccharide vaccine, 23 valent (40213201) <br> Source: No matching concept (0) <br> 100</span></td>
+</tr>
+<tr>
+<td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">2</span></td>
+<td headers="drug_exposure  [header_name]Cdm name
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Alendronate (1557272) <br> Source: No matching concept (0) <br> 100</span></td>
+</tr>
+<tr>
+<td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">3</span></td>
+<td headers="drug_exposure  [header_name]Cdm name
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: poliovirus vaccine, inactivated (40213160) <br> Source: No matching concept (0) <br> 100</span></td>
+</tr>
+<tr>
+<td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">4</span></td>
+<td headers="drug_exposure  [header_name]Cdm name
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: fluticasone (1149380) <br> Source: No matching concept (0) <br> 100</span></td>
+</tr>
+<tr>
+<td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">5</span></td>
+<td headers="drug_exposure  [header_name]Cdm name
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: diphtheria, tetanus toxoids and acellular pertussis vaccine (40213281) <br> Source: No matching concept (0) <br> 100</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section level4">
+<h4 id="choosing-the-count-type">Choosing the count type<a class="anchor" aria-label="anchor" href="#choosing-the-count-type"></a>
+</h4>
+<p>If your summary includes both record and person counts, you must
+specify which type to display using the <code>countBy</code>
+argument:</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseConceptIdCounts.html">summariseConceptIdCounts</a></span><span class="op">(</span><span class="va">cdm</span>,</span>
+<span>  omopTableName <span class="op">=</span> <span class="st">"drug_exposure"</span>,</span>
+<span>  countBy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"record"</span>, <span class="st">"person"</span><span class="op">)</span></span>
+<span><span class="op">)</span> </span>
+<span><span class="fu"><a href="../reference/tableTopConceptCounts.html">tableTopConceptCounts</a></span><span class="op">(</span><span class="va">result</span>, countBy <span class="op">=</span> <span class="st">"person"</span><span class="op">)</span></span></code></pre></div>
+<div id="sbsnnpsmim" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#sbsnnpsmim table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#sbsnnpsmim thead, #sbsnnpsmim tbody, #sbsnnpsmim tfoot, #sbsnnpsmim tr, #sbsnnpsmim td, #sbsnnpsmim th {
+  border-style: none;
+}
+
+#sbsnnpsmim p {
+  margin: 0;
+  padding: 0;
+}
+
+#sbsnnpsmim .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 3px;
+  border-top-color: #D9D9D9;
+  border-right-style: solid;
+  border-right-width: 3px;
+  border-right-color: #D9D9D9;
+  border-bottom-style: solid;
+  border-bottom-width: 3px;
+  border-bottom-color: #D9D9D9;
+  border-left-style: solid;
+  border-left-width: 3px;
+  border-left-color: #D9D9D9;
+}
+
+#sbsnnpsmim .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#sbsnnpsmim .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#sbsnnpsmim .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#sbsnnpsmim .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#sbsnnpsmim .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#sbsnnpsmim .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#sbsnnpsmim .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#sbsnnpsmim .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#sbsnnpsmim .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#sbsnnpsmim .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#sbsnnpsmim .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#sbsnnpsmim .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#sbsnnpsmim .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#sbsnnpsmim .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#sbsnnpsmim .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#sbsnnpsmim .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#sbsnnpsmim .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#sbsnnpsmim .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#sbsnnpsmim .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#sbsnnpsmim .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#sbsnnpsmim .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#sbsnnpsmim .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#sbsnnpsmim .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#sbsnnpsmim .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#sbsnnpsmim .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#sbsnnpsmim .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#sbsnnpsmim .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#sbsnnpsmim .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#sbsnnpsmim .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#sbsnnpsmim .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 3px;
+  border-top-color: #D9D9D9;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#sbsnnpsmim .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#sbsnnpsmim .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#sbsnnpsmim .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#sbsnnpsmim .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#sbsnnpsmim .gt_left {
+  text-align: left;
+}
+
+#sbsnnpsmim .gt_center {
+  text-align: center;
+}
+
+#sbsnnpsmim .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#sbsnnpsmim .gt_font_normal {
+  font-weight: normal;
+}
+
+#sbsnnpsmim .gt_font_bold {
+  font-weight: bold;
+}
+
+#sbsnnpsmim .gt_font_italic {
+  font-style: italic;
+}
+
+#sbsnnpsmim .gt_super {
+  font-size: 65%;
+}
+
+#sbsnnpsmim .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#sbsnnpsmim .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#sbsnnpsmim .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#sbsnnpsmim .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#sbsnnpsmim .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#sbsnnpsmim .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#sbsnnpsmim .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#sbsnnpsmim .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#sbsnnpsmim div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_col_headings gt_spanner_row">
+<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="2" colspan="1" style="text-align: center; font-weight: bold; border-left-width: 1px; border-left-style: solid; border-left-color: White; border-right-width: 1px; border-right-style: solid; border-right-color: White; border-top-width: 1px; border-top-style: solid; border-top-color: White; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: White;" scope="col" id="Top">Top</th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="1" style="background-color: #D9D9D9; text-align: center; font-weight: bold; border-left-width: 1px; border-left-style: solid; border-left-color: White; border-right-width: 1px; border-right-style: solid; border-right-color: White; border-top-width: 1px; border-top-style: solid; border-top-color: White; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: White;" scope="col" id="spanner-[header_name]Cdm name
+[header_level]mockOmopSketch">
+        <div class="gt_column_spanner">Cdm name</div>
+      </th>
+    </tr>
+<tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="background-color: #E1E1E1; text-align: center; font-weight: bold; border-left-width: 1px; border-left-style: solid; border-left-color: White; border-right-width: 1px; border-right-style: solid; border-right-color: White; border-top-width: 1px; border-top-style: solid; border-top-color: White; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: White;" scope="col" id="[header_name]Cdm-name-[header_level]mockOmopSketch">mockOmopSketch</th>
+    </tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="gt_group_heading_row">
+<th colspan="2" class="gt_group_heading" style="background-color: #E9E9E9; font-weight: bold;" scope="colgroup" id="drug_exposure">drug_exposure</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">1</span></td>
+<td headers="drug_exposure  [header_name]Cdm name
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: {28 (Norethindrone 0.35 MG Oral Tablet) } Pack [Camila 28 Day] (19127922) <br> Source: No matching concept (0) <br> 73</span></td>
+</tr>
+<tr>
+<td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">2</span></td>
+<td headers="drug_exposure  [header_name]Cdm name
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: 1 ML medroxyprogesterone acetate 150 MG/ML Injection (40224805) <br> Source: No matching concept (0) <br> 71</span></td>
+</tr>
+<tr>
+<td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">3</span></td>
+<td headers="drug_exposure  [header_name]Cdm name
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Chlorpheniramine Maleate 4 MG Oral Tablet (43012036) <br> Source: No matching concept (0) <br> 71</span></td>
+</tr>
+<tr>
+<td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">4</span></td>
+<td headers="drug_exposure  [header_name]Cdm name
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: 120 ACTUAT Fluticasone propionate 0.044 MG/ACTUAT Metered Dose Inhaler (40169216) <br> Source: No matching concept (0) <br> 71</span></td>
+</tr>
+<tr>
+<td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">5</span></td>
+<td headers="drug_exposure  [header_name]Cdm name
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Piperacillin (1746114) <br> Source: No matching concept (0) <br> 70</span></td>
+</tr>
+<tr>
+<td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">6</span></td>
+<td headers="drug_exposure  [header_name]Cdm name
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Sodium Chloride (967823) <br> Source: No matching concept (0) <br> 70</span></td>
+</tr>
+<tr>
+<td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">7</span></td>
+<td headers="drug_exposure  [header_name]Cdm name
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Tacrine (836654) <br> Source: No matching concept (0) <br> 70</span></td>
+</tr>
+<tr>
+<td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">8</span></td>
+<td headers="drug_exposure  [header_name]Cdm name
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: norgestimate (1515774) <br> Source: No matching concept (0) <br> 70</span></td>
+</tr>
+<tr>
+<td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">9</span></td>
+<td headers="drug_exposure  [header_name]Cdm name
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Propofol (753626) <br> Source: No matching concept (0) <br> 69</span></td>
+</tr>
+<tr>
+<td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">10</span></td>
+<td headers="drug_exposure  [header_name]Cdm name
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Terfenadine (1150836) <br> Source: No matching concept (0) <br> 69</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
