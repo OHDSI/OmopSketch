@@ -40,7 +40,7 @@ cdm
 
 # Summarise database characteristics
 
-The `databaseCharacteristics()` function provides a comprehensive summary of the CDM, returning a [summarised result]() that includes:
+The `databaseCharacteristics()` function provides a comprehensive summary of the CDM, returning a [summarised result](https://darwin-eu-dev.github.io/omopgenerics/articles/summarised_result.html) that includes:
 
 -   A general database snapshot, using `summariseOmopSnapshot()`
 
