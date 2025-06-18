@@ -112,7 +112,7 @@ databaseCharacteristics <- function(cdm,
 
 
   # Summarise missing data
-  cli::cli_inform(paste(cli::symbol$arrow_right,"Summarising missing data"))
+  cli::cli_inform(paste(cli::symbol$arrow_right, "Summarising missing data"))
   result$missingData <- do.call(
     summariseMissingData,
     c(list(
@@ -127,7 +127,23 @@ databaseCharacteristics <- function(cdm,
 
   omopTableName <- omopTableName[omopTableName != "person"]
 
+  # Summarise table quality
+  cli::cli_inform(paste(cli::symbol$arrow_right, "Summarising table quality"))
+  result$tableQuality <- do.call(
+    summariseTableQuality,
+    c(list(
+      cdm,
+      omopTableName = omopTableName,
+      sex = sex,
+      ageGroup = ageGroup,
+      interval = interval,
+      dateRange = dateRange
+    ), filter_args(summariseTableQuality, args_list))
+  )
+
+
   if (conceptIdCounts) {
+    
     cli::cli_inform(paste(cli::symbol$arrow_right,"Summarising concept id counts"))
     result$conceptIdCounts <- do.call(
       summariseConceptIdCounts,

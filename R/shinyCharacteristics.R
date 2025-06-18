@@ -33,7 +33,7 @@ shinyCharacteristics <- function(result, directory, title = "Database characteri
   omopgenerics::assertCharacter(logo, length = 1, null = TRUE)
   omopgenerics::assertCharacter(theme, length = 1, null = TRUE)
 
-  result_types <- c("summarise_omop_snapshot", "summarise_characteristics", "summarise_observation_period", "summarise_in_observation", "summarise_missing_data", "summarise_clinical_records", "summarise_concept_id_counts", "summarise_record_count")
+  result_types <- c("summarise_omop_snapshot", "summarise_characteristics", "summarise_observation_period", "summarise_in_observation", "summarise_missing_data", "summarise_table_quality", "summarise_clinical_records", "summarise_concept_id_counts", "summarise_record_count")
 
   # subset to result_type of interest
   result <- result |>
@@ -69,6 +69,7 @@ shinyCharacteristics <- function(result, directory, title = "Database characteri
   panelDetails$summarise_clinical_records$icon <- NULL
   panelDetails$summarise_record_count$icon <- NULL
   panelDetails$summarise_missing_data$icon <- NULL
+  panelDetails$summarise_table_quality$icon <- NULL
   panelDetails$summarise_in_observation$icon <- NULL
   panelDetails$summarise_characteristics$content$tidy <- NULL
   panelDetails$summarise_characteristics$title <- "Population Characteristics"
@@ -101,7 +102,8 @@ shinyCharacteristics <- function(result, directory, title = "Database characteri
 
   panelStructure <- list("summarise_omop_snapshot", "summarise_characteristics",
                          "Observation Period" = c("summarise_in_observation", "summarise_observation_period"),
-                         "Clinical Tables" = c("summarise_clinical_records", "summarise_missing_data", "summarise_record_count"), "summarise_concept_id_counts"[conceptIdCounts]
+                         "Quality" = c("summarise_missing_data", "summarise_table_quality"),
+                         "Clinical Tables" = c("summarise_clinical_records", "summarise_record_count"), "summarise_concept_id_counts"[conceptIdCounts]
   )
 
   OmopViewer::exportStaticApp(
@@ -118,3 +120,4 @@ shinyCharacteristics <- function(result, directory, title = "Database characteri
   )
   return(invisible())
 }
+
