@@ -45,19 +45,22 @@ tableClinicalRecords <- function(result,
   }
 
   header <- c("cdm_name")
-
+  custom_order <- c("Number records", "Number subjects", "Records per person", "In observation", "Domain", "Source vocabulary", "Standard concept", "Type concept id")
   result |>
     formatColumn(c("variable_name", "variable_level")) |>
-    dplyr::arrange(.data$variable_name, .data$variable_level) |>
+    dplyr::mutate(variable_name = factor(variable_name, levels = custom_order)) |>
+    dplyr::arrange(variable_name, variable_level) |>
     visOmopResults::visOmopTable(
       type = type,
       estimateName = c(
         "N (%)" = "<count> (<percentage>%)",
         "N" = "<count>",
-        "Mean (SD)" = "<mean> (<sd>)"
+        "Mean (SD)" = "<mean> (<sd>)",
+        "Median [Q25 - Q75]" = "<median> [<q25> - <q75>]",
+        "Range [min to max]" = "[<min> to <max>]"
       ),
       header = header,
       rename = c("Database name" = "cdm_name"),
       groupColumn = c("omop_table", omopgenerics::strataColumns(result))
-    )
+    ) |> suppressMessages()
 }
