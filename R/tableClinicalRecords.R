@@ -48,8 +48,8 @@ tableClinicalRecords <- function(result,
   custom_order <- c("Number records", "Number subjects", "Records per person", "In observation", "Domain", "Source vocabulary", "Standard concept", "Type concept id")
   result |>
     formatColumn(c("variable_name", "variable_level")) |>
-    dplyr::mutate(variable_name = factor(variable_name, levels = custom_order)) |>
-    dplyr::arrange(variable_name, variable_level) |>
+    dplyr::mutate(variable_name = factor(.data$variable_name, levels = custom_order)) |>
+    dplyr::arrange(.data$variable_name, .data$variable_level) |>
     visOmopResults::visOmopTable(
       type = type,
       estimateName = c(
