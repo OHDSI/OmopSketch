@@ -18,7 +18,7 @@
 #'
 #' @return A `summarised_result` object with counts and percentages of potential quality issues,
 #' stratified as specified.
-#' @export
+#' @noRd
 #' @examples
 #' \donttest{
 #' library(dplyr)
