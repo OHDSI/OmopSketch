@@ -18,7 +18,7 @@ results <- purrr::map(databases, \(dbName) {
     ) |>
     databaseCharacteristics(
       interval = "years",
-      conceptIdCount = TRUE
+      conceptIdCounts = TRUE
     ) |>
     suppressMessages()
   cli::cli_inform(c(v = "{.strong {dbName}} characterised"))
