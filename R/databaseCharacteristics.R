@@ -7,7 +7,7 @@
 #' @param ageGroup A list of age groups to stratify the results by. Each element represents a specific age range.
 #' @param sex Logical; whether to stratify results by sex (`TRUE`) or not (`FALSE`).
 #' @inheritParams dateRange-startDate
-#' @param conceptIdCount Logical; whether to summarise concept ID counts (`TRUE`) or not (`FALSE`).
+#' @param conceptIdCounts Logical; whether to summarise concept ID counts (`TRUE`) or not (`FALSE`).
 #' @param ... additional arguments passed to the OmopSketch functions that are used internally.
 #' @return A `summarised_result` object containing the results of the characterisation.
 #' @export
@@ -17,7 +17,7 @@
 #' cdm <- mockOmopSketch(numberIndividuals = 100)
 #'
 #' result <- databaseCharacteristics(cdm = cdm, omopTableNam = c("drug_exposure", "condition_occurrence"),
-#' sex = TRUE, ageGroup = list(c(0,50), c(51,100)), interval = "years", conceptIdCount = FALSE)
+#' sex = TRUE, ageGroup = list(c(0,50), c(51,100)), interval = "years", conceptIdCounts = FALSE)
 #'
 #' PatientProfiles::mockDisconnect(cdm)
 #' }
@@ -32,7 +32,7 @@ databaseCharacteristics <- function(cdm,
                                     ageGroup = NULL,
                                     dateRange = NULL,
                                     interval = "overall",
-                                    conceptIdCount = FALSE,
+                                    conceptIdCounts = FALSE,
                                     ...) {
 
   rlang::check_installed("CohortCharacteristics")
@@ -47,7 +47,7 @@ databaseCharacteristics <- function(cdm,
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, multipleAgeGroup = FALSE)
   dateRange <- validateStudyPeriod(cdm, dateRange)
   omopgenerics::assertChoice(interval, c("overall", "years", "quarters", "months"), length = 1)
-  omopgenerics::assertLogical(conceptIdCount, length = 1)
+  omopgenerics::assertLogical(conceptIdCounts, length = 1)
 
   args_list <- list(...)
 
@@ -127,9 +127,9 @@ databaseCharacteristics <- function(cdm,
 
   omopTableName <- omopTableName[omopTableName != "person"]
 
-  if (conceptIdCount) {
+  if (conceptIdCounts) {
     cli::cli_inform(paste(cli::symbol$arrow_right,"Summarising concept id counts"))
-    result$conceptIdCount <- do.call(
+    result$conceptIdCounts <- do.call(
       summariseConceptIdCounts,
       c(list(
         cdm,

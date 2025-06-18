@@ -41,25 +41,28 @@ cdm
 ```
 
 # Summarise concept id counts
+
 We now use the `summariseConceptIdCounts()` function from the OmopSketch package to retrieve counts for each concept id and name, as well as for each source concept id and name, across the clinical tables.
 
-```{r, warning=FALSE} 
+```{r, warning=FALSE}
 summariseConceptIdCounts(cdm, omopTableName = "drug_exposure") |>
   select(group_level, variable_name, variable_level, estimate_name, estimate_value, additional_name, additional_level) |>
   glimpse()
-``` 
+```
+
 By default, the function returns the number of records (`estimate_name == "count_records"`) for each concept_id. To include counts by person, you can set the `countBy` argument to `"person"` or to c`("record", "person")` to obtain both record and person counts.
+
 ```{r, warning=FALSE}
 summariseConceptIdCounts(cdm,
   omopTableName = "drug_exposure",
   countBy = c("record", "person")
 ) |>
   select( variable_name, estimate_name, estimate_value) 
-```         
+```
 
 Further stratification can be applied using the `interval`, `sex`, and `ageGroup` arguments. The interval argument supports "overall" (no time stratification), "years", "quarters", or "months".
 
-``` {r, warning=FALSE} 
+```{r, warning=FALSE}
 summariseConceptIdCounts(cdm,
   omopTableName = "condition_occurrence",
   countBy = "person",
@@ -70,6 +73,7 @@ summariseConceptIdCounts(cdm,
   select(group_level, strata_level, variable_name, estimate_name, additional_level) |>
   glimpse()
 ```
+
 We can also filter the clinical table to a specific time window by setting the dateRange argument.
 
 ```{r}
@@ -80,6 +84,7 @@ summarisedResult |>
   omopgenerics::settings()|>
   glimpse()
 ```
+
 Finally, you can summarise concept counts on a subset of records by specifying the `sample` argument.
 
 ```{r}
@@ -91,27 +96,31 @@ summariseConceptIdCounts(cdm,
 
 ```
 
+## Display the results
 
-## Display the results 
 Finally, concept counts can be visualised using `tableConceptIdCounts()`. By default, it generates an interactive [reactable](https://glin.github.io/reactable/) table, but [DT](https://rstudio.github.io/DT/) datatables are also supported.
- 
-```{r, warning=FALSE} 
+
+```{r, warning=FALSE}
 result <- summariseConceptIdCounts(cdm,
   omopTableName = "measurement",
   countBy = "record"
 ) 
 tableConceptIdCounts(result, type = "reactable")
-```   
+```
 
 ```{r}
 tableConceptIdCounts(result, type = "datatable")
 ```
-The display argument in tableConceptIdCounts() controls which concept counts are shown. Available options include `display = "overall"`. It is the default option and it shows both standard and source concept counts. 
+
+The `display` argument in tableConceptIdCounts() controls which concept counts are shown. Available options include `display = "overall"`. It is the default option and it shows both standard and source concept counts.
+
 ```{r}
 tableConceptIdCounts(result, display = "overall")
 
 ```
+
 If `display = "standard"` the table shows only **standard** concept_id and concept_name counts.
+
 ```{r}
 tableConceptIdCounts(result, display = "standard")
 
@@ -136,4 +145,36 @@ If `display = "missing standard"` the table shows only counts for source concept
 ```{r}
 tableConceptIdCounts(result, display = "missing standard")
 
+```
+
+## Display the most frequent concepts
+
+You can use the `tableTopConceptCounts()` function to display the most frequent concepts in a OMOP CDM table in formatted table. By default, the function returns a [gt](https://gt.rstudio.com/) table, but you can also choose from other output formats, including [flextable](https://davidgohel.github.io/flextable/), [datatable](https://rstudio.github.io/DT/), and [reactable](https://glin.github.io/reactable/).
+
+```{r, warning=FALSE}
+result <- summariseConceptIdCounts(cdm,
+  omopTableName = "drug_exposure",
+  countBy = "record"
+) 
+tableTopConceptCounts(result, type = "gt")
+```
+
+### Customising the number of top concepts
+
+By default, the function shows the top 10 concepts. You can change this using the `top` argument:
+
+```{r}
+tableTopConceptCounts(result, top = 5)
+```
+
+### Choosing the count type
+
+If your summary includes both record and person counts, you must specify which type to display using the `countBy` argument:
+
+```{r, warning=FALSE}
+result <- summariseConceptIdCounts(cdm,
+  omopTableName = "drug_exposure",
+  countBy = c("record", "person")
+) 
+tableTopConceptCounts(result, countBy = "person")
 ```

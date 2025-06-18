@@ -25,11 +25,11 @@ library(CDMConnector)
 CDMConnector::requireEunomia()
 ```
 
-In this vignette, we explore how *OmopSketch* functions can serve as a valuable tool for summarising missing data in databases containing electronic health records mapped to the OMOP Common Data Model. In this context, missing data is defined as entries with NA values or concept IDs equal to 0.
+In this vignette, we explore how *OmopSketch* functions can serve as a valuable tool for summarising missingness in databases containing electronic health records mapped to the OMOP Common Data Model.
 
 ## Create a mock cdm
 
-Let's see an example of its functionalities. To start with, we will load essential packages and create a mock cdm using the mockOmopSketch() database.
+To illustrate the package’s functionality, we begin by loading the required packages and connecting to a test CDM using the Eunomia dataset.
 
 ```{r, warning=FALSE}
 library(dplyr)
@@ -49,7 +49,9 @@ cdm
 
 ## Summary of missing data
 
-We can now use the `summariseMissingData()` function to assess the presence of missing values in the tables.
+A common first step in data quality assessment is to identify missing values. In this contest, missing data are defined as either NA values or concept IDs equal to 0.
+
+You can use the `summariseMissingData()` function to summarise missingness across the clinical tables in the CDM:
 
 ```{r, warning=FALSE}
 result_missingData <- summariseMissingData(cdm,
@@ -119,7 +121,7 @@ result_missingData <- summariseMissingData(cdm = cdm,
 result_missingData |> glimpse()
 ```
 
-## Summarise in sample of OMOP CDM
+### Summarise in sample of OMOP CDM
 
 Finally, you can summarise missing data on a sample of records from the OMOP CDM tables by specifying the desired number of records with the `sample` argument.
 
@@ -131,7 +133,7 @@ result_missingData <- summariseMissingData(cdm = cdm,
 result_missingData |> glimpse()
 ```
 
-## Visualise summary results
+### Visualise summary results
 
 You can present these results using the function `tableMissingData()`.
 
@@ -146,7 +148,8 @@ result_missingData <- summariseMissingData(cdm,
 )
 result_missingData |> tableMissingData()
 ```
-This table can either be of type `gt` (default) or `flextable`.
+
+This table can either be of type [gt](https://gt.rstudio.com/) (default) or [flextable](https://davidgohel.github.io/flextable/).
 
 ```{r, warning = FALSE}
 result_missingData |> tableMissingData(type = "flextable")
@@ -157,5 +160,3 @@ Finally, disconnect from the cdm
 ```{r, warning=FALSE}
 PatientProfiles::mockDisconnect(cdm = cdm)
 ```
-
-The results of the characterisation using `OmopSketch` can be further explored through the ShinyApp at <https://dpa-pde-oxford.shinyapps.io/OmopSketch-vignette/>
