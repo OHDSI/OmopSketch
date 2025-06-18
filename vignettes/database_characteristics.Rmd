@@ -44,7 +44,7 @@ The `databaseCharacteristics()` function provides a comprehensive summary of the
 
 -   A general database snapshot, using `summariseOmopSnapshot()`
 
--   A characterisation of the population in observation, built using the [CohortConstructor]() and [CohortCharacteristics]() packages
+-   A characterisation of the population in observation, built using the [CohortConstructor](https://ohdsi.github.io/CohortConstructor/) and [CohortCharacteristics](https://darwin-eu.github.io/CohortCharacteristics/) packages
 
 -   A summary of the observation period table using `summariseObservationPeriod()` and `summariseInObservation()`
 
