@@ -27,12 +27,7 @@ results <- purrr::map(databases, \(dbName) {
 }) |>
   omopgenerics::bind()
 
-# create shiny
-# TODO use the shiny app from OmopSketch
-OmopViewer::exportStaticApp(
+shinyCharacteristics(
   result = results,
-  background = FALSE,
-  summary = FALSE,
-  directory = here::here("extras"),
-  open = FALSE
-)
+  directory = here::here("extras")
+  )
