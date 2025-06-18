@@ -28,6 +28,7 @@ articles:
       - summarise_observation_period
       - characterisation
       - missing_data
+      - database_characteristics
 
 reference:
   - subtitle: Snapshots
