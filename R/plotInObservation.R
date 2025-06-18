@@ -60,6 +60,7 @@ plotInObservation <- function(result,
   # plot
   if (length(unique(result$additional_level)) > 1) {
     p <- result |>
+      dplyr::filter(.data$additional_level != "overall") |>
       dplyr::filter(.data$estimate_name == estimate) |>
       visOmopResults::scatterPlot(
         x = "time_interval",
