@@ -52,9 +52,8 @@ The `databaseCharacteristics()` function provides a comprehensive summary of the
 
 -   A characterisation of the clinical tables with `summariseClinicalRecords()` and `summariseRecordCount()`
 
-```{r}
+```{r, eval = FALSE}
 result <- databaseCharacteristics(cdm)
-omopgenerics::settings(result) |> dplyr::select("result_id", "result_type", "package_name")
 ```
 
 ## Selecting tables to characterise

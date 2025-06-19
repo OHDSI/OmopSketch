@@ -65,7 +65,7 @@ summarisedResult |>
 
 Additionally, you can stratify the results by sex and age groups, and specify a date range of interest:
 
-```{r, warning=FALSE}
+```{r, warning=FALSE, eval=FALSE}
 summarisedResult <- summariseObservationPeriod(cdm$observation_period,
   estimates = c("mean", "sd", "q05", "q95"),
   sex = TRUE,
@@ -73,9 +73,6 @@ summarisedResult <- summariseObservationPeriod(cdm$observation_period,
   dateRange = as.Date(c("1970-01-01", "2010-01-01"))
 )
 
-summarisedResult |>
-  select(group_level, variable_name, strata_level, estimate_name, estimate_value) |>
-  glimpse()
 ```
 
 Notice that, by default, the "overall" group will be also included, as well as crossed strata (that means, sex == "Female" and ageGroup == "\>35").
@@ -146,13 +143,11 @@ summarisedResult |>
 
 Note that you can adjust the time interval period using the `interval` argument, which can be set to either "years", "quarters", "months" or "overall" (default value).
 
-```{r, warning=FALSE}
+```{r, warning=FALSE, eval = FALSE}
 summarisedResult <- summariseInObservation(cdm$observation_period,
   interval = "months"
 )
 
-summarisedResult |>
-  select(variable_name, estimate_name, estimate_value, additional_name, additional_level)
 ```
 
 Along with the number of records in observation, you can also calculate the number of person-days by setting the `output` argument to c("record", "person-days").
@@ -169,7 +164,7 @@ summarisedResult |>
 
 We can further stratify our counts by sex (setting argument `sex = TRUE`) or by age (providing an age group). Notice that in both cases, the function will automatically create a group called *overall* with all the sex groups and all the age groups. We can also define a date range of interest to filter the `observation_period` table accordingly.
 
-```{r, warning=FALSE}
+```{r, warning=FALSE, eval = FALSE}
 
 summarisedResult <- summariseInObservation(cdm$observation_period, 
                                            output = c("record", "person-days"),
