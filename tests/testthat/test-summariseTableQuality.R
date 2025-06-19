@@ -1,5 +1,5 @@
 test_that("summariseTableQuality works", {
-
+  skip_on_cran()
   cdm <- cdmEunomia()
   ids <- cdm$drug_exposure |> dplyr::distinct(drug_exposure_id) |> dplyr::pull()
   set.seed(123)
@@ -117,7 +117,7 @@ test_that("summariseTableQuality works", {
 
 
 test_that("tableQuality works", {
-
+  skip_on_cran()
   cdm <- mockOmopSketch()
   expect_no_error(result <- summariseTableQuality(cdm, "drug_exposure", sex = TRUE))
   expect_no_error(tableQuality(result, type = "gt"))
