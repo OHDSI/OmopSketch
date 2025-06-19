@@ -64,73 +64,68 @@ result_missingData |> glimpse()
 
 You can choose to summarise missing data for specific OMOP CDM tables using the argument `omopTableName`.
 
-```{r, warning=FALSE}
+```{r, warning=FALSE, eval = FALSE}
 result_missingData <- summariseMissingData(cdm = cdm, 
                                            omopTableName = c("observation_period", "visit_occurrence", "condition_occurrence", "drug_exposure", "procedure_occurrence","device_exposure", "measurement", "observation", "death"))
 
-result_missingData |> glimpse()
 ```
 
 ### Summarise by sex
 
 You can choose to summarise missing data by sex by setting the argument `sex` to `TRUE`.
 
-```{r, warning=FALSE}
+```{r, warning=FALSE, eval = FALSE}
 result_missingData <- summariseMissingData(cdm = cdm, 
                                            omopTableName = c("observation_period", "visit_occurrence", "condition_occurrence", "drug_exposure", "procedure_occurrence","device_exposure", "measurement", "observation", "death"),
                                            sex = TRUE)
 
-result_missingData |> glimpse()
 ```
 
 ### Summarise by age group
 
 You can choose to summarise missing data by age group by creating a list defining the age groups you want to use.
 
-```{r, warning=FALSE}
+```{r, warning=FALSE, eval = FALSE}
 result_missingData <- summariseMissingData(cdm = cdm, 
                                            omopTableName = c("observation_period", "visit_occurrence", "condition_occurrence", "drug_exposure", "procedure_occurrence","device_exposure", "measurement", "observation", "death"), 
                                            ageGroup = list(c(0, 17), c(18, 64), c(65, 150)))
 
-result_missingData |> glimpse()
 ```
 
 ### Summarise by date and/or time interval
 
 You can also summarise missing data within a specific date range or across defined time intervals using the `dateRange` and `interval` arguments. The `interval` argument supports "overall" (no time stratification), "years", "quarters", or "months".
 
-```{r, warning=FALSE}
+```{r, warning=FALSE, eval = FALSE}
 result_missingData <- summariseMissingData(cdm = cdm, 
                                            omopTableName = c("observation_period", "visit_occurrence", "condition_occurrence", "drug_exposure", "procedure_occurrence","device_exposure", "measurement", "observation", "death"), 
                                            interval = "years",
                                            dateRange = as.Date(c("2012-01-01", "2019-01-01")))
 
-result_missingData |> glimpse()
+
 ```
 
 ### Summarise by column
 
 You can also choose to summarise missing data for specific columns in the OMOP CDM tables using the argument `col`.
 
-```{r, warning=FALSE}
+```{r, warning=FALSE, eval = FALSE}
 result_missingData <- summariseMissingData(cdm = cdm, 
                                            omopTableName = c("observation_period", "visit_occurrence", "condition_occurrence", "drug_exposure", "procedure_occurrence","device_exposure", "measurement", "observation", "death"),
                                            col = c("observation_period_start_date",
                                                    "observation_period_end_date"))
 
-result_missingData |> glimpse()
 ```
 
 ### Summarise in sample of OMOP CDM
 
 Finally, you can summarise missing data on a sample of records from the OMOP CDM tables by specifying the desired number of records with the `sample` argument.
 
-```{r, warning=FALSE}
+```{r, warning=FALSE, eval = FALSE}
 result_missingData <- summariseMissingData(cdm = cdm, 
                                            omopTableName = c("observation_period", "visit_occurrence", "condition_occurrence", "drug_exposure", "procedure_occurrence","device_exposure", "measurement", "observation", "death"),
                                            sample = 1000)
 
-result_missingData |> glimpse()
 ```
 
 ### Visualise summary results

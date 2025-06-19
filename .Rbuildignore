@@ -13,3 +13,5 @@
 ^Meta$
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
+^vignettes/characterisation.Rmd
+^vignettes/concept_id_counts.Rmd
