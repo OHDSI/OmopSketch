@@ -36,7 +36,6 @@
 <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Package functionalities</h6></li>
     <li><a class="dropdown-item" href="../articles/summarise_clinical_tables_records.html">Summarise clinical tables records</a></li>
-    <li><a class="dropdown-item" href="../articles/summarise_concept_set_counts.html">Summarise concept counts</a></li>
     <li><a class="dropdown-item" href="../articles/summarise_concept_id_counts.html">Summarise concept id counts</a></li>
     <li><a class="dropdown-item" href="../articles/summarise_observation_period.html">Summarise observation period</a></li>
     <li><a class="dropdown-item" href="../articles/characterisation.html">Characterisation of OMOP CDM</a></li>
@@ -176,18 +175,7 @@ specify a date range of interest:</p>
 <span>  sex <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">34</span><span class="op">)</span>, <span class="st">"&gt;=35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  dateRange <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1970-01-01"</span>, <span class="st">"2010-01-01"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">summarisedResult</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span>, <span class="va">strata_level</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rows: 135</span></span>
-<span><span class="co">#&gt; Columns: 5</span></span>
-<span><span class="co">#&gt; $ group_level    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "all"<span style="color: #949494;">, </span>"all"<span style="color: #949494;">, </span>"all"<span style="color: #949494;">, </span>"all"<span style="color: #949494;">, </span>"all"<span style="color: #949494;">, </span>"all"<span style="color: #949494;">, </span>"all"<span style="color: #949494;">, </span>"all"<span style="color: #949494;">,</span>…</span></span>
-<span><span class="co">#&gt; $ variable_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Number records"<span style="color: #949494;">, </span>"Number subjects"<span style="color: #949494;">, </span>"Records per perso…</span></span>
-<span><span class="co">#&gt; $ strata_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>…</span></span>
-<span><span class="co">#&gt; $ estimate_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count"<span style="color: #949494;">, </span>"count"<span style="color: #949494;">, </span>"mean"<span style="color: #949494;">, </span>"sd"<span style="color: #949494;">, </span>"q05"<span style="color: #949494;">, </span>"q95"<span style="color: #949494;">, </span>"mean"<span style="color: #949494;">, </span>"…</span></span>
-<span><span class="co">#&gt; $ estimate_value <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "68"<span style="color: #949494;">, </span>"68"<span style="color: #949494;">, </span>"1"<span style="color: #949494;">, </span>"0"<span style="color: #949494;">, </span>"1"<span style="color: #949494;">, </span>"1"<span style="color: #949494;">, </span>"3630.75"<span style="color: #949494;">, </span>"3455.634828…</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
 <p>Notice that, by default, the “overall” group will be also included,
 as well as crossed strata (that means, sex == “Female” and ageGroup ==
 “&gt;35”).</p>
@@ -206,23 +194,23 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/tableObservationPeriod.html">tableObservationPeriod</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> &lt;median&gt; [&lt;q25&gt; - &lt;q75&gt;] has not been formatted.</span></span></code></pre></div>
-<div id="qwmvimqgtw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#qwmvimqgtw table {
+<div id="aeobcrcscf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#aeobcrcscf table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#qwmvimqgtw thead, #qwmvimqgtw tbody, #qwmvimqgtw tfoot, #qwmvimqgtw tr, #qwmvimqgtw td, #qwmvimqgtw th {
+#aeobcrcscf thead, #aeobcrcscf tbody, #aeobcrcscf tfoot, #aeobcrcscf tr, #aeobcrcscf td, #aeobcrcscf th {
   border-style: none;
 }
 
-#qwmvimqgtw p {
+#aeobcrcscf p {
   margin: 0;
   padding: 0;
 }
 
-#qwmvimqgtw .gt_table {
+#aeobcrcscf .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -248,12 +236,12 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-left-color: #D9D9D9;
 }
 
-#qwmvimqgtw .gt_caption {
+#aeobcrcscf .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#qwmvimqgtw .gt_title {
+#aeobcrcscf .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -265,7 +253,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-bottom-width: 0;
 }
 
-#qwmvimqgtw .gt_subtitle {
+#aeobcrcscf .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -277,7 +265,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-top-width: 0;
 }
 
-#qwmvimqgtw .gt_heading {
+#aeobcrcscf .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -289,13 +277,13 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-right-color: #D3D3D3;
 }
 
-#qwmvimqgtw .gt_bottom_border {
+#aeobcrcscf .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#qwmvimqgtw .gt_col_headings {
+#aeobcrcscf .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -310,7 +298,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-right-color: #D3D3D3;
 }
 
-#qwmvimqgtw .gt_col_heading {
+#aeobcrcscf .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -330,7 +318,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   overflow-x: hidden;
 }
 
-#qwmvimqgtw .gt_column_spanner_outer {
+#aeobcrcscf .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -342,15 +330,15 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   padding-right: 4px;
 }
 
-#qwmvimqgtw .gt_column_spanner_outer:first-child {
+#aeobcrcscf .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#qwmvimqgtw .gt_column_spanner_outer:last-child {
+#aeobcrcscf .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#qwmvimqgtw .gt_column_spanner {
+#aeobcrcscf .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -362,11 +350,11 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   width: 100%;
 }
 
-#qwmvimqgtw .gt_spanner_row {
+#aeobcrcscf .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#qwmvimqgtw .gt_group_heading {
+#aeobcrcscf .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -392,7 +380,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   text-align: left;
 }
 
-#qwmvimqgtw .gt_empty_group_heading {
+#aeobcrcscf .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -407,15 +395,15 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   vertical-align: middle;
 }
 
-#qwmvimqgtw .gt_from_md > :first-child {
+#aeobcrcscf .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#qwmvimqgtw .gt_from_md > :last-child {
+#aeobcrcscf .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#qwmvimqgtw .gt_row {
+#aeobcrcscf .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -434,7 +422,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   overflow-x: hidden;
 }
 
-#qwmvimqgtw .gt_stub {
+#aeobcrcscf .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -447,7 +435,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   padding-right: 5px;
 }
 
-#qwmvimqgtw .gt_stub_row_group {
+#aeobcrcscf .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -461,15 +449,15 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   vertical-align: top;
 }
 
-#qwmvimqgtw .gt_row_group_first td {
+#aeobcrcscf .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#qwmvimqgtw .gt_row_group_first th {
+#aeobcrcscf .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#qwmvimqgtw .gt_summary_row {
+#aeobcrcscf .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -479,16 +467,16 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   padding-right: 5px;
 }
 
-#qwmvimqgtw .gt_first_summary_row {
+#aeobcrcscf .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#qwmvimqgtw .gt_first_summary_row.thick {
+#aeobcrcscf .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#qwmvimqgtw .gt_last_summary_row {
+#aeobcrcscf .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -498,7 +486,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-bottom-color: #D3D3D3;
 }
 
-#qwmvimqgtw .gt_grand_summary_row {
+#aeobcrcscf .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -508,7 +496,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   padding-right: 5px;
 }
 
-#qwmvimqgtw .gt_first_grand_summary_row {
+#aeobcrcscf .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -518,7 +506,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-top-color: #D3D3D3;
 }
 
-#qwmvimqgtw .gt_last_grand_summary_row_top {
+#aeobcrcscf .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -528,11 +516,11 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-bottom-color: #D3D3D3;
 }
 
-#qwmvimqgtw .gt_striped {
+#aeobcrcscf .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#qwmvimqgtw .gt_table_body {
+#aeobcrcscf .gt_table_body {
   border-top-style: solid;
   border-top-width: 3px;
   border-top-color: #D9D9D9;
@@ -541,7 +529,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-bottom-color: #D3D3D3;
 }
 
-#qwmvimqgtw .gt_footnotes {
+#aeobcrcscf .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -555,7 +543,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-right-color: #D3D3D3;
 }
 
-#qwmvimqgtw .gt_footnote {
+#aeobcrcscf .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -564,7 +552,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   padding-right: 5px;
 }
 
-#qwmvimqgtw .gt_sourcenotes {
+#aeobcrcscf .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -578,7 +566,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-right-color: #D3D3D3;
 }
 
-#qwmvimqgtw .gt_sourcenote {
+#aeobcrcscf .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -586,72 +574,72 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   padding-right: 5px;
 }
 
-#qwmvimqgtw .gt_left {
+#aeobcrcscf .gt_left {
   text-align: left;
 }
 
-#qwmvimqgtw .gt_center {
+#aeobcrcscf .gt_center {
   text-align: center;
 }
 
-#qwmvimqgtw .gt_right {
+#aeobcrcscf .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#qwmvimqgtw .gt_font_normal {
+#aeobcrcscf .gt_font_normal {
   font-weight: normal;
 }
 
-#qwmvimqgtw .gt_font_bold {
+#aeobcrcscf .gt_font_bold {
   font-weight: bold;
 }
 
-#qwmvimqgtw .gt_font_italic {
+#aeobcrcscf .gt_font_italic {
   font-style: italic;
 }
 
-#qwmvimqgtw .gt_super {
+#aeobcrcscf .gt_super {
   font-size: 65%;
 }
 
-#qwmvimqgtw .gt_footnote_marks {
+#aeobcrcscf .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#qwmvimqgtw .gt_asterisk {
+#aeobcrcscf .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#qwmvimqgtw .gt_indent_1 {
+#aeobcrcscf .gt_indent_1 {
   text-indent: 5px;
 }
 
-#qwmvimqgtw .gt_indent_2 {
+#aeobcrcscf .gt_indent_2 {
   text-indent: 10px;
 }
 
-#qwmvimqgtw .gt_indent_3 {
+#aeobcrcscf .gt_indent_3 {
   text-indent: 15px;
 }
 
-#qwmvimqgtw .gt_indent_4 {
+#aeobcrcscf .gt_indent_4 {
   text-indent: 20px;
 }
 
-#qwmvimqgtw .gt_indent_5 {
+#aeobcrcscf .gt_indent_5 {
   text-indent: 25px;
 }
 
-#qwmvimqgtw .katex-display {
+#aeobcrcscf .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#qwmvimqgtw div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#aeobcrcscf div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -889,24 +877,7 @@ observation during specific intervals of time.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseInObservation.html">summariseInObservation</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>,</span>
 <span>  interval <span class="op">=</span> <span class="st">"months"</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">summarisedResult</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">variable_name</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span>, <span class="va">additional_name</span>, <span class="va">additional_level</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1,550 × 5</span></span></span>
-<span><span class="co">#&gt;    variable_name   estimate_name estimate_value additional_name additional_level</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Number records… count         100            overall         overall         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Number records… percentage    100.00         overall         overall         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Number records… count         1              time_interval   1955-07-01 to 1…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Number records… percentage    1.00           time_interval   1955-07-01 to 1…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Number records… count         1              time_interval   1955-08-01 to 1…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Number records… percentage    1.00           time_interval   1955-08-01 to 1…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Number records… count         1              time_interval   1955-09-01 to 1…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Number records… percentage    1.00           time_interval   1955-09-01 to 1…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Number records… count         1              time_interval   1955-10-01 to 1…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Number records… percentage    1.00           time_interval   1955-10-01 to 1…</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1,540 more rows</span></span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
 <p>Along with the number of records in observation, you can also
 calculate the number of person-days by setting the <code>output</code>
 argument to c(“record”, “person-days”).</p>
@@ -942,22 +913,7 @@ also define a date range of interest to filter the
 <span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">strata_level</span>, <span class="va">variable_name</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span>, <span class="va">additional_name</span>, <span class="va">additional_level</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1,680 × 6</span></span></span>
-<span><span class="co">#&gt;    strata_level    variable_name    estimate_name estimate_value additional_name</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> overall         Number person-d… count         246891         overall        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Female          Number person-d… count         167999         overall        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Male            Number person-d… count         78892          overall        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> &gt;=35            Number person-d… count         25889          overall        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> &lt;35             Number person-d… count         221002         overall        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Male &amp;&amp;&amp; &lt;35    Number person-d… count         66195          overall        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Female &amp;&amp;&amp; &gt;=35 Number person-d… count         13192          overall        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Female &amp;&amp;&amp; &lt;35  Number person-d… count         154807         overall        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Male &amp;&amp;&amp; &gt;=35   Number person-d… count         12697          overall        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> overall         Number records … count         68             overall        </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1,670 more rows</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: additional_level &lt;chr&gt;</span></span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">strata_level</span>, <span class="va">variable_name</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span>, <span class="va">additional_name</span>, <span class="va">additional_level</span><span class="op">)</span></span></code></pre></div>
 <p>You can include additional output metrics by them to the output
 argument:</p>
 <p>If <code>output = "person"</code>, the trend in the number of
@@ -1006,11 +962,11 @@ stratification is ignored.</p>
 <span><span class="co">#&gt;    strata_level variable_name       estimate_name estimate_value additional_name</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> overall      Number females in … count         57             overall        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> &lt;35          Number females in … count         44             overall        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> &gt;=35         Number females in … count         13             overall        </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> &gt;=35         Number females in … count         13             overall        </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> &lt;35          Number females in … count         44             overall        </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> overall      Number females in … percentage    57.00          overall        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> &lt;35          Number females in … percentage    44.00          overall        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> &gt;=35         Number females in … percentage    13.00          overall        </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> &gt;=35         Number females in … percentage    13.00          overall        </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> &lt;35          Number females in … percentage    44.00          overall        </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> overall      Number females in … count         1              time_interval  </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> &lt;35          Number females in … count         1              time_interval  </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> overall      Number females in … percentage    1.00           time_interval  </span></span>
@@ -1030,14 +986,14 @@ more recent.</p>
 <span>                                           <span class="op">)</span>                                        </span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> age: median</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2025-06-19 11:27:25.63138</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2025-06-19 19:14:54.726594</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2025-06-19 11:27:25.791001</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2025-06-19 19:14:54.893893</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> age: median</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2025-06-19 11:27:27.055623</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2025-06-19 19:14:56.127538</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2025-06-19 11:27:27.25894</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2025-06-19 19:14:56.317217</span></span>
 <span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span></span>
@@ -1070,23 +1026,23 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/tableInObservation.html">tableInObservation</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"gt"</span><span class="op">)</span></span></code></pre></div>
-<div id="iubctzccll" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#iubctzccll table {
+<div id="auxpnosfna" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#auxpnosfna table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#iubctzccll thead, #iubctzccll tbody, #iubctzccll tfoot, #iubctzccll tr, #iubctzccll td, #iubctzccll th {
+#auxpnosfna thead, #auxpnosfna tbody, #auxpnosfna tfoot, #auxpnosfna tr, #auxpnosfna td, #auxpnosfna th {
   border-style: none;
 }
 
-#iubctzccll p {
+#auxpnosfna p {
   margin: 0;
   padding: 0;
 }
 
-#iubctzccll .gt_table {
+#auxpnosfna .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1112,12 +1068,12 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-left-color: #D9D9D9;
 }
 
-#iubctzccll .gt_caption {
+#auxpnosfna .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#iubctzccll .gt_title {
+#auxpnosfna .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1129,7 +1085,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-bottom-width: 0;
 }
 
-#iubctzccll .gt_subtitle {
+#auxpnosfna .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1141,7 +1097,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-top-width: 0;
 }
 
-#iubctzccll .gt_heading {
+#auxpnosfna .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1153,13 +1109,13 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-right-color: #D3D3D3;
 }
 
-#iubctzccll .gt_bottom_border {
+#auxpnosfna .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#iubctzccll .gt_col_headings {
+#auxpnosfna .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1174,7 +1130,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-right-color: #D3D3D3;
 }
 
-#iubctzccll .gt_col_heading {
+#auxpnosfna .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1194,7 +1150,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   overflow-x: hidden;
 }
 
-#iubctzccll .gt_column_spanner_outer {
+#auxpnosfna .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1206,15 +1162,15 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   padding-right: 4px;
 }
 
-#iubctzccll .gt_column_spanner_outer:first-child {
+#auxpnosfna .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#iubctzccll .gt_column_spanner_outer:last-child {
+#auxpnosfna .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#iubctzccll .gt_column_spanner {
+#auxpnosfna .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1226,11 +1182,11 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   width: 100%;
 }
 
-#iubctzccll .gt_spanner_row {
+#auxpnosfna .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#iubctzccll .gt_group_heading {
+#auxpnosfna .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1256,7 +1212,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   text-align: left;
 }
 
-#iubctzccll .gt_empty_group_heading {
+#auxpnosfna .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1271,15 +1227,15 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   vertical-align: middle;
 }
 
-#iubctzccll .gt_from_md > :first-child {
+#auxpnosfna .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#iubctzccll .gt_from_md > :last-child {
+#auxpnosfna .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#iubctzccll .gt_row {
+#auxpnosfna .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1298,7 +1254,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   overflow-x: hidden;
 }
 
-#iubctzccll .gt_stub {
+#auxpnosfna .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1311,7 +1267,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   padding-right: 5px;
 }
 
-#iubctzccll .gt_stub_row_group {
+#auxpnosfna .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1325,15 +1281,15 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   vertical-align: top;
 }
 
-#iubctzccll .gt_row_group_first td {
+#auxpnosfna .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#iubctzccll .gt_row_group_first th {
+#auxpnosfna .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#iubctzccll .gt_summary_row {
+#auxpnosfna .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1343,16 +1299,16 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   padding-right: 5px;
 }
 
-#iubctzccll .gt_first_summary_row {
+#auxpnosfna .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#iubctzccll .gt_first_summary_row.thick {
+#auxpnosfna .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#iubctzccll .gt_last_summary_row {
+#auxpnosfna .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1362,7 +1318,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-bottom-color: #D3D3D3;
 }
 
-#iubctzccll .gt_grand_summary_row {
+#auxpnosfna .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1372,7 +1328,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   padding-right: 5px;
 }
 
-#iubctzccll .gt_first_grand_summary_row {
+#auxpnosfna .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1382,7 +1338,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-top-color: #D3D3D3;
 }
 
-#iubctzccll .gt_last_grand_summary_row_top {
+#auxpnosfna .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1392,11 +1348,11 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-bottom-color: #D3D3D3;
 }
 
-#iubctzccll .gt_striped {
+#auxpnosfna .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#iubctzccll .gt_table_body {
+#auxpnosfna .gt_table_body {
   border-top-style: solid;
   border-top-width: 3px;
   border-top-color: #D9D9D9;
@@ -1405,7 +1361,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-bottom-color: #D3D3D3;
 }
 
-#iubctzccll .gt_footnotes {
+#auxpnosfna .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1419,7 +1375,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-right-color: #D3D3D3;
 }
 
-#iubctzccll .gt_footnote {
+#auxpnosfna .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1428,7 +1384,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   padding-right: 5px;
 }
 
-#iubctzccll .gt_sourcenotes {
+#auxpnosfna .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1442,7 +1398,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-right-color: #D3D3D3;
 }
 
-#iubctzccll .gt_sourcenote {
+#auxpnosfna .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1450,72 +1406,72 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   padding-right: 5px;
 }
 
-#iubctzccll .gt_left {
+#auxpnosfna .gt_left {
   text-align: left;
 }
 
-#iubctzccll .gt_center {
+#auxpnosfna .gt_center {
   text-align: center;
 }
 
-#iubctzccll .gt_right {
+#auxpnosfna .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#iubctzccll .gt_font_normal {
+#auxpnosfna .gt_font_normal {
   font-weight: normal;
 }
 
-#iubctzccll .gt_font_bold {
+#auxpnosfna .gt_font_bold {
   font-weight: bold;
 }
 
-#iubctzccll .gt_font_italic {
+#auxpnosfna .gt_font_italic {
   font-style: italic;
 }
 
-#iubctzccll .gt_super {
+#auxpnosfna .gt_super {
   font-size: 65%;
 }
 
-#iubctzccll .gt_footnote_marks {
+#auxpnosfna .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#iubctzccll .gt_asterisk {
+#auxpnosfna .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#iubctzccll .gt_indent_1 {
+#auxpnosfna .gt_indent_1 {
   text-indent: 5px;
 }
 
-#iubctzccll .gt_indent_2 {
+#auxpnosfna .gt_indent_2 {
   text-indent: 10px;
 }
 
-#iubctzccll .gt_indent_3 {
+#auxpnosfna .gt_indent_3 {
   text-indent: 15px;
 }
 
-#iubctzccll .gt_indent_4 {
+#auxpnosfna .gt_indent_4 {
   text-indent: 20px;
 }
 
-#iubctzccll .gt_indent_5 {
+#auxpnosfna .gt_indent_5 {
   text-indent: 25px;
 }
 
-#iubctzccll .katex-display {
+#auxpnosfna .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#iubctzccll div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#auxpnosfna div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1618,14 +1574,14 @@ package.</p>
 <span>                       ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">34</span><span class="op">)</span>, <span class="st">"&gt;=35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> </span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> age: median</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2025-06-19 11:27:31.377625</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2025-06-19 19:15:00.246989</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2025-06-19 11:27:31.72764</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2025-06-19 19:15:00.591585</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> age: median</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2025-06-19 11:27:33.377033</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2025-06-19 19:15:02.231568</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2025-06-19 11:27:33.78656</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2025-06-19 19:15:02.6287</span></span>
 <span><span class="fu"><a href="../reference/plotInObservation.html">plotInObservation</a></span><span class="op">(</span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">variable_name</span> <span class="op">==</span> <span class="st">"Median age in observation"</span><span class="op">)</span>,</span>
 <span>  colour <span class="op">=</span> <span class="st">"sex"</span>, </span>

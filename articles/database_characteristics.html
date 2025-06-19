@@ -36,7 +36,6 @@
 <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Package functionalities</h6></li>
     <li><a class="dropdown-item" href="../articles/summarise_clinical_tables_records.html">Summarise clinical tables records</a></li>
-    <li><a class="dropdown-item" href="../articles/summarise_concept_set_counts.html">Summarise concept counts</a></li>
     <li><a class="dropdown-item" href="../articles/summarise_concept_id_counts.html">Summarise concept id counts</a></li>
     <li><a class="dropdown-item" href="../articles/summarise_observation_period.html">Summarise observation period</a></li>
     <li><a class="dropdown-item" href="../articles/characterisation.html">Characterisation of OMOP CDM</a></li>
@@ -135,91 +134,7 @@ packages</p></li>
 <code><a href="../reference/summariseRecordCount.html">summariseRecordCount()</a></code></p></li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/databaseCharacteristics.html">databaseCharacteristics</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">)</span></span>
-<span><span class="co">#&gt; The characterisation will focus on the following OMOP tables: person,</span></span>
-<span><span class="co">#&gt; observation_period, visit_occurrence, condition_occurrence, drug_exposure,</span></span>
-<span><span class="co">#&gt; procedure_occurrence, device_exposure, measurement, observation, and death</span></span>
-<span><span class="co">#&gt; → Getting cdm snapshot</span></span>
-<span><span class="co">#&gt; Warning: Vocabulary version in cdm_source (NA) doesn't match the one in the vocabulary</span></span>
-<span><span class="co">#&gt; table (v5.0 18-JAN-19)</span></span>
-<span><span class="co">#&gt; → Getting population characteristics</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Building new trimmed cohort</span></span>
-<span><span class="co">#&gt; Creating initial cohort</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Cohort trimmed</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> adding demographics columns</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> summarising data</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> summarising cohort <span style="color: #0000BB;">general_population</span></span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> summariseCharacteristics finished!</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; → Summarising missing data</span></span>
-<span><span class="co">#&gt; Warning: These columns contain missing values, which are not permitted:</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">"race_concept_id"</span> and <span style="color: #0000BB;">"ethnicity_concept_id"</span></span></span>
-<span><span class="co">#&gt; Warning: These columns contain missing values, which are not permitted:</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">"period_type_concept_id"</span></span></span>
-<span><span class="co">#&gt; Warning: device_exposureomop table is empty.</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> 56 duplicated rows eliminated.</span></span>
-<span><span class="co">#&gt; → Summarising table quality</span></span>
-<span><span class="co">#&gt; Warning: device_exposureomop table is empty.</span></span>
-<span><span class="co">#&gt; → Summarising clinical records</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Adding variables of interest to <span style="color: #0000BB;">observation_period</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person in <span style="color: #0000BB;">observation_period</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">observation_period</span>: `in_observation` and `type_concept`.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Adding variables of interest to <span style="color: #0000BB;">visit_occurrence</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person in <span style="color: #0000BB;">visit_occurrence</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">visit_occurrence</span>: `in_observation`, `standard_concept`,</span></span>
-<span><span class="co">#&gt;   `source_vocabulary`, `domain_id`, and `type_concept`.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Adding variables of interest to <span style="color: #0000BB;">condition_occurrence</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person in <span style="color: #0000BB;">condition_occurrence</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">condition_occurrence</span>: `in_observation`, `standard_concept`,</span></span>
-<span><span class="co">#&gt;   `source_vocabulary`, `domain_id`, and `type_concept`.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Adding variables of interest to <span style="color: #0000BB;">drug_exposure</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person in <span style="color: #0000BB;">drug_exposure</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">drug_exposure</span>: `in_observation`, `standard_concept`,</span></span>
-<span><span class="co">#&gt;   `source_vocabulary`, `domain_id`, and `type_concept`.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Adding variables of interest to <span style="color: #0000BB;">procedure_occurrence</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person in <span style="color: #0000BB;">procedure_occurrence</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">procedure_occurrence</span>: `in_observation`, `standard_concept`,</span></span>
-<span><span class="co">#&gt;   `source_vocabulary`, `domain_id`, and `type_concept`.</span></span>
-<span><span class="co">#&gt; Warning: device_exposure is empty.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Adding variables of interest to <span style="color: #0000BB;">measurement</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person in <span style="color: #0000BB;">measurement</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">measurement</span>: `in_observation`, `standard_concept`,</span></span>
-<span><span class="co">#&gt;   `source_vocabulary`, `domain_id`, and `type_concept`.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Adding variables of interest to <span style="color: #0000BB;">observation</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person in <span style="color: #0000BB;">observation</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">observation</span>: `in_observation`, `standard_concept`,</span></span>
-<span><span class="co">#&gt;   `source_vocabulary`, `domain_id`, and `type_concept`.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Adding variables of interest to <span style="color: #0000BB;">death</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person in <span style="color: #0000BB;">death</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">death</span>: `in_observation`, `standard_concept`, `source_vocabulary`,</span></span>
-<span><span class="co">#&gt;   `domain_id`, and `type_concept`.</span></span>
-<span><span class="co">#&gt; → Summarising record counts</span></span>
-<span><span class="co">#&gt; Warning: device_exposure omop table is empty after application of date</span></span>
-<span><span class="co">#&gt; range.</span></span>
-<span><span class="co">#&gt; → Summarising in observation records, subjects, person-days, age and sex</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> age: median</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2025-06-19 11:23:01.930708</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2025-06-19 11:23:02.01</span></span>
-<span><span class="co">#&gt; → Summarising observation period</span></span>
-<span><span class="co">#&gt; ☺ Database characterisation finished. Code ran in 0 min and 41 sec</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> 1 table created: <span style="color: #0000BB;">"og_005_1750332147"</span>.</span></span>
-<span><span class="fu">omopgenerics</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/omopgenerics/reference/settings.html" class="external-link">settings</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="st">"result_id"</span>, <span class="st">"result_type"</span>, <span class="st">"package_name"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 8 × 3</span></span></span>
-<span><span class="co">#&gt;   result_id result_type                  package_name         </span></span>
-<span><span class="co">#&gt;       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>         1 summarise_omop_snapshot      OmopSketch           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>         2 summarise_characteristics    CohortCharacteristics</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>         3 summarise_missing_data       OmopSketch           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>         4 summarise_table_quality      OmopSketch           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>         5 summarise_clinical_records   OmopSketch           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>         6 summarise_record_count       OmopSketch           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span>         7 summarise_in_observation     OmopSketch           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span>         8 summarise_observation_period OmopSketch</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/databaseCharacteristics.html">databaseCharacteristics</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="selecting-tables-to-characterise">Selecting tables to characterise<a class="anchor" aria-label="anchor" href="#selecting-tables-to-characterise"></a>
 </h3>
