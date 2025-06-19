@@ -1,3 +1,7 @@
+# OmopSketch 0.5.1
+
+-   removed overall results when plotting trends by @cecicampanile #418
+
 # OmopSketch 0.5.0
 
 -   Table top concept counts by \@cecicampanile \@catalamarti #392
@@ -74,4 +78,4 @@
 -   Interval argument in summariseMissingData and summariseConceptIdCounts, year argument deprecated by @cecicampanile #317
 -   Only records in observation are accounted in summariseConceptIdCounts and summariseConceptSetCounts by @cecicampanile #319
 -   vignette with full characterisation and shiny by @cecicampanile #325
--   in summariseInObservation and summariseObservationPeriod study range is now applied wih cohortConstructor::trimToDateRange instead of requireInDateRange by @cecicampanile #325
+-   in summariseInObservation and summariseObservationPeriod study range is now applied with cohortConstructor::trimToDateRange instead of requireInDateRange by @cecicampanile #325
