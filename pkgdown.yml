@@ -9,7 +9,7 @@ articles:
   summarise_concept_id_counts: summarise_concept_id_counts.html
   summarise_concept_set_counts: summarise_concept_set_counts.html
   summarise_observation_period: summarise_observation_period.html
-last_built: 2025-06-18T19:18Z
+last_built: 2025-06-19T09:21Z
 urls:
   reference: https://OHDSI.github.io/OmopSketch/reference
   article: https://OHDSI.github.io/OmopSketch/articles

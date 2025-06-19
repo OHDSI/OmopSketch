@@ -80,7 +80,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Summarise concept id counts</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/OHDSI/OmopSketch/blob/main/vignettes/summarise_concept_id_counts.Rmd" class="external-link"><code>vignettes/summarise_concept_id_counts.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/OHDSI/OmopSketch/blob/v0.5.0/vignettes/summarise_concept_id_counts.Rmd" class="external-link"><code>vignettes/summarise_concept_id_counts.Rmd</code></a></small>
       <div class="d-none name"><code>summarise_concept_id_counts.Rmd</code></div>
     </div>
 
@@ -145,8 +145,8 @@ tables.</p>
 <span><span class="co">#&gt; Rows: 216</span></span>
 <span><span class="co">#&gt; Columns: 7</span></span>
 <span><span class="co">#&gt; $ group_level      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "drug_exposure"<span style="color: #949494;">, </span>"drug_exposure"<span style="color: #949494;">, </span>"drug_exposure"<span style="color: #949494;">, </span>"d…</span></span>
-<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "pneumococcal polysaccharide vaccine, 23 valent"<span style="color: #949494;">, </span>"Al…</span></span>
-<span><span class="co">#&gt; $ variable_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "40213201"<span style="color: #949494;">, </span>"1557272"<span style="color: #949494;">, </span>"40213160"<span style="color: #949494;">, </span>"1149380"<span style="color: #949494;">, </span>"402132…</span></span>
+<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Midazolam"<span style="color: #949494;">, </span>"Diclofenac Sodium 75 MG Delayed Release…</span></span>
+<span><span class="co">#&gt; $ variable_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "708298"<span style="color: #949494;">, </span>"40162359"<span style="color: #949494;">, </span>"40213227"<span style="color: #949494;">, </span>"723013"<span style="color: #949494;">, </span>"1150770"…</span></span>
 <span><span class="co">#&gt; $ estimate_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"c…</span></span>
 <span><span class="co">#&gt; $ estimate_value   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "100"<span style="color: #949494;">, </span>"100"<span style="color: #949494;">, </span>"100"<span style="color: #949494;">, </span>"100"<span style="color: #949494;">, </span>"100"<span style="color: #949494;">, </span>"100"<span style="color: #949494;">, </span>"100"<span style="color: #949494;">, </span>"100…</span></span>
 <span><span class="co">#&gt; $ additional_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "source_concept_id &amp;&amp;&amp; source_concept_name"<span style="color: #949494;">, </span>"source_…</span></span>
@@ -165,16 +165,16 @@ obtain both record and person counts.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 432 × 3</span></span></span>
 <span><span class="co">#&gt;    variable_name                                    estimate_name estimate_value</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> pneumococcal polysaccharide vaccine, 23 valent   count_records 100           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> pneumococcal polysaccharide vaccine, 23 valent   count_subjec… 59            </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Alendronate                                      count_records 100           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Alendronate                                      count_subjec… 61            </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> poliovirus vaccine, inactivated                  count_records 100           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> poliovirus vaccine, inactivated                  count_subjec… 65            </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> fluticasone                                      count_records 100           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> fluticasone                                      count_subjec… 63            </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> diphtheria, tetanus toxoids and acellular pertu… count_records 100           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> diphtheria, tetanus toxoids and acellular pertu… count_subjec… 58            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> celecoxib 200 MG Oral Capsule [Celebrex]         count_records 100           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> celecoxib 200 MG Oral Capsule [Celebrex]         count_subjec… 62            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Ampicillin 100 MG/ML Injectable Solution         count_records 100           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Ampicillin 100 MG/ML Injectable Solution         count_subjec… 62            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> rotavirus, live, monovalent vaccine              count_records 100           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> rotavirus, live, monovalent vaccine              count_subjec… 63            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Memantine                                        count_records 100           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Memantine                                        count_subjec… 61            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> tetanus toxoid, reduced diphtheria toxoid, and … count_records 100           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> tetanus toxoid, reduced diphtheria toxoid, and … count_subjec… 63            </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 422 more rows</span></span></span></code></pre></div>
 <p>Further stratification can be applied using the
 <code>interval</code>, <code>sex</code>, and <code>ageGroup</code>
@@ -194,7 +194,7 @@ stratification), “years”, “quarters”, or “months”.</p>
 <span><span class="co">#&gt; Columns: 5</span></span>
 <span><span class="co">#&gt; $ group_level      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "condition_occurrence"<span style="color: #949494;">, </span>"condition_occurrence"<span style="color: #949494;">, </span>"cond…</span></span>
 <span><span class="co">#&gt; $ strata_level     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"…</span></span>
-<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Fracture of vertebral column without spinal cord inj…</span></span>
+<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Escherichia coli urinary tract infection"<span style="color: #949494;">, </span>"Childhoo…</span></span>
 <span><span class="co">#&gt; $ estimate_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_subjects"<span style="color: #949494;">, </span>"count_subjects"<span style="color: #949494;">, </span>"count_subjects"<span style="color: #949494;">,</span>…</span></span>
 <span><span class="co">#&gt; $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "0 &amp;&amp;&amp; No matching concept"<span style="color: #949494;">, </span>"0 &amp;&amp;&amp; No matching conce…</span></span></code></pre></div>
 <p>We can also filter the clinical table to a specific time window by
@@ -226,10 +226,10 @@ specifying the <code>sample</code> argument.</p>
 <span>                         sample <span class="op">=</span> <span class="fl">50</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span>, <span class="va">estimate_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rows: 39</span></span>
+<span><span class="co">#&gt; Rows: 40</span></span>
 <span><span class="co">#&gt; Columns: 3</span></span>
 <span><span class="co">#&gt; $ group_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "condition_occurrence"<span style="color: #949494;">, </span>"condition_occurrence"<span style="color: #949494;">, </span>"conditi…</span></span>
-<span><span class="co">#&gt; $ variable_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Laceration of foot"<span style="color: #949494;">, </span>"Bullet wound"<span style="color: #949494;">, </span>"Closed fracture o…</span></span>
+<span><span class="co">#&gt; $ variable_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Fracture of vertebral column without spinal cord injury…</span></span>
 <span><span class="co">#&gt; $ estimate_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"coun…</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="display-the-results">Display the results<a class="anchor" aria-label="anchor" href="#display-the-results"></a>
@@ -1847,12 +1847,12 @@ argument:</p>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">9</span></td>
 <td headers="drug_exposure  [header_name]Cdm name
-[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Warfarin Sodium 5 MG Oral Tablet (40163554) <br> Source: No matching concept (0) <br> 69</span></td>
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Terfenadine (1150836) <br> Source: No matching concept (0) <br> 69</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">10</span></td>
 <td headers="drug_exposure  [header_name]Cdm name
-[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Terfenadine (1150836) <br> Source: No matching concept (0) <br> 69</span></td>
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Propofol (753626) <br> Source: No matching concept (0) <br> 69</span></td>
 </tr>
 </tbody>
 </table>
