@@ -1,4 +1,7 @@
 
+# set timeout to 10 minutes
+options(timeout = 600)
+
 # databases to characterise
 devtools::load_all()
 databases <- omock::availableMockDatasets()
