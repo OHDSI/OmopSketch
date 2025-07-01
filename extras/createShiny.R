@@ -40,6 +40,10 @@ results <- purrr::map(databases, \(dbName) {
   CDMConnector::cdmDisconnect(cdm = cdm)
   duckdb::duckdb_shutdown(drv = drv)
   unlink(duckFile)
+  mockPath <- file.path(omock::mockDatasetsFolder(), paste0(dbName, ".zip"))
+  print(file.exists(mockPath))
+  unlink(mockPath)
+  print(file.exists(mockPath))
 
   res
 }) |>
