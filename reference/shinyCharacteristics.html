@@ -53,6 +53,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">shinyCharacteristics</span><span class="op">(</span></span>
 <span>  <span class="va">result</span>,</span>
 <span>  <span class="va">directory</span>,</span>
+<span>  background <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  title <span class="op">=</span> <span class="st">"Database characterisation"</span>,</span>
 <span>  logo <span class="op">=</span> <span class="st">"ohdsi"</span>,</span>
 <span>  theme <span class="op">=</span> <span class="st">"bslib::bs_theme(bootswatch = 'flatly')"</span></span>
@@ -71,6 +72,13 @@ This object should include summaries of various OMOP CDM tables, such as populat
 <dt id="arg-directory">directory<a class="anchor" aria-label="anchor" href="#arg-directory"></a></dt>
 <dd><p>A character string specifying the directory where the application
 will be saved.</p></dd>
+
+
+<dt id="arg-background">background<a class="anchor" aria-label="anchor" href="#arg-background"></a></dt>
+<dd><p>Background panel for the Shiny app.
+If set to <code>TRUE</code> (default), a standard background panel with a general description will be included.
+If set to <code>FALSE</code>, no background panel will be displayed.
+Alternatively, you can provide a file path (e.g., <code>"path/to/file.md"</code>) to include custom background content from a Markdown file.</p></dd>
 
 
 <dt id="arg-title">title<a class="anchor" aria-label="anchor" href="#arg-title"></a></dt>
