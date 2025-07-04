@@ -169,3 +169,17 @@ validateFacet <- function(facet, result, call = parent.frame()) {
 
   return(invisible(NULL))
 }
+
+#' @noRd
+validateBackground <- function(background) {
+
+  msg <- "'background' must be either TRUE/FALSE or a path to an existing `.md` file."
+  if (is.logical(background)) {
+    omopgenerics::assertLogical(background, length = 1, call = call, msg = msg)
+  } else if (is.character(background)) {
+    omopgenerics::assertCharacter(background, length = 1, call = call, msg = msg)
+  } else {
+    cli::cli_abort(message = msg, call = call)
+  }
+  return(invisible(NULL))
+}
