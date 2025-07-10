@@ -264,8 +264,8 @@ moveDirectory <- function(from, to) {
     purrr::map_chr(\(x) {
       nm <- stringr::str_replace(
         string = x,
-        pattern = paste0("^", origin),
-        replacement = directory
+        pattern = paste0("^", from),
+        replacement = to
       )
       dir <- dirname(nm)
       if (!dir.exists(dir)) {
