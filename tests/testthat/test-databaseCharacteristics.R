@@ -32,13 +32,13 @@ test_that("shinyCharacteristics works", {
     result = omopgenerics::emptySummarisedResult(),
     directory = dir,
   ))
-  expect_false("shiny" %in% list.files(dir))
+  expect_false("OmopSketchShiny" %in% list.files(dir))
   expect_no_error(shinyCharacteristics(
     result = result,
     directory = dir
   ))
-  expect_true("shiny" %in% list.files(dir))
+  expect_true("OmopSketchShiny" %in% list.files(dir))
 
-  unlink(file.path(dir, "shiny"), recursive = TRUE)
+  unlink(file.path(dir, "OmopSketchShiny"), recursive = TRUE)
 })
 
