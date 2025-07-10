@@ -28,9 +28,13 @@
 #' }
 #'
 #' @export
-shinyCharacteristics <- function(result, directory, background = TRUE , title = "Database characterisation", logo = "ohdsi", theme = "bslib::bs_theme(bootswatch = 'flatly')") {
-
-  rlang::check_installed("OmopViewer")
+shinyCharacteristics <- function(result,
+                                 directory,
+                                 background = TRUE,
+                                 title = "Database characterisation",
+                                 logo = "ohdsi",
+                                 theme = NULL) {
+  rlang::check_installed(pkg = "OmopViewer", version = "0.4.0")
 
   omopgenerics::validateResultArgument(result)
   omopgenerics::assertCharacter(directory, length = 1)
@@ -38,16 +42,50 @@ shinyCharacteristics <- function(result, directory, background = TRUE , title = 
   omopgenerics::assertCharacter(theme, length = 1, null = TRUE)
   validateBackground(background)
 
+  # check directory
+  correct <- function(x) {
+    x <- tolower(x)
+    x[x == "yes"] <- "y"
+    x[x == "no"] <- "n"
+    x
+  }
+  directory <- file.path(directory, "OmopSketchShiny")
+  if (dir.exists(directory)) {
+    if (rlang::is_interactive()) {
+      cli::cli_inform(c("!" = "directory already exists: {.path {directory}}"))
+      msg <- c(i = "Do you want to overwrite it? Y/n")
+      cli::cli_inform(message = msg)
+      x <- correct(readline())
+      while(!x %in% c("y", "n")) {
+        cli::cli_inform(message = c("!" = "Please answer 'yes' or 'no'.", msg))
+        x <- correct(readline())
+      }
+      if (x == "n") {
+        cli::cli_abort(c(x = "Shiny is not created as it already exists"))
+      }
+    }
+    cli::cli_inform(c("!" = "Deleting prior existing directory: {.path {directory}}"))
+    unlink(x = directory, recursive = TRUE)
+  }
+  dir.create(path = directory)
 
-  if (background == TRUE) {
-
-    background_tmp <- tempfile(fileext = ".md")
-    writeLines(createOmopSketchBackground(), background_tmp)
-    background <- background_tmp
-
+  # create background if needed
+  if (isTRUE(background)) {
+    background <- tempfile(fileext = ".md")
+    writeLines(text = createOmopSketchBackground(), con = background)
+    deleteBackground <- TRUE
+  } else {
+    deleteBackground <- FALSE
   }
 
-  result_types <- c("summarise_omop_snapshot", "summarise_characteristics", "summarise_observation_period", "summarise_in_observation", "summarise_missing_data", "summarise_table_quality", "summarise_clinical_records", "summarise_concept_id_counts", "summarise_record_count")
+  # result types of interest
+  result_types <- c(
+    "summarise_omop_snapshot", "summarise_characteristics",
+    "summarise_observation_period", "summarise_in_observation",
+    "summarise_missing_data", "summarise_table_quality",
+    "summarise_clinical_records", "summarise_concept_id_counts",
+    "summarise_record_count"
+  )
 
   # subset to result_type of interest
   result <- result |>
@@ -55,74 +93,126 @@ shinyCharacteristics <- function(result, directory, background = TRUE , title = 
       .data$result_type %in% .env$result_types
     )
 
-  # check if it is empty
-  if (nrow(result) == 0) {
-    warnEmpty(result_types)
-    return(emptyPlot())
-  }
+  # get current resultTypes
+  resultTypes <- unique(omopgenerics::settings(result)$result_type)
 
-  conceptIdCounts <- "summarise_concept_id_counts" %in% dplyr::pull(omopgenerics::settings(result), "result_type")
-
+  # default panelDetails
   panelDetails <- OmopViewer::panelDetailsFromResult(result = result)
 
-  panelDetails$summarise_omop_snapshot$icon <- "camera"
-  panelDetails$summarise_omop_snapshot$content$tidy <- NULL
+  if ("summarise_omop_snapshot" %in% resultTypes) {
+    # customise summarise_omop_snapshot
+    panelDetails$summarise_omop_snapshot$icon <- "camera"
+    panelDetails$summarise_omop_snapshot$content$tidy <- NULL
+  }
 
-  panelDetails$summarise_observation_period$icon <- NULL
-  panelDetails$summarise_observation_period$content$tidy <- NULL
+  if ("summarise_observation_period" %in% resultTypes) {
+    # customise summarise_observation_period
+    panelDetails$summarise_observation_period$icon <- NULL
+    panelDetails$summarise_observation_period$content$tidy <- NULL
+    panelDetails$summarise_observation_period$content$plot$filters$variable$choices <- c("Number subjects", "Records per person", "Duration in days", "Days to next observation period")
+    panelDetails$summarise_observation_period$content$plot$filters$variable$selected <- "Number subjects"
+    panelDetails$summarise_observation_period$content$plot$filters$variable$label <- "Variable"
+  }
 
-  variable_names <- result |>
-    omopgenerics::filterSettings(.data$result_type == "summarise_observation_period") |>
-    dplyr::distinct(.data$variable_name) |>
-    dplyr::pull()
+  if ("summarise_clinical_records" %in% resultTypes) {
+    # customise summarise_clinical_records
+    panelDetails$summarise_clinical_records$icon <- NULL
+  }
 
-  panelDetails$summarise_observation_period$content$plot$filters$variable$choices <- c("Number subjects", "Records per person", "Duration in days", "Days to next observation period")
-  panelDetails$summarise_observation_period$content$plot$filters$variable$selected <- "Number subjects"
-  panelDetails$summarise_observation_period$content$plot$filters$variable$label <- "Variable"
+  if ("summarise_record_count" %in% resultTypes) {
+    # customise summarise_record_count
+    panelDetails$summarise_record_count$icon <- NULL
+  }
 
-  panelDetails$summarise_clinical_records$icon <- NULL
-  panelDetails$summarise_record_count$icon <- NULL
-  panelDetails$summarise_missing_data$icon <- NULL
-  panelDetails$summarise_table_quality$icon <- NULL
-  panelDetails$summarise_in_observation$icon <- NULL
-  panelDetails$summarise_characteristics$content$tidy <- NULL
-  panelDetails$summarise_characteristics$title <- "Population Characteristics"
+  if ("summarise_missing_data" %in% resultTypes) {
+    # customise summarise_missing_data
+    panelDetails$summarise_missing_data$icon <- NULL
+  }
 
-  variable_names <- result |>
-    omopgenerics::filterSettings(.data$result_type == "summarise_characteristics") |>
-    dplyr::distinct(.data$variable_name) |>
-    dplyr::pull()
+  if ("summarise_table_quality" %in% resultTypes) {
+    # customise summarise_table_quality
+    panelDetails$summarise_table_quality$icon <- NULL
+  }
 
-  panelDetails$summarise_characteristics$content$plot$render <- "<filtered_data> |>\n dplyr::filter(.data$variable_name == input$variable) |> \n    CohortCharacteristics::plotCharacteristics(\n      plotType = input$plot_type,\n      facet = input$facet,\n      colour = input$colour\n      )"
-  panelDetails$summarise_characteristics$content$plot$filters$variable <- list(button_type = "pickerInput", label = "Variable", choices = variable_names, selected = "Number subjects", multiple = FALSE)
-  panelDetails$summarise_characteristics$content$plot$filters$plot_type$selected <- "barplot"
+  if ("summarise_characteristics" %in% resultTypes) {
+    # customise summarise_characteristics
+    variable_names <- result |>
+      omopgenerics::filterSettings(.data$result_type == "summarise_characteristics") |>
+      dplyr::distinct(.data$variable_name) |>
+      dplyr::pull()
+    panelDetails$summarise_characteristics$content$tidy <- NULL
+    panelDetails$summarise_characteristics$title <- "Population Characteristics"
+    panelDetails$summarise_characteristics$content$plot$render <- "<filtered_data> |>
+    dplyr::filter(.data$variable_name == input$variable) |>
+    CohortCharacteristics::plotCharacteristics(
+      plotType = input$plot_type,
+      facet = input$facet,
+      colour = input$colour
+    )"
+    panelDetails$summarise_characteristics$content$plot$filters$variable <- list(
+      button_type = "pickerInput",
+      label = "Variable",
+      choices = variable_names,
+      selected = "Number subjects",
+      multiple = FALSE
+    )
+    panelDetails$summarise_characteristics$content$plot$filters$plot_type$selected <- "barplot"
+  }
 
+  if ("summarise_in_observation" %in% resultTypes) {
+    # customise summarise_in_observation
+    variable_names <- result |>
+      omopgenerics::filterSettings(.data$result_type == "summarise_in_observation") |>
+      dplyr::distinct(.data$variable_name) |>
+      dplyr::pull()
+    panelDetails$summarise_in_observation$content$plot$render <- "<filtered_data> |>
+    dplyr::filter(.data$variable_name == input$variable) |>
+    OmopSketch::plotInObservation(
+      facet = input$facet,
+      colour = input$colour
+    )"
+    panelDetails$summarise_in_observation$content$plot$filters$variable <- list(
+      button_type = "pickerInput",
+      label = "Variable",
+      choices = variable_names,
+      selected = "Number records in observation",
+      multiple = FALSE
+    )
+    panelDetails$summarise_in_observation$icon <- NULL
+  }
 
-  variable_names <- result |>
-    omopgenerics::filterSettings(.data$result_type == "summarise_in_observation") |>
-    dplyr::distinct(.data$variable_name) |>
-    dplyr::pull()
-
-  panelDetails$summarise_in_observation$content$plot$render <- "<filtered_data> |>\n dplyr::filter(.data$variable_name == input$variable) |> \n OmopSketch::plotInObservation(\n facet = input$facet,\n  colour = input$colour\n )"
-  panelDetails$summarise_in_observation$content$plot$filters$variable <- list(button_type = "pickerInput", label = "Variable", choices = variable_names, selected = "Number records in observation", multiple = FALSE)
-
-
-  if (conceptIdCounts) {
+  if ("summarise_concept_id_counts" %in% resultTypes) {
+    # customise summarise_concept_id_counts
     panelDetails$summarise_concept_id_counts$content$tidy$filters$columns$choices <- c("cdm_name", "<group>", "<strata>", "<additional>", "<settings>")
     panelDetails$summarise_concept_id_counts$content$tidy$filters$columns$selected <- c("cdm_name", "<group>", "<strata>")
     panelDetails$summarise_concept_id_counts$content$formatted <- NULL
   }
 
+  # define structure
+  panelStructure <- list(
+    "summarise_omop_snapshot",
+    "summarise_characteristics",
+    "Observation Period" = c("summarise_in_observation", "summarise_observation_period"),
+    "Quality" = c("summarise_missing_data", "summarise_table_quality"),
+    "Clinical Tables" = c("summarise_clinical_records", "summarise_record_count"),
+    "summarise_concept_id_counts"
+  ) |>
+    # keep only the present result types
+    purrr::map(\(x) x[x %in% resultTypes]) |>
+    purrr::compact()
 
-  panelStructure <- list("summarise_omop_snapshot", "summarise_characteristics",
-                         "Observation Period" = c("summarise_in_observation", "summarise_observation_period"),
-                         "Quality" = c("summarise_missing_data", "summarise_table_quality"),
-                         "Clinical Tables" = c("summarise_clinical_records", "summarise_record_count"), "summarise_concept_id_counts"[conceptIdCounts]
-  )
+  # temporary folder
+  tmpDir <- file.path(tempdir(), "omopviewer_test")
+  if (dir.exists(tmpDir)) {
+    unlink(x = tmpDir, recursive = TRUE)
+  }
+  dir.create(path = tmpDir)
 
+  # create temporary shiny
+  cli::cli_inform(c("i" = "Creating shiny from provided results."))
   OmopViewer::exportStaticApp(
     result = result,
-    directory = directory,
+    directory = tmpDir,
     logo = logo,
     title = title,
     background = background,
@@ -130,19 +220,26 @@ shinyCharacteristics <- function(result, directory, background = TRUE , title = 
     panelDetails = panelDetails,
     panelStructure = panelStructure,
     theme = theme,
-    open = rlang::is_interactive()
-  )
+    open = FALSE
+  ) |>
+    suppressMessages()
 
-  if (file.exists(background_tmp)) {
-    file.remove(background_tmp)
+  # move shiny
+  moveDirectory(from = file.path(tmpDir, "shiny"), to = directory)
+
+  if (deleteBackground) {
+    file.remove(background)
   }
 
+  if (rlang::is_interactive()) {
+    cli::cli_inform(c(i = "Launching shiny"))
+    usethis::proj_activate(path = directory)
+  }
 
   return(invisible())
 }
-
 createOmopSketchBackground <- function() {
-  md <- c(
+  c(
     "## OmopSketch Database Characterisation",
     "-----",
     "### Shiny App Overview",
@@ -160,6 +257,22 @@ createOmopSketchBackground <- function() {
     "- **Missing Data**: Overview of missing values and zero IDs in OMOP tables, based on [`summariseMissingData()`](https://ohdsi.github.io/OmopSketch/reference/summariseMissingData.html).",
     "- **Concept Counts** *(optional)*: Counts of `concept_id`s across tables, generated by [`summariseConceptIdCounts()`](https://ohdsi.github.io/OmopSketch/reference/summariseConceptIdCounts.html)."
   )
-  paste(md, collapse = "\n")
 }
-
+moveDirectory <- function(from, to) {
+  files <- list.files(path = from, full.names = TRUE, recursive = TRUE)
+  newFiles <- files |>
+    purrr::map_chr(\(x) {
+      nm <- stringr::str_replace(
+        string = x,
+        pattern = paste0("^", origin),
+        replacement = directory
+      )
+      dir <- dirname(nm)
+      if (!dir.exists(dir)) {
+        dir.create(path = dir)
+      }
+      nm
+    })
+  file.copy(from = files, to = newFiles)
+  unlink(x = from, recursive = TRUE)
+}
