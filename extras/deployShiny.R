@@ -5,7 +5,7 @@ rsconnect::setAccountInfo(
   secret = Sys.getenv("SHINYAPPS_SECRET")
 )
 rsconnect::deployApp(
-  appDir = here::here("extras", "shiny"),
+  appDir = here::here("extras", "OmopSketchShiny"),
   appName = "OmopSketchCharacterisation",
   forceUpdate = TRUE,
   logLevel = "verbose",

@@ -61,7 +61,8 @@ Suggests:
     covr,
     ggplot2,
     visOmopResults (>= 0.5.0),
-    devtools
+    devtools,
+    usethis
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Imports: 

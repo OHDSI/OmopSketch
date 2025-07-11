@@ -46,7 +46,7 @@ jobs:
 
       - name: Create renv file
         run: Rscript -e 'renv::init()'
-        working-directory: extras/shiny
+        working-directory: extras/OmopSketchShiny
 
       - name: Deploy to shinyapps.io
         if: github.event_name != 'pull_request'
