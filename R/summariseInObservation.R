@@ -283,7 +283,7 @@ getDenominator <- function(cdm, output) {
         dplyr::select("person_id") |>
         dplyr::summarise("n" = dplyr::n()) |>
         dplyr::pull("n")),
-      "variable_name" = "Number records in observation"
+      "variable_name" = "Records in observation"
     )
   }
   if ("person" %in% output) {
@@ -293,7 +293,7 @@ getDenominator <- function(cdm, output) {
         dplyr::select("person_id") |>
         dplyr::summarise("n" = dplyr::n()) |>
         dplyr::pull("n")),
-      "variable_name" = "Number subjects in observation"
+      "variable_name" = "Subjects in observation"
     )
   }
   if ("person-days" %in% output) {
@@ -318,7 +318,7 @@ getDenominator <- function(cdm, output) {
         dplyr::select("person_id") |>
         dplyr::summarise("n" = dplyr::n()) |>
         dplyr::pull("n")),
-      "variable_name" = "Number females in observation"
+      "variable_name" = "Females in observation"
     )
   }
 
