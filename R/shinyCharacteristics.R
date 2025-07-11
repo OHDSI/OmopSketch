@@ -63,8 +63,10 @@ shinyCharacteristics <- function(result,
       if (x == "n") {
         cli::cli_abort(c(x = "Shiny is not created as it already exists"))
       }
+      cli::cli_inform(c("!" = "Deleting prior existing directory: {.path {directory}}"))
+    } else {
+      cli::cli_warn(c("!" = "Deleting prior existing directory: {.path {directory}}"))
     }
-    cli::cli_inform(c("!" = "Deleting prior existing directory: {.path {directory}}"))
     unlink(x = directory, recursive = TRUE)
   }
   dir.create(path = directory)
@@ -92,6 +94,11 @@ shinyCharacteristics <- function(result,
     omopgenerics::filterSettings(
       .data$result_type %in% .env$result_types
     )
+
+  # message if empty
+  if (nrow(result) == 0) {
+    cli::cli_inform(c("!" = "No results provided, shiny will be empty."))
+  }
 
   # get current resultTypes
   resultTypes <- unique(omopgenerics::settings(result)$result_type)
