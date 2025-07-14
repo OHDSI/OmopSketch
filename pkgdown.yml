@@ -8,7 +8,7 @@ articles:
   summarise_clinical_tables_records: summarise_clinical_tables_records.html
   summarise_concept_id_counts: summarise_concept_id_counts.html
   summarise_observation_period: summarise_observation_period.html
-last_built: 2025-07-04T09:00Z
+last_built: 2025-07-14T09:50Z
 urls:
   reference: https://OHDSI.github.io/OmopSketch/reference
   article: https://OHDSI.github.io/OmopSketch/articles
