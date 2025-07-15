@@ -353,3 +353,65 @@ getOmopTableEndDate <- function(omopTable, date) {
     dplyr::mutate("end_date" = as.Date(paste0(as.character(as.integer(clock::get_year(.data$end_date))), "-12-31"))) |>
     dplyr::pull("end_date")
 }
+
+getDenominator <- function(omopTable, output) {
+  cdm <- omopgenerics::cdmReference(omopTable)
+
+  denominator <- tibble::tibble(
+    "denominator" = c(numeric()),
+    "variable_name" = c(character())
+  )
+  if ("record" %in% output) {
+    denominator <- denominator |>
+      dplyr::bind_rows(tibble::tibble(
+        "denominator" = c(omopTable  |>
+                            dplyr::ungroup() |>
+                            dplyr::summarise("n" = dplyr::n()) |>
+                            dplyr::pull("n")),
+        "variable_name" = "Records in observation"
+      ))
+  }
+  if ("person" %in% output) {
+    denominator <- denominator |>
+      dplyr::bind_rows(tibble::tibble(
+        "denominator" = c(cdm[["person"]] |>
+                            dplyr::ungroup() |>
+                            dplyr::select("person_id") |>
+                            dplyr::summarise("n" = dplyr::n()) |>
+                            dplyr::pull("n")),
+        "variable_name" = "Subjects in observation"
+      ))
+  }
+  if ("person-days" %in% output) {
+    tableName <- omopgenerics::tableName(table = omopTable)
+    start_date_name <- omopgenerics::omopColumns(table = tableName, field = "start_date")
+    end_date_name <- omopgenerics::omopColumns(table = tableName, field = "end_date")
+    y <- omopTable |>
+      dplyr::ungroup() |>
+      dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
+      dplyr::mutate(n = !!CDMConnector::datediff(start_date_name, end_date_name, interval = "day") + 1) |>
+      dplyr::summarise("n" = sum(.data$n, na.rm = TRUE)) |>
+      dplyr::pull("n")
+
+    denominator <- denominator |>
+      dplyr::bind_rows(tibble::tibble(
+        "denominator" = y,
+        "variable_name" = "Person-days"
+      ))
+  }
+
+  if ("sex" %in% output) {
+    denominator <- denominator |>
+      dplyr::bind_rows(tibble::tibble(
+        "denominator" = c(omopTable |>
+                            dplyr::ungroup() |>
+                            dplyr::inner_join(cdm[["person"]] |>
+                                                dplyr::filter(.data$gender_concept_id %in% c(8507, 8532)), by = "person_id") |>
+                            dplyr::summarise("n" = dplyr::n_distinct(.data$person_id)) |>
+                            dplyr::pull("n")),
+        "variable_name" = "Females in observation"
+      ))
+  }
+
+  return(denominator)
+}
