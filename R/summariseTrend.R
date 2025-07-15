@@ -297,3 +297,59 @@ res <- res |>
   dplyr::bind_rows()
 return(res)
 }
+
+getIntervalTibbleForObservation <- function(omopTable, start_date_name, end_date_name, interval) {
+  x <- validateIntervals(interval)
+  interval <- x$interval
+  unitInterval <- x$unitInterval
+
+  startDate <- getOmopTableStartDate(omopTable, start_date_name)
+  endDate <- getOmopTableEndDate(omopTable, end_date_name)
+
+  tibble::tibble(
+    "group" = seq.Date(startDate, endDate, .env$interval)
+  ) |>
+    dplyr::rowwise() |>
+    dplyr::mutate("interval" = max(
+      which(
+        .data$group >= seq.Date(from = startDate, to = endDate, by = paste(.env$unitInterval, .env$interval))
+      ),
+      na.rm = TRUE
+    )) |>
+    dplyr::ungroup() |>
+    dplyr::group_by(.data$interval) |>
+    dplyr::mutate(
+      "interval_start_date" = min(.data$group),
+      "interval_end_date" = dplyr::if_else(
+        .env$interval == "year",
+        clock::add_years(min(.data$group), .env$unitInterval, invalid = "previous") - 1,
+        clock::add_months(min(.data$group), .env$unitInterval, invalid = "previous") - 1
+      )
+    ) |>
+    dplyr::mutate(
+      "interval_start_date" = as.Date(.data$interval_start_date),
+      "interval_end_date" = as.Date(.data$interval_end_date)
+    ) |>
+    dplyr::mutate(
+      "time_interval" = paste(.data$interval_start_date, "to", .data$interval_end_date)
+    ) |>
+    dplyr::ungroup() |>
+    dplyr::select("interval_start_date", "interval_end_date", "time_interval") |>
+    dplyr::distinct()
+}
+
+getOmopTableStartDate <- function(omopTable, date) {
+  omopTable |>
+    dplyr::summarise("start_date" = min(.data[[date]], na.rm = TRUE)) |>
+    dplyr::collect() |>
+    dplyr::mutate("start_date" = as.Date(paste0(as.character(as.integer(clock::get_year(.data$start_date))), "-01-01"))) |>
+    dplyr::pull("start_date")
+}
+
+getOmopTableEndDate <- function(omopTable, date) {
+  omopTable |>
+    dplyr::summarise("end_date" = max(.data[[date]], na.rm = TRUE)) |>
+    dplyr::collect() |>
+    dplyr::mutate("end_date" = as.Date(paste0(as.character(as.integer(clock::get_year(.data$end_date))), "-12-31"))) |>
+    dplyr::pull("end_date")
+}
