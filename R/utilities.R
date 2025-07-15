@@ -1,14 +1,15 @@
 warnFacetColour <- function(result, cols) {
   colsToWarn <- result |>
     dplyr::select(
-      "cdm_name", "group_name", "group_level", "strata_name", "strata_level",
-      "variable_name", "variable_level"
+      dplyr::any_of(c("cdm_name", "group_name", "group_level", "strata_name", "strata_level",
+      "variable_name", "variable_level", "type"))
     ) |>
     dplyr::distinct() |>
     omopgenerics::splitAll() |>
     dplyr::select(!dplyr::any_of(unique(unlist(cols)))) |>
     as.list() |>
-    purrr::map(unique)
+    purrr::map(unique) |>
+    suppressMessages()
   colsToWarn <- colsToWarn[lengths(colsToWarn) > 1]
   if (length(colsToWarn) > 0) {
     cli::cli_warn(message = c(

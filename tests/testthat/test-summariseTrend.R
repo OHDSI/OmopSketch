@@ -825,3 +825,44 @@ test_that("overall time interval work", {
 })
 
 
+test_that("tableTrend() works", {
+  skip_on_cran()
+  # Load mock database ----
+  cdm <- cdmEunomia()
+
+  # Check that works ----
+  expect_no_error(x <- tableTrend(summariseTrend(cdm, event = "condition_occurrence")))
+  expect_true(inherits(x, "gt_tbl"))
+  expect_no_error(y <- tableTrend(summariseTrend(cdm, episode = "observation_period", event = c(
+    "observation_period",
+    "measurement"
+  ))))
+  expect_true(inherits(y, "gt_tbl"))
+  expect_warning(t <- summariseTrend(cdm, event = "death"))
+  expect_warning(inherits(tableTrend(t), "gt_tbl"))
+  expect_no_error(x <- tableTrend(summariseTrend(cdm, episode = "condition_occurrence"), type = "datatable"))
+  expect_no_error(x <- tableTrend(summariseTrend(cdm, event = "condition_occurrence"), type = "reactable"))
+  expect_no_error(tableTrend(summariseTrend(cdm, event = "condition_occurrence", output = "age")))
+  expect_no_error(tableTrend(summariseTrend(cdm, episode = "drug_exposure", event = "condition_occurrence",interval = "years", output = c("age", "record"), sex = TRUE)))
+
+  PatientProfiles::mockDisconnect(cdm = cdm)
+})
+
+test_that("plotTrend() works", {
+  skip_on_cran()
+  # Load mock database ----
+  cdm <- cdmEunomia()
+
+  # Check that works ----
+  expect_no_error(x <- plotTrend(summariseTrend(cdm, event = "condition_occurrence")))
+  expect_true(inherits(x, "ggplot"))
+  expect_no_error(plotTrend(summariseTrend(cdm, episode = "observation_period")))
+  expect_no_error(plotTrend(summariseTrend(cdm, episode = "observation_period", output = "age")))
+  expect_no_error(plotTrend(summariseTrend(cdm, episode = "observation_period", output = c("age", "record"))))
+  expect_error(plotTrend(summariseTrend(cdm, episode = "observation_period", output = c("age", "sex"))))
+  expect_no_error(plotTrend(summariseTrend(cdm, episode = "observation_period", output = c("age", "sex")), output = "sex"))
+
+  expect_warning(plotTrend(summariseTrend(cdm, episode = "condition_occurrence", event = "drug_exposure"), colour = NULL, facet = NULL))
+
+  PatientProfiles::mockDisconnect(cdm = cdm)
+})

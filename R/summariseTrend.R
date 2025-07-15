@@ -1,3 +1,53 @@
+#' Summarise temporal trends in OMOP tables
+#'
+#' This function summarises temporal trends from OMOP CDM tables, considering
+#' only data within the observation period.
+#' It supports both event and episode tables and can report trends such as
+#' number of records, number of subjects, person-days, median age, and number of females.
+#'
+#' - **Event tables**:
+#'   Records are included if their **start date** falls within the study period.
+#'   Each record contributes to the time interval containing the start date.
+#'
+#' - **Episode tables**:
+#'   Records are included if their **start or end date** overlaps with the study
+#'   period. Records are **trimmed** to the date range, and contribute to **all**
+#'   overlapping time intervals between start and end dates.
+#'
+#' @param cdm A `cdm_reference` object.
+#' @param event A character vector of OMOP table names to treat as event tables (uses only start date).
+#' @param episode A character vector of OMOP table names to treat as episode tables (uses start and end date).
+#' @param output A character vector indicating what to summarise.
+#' Options include `"record"` (default), `"person"`, `"person-days"`, `"age"`, `"sex"`.
+#' If included, the number of person-days is computed only for episode tables.
+#' @param interval Time granularity for trends. One of `"overall"` (default), `"years"`,
+#' `"quarters"`, or `"months"`.
+#' @param ageGroup A list of age groups to stratify results by.
+#' @param sex Logical. If `TRUE`, stratify results by sex.
+#' @param dateRange A vector of two dates defining the desired study period.
+#' If `dateRange` is `NULL`, no restriction is applied.
+#' @return A summarised_result object.
+#' @export
+#' @examples
+#' \donttest{
+#'
+#' cdm <- mockOmopSketch()
+#'
+#' summarisedResult <- summariseTrend(
+#'   cdm = cdm,
+#'   event = c("condition_occurrence", "drug_exposure"),
+#'   episode = "observation_period",
+#'   interval = "years",
+#'   ageGroup = list("<=20" = c(0, 20), ">20" = c(21, Inf)),
+#'   sex = TRUE,
+#'   dateRange = as.Date(c("1950-01-01", "2010-12-31"))
+#' )
+#'
+#' summarisedResult |>
+#'   dplyr::glimpse()
+#'
+#' PatientProfiles::mockDisconnect(cdm = cdm)
+#' }
 summariseTrend <- function(cdm,
                            event = NULL,
                            episode = NULL,
