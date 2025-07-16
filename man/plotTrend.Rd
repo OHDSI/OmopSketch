@@ -35,7 +35,7 @@ library(dplyr)
 
 cdm <- mockOmopSketch()
 
-result <- summariseTrend(cdm
+result <- summariseTrend(cdm,
   episode = "observation_period",
   output = c("person-days","record"),
   interval = "years",

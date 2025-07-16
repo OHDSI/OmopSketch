@@ -18,7 +18,7 @@
 #'
 #' cdm <- mockOmopSketch()
 #'
-#' result <- summariseTrend(cdm
+#' result <- summariseTrend(cdm,
 #'   episode = "observation_period",
 #'   output = c("person-days","record"),
 #'   interval = "years",
@@ -56,7 +56,7 @@ plotTrend <- function(result,
     omopgenerics::filterSettings(
       .data$result_type == "summarise_trend"
     ) |>
-    dplyr::filter(variable_name == variableName) |>
+    dplyr::filter(.data$variable_name == variableName) |>
     omopgenerics::addSettings(settingsColumn = "type")
   if (nrow(result) == 0) {
     cli::cli_abort(c("!" = "No records found with result_type == summarise_trend"))

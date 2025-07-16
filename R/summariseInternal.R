@@ -306,7 +306,7 @@ summariseMedianAge <- function(x, index_date, strata) {
     x |>
       dplyr::collect() |>
       dplyr::group_by(dplyr::across(dplyr::all_of(stratak))) |>
-      dplyr::summarise("estimate_value" = median(age))
+      dplyr::summarise("estimate_value" = stats::median(.data$age))
 
   }) |>
     dplyr::bind_rows() |>
