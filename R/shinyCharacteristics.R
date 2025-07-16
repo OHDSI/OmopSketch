@@ -149,7 +149,7 @@ shinyCharacteristics <- function(result,
       dplyr::pull()
     panelDetails$summarise_characteristics$content$tidy <- NULL
     panelDetails$summarise_characteristics$title <- "Population Characteristics"
-    panelDetails$summarise_characteristics$content$plot$render <- "<filtered_data> |>
+    panelDetails$summarise_characteristics$content$plot$reactive <- "<filtered_data> |>
     dplyr::filter(.data$variable_name == input$variable) |>
     CohortCharacteristics::plotCharacteristics(
       plotType = input$plot_type,
