@@ -21,7 +21,7 @@
 #' )
 #'
 #' result |>
-#'   filter(variable_name == "Number person-days") |>
+#'   filter(variable_name == "Person-days") |>
 #'   plotInObservation(facet = "sex", colour = "age_group")
 #'
 #' PatientProfiles::mockDisconnect(cdm)
