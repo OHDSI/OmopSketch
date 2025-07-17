@@ -7,9 +7,10 @@
 shinyCharacteristics(
   result,
   directory,
+  background = TRUE,
   title = "Database characterisation",
   logo = "ohdsi",
-  theme = "bslib::bs_theme(bootswatch = 'flatly')"
+  theme = NULL
 )
 }
 \arguments{
@@ -18,6 +19,11 @@ This object should include summaries of various OMOP CDM tables, such as populat
 
 \item{directory}{A character string specifying the directory where the application
 will be saved.}
+
+\item{background}{Background panel for the Shiny app.
+If set to \code{TRUE} (default), a standard background panel with a general description will be included.
+If set to \code{FALSE}, no background panel will be displayed.
+Alternatively, you can provide a file path (e.g., \code{"path/to/file.md"}) to include custom background content from a Markdown file.}
 
 \item{title}{Title of the shiny. Default is "Characterisation"}
 

@@ -57,11 +57,12 @@ Suggests:
     shinyWidgets,
     testthat (>= 3.0.0),
     withr,
-    omock (>= 0.3.0),
+    omock (>= 0.4.0),
     covr,
     ggplot2,
     visOmopResults (>= 0.5.0),
-    devtools
+    devtools,
+    usethis
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Imports: 
