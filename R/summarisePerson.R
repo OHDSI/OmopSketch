@@ -27,8 +27,18 @@ summarisePerson <- function(cdm) {
   result <- list()
 
   # summary subjects
-  number_subjects <- omopgenerics::numberSubjects(cdm$person)
-  result[["Number subjects"]] <- dplyr::tibble(count = number_subjects)
+  number_subjects <- as.numeric(omopgenerics::numberSubjects(cdm$person))
+  number_subjects_no_op <- cdm$observation_period |>
+    dplyr::anti_join(cdm$person, by = "person_id") |>
+    omopgenerics::numberSubjects() |>
+    as.numeric()
+  result[["Number subjects"]] <- dplyr::tibble(
+    count = as.integer(number_subjects)
+  )
+  result[["Number subjects not in observation"]] <- dplyr::tibble(
+    count = as.integer(number_subjects_no_op),
+    percentage = 100 * number_subjects_no_op / number_subjects
+  )
 
   # summary sex
   result[["Sex"]] <- cdm$person |>
@@ -112,10 +122,10 @@ addCount <- function(x, variable, den, labels = NULL) {
   x |>
     dplyr::arrange(.data$variable_level) |>
     dplyr::mutate(
-      dplyr::mutate(count = dplyr::coalesce(.data$count, 0L)),
+      count = dplyr::coalesce(.data$count, 0L),
       variable_level = as.character(.data$variable_level),
       variable_level = dplyr::coalesce(.data$variable_level, "Missing"),
-      percentage = 100 * .data$count / .env$den
+      percentage = 100 * as.numeric(.data$count) / .env$den
     )
 }
 summariseNumeric <- function(x, variable, den) {
