@@ -417,7 +417,8 @@ getDenominator <- function(omopTable, output) {
         "denominator" = c(omopTable  |>
                             dplyr::ungroup() |>
                             dplyr::summarise("n" = dplyr::n()) |>
-                            dplyr::pull("n")),
+                            dplyr::pull("n") |>
+                            as.numeric()),
         "variable_name" = "Records in observation"
       ))
   }
@@ -428,7 +429,8 @@ getDenominator <- function(omopTable, output) {
                             dplyr::ungroup() |>
                             dplyr::select("person_id") |>
                             dplyr::summarise("n" = dplyr::n()) |>
-                            dplyr::pull("n")),
+                            dplyr::pull("n") |>
+                            as.numeric()),
         "variable_name" = "Subjects in observation"
       ))
   }
@@ -441,7 +443,8 @@ getDenominator <- function(omopTable, output) {
       dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
       dplyr::mutate(n = !!CDMConnector::datediff(start_date_name, end_date_name, interval = "day") + 1) |>
       dplyr::summarise("n" = sum(.data$n, na.rm = TRUE)) |>
-      dplyr::pull("n")
+      dplyr::pull("n") |>
+      as.numeric()
 
     denominator <- denominator |>
       dplyr::bind_rows(tibble::tibble(
@@ -458,7 +461,8 @@ getDenominator <- function(omopTable, output) {
                             dplyr::inner_join(cdm[["person"]] |>
                                                 dplyr::filter(.data$gender_concept_id %in% c(8507, 8532)), by = "person_id") |>
                             dplyr::summarise("n" = dplyr::n_distinct(.data$person_id)) |>
-                            dplyr::pull("n")),
+                            dplyr::pull("n") |>
+                            as.numeric()),
         "variable_name" = "Females in observation"
       ))
   }
