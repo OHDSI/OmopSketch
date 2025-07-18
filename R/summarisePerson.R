@@ -19,6 +19,7 @@
 #'
 #' PatientProfiles::mockDisconnect(cdm)
 #' }
+#'
 summarisePerson <- function(cdm) {
   # input check
   cdm <- omopgenerics::validateCdmArgument(cdm = cdm)
@@ -63,27 +64,27 @@ summarisePerson <- function(cdm) {
 
   # summary year of birth
   result[["Year of birth"]] <- cdm$person |>
-    addCount(variable = "year_of_birth", den = number_subjects)
+    summariseNumeric1(variable = "year_of_birth")
 
   # summary month of birth
   result[["Month of birth"]] <- cdm$person |>
-    addCount(variable = "month_of_birth", den = number_subjects)
+    summariseNumeric1(variable = "month_of_birth")
 
   # summary month of birth
   result[["Day of birth"]] <- cdm$person |>
-    addCount(variable = "day_of_birth", den = number_subjects)
+    summariseNumeric1(variable = "day_of_birth")
 
   # summary location_id
   result[["Location"]] <- cdm$person |>
-    summariseNumeric(variable = "location_id", den = number_subjects)
+    summariseNumeric2(variable = "location_id", den = number_subjects)
 
   # summary provider_id
   result[["Provider"]] <- cdm$person |>
-    summariseNumeric(variable = "provider_id", den = number_subjects)
+    summariseNumeric2(variable = "provider_id", den = number_subjects)
 
   # summary care_site_id
   result[["Care site"]] <- cdm$person |>
-    summariseNumeric(variable = "care_site_id", den = number_subjects)
+    summariseNumeric2(variable = "care_site_id", den = number_subjects)
 
   # format results
   result <- result |>
@@ -95,11 +96,15 @@ summarisePerson <- function(cdm) {
       package_version = as.character(utils::packageVersion("OmopSketch"))
     ) |>
     omopgenerics::transformToSummarisedResult(
-      estimates = c("count", "percentage", "count_missing", "count_0", "distinct_values", "percentage_missing"),
+      estimates = c(
+        "count", "percentage", "count_missing", "percentage_missing", "count_0",
+        "percentage_0", "distinct_values", "min", "q05", "q25", "median", "q75",
+        "q95", "max"
+      ),
       settings = c("result_type", "package_name", "package_version")
     ) |>
     dplyr::mutate(estimate_type = dplyr::if_else(
-      .data$estimate_type %in% c("percentage", "percentage_missing"),
+      .data$estimate_type %in% c("percentage", "percentage_missing", "percentage_0"),
       "percentage",
       .data$estimate_type
     ))
@@ -128,7 +133,23 @@ addCount <- function(x, variable, den, labels = NULL) {
       percentage = 100 * as.numeric(.data$count) / .env$den
     )
 }
-summariseNumeric <- function(x, variable, den) {
+summariseNumeric1 <- function(x, variable) {
+  x |>
+    dplyr::select()
+  PatientProfiles::summariseResult(
+    table = x,
+    variables = variable,
+    estimates = c(
+      "count_missing", "percentage_missing", "min", "q05", "q25", "median",
+      "q75", "q95", "max"
+    ),
+    counts = FALSE
+  ) |>
+    suppressMessages() |>
+    omopgenerics::tidy() |>
+    dplyr::select(!c("cdm_name", "variable_name"))
+}
+summariseNumeric2 <- function(x, variable, den) {
   x |>
     dplyr::rename(variable_level = !!variable) |>
     dplyr::summarise(
@@ -141,6 +162,54 @@ summariseNumeric <- function(x, variable, den) {
       count_missing = dplyr::coalesce(.data$count_missing, 0L),
       count_0 = dplyr::coalesce(.data$count_0, 0L),
       distinct_values = dplyr::coalesce(.data$distinct_values, 0L),
-      percentage_missing = 100 * .data$count_missing / .env$den
+      percentage_missing = 100 * as.numeric(.data$count_missing) / .env$den,
+      percentage_0 =  100 * as.numeric(.data$count_0) / .env$den,
     )
+}
+
+#' Visualise the results of `summarisePerson()` into a table
+#'
+#' @param result A summarised_result object created by `summarisePerson()`.
+#' @param type One of the supported visualisation formats (see
+#' `visOmopResults::tableType()`).
+#'
+#' @return A table visualisation.
+#' @export
+#'
+#' @examples
+#' \donttest{
+#' library(OmopSketch)
+#'
+#' cdm <- mockOmopSketch(numberIndividuals = 100)
+#'
+#' result <- summarisePerson(cdm = cdm)
+#'
+#' tablePerson(result = result)
+#' }
+#'
+tablePerson <- function(result,
+                        type = "gt") {
+  rlang::check_installed("visOmopResults")
+
+  # input check
+  result <- omopgenerics::validateResultArgument(result = result)
+  omopgenerics::assertChoice(type, choices = visOmopResults::tableType())
+
+  # visualise results
+  visOmopResults::visOmopTable(
+    result = result,
+    estimateName = c(
+      "N (%)" = "<count> (<percentage>%)",
+      "N" = "<count>",
+      "Zeros N (%)" = "<count_0> (<percentage_0>%)",
+      "Missing N (%)" = "<count_missing> (<percentage_missing>%)",
+      "Median [Q25 - Q75]" = "<median> [<q25> - <q75>]",
+      "Q05 - Q95" = "<q05> - <q95>",
+      "Range" = "<min> to <max>",
+      "Distinct values" = "<distinct_values>"
+    ),
+    header = c("cdm_name"),
+    type = type
+  ) |>
+    suppressWarnings()
 }
