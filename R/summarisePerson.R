@@ -41,6 +41,10 @@ summarisePerson <- function(cdm) {
     percentage = 100 * number_subjects_no_op / number_subjects
   )
 
+  if (number_subjects_no_op > 0) {
+    cli::cli_warn(c("!" = "There {?is/are} {number_subjects_no_op} individual{?s} with no observation period defined."))
+  }
+
   # summary sex
   result[["Sex"]] <- cdm$person |>
     PatientProfiles::addSexQuery() |>
