@@ -310,7 +310,7 @@ summariseMedianAge <- function(x, index_date, strata) {
 
   }) |>
     dplyr::bind_rows() |>
-    dplyr::mutate(estimate_name = "median_age",
+    dplyr::mutate(estimate_name = "median",
                   estimate_type = "numeric",
                   estimate_value =  sprintf("%i", as.integer(.data$estimate_value)))
 
