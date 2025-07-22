@@ -60,3 +60,22 @@ createSettings <- function(result_type, result_id = 1L, study_period = NULL) {
   # Return the settings tibble
   return(settings)
 }
+
+#' Tables in the cdm_reference that contain clinical information
+#'
+#' @description
+#' This function provides a list of allowed inputs for the `omopTableName` argument in
+#' `summariseClinicalRecords`
+#' @return A character vector with table names
+#'
+#' @export
+#'
+#' @examples
+#' clinicalTables()
+#'
+clinicalTables <- function(){
+ c("observation_period", "visit_occurrence", "visit_detail", "condition_occurrence",
+   "drug_exposure", "procedure_occurrence", "device_exposure", "measurement",
+   "observation","death", "note", "specimen", "payer_plan_period", "drug_era",
+   "dose_era", "condition_era")
+}

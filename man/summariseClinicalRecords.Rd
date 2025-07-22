@@ -4,8 +4,8 @@
 \alias{summariseClinicalRecords}
 \title{Summarise an omop table from a cdm object. You will obtain
 information related to the number of records, number of subjects, whether the
-records are in observation, number of present domains and number of present
-concepts.}
+records are in observation, number of present domains, number of present
+concepts, missing data and inconsistencies}
 \usage{
 summariseClinicalRecords(
   cdm,
@@ -16,16 +16,21 @@ summariseClinicalRecords(
   sourceVocabulary = TRUE,
   domainId = TRUE,
   typeConcept = TRUE,
+  missingData = TRUE,
+  endBeforeStart = TRUE,
+  startBeforeBirth = TRUE,
   sex = FALSE,
   ageGroup = NULL,
-  dateRange = NULL
+  dateRange = NULL,
+  .options = NULL
 )
 }
 \arguments{
 \item{cdm}{A cdm_reference object.}
 
 \item{omopTableName}{A character vector of the names of the tables to
-summarise in the cdm object.}
+summarise in the cdm object. Run \code{OmopSketch::clinicalTables()} to check the
+available options.}
 
 \item{recordsPerPerson}{Generates summary statistics for the number of
 records per person. Set to NULL if no summary statistics are required.}
@@ -45,6 +50,14 @@ concept id information.}
 \item{typeConcept}{Boolean variable. Whether to summarise type concept id
 field information.}
 
+\item{missingData}{Boolean variable. Whether to summarise the number of missing data}
+
+\item{endBeforeStart}{Boolean variable. Whether to summarise the number of records
+with end date before start date}
+
+\item{startBeforeBirth}{Boolean variable. Whether to summarise the number of records
+with start date before the person's birth date.}
+
 \item{sex}{Boolean variable. Whether to stratify by sex (TRUE) or not
 (FALSE).}
 
@@ -53,6 +66,9 @@ field information.}
 \item{dateRange}{A vector of two dates defining the desired study period.
 Only the \code{start_date} column of the OMOP table is checked to ensure it falls within this range.
 If \code{dateRange} is \code{NULL}, no restriction is applied.}
+
+\item{.options}{A named list with additional argument for summarise missing data.
+\code{OmopSketch::missingDataOptions()} shows allowed arguments and their default values.}
 }
 \value{
 A summarised_result object.
@@ -60,8 +76,8 @@ A summarised_result object.
 \description{
 Summarise an omop table from a cdm object. You will obtain
 information related to the number of records, number of subjects, whether the
-records are in observation, number of present domains and number of present
-concepts.
+records are in observation, number of present domains, number of present
+concepts, missing data and inconsistencies
 }
 \examples{
 \donttest{
@@ -75,7 +91,10 @@ summarisedResult <- summariseClinicalRecords(
   standardConcept = TRUE,
   sourceVocabulary = TRUE,
   domainId = TRUE,
-  typeConcept = TRUE
+  typeConcept = TRUE,
+  missingData = TRUE,
+  endBeforeStart = TRUE,
+  startBeforeBirth = TRUE
 )
 
 summarisedResult

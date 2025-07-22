@@ -45,7 +45,7 @@ tableClinicalRecords <- function(result,
   }
 
   header <- c("cdm_name")
-  custom_order <- c("Number records", "Number subjects", "Records per person", "In observation", "Domain", "Source vocabulary", "Standard concept", "Type concept id")
+  custom_order <- c("Number records", "Number subjects", "Records per person", "In observation", "Domain", "Source vocabulary", "Standard concept", "Type concept id", "Start date before birth date", "End date before start date", "Column name")
   result |>
     formatColumn(c("variable_name", "variable_level")) |>
     dplyr::mutate(variable_name = factor(.data$variable_name, levels = custom_order)) |>

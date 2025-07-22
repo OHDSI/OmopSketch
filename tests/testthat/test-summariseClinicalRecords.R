@@ -78,7 +78,10 @@ test_that("summariseClinicalRecords() works", {
     standardConcept = FALSE,
     sourceVocabulary = FALSE,
     domainId = FALSE,
-    typeConcept = FALSE
+    typeConcept = FALSE,
+    missingData = FALSE,
+    endBeforeStart = FALSE,
+    startBeforeBirth = FALSE
   ) |>
     dplyr::tally() |> dplyr::pull() == 3)
 
