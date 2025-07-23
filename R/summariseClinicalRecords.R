@@ -1,7 +1,7 @@
 #' Summarise an omop table from a cdm object. You will obtain
 #' information related to the number of records, number of subjects, whether the
 #' records are in observation, number of present domains, number of present
-#' concepts, missing data and inconsistencies
+#' concepts, missing data and inconsistencies in start date and end date
 #'
 #' @param cdm A cdm_reference object.
 #' @param omopTableName A character vector of the names of the tables to
