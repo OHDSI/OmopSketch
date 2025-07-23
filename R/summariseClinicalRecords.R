@@ -90,10 +90,6 @@ summariseClinicalRecords <- function(cdm,
 
   .options <- defaultOptions(.options)
 
-  # warnings for observation_period
-  warnStandardConcept <- standardConcept & !missing(standardConcept)
-  warnSourceVocabulary <- sourceVocabulary & !missing(sourceVocabulary)
-  warnDomainId <- domainId & !missing(domainId)
   warnEndBeforeStart <- endBeforeStart & !missing(endBeforeStart)
 
   # prefix
@@ -125,27 +121,6 @@ summariseClinicalRecords <- function(cdm,
       return(tibble::tibble())
     }
 
-    # warn if observation_period
-    if ("observation_period" == table) {
-      if (warnStandardConcept) {
-        "standardConcept turned to FALSE for observation_period OMOP table" |>
-          rlang::set_names("i") |>
-          cli::cli_inform()
-      }
-      standardConcept <- FALSE
-      if (warnSourceVocabulary) {
-        "sourceVocabulary turned to FALSE for observation_period OMOP table" |>
-          rlang::set_names("i") |>
-          cli::cli_inform()
-      }
-      sourceVocabulary <- FALSE
-      if (warnDomainId) {
-        "domainId turned to FALSE for observation_period OMOP table" |>
-          rlang::set_names("i") |>
-          cli::cli_inform()
-      }
-      domainId <- FALSE
-    }
     if (omopgenerics::omopColumns(table = table, field = "start_date") == omopgenerics::omopColumns(table = table, field = "end_date")){
       if (warnEndBeforeStart){
         "endBeforeStart turned to FALSE for {.pkg {table}}" |>
@@ -160,12 +135,14 @@ summariseClinicalRecords <- function(cdm,
       return(tibble::tibble())
     }
     cli::cli_inform(c("i" = "Adding variables of interest to {.pkg {table}}."))
+    start_date_name <- omopgenerics::omopColumns(table, field = "start_date")
     omopTable <- omopTable |>
       addStratifications(
-        indexDate = omopgenerics::omopColumns(table, field = "start_date"),
+        indexDate = start_date_name,
         sex = sex,
         ageGroup = ageGroup,
         interval = "overall",
+        intervalName = "",
         name = omopgenerics::uniqueTableName(prefix)
       )
     x <- omopTable |>
@@ -544,25 +521,29 @@ addVariables <- function(x, tableName, inObservation, standardConcept, sourceVoc
   }
   if (startBeforeBirth) {
     if (!("birth_datetime" %in% colnames(cdm$person))) {
+      q <- c(birthdate = "as.Date(paste0(
+    as.character(as.integer(.data$year_of_birth)), '-',
+    as.character(as.integer(dplyr::coalesce(.data$month_of_birth, 1L))), '-',
+    as.character(as.integer(dplyr::coalesce(.data$day_of_birth, 1L)))))"
+      ) |>
+        rlang::parse_exprs()
+
       person_tbl <- cdm$person |>
-        dplyr::mutate(
-          birthdate = as.Date(paste0(
-            .data$year_of_birth, "-",
-            dbplyr::sql("LPAD(CAST(month_of_birth AS VARCHAR), 2, '0')"), "-",
-            dbplyr::sql("LPAD(CAST(day_of_birth AS VARCHAR), 2, '0')")
-            )))  |>
+        dplyr::mutate(!!!q) |>
         dplyr::select("person_id", "birthdate")
     } else {
+      q <- c(birthdate = "as.Date(paste0(
+    as.character(as.integer(.data$year_of_birth)), '-',
+    as.character(as.integer(dplyr::coalesce(.data$month_of_birth, 1L))), '-',
+    as.character(as.integer(dplyr::coalesce(.data$day_of_birth, 1L)))))"
+      ) |>
+        rlang::parse_exprs()
 
       person_tbl <- cdm$person |>
         dplyr::mutate(
           birthdate = dplyr::case_when(
             !is.na(.data$birth_datetime) ~ as.Date(.data$birth_datetime),
-            TRUE ~ as.Date(paste0(
-              .data$year_of_birth, "-",
-              dbplyr::sql("LPAD(CAST(month_of_birth AS VARCHAR), 2, '0')"), "-",
-              dbplyr::sql("LPAD(CAST(day_of_birth AS VARCHAR), 2, '0')")
-            ))
+            TRUE ~ !!!q
           )
         ) |>
         dplyr::select("person_id", "birthdate")

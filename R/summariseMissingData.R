@@ -153,7 +153,7 @@ summariseMissingDataFromTable <- function(omopTable, table, cdm, col, dateRange,
   # check if table is empty
 
   if (omopgenerics::isTableEmpty(omopTable)) {
-    cli::cli_warn(paste0(table, "omop table is empty."))
+    cli::cli_warn(paste0(table, " omop table is empty."))
     return(NULL)
   }
   col_table <- columnsToSummarise(
