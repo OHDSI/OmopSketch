@@ -75,8 +75,8 @@ reference:
       - databaseCharacteristics
       - shinyCharacteristics
 
-- subtitle: Helper functions
-    desc: Functions to help populate and summariseClinicalRecords().
+  - subtitle: Helper functions
+    desc: Functions to help populate and summariseClinicalRecords()
     contents:
       - clinicalTables
       - missingDataOptions
