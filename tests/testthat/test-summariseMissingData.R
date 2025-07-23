@@ -207,7 +207,7 @@ test_that("interval argument works", {
       quarter = paste(quarter_start, "to", quarter_end)
     ) |>
     dplyr::select(!c("time_interval", "start_date", "quarter_start", "quarter_end")) |>
-    dplyr::group_by(quarter, variable_name) |>
+    dplyr::group_by(quarter, variable_level) |>
     dplyr::summarise(na_count = sum(na_count), .groups = "drop") |>
     dplyr::rename("time_interval" = quarter) |>
     dplyr::arrange(time_interval)
@@ -216,7 +216,7 @@ test_that("interval argument works", {
     omopgenerics::splitAdditional() |>
     omopgenerics::pivotEstimates() |>
     dplyr::filter(time_interval != "overall") |>
-    dplyr::select(time_interval, variable_name, na_count) |>
+    dplyr::select(time_interval, variable_level, na_count) |>
     dplyr::arrange(time_interval)
 
   expect_equal(m_quarters |>
@@ -232,7 +232,7 @@ test_that("interval argument works", {
       year = clock::get_year(clock::as_year_month_day(start_date))
     ) |>
     omopgenerics::pivotEstimates() |>
-    dplyr::group_by(year, variable_name) |>
+    dplyr::group_by(year, variable_level) |>
     dplyr::summarise(
       na_count = sum(na_count),
       .groups = "drop"
@@ -248,7 +248,7 @@ test_that("interval argument works", {
       year = clock::get_year(clock::as_year_month_day(start_date))
     ) |>
     omopgenerics::pivotEstimates() |>
-    dplyr::select(year, variable_name, na_count) |>
+    dplyr::select(year, variable_level, na_count) |>
     dplyr::arrange(year)
 
   expect_equal(m_year |> sortTibble(), y_year |> sortTibble())
@@ -256,9 +256,9 @@ test_that("interval argument works", {
   o <- o |>
     omopgenerics::splitAdditional() |>
     omopgenerics::pivotEstimates() |>
-    dplyr::select(variable_name, na_count)
+    dplyr::select(variable_level, na_count)
 
-  expect_equal(y_year |> dplyr::group_by(variable_name) |> dplyr::summarise(na_count = sum(na_count), .groups = "drop") |> sortTibble(), o |> sortTibble())
+  expect_equal(y_year |> dplyr::group_by(variable_level) |> dplyr::summarise(na_count = sum(na_count), .groups = "drop") |> sortTibble(), o |> sortTibble())
 
 
   q_year <- q |>
@@ -271,7 +271,7 @@ test_that("interval argument works", {
       year = clock::get_year(clock::as_year_month_day(start_date))
     ) |>
     omopgenerics::pivotEstimates() |>
-    dplyr::group_by(year, variable_name) |>
+    dplyr::group_by(year, variable_level) |>
     dplyr::summarise(
       na_count = sum(na_count),
       .groups = "drop"
@@ -462,7 +462,7 @@ test_that("zero count argument works", {
   cdm$person <- cdm$person |>
     dplyr::mutate(person_id = dplyr::if_else(.data$person_id == 6, 0, .data$person_id))
   expect_equal(summariseMissingData(cdm, omopTableName = "person") |>
-    dplyr::filter(variable_name == "person_id" & estimate_name == "zero_count") |>
+    dplyr::filter(variable_level == "person_id" & estimate_name == "zero_count") |>
     dplyr::pull(.data$estimate_value) |> as.integer(), 1L)
 
 
@@ -470,7 +470,7 @@ test_that("zero count argument works", {
   columns_zero <- columns[grepl("_id$", columns)]
   expect_equal(summariseMissingData(cdm, "drug_exposure") |>
     dplyr::filter(estimate_name == "zero_count") |>
-    dplyr::distinct(variable_name) |>
+    dplyr::distinct(variable_level) |>
     dplyr::pull() |> sort(), columns_zero |> sort())
 
 

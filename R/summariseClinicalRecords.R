@@ -122,9 +122,8 @@ summariseClinicalRecords <- function(cdm,
     omopTable <- dplyr::ungroup(cdm[[table]])
     if (omopgenerics::isTableEmpty(omopTable)) {
       cli::cli_warn("{table} is empty.")
-      return(omopgenerics::emptySummarisedResult())
+      return(tibble::tibble())
     }
-    prefix <- omopgenerics::tmpPrefix()
 
     # warn if observation_period
     if ("observation_period" == table) {
@@ -158,7 +157,7 @@ summariseClinicalRecords <- function(cdm,
     # restrict study period
     omopTable <- restrictStudyPeriod(omopTable, dateRange)
     if (is.null(omopTable)) {
-      return(omopgenerics::emptySummarisedResult())
+      return(tibble::tibble())
     }
     cli::cli_inform(c("i" = "Adding variables of interest to {.pkg {table}}."))
     omopTable <- omopTable |>
@@ -276,7 +275,7 @@ summariseClinicalRecords <- function(cdm,
         )
     }
 
-    denominator <- resultsRecordPerPerson |>
+    denominator <- result$recordPerPerson |>
       dplyr::filter(.data$variable_name == "Number records") |>
       dplyr::select("strata_name", "strata_level", den = "estimate_value")
 
@@ -326,35 +325,21 @@ summariseClinicalRecords <- function(cdm,
     }
 
     fullResult <- dplyr::bind_rows(result) |>
-      dplyr::mutate(omop_table = .env$table) |>
-      omopgenerics::uniteGroup(cols = "omop_table")
-
-    # drop temp tables
-    omopgenerics::dropSourceTable(cdm = cdm, name = dplyr::starts_with(prefix))
-
-    # order
-    fullResult |>
-      dplyr::select("strata_name", "strata_level") |>
-      dplyr::distinct() |>
-      dplyr::cross_join(dplyr::tibble(variable_name = unique(c(
-        "Number subjects", "Number records", "records_per_person",
-        unique(fullResult$variable_name)
-      )))) |>
-      dplyr::mutate(order_id = dplyr::row_number()) |>
-      dplyr::right_join(
-        fullResult,
-        by = c("strata_name", "strata_level", "variable_name"),
-        relationship = "many-to-many"
-      ) |>
-      dplyr::arrange(.data$order_id, .data$variable_level, .data$estimate_name) |>
-      dplyr::select(!"order_id")
+      dplyr::mutate(omop_table = .env$table)
   }) |>
-    dplyr::bind_rows() |>
+    dplyr::bind_rows()
+
+  if(rlang::is_empty(result)){
+    return(omopgenerics::emptySummarisedResult(settings = set))
+  }
+
+  result <- result |>
     dplyr::mutate(
       result_id = 1L,
       cdm_name = omopgenerics::cdmName(cdm)
     ) |>
-  omopgenerics::newSummarisedResult(settings = set)
+    omopgenerics::uniteGroup(cols = "omop_table") |>
+    omopgenerics::newSummarisedResult(settings = set)
 
   # drop temp tables
   omopgenerics::dropSourceTable(cdm = cdm, name = dplyr::starts_with(prefix))

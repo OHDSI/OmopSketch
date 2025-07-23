@@ -75,7 +75,7 @@ summariseMissingData <- function(cdm,
       omopgenerics::combineStrata(c(strataCols(sex = sex, ageGroup = ageGroup, interval = interval)))
     )
     result <- purrr::map(omopTableName, function(table) {
-      summariseMissingDataFromTable(omoTable = cdm[[table]], table = table, cdm = cdm, col = col, dateRange = dateRange, sample = sample, sex = sex, ageGroup = ageGroup, interval = interval, strata = strata)
+      summariseMissingDataFromTable(omopTable = cdm[[table]], table = table, cdm = cdm, col = col, dateRange = dateRange, sample = sample, sex = sex, ageGroup = ageGroup, interval = interval, strata = strata)
     }) |>
       purrr::compact()
   } else {
@@ -101,8 +101,8 @@ summariseMissingData <- function(cdm,
     omopgenerics::uniteStrata(cols = setdiff(unique(unlist(strata)), "interval")) |>
     addTimeInterval() |>
     omopgenerics::uniteAdditional(cols = "time_interval") |>
-    dplyr::mutate(variable_level = NA_character_) |>
-    dplyr::rename(variable_name = "column_name") |>
+    dplyr::mutate(variable_name = "Column name") |>
+    dplyr::rename("variable_level" = "column_name") |>
     omopgenerics::newSummarisedResult(settings = createSettings(
       result_type = "summarise_missing_data", study_period = dateRange
     ))

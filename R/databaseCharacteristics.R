@@ -111,37 +111,19 @@ databaseCharacteristics <- function(cdm,
 
   omopgenerics::dropSourceTable(cdm = cdm, c("population_1", "population_2", "population"))
 
-
+  if ("person" %in% omopTableName){
   # Summarise missing data
-  cli::cli_inform(paste(cli::symbol$arrow_right, "Summarising missing data"))
+  cli::cli_inform(paste(cli::symbol$arrow_right, "Summarising missing data in person table"))
   result$missingData <- do.call(
     summariseMissingData,
     c(list(
       cdm,
-      omopTableName = omopTableName,
-      sex = sex,
-      ageGroup = ageGroup,
-      interval = interval,
-      dateRange = dateRange
+      omopTableName = "person"
     ), filter_args(summariseMissingData, args_list))
   )
+  }
 
   omopTableName <- omopTableName[omopTableName != "person"]
-
-  # Summarise table quality
-  cli::cli_inform(paste(cli::symbol$arrow_right, "Summarising table quality"))
-  result$tableQuality <- do.call(
-    summariseTableQuality,
-    c(list(
-      cdm,
-      omopTableName = omopTableName,
-      sex = sex,
-      ageGroup = ageGroup,
-      interval = interval,
-      dateRange = dateRange
-    ), filter_args(summariseTableQuality, args_list))
-  )
-
 
   if (conceptIdCounts) {
 
