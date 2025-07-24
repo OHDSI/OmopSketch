@@ -81,7 +81,7 @@ summariseClinicalRecords <- function(cdm,
   if (lifecycle::is_present(domainId)) {
     lifecycle::deprecate_warn("1.0.0", "summariseClinicalRecords(domainId)", "summariseClinicalRecords(conceptSummary)")
   }
-  if (lifecycle::is_presentl(typeConcept)) {
+  if (lifecycle::is_present(typeConcept)) {
     lifecycle::deprecate_warn("1.0.0", "summariseClinicalRecords(typeConcept)", "summariseClinicalRecords(conceptSummary)")
   }
   # Initial checks ----
