@@ -11,18 +11,17 @@ summariseClinicalRecords(
   cdm,
   omopTableName,
   recordsPerPerson = c("mean", "sd", "median", "q25", "q75", "min", "max"),
-  inObservation = TRUE,
-  standardConcept = TRUE,
-  sourceVocabulary = TRUE,
-  domainId = TRUE,
-  typeConcept = TRUE,
+  conceptSummary = TRUE,
   missingData = TRUE,
-  endBeforeStart = TRUE,
-  startBeforeBirth = TRUE,
+  quality = TRUE,
   sex = FALSE,
   ageGroup = NULL,
   dateRange = NULL,
-  .options = NULL
+  inObservation = lifecycle::deprecated(),
+  standardConcept = lifecycle::deprecated(),
+  sourceVocabulary = lifecycle::deprecated(),
+  domainId = lifecycle::deprecated(),
+  typeConcept = lifecycle::deprecated()
 )
 }
 \arguments{
@@ -35,28 +34,22 @@ available options.}
 \item{recordsPerPerson}{Generates summary statistics for the number of
 records per person. Set to NULL if no summary statistics are required.}
 
-\item{inObservation}{Boolean variable. Whether to include the percentage of
-records in observation.}
+\item{conceptSummary}{Logical. If \code{TRUE}, includes summaries of concept-level information, including:
+\itemize{
+\item Domain ID of standard concepts
+\item Type concept ID
+\item Standard vs non-standard concepts
+\item Source vocabulary usage
+}}
 
-\item{standardConcept}{Boolean variable. Whether to summarise standard
-concept information.}
+\item{missingData}{Logical. If \code{TRUE}, includes a summary of missing data for relevant fields.}
 
-\item{sourceVocabulary}{Boolean variable.  Whether to summarise source
-vocabulary information.}
-
-\item{domainId}{Boolean variable. Whether to summarise domain id of standard
-concept id information.}
-
-\item{typeConcept}{Boolean variable. Whether to summarise type concept id
-field information.}
-
-\item{missingData}{Boolean variable. Whether to summarise the number of missing data}
-
-\item{endBeforeStart}{Boolean variable. Whether to summarise the number of records
-with end date before start date}
-
-\item{startBeforeBirth}{Boolean variable. Whether to summarise the number of records
-with start date before the person's birth date.}
+\item{quality}{Logical. If \code{TRUE}, performs basic data quality checks, including:
+\itemize{
+\item Percentage of records within the observation period
+\item Number of records with end date before start date
+\item Number of records with start date before the person's birth date
+}}
 
 \item{sex}{Boolean variable. Whether to stratify by sex (TRUE) or not
 (FALSE).}
@@ -67,8 +60,15 @@ with start date before the person's birth date.}
 Only the \code{start_date} column of the OMOP table is checked to ensure it falls within this range.
 If \code{dateRange} is \code{NULL}, no restriction is applied.}
 
-\item{.options}{A named list with additional argument for summarise missing data.
-\code{OmopSketch::missingDataOptions()} shows allowed arguments and their default values.}
+\item{inObservation}{Deprecated. Use \code{quality = TRUE} instead.}
+
+\item{standardConcept}{Deprecated. Use \code{conceptSummary = TRUE} instead.}
+
+\item{sourceVocabulary}{Deprecated. Use \code{conceptSummary = TRUE} instead.}
+
+\item{domainId}{Deprecated. Use \code{conceptSummary = TRUE} instead.}
+
+\item{typeConcept}{Deprecated. Use \code{conceptSummary = TRUE} instead.}
 }
 \value{
 A summarised_result object.
@@ -87,14 +87,9 @@ summarisedResult <- summariseClinicalRecords(
   cdm = cdm,
   omopTableName = "condition_occurrence",
   recordsPerPerson = c("mean", "sd"),
-  inObservation = TRUE,
-  standardConcept = TRUE,
-  sourceVocabulary = TRUE,
-  domainId = TRUE,
-  typeConcept = TRUE,
-  missingData = TRUE,
-  endBeforeStart = TRUE,
-  startBeforeBirth = TRUE
+  quality = TRUE,
+  conceptSummary = TRUE,
+  missingData = TRUE
 )
 
 summarisedResult

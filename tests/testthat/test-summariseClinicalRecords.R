@@ -4,10 +4,10 @@ test_that("summariseClinicalRecords() works", {
   cdm <- cdmEunomia()
 
   # Check all tables work ----
-  expect_true(inherits(summariseClinicalRecords(cdm, "observation_period"), "summarised_result"))
-  expect_no_error(op <- summariseClinicalRecords(cdm, "observation_period"))
+  expect_true(inherits(summariseClinicalRecords(cdm, "drug_exposure"), "summarised_result"))
+  expect_error(summariseClinicalRecords(cdm, "observation_period"))
   expect_no_error(vo <- summariseClinicalRecords(cdm, "visit_occurrence"))
-  expect_no_error(summariseClinicalRecords(cdm, "condition_occurrence"))
+  expect_no_error(c <- summariseClinicalRecords(cdm, "condition_occurrence"))
   expect_no_error(summariseClinicalRecords(cdm, "drug_exposure"))
   expect_no_error(summariseClinicalRecords(cdm, "procedure_occurrence"))
   expect_warning(summariseClinicalRecords(cdm, "device_exposure"))
@@ -16,12 +16,12 @@ test_that("summariseClinicalRecords() works", {
   expect_warning(de <- summariseClinicalRecords(cdm, "death"))
 
   # Check result type
-  checkResultType(op, "summarise_clinical_records")
+  checkResultType(c, "summarise_clinical_records")
   checkResultType(de, "summarise_clinical_records")
 
-  expect_no_error(all <- summariseClinicalRecords(cdm, c("observation_period", "visit_occurrence", "measurement")))
+  expect_no_error(all <- summariseClinicalRecords(cdm, c("condition_occurrence", "visit_occurrence", "measurement")))
   expect_equal(
-    dplyr::bind_rows(op, vo, m) |>
+    dplyr::bind_rows(c, vo, m) |>
       dplyr::mutate(estimate_value = dplyr::if_else(
         .data$variable_name == "records_per_person",
         as.character(round(as.numeric(.data$estimate_value), 3)),
@@ -42,46 +42,35 @@ test_that("summariseClinicalRecords() works", {
     dplyr::filter(variable_name %in% "records_per_person") |>
     dplyr::tally() |>
     dplyr::pull() == 0)
-  expect_true(summariseClinicalRecords(cdm, "condition_occurrence",
-    inObservation = FALSE
-  ) |>
+  q <- summariseClinicalRecords(cdm, "condition_occurrence",
+                                quality = FALSE)
+  expect_true(q |>
     dplyr::filter(variable_name %in% "In observation") |>
     dplyr::tally() |>
     dplyr::pull() == 0)
-  expect_true(summariseClinicalRecords(cdm, "condition_occurrence",
-    standardConcept = FALSE
-  ) |>
+  cs <- summariseClinicalRecords(cdm, "condition_occurrence",
+                                 conceptSummary = FALSE)
+  expect_true(cs |>
     dplyr::filter(variable_name %in% "Standard concept") |>
     dplyr::tally() |>
     dplyr::pull() == 0)
-  expect_true(summariseClinicalRecords(cdm, "condition_occurrence",
-    sourceVocabulary = FALSE
-  ) |>
+  expect_true(cs |>
     dplyr::filter(variable_name %in% "Source vocabulary") |>
     dplyr::tally() |>
     dplyr::pull() == 0)
-  expect_true(summariseClinicalRecords(cdm, "condition_occurrence",
-    domainId = FALSE
-  ) |>
+  expect_true(cs |>
     dplyr::filter(variable_name %in% "Domain") |>
     dplyr::tally() |>
     dplyr::pull() == 0)
-  expect_true(summariseClinicalRecords(cdm, "condition_occurrence",
-    typeConcept = FALSE
-  ) |>
+  expect_true(cs |>
     dplyr::filter(variable_name %in% "Type concept id") |>
     dplyr::tally() |>
     dplyr::pull() == 0)
   expect_true(summariseClinicalRecords(cdm, "condition_occurrence",
     recordsPerPerson = NULL,
-    inObservation = FALSE,
-    standardConcept = FALSE,
-    sourceVocabulary = FALSE,
-    domainId = FALSE,
-    typeConcept = FALSE,
-    missingData = FALSE,
-    endBeforeStart = FALSE,
-    startBeforeBirth = FALSE
+    quality = FALSE,
+    conceptSummary = FALSE,
+    missingData = FALSE
   ) |>
     dplyr::tally() |> dplyr::pull() == 3)
 
@@ -94,8 +83,8 @@ test_that("summariseClinicalRecords() sex and ageGroup argument work", {
   cdm <- cdmEunomia()
 
   # Check all tables work ----
-  expect_true(inherits(summariseClinicalRecords(cdm, "observation_period", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))), "summarised_result"))
-  expect_no_error(op <- summariseClinicalRecords(cdm, "observation_period", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
+  expect_true(inherits(summariseClinicalRecords(cdm, "condition_occurrence", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))), "summarised_result"))
+  expect_no_error(co <- summariseClinicalRecords(cdm, "condition_occurrence", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
   expect_no_error(vo <- summariseClinicalRecords(cdm, "visit_occurrence", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
   expect_no_error(m <- summariseClinicalRecords(cdm, "measurement", sex = TRUE, ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))))
   # expect_no_error(summariseClinicalRecords(cdm,
@@ -105,13 +94,13 @@ test_that("summariseClinicalRecords() sex and ageGroup argument work", {
   # expect_warning(summariseClinicalRecords(cdm,c("device_exposure","observation","death"), sex = FALSE,ageGroup = list(c(30, Inf))))
 
   expect_no_error(all <- summariseClinicalRecords(cdm,
-    c("observation_period", "visit_occurrence", "measurement"),
+    c("condition_occurrence", "visit_occurrence", "measurement"),
     sex = TRUE,
     ageGroup = list(">= 30" = c(30, Inf), "<30" = c(0, 29))
   ))
 
   expect_identical(
-    dplyr::bind_rows(op, vo, m) |>
+    dplyr::bind_rows(co, vo, m) |>
       dplyr::mutate(estimate_value = dplyr::if_else(
         .data$estimate_type != "integer",
         as.character(round(as.numeric(.data$estimate_value), 3)),
@@ -198,72 +187,7 @@ test_that("summariseClinicalRecords() sex and ageGroup argument work", {
 
   PatientProfiles::mockDisconnect(cdm = cdm)
 
-  # Check statistics
-  cdm <- omopgenerics::cdmFromTables(
-    tables = list(
-      person = dplyr::tibble(
-        person_id = as.integer(1:5),
-        gender_concept_id = c(8507L, 8532L, 8532L, 8507L, 8507L),
-        year_of_birth = c(2000L, 2000L, 2011L, 2012L, 2013L),
-        month_of_birth = 1L,
-        day_of_birth = 1L,
-        race_concept_id = 0L,
-        ethnicity_concept_id = 0L
-      ),
-      observation_period = dplyr::tibble(
-        observation_period_id = as.integer(1:9),
-        person_id = c(1, 1, 1, 2, 2, 3, 3, 4, 5) |> as.integer(),
-        observation_period_start_date = as.Date(c(
-          "2020-03-01", "2020-03-25", "2020-04-25", "2020-08-10",
-          "2020-03-10", "2020-03-01", "2020-04-10", "2020-03-10",
-          "2020-03-10"
-        )),
-        observation_period_end_date = as.Date(c(
-          "2020-03-20", "2020-03-30", "2020-08-15", "2020-12-31",
-          "2020-03-27", "2020-03-09", "2020-05-08", "2020-12-10",
-          "2020-03-10"
-        )),
-        period_type_concept_id = 0L
-      )
-    ),
-    cdmName = "mock data"
-  )
-
-  cdm <- CDMConnector::copyCdmTo(
-    con = connection(), cdm = cdm, schema = schema()
-  )
-
-  result <- summariseClinicalRecords(
-    cdm = cdm,
-    omopTableName = "observation_period",
-    inObservation = FALSE,
-    standardConcept = FALSE,
-    sourceVocabulary = FALSE,
-    domainId = FALSE,
-    typeConcept = FALSE,
-    sex = TRUE,
-    ageGroup = list("old" = c(10, Inf), "young" = c(0, 9))
-  )
-
-  # Check num records
-  records <- result |>
-    dplyr::filter(variable_name == "Number records", estimate_name == "count")
-  expect_identical(records |> dplyr::filter(strata_name == "overall") |> dplyr::pull(estimate_value), "9")
-  expect_identical(records |> dplyr::filter(strata_level == "old") |> dplyr::pull(estimate_value), "5")
-  expect_identical(records |> dplyr::filter(strata_level == "young") |> dplyr::pull(estimate_value), "4")
-  expect_identical(records |> dplyr::filter(strata_level == "Male") |> dplyr::pull(estimate_value), "5")
-  expect_identical(records |> dplyr::filter(strata_level == "Female") |> dplyr::pull(estimate_value), "4")
-  expect_identical(records |> dplyr::filter(strata_level == "old &&& Male") |> dplyr::pull(estimate_value), "3")
-  expect_identical(records |> dplyr::filter(strata_level == "old &&& Female") |> dplyr::pull(estimate_value), "2")
-  expect_identical(records |> dplyr::filter(strata_level == "young &&& Male") |> dplyr::pull(estimate_value), "2")
-  expect_identical(records |> dplyr::filter(strata_level == "young &&& Female") |> dplyr::pull(estimate_value), "2")
-
-  # Check stats
-  records <- result |>
-    dplyr::filter(variable_name == "records_per_person")
-  expect_true(records |> dplyr::filter(strata_name == "overall", estimate_name == "mean") |> dplyr::pull(estimate_value) == "1.8000")
-  expect_true(records |> dplyr::filter(strata_level == "old &&& Male", estimate_name == "median") |> dplyr::pull(estimate_value) == "3")
-})
+  })
 
 test_that("dateRange argument works", {
   skip_on_cran()
@@ -297,7 +221,7 @@ test_that("tableClinicalRecords() works", {
   expect_no_error(x <- tableClinicalRecords(summariseClinicalRecords(cdm, "condition_occurrence")))
   expect_true(inherits(x, "gt_tbl"))
   expect_no_error(y <- tableClinicalRecords(summariseClinicalRecords(cdm, c(
-    "observation_period",
+    "drug_exposure",
     "measurement"
   ))))
   expect_true(inherits(y, "gt_tbl"))
@@ -401,7 +325,7 @@ test_that("record outside observaton period", {
 
   PatientProfiles::mockDisconnect(cdm = cdm)
 })
-test_that("arguments EndBeforeStart and StartBeforeBirth work", {
+test_that("argument quality works", {
   skip_on_cran()
   cdm <- cdmEunomia()
   ids <- cdm$drug_exposure |> dplyr::distinct(drug_exposure_id) |> dplyr::pull()
@@ -418,7 +342,7 @@ test_that("arguments EndBeforeStart and StartBeforeBirth work", {
 
 
 
-  expect_no_error(x <- summariseClinicalRecords(cdm, "drug_exposure", recordsPerPerson = NULL,sourceVocabulary = F,missingData = F, inObservation = F, typeConcept = F, standardConcept = F, domainId = F))
+  expect_no_error(x <- summariseClinicalRecords(cdm, "drug_exposure", recordsPerPerson = NULL, quality = T, conceptSummary = F, missingData = F))
   y <- cdm$drug_exposure |>
     dplyr::filter(.data$drug_exposure_end_date < .data$drug_exposure_start_date)
   z <- cdm$drug_exposure |>
@@ -433,7 +357,7 @@ test_that("arguments EndBeforeStart and StartBeforeBirth work", {
                x |> dplyr::filter(variable_name == "Start date before birth date", estimate_name == "count") |> dplyr::pull(estimate_value) |> as.numeric()
   )
 
-  expect_no_error(x <- summariseClinicalRecords(cdm, "drug_exposure", recordsPerPerson = NULL,sourceVocabulary = F,missingData = F, inObservation = F, typeConcept = F, standardConcept = F, domainId = F, sex = TRUE))
+  expect_no_error(x <- summariseClinicalRecords(cdm, "drug_exposure", recordsPerPerson = NULL, quality = T, conceptSummary = F, missingData = F, sex = TRUE))
   x <- x |> omopgenerics::splitStrata()
 
 
@@ -455,7 +379,7 @@ test_that("arguments EndBeforeStart and StartBeforeBirth work", {
                  dplyr::pull(estimate_value) |>
                  as.numeric() )
 
-  expect_no_error(x <- summariseClinicalRecords(cdm, "drug_exposure", recordsPerPerson = NULL,sourceVocabulary = F,missingData = F, inObservation = F, typeConcept = F, standardConcept = F, domainId = F, dateRange = as.Date(c("1910-01-01", NA))))
+  expect_no_error(x <- summariseClinicalRecords(cdm, "drug_exposure", recordsPerPerson = NULL, quality = T, conceptSummary = F,missingData = F, dateRange = as.Date(c("1910-01-01", NA))))
 
 
   ids <- cdm$condition_occurrence |> dplyr::distinct(condition_occurrence_id) |> dplyr::pull()
@@ -471,34 +395,34 @@ test_that("arguments EndBeforeStart and StartBeforeBirth work", {
     dplyr::filter(.data$condition_end_date < .data$condition_start_date)
 
 
-  expect_no_error(x <- summariseClinicalRecords(cdm, "condition_occurrence", recordsPerPerson = NULL,sourceVocabulary = F,missingData = F, inObservation = F, typeConcept = F, standardConcept = F, domainId = F))
+  expect_no_error(x <- summariseClinicalRecords(cdm, "condition_occurrence", recordsPerPerson = NULL, quality = T, conceptSummary = F, missingData  = F))
   expect_equal(y |> dplyr::tally() |> dplyr::pull(n), x |> dplyr::filter(estimate_name == "count", variable_name == "End date before start date") |> dplyr::pull(estimate_value)|> as.numeric())
   expect_equal(0L, x |> dplyr::filter(estimate_name == "count", variable_name == "Start date before birth date") |> dplyr::pull(estimate_value)|> as.numeric())
 
 
-  ids <- cdm$observation_period |> dplyr::distinct(observation_period_id) |> dplyr::pull()
+  ids <- cdm$visit_occurrence |> dplyr::distinct(visit_occurrence_id) |> dplyr::pull()
   set.seed(123)
   shuffled <- sample(ids)
   vec <- shuffled[1:10]
 
-  cdm$observation_period <- cdm$observation_period |>
-    dplyr::mutate(observation_period_start_date = dplyr::if_else(.data$observation_period_id %in% vec,
+  cdm$visit_occurrence <- cdm$visit_occurrence |>
+    dplyr::mutate(visit_start_date = dplyr::if_else(.data$visit_occurrence_id %in% vec,
                                                                  as.Date("1900-01-01"),
-                                                                 .data$observation_period_start_date))
+                                                                 .data$visit_start_date))
 
-  z <- cdm$observation_period |>
+  z <- cdm$visit_occurrence |>
     dplyr::inner_join(cdm$person |> dplyr::select(person_id, birth_datetime), by = "person_id") |>
-    dplyr::filter(.data$observation_period_start_date < .data$birth_datetime)
+    dplyr::filter(.data$visit_start_date < .data$birth_datetime)
 
-  expect_no_error(x <- summariseClinicalRecords(cdm, "observation_period", recordsPerPerson = NULL,sourceVocabulary = F,missingData = F, inObservation = F, typeConcept = F, standardConcept = F, domainId = F))
+  expect_no_error(x <- summariseClinicalRecords(cdm, "visit_occurrence", recordsPerPerson = NULL, quality = T, conceptSummary = F, missingData = F))
   expect_equal(z|>dplyr::tally() |> dplyr::pull(n), x |> dplyr::filter(variable_name == "Start date before birth date" & estimate_name == "count") |> dplyr::pull(estimate_value) |> as.numeric())
 
   expect_equal(0L, x |> dplyr::filter(estimate_name == "count", variable_name == "End date before start date") |> dplyr::pull(estimate_value)|> as.numeric())
 
 
-  expect_no_error(summariseClinicalRecords(cdm, "procedure_occurrence", recordsPerPerson = NULL,sourceVocabulary = F,missingData = F, inObservation = F, typeConcept = F, standardConcept = F, domainId = F))
-  expect_no_error(summariseClinicalRecords(cdm, "measurement", recordsPerPerson = NULL,sourceVocabulary = F,missingData = F, inObservation = F, typeConcept = F, standardConcept = F, domainId = F))
-  expect_warning(summariseClinicalRecords(cdm, "death", recordsPerPerson = NULL,sourceVocabulary = F,missingData = F, inObservation = F, typeConcept = F, standardConcept = F, domainId = F))
+  expect_no_error(summariseClinicalRecords(cdm, "procedure_occurrence", recordsPerPerson = NULL,conceptSummary  = F,missingData = F))
+  expect_no_error(summariseClinicalRecords(cdm, "measurement", recordsPerPerson = NULL,conceptSummary  = F,missingData = F))
+  expect_warning(summariseClinicalRecords(cdm, "death", recordsPerPerson = NULL,conceptSummary  = F,missingData = F))
 
 
 
@@ -512,33 +436,22 @@ test_that("argument missingData works", {
   cdm <- cdmEunomia()
 
 
-  expect_no_error(x <- summariseClinicalRecords(cdm, "drug_exposure", recordsPerPerson = NULL,sourceVocabulary = F, inObservation = F, typeConcept = F, standardConcept = F, domainId = F, endBeforeStart = F, startBeforeBirth = F))
+  expect_no_error(x <- summariseClinicalRecords(cdm, "drug_exposure", recordsPerPerson = NULL, quality = F, conceptSummary = F))
 
   y <- summariseMissingData(cdm, "drug_exposure")
 
   expect_equal(x |> dplyr::filter(variable_name == "Column name"), y, ignore_attr = TRUE)
 
-  expect_no_error(x <- summariseClinicalRecords(cdm, "drug_exposure",sex = T, ageGroup = list(c(0,50), c(51, 100)), recordsPerPerson = NULL,sourceVocabulary = F, inObservation = F, typeConcept = F, standardConcept = F, domainId = F, endBeforeStart = F, startBeforeBirth = F))
+  expect_no_error(x <- summariseClinicalRecords(cdm, "drug_exposure",sex = T, ageGroup = list(c(0,50), c(51, 100)), recordsPerPerson = NULL,quality = F, conceptSummary = F))
   y <- summariseMissingData(cdm, "drug_exposure", sex = T, ageGroup = list(c(0,50), c(51, 100)))
 
   expect_equal(x |> dplyr::filter(variable_name == "Column name") |> dplyr::arrange(.data$variable_level, .data$strata_name, .data$strata_level), y |> dplyr::arrange(.data$variable_level, .data$strata_name, .data$strata_level), ignore_attr = TRUE)
 
-  expect_no_error(x <- summariseClinicalRecords(cdm, "drug_exposure", dateRange = as.Date(c("1990-01-01", "1999-12-31")), recordsPerPerson = NULL,sourceVocabulary = F, inObservation = F, typeConcept = F, standardConcept = F, domainId = F, endBeforeStart = F, startBeforeBirth = F))
+  expect_no_error(x <- summariseClinicalRecords(cdm, "drug_exposure", dateRange = as.Date(c("1990-01-01", "1999-12-31")), recordsPerPerson = NULL, quality = F, conceptSummary = F))
   y <- summariseMissingData(cdm, "drug_exposure", dateRange = as.Date(c("1990-01-01", "1999-12-31")))
 
   expect_equal(x |> dplyr::filter(variable_name == "Column name") |> dplyr::arrange(.data$variable_level), y |> dplyr::arrange(.data$variable_level), ignore_attr = TRUE)
 
-  expect_no_error(x <- summariseClinicalRecords(cdm, "drug_exposure", .options = list( col = "drug_concept_id", interval = "years"), recordsPerPerson = NULL,sourceVocabulary = F, inObservation = F, typeConcept = F, standardConcept = F, domainId = F, endBeforeStart = F, startBeforeBirth = F))
-  y <- summariseMissingData(cdm, "drug_exposure", col = "drug_concept_id", interval = "years")
-
-  expect_equal(x |>
-                 dplyr::filter(variable_name == "Column name") |>
-                 dplyr::arrange(.data$variable_level,.data$estimate_name, .data$additional_level)
-               ,
-               y |> dplyr::arrange(.data$variable_level,.data$estimate_name, .data$additional_level),
-               ignore_attr = TRUE)
-  expect_no_error(x <- summariseClinicalRecords(cdm, "drug_exposure", .options = list(sample = 100), recordsPerPerson = NULL,sourceVocabulary = F, inObservation = F, typeConcept = F, standardConcept = F, domainId = F, endBeforeStart = F, startBeforeBirth = F))
-  expect_equal(x |> dplyr::filter(.data$variable_level == "sig" & .data$estimate_name == "na_count") |> dplyr::pull(.data$estimate_value) |> as.numeric(), 100)
 
   CDMConnector::cdmDisconnect(cdm)
 

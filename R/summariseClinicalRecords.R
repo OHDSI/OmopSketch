@@ -9,27 +9,29 @@
 #' available options.
 #' @param recordsPerPerson Generates summary statistics for the number of
 #' records per person. Set to NULL if no summary statistics are required.
-#' @param inObservation Boolean variable. Whether to include the percentage of
-#' records in observation.
-#' @param standardConcept Boolean variable. Whether to summarise standard
-#' concept information.
-#' @param sourceVocabulary Boolean variable.  Whether to summarise source
-#' vocabulary information.
-#' @param domainId  Boolean variable. Whether to summarise domain id of standard
-#' concept id information.
-#' @param typeConcept  Boolean variable. Whether to summarise type concept id
-#' field information.
-#' @param missingData Boolean variable. Whether to summarise the number of missing data
-#' @param endBeforeStart  Boolean variable. Whether to summarise the number of records
-#'  with end date before start date
-#' @param startBeforeBirth  Boolean variable. Whether to summarise the number of records
-#' with start date before the person's birth date.
+#' @param missingData Logical. If `TRUE`, includes a summary of missing data for relevant fields.
+#' @param quality Logical. If `TRUE`, performs basic data quality checks, including:
+#' \itemize{
+#'   \item Percentage of records within the observation period
+#'   \item Number of records with end date before start date
+#'   \item Number of records with start date before the person's birth date
+#' }
+#' @param conceptSummary Logical. If `TRUE`, includes summaries of concept-level information, including:
+#' \itemize{
+#'   \item Domain ID of standard concepts
+#'   \item Type concept ID
+#'   \item Standard vs non-standard concepts
+#'   \item Source vocabulary usage
+#' }
 #' @param ageGroup A list of age groups to stratify results by.
 #' @param sex Boolean variable. Whether to stratify by sex (TRUE) or not
 #' (FALSE).
 #' @inheritParams dateRange-startDate
-#' @param .options A named list with additional argument for summarise missing data.
-#' `OmopSketch::missingDataOptions()` shows allowed arguments and their default values.
+#' @param inObservation Deprecated. Use `quality = TRUE` instead.
+#' @param standardConcept Deprecated. Use `conceptSummary = TRUE` instead.
+#' @param sourceVocabulary Deprecated. Use `conceptSummary = TRUE` instead.
+#' @param domainId Deprecated. Use `conceptSummary = TRUE` instead.
+#' @param typeConcept Deprecated. Use `conceptSummary = TRUE` instead.
 #' @return A summarised_result object.
 #' @export
 #' @examples
@@ -40,14 +42,9 @@
 #'   cdm = cdm,
 #'   omopTableName = "condition_occurrence",
 #'   recordsPerPerson = c("mean", "sd"),
-#'   inObservation = TRUE,
-#'   standardConcept = TRUE,
-#'   sourceVocabulary = TRUE,
-#'   domainId = TRUE,
-#'   typeConcept = TRUE,
-#'   missingData = TRUE,
-#'   endBeforeStart = TRUE,
-#'   startBeforeBirth = TRUE
+#'   quality = TRUE,
+#'   conceptSummary = TRUE,
+#'   missingData = TRUE
 #' )
 #'
 #' summarisedResult
@@ -57,18 +54,36 @@
 summariseClinicalRecords <- function(cdm,
                                      omopTableName,
                                      recordsPerPerson = c("mean", "sd", "median", "q25", "q75", "min", "max"),
-                                     inObservation = TRUE,
-                                     standardConcept = TRUE,
-                                     sourceVocabulary = TRUE,
-                                     domainId = TRUE,
-                                     typeConcept = TRUE,
+                                     conceptSummary = TRUE,
                                      missingData = TRUE,
-                                     endBeforeStart = TRUE,
-                                     startBeforeBirth = TRUE,
+                                     quality = TRUE,
                                      sex = FALSE,
                                      ageGroup = NULL,
                                      dateRange = NULL,
-                                     .options = NULL) {
+                                     # Deprecated arguments
+                                     inObservation = lifecycle::deprecated(),
+                                     standardConcept = lifecycle::deprecated(),
+                                     sourceVocabulary = lifecycle::deprecated(),
+                                     domainId = lifecycle::deprecated(),
+                                     typeConcept = lifecycle::deprecated()) {
+  # Check for deprecated arguments
+  if (lifecycle::is_present(inObservation)) {
+    lifecycle::deprecate_warn("1.0.0", "summariseClinicalRecords(inObservation)", "summariseClinicalRecords(quality)")
+
+  }
+
+  if (lifecycle::is_present(standardConcept)) {
+    lifecycle::deprecate_warn("1.0.0", "summariseClinicalRecords(standardConcept)", "summariseClinicalRecords(conceptSummary)")
+  }
+  if (lifecycle::is_present(sourceVocabulary)) {
+    lifecycle::deprecate_warn("1.0.0", "summariseClinicalRecords(sourceVocabulary)", "summariseClinicalRecords(conceptSummary)")
+  }
+  if (lifecycle::is_present(domainId)) {
+    lifecycle::deprecate_warn("1.0.0", "summariseClinicalRecords(domainId)", "summariseClinicalRecords(conceptSummary)")
+  }
+  if (lifecycle::is_presentl(typeConcept)) {
+    lifecycle::deprecate_warn("1.0.0", "summariseClinicalRecords(typeConcept)", "summariseClinicalRecords(conceptSummary)")
+  }
   # Initial checks ----
   cdm <- omopgenerics::validateCdmArgument(cdm)
   omopgenerics::assertChoice(omopTableName, choices = clinicalTables(), unique = TRUE)
@@ -80,17 +95,12 @@ summariseClinicalRecords <- function(cdm,
   omopgenerics::assertChoice(recordsPerPerson, choices = estimates, null = TRUE)
   recordsPerPerson <- unique(recordsPerPerson)
   if (is.null(recordsPerPerson)) recordsPerPerson <- character()
-  omopgenerics::assertLogical(inObservation, length = 1)
-  omopgenerics::assertLogical(standardConcept, length = 1)
-  omopgenerics::assertLogical(sourceVocabulary, length = 1)
-  omopgenerics::assertLogical(domainId, length = 1)
-  omopgenerics::assertLogical(typeConcept, length = 1)
+  omopgenerics::assertLogical(conceptSummary, length = 1)
+  omopgenerics::assertLogical(missingData, length = 1)
+  omopgenerics::assertLogical(quality, length = 1)
   omopgenerics::assertLogical(sex, length = 1)
+
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, multipleAgeGroup = FALSE)
-
-  .options <- defaultOptions(.options)
-
-  warnEndBeforeStart <- endBeforeStart & !missing(endBeforeStart)
 
   # prefix
   prefix <- omopgenerics::tmpPrefix()
@@ -121,14 +131,6 @@ summariseClinicalRecords <- function(cdm,
       return(tibble::tibble())
     }
 
-    if (omopgenerics::omopColumns(table = table, field = "start_date") == omopgenerics::omopColumns(table = table, field = "end_date")){
-      if (warnEndBeforeStart){
-        "endBeforeStart turned to FALSE for {.pkg {table}}" |>
-          rlang::set_names("i") |>
-          cli::cli_inform()
-      }
-      endBeforeStart <- FALSE
-    }
     # restrict study period
     omopTable <- restrictStudyPeriod(omopTable, dateRange)
     if (is.null(omopTable)) {
@@ -147,13 +149,10 @@ summariseClinicalRecords <- function(cdm,
       )
     x <- omopTable |>
       addVariables(
-        tableName = table, inObservation = inObservation,
-        standardConcept = standardConcept,
-        sourceVocabulary = sourceVocabulary,
-        domainId = domainId,
-        typeConcept = typeConcept,
-        startBeforeBirth = startBeforeBirth,
-        endBeforeStart = endBeforeStart
+        tableName = table,
+        quality = quality,
+        conceptSummary = conceptSummary
+
       ) |>
       dplyr::compute(name = omopgenerics::uniqueTableName(prefix))
     result <- list()
@@ -163,11 +162,11 @@ summariseClinicalRecords <- function(cdm,
     ) |>
       dplyr::select(!dplyr::starts_with("group_"))
 
-    variables <- variablesToSummarise(inObservation = inObservation, standardConcept = standardConcept, sourceVocabulary = sourceVocabulary, domainId = domainId, typeConcept = typeConcept, startBeforeBirth = startBeforeBirth, endBeforeStart = endBeforeStart)
+    variables <- variablesToSummarise(quality = quality, conceptSummary = conceptSummary)
 
     if (length(variables)) {
     res <- list()
-    if (inObservation) {
+    if (quality) {
       cli::cli_inform(c("i" = "Summarising records in observation in {.pkg {table}}."))
       strataInObs <- lapply(strata, function(x) c(x, "in_observation"))
       res$inObs <- x |>
@@ -177,8 +176,30 @@ summariseClinicalRecords <- function(cdm,
           variable_name = "In observation",
           variable_level = dplyr::if_else(.data$in_observation == 1, "Yes", "No")
         )
+
+      cli::cli_inform(c("i" = "Summarising records with start before birth date in {.pkg {table}}."))
+      res$sbb <- x |>
+          dplyr::filter(.data$start_before_birth == 1) |>
+          summariseCountsInternal(strata = strata, counts = "records") |>
+          dplyr::mutate(
+            estimate_name = "count",
+            variable_name = "Start date before birth date",
+            variable_level = NA_character_
+          )
+
+
+      cli::cli_inform(c("i" = "Summarising records with end date before start date in {.pkg {table}}."))
+      res$ebs <- x |>
+          dplyr::filter(.data$end_before_start == 1) |>
+          summariseCountsInternal(strata = strata, counts = "records") |>
+          dplyr::mutate(
+            estimate_name = "count",
+            variable_name = "End date before start date",
+            variable_level = NA_character_
+          )
+
     }
-    if (domainId) {
+    if (conceptSummary) {
       cli::cli_inform(c("i" = "Summarising domains in {.pkg {table}}."))
       strataDomain <- lapply(strata, function(x) c(x, "domain_id"))
       res$domain <- x |>
@@ -188,8 +209,7 @@ summariseClinicalRecords <- function(cdm,
           variable_name = "Domain",
           variable_level = .data$domain_id
         )
-    }
-    if (standardConcept) {
+
       cli::cli_inform(c("i" = "Summarising standard concepts in {.pkg {table}}."))
       strataStandard <- lapply(strata, function(x) c(x, "standard_concept"))
       res$standardConcept <- x |>
@@ -199,8 +219,7 @@ summariseClinicalRecords <- function(cdm,
           variable_name = "Standard concept",
           variable_level = .data$standard_concept
         )
-    }
-    if (sourceVocabulary) {
+
       cli::cli_inform(c("i" = "Summarising source vocabularies in {.pkg {table}}."))
       strataSource <- lapply(strata, function(x) c(x, "source_vocabulary"))
 
@@ -212,8 +231,7 @@ summariseClinicalRecords <- function(cdm,
           variable_name = "Source vocabulary",
           variable_level = .data$source_vocabulary
         )
-    }
-    if (typeConcept) {
+
       cli::cli_inform(c("i" = "Summarising concept types in {.pkg {table}}."))
       strataType <- lapply(strata, function(x) c(x, "type_concept"))
       res$typeConcept <- x |>
@@ -229,28 +247,8 @@ summariseClinicalRecords <- function(cdm,
         )) |>
         dplyr::rename(variable_level = "type_name")
     }
-    if (startBeforeBirth) {
-      cli::cli_inform(c("i" = "Summarising records with start before birth date in {.pkg {table}}."))
-      res$sbb <- x |>
-        dplyr::filter(.data$start_before_birth == 1) |>
-        summariseCountsInternal(strata = strata, counts = "records") |>
-        dplyr::mutate(
-          estimate_name = "count",
-          variable_name = "Start date before birth date",
-          variable_level = NA_character_
-        )
-    }
-    if (endBeforeStart) {
-      cli::cli_inform(c("i" = "Summarising records with end date before start date in {.pkg {table}}."))
-      res$ebs <- x |>
-        dplyr::filter(.data$end_before_start == 1) |>
-        summariseCountsInternal(strata = strata, counts = "records") |>
-        dplyr::mutate(
-          estimate_name = "count",
-          variable_name = "End date before start date",
-          variable_level = NA_character_
-        )
-    }
+
+
 
     denominator <- result$recordPerPerson |>
       dplyr::filter(.data$variable_name == "Number records") |>
@@ -278,21 +276,17 @@ summariseClinicalRecords <- function(cdm,
 
     if (missingData) {
       cli::cli_inform(c("i" = "Summarising missing data in {.pkg {table}}."))
-      strataMissing <- c(
-        list(character()),
-        omopgenerics::combineStrata(c(strataCols(sex = sex, ageGroup = ageGroup, interval = .options[["interval"]])))
-      )
       result$missing <- summariseMissingDataFromTable(
         omopTable = omopTable,
         table = table,
         cdm = cdm,
-        col = .options[["col"]],
+        col = NULL,
         dateRange = NULL,
-        sample = .options[["sample"]],
+        sample = NULL,
         sex = FALSE,
         ageGroup = NULL,
-        interval = .options[["interval"]],
-        strata = strataMissing
+        interval = "overall",
+        strata = strata
       ) |>
         omopgenerics::uniteStrata(cols = strataCols(sex = sex, ageGroup = ageGroup)) |>
         dplyr::mutate(variable_name = "Column name") |>
@@ -384,11 +378,10 @@ summariseRecordsPerPerson <- function(x, den, strata, estimates) {
 
   return(result)
 }
-variablesToSummarise <- function(inObservation, standardConcept, sourceVocabulary, domainId, typeConcept, startBeforeBirth, endBeforeStart) {
-  c(
-    "in_observation"[inObservation], "standard_concept"[standardConcept],
-    "source_vocabulary"[sourceVocabulary], "domain_id"[domainId],
-    "type_concept"[typeConcept], "start_before_birth"[startBeforeBirth], "end_before_start"[endBeforeStart]
+variablesToSummarise <- function(quality, conceptSummary) {
+  c(c("standard_concept",
+    "source_vocabulary", "domain_id",
+    "type_concept")[conceptSummary], c("in_observation", "start_before_birth", "end_before_start")[quality]
   )
 }
 
@@ -435,7 +428,8 @@ denominator <- function(cdm, sex, ageGroup, name) {
 
   return(demographics)
 }
-addVariables <- function(x, tableName, inObservation, standardConcept, sourceVocabulary, domainId, typeConcept, startBeforeBirth, endBeforeStart) {
+addVariables <- function(x, tableName, quality, conceptSummary) {
+
   newNames <- c(
     # here to support death table
     person_id = "person_id",
@@ -454,114 +448,96 @@ addVariables <- function(x, tableName, inObservation, standardConcept, sourceVoc
     dplyr::select(dplyr::all_of(newNames), dplyr::any_of(c("sex", "age_group"))) |>
     dplyr::mutate(end_date = dplyr::coalesce(.data$end_date, .data$start_date))
 
+  if (quality) {
+    # Add in_observation flag
+    obs_tbl <- cdm[["observation_period"]] |>
+      dplyr::select(
+        person_id,
+        obs_start = observation_period_start_date,
+        obs_end = observation_period_end_date
+      )
 
-  # In observation
-  if (inObservation) {
     x <- x |>
       dplyr::left_join(
         x |>
-          dplyr::inner_join(
-            cdm[["observation_period"]] |>
-              dplyr::select(
-                "person_id",
-                obs_start = "observation_period_start_date",
-                obs_end = "observation_period_end_date"
-              ),
-            by = "person_id"
-          ) |>
-          dplyr::filter(
-            .data$start_date >= .data$obs_start &
-              .data$end_date <= .data$obs_end
-          ) |>
+          dplyr::inner_join(obs_tbl, by = "person_id") |>
+          dplyr::filter(start_date >= obs_start & end_date <= obs_end) |>
           dplyr::mutate(in_observation = 1L) |>
-          dplyr::select(c("in_observation", "id", "person_id")),
+          dplyr::select(id, person_id, in_observation),
         by = c("person_id", "id")
       ) |>
-      dplyr::mutate(in_observation = dplyr::coalesce(.data$in_observation, 0L))
-  }
+      dplyr::mutate(in_observation = dplyr::coalesce(in_observation, 0L))
 
-  # Domain and standard
-  if (domainId | standardConcept) {
+    # Add end_before_start flag
     x <- x |>
-      dplyr::left_join(
-        cdm$concept |>
-          dplyr::select(
-            standard = "concept_id", "domain_id", "standard_concept"
-          ),
-        by = "standard"
+      dplyr::mutate(
+        end_before_start = dplyr::if_else(end_date < start_date, 1L, 0L)
       )
-    if (standardConcept) {
-      x <- x |>
-        dplyr::mutate(standard = dplyr::case_when(
-          .data$standard == 0 ~ "No matching concept",
-          .data$standard_concept == "S" ~ "Standard",
-          .data$standard_concept == "C" ~ "Classification",
-          .default = "Source"
-        ))
-    }
-  }
-
-  # Source
-  if (sourceVocabulary) {
-    x <- x |>
-      dplyr::left_join(
-        cdm$concept |>
-          dplyr::select(
-            source = "concept_id", source_vocabulary = "vocabulary_id"
-          ),
-        by = "source"
-      ) |>
-      dplyr::mutate(source_vocabulary = dplyr::coalesce(
-        .data$source_vocabulary, "No matching concept"
-      ))
-  }
-  if (endBeforeStart) {
-    x <- x |>
-      dplyr::mutate(end_before_start = dplyr::if_else(.data[["end_date"]] < .data[["start_date"]], 1L, 0L))
-  }
-  if (startBeforeBirth) {
-    if (!("birth_datetime" %in% colnames(cdm$person))) {
-      q <- c(birthdate = "as.Date(paste0(
+    birth_expr <- rlang::parse_expr(
+      "as.Date(paste0(
     as.character(as.integer(.data$year_of_birth)), '-',
     as.character(as.integer(dplyr::coalesce(.data$month_of_birth, 1L))), '-',
-    as.character(as.integer(dplyr::coalesce(.data$day_of_birth, 1L)))))"
-      ) |>
-        rlang::parse_exprs()
+    as.character(as.integer(dplyr::coalesce(.data$day_of_birth, 1L)))
+  ))"
+    )
 
-      person_tbl <- cdm$person |>
-        dplyr::mutate(!!!q) |>
-        dplyr::select("person_id", "birthdate")
+
+    person_tbl <- if (!("birth_datetime" %in% colnames(cdm$person))) {
+      cdm$person |>
+        dplyr::mutate(birthdate = !!birth_expr) |>
+        dplyr::select(person_id, birthdate)
     } else {
-      q <- c(birthdate = "as.Date(paste0(
-    as.character(as.integer(.data$year_of_birth)), '-',
-    as.character(as.integer(dplyr::coalesce(.data$month_of_birth, 1L))), '-',
-    as.character(as.integer(dplyr::coalesce(.data$day_of_birth, 1L)))))"
-      ) |>
-        rlang::parse_exprs()
-
-      person_tbl <- cdm$person |>
+      cdm$person |>
         dplyr::mutate(
           birthdate = dplyr::case_when(
             !is.na(.data$birth_datetime) ~ as.Date(.data$birth_datetime),
-            TRUE ~ !!!q
+            TRUE ~ !!birth_expr
           )
         ) |>
-        dplyr::select("person_id", "birthdate")
-      }
+        dplyr::select(person_id, birthdate)
+    }
+
 
     x <- x |>
       dplyr::left_join(person_tbl, by = "person_id") |>
       dplyr::mutate(
         start_before_birth = dplyr::if_else(
-           as.Date(.data$start_date) < .data$birthdate,
+          as.Date(.data$start_date) < .data$birthdate,
           1L,
           0L
         )
       )
+
   }
-  variables <- c("id", "person_id", "start_date", "sex", "age_group", variablesToSummarise(
-    inObservation, standardConcept, sourceVocabulary, domainId, typeConcept, startBeforeBirth, endBeforeStart
-  ))
+
+
+
+
+
+
+  if (conceptSummary) {
+
+    x <- x |>
+      dplyr::left_join(
+        cdm$concept |>
+          dplyr::select(
+            standard = "concept_id", "domain_id", "standard_concept",
+            source = "concept_id", source_vocabulary = "vocabulary_id"
+          ),
+        by = c("standard", "source")
+      ) |>
+        dplyr::mutate(standard = dplyr::case_when(
+          .data$standard == 0 ~ "No matching concept",
+          .data$standard_concept == "S" ~ "Standard",
+          .data$standard_concept == "C" ~ "Classification",
+          .default = "Source"
+        ), source_vocabulary = dplyr::coalesce(
+        .data$source_vocabulary, "No matching concept"
+      ))
+
+
+  }
+  variables <- c("id", "person_id", "start_date", "sex", "age_group", variablesToSummarise(quality = quality, conceptSummary = conceptSummary))
 
   x |>
     dplyr::select(dplyr::any_of(variables))
@@ -570,36 +546,4 @@ reduceDemicals <- function(x, n) {
   id <- grepl(pattern = ".", x = x, fixed = TRUE) & !is.na(suppressWarnings(as.numeric(x)))
   x[id] <- sprintf(paste0("%.", n, "f"), as.numeric(x[id]))
   return(x)
-}
-
-
-defaultOptions <- function(userOptions) {
-  defaultOpts <- list(
-    col = NULL,
-    interval = "overall",
-    sample = 1000000
-  )
-
-  for (opt in names(userOptions)) {
-    defaultOpts[[opt]] <- userOptions[[opt]]
-  }
-
-  return(defaultOpts)
-}
-
-#' Additional customisable arguments for summarising missingness in the `summariseClinicalRecords()` function.
-#'
-#' @description
-#' This function provides a list of allowed inputs for the `.option` argument in
-#' `summariseClinicalRecords`, and their corresponding default values.
-#'
-#' @return A named list of default options.
-#'
-#' @export
-#'
-#' @examples
-#' missingDataOptions()
-#'
-missingDataOptions <- function() {
-  return(defaultOptions(NULL))
 }
