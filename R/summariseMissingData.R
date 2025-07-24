@@ -64,7 +64,7 @@ summariseMissingData <- function(cdm,
 
     omopTableName <- omopTableName[omopTableName != "person"]
     strata <- c(list(character()), list("sex"[sex]))
-    result_person <- summariseMissingDataFromTable(table = "person", cdm = cdm, col = col, dateRange = NULL, sample = sample, sex = sex, ageGroup = NULL, interval = "overall", strata = strata)
+    result_person <- summariseMissingDataFromTable(omopTable = cdm[["person"]], table = "person", cdm = cdm, col = col, dateRange = NULL, sample = sample, sex = sex, ageGroup = NULL, interval = "overall", strata = strata)
   } else {
     result_person <- tibble::tibble()
   }
@@ -75,7 +75,7 @@ summariseMissingData <- function(cdm,
       omopgenerics::combineStrata(c(strataCols(sex = sex, ageGroup = ageGroup, interval = interval)))
     )
     result <- purrr::map(omopTableName, function(table) {
-      summariseMissingDataFromTable(table = table, cdm = cdm, col = col, dateRange = dateRange, sample = sample, sex = sex, ageGroup = ageGroup, interval = interval, strata = strata)
+      summariseMissingDataFromTable(omopTable = cdm[[table]], table = table, cdm = cdm, col = col, dateRange = dateRange, sample = sample, sex = sex, ageGroup = ageGroup, interval = interval, strata = strata)
     }) |>
       purrr::compact()
   } else {
@@ -101,8 +101,8 @@ summariseMissingData <- function(cdm,
     omopgenerics::uniteStrata(cols = setdiff(unique(unlist(strata)), "interval")) |>
     addTimeInterval() |>
     omopgenerics::uniteAdditional(cols = "time_interval") |>
-    dplyr::mutate(variable_level = NA_character_) |>
-    dplyr::rename(variable_name = "column_name") |>
+    dplyr::mutate(variable_name = "Column name") |>
+    dplyr::rename("variable_level" = "column_name") |>
     omopgenerics::newSummarisedResult(settings = createSettings(
       result_type = "summarise_missing_data", study_period = dateRange
     ))
@@ -146,14 +146,14 @@ columnsToSummarise <- function(col, cols, table, version) {
 
 
 
-summariseMissingDataFromTable <- function(table, cdm, col, dateRange, sample, sex, ageGroup, interval, strata) {
-  omopTable <- cdm[[table]]
+summariseMissingDataFromTable <- function(omopTable, table, cdm, col, dateRange, sample, sex, ageGroup, interval, strata) {
+
   prefix <- omopgenerics::tmpPrefix()
 
   # check if table is empty
 
   if (omopgenerics::isTableEmpty(omopTable)) {
-    cli::cli_warn(paste0(table, "omop table is empty."))
+    cli::cli_warn(paste0(table, " omop table is empty."))
     return(NULL)
   }
   col_table <- columnsToSummarise(

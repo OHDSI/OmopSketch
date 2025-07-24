@@ -124,6 +124,14 @@ shinyCharacteristics <- function(result,
   if ("summarise_clinical_records" %in% resultTypes) {
     # customise summarise_clinical_records
     panelDetails$summarise_clinical_records$icon <- NULL
+    panelDetails$summarise_clinical_records$content$table$reactive <- "<filtered_data> |>
+    dplyr::filter(!(grepl('na',.data$estimate_name) | grepl('zero',.data$estimate_name))) |>
+    OmopSketch::tableClinicalRecords()"
+    panelDetails$summarise_clinical_records$content$tableMissing <- panelDetails$summarise_clinical_records$content$table
+    panelDetails$summarise_clinical_records$content$tableMissing$title <- "Table Missing Data"
+    panelDetails$summarise_clinical_records$content$tableMissing$reactive <- "<filtered_data> |>
+    OmopSketch::tableMissingData()"
+    panelDetails$summarise_clinical_records$content$tableMissing$download$filename <- "paste0(\"table_missing_data_clinical_tables.\", input$format)"
   }
 
   if ("summarise_record_count" %in% resultTypes) {
@@ -134,6 +142,7 @@ shinyCharacteristics <- function(result,
   if ("summarise_missing_data" %in% resultTypes) {
     # customise summarise_missing_data
     panelDetails$summarise_missing_data$icon <- NULL
+
   }
 
   if ("summarise_table_quality" %in% resultTypes) {

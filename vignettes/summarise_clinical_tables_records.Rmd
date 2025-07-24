@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-In this vignette, we will explore the *OmopSketch* functions designed to provide an overview of the clinical tables within a CDM object (*observation_period*, *visit_occurrence*, *condition_occurrence*, *drug_exposure*, *procedure_occurrence*, *device_exposure*, *measurement*, *observation*, and *death*). Specifically, there are four key functions that facilitate this:
+In this vignette, we will explore the *OmopSketch* functions designed to provide an overview of the clinical tables within a CDM object (e.g. *visit_occurrence*, *condition_occurrence*, *drug_exposure*, *procedure_occurrence*, *device_exposure*, *measurement*, *observation*, and *death*). Specifically, there are four key functions that facilitate this:
 
 -   `summariseClinicalRecords()` and `tableClinicalRecords()`: Use them to create a summary statistics with key basic information of the clinical table (e.g., number of records, number of concepts mapped, etc.)
 
@@ -70,12 +70,9 @@ You can further specify if you want to include the number of records in observat
 ```{r, warning=FALSE}
 summarisedResult <- summariseClinicalRecords(cdm,
   "condition_occurrence",
-  recordsPerPerson = c("mean", "sd", "q05", "q95"),
-  inObservation = TRUE,
-  standardConcept = TRUE,
-  sourceVocabulary = TRUE,
-  domainId = TRUE,
-  typeConcept = TRUE
+  recordsPerPerson = c("mean", "sd", "q05", "q95"), 
+  conceptSummary = TRUE, 
+  quality = TRUE
 )
 
 summarisedResult |>
@@ -89,11 +86,8 @@ Additionally, you can also stratify the previous results by sex and age groups:
 summarisedResult <- summariseClinicalRecords(cdm,
   "condition_occurrence",
   recordsPerPerson = c("mean", "sd", "q05", "q95"),
-  inObservation = TRUE,
-  standardConcept = TRUE,
-  sourceVocabulary = TRUE,
-  domainId = TRUE,
-  typeConcept = TRUE,
+  quality = TRUE, 
+  conceptSummary = TRUE,
   sex = TRUE,
   ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf))
 )
@@ -109,13 +103,11 @@ Also, see that the analysis can be conducted for multiple OMOP tables at the sam
 
 ```{r, warning=FALSE}
 summarisedResult <- summariseClinicalRecords(cdm,
-  c("observation_period", "drug_exposure"),
+  c("visit_occurrence", "drug_exposure"),
   recordsPerPerson = c("mean", "sd"),
-  inObservation = FALSE,
-  standardConcept = FALSE,
-  sourceVocabulary = FALSE,
-  domainId = FALSE,
-  typeConcept = FALSE
+  quality = FALSE,
+  conceptSummary = FALSE,
+  missingData = FALSE
 )
 
 summarisedResult |>
@@ -143,11 +135,8 @@ summarisedResult |>
 summarisedResult <- summariseClinicalRecords(cdm,
   "condition_occurrence",
   recordsPerPerson = c("mean", "sd", "q05", "q95"),
-  inObservation = TRUE,
-  standardConcept = TRUE,
-  sourceVocabulary = TRUE,
-  domainId = TRUE,
-  typeConcept = TRUE,
+  quality = T, 
+  conceptSummary = T,
   sex = TRUE
 )
 

@@ -45,7 +45,7 @@ tableClinicalRecords <- function(result,
   }
 
   header <- c("cdm_name")
-  custom_order <- c("Number records", "Number subjects", "Records per person", "In observation", "Domain", "Source vocabulary", "Standard concept", "Type concept id")
+  custom_order <- c("Number records", "Number subjects", "Records per person", "In observation", "Domain", "Source vocabulary", "Standard concept", "Type concept id", "Start date before birth date", "End date before start date", "Column name")
   result |>
     formatColumn(c("variable_name", "variable_level")) |>
     dplyr::mutate(variable_name = factor(.data$variable_name, levels = custom_order)) |>
@@ -57,7 +57,9 @@ tableClinicalRecords <- function(result,
         "N" = "<count>",
         "Mean (SD)" = "<mean> (<sd>)",
         "Median [Q25 - Q75]" = "<median> [<q25> - <q75>]",
-        "Range [min to max]" = "[<min> to <max>]"
+        "Range [min to max]" = "[<min> to <max>]",
+        "N missing data (%)" = "<na_count> (<na_percentage>%)",
+        "N zeros (%)" = "<zero_count> (<zero_percentage>%)"
       ),
       header = header,
       rename = c("Database name" = "cdm_name"),
