@@ -48,7 +48,7 @@ Suggests:
     knitr,
     lubridate,
     odbc,
-    OmopViewer (>= 0.3.0),
+    OmopViewer,
     sortable,
     reactable,
     remotes,
@@ -63,6 +63,7 @@ Suggests:
     visOmopResults (>= 0.5.0),
     devtools,
     usethis
+Remotes: OHDSI/OmopViewer
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Imports: 
@@ -77,6 +78,7 @@ Imports:
     PatientProfiles (>= 1.3.1),
     purrr,
     rlang,
+    stats,
     stringr,
     tibble,
     tidyr

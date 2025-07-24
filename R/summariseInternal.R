@@ -295,3 +295,25 @@ summariseSumInternal <- function(x, strata, variable) {
 }
 
 
+
+summariseMedianAge <- function(x, index_date, strata) {
+
+  x <- x |>
+    PatientProfiles::addAgeQuery(indexDate = index_date)
+
+  purrr::map(strata, \(stratak) {
+
+    x |>
+      dplyr::collect() |>
+      dplyr::group_by(dplyr::across(dplyr::all_of(stratak))) |>
+      dplyr::summarise("estimate_value" = stats::median(.data$age))
+
+  }) |>
+    dplyr::bind_rows() |>
+    dplyr::mutate(estimate_name = "median",
+                  estimate_type = "numeric",
+                  estimate_value =  sprintf("%i", as.integer(.data$estimate_value)))
+
+}
+
+
