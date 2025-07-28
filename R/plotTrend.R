@@ -102,9 +102,9 @@ plotTrend <- function(result,
         axis.text.x = ggplot2::element_text(angle = 90, hjust = 1, size = 8),
         plot.margin = ggplot2::margin(t = 5, r = 5, b = 30, l = 5)
       )
-    p
+
   } else {
-    result |>
+  p <-  result |>
       dplyr::filter(.data$estimate_name == estimate) |>
       visOmopResults::barPlot(
         x = "variable_name",
@@ -113,6 +113,8 @@ plotTrend <- function(result,
         colour = colour
       )
   }
+  p + ggplot2::theme(legend.position = "top")
+
 }
 fromOutputToVariableName <- function(output){
   if (output == "record") {
