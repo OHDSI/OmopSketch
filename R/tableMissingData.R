@@ -24,7 +24,7 @@ tableMissingData <- function(result,
   # subset to result_type of interest
   result <- result |>
     omopgenerics::filterSettings(
-      .data$result_type %in% c( "summarise_missing_data", "summarise_clinical_records")
+      .data$result_type %in% c( "summarise_missing_data", "summarise_clinical_records", "summarise_observation_period")
     ) |>
     dplyr::filter(grepl("na",.data$estimate_name) | grepl("zero",.data$estimate_name))
 

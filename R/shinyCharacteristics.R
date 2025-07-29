@@ -119,6 +119,15 @@ shinyCharacteristics <- function(result,
     panelDetails$summarise_observation_period$content$plot$filters$variable$choices <- c("Number subjects", "Records per person", "Duration in days", "Days to next observation period")
     panelDetails$summarise_observation_period$content$plot$filters$variable$selected <- "Number subjects"
     panelDetails$summarise_observation_period$content$plot$filters$variable$label <- "Variable"
+    panelDetails$summarise_observation_period$content$table$reactive <- "<filtered_data> |>
+    dplyr::filter(!(grepl('na',.data$estimate_name) | grepl('zero',.data$estimate_name))) |>
+    OmopSketch::tableObservationPeriod()"
+    panelDetails$summarise_observation_period$content$tableMissing <- panelDetails$summarise_clinical_records$content$table
+    panelDetails$summarise_observation_period$content$tableMissing$title <- "Table Missing Data"
+    panelDetails$summarise_observation_period$content$tableMissing$reactive <- "<filtered_data> |>
+    OmopSketch::tableMissingData()"
+    panelDetails$summarise_observation_period$content$tableMissing$download$filename <- "paste0(\"table_missing_data_observation_period.\", input$format)"
+
   }
 
   if ("summarise_clinical_records" %in% resultTypes) {

@@ -59,11 +59,11 @@ test_that("check summariseObservationPeriod works", {
   # test estimates
   expect_no_error(
     resEst <- cdm$observation_period |>
-      summariseObservationPeriod(estimates = c("mean", "median"))
+      summariseObservationPeriod(estimates = c("mean", "median"), quality = FALSE, missing = FALSE)
   )
   expect_true(all(
     resEst |>
-      dplyr::filter(!.data$variable_name %in% c("Number records", "Number subjects")) |>
+      dplyr::filter(!.data$variable_name %in% c("Number records", "Number subjects", "Type concept id")) |>
       dplyr::pull("estimate_name") |>
       unique() %in% c("mean", "median")
   ))
