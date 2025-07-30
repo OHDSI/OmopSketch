@@ -206,13 +206,6 @@ shinyCharacteristics <- function(result,
     panelDetails$summarise_in_observation$icon <- NULL
   }
 
-  if ("summarise_concept_id_counts" %in% resultTypes) {
-    # customise summarise_concept_id_counts
-    panelDetails$summarise_concept_id_counts$content$tidy$filters$columns$choices <- c("cdm_name", "<group>", "<strata>", "<additional>", "<settings>")
-    panelDetails$summarise_concept_id_counts$content$tidy$filters$columns$selected <- c("cdm_name", "<group>", "<strata>")
-    panelDetails$summarise_concept_id_counts$content$formatted <- NULL
-  }
-
   # define structure
   panelStructure <- list(
     "summarise_omop_snapshot",
