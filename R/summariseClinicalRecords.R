@@ -449,6 +449,9 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
     dplyr::mutate(end_date = dplyr::coalesce(.data$end_date, .data$start_date))
 
   if (quality) {
+
+    if (tableName != "observation_period")
+    {
     # Add in_observation flag
     obs_tbl <- cdm[["observation_period"]] |>
       dplyr::select(
@@ -467,6 +470,7 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
         by = c("person_id", "id")
       ) |>
       dplyr::mutate(in_observation = dplyr::coalesce(in_observation, 0L))
+    }
 
     # Add end_before_start flag
     x <- x |>

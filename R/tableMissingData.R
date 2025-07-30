@@ -24,9 +24,21 @@ tableMissingData <- function(result,
   # subset to result_type of interest
   result <- result |>
     omopgenerics::filterSettings(
-      .data$result_type %in% c( "summarise_missing_data", "summarise_clinical_records", "summarise_observation_period")
+      .data$result_type %in% c( "summarise_missing_data", "summarise_clinical_records")
     ) |>
-    dplyr::filter(grepl("na",.data$estimate_name) | grepl("zero",.data$estimate_name))
+    dplyr::filter(grepl("na",.data$estimate_name) | grepl("zero",.data$estimate_name)) |>
+   omopgenerics::bind(
+      result |>
+        omopgenerics::filterSettings(
+          .data$result_type == "summarise_observation_period") |>
+        dplyr::filter(grepl("na",.data$estimate_name) | grepl("zero",.data$estimate_name)) |>
+        dplyr::select(!c("group_name", "group_level")) |>
+        dplyr::mutate("omop_table" = "observation_period") |>
+        omopgenerics::uniteGroup(cols = "omop_table")|>
+        omopgenerics::newSummarisedResult()
+    )
+
+
 
   # check if it is empty
   if (nrow(result) == 0) {
@@ -37,6 +49,7 @@ tableMissingData <- function(result,
   header <- c("cdm_name")
 
   result |>
+
     visOmopResults::visOmopTable(
       type = type,
       estimateName = c("N missing data (%)" = "<na_count> (<na_percentage>%)",

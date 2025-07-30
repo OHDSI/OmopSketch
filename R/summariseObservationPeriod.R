@@ -105,11 +105,11 @@ summariseObservationPeriod <- function(cdm,
     return(omopgenerics::emptySummarisedResult(settings = set))
   }
 
-  observationPeriod <- observationPeriod |>
+  observationPeriodStrata <- observationPeriod|>
     addSexAgeGroup(sex = sex, ageGroup = ageGroup, indexDate = start_date_name) |>
     dplyr::compute(name = omopgenerics::uniqueTableName(prefix = tablePrefix), temporary = FALSE)
 
-  obs <- observationPeriod |>
+  obs <- observationPeriodStrata |>
     dplyr::group_by(.data$person_id, dplyr::across(dplyr::any_of(c("sex", "age_group")))) |>
     dplyr::arrange(.data$observation_period_start_date) |>
     dplyr::mutate("next_start" = dplyr::lead(.data$observation_period_start_date)) %>%
@@ -173,7 +173,7 @@ summariseObservationPeriod <- function(cdm,
 
  strataType <- lapply(strata, function(x) c(x, "period_type_concept_id"))
 
- result$typeConcept <- observationPeriod |>
+ result$typeConcept <- observationPeriodStrata |>
    summariseCountsInternal(strata = strataType, counts = "records") |>
    dplyr::mutate(
      estimate_name = "count",
@@ -188,18 +188,14 @@ summariseObservationPeriod <- function(cdm,
    dplyr::select(!"period_type_concept_id")
 
   if (quality){
-
-  number_subjects <- summarisedResult |>
-    dplyr::filter(.data$variable_name == "Number subjects" & .data$group_level == "all" & .data$strata_level == "overall") |>
-    dplyr::pull("estimate_value") |> as.numeric()
-
-  number_subjects_no_person <- cdm$person |>
-    dplyr::anti_join(observationPeriod, by = "person_id") |>
+    number_subjects <-observationPeriod |> omopgenerics::numberSubjects()
+  number_subjects_no_person <- observationPeriod |>
+    dplyr::anti_join(cdm$person, by = "person_id") |>
     omopgenerics::numberSubjects() |>
     as.numeric()
   result$notInPerson <- dplyr::tibble(
-    count = as.integer(number_subjects_no_person),
-    percentage = 100 * number_subjects_no_person / number_subjects
+    count = as.character(as.integer(number_subjects_no_person)),
+    percentage = sprintf("%.2f", 100 * number_subjects_no_person / number_subjects)
   ) |>
     tidyr::pivot_longer(
     cols = everything(),
@@ -209,41 +205,26 @@ summariseObservationPeriod <- function(cdm,
     dplyr::mutate(variable_name = "Subjects not in person table",
                      variable_level = NA_character_,
                      estimate_type = dplyr::case_when(.data$estimate_name == "count"  ~ "integer",
-                                                      .data$estimate_name == "percentage"  ~ "percentage"),
-                     estimate_value = as.character(.data$estimate_value)
+                                                      .data$estimate_name == "percentage"  ~ "percentage")
+
     )
   if (number_subjects_no_person > 0) {
     cli::cli_warn(c("!" = "There {?is/are} {number_subjects_no_person} individual{?s} not included in the person table."))
   }
 
-  result$endBeforeStart <- observationPeriod |> dplyr::filter(.data$observation_period_end_date < .data$observation_period_start_date) |>
+  x <- observationPeriodStrata |>
+    addVariables(tableName = "observation_period", quality = quality, conceptSummary = FALSE) |>
+    dplyr::compute(name = omopgenerics::uniqueTableName(tablePrefix))
+
+  result$endBeforeStart <- x |>
+    dplyr::filter(.data$end_before_start == 1) |>
     summariseCountsInternal(strata = strata, counts = "records") |>
     dplyr::mutate(estimate_name = "count",
                   variable_name = "End date before start date")
-  birth_expr <- rlang::parse_expr(
-    "as.Date(paste0(
-    as.character(as.integer(.data$year_of_birth)), '-',
-    as.character(as.integer(dplyr::coalesce(.data$month_of_birth, 1L))), '-',
-    as.character(as.integer(dplyr::coalesce(.data$day_of_birth, 1L)))
-  ))"
-  )
-  person_tbl <- if (!("birth_datetime" %in% colnames(cdm$person))) {
-    cdm$person |>
-      dplyr::mutate(birthdate = !!birth_expr) |>
-      dplyr::select(person_id, birthdate)
-  } else {
-    cdm$person |>
-      dplyr::mutate(
-        birthdate = dplyr::case_when(
-          !is.na(.data$birth_datetime) ~ as.Date(.data$birth_datetime),
-          TRUE ~ !!birth_expr
-        )
-      ) |>
-      dplyr::select(person_id, birthdate)
-  }
-  result$startBeforeBirth <- observationPeriod |>
-    dplyr::left_join(person_tbl|> dplyr::select("person_id", "birthdate"), by = "person_id") |>
-    dplyr::filter(as.Date(.data$observation_period_start_date) < as.Date(.data$birthdate)) |>
+
+
+ result$startBeforeBirth <- x|>
+   dplyr::filter(.data$start_before_birth == 1) |>
     summariseCountsInternal(strata = strata, counts = "records")|>
     dplyr::mutate(estimate_name = "count",
                   variable_name = "Start date before birth date")
@@ -252,7 +233,7 @@ summariseObservationPeriod <- function(cdm,
 
 
   if (missingData) {
-    result$missingData <- summariseMissingDataFromTable(omopTable = observationPeriod, table = "observation_period", cdm = cdm, strata = strata, col = NULL, sex = FALSE, ageGroup = NULL, dateRange = NULL,  sample = NULL, interval = "overall") |>
+    result$missingData <- summariseMissingDataFromTable(omopTable = observationPeriodStrata, table = "observation_period", cdm = cdm, strata = strata, col = NULL, sex = FALSE, ageGroup = NULL, dateRange = NULL,  sample = NULL, interval = "overall") |>
       dplyr::mutate(variable_name = "Column name",
                     variable_level = .data$column_name) |>
       dplyr::select(!c("omop_table", "column_name"))
@@ -274,7 +255,7 @@ summariseObservationPeriod <- function(cdm,
                               dplyr::filter(.data$variable_name %in% variables_percentage & .data$estimate_name == "count") |>
                               dplyr:: left_join(denominator, by = c("strata_name", "strata_level") )|>
                               dplyr::mutate(
-                                estimate_value = as.character(100 * as.numeric(.data$estimate_value) / as.numeric(.data$den)),
+                                estimate_value = sprintf("%.2f", 100 * as.numeric(.data$estimate_value) / as.numeric(.data$den)),
                                 estimate_name = "percentage",
                                 estimate_type = "percentage"
                               ) |>
