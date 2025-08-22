@@ -6,9 +6,9 @@
 \usage{
 databaseCharacteristics(
   cdm,
-  omopTableName = c("person", "observation_period", "visit_occurrence",
-    "condition_occurrence", "drug_exposure", "procedure_occurrence", "device_exposure",
-    "measurement", "observation", "death"),
+  omopTableName = c("person", "visit_occurrence", "condition_occurrence",
+    "drug_exposure", "procedure_occurrence", "device_exposure", "measurement",
+    "observation", "death"),
   sex = FALSE,
   ageGroup = NULL,
   dateRange = NULL,

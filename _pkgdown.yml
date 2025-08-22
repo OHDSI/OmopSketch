@@ -78,6 +78,11 @@ reference:
       - databaseCharacteristics
       - shinyCharacteristics
 
+  - subtitle: Helper functions
+    desc: Functions to help populate and summariseClinicalRecords()
+    contents:
+      - clinicalTables
+
   - subtitle: Deprecated functions
     desc: These functions have been deprecated
     contents:

@@ -10,15 +10,11 @@ test_that("databaseCharacteristics works", {
   expect_no_error(databaseCharacteristics(cdm, sex = TRUE, ageGroup = list(c(0,50), c(51,Inf)), dateRange = as.Date(c("1970-01-01", NA)) ) |> suppressWarnings())
   expect_no_error(databaseCharacteristics(cdm, sex = TRUE, ageGroup = list(c(0,50), c(51,Inf)), dateRange = as.Date(c("1970-01-01", NA)), conceptIdCounts = TRUE) |> suppressWarnings())
   expect_no_error(databaseCharacteristics(cdm, sex = TRUE, ageGroup = list(c(0,50), c(51,Inf)), dateRange = as.Date(c("1970-01-01", NA)), conceptIdCounts = TRUE, interval = "years") |> suppressWarnings())
-  x <- databaseCharacteristics(cdm, omopTableName = "drug_exposure",  sample = 1) |> suppressWarnings()
-
-  expect_equal(x |> omopgenerics::filterSettings(result_type == "summarise_missing_data")|>
+  x <- databaseCharacteristics(cdm, omopTableName = "drug_exposure", missingData = FALSE) |> suppressWarnings()
+  expect_equal(x |> omopgenerics::filterSettings(result_type == "summarise_clinical_records")|>
                  dplyr::filter(estimate_name == "na_count") |>
-                 dplyr::distinct(estimate_value) |>
-                 dplyr::pull() |>
-                 as.integer() |>
-                 sort(),
-               c(0L, 1L))
+                 nrow(),
+              0)
 
 })
 

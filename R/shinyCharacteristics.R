@@ -120,6 +120,15 @@ shinyCharacteristics <- function(result,
     panelDetails$summarise_observation_period$content$plot$filters$variable$choices <- c("Number subjects", "Records per person", "Duration in days", "Days to next observation period")
     panelDetails$summarise_observation_period$content$plot$filters$variable$selected <- "Number subjects"
     panelDetails$summarise_observation_period$content$plot$filters$variable$label <- "Variable"
+    panelDetails$summarise_observation_period$content$table$reactive <- "<filtered_data> |>
+    dplyr::filter(!(grepl('na',.data$estimate_name) | grepl('zero',.data$estimate_name))) |>
+    OmopSketch::tableObservationPeriod()"
+    panelDetails$summarise_observation_period$content$tableMissing <- panelDetails$summarise_clinical_records$content$table
+    panelDetails$summarise_observation_period$content$tableMissing$title <- "Table Missing Data"
+    panelDetails$summarise_observation_period$content$tableMissing$reactive <- "<filtered_data> |>
+    OmopSketch::tableMissingData()"
+    panelDetails$summarise_observation_period$content$tableMissing$download$filename <- "paste0(\"table_missing_data_observation_period.\", input$format)"
+
   }
 
   if ("summarise_clinical_records" %in% resultTypes) {
@@ -136,6 +145,7 @@ shinyCharacteristics <- function(result,
   if ("summarise_missing_data" %in% resultTypes) {
     # customise summarise_missing_data
     panelDetails$summarise_missing_data$icon <- NULL
+
   }
 
   if ("summarise_table_quality" %in% resultTypes) {
@@ -209,25 +219,6 @@ shinyCharacteristics <- function(result,
       omopgenerics::filterSettings(type == 'event') |>
       dplyr::distinct(.data$variable_name) |>
       dplyr::pull()
-
-    panelDetails$summarise_trend_event$content$plot$reactive <- "<filtered_data> |>
-    omopgenerics::filterSettings(type == 'event')  |>
-    dplyr::filter(.data$variable_name == input$variable) |>
-    OmopSketch::plotTrend(
-      facet = input$facet,
-      colour = input$colour
-    )"
-
-    panelDetails$summarise_trend_event$content$plot$filters$variable <- list(
-      button_type = "pickerInput",
-      label = "Variable",
-      choices = variable_names,
-      selected = "Records in observation",
-      multiple = FALSE
-    )
-    panelDetails$summarise_trend <- NULL
-  }
-
 
   # define structure
   panelStructure <- list(
