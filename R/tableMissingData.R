@@ -38,8 +38,6 @@ tableMissingData <- function(result,
         omopgenerics::newSummarisedResult()
     )
 
-
-
   # check if it is empty
   if (nrow(result) == 0) {
     warnEmpty("summarise_missing_data")
