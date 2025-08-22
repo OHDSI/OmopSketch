@@ -1,14 +1,14 @@
 on_github <- function() {
   !interactive() && !identical(Sys.getenv("NOT_CRAN"), "false")
 }
-if (on_github()) {
-  withr::local_envvar(
-    R_USER_CACHE_DIR = tempfile(),
-    .local_envir = testthat::teardown_env(),
-    EUNOMIA_DATA_FOLDER = Sys.getenv("EUNOMIA_DATA_FOLDER", unset = tempfile())
-  )
-  CDMConnector::downloadEunomiaData(overwrite = TRUE)
-}
+# if (on_github()) {
+#   withr::local_envvar(
+#     R_USER_CACHE_DIR = tempfile(),
+#     .local_envir = testthat::teardown_env(),
+#     EUNOMIA_DATA_FOLDER = Sys.getenv("EUNOMIA_DATA_FOLDER", unset = tempfile())
+#   )
+#   CDMConnector::downloadEunomiaData(overwrite = TRUE)
+# }
 schema <- function(type = Sys.getenv("DB_TO_TEST", "duckdb")) {
   switch(type,
     "duckdb" = c(schema = "main", prefix = "omop_sketch_"),

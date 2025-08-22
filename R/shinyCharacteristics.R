@@ -36,11 +36,11 @@ shinyCharacteristics <- function(result,
                                  theme = NULL) {
   rlang::check_installed(pkg = "OmopViewer", version = "0.4.0")
 
-  omopgenerics::validateResultArgument(result)
+  result <- omopgenerics::validateResultArgument(result)
   omopgenerics::assertCharacter(directory, length = 1)
   omopgenerics::assertCharacter(logo, length = 1, null = TRUE)
   omopgenerics::assertCharacter(theme, length = 1, null = TRUE)
-  validateBackground(background)
+  background <- validateBackground(background)
 
   # check directory
   correct <- function(x) {
@@ -179,46 +179,40 @@ shinyCharacteristics <- function(result,
   }
 
   if ("summarise_trend" %in% resultTypes) {
-
-    panelDetails$summarise_trend_episode <- panelDetails$summarise_trend
-    panelDetails$summarise_trend_episode$icon <- NULL
-    panelDetails$summarise_trend_episode$title <- "Observation Period Trends"
-    panelDetails$summarise_trend_episode$content$table$reactive <- "<filtered_data> |>
-    omopgenerics::filterSettings(type == 'episode')  |>
-    OmopSketch::tableTrend()"
-
-    variable_names <- result |>
-      omopgenerics::filterSettings(.data$result_type == "summarise_trend") |>
-      omopgenerics::filterSettings(type == 'episode') |>
-      dplyr::distinct(.data$variable_name) |>
-      dplyr::pull()
-
-    panelDetails$summarise_trend_episode$content$plot$reactive <- "<filtered_data> |>
-    omopgenerics::filterSettings(type == 'episode')  |>
-    dplyr::filter(.data$variable_name == input$variable) |>
-    OmopSketch::plotTrend(
-      facet = input$facet,
-      colour = input$colour
-    )"
-    panelDetails$summarise_trend_episode$content$plot$filters$variable <- list(
-      button_type = "pickerInput",
-      label = "Variable",
-      choices = variable_names,
-      selected = "Records in observation",
-      multiple = FALSE
-    )
-    panelDetails$summarise_trend_event <- panelDetails$summarise_trend
-    panelDetails$summarise_trend_event$icon <- NULL
-    panelDetails$summarise_trend_event$title <- "Clinical Tables Trends"
-    panelDetails$summarise_trend_event$content$table$reactive <- "<filtered_data> |>
-    omopgenerics::filterSettings(type == 'event')  |>
-    OmopSketch::tableTrend()"
-
-    variable_names <- result |>
-      omopgenerics::filterSettings(.data$result_type == "summarise_trend") |>
-      omopgenerics::filterSettings(type == 'event') |>
-      dplyr::distinct(.data$variable_name) |>
-      dplyr::pull()
+    # panelDetails$summarise_trend_episode <- panelDetails$summarise_trend
+    # panelDetails$summarise_trend_episode$icon <- NULL
+    # panelDetails$summarise_trend_episode$title <- "Observation Period Trends"
+    # panelDetails$summarise_trend_episode$content$table$reactive <- "<filtered_data> |>
+    # omopgenerics::filterSettings(type == 'episode')  |>
+    # OmopSketch::tableTrend()"
+    #
+    # variable_names <- result |>
+    #   omopgenerics::filterSettings(.data$result_type == "summarise_trend") |>
+    #   omopgenerics::filterSettings(type == 'episode') |>
+    #   dplyr::distinct(.data$variable_name) |>
+    #   dplyr::pull()
+    #
+    # panelDetails$summarise_trend_episode$content$plot$reactive <- "<filtered_data> |>
+    # omopgenerics::filterSettings(type == 'episode')  |>
+    # dplyr::filter(.data$variable_name == input$variable) |>
+    # OmopSketch::plotTrend(
+    #   facet = input$facet,
+    #   colour = input$colour
+    # )"
+    # panelDetails$summarise_trend_episode$content$plot$filters$variable <- list(
+    #   button_type = "pickerInput",
+    #   label = "Variable",
+    #   choices = variable_names,
+    #   selected = "Records in observation",
+    #   multiple = FALSE
+    # )
+    # panelDetails$summarise_trend_event <- panelDetails$summarise_trend
+    # panelDetails$summarise_trend_event$icon <- NULL
+    # panelDetails$summarise_trend_event$title <- "Clinical Tables Trends"
+    # panelDetails$summarise_trend_event$content$table$reactive <- "<filtered_data> |>
+    # omopgenerics::filterSettings(type == 'event')  |>
+    # OmopSketch::tableTrend()"
+  }
 
   # define structure
   panelStructure <- list(
