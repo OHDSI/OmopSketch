@@ -47,6 +47,8 @@ reference:
   - subtitle: Observation Periods
     desc: Summarise and plot the observation period table in the OMOP Common Data Model
     contents:
+      - summarisePerson
+      - tablePerson
       - summariseObservationPeriod
       - plotObservationPeriod
       - tableObservationPeriod
