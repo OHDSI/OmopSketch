@@ -860,16 +860,16 @@ observation during specific intervals of time.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 132 × 5</span></span></span>
 <span><span class="co">#&gt;    variable_name   estimate_name estimate_value additional_name additional_level</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Number records… count         100            overall         overall         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Number records… percentage    100.00         overall         overall         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Number records… count         1              time_interval   1955-01-01 to 1…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Number records… percentage    1.00           time_interval   1955-01-01 to 1…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Number records… count         2              time_interval   1956-01-01 to 1…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Number records… percentage    2.00           time_interval   1956-01-01 to 1…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Number records… count         3              time_interval   1957-01-01 to 1…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Number records… percentage    3.00           time_interval   1957-01-01 to 1…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Number records… count         4              time_interval   1958-01-01 to 1…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Number records… percentage    4.00           time_interval   1958-01-01 to 1…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Records in obs… count         1              time_interval   1955-01-01 to 1…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Records in obs… percentage    1.00           time_interval   1955-01-01 to 1…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Records in obs… count         2              time_interval   1956-01-01 to 1…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Records in obs… percentage    2.00           time_interval   1956-01-01 to 1…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Records in obs… count         3              time_interval   1957-01-01 to 1…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Records in obs… percentage    3.00           time_interval   1957-01-01 to 1…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Records in obs… count         4              time_interval   1958-01-01 to 1…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Records in obs… percentage    4.00           time_interval   1958-01-01 to 1…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Records in obs… count         4              time_interval   1959-01-01 to 1…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Records in obs… percentage    4.00           time_interval   1959-01-01 to 1…</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 122 more rows</span></span></span></code></pre></div>
 <p>Note that you can adjust the time interval period using the
 <code>interval</code> argument, which can be set to either “years”,
@@ -892,10 +892,10 @@ argument to c(“record”, “person-days”).</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 5</span></span></span>
 <span><span class="co">#&gt;   variable_name    estimate_name estimate_value additional_name additional_level</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Number person-d… count         345934         overall         overall         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Number records … count         100            overall         overall         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> Number person-d… percentage    100.00         overall         overall         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Number records … percentage    100.00         overall         overall</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Records in obse… count         100            overall         overall         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Person-days      count         345934         overall         overall         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> Records in obse… percentage    100.00         overall         overall         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Person-days      percentage    100.00         overall         overall</span></span></code></pre></div>
 <p>We can further stratify our counts by sex (setting argument
 <code>sex = TRUE</code>) or by age (providing an age group). Notice that
 in both cases, the function will automatically create a group called
@@ -930,18 +930,18 @@ individuals in observation is returned.</p>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">strata_level</span>, <span class="va">variable_name</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span>, <span class="va">additional_name</span>, <span class="va">additional_level</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 968 × 6</span></span></span>
-<span><span class="co">#&gt;    strata_level    variable_name    estimate_name estimate_value additional_name</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> overall         Number subjects… count         100            overall        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Female          Number subjects… count         57             overall        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Male            Number subjects… count         43             overall        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> &gt;=35            Number subjects… count         20             overall        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> &lt;35             Number subjects… count         80             overall        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Female &amp;&amp;&amp; &lt;35  Number subjects… count         44             overall        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Male &amp;&amp;&amp; &gt;=35   Number subjects… count         7              overall        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Male &amp;&amp;&amp; &lt;35    Number subjects… count         36             overall        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Female &amp;&amp;&amp; &gt;=35 Number subjects… count         13             overall        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> overall         Number subjects… percentage    100.00         overall        </span></span>
+<span><span class="co">#&gt;    strata_level variable_name       estimate_name estimate_value additional_name</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> overall      Subjects in observ… count         1              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Male         Subjects in observ… count         1              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> &lt;35          Subjects in observ… count         1              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Male &amp;&amp;&amp; &lt;35 Subjects in observ… count         1              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> overall      Subjects in observ… percentage    1.00           time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Male         Subjects in observ… percentage    1.00           time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> &lt;35          Subjects in observ… percentage    1.00           time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Male &amp;&amp;&amp; &lt;35 Subjects in observ… percentage    1.00           time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> overall      Subjects in observ… count         2              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Male         Subjects in observ… count         2              time_interval  </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 958 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: additional_level &lt;chr&gt;</span></span></span></code></pre></div>
 <p>If <code>output = "sex"</code>, the trend in the number of females in
@@ -961,16 +961,16 @@ stratification is ignored.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 314 × 6</span></span></span>
 <span><span class="co">#&gt;    strata_level variable_name       estimate_name estimate_value additional_name</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> overall      Number females in … count         57             overall        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> &lt;35          Number females in … count         44             overall        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> &gt;=35         Number females in … count         13             overall        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> overall      Number females in … percentage    57.00          overall        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> &lt;35          Number females in … percentage    44.00          overall        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> &gt;=35         Number females in … percentage    13.00          overall        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> overall      Number females in … count         1              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> &lt;35          Number females in … count         1              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> overall      Number females in … percentage    1.00           time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> &lt;35          Number females in … percentage    1.00           time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> overall      Females in observa… count         1              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> &lt;35          Females in observa… count         1              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> overall      Females in observa… percentage    1.00           time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> &lt;35          Females in observa… percentage    1.00           time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> overall      Females in observa… count         1              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> &lt;35          Females in observa… count         1              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> overall      Females in observa… percentage    1.00           time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> &lt;35          Females in observa… percentage    1.00           time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> overall      Females in observa… count         1              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> &lt;35          Females in observa… count         1              time_interval  </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 304 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: additional_level &lt;chr&gt;</span></span></span></code></pre></div>
 <p>If <code>output = "age</code>, the trend in the median age of the
@@ -984,33 +984,23 @@ more recent.</p>
 <span>                                           interval <span class="op">=</span> <span class="st">"years"</span>,</span>
 <span>                                           ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">34</span><span class="op">)</span>, <span class="st">"&gt;=35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span>, </span>
 <span>                                           <span class="op">)</span>                                        </span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> age: median</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2025-07-16 12:59:02.299333</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2025-07-16 12:59:02.472552</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> age: median</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2025-07-16 12:59:03.840923</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2025-07-16 12:59:04.066809</span></span>
 <span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">strata_level</span>, <span class="va">variable_name</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span>, <span class="va">additional_name</span>, <span class="va">additional_level</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 165 × 6</span></span></span>
-<span><span class="co">#&gt;    strata_level variable_name       estimate_name estimate_value additional_name</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> overall      Median age in obse… median        18             overall        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> &lt;35          Median age in obse… median        12             overall        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> &gt;=35         Median age in obse… median        47             overall        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> overall      Median age in obse… median        1              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> &lt;35          Median age in obse… median        1              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> overall      Median age in obse… median        1              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> &lt;35          Median age in obse… median        1              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> overall      Median age in obse… median        2              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> &lt;35          Median age in obse… median        2              time_interval  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> overall      Median age in obse… median        2              time_interval  </span></span>
+<span><span class="co">#&gt;    strata_level variable_name      estimate_name estimate_value additional_name</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> overall      Age in observation median        1              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> &lt;35          Age in observation median        1              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> overall      Age in observation median        1              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> &lt;35          Age in observation median        1              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> overall      Age in observation median        2              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> &lt;35          Age in observation median        2              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> overall      Age in observation median        2              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> &lt;35          Age in observation median        2              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> overall      Age in observation median        3              time_interval  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> &lt;35          Age in observation median        3              time_interval  </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 155 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: additional_level &lt;chr&gt;</span></span></span></code></pre></div>
 <div class="section level3">
@@ -1026,23 +1016,23 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/tableInObservation.html">tableInObservation</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"gt"</span><span class="op">)</span></span></code></pre></div>
-<div id="auxpnosfna" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#auxpnosfna table {
+<div id="pahrmkvfsi" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#pahrmkvfsi table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#auxpnosfna thead, #auxpnosfna tbody, #auxpnosfna tfoot, #auxpnosfna tr, #auxpnosfna td, #auxpnosfna th {
+#pahrmkvfsi thead, #pahrmkvfsi tbody, #pahrmkvfsi tfoot, #pahrmkvfsi tr, #pahrmkvfsi td, #pahrmkvfsi th {
   border-style: none;
 }
 
-#auxpnosfna p {
+#pahrmkvfsi p {
   margin: 0;
   padding: 0;
 }
 
-#auxpnosfna .gt_table {
+#pahrmkvfsi .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1068,12 +1058,12 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-left-color: #D9D9D9;
 }
 
-#auxpnosfna .gt_caption {
+#pahrmkvfsi .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#auxpnosfna .gt_title {
+#pahrmkvfsi .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1085,7 +1075,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-bottom-width: 0;
 }
 
-#auxpnosfna .gt_subtitle {
+#pahrmkvfsi .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1097,7 +1087,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-top-width: 0;
 }
 
-#auxpnosfna .gt_heading {
+#pahrmkvfsi .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1109,13 +1099,13 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-right-color: #D3D3D3;
 }
 
-#auxpnosfna .gt_bottom_border {
+#pahrmkvfsi .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#auxpnosfna .gt_col_headings {
+#pahrmkvfsi .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1130,7 +1120,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-right-color: #D3D3D3;
 }
 
-#auxpnosfna .gt_col_heading {
+#pahrmkvfsi .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1150,7 +1140,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   overflow-x: hidden;
 }
 
-#auxpnosfna .gt_column_spanner_outer {
+#pahrmkvfsi .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1162,15 +1152,15 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   padding-right: 4px;
 }
 
-#auxpnosfna .gt_column_spanner_outer:first-child {
+#pahrmkvfsi .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#auxpnosfna .gt_column_spanner_outer:last-child {
+#pahrmkvfsi .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#auxpnosfna .gt_column_spanner {
+#pahrmkvfsi .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1182,11 +1172,11 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   width: 100%;
 }
 
-#auxpnosfna .gt_spanner_row {
+#pahrmkvfsi .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#auxpnosfna .gt_group_heading {
+#pahrmkvfsi .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1212,7 +1202,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   text-align: left;
 }
 
-#auxpnosfna .gt_empty_group_heading {
+#pahrmkvfsi .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1227,15 +1217,15 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   vertical-align: middle;
 }
 
-#auxpnosfna .gt_from_md > :first-child {
+#pahrmkvfsi .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#auxpnosfna .gt_from_md > :last-child {
+#pahrmkvfsi .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#auxpnosfna .gt_row {
+#pahrmkvfsi .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1254,7 +1244,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   overflow-x: hidden;
 }
 
-#auxpnosfna .gt_stub {
+#pahrmkvfsi .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1267,7 +1257,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   padding-right: 5px;
 }
 
-#auxpnosfna .gt_stub_row_group {
+#pahrmkvfsi .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1281,15 +1271,15 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   vertical-align: top;
 }
 
-#auxpnosfna .gt_row_group_first td {
+#pahrmkvfsi .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#auxpnosfna .gt_row_group_first th {
+#pahrmkvfsi .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#auxpnosfna .gt_summary_row {
+#pahrmkvfsi .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1299,16 +1289,16 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   padding-right: 5px;
 }
 
-#auxpnosfna .gt_first_summary_row {
+#pahrmkvfsi .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#auxpnosfna .gt_first_summary_row.thick {
+#pahrmkvfsi .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#auxpnosfna .gt_last_summary_row {
+#pahrmkvfsi .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1318,7 +1308,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-bottom-color: #D3D3D3;
 }
 
-#auxpnosfna .gt_grand_summary_row {
+#pahrmkvfsi .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1328,7 +1318,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   padding-right: 5px;
 }
 
-#auxpnosfna .gt_first_grand_summary_row {
+#pahrmkvfsi .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1338,7 +1328,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-top-color: #D3D3D3;
 }
 
-#auxpnosfna .gt_last_grand_summary_row_top {
+#pahrmkvfsi .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1348,11 +1338,11 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-bottom-color: #D3D3D3;
 }
 
-#auxpnosfna .gt_striped {
+#pahrmkvfsi .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#auxpnosfna .gt_table_body {
+#pahrmkvfsi .gt_table_body {
   border-top-style: solid;
   border-top-width: 3px;
   border-top-color: #D9D9D9;
@@ -1361,7 +1351,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-bottom-color: #D3D3D3;
 }
 
-#auxpnosfna .gt_footnotes {
+#pahrmkvfsi .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1375,7 +1365,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-right-color: #D3D3D3;
 }
 
-#auxpnosfna .gt_footnote {
+#pahrmkvfsi .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1384,7 +1374,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   padding-right: 5px;
 }
 
-#auxpnosfna .gt_sourcenotes {
+#pahrmkvfsi .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1398,7 +1388,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-right-color: #D3D3D3;
 }
 
-#auxpnosfna .gt_sourcenote {
+#pahrmkvfsi .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1406,72 +1396,72 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   padding-right: 5px;
 }
 
-#auxpnosfna .gt_left {
+#pahrmkvfsi .gt_left {
   text-align: left;
 }
 
-#auxpnosfna .gt_center {
+#pahrmkvfsi .gt_center {
   text-align: center;
 }
 
-#auxpnosfna .gt_right {
+#pahrmkvfsi .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#auxpnosfna .gt_font_normal {
+#pahrmkvfsi .gt_font_normal {
   font-weight: normal;
 }
 
-#auxpnosfna .gt_font_bold {
+#pahrmkvfsi .gt_font_bold {
   font-weight: bold;
 }
 
-#auxpnosfna .gt_font_italic {
+#pahrmkvfsi .gt_font_italic {
   font-style: italic;
 }
 
-#auxpnosfna .gt_super {
+#pahrmkvfsi .gt_super {
   font-size: 65%;
 }
 
-#auxpnosfna .gt_footnote_marks {
+#pahrmkvfsi .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#auxpnosfna .gt_asterisk {
+#pahrmkvfsi .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#auxpnosfna .gt_indent_1 {
+#pahrmkvfsi .gt_indent_1 {
   text-indent: 5px;
 }
 
-#auxpnosfna .gt_indent_2 {
+#pahrmkvfsi .gt_indent_2 {
   text-indent: 10px;
 }
 
-#auxpnosfna .gt_indent_3 {
+#pahrmkvfsi .gt_indent_3 {
   text-indent: 15px;
 }
 
-#auxpnosfna .gt_indent_4 {
+#pahrmkvfsi .gt_indent_4 {
   text-indent: 20px;
 }
 
-#auxpnosfna .gt_indent_5 {
+#pahrmkvfsi .gt_indent_5 {
   text-indent: 25px;
 }
 
-#auxpnosfna .katex-display {
+#pahrmkvfsi .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#auxpnosfna div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#pahrmkvfsi div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1479,8 +1469,8 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
 <thead>
 <tr class="gt_col_headings gt_spanner_row">
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="2" colspan="1" style="text-align: center; font-weight: bold; border-left-width: 1px; border-left-style: solid; border-left-color: White; border-right-width: 1px; border-right-style: solid; border-right-color: White; border-top-width: 1px; border-top-style: solid; border-top-color: White; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: White;" scope="col" id="Variable-name">Variable name</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="2" colspan="1" style="text-align: center; font-weight: bold; border-left-width: 1px; border-left-style: solid; border-left-color: White; border-right-width: 1px; border-right-style: solid; border-right-color: White; border-top-width: 1px; border-top-style: solid; border-top-color: White; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: White;" scope="col" id="Estimate-name">Estimate name</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="2" colspan="1" style="text-align: center; font-weight: bold; border-left-width: 1px; border-left-style: solid; border-left-color: White; border-right-width: 1px; border-right-style: solid; border-right-color: White; border-top-width: 1px; border-top-style: solid; border-top-color: White; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: White;" scope="col" id="Sex">Sex</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="2" colspan="1" style="text-align: center; font-weight: bold; border-left-width: 1px; border-left-style: solid; border-left-color: White; border-right-width: 1px; border-right-style: solid; border-right-color: White; border-top-width: 1px; border-top-style: solid; border-top-color: White; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: White;" scope="col" id="Estimate-name">Estimate name</th>
       <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="1" style="background-color: #D9D9D9; text-align: center; font-weight: bold; border-left-width: 1px; border-left-style: solid; border-left-color: White; border-right-width: 1px; border-right-style: solid; border-right-color: White; border-top-width: 1px; border-top-style: solid; border-top-color: White; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: White;" scope="col" id="spanner-[header_name]Database name
 [header_level]mockOmopSketch">
         <div class="gt_column_spanner">Database name</div>
@@ -1491,54 +1481,57 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
     </tr>
 </thead>
 <tbody class="gt_table_body">
-<tr>
-<td headers="Variable name" class="gt_row gt_left" style="text-align: left;">Number person-days</td>
-<td headers="Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N (%)</td>
-<td headers="Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Female</td>
-<td headers="[header_name]Database name
-[header_level]mockOmopSketch" class="gt_row gt_right" style="text-align: right;">221503 (64.03%)</td>
+<tr class="gt_group_heading_row">
+<th colspan="4" class="gt_group_heading" style="background-color: #E9E9E9; font-weight: bold;" scope="colgroup" id="episode; observation_period">episode; observation_period</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="episode; observation_period  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Subjects in observation</td>
+<td headers="episode; observation_period  Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">overall</td>
+<td headers="episode; observation_period  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N (%)</td>
+<td headers="episode; observation_period  [header_name]Database name
+[header_level]mockOmopSketch" class="gt_row gt_right" style="text-align: right;">100 (100.00%)</td>
 </tr>
 <tr>
-<td headers="Variable name" class="gt_row gt_left" style="text-align: left;">Number subjects in observation</td>
-<td headers="Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N (%)</td>
-<td headers="Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Female</td>
-<td headers="[header_name]Database name
+<td headers="episode; observation_period  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="episode; observation_period  Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Female</td>
+<td headers="episode; observation_period  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N (%)</td>
+<td headers="episode; observation_period  [header_name]Database name
 [header_level]mockOmopSketch" class="gt_row gt_right" style="text-align: right;">57 (57.00%)</td>
 </tr>
 <tr>
-<td headers="Variable name" class="gt_row gt_left" style="text-align: left;">Number person-days</td>
-<td headers="Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N (%)</td>
-<td headers="Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Male</td>
-<td headers="[header_name]Database name
-[header_level]mockOmopSketch" class="gt_row gt_right" style="text-align: right;">124431 (35.97%)</td>
-</tr>
-<tr>
-<td headers="Variable name" class="gt_row gt_left" style="text-align: left;">Number subjects in observation</td>
-<td headers="Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N (%)</td>
-<td headers="Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Male</td>
-<td headers="[header_name]Database name
+<td headers="episode; observation_period  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="episode; observation_period  Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Male</td>
+<td headers="episode; observation_period  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N (%)</td>
+<td headers="episode; observation_period  [header_name]Database name
 [header_level]mockOmopSketch" class="gt_row gt_right" style="text-align: right;">43 (43.00%)</td>
 </tr>
 <tr>
-<td headers="Variable name" class="gt_row gt_left" style="text-align: left;">Number females in observation</td>
-<td headers="Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N (%)</td>
-<td headers="Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">overall</td>
-<td headers="[header_name]Database name
+<td headers="episode; observation_period  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Females in observation</td>
+<td headers="episode; observation_period  Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">overall</td>
+<td headers="episode; observation_period  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N (%)</td>
+<td headers="episode; observation_period  [header_name]Database name
 [header_level]mockOmopSketch" class="gt_row gt_right" style="text-align: right;">57 (57.00%)</td>
 </tr>
 <tr>
-<td headers="Variable name" class="gt_row gt_left" style="text-align: left;">Number person-days</td>
-<td headers="Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N (%)</td>
-<td headers="Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">overall</td>
-<td headers="[header_name]Database name
-[header_level]mockOmopSketch" class="gt_row gt_right" style="text-align: right;">345934 (100.00%)</td>
+<td headers="episode; observation_period  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Person-days</td>
+<td headers="episode; observation_period  Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">overall</td>
+<td headers="episode; observation_period  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N (%)</td>
+<td headers="episode; observation_period  [header_name]Database name
+[header_level]mockOmopSketch" class="gt_row gt_right" style="text-align: right;">345,934 (100.00%)</td>
 </tr>
 <tr>
-<td headers="Variable name" class="gt_row gt_left" style="text-align: left;">Number subjects in observation</td>
-<td headers="Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N (%)</td>
-<td headers="Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">overall</td>
-<td headers="[header_name]Database name
-[header_level]mockOmopSketch" class="gt_row gt_right" style="text-align: right;">100 (100.00%)</td>
+<td headers="episode; observation_period  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="episode; observation_period  Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Female</td>
+<td headers="episode; observation_period  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N (%)</td>
+<td headers="episode; observation_period  [header_name]Database name
+[header_level]mockOmopSketch" class="gt_row gt_right" style="text-align: right;">221,503 (64.03%)</td>
+</tr>
+<tr>
+<td headers="episode; observation_period  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"></td>
+<td headers="episode; observation_period  Sex" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Male</td>
+<td headers="episode; observation_period  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N (%)</td>
+<td headers="episode; observation_period  [header_name]Database name
+[header_level]mockOmopSketch" class="gt_row gt_right" style="text-align: right;">124,431 (35.97%)</td>
 </tr>
 </tbody>
 </table>
@@ -1553,9 +1546,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
 <code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseInObservation.html">summariseInObservation</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span>,</span>
 <span>  interval <span class="op">=</span> <span class="st">"years"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/plotInObservation.html">plotInObservation</a></span><span class="op">(</span><span class="va">summarisedResult</span><span class="op">)</span></span>
-<span><span class="co">#&gt; `result_id` is not present in <span style="color: #0000BB;">result</span>.</span></span>
-<span><span class="co">#&gt; `result_id` is not present in <span style="color: #0000BB;">result</span>.</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/plotInObservation.html">plotInObservation</a></span><span class="op">(</span><span class="va">summarisedResult</span><span class="op">)</span></span></code></pre></div>
 <p><img src="summarise_observation_period_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
 <p>Notice that one output at a time can be plotted. If more outputs have
 been included in the summarised result, you will have to filter to only
@@ -1572,22 +1563,10 @@ package.</p>
 <span>                       output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"record"</span>, <span class="st">"age"</span><span class="op">)</span>,</span>
 <span>                       sex <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                       ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">34</span><span class="op">)</span>, <span class="st">"&gt;=35"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> </span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> age: median</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2025-07-16 12:59:08.497466</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2025-07-16 12:59:08.879153</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be computed:</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> age: median</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2025-07-16 12:59:10.659007</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2025-07-16 12:59:11.128868</span></span>
 <span><span class="fu"><a href="../reference/plotInObservation.html">plotInObservation</a></span><span class="op">(</span><span class="va">summarisedResult</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">variable_name</span> <span class="op">==</span> <span class="st">"Median age in observation"</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">variable_name</span> <span class="op">==</span> <span class="st">"Age in observation"</span><span class="op">)</span>,</span>
 <span>  colour <span class="op">=</span> <span class="st">"sex"</span>, </span>
-<span>  facet <span class="op">=</span> <span class="st">"age_group"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; `result_id` is not present in <span style="color: #0000BB;">result</span>.</span></span>
-<span><span class="co">#&gt; `result_id` is not present in <span style="color: #0000BB;">result</span>.</span></span></code></pre></div>
+<span>  facet <span class="op">=</span> <span class="st">"age_group"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="summarise_observation_period_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
 <p>Finally, disconnect from the cdm</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
