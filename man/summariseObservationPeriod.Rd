@@ -7,7 +7,6 @@ summarised_result object.}
 \usage{
 summariseObservationPeriod(
   cdm,
-  observationPeriod = lifecycle::deprecated(),
   estimates = c("mean", "sd", "min", "q05", "q25", "median", "q75", "q95", "max",
     "density"),
   missingData = TRUE,
@@ -15,13 +14,12 @@ summariseObservationPeriod(
   byOrdinal = TRUE,
   ageGroup = NULL,
   sex = FALSE,
-  dateRange = NULL
+  dateRange = NULL,
+  observationPeriod = lifecycle::deprecated()
 )
 }
 \arguments{
 \item{cdm}{A cdm_reference object.}
-
-\item{observationPeriod}{deprecated.}
 
 \item{estimates}{Estimates to summarise the variables of interest (
 \verb{records per person}, \verb{duration in days} and
@@ -46,6 +44,8 @@ summariseObservationPeriod(
 \item{dateRange}{A vector of two dates defining the desired study period.
 Only the \code{start_date} column of the OMOP table is checked to ensure it falls within this range.
 If \code{dateRange} is \code{NULL}, no restriction is applied.}
+
+\item{observationPeriod}{deprecated.}
 }
 \value{
 A summarised_result object with the summarised data.

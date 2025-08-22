@@ -2,7 +2,6 @@
 #' summarised_result object.
 #'
 #' @param cdm A cdm_reference object.
-#' @param observationPeriod deprecated.
 #' @param estimates Estimates to summarise the variables of interest (
 #' `records per person`, `duration in days` and
 #' `days to next observation period`).
@@ -18,6 +17,7 @@
 #' @param sex Boolean variable. Whether to stratify by sex (TRUE) or not
 #' (FALSE).
 #' @inheritParams dateRange-startDate
+#' @param observationPeriod deprecated.
 #'
 #' @return A summarised_result object with the summarised data.
 #'
@@ -38,42 +38,37 @@
 #' PatientProfiles::mockDisconnect(cdm)
 #' }
 summariseObservationPeriod <- function(cdm,
-    observationPeriod = lifecycle::deprecated(),
-    estimates = c(
-      "mean", "sd", "min", "q05", "q25",
-      "median", "q75", "q95", "max",
-      "density"
-      ),
-    missingData = TRUE,
-    quality = TRUE,
-    byOrdinal = TRUE,
-    ageGroup = NULL,
-    sex = FALSE,
-    dateRange = NULL) {
+                                       estimates = c(
+                                         "mean", "sd", "min", "q05", "q25",
+                                         "median", "q75", "q95", "max",
+                                         "density"
+                                       ),
+                                       missingData = TRUE,
+                                       quality = TRUE,
+                                       byOrdinal = TRUE,
+                                       ageGroup = NULL,
+                                       sex = FALSE,
+                                       dateRange = NULL,
+                                       observationPeriod = lifecycle::deprecated()) {
   # input checks
-  if (lifecycle::is_present(observationPeriod)){
+  if (lifecycle::is_present(observationPeriod)) {
     lifecycle::deprecate_warn(
       when = "0.5.1",
       what = "summariseObservationPeriod(observationPeriod)",
       with = "summariseObservationPeriod(cdm)"
     )
-    cdm <- observationPeriod
+    if (missing(cdm)) {
+      cdm <- observationPeriod
+    }
   }
 
-  if (inherits(cdm, "cdm_reference")) {
-    cdm <- omopgenerics::validateCdmArgument(cdm = cdm)
-    observationPeriod <- cdm[["observation_period"]]
-  } else {
-    omopgenerics::validateCdmTable(cdm)
-    observationPeriod <- cdm
-    cdm <- omopgenerics::cdmReference(cdm)
-    omopgenerics::assertTable(observationPeriod, class = "cdm_table",
-                              columns = omopgenerics::omopColumns(table = "observation_period",
-                                                                  version = omopgenerics::cdmVersion(cdm)
-                                                                  )
-                              )
+  # initial checks
+  if (inherits(x = cdm, what = "cdm_table")) {
+    cli::cli_inform(c(i = "retrieving cdm object from {.emph cdm_table}."))
+    cdm <- omopgenerics::cdmReference(table = cdm)
   }
-
+  cdm <- omopgenerics::validateCdmArgument(cdm = cdm)
+  observationPeriod <- cdm[["observation_period"]]
   omopgenerics::assertLogical(sex)
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup)
   dateRange <- validateStudyPeriod(cdm, dateRange)
@@ -84,7 +79,6 @@ summariseObservationPeriod <- function(cdm,
   omopgenerics::assertChoice(estimates, opts, unique = TRUE)
   omopgenerics::assertLogical(byOrdinal)
 
-
   tablePrefix <- omopgenerics::tmpPrefix()
 
   strata <- c(list(character()), omopgenerics::combineStrata(strataCols(sex = sex, ageGroup = ageGroup)))
@@ -94,8 +88,6 @@ summariseObservationPeriod <- function(cdm,
   if (omopgenerics::isTableEmpty(observationPeriod)) {
     return(omopgenerics::emptySummarisedResult(settings = set))
   }
-
-
 
   start_date_name <- omopgenerics::omopColumns(table = "observation_period", field = "start_date")
 
@@ -199,7 +191,7 @@ summariseObservationPeriod <- function(cdm,
     percentage = sprintf("%.2f", 100 * number_subjects_no_person / number_subjects)
   ) |>
     tidyr::pivot_longer(
-    cols = everything(),
+    cols = dplyr::everything(),
     names_to = "estimate_name",
     values_to = "estimate_value"
   ) |>
