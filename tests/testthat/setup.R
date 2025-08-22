@@ -35,10 +35,13 @@ cdmEunomia <- function() {
         cdmLocal$person |>
           dplyr::select("person_id"),
         by = "person_id"
-      ) |>
-      dplyr::group_by(dplyr::across(dplyr::all_of(id))) |>
-      dplyr::filter(.data[[start]] == min(.data[[start]], na.rm = TRUE)) |>
-      dplyr::ungroup()
+      )
+    if (nrow(cdmLocal[[tab]]) > 0) {
+      cdmLocal[[tab]] <- cdmLocal[[tab]] |>
+        dplyr::group_by(dplyr::across(dplyr::all_of(id))) |>
+        dplyr::filter(.data[[start]] == min(.data[[start]], na.rm = TRUE)) |>
+        dplyr::ungroup()
+    }
   }
 
   # insert cdm

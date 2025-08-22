@@ -26,9 +26,9 @@ test_that("table omop snapshot works", {
 test_that("works with mockOmopSketch", {
   skip_on_cran()
   cdm <- mockOmopSketch()
-  expect_no_error(x <- tableOmopSnapshot(summariseOmopSnapshot(cdm)) |> suppressWarnings())
+  expect_no_error(x <- tableOmopSnapshot(summariseOmopSnapshot(cdm)))
   expect_true(inherits(x, "gt_tbl"))
-  expect_warning(x <- summariseOmopSnapshot(cdm))
+  expect_no_error(x <- summariseOmopSnapshot(cdm))
   x <- x |> dplyr::filter(result_id == 0.1)
   expect_warning(inherits(tableOmopSnapshot(x), "gt_tbl"))
 

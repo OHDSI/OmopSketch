@@ -11,7 +11,8 @@ summariseOmopSnapshot(cdm)
 \item{cdm}{A cdm_reference object.}
 }
 \value{
-A summarised_result object.
+A summarised_result object that contains the OMOP CDM snapshot
+information.
 }
 \description{
 Summarise a cdm_reference object creating a snapshot with the metadata of the
@@ -25,4 +26,5 @@ cdm <- mockOmopSketch(numberIndividuals = 10)
 
 summariseOmopSnapshot(cdm = cdm)
 }
+
 }
