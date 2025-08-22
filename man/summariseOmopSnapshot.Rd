@@ -19,6 +19,8 @@ cdm_reference object.
 }
 \examples{
 \donttest{
+library(OmopSketch)
+
 cdm <- mockOmopSketch(numberIndividuals = 10)
 
 summariseOmopSnapshot(cdm = cdm)

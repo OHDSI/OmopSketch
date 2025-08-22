@@ -15,6 +15,7 @@
 #' @export
 #' @examples
 #' \donttest{
+#' library(OmopSketch)
 #' mockOmopSketch(numberIndividuals = 100)
 #' }
 mockOmopSketch <- function(con = NULL,

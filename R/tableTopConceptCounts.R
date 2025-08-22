@@ -16,7 +16,7 @@
 #' library(CDMConnector)
 #' library(duckdb)
 #'
-#' requireEunomia()
+#' #requireEunomia()
 #' con <- dbConnect(drv = duckdb(dbdir = eunomiaDir()))
 #' cdm <- cdmFromCon(con = con, cdmSchema = "main", writeSchema = "main")
 #'

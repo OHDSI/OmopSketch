@@ -19,6 +19,8 @@ Create a visual table from a summarise_omop_snapshot result.
 }
 \examples{
 \donttest{
+library(OmopSketch)
+
 cdm <- mockOmopSketch(numberIndividuals = 10)
 
 result <- summariseOmopSnapshot(cdm = cdm)

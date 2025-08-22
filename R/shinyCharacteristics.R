@@ -20,8 +20,8 @@
 #'
 #' @examples
 #' \dontrun{
-#'
 #' library(OmopSketch)
+#'
 #' cdm <- mockOmopSketch()
 #' res <- databaseCharacteristics(cdm = cdm)
 #' shinyCharacteristics(result = res, directory = here::here())

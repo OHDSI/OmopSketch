@@ -30,6 +30,7 @@
 #' @export
 #' @examples
 #' \donttest{
+#' library(OmopSketch)
 #'
 #' cdm <- mockOmopSketch()
 #'

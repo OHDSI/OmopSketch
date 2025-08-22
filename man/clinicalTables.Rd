@@ -14,6 +14,8 @@ This function provides a list of allowed inputs for the \code{omopTableName} arg
 \code{summariseClinicalRecords}
 }
 \examples{
+library(OmopSketch)
+
 clinicalTables()
 
 }

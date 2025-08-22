@@ -10,7 +10,7 @@
 #' @examples
 #' \donttest{
 #' library(dplyr)
-#' librray(OmopSketch)
+#' library(OmopSketch)
 #'
 #' cdm <- mockOmopSketch()
 #'

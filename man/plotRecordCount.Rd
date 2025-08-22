@@ -23,6 +23,8 @@ Create a ggplot of the records' count trend.
 }
 \examples{
 \donttest{
+library(OmopSketch)
+
 cdm <- mockOmopSketch()
 
 summarisedResult <- summariseRecordCount(

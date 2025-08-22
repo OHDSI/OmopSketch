@@ -13,6 +13,7 @@
 #' @export
 #' @examples
 #' \donttest{
+#' library(OmopSketch)
 #'
 #' cdm <- mockOmopSketch(numberIndividuals = 100)
 #'
