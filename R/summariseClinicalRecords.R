@@ -446,7 +446,7 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
   cdm <- omopgenerics::cdmReference(x)
 
   x <- x |>
-    dplyr::select(dplyr::any_of(c(newNames, "sex", "age_group"))) |>
+    dplyr::select(dplyr::all_of(newNames), dplyr::any_of(c("sex", "age_group"))) |>
     dplyr::mutate(end_date = dplyr::coalesce(.data$end_date, .data$start_date))
 
   if (quality) {

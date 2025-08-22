@@ -1,60 +1,80 @@
 #' Creates a mock database to test OmopSketch package.
 #'
-#' @param con A DBI connection to create the cdm mock object. By default, the
-#' connection would be a 'duckdb' one.
-#' @param writeSchema Name of an schema of the DBI connection with writing
-#' permissions.
 #' @param numberIndividuals Number of individuals to create in the cdm
 #' reference object.
-#' @param seed An optional integer used to set the seed for random number
-#' generation, ensuring reproducibility of the generated data. If provided, this
-#' seed allows the function to produce consistent results each time it is run
-#' with the same inputs. If 'NULL', the seed is not set, which can lead to
-#' different outputs on each run.
+#' @param con deprecated.
+#' @param writeSchema deprecated.
+#' @param seed deprecated.
+#'
 #' @return A mock cdm_reference object.
 #' @export
 #' @examples
 #' \donttest{
 #' library(OmopSketch)
-#' mockOmopSketch(numberIndividuals = 100)
+#'
+#' cdm <- mockOmopSketch(numberIndividuals = 100)
+#' cdm
+#'
+#' # to insert into a duck db connection
+#' library(duckdb)
+#' library(CDMConnector)
+#'
+#' con <- dbConnect(drv = duckdb())
+#' to <- dbSource(con = con, writeSchema = "main")
+#' cdm <- insertCdmTo(cdm = cdm, to = to)
+#'
+#' cdm
 #' }
-mockOmopSketch <- function(con = NULL,
-                           writeSchema = NULL,
-                           numberIndividuals = 100,
-                           seed = NULL) {
+#'
+mockOmopSketch <- function(numberIndividuals = 100,
+                           con = lifecycle::deprecated(),
+                           writeSchema = lifecycle::deprecated(),
+                           seed = lifecycle::deprecated()) {
+  # input check
   omopgenerics::assertNumeric(numberIndividuals, min = 1, length = 1)
-
-  if (is.null(con)) {
-    # TO BE REMOVED WHEN WE SUPPORT LOCAL CDMs
-    rlang::check_installed("duckdb")
-    con <- duckdb::dbConnect(duckdb::duckdb(), ":memory:")
+  if (lifecycle::is_present(seed)) {
+    lifecycle::deprecate_soft(
+      when = "1.0.0",
+      what = "mockOmopSketch(seed)",
+      with = "set.seed()"
+    )
+    set.seed(seed = seed)
   }
-
-  if (!inherits(con, "DBIConnection")) {
-    cli::cli_abort(c("!" = "`con` must be a DBI connection"))
+  if (lifecycle::is_present(con)) {
+    lifecycle::deprecate_soft(
+      when = "1.0.0",
+      what = "mockOmopSketch(con)",
+      with = "omopgenerics::insertCdmTo()"
+    )
   }
-  if (is.null(writeSchema) & inherits(con, "duckdb_connection")) {
-    # TO BE REMOVED WHEN WE SUPPORT LOCAL CDMs
-    writeSchema <- "main"
+  if (lifecycle::is_present(writeSchema)) {
+    lifecycle::deprecate_soft(
+      when = "1.0.0",
+      what = "mockOmopSketch(writeSchema)",
+      with = "omopgenerics::insertCdmTo()"
+    )
   }
 
   cdm <- omock::mockCdmReference(cdmName = "mockOmopSketch", vocabularySet = "eunomia") |>
-    omock::mockPerson(nPerson = numberIndividuals, seed = seed) |>
-    omock::mockObservationPeriod(seed = seed) |>
-    omock::mockConditionOccurrence(seed = seed) |>
-    omock::mockDeath(seed = seed) |>
-    omock::mockDrugExposure(seed = seed) |>
-    omock::mockMeasurement(seed = seed) |>
-    omock::mockObservation(seed = seed) |>
-    omock::mockProcedureOccurrence(seed = seed) |>
-    omock::mockVisitOccurrence(seed = seed) |>
-    # Create device exposure table - empty (Eunomia also has it empty)
+    omock::mockPerson(nPerson = numberIndividuals) |>
+    omock::mockObservationPeriod() |>
+    omock::mockConditionOccurrence() |>
+    omock::mockDeath() |>
+    omock::mockDrugExposure() |>
+    omock::mockMeasurement() |>
+    omock::mockObservation() |>
+    omock::mockProcedureOccurrence() |>
+    omock::mockVisitOccurrence() |>
+    # TODO replace with omock::mockDeviceExposure
     omopgenerics::emptyOmopTable("device_exposure") |>
     checkColumns()
 
-
-  # WHEN WE SUPORT LOCAL CDMs WE WILL HAVE TO ACCOUNT FOR THAT HERE
-  cdm <- CDMConnector::copyCdmTo(con = con, cdm = cdm, schema = writeSchema)
+  # TODO remove when local datasets are supported
+  to <- CDMConnector::dbSource(
+    con = duckdb::dbConnect(drv = duckdb::duckdb()),
+    writeSchema = "main"
+  )
+  cdm <- omopgenerics::insertCdmTo(cdm = cdm, to = to)
 
   return(cdm)
 }
@@ -69,7 +89,7 @@ checkColumns <- function(cdm_local) {
     ))
   for (table in names(cdm_local)) {
     cols <- info |>
-      dplyr::filter(.data$cdm_table_name == table) |>
+      dplyr::filter(.data$cdm_table_name == .env$table) |>
       dplyr::select("cdm_field_name", "cdm_datatype")
 
     missing_cols <- cols |>

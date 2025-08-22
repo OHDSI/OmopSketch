@@ -44,7 +44,7 @@ cdm <- mockOmopSketch()
 Let's now use the `summariseObservationPeriod()` function from the OmopSketch package to help us have an overview of one of the `observation_period` table, including some statistics such as the `Number of subjects` and `Duration in days` for each observation period (e.g., 1st, 2nd)
 
 ```{r, warning=FALSE}
-summarisedResult <- summariseObservationPeriod(cdm$observation_period)
+summarisedResult <- summariseObservationPeriod(cdm = cdm)
 
 summarisedResult
 ```
@@ -54,7 +54,8 @@ Notice that the output is in the summarised result format.
 We can use the arguments to specify which statistics we want to perform. For example, use the argument `estimates` to indicate which estimates you are interested regarding the `Duration in days` of the observation period.
 
 ```{r, warning=FALSE}
-summarisedResult <- summariseObservationPeriod(cdm$observation_period,
+summarisedResult <- summariseObservationPeriod(
+  cdm = cdm,
   estimates = c("mean", "sd", "q05", "q95")
 )
 
@@ -66,7 +67,8 @@ summarisedResult |>
 Additionally, you can stratify the results by sex and age groups, and specify a date range of interest:
 
 ```{r, warning=FALSE, eval=FALSE}
-summarisedResult <- summariseObservationPeriod(cdm$observation_period,
+summarisedResult <- summariseObservationPeriod(
+  cdm = cdm,
   estimates = c("mean", "sd", "q05", "q95"),
   sex = TRUE,
   ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf)),
@@ -82,7 +84,8 @@ Notice that, by default, the "overall" group will be also included, as well as c
 `tableObservationPeriod()` will help you to create a table (see supported types with: visOmopResults::tableType()). By default it creates a [gt](https://gt.rstudio.com/) table.
 
 ```{r, warning=FALSE}
-summarisedResult <- summariseObservationPeriod(cdm$observation_period,
+summarisedResult <- summariseObservationPeriod(
+  cdm = cdm,
   estimates = c("mean", "sd", "q05", "q95"),
   sex = TRUE
 )
@@ -96,9 +99,10 @@ summarisedResult |>
 Finally, we can visualise the result using `plotObservationPeriod()`.
 
 ```{r, warning=FALSE}
-summarisedResult <- summariseObservationPeriod(cdm$observation_period)
+summarisedResult <- summariseObservationPeriod(cdm = cdm)
 
-plotObservationPeriod(summarisedResult,
+plotObservationPeriod(
+  result = summarisedResult,
   variableName = "Number subjects",
   plotType = "barplot"
 )
@@ -109,16 +113,16 @@ Note that either `Number subjects` or `Duration in days` can be plotted. For `Nu
 Additionally, if results were stratified by sex or age group, we can further use `facet` or `colour` arguments to highlight the different results in the plot. To help us identify by which variables we can colour or facet by, we can use [visOmopResult](https://darwin-eu.github.io/visOmopResults/) package.
 
 ```{r, warning=FALSE}
-summarisedResult <- summariseObservationPeriod(cdm$observation_period,
-  sex = TRUE
-)
-plotObservationPeriod(summarisedResult,
+summarisedResult <- summariseObservationPeriod(cdm = cdm, sex = TRUE)
+plotObservationPeriod(
+  result = summarisedResult,
   variableName = "Duration in days",
   plotType = "boxplot",
   facet = "sex"
 )
 
-summarisedResult <- summariseObservationPeriod(cdm$observation_period,
+summarisedResult <- summariseObservationPeriod(
+  cdm = cdm,
   sex = TRUE,
   ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf))
 )
@@ -153,7 +157,6 @@ summarisedResult <- summariseInObservation(cdm$observation_period,
 Along with the number of records in observation, you can also calculate the number of person-days by setting the `output` argument to c("record", "person-days").
 
 ```{r, warning=FALSE}
-
 summarisedResult <- summariseInObservation(cdm$observation_period, 
                                            output = c("record", "person-days"))                                        
 
@@ -213,11 +216,12 @@ summarisedResult |>
 If `output = "age`, the trend in the median age of the population in observation is calculated. If `ageGroup` and `interval` are both specified, the age is computed at the beginning of the interval or of the observation period, whichever is more recent.
 
 ```{r}
-summarisedResult <- summariseInObservation(cdm$observation_period, 
-                                           output = c("age"),
-                                           interval = "years",
-                                           ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf)), 
-                                           )                                        
+summarisedResult <- summariseInObservation(
+  observationPeriod = cdm$observation_period, 
+  output = c("age"),
+  interval = "years",
+  ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf)) 
+)                                        
 
 
 summarisedResult |>

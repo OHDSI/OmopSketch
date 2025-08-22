@@ -1,9 +1,13 @@
+
 #' Summarise a cdm_reference object creating a snapshot with the metadata of the
 #' cdm_reference object.
 #'
 #' @param cdm A cdm_reference object.
+#'
 #' @return A summarised_result object.
+#'
 #' @export
+#'
 #' @examples
 #' \donttest{
 #' library(OmopSketch)
@@ -12,6 +16,7 @@
 #'
 #' summariseOmopSnapshot(cdm = cdm)
 #' }
+#'
 summariseOmopSnapshot <- function(cdm) {
   rlang::check_installed(pkg = "omopgenerics", version = "1.3.0")
 

@@ -30,7 +30,7 @@
 #'
 #' cdm <- mockOmopSketch(numberIndividuals = 100)
 #'
-#' result <- summariseObservationPeriod(observationPeriod = cdm$observation_period)
+#' result <- summariseObservationPeriod(cdm = cdm)
 #'
 #' result |>
 #'   glimpse()
@@ -106,11 +106,9 @@ summariseObservationPeriod <- function(cdm,
     dplyr::group_by(.data$person_id, dplyr::across(dplyr::any_of(c("sex", "age_group")))) |>
     dplyr::arrange(.data$observation_period_start_date) |>
     dplyr::mutate("next_start" = dplyr::lead(.data$observation_period_start_date)) %>%
-    dplyr::mutate(
-      "duration" = as.integer(!!CDMConnector::datediff("observation_period_start_date", "observation_period_end_date")) + 1L,
-      "next_obs" = as.integer(!!CDMConnector::datediff("observation_period_end_date", "next_start")),
-      "id" = as.integer(dplyr::row_number())
-    ) |>
+    datediffDays(start = "observation_period_start_date", end = "observation_period_end_date", name = "duration", offset = 1) |>
+    datediffDays(start = "observation_period_end_date", end = "next_start", name = "next_obs") |>
+    dplyr::mutate("id" = as.integer(dplyr::row_number())) |>
     dplyr::ungroup() |>
     dplyr::select("person_id", "id", "duration", "next_obs", dplyr::any_of(c("sex", "age_group"))) |>
     dplyr::collect()
