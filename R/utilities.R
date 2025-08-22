@@ -1,14 +1,15 @@
 warnFacetColour <- function(result, cols) {
   colsToWarn <- result |>
     dplyr::select(
-      "cdm_name", "group_name", "group_level", "strata_name", "strata_level",
-      "variable_name", "variable_level"
+      dplyr::any_of(c("cdm_name", "group_name", "group_level", "strata_name", "strata_level",
+      "variable_name", "variable_level", "type"))
     ) |>
     dplyr::distinct() |>
     omopgenerics::splitAll() |>
     dplyr::select(!dplyr::any_of(unique(unlist(cols)))) |>
     as.list() |>
-    purrr::map(unique)
+    purrr::map(unique) |>
+    suppressMessages()
   colsToWarn <- colsToWarn[lengths(colsToWarn) > 1]
   if (length(colsToWarn) > 0) {
     cli::cli_warn(message = c(
@@ -37,6 +38,40 @@ asCharacterFacet <- function(facet) {
     facet <- facet[facet != "."]
   }
   return(facet)
+}
+
+addTimeInterval <- function(x) {
+  if (!"interval" %in% colnames(x)) {
+    return(dplyr::mutate(x, time_interval = NA_character_))
+  }
+  x |>
+    dplyr::mutate(
+      type = dplyr::case_when(
+        nchar(.data$interval) == 4 ~ "years",
+        substr(.data$interval, 6, 6) == "Q" ~ "quarters",
+        substr(.data$interval, 5, 5) == "_" ~ "months",
+        .default = "overall"
+      ),
+      start = dplyr::case_when(
+        .data$type == "years" ~ paste0(.data$interval, "-01-01"),
+        .data$type == "quarters" ~ paste0(substr(.data$interval, 1, 4), "-", sprintf("%02i", as.integer(as.numeric(substr(.data$interval, 7, 7)) * 3 - 2)), "-01"),
+        .data$type == "months" ~ paste0(substr(.data$interval, 1, 4), "-", sprintf("%02i", as.integer(substr(.data$interval, 6, 7))), "-01"),
+        .data$type == "overall" ~ NA_character_
+      ) |>
+        suppressWarnings(),
+      end = dplyr::case_when(
+        .data$type == "years" ~ clock::add_years(as.Date(.data$start), 1),
+        .data$type == "quarters" ~ clock::add_months(as.Date(.data$start), 3),
+        .data$type == "months" ~ clock::add_months(as.Date(.data$start), 1),
+        .data$type == "overall" ~ as.Date(NA)
+      ) |>
+        clock::add_days(-1) |>
+        format("%Y-%m-%d"),
+      time_interval = dplyr::if_else(
+        .data$type == "overall", NA_character_, paste(.data$start, "to", .data$end)
+      )
+    ) |>
+    dplyr::select(!c("start", "end", "type", "interval"))
 }
 
 

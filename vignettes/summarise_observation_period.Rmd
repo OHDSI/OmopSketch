@@ -260,7 +260,7 @@ summarisedResult <- summariseInObservation(cdm$observation_period,
                        sex = TRUE,
                        ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf))) 
 plotInObservation(summarisedResult |> 
-  filter(variable_name == "Median age in observation"),
+  filter(variable_name == "Age in observation"),
   colour = "sex", 
   facet = "age_group")
   
