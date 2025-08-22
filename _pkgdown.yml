@@ -41,9 +41,6 @@ reference:
     contents:
       - summariseClinicalRecords
       - tableClinicalRecords
-      - summariseRecordCount
-      - plotRecordCount
-      - tableRecordCount
       - summariseMissingData
       - tableMissingData
 
@@ -53,9 +50,6 @@ reference:
       - summariseObservationPeriod
       - plotObservationPeriod
       - tableObservationPeriod
-      - summariseInObservation
-      - plotInObservation
-      - tableInObservation
 
   - subtitle: Counts
     desc: Summarise concept code use in the OMOP Common Data Model
@@ -63,6 +57,13 @@ reference:
       - summariseConceptIdCounts
       - tableConceptIdCounts
       - tableTopConceptCounts
+
+  - subtitle: Temporal Trends
+    desc: Summarise and plot temporal trends in tables in the OMOP Common Data Model
+    contents:
+      - summariseTrend
+      - tableTrend
+      - plotTrend
 
   - subtitle: Mock Database
     desc: Create a mock database to test the OmopSketch package
@@ -81,3 +82,9 @@ reference:
       - summariseConceptCounts
       - summariseConceptSetCounts
       - plotConceptSetCounts
+      - summariseRecordCount
+      - plotRecordCount
+      - tableRecordCount
+      - summariseInObservation
+      - plotInObservation
+      - tableInObservation

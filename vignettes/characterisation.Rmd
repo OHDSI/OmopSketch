@@ -158,13 +158,13 @@ result_inObservation <-summariseInObservation(cdm$observation_period,
                                               dateRange = dateRange) 
 
 result_inObservation |>    
-  filter(variable_name == "Number person-days") |>
+  filter(variable_name == "Person-days") |>
   plotInObservation(colour = "sex", 
                     facet = "age_group")
 
 
 result_inObservation |>
-  filter(variable_name == "Number person-days") |>
+  filter(variable_name == "Person-days") |>
   plotInObservation(
     colour = "sex",
     facet = "age_group"

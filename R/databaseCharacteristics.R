@@ -17,7 +17,7 @@
 #' cdm <- mockOmopSketch(numberIndividuals = 100)
 #'
 #' result <- databaseCharacteristics(cdm = cdm,
-#' omopTableNam = c("drug_exposure", "condition_occurrence"),
+#' omopTableName = c("drug_exposure", "condition_occurrence"),
 #' sex = TRUE, ageGroup = list(c(0,50), c(51,100)), interval = "years", conceptIdCounts = FALSE)
 #'
 #' PatientProfiles::mockDisconnect(cdm)
@@ -52,6 +52,11 @@ databaseCharacteristics <- function(cdm,
 
   args_list <- list(...)
 
+  empty_tables <- c()
+  for (table in omopTableName) {
+    empty_tables <- c(empty_tables, table[omopgenerics::isTableEmpty(cdm[[table]])])
+  }
+  omopTableName <- omopTableName[!(omopTableName %in% empty_tables)]
   cli::cli_inform(paste("The characterisation will focus on the following OMOP tables: {omopTableName}"))
 
   startTime <- Sys.time()
@@ -172,33 +177,6 @@ databaseCharacteristics <- function(cdm,
     ), filter_args(summariseClinicalRecords, args_list))
   )
 
-  # Summarize record counts
-  cli::cli_inform(paste(cli::symbol$arrow_right,"Summarising record counts"))
-  result$recordCounts <- do.call(
-    summariseRecordCount,
-    c(list(
-      cdm,
-      omopTableName,
-      sex = sex,
-      ageGroup = ageGroup,
-      interval = interval,
-      dateRange = dateRange
-    ), filter_args(summariseRecordCount, args_list))
-  )
-
-  # Summarize in observation records
-  cli::cli_inform(paste(cli::symbol$arrow_right,"Summarising in observation records, subjects, person-days, age and sex"))
-  result$inObservation <- do.call(
-    summariseInObservation,
-    c(list(
-      cdm$observation_period,
-      output = c("record", "person", "person-days", "age", "sex"),
-      interval = interval,
-      sex = sex,
-      ageGroup = ageGroup,
-      dateRange = dateRange
-    ), filter_args(summariseInObservation, args_list))
-  )
 
   # Summarise observation period
   cli::cli_inform(paste(cli::symbol$arrow_right, "Summarising observation period"))
@@ -210,6 +188,22 @@ databaseCharacteristics <- function(cdm,
       ageGroup = ageGroup,
       dateRange = dateRange
     ), filter_args(summariseObservationPeriod, args_list))
+  )
+
+  # Summarize in observation records
+  cli::cli_inform(paste(cli::symbol$arrow_right,"Summarising trends: records, subjects, person-days, age and sex"))
+  result$trend <- do.call(
+    summariseTrend,
+    c(list(
+      cdm = cdm,
+      episode = "observation_period",
+      event = omopTableName,
+      output = c("record", "person", "person-days", "age", "sex"),
+      interval = interval,
+      sex = sex,
+      ageGroup = ageGroup,
+      dateRange = dateRange
+    ), filter_args(summariseTrend, args_list))
   )
 
   # Combine results and export

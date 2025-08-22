@@ -83,7 +83,7 @@ shinyCharacteristics <- function(result,
   # result types of interest
   result_types <- c(
     "summarise_omop_snapshot", "summarise_characteristics",
-    "summarise_observation_period", "summarise_in_observation",
+    "summarise_observation_period", "summarise_trend",
     "summarise_missing_data", "summarise_table_quality",
     "summarise_clinical_records", "summarise_concept_id_counts",
     "summarise_record_count"
@@ -115,6 +115,7 @@ shinyCharacteristics <- function(result,
   if ("summarise_observation_period" %in% resultTypes) {
     # customise summarise_observation_period
     panelDetails$summarise_observation_period$icon <- NULL
+    panelDetails$summarise_observation_period$title <- "Observation Period Summary"
     panelDetails$summarise_observation_period$content$tidy <- NULL
     panelDetails$summarise_observation_period$content$plot$filters$variable$choices <- c("Number subjects", "Records per person", "Duration in days", "Days to next observation period")
     panelDetails$summarise_observation_period$content$plot$filters$variable$selected <- "Number subjects"
@@ -124,6 +125,7 @@ shinyCharacteristics <- function(result,
   if ("summarise_clinical_records" %in% resultTypes) {
     # customise summarise_clinical_records
     panelDetails$summarise_clinical_records$icon <- NULL
+    panelDetails$summarise_clinical_records$title <- "Clinical Tables Summary"
   }
 
   if ("summarise_record_count" %in% resultTypes) {
@@ -166,46 +168,78 @@ shinyCharacteristics <- function(result,
     panelDetails$summarise_characteristics$content$plot$filters$plot_type$selected <- "barplot"
   }
 
-  if ("summarise_in_observation" %in% resultTypes) {
-    # customise summarise_in_observation
+  if ("summarise_trend" %in% resultTypes) {
+
+    panelDetails$summarise_trend_episode <- panelDetails$summarise_trend
+    panelDetails$summarise_trend_episode$icon <- NULL
+    panelDetails$summarise_trend_episode$title <- "Observation Period Trends"
+    panelDetails$summarise_trend_episode$content$table$reactive <- "<filtered_data> |>
+    omopgenerics::filterSettings(type == 'episode')  |>
+    OmopSketch::tableTrend()"
+
     variable_names <- result |>
-      omopgenerics::filterSettings(.data$result_type == "summarise_in_observation") |>
+      omopgenerics::filterSettings(.data$result_type == "summarise_trend") |>
+      omopgenerics::filterSettings(type == 'episode') |>
       dplyr::distinct(.data$variable_name) |>
       dplyr::pull()
-    panelDetails$summarise_in_observation$content$plot$render <- "<filtered_data> |>
+
+    panelDetails$summarise_trend_episode$content$plot$reactive <- "<filtered_data> |>
+    omopgenerics::filterSettings(type == 'episode')  |>
     dplyr::filter(.data$variable_name == input$variable) |>
-    OmopSketch::plotInObservation(
+    OmopSketch::plotTrend(
       facet = input$facet,
       colour = input$colour
     )"
-    panelDetails$summarise_in_observation$content$plot$filters$variable <- list(
+    panelDetails$summarise_trend_episode$content$plot$filters$variable <- list(
       button_type = "pickerInput",
       label = "Variable",
       choices = variable_names,
-      selected = "Number records in observation",
+      selected = "Records in observation",
       multiple = FALSE
     )
-    panelDetails$summarise_in_observation$icon <- NULL
+    panelDetails$summarise_trend_event <- panelDetails$summarise_trend
+    panelDetails$summarise_trend_event$icon <- NULL
+    panelDetails$summarise_trend_event$title <- "Clinical Tables Trends"
+    panelDetails$summarise_trend_event$content$table$reactive <- "<filtered_data> |>
+    omopgenerics::filterSettings(type == 'event')  |>
+    OmopSketch::tableTrend()"
+
+    variable_names <- result |>
+      omopgenerics::filterSettings(.data$result_type == "summarise_trend") |>
+      omopgenerics::filterSettings(type == 'event') |>
+      dplyr::distinct(.data$variable_name) |>
+      dplyr::pull()
+
+    panelDetails$summarise_trend_event$content$plot$reactive <- "<filtered_data> |>
+    omopgenerics::filterSettings(type == 'event')  |>
+    dplyr::filter(.data$variable_name == input$variable) |>
+    OmopSketch::plotTrend(
+      facet = input$facet,
+      colour = input$colour
+    )"
+
+    panelDetails$summarise_trend_event$content$plot$filters$variable <- list(
+      button_type = "pickerInput",
+      label = "Variable",
+      choices = variable_names,
+      selected = "Records in observation",
+      multiple = FALSE
+    )
+    panelDetails$summarise_trend <- NULL
   }
 
-  if ("summarise_concept_id_counts" %in% resultTypes) {
-    # customise summarise_concept_id_counts
-    panelDetails$summarise_concept_id_counts$content$tidy$filters$columns$choices <- c("cdm_name", "<group>", "<strata>", "<additional>", "<settings>")
-    panelDetails$summarise_concept_id_counts$content$tidy$filters$columns$selected <- c("cdm_name", "<group>", "<strata>")
-    panelDetails$summarise_concept_id_counts$content$formatted <- NULL
-  }
 
   # define structure
   panelStructure <- list(
     "summarise_omop_snapshot",
     "summarise_characteristics",
-    "Observation Period" = c("summarise_in_observation", "summarise_observation_period"),
+    "Observation Period" = c("summarise_observation_period", "summarise_trend_episode"),
     "Quality" = c("summarise_missing_data", "summarise_table_quality"),
-    "Clinical Tables" = c("summarise_clinical_records", "summarise_record_count"),
+    "Clinical Tables" = c("summarise_clinical_records", "summarise_trend_event"),
     "summarise_concept_id_counts"
   ) |>
     # keep only the present result types
-    purrr::map(\(x) x[x %in% resultTypes]) |>
+    purrr::map(\(x) x[x %in% names(panelDetails)]) |>
     purrr::compact()
 
   # temporary folder
@@ -258,9 +292,8 @@ createOmopSketchBackground <- function() {
     "- **Snapshot**: Metadata extracted from the `cdm_source` table, using the output of [`summariseOmopSnapshot()`](https://ohdsi.github.io/OmopSketch/reference/summariseOmopSnapshot.html).",
     "- **Population Characteristics**: Summary of the demographics of the population in observation, generated using [**CohortConstructor**](https://ohdsi.github.io/CohortConstructor/) and [**CohortCharacteristics**](https://darwin-eu.github.io/CohortCharacteristics/).",
     "- **Observation Period**: Distribution and length of observation periods, based on [`summariseObservationPeriod()`](https://ohdsi.github.io/OmopSketch/reference/summariseObservationPeriod.html).",
-    "- **In Observation**: Yearly counts of individuals in observation, generated from [`summariseInObservation()`](https://ohdsi.github.io/OmopSketch/reference/summariseInObservation.html).",
+    "- **Trends**: Temporal trends of individuals and records in observation, including changes in median age, proportion of females, and number of person-days, generated from [`summariseTrend()`](https://ohdsi.github.io/OmopSketch/reference/summariseTrend.html).",
     "- **Clinical Records**: Summary of clinical tables focused on vocabulary usage and quality checks, from [`summariseClinicalRecords()`](https://ohdsi.github.io/OmopSketch/reference/summariseClinicalRecords.html).",
-    "- **Record Count**: Annual record counts for selected OMOP tables, using [`summariseRecordCount()`](https://ohdsi.github.io/OmopSketch/reference/summariseRecordCount.html).",
     "- **Missing Data**: Overview of missing values and zero IDs in OMOP tables, based on [`summariseMissingData()`](https://ohdsi.github.io/OmopSketch/reference/summariseMissingData.html).",
     "- **Concept Counts** *(optional)*: Counts of `concept_id`s across tables, generated by [`summariseConceptIdCounts()`](https://ohdsi.github.io/OmopSketch/reference/summariseConceptIdCounts.html)."
   )
