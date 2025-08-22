@@ -197,7 +197,6 @@ summariseClinicalRecords <- function(cdm,
             variable_name = "End date before start date",
             variable_level = NA_character_
           )
-
     }
     if (conceptSummary) {
       cli::cli_inform(c("i" = "Summarising domains in {.pkg {table}}."))
@@ -509,11 +508,6 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
       )
 
   }
-
-
-
-
-
 
   if (conceptSummary) {
 

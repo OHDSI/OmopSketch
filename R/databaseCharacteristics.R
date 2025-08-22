@@ -165,7 +165,7 @@ databaseCharacteristics <- function(cdm,
   result$observationPeriod <- do.call(
     summariseObservationPeriod,
     c(list(
-      cdm$observation_period,
+      cdm,
       sex = sex,
       ageGroup = ageGroup,
       dateRange = dateRange

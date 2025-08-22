@@ -35,7 +35,7 @@ tableObservationPeriod <- function(result,
   header <- c("cdm_name")
 
   result |>
-    dplyr::filter(is.na(.data$variable_level)) |> # to remove density
+    dplyr::filter(!grepl("density", .data$estimate_name)) |>
     formatColumn("variable_name") |>
     # Arrange by observation period ordinal
     dplyr::mutate(order = dplyr::coalesce(as.numeric(stringr::str_extract(.data$group_level, "\\d+")), 0)) |>
@@ -43,14 +43,17 @@ tableObservationPeriod <- function(result,
     dplyr::select(-"order") |>
     visOmopResults::visOmopTable(
       estimateName = c(
+        "N (%)" = "<count> (<percentage>%)",
         "N" = "<count>",
         "mean (sd)" = "<mean> (<sd>)",
-        "median [Q25 - Q75]" = "<median> [<q25> - <q75>]"
+        "median [Q25 - Q75]" = "<median> [<q25> - <q75>]",
+        "N missing data (%)" = "<na_count> (<na_percentage>%)",
+        "N zeros (%)" = "<zero_count> (<zero_percentage>%)"
       ),
       header = header,
       groupColumn = omopgenerics::strataColumns(result),
       hide = c(
-        "result_id", "estimate_type", "strata_name", "variable_level"
+        "result_id", "estimate_type", "strata_name"
       ),
       type = type,
       .options = list(keepNotFormatted = FALSE) # to consider removing this? If

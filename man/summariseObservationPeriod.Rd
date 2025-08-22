@@ -6,9 +6,12 @@
 summarised_result object.}
 \usage{
 summariseObservationPeriod(
-  observationPeriod,
+  cdm,
+  observationPeriod = lifecycle::deprecated(),
   estimates = c("mean", "sd", "min", "q05", "q25", "median", "q75", "q95", "max",
     "density"),
+  missingData = TRUE,
+  quality = TRUE,
   byOrdinal = TRUE,
   ageGroup = NULL,
   sex = FALSE,
@@ -16,11 +19,22 @@ summariseObservationPeriod(
 )
 }
 \arguments{
-\item{observationPeriod}{observation_period omop table.}
+\item{cdm}{A cdm_reference object.}
+
+\item{observationPeriod}{deprecated.}
 
 \item{estimates}{Estimates to summarise the variables of interest (
 \verb{records per person}, \verb{duration in days} and
 \verb{days to next observation period}).}
+
+\item{missingData}{Logical. If \code{TRUE}, includes a summary of missing data for relevant fields.}
+
+\item{quality}{Logical. If \code{TRUE}, performs basic data quality checks, including:
+\itemize{
+\item Number of subjects not included in person table
+\item Number of records with end date before start date
+\item Number of records with start date before the person's birth date
+}}
 
 \item{byOrdinal}{Boolean variable. Whether to stratify by the ordinal observation period (e.g., 1st, 2nd, etc.) (TRUE) or simply analyze overall data (FALSE)}
 

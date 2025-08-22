@@ -119,6 +119,8 @@ plotObservationPeriod <- function(result,
         levels = unique(.data$observation_period_ordinal[order(.data$observation_period_order)])
       )
     )
+  p <- p +
+    ggplot2::theme(legend.position = "top")
   return(p)
 }
 
