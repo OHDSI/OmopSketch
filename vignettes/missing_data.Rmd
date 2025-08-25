@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 )
 
 library(CDMConnector)
-#requireEunomia()
+requireEunomia()
 ```
 
 In this vignette, we explore how *OmopSketch* functions can serve as a valuable tool for summarising missingness in databases containing electronic health records mapped to the OMOP Common Data Model.
