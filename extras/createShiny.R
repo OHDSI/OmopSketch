@@ -41,7 +41,7 @@ results <- purrr::map(databases, \(dbName) {
     cli::cli_inform(c(v = "{.strong {dbName}} characterised in {diff} seconds."))
 
     # disconnect
-    CDMConnector::cdmDisconnect(cdm = cdm)
+    omopgenerics::cdmDisconnect(cdm = cdm)
     duckdb::duckdb_shutdown(drv = drv)
     unlink(duckFile)
     unlink(file.path(omock::mockDatasetsFolder(), paste0(dbName, ".zip")))

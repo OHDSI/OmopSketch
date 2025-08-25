@@ -17,9 +17,9 @@ test_that("summariseTrend - episode works", {
     dplyr::pull("estimate_value") |>
     as.numeric()
   y <- cdm$observation_period %>%
-    dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
-    dplyr::mutate(start_year = !!CDMConnector::datepart("observation_period_start_date", "year")) %>%
-    dplyr::mutate(end_year = !!CDMConnector::datepart("observation_period_end_date", "year")) %>%
+    dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") |>
+    getYear(date = "observation_period_start_date", name = "start_year") |>
+    getYear(date = "observation_period_end_date", name = "end_year") |>
     dplyr::filter(start_year <= 1909, end_year >= 1909) |>
     dplyr::tally() |>
     dplyr::pull("n") |>
@@ -40,8 +40,8 @@ test_that("summariseTrend - episode works", {
     dplyr::filter(
       .data$drug_exposure_start_date >= .data$observation_period_start_date & .data$drug_exposure_end_date <= .data$observation_period_end_date
     ) %>%
-    dplyr::mutate(start = !!CDMConnector::datepart("drug_exposure_start_date", "year")) %>%
-    dplyr::mutate(end = !!CDMConnector::datepart("drug_exposure_end_date", "year")) %>%
+    getYear(date = "drug_exposure_start_date", name = "start") |>
+    getYear(date = "drug_exposure_end_date", name = "end") |>
     dplyr::filter((.data$start < 1936 & .data$end >= 1936) |
                     (.data$start >= 1936 & .data$start <= 1936)) |>
     dplyr::tally() |>
@@ -55,8 +55,8 @@ test_that("summariseTrend - episode works", {
     as.numeric()
   y <- cdm$observation_period %>%
     dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
-    dplyr::mutate(start = !!CDMConnector::datepart("observation_period_start_date", "year")) %>%
-    dplyr::mutate(end = !!CDMConnector::datepart("observation_period_end_date", "year")) %>%
+    getYear(date = "observation_period_start_date", name = "start") |>
+    getYear(date = "observation_period_end_date", name = "end") |>
     dplyr::filter((.data$start < 1936 & .data$end >= 1936) |
                     (.data$start >= 1936 & .data$start <= 1936)) |>
     dplyr::tally() |>
@@ -70,8 +70,8 @@ test_that("summariseTrend - episode works", {
     as.numeric()
   y <- cdm$observation_period %>%
     dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
-    dplyr::mutate(start = !!CDMConnector::datepart("observation_period_start_date", "year")) %>%
-    dplyr::mutate(end = !!CDMConnector::datepart("observation_period_end_date", "year")) %>%
+    getYear(date = "observation_period_start_date", name = "start") |>
+    getYear(date = "observation_period_end_date", name = "end") |>
     dplyr::filter((.data$start < 1996 & .data$end >= 1996) |
                     (.data$start >= 1996 & .data$start <= 1996)) |>
     dplyr::distinct(.data$person_id) |>
@@ -89,8 +89,8 @@ test_that("summariseTrend - episode works", {
     dplyr::filter(
       .data$condition_start_date >= .data$observation_period_start_date & .data$condition_end_date <= .data$observation_period_end_date
     ) %>%
-    dplyr::mutate(start = !!CDMConnector::datepart("condition_start_date", "year")) %>%
-    dplyr::mutate(end = !!CDMConnector::datepart("condition_end_date", "year")) %>%
+    getYear(date = "condition_start_date", name = "start") |>
+    getYear(date = "condition_end_date", name = "end") |>
     dplyr::filter((.data$start < 1998 & .data$end >= 1998) |
                     (.data$start >= 1998 & .data$start <= 1998)) |>
     dplyr::tally() |>
@@ -406,7 +406,7 @@ test_that("check person-days output works", {
       "start_date" = pmax(start_date, observation_period_start_date, na.rm = TRUE),
       "end_date" = pmin(end_date, observation_period_end_date, na.rm = TRUE)
     ) %>%
-    dplyr::mutate(days = !!CDMConnector::datediff("start_date", "end_date", interval = "day") + 1) |>
+    datediffDays(start = "start_date", end = "end_date", name = "days", offset = 1) |>
     dplyr::summarise(n = sum(days, na.rm = TRUE)) |>
     dplyr::pull("n") |>
     as.numeric()
@@ -414,8 +414,8 @@ test_that("check person-days output works", {
 
   # Check percentage
   den <- cdm$observation_period |>
-    dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
-    dplyr::mutate(days = !!CDMConnector::datediff("observation_period_start_date", "observation_period_end_date", interval = "day") + 1) |>
+    dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") |>
+    datediffDays(start = "observation_period_start_date", end = "observation_period_end_date", name = "days", offset = 1) |>
     dplyr::summarise(n = sum(days, na.rm = TRUE)) |>
     dplyr::pull("n")
   x <- summariseTrend(cdm, episode = "observation_period", interval = "years", output = c("record", "person-days")) |>
@@ -430,7 +430,7 @@ test_that("check person-days output works", {
       "start_date" = pmax(start_date, observation_period_start_date, na.rm = TRUE),
       "end_date" = pmin(end_date, observation_period_end_date, na.rm = TRUE)
     ) %>%
-    dplyr::mutate(days = !!CDMConnector::datediff("start_date", "end_date", interval = "day") + 1) |>
+    datediffDays(start = "start_date", end = "end_date", name = "days", offset = 1) |>
     dplyr::summarise(n = sum(days, na.rm = TRUE)) |>
     dplyr::pull("n") |>
     as.numeric() / den * 100
@@ -517,9 +517,7 @@ test_that("dateRange argument works", {
 
   PatientProfiles::mockDisconnect(cdm = cdm)
 
-  db <- DBI::dbConnect(duckdb::duckdb(), dbdir = CDMConnector::eunomiaDir())
-  cdm <- CDMConnector::cdmFromCon(con = db, cdmSchema = "main", writeSchema = "main")
-
+  cdm <- cdmEunomia()
 
   expect_no_error(summariseTrend(cdm, "observation_period",
                                        interval = "years",
@@ -534,7 +532,7 @@ test_that("no tables created", {
   # Load mock database ----
   cdm <- cdmEunomia()
 
-  startNames <- CDMConnector::listSourceTables(cdm)
+  startNames <- omopgenerics::listSourceTables(cdm)
 
   results <- summariseTrend(cdm, episode = "observation_period",
                             event = "drug_exposure",
@@ -551,7 +549,7 @@ test_that("no tables created", {
 
 
 
-  endNames <- CDMConnector::listSourceTables(cdm)
+  endNames <- omopgenerics::listSourceTables(cdm)
 
   expect_true(length(setdiff(endNames, startNames)) == 0)
 

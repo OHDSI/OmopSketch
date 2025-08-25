@@ -5,6 +5,8 @@
 #' @export
 #' @examples
 #' \donttest{
+#' library(OmopSketch)
+#'
 #' cdm <- mockOmopSketch(numberIndividuals = 10)
 #'
 #' result <- summariseOmopSnapshot(cdm = cdm)

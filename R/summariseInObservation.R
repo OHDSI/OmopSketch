@@ -17,6 +17,7 @@
 #' @examples
 #' \donttest{
 #' library(dplyr, warn.conflicts = FALSE)
+#' library(OmopSketch)
 #'
 #' cdm <- mockOmopSketch()
 #'

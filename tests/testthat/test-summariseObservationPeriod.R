@@ -31,9 +31,9 @@ test_that("check summariseObservationPeriod works", {
     ),
     cdmName = "mock data"
   )
-  cdm <- CDMConnector::copyCdmTo(
-    con = connection(), cdm = cdm, schema = schema()
-  )
+
+  cdm <- copyCdm(cdm)
+
   # simple run
   expect_no_error(resAll <- summariseObservationPeriod(cdm$observation_period))
   expect_no_error(
@@ -393,9 +393,8 @@ test_that("check summariseObservationPeriod strata works", {
     ),
     cdmName = "mock data"
   )
-  cdm <- CDMConnector::copyCdmTo(
-    con = connection(), cdm = cdm, schema = schema()
-  )
+
+  cdm <- copyCdm(cdm)
 
   # simple run
   expect_no_error(summariseObservationPeriod(cdm$observation_period,
@@ -558,7 +557,7 @@ test_that("no tables created", {
   # Load mock database ----
   cdm <- cdmEunomia()
 
-  startNames <- CDMConnector::listSourceTables(cdm)
+  startNames <- omopgenerics::listSourceTables(cdm)
 
   results <- summariseObservationPeriod(cdm$observation_period,
     sex = TRUE,
@@ -571,7 +570,7 @@ test_that("no tables created", {
   )
 
 
-  endNames <- CDMConnector::listSourceTables(cdm)
+  endNames <- omopgenerics::listSourceTables(cdm)
 
   expect_true(length(setdiff(endNames, startNames)) == 0)
 
