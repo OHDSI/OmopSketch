@@ -6,6 +6,7 @@ options(timeout = 600)
 devtools::load_all()
 databases <- omock::availableMockDatasets()
 databases <- databases[!databases %in% c("empty_cdm", "synpuf-1k_5.3")]
+databases <- c("synpuf-1k_5.4", "GiBleed", "synthea-allergies-10k", "synthea-covid19-200k")
 
 # create results
 results <- purrr::map(databases, \(dbName) {
