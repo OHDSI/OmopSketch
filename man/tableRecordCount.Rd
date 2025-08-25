@@ -19,6 +19,7 @@ Create a visual table from a summariseRecordCount() result.
 }
 \examples{
 \donttest{
+library(OmopSketch)
 library(dplyr, warn.conflicts = FALSE)
 
 cdm <- mockOmopSketch()

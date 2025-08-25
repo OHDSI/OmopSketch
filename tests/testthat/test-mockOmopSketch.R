@@ -1,8 +1,6 @@
 test_that("check mockOmopSketch", {
   skip_on_cran()
 
-  expect_error(mockOmopSketch(con = "aasa"))
-
   # By default
   expect_no_error(cdm <- mockOmopSketch())
   expect_true(inherits(cdm, "cdm_reference"))

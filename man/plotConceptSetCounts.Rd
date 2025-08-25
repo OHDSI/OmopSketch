@@ -24,6 +24,7 @@ Plot the concept counts of a summariseConceptSetCounts output.
 \examples{
 \donttest{
 library(dplyr)
+library(OmopSketch)
 
 cdm <- mockOmopSketch()
 

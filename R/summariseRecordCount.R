@@ -13,6 +13,7 @@
 #' @export
 #' @examples
 #' \donttest{
+#' library(OmopSketch)
 #' library(dplyr, warn.conflicts = FALSE)
 #'
 #' cdm <- mockOmopSketch()

@@ -250,7 +250,7 @@ test_that("no tables created", {
   # Load mock database ----
   cdm <- cdmEunomia()
 
-  startNames <- CDMConnector::listSourceTables(cdm)
+  startNames <- omopgenerics::listSourceTables(cdm)
 
   results <- summariseClinicalRecords(
     cdm = cdm,
@@ -264,7 +264,7 @@ test_that("no tables created", {
     dateRange = as.Date(c("2012-01-01", "2018-01-01"))
   )
 
-  endNames <- CDMConnector::listSourceTables(cdm)
+  endNames <- omopgenerics::listSourceTables(cdm)
 
   expect_true(length(setdiff(endNames, startNames)) == 0)
 
@@ -427,7 +427,7 @@ test_that("argument quality works", {
 
 
 
-  CDMConnector::cdmDisconnect(cdm)
+  omopgenerics::cdmDisconnect(cdm)
 
 
 })
@@ -453,7 +453,7 @@ test_that("argument missingData works", {
   expect_equal(x |> dplyr::filter(variable_name == "Column name") |> dplyr::arrange(.data$variable_level), y |> dplyr::arrange(.data$variable_level), ignore_attr = TRUE)
 
 
-  CDMConnector::cdmDisconnect(cdm)
+  omopgenerics::cdmDisconnect(cdm)
 
 
 })

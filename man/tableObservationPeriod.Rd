@@ -19,6 +19,8 @@ Create a visual table from a summariseObservationPeriod() result.
 }
 \examples{
 \donttest{
+library(OmopSketch)
+
 cdm <- mockOmopSketch(numberIndividuals = 100)
 
 result <- summariseObservationPeriod(observationPeriod = cdm$observation_period)

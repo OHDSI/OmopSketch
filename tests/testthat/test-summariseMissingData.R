@@ -130,9 +130,8 @@ test_that("col not present in table", {
     ),
     cdmName = "mock data"
   )
-  cdm <- CDMConnector::copyCdmTo(
-    con = connection(), cdm = cdm, schema = schema()
-  )
+
+  cdm <- copyCdm(cdm)
 
   expect_no_error(expect_message(summariseMissingData(cdm, "person", col = NULL)))
 
@@ -144,7 +143,7 @@ test_that("no tables created", {
   # Load mock database ----
   cdm <- cdmEunomia()
 
-  startNames <- CDMConnector::listSourceTables(cdm)
+  startNames <- omopgenerics::listSourceTables(cdm)
 
   results <- summariseMissingData(
     cdm = cdm,
@@ -160,7 +159,7 @@ test_that("no tables created", {
     sample = 100
   )
 
-  endNames <- CDMConnector::listSourceTables(cdm)
+  endNames <- omopgenerics::listSourceTables(cdm)
 
   expect_true(length(setdiff(endNames, startNames)) == 0)
 
@@ -417,9 +416,8 @@ test_that("col not present in table", {
     ),
     cdmName = "mock data"
   )
-  cdm <- CDMConnector::copyCdmTo(
-    con = connection(), cdm = cdm, schema = schema()
-  )
+
+  cdm <- copyCdm(cdm)
 
   expect_no_error(expect_message(summariseMissingData(cdm, "person", col = NULL)))
 
@@ -431,7 +429,7 @@ test_that("no tables created", {
   # Load mock database ----
   cdm <- cdmEunomia()
 
-  startNames <- CDMConnector::listSourceTables(cdm)
+  startNames <- omopgenerics::listSourceTables(cdm)
 
   results <- summariseMissingData(
     cdm = cdm,
@@ -447,7 +445,7 @@ test_that("no tables created", {
     sample = 100
   )
 
-  endNames <- CDMConnector::listSourceTables(cdm)
+  endNames <- omopgenerics::listSourceTables(cdm)
 
   expect_true(length(setdiff(endNames, startNames)) == 0)
 

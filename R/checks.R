@@ -183,5 +183,5 @@ validateBackground <- function(background) {
   } else {
     cli::cli_abort(message = msg, call = call)
   }
-  return(invisible(NULL))
+  return(invisible(background))
 }

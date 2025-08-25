@@ -6,6 +6,8 @@
 #' @export
 #' @examples
 #' \donttest{
+#' library(OmopSketch)
+#'
 #' cdm <- mockOmopSketch()
 #'
 #' summarisedResult <- summariseClinicalRecords(

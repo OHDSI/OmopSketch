@@ -81,6 +81,8 @@ concepts, missing data and inconsistencies in start date and end date
 }
 \examples{
 \donttest{
+library(OmopSketch)
+
 cdm <- mockOmopSketch()
 
 summarisedResult <- summariseClinicalRecords(

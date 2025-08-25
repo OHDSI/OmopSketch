@@ -42,8 +42,8 @@ Generate an interactive Shiny application that visualises the results obtained f
 }
 \examples{
 \dontrun{
-
 library(OmopSketch)
+
 cdm <- mockOmopSketch()
 res <- databaseCharacteristics(cdm = cdm)
 shinyCharacteristics(result = res, directory = here::here())

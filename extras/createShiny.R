@@ -6,6 +6,7 @@ options(timeout = 600)
 devtools::load_all()
 databases <- omock::availableMockDatasets()
 databases <- databases[!databases %in% c("empty_cdm", "synpuf-1k_5.3")]
+databases <- c("synpuf-1k_5.4", "GiBleed", "synthea-allergies-10k", "synthea-covid19-200k")
 
 # create results
 results <- purrr::map(databases, \(dbName) {
@@ -41,7 +42,7 @@ results <- purrr::map(databases, \(dbName) {
     cli::cli_inform(c(v = "{.strong {dbName}} characterised in {diff} seconds."))
 
     # disconnect
-    CDMConnector::cdmDisconnect(cdm = cdm)
+    omopgenerics::cdmDisconnect(cdm = cdm)
     duckdb::duckdb_shutdown(drv = drv)
     unlink(duckFile)
     unlink(file.path(omock::mockDatasetsFolder(), paste0(dbName, ".zip")))

@@ -24,6 +24,7 @@ Create a ggplot2 plot from the output of summariseInObservation().
 \examples{
 \donttest{
 library(dplyr)
+library(OmopSketch)
 
 cdm <- mockOmopSketch()
 

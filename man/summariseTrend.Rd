@@ -58,6 +58,7 @@ overlapping time intervals between start and end dates.
 }
 \examples{
 \donttest{
+library(OmopSketch)
 
 cdm <- mockOmopSketch()
 
