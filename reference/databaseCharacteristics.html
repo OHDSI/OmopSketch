@@ -52,9 +52,9 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">databaseCharacteristics</span><span class="op">(</span></span>
 <span>  <span class="va">cdm</span>,</span>
-<span>  omopTableName <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"person"</span>, <span class="st">"observation_period"</span>, <span class="st">"visit_occurrence"</span>,</span>
-<span>    <span class="st">"condition_occurrence"</span>, <span class="st">"drug_exposure"</span>, <span class="st">"procedure_occurrence"</span>, <span class="st">"device_exposure"</span>,</span>
-<span>    <span class="st">"measurement"</span>, <span class="st">"observation"</span>, <span class="st">"death"</span><span class="op">)</span>,</span>
+<span>  omopTableName <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"person"</span>, <span class="st">"visit_occurrence"</span>, <span class="st">"condition_occurrence"</span>,</span>
+<span>    <span class="st">"drug_exposure"</span>, <span class="st">"procedure_occurrence"</span>, <span class="st">"device_exposure"</span>, <span class="st">"measurement"</span>,</span>
+<span>    <span class="st">"observation"</span>, <span class="st">"death"</span><span class="op">)</span>,</span>
 <span>  sex <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  ageGroup <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  dateRange <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -120,8 +120,8 @@ If <code>dateRange</code> is <code>NULL</code>, no restriction is applied.</p></
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The characterisation will focus on the following OMOP tables: drug_exposure and</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> condition_occurrence</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → Getting cdm snapshot</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Vocabulary version in cdm_source (NA) doesn't match the one in the vocabulary</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> table (v5.0 18-JAN-19)</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span><span style="color: #BB0000;">✖</span> Vocabulary version in `cdm_source` (<span style="font-style: italic;">NA</span>) doesn't match the one in the</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   `vocabulary` table (<span style="font-style: italic;">v5.0 18-JAN-19</span>).</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → Getting population characteristics</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Building new trimmed cohort</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding demographics information</span>
@@ -140,22 +140,34 @@ If <code>dateRange</code> is <code>NULL</code>, no restriction is applied.</p></
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> summarising cohort <span style="color: #0000BB;">age_group_0_50</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> summarising cohort <span style="color: #0000BB;">age_group_51_100</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> summariseCharacteristics finished!</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → Summarising missing data</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → Summarising table quality</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → Summarising clinical records</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Adding variables of interest to <span style="color: #0000BB;">drug_exposure</span>.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising records per person in <span style="color: #0000BB;">drug_exposure</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">drug_exposure</span>: `in_observation`, `standard_concept`,</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   `source_vocabulary`, `domain_id`, and `type_concept`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising records in observation in <span style="color: #0000BB;">drug_exposure</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising records with start before birth date in <span style="color: #0000BB;">drug_exposure</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising records with end date before start date in <span style="color: #0000BB;">drug_exposure</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising domains in <span style="color: #0000BB;">drug_exposure</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising standard concepts in <span style="color: #0000BB;">drug_exposure</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising source vocabularies in <span style="color: #0000BB;">drug_exposure</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising concept types in <span style="color: #0000BB;">drug_exposure</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising missing data in <span style="color: #0000BB;">drug_exposure</span>.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Adding variables of interest to <span style="color: #0000BB;">condition_occurrence</span>.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising records per person in <span style="color: #0000BB;">condition_occurrence</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising <span style="color: #0000BB;">condition_occurrence</span>: `in_observation`, `standard_concept`,</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   `source_vocabulary`, `domain_id`, and `type_concept`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising records in observation in <span style="color: #0000BB;">condition_occurrence</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising records with start before birth date in <span style="color: #0000BB;">condition_occurrence</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising records with end date before start date in <span style="color: #0000BB;">condition_occurrence</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising domains in <span style="color: #0000BB;">condition_occurrence</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising standard concepts in <span style="color: #0000BB;">condition_occurrence</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising source vocabularies in <span style="color: #0000BB;">condition_occurrence</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising concept types in <span style="color: #0000BB;">condition_occurrence</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Summarising missing data in <span style="color: #0000BB;">condition_occurrence</span>.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → Summarising observation period</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>These columns contain missing values, which are not permitted:</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">"period_type_concept_id"</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → Summarising trends: records, subjects, person-days, age and sex</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → The number of person-days is not computed for event tables</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ☺ Database characterisation finished. Code ran in 1 min and 3 sec</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> 1 table created: <span style="color: #0000BB;">"og_008_1755858381"</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ☺ Database characterisation finished. Code ran in 0 min and 55 sec</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> 1 table created: <span style="color: #0000BB;">"og_008_1756815685"</span>.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">PatientProfiles</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/PatientProfiles/reference/mockDisconnect.html" class="external-link">mockDisconnect</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
