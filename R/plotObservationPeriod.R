@@ -9,6 +9,7 @@
 #' `visOmopResults::tidyColumns()`.
 #' @param colour Columns to colour by. See possible columns to colour by with:
 #' `visOmopResults::tidyColumns()`.
+#' @inheritParams style-plot
 #' @return A ggplot2 object.
 #' @export
 #' @examples
@@ -28,7 +29,8 @@ plotObservationPeriod <- function(result,
                                   variableName = "Number subjects",
                                   plotType = "barplot",
                                   facet = NULL,
-                                  colour = NULL) {
+                                  colour = NULL,
+                                  style = "default") {
   rlang::check_installed("ggplot2")
   rlang::check_installed("visOmopResults")
   # initial checks
@@ -80,7 +82,8 @@ plotObservationPeriod <- function(result,
       x = "observation_period_ordinal",
       y = "count",
       facet = facet,
-      colour = colour
+      colour = colour,
+      style = style
     ) +
       ggplot2::ylab(stringr::str_to_sentence(unique(result$variable_name)))
   } else if (plotType == "boxplot") {
@@ -88,7 +91,8 @@ plotObservationPeriod <- function(result,
       result = result,
       x = "observation_period_ordinal",
       facet = facet,
-      colour = colour
+      colour = colour,
+      style = style
     )
   } else if (plotType == "densityplot") {
     p <- visOmopResults::scatterPlot(
@@ -100,7 +104,8 @@ plotObservationPeriod <- function(result,
       ribbon = FALSE,
       facet = facet,
       colour = colour,
-      group = optFacetColour
+      group = optFacetColour,
+      style = style
     ) +
       ggplot2::xlab(stringr::str_to_sentence(unique(result$variable_name))) +
       ggplot2::ylab("Density")

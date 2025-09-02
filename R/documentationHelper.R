@@ -32,3 +32,14 @@ NULL
 #' @name style
 #' @keywords internal
 NULL
+
+
+#' Helper for consistent documentation of `style`.
+#'
+#' @param style Which style to apply to the plot, options are: "default", "darwin"
+#'  and NULL (default ggplot style). Customised styles can be achieved by modifying the returned ggplot object.
+#'
+#'
+#' @name style-plot
+#' @keywords internal
+NULL

@@ -9,7 +9,8 @@ plotObservationPeriod(
   variableName = "Number subjects",
   plotType = "barplot",
   facet = NULL,
-  colour = NULL
+  colour = NULL,
+  style = "default"
 )
 }
 \arguments{
@@ -26,6 +27,9 @@ plotObservationPeriod(
 
 \item{colour}{Columns to colour by. See possible columns to colour by with:
 \code{visOmopResults::tidyColumns()}.}
+
+\item{style}{Which style to apply to the plot, options are: "default", "darwin"
+and NULL (default ggplot style). Customised styles can be achieved by modifying the returned ggplot object.}
 }
 \value{
 A ggplot2 object.
