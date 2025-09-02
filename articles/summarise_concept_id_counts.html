@@ -164,16 +164,16 @@ obtain both record and person counts.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 432 × 3</span></span></span>
 <span><span class="co">#&gt;    variable_name                                    estimate_name estimate_value</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> celecoxib 200 MG Oral Capsule [Celebrex]         count_records 100           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> celecoxib 200 MG Oral Capsule [Celebrex]         count_subjec… 62            </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Ampicillin 100 MG/ML Injectable Solution         count_records 100           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Ampicillin 100 MG/ML Injectable Solution         count_subjec… 62            </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> rotavirus, live, monovalent vaccine              count_records 100           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> rotavirus, live, monovalent vaccine              count_subjec… 63            </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Memantine                                        count_records 100           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Memantine                                        count_subjec… 61            </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> tetanus toxoid, reduced diphtheria toxoid, and … count_records 100           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> tetanus toxoid, reduced diphtheria toxoid, and … count_subjec… 63            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> pneumococcal polysaccharide vaccine, 23 valent   count_records 100           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> pneumococcal polysaccharide vaccine, 23 valent   count_subjec… 59            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Alendronate                                      count_records 100           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Alendronate                                      count_subjec… 61            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> poliovirus vaccine, inactivated                  count_records 100           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> poliovirus vaccine, inactivated                  count_subjec… 65            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> fluticasone                                      count_records 100           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> fluticasone                                      count_subjec… 63            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> diphtheria, tetanus toxoids and acellular pertu… count_records 100           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> diphtheria, tetanus toxoids and acellular pertu… count_subjec… 58            </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 422 more rows</span></span></span></code></pre></div>
 <p>Further stratification can be applied using the
 <code>interval</code>, <code>sex</code>, and <code>ageGroup</code>
@@ -193,7 +193,7 @@ stratification), “years”, “quarters”, or “months”.</p>
 <span><span class="co">#&gt; Columns: 5</span></span>
 <span><span class="co">#&gt; $ group_level      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "condition_occurrence"<span style="color: #949494;">, </span>"condition_occurrence"<span style="color: #949494;">, </span>"cond…</span></span>
 <span><span class="co">#&gt; $ strata_level     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"…</span></span>
-<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Laceration of hand"<span style="color: #949494;">, </span>"Laceration of foot"<span style="color: #949494;">, </span>"Bullet w…</span></span>
+<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Escherichia coli urinary tract infection"<span style="color: #949494;">, </span>"Childhoo…</span></span>
 <span><span class="co">#&gt; $ estimate_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_subjects"<span style="color: #949494;">, </span>"count_subjects"<span style="color: #949494;">, </span>"count_subjects"<span style="color: #949494;">,</span>…</span></span>
 <span><span class="co">#&gt; $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "0 &amp;&amp;&amp; No matching concept"<span style="color: #949494;">, </span>"0 &amp;&amp;&amp; No matching conce…</span></span></code></pre></div>
 <p>We can also filter the clinical table to a specific time window by
@@ -228,7 +228,7 @@ specifying the <code>sample</code> argument.</p>
 <span><span class="co">#&gt; Rows: 38</span></span>
 <span><span class="co">#&gt; Columns: 3</span></span>
 <span><span class="co">#&gt; $ group_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "condition_occurrence"<span style="color: #949494;">, </span>"condition_occurrence"<span style="color: #949494;">, </span>"conditi…</span></span>
-<span><span class="co">#&gt; $ variable_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Acute bacterial sinusitis"<span style="color: #949494;">, </span>"Injury of tendon of the ro…</span></span>
+<span><span class="co">#&gt; $ variable_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Fracture of vertebral column without spinal cord injury…</span></span>
 <span><span class="co">#&gt; $ estimate_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"coun…</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="display-the-results">Display the results<a class="anchor" aria-label="anchor" href="#display-the-results"></a>
@@ -304,23 +304,23 @@ from other output formats, including <a href="https://davidgohel.github.io/flext
 <span>  countBy <span class="op">=</span> <span class="st">"record"</span></span>
 <span><span class="op">)</span> </span>
 <span><span class="fu"><a href="../reference/tableTopConceptCounts.html">tableTopConceptCounts</a></span><span class="op">(</span><span class="va">result</span>, type <span class="op">=</span> <span class="st">"gt"</span><span class="op">)</span></span></code></pre></div>
-<div id="psbibbfzjq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#psbibbfzjq table {
+<div id="wqufiaopfq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#wqufiaopfq table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#psbibbfzjq thead, #psbibbfzjq tbody, #psbibbfzjq tfoot, #psbibbfzjq tr, #psbibbfzjq td, #psbibbfzjq th {
+#wqufiaopfq thead, #wqufiaopfq tbody, #wqufiaopfq tfoot, #wqufiaopfq tr, #wqufiaopfq td, #wqufiaopfq th {
   border-style: none;
 }
 
-#psbibbfzjq p {
+#wqufiaopfq p {
   margin: 0;
   padding: 0;
 }
 
-#psbibbfzjq .gt_table {
+#wqufiaopfq .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -346,12 +346,12 @@ from other output formats, including <a href="https://davidgohel.github.io/flext
   border-left-color: #D9D9D9;
 }
 
-#psbibbfzjq .gt_caption {
+#wqufiaopfq .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#psbibbfzjq .gt_title {
+#wqufiaopfq .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -363,7 +363,7 @@ from other output formats, including <a href="https://davidgohel.github.io/flext
   border-bottom-width: 0;
 }
 
-#psbibbfzjq .gt_subtitle {
+#wqufiaopfq .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -375,7 +375,7 @@ from other output formats, including <a href="https://davidgohel.github.io/flext
   border-top-width: 0;
 }
 
-#psbibbfzjq .gt_heading {
+#wqufiaopfq .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -387,13 +387,13 @@ from other output formats, including <a href="https://davidgohel.github.io/flext
   border-right-color: #D3D3D3;
 }
 
-#psbibbfzjq .gt_bottom_border {
+#wqufiaopfq .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#psbibbfzjq .gt_col_headings {
+#wqufiaopfq .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -408,7 +408,7 @@ from other output formats, including <a href="https://davidgohel.github.io/flext
   border-right-color: #D3D3D3;
 }
 
-#psbibbfzjq .gt_col_heading {
+#wqufiaopfq .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -428,7 +428,7 @@ from other output formats, including <a href="https://davidgohel.github.io/flext
   overflow-x: hidden;
 }
 
-#psbibbfzjq .gt_column_spanner_outer {
+#wqufiaopfq .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -440,15 +440,15 @@ from other output formats, including <a href="https://davidgohel.github.io/flext
   padding-right: 4px;
 }
 
-#psbibbfzjq .gt_column_spanner_outer:first-child {
+#wqufiaopfq .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#psbibbfzjq .gt_column_spanner_outer:last-child {
+#wqufiaopfq .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#psbibbfzjq .gt_column_spanner {
+#wqufiaopfq .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -460,11 +460,11 @@ from other output formats, including <a href="https://davidgohel.github.io/flext
   width: 100%;
 }
 
-#psbibbfzjq .gt_spanner_row {
+#wqufiaopfq .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#psbibbfzjq .gt_group_heading {
+#wqufiaopfq .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -490,7 +490,7 @@ from other output formats, including <a href="https://davidgohel.github.io/flext
   text-align: left;
 }
 
-#psbibbfzjq .gt_empty_group_heading {
+#wqufiaopfq .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -505,15 +505,15 @@ from other output formats, including <a href="https://davidgohel.github.io/flext
   vertical-align: middle;
 }
 
-#psbibbfzjq .gt_from_md > :first-child {
+#wqufiaopfq .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#psbibbfzjq .gt_from_md > :last-child {
+#wqufiaopfq .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#psbibbfzjq .gt_row {
+#wqufiaopfq .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -532,7 +532,7 @@ from other output formats, including <a href="https://davidgohel.github.io/flext
   overflow-x: hidden;
 }
 
-#psbibbfzjq .gt_stub {
+#wqufiaopfq .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -545,7 +545,7 @@ from other output formats, including <a href="https://davidgohel.github.io/flext
   padding-right: 5px;
 }
 
-#psbibbfzjq .gt_stub_row_group {
+#wqufiaopfq .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -559,15 +559,15 @@ from other output formats, including <a href="https://davidgohel.github.io/flext
   vertical-align: top;
 }
 
-#psbibbfzjq .gt_row_group_first td {
+#wqufiaopfq .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#psbibbfzjq .gt_row_group_first th {
+#wqufiaopfq .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#psbibbfzjq .gt_summary_row {
+#wqufiaopfq .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -577,16 +577,16 @@ from other output formats, including <a href="https://davidgohel.github.io/flext
   padding-right: 5px;
 }
 
-#psbibbfzjq .gt_first_summary_row {
+#wqufiaopfq .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#psbibbfzjq .gt_first_summary_row.thick {
+#wqufiaopfq .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#psbibbfzjq .gt_last_summary_row {
+#wqufiaopfq .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -596,7 +596,7 @@ from other output formats, including <a href="https://davidgohel.github.io/flext
   border-bottom-color: #D3D3D3;
 }
 
-#psbibbfzjq .gt_grand_summary_row {
+#wqufiaopfq .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -606,7 +606,7 @@ from other output formats, including <a href="https://davidgohel.github.io/flext
   padding-right: 5px;
 }
 
-#psbibbfzjq .gt_first_grand_summary_row {
+#wqufiaopfq .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -616,7 +616,7 @@ from other output formats, including <a href="https://davidgohel.github.io/flext
   border-top-color: #D3D3D3;
 }
 
-#psbibbfzjq .gt_last_grand_summary_row_top {
+#wqufiaopfq .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -626,11 +626,11 @@ from other output formats, including <a href="https://davidgohel.github.io/flext
   border-bottom-color: #D3D3D3;
 }
 
-#psbibbfzjq .gt_striped {
+#wqufiaopfq .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#psbibbfzjq .gt_table_body {
+#wqufiaopfq .gt_table_body {
   border-top-style: solid;
   border-top-width: 3px;
   border-top-color: #D9D9D9;
@@ -639,7 +639,7 @@ from other output formats, including <a href="https://davidgohel.github.io/flext
   border-bottom-color: #D3D3D3;
 }
 
-#psbibbfzjq .gt_footnotes {
+#wqufiaopfq .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -653,7 +653,7 @@ from other output formats, including <a href="https://davidgohel.github.io/flext
   border-right-color: #D3D3D3;
 }
 
-#psbibbfzjq .gt_footnote {
+#wqufiaopfq .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -662,7 +662,7 @@ from other output formats, including <a href="https://davidgohel.github.io/flext
   padding-right: 5px;
 }
 
-#psbibbfzjq .gt_sourcenotes {
+#wqufiaopfq .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -676,7 +676,7 @@ from other output formats, including <a href="https://davidgohel.github.io/flext
   border-right-color: #D3D3D3;
 }
 
-#psbibbfzjq .gt_sourcenote {
+#wqufiaopfq .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -684,72 +684,72 @@ from other output formats, including <a href="https://davidgohel.github.io/flext
   padding-right: 5px;
 }
 
-#psbibbfzjq .gt_left {
+#wqufiaopfq .gt_left {
   text-align: left;
 }
 
-#psbibbfzjq .gt_center {
+#wqufiaopfq .gt_center {
   text-align: center;
 }
 
-#psbibbfzjq .gt_right {
+#wqufiaopfq .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#psbibbfzjq .gt_font_normal {
+#wqufiaopfq .gt_font_normal {
   font-weight: normal;
 }
 
-#psbibbfzjq .gt_font_bold {
+#wqufiaopfq .gt_font_bold {
   font-weight: bold;
 }
 
-#psbibbfzjq .gt_font_italic {
+#wqufiaopfq .gt_font_italic {
   font-style: italic;
 }
 
-#psbibbfzjq .gt_super {
+#wqufiaopfq .gt_super {
   font-size: 65%;
 }
 
-#psbibbfzjq .gt_footnote_marks {
+#wqufiaopfq .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#psbibbfzjq .gt_asterisk {
+#wqufiaopfq .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#psbibbfzjq .gt_indent_1 {
+#wqufiaopfq .gt_indent_1 {
   text-indent: 5px;
 }
 
-#psbibbfzjq .gt_indent_2 {
+#wqufiaopfq .gt_indent_2 {
   text-indent: 10px;
 }
 
-#psbibbfzjq .gt_indent_3 {
+#wqufiaopfq .gt_indent_3 {
   text-indent: 15px;
 }
 
-#psbibbfzjq .gt_indent_4 {
+#wqufiaopfq .gt_indent_4 {
   text-indent: 20px;
 }
 
-#psbibbfzjq .gt_indent_5 {
+#wqufiaopfq .gt_indent_5 {
   text-indent: 25px;
 }
 
-#psbibbfzjq .katex-display {
+#wqufiaopfq .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#psbibbfzjq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#wqufiaopfq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -830,23 +830,23 @@ from other output formats, including <a href="https://davidgohel.github.io/flext
 this using the <code>top</code> argument:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tableTopConceptCounts.html">tableTopConceptCounts</a></span><span class="op">(</span><span class="va">result</span>, top <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
-<div id="ixqgnjgdef" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ixqgnjgdef table {
+<div id="gzktpbvznp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#gzktpbvznp table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ixqgnjgdef thead, #ixqgnjgdef tbody, #ixqgnjgdef tfoot, #ixqgnjgdef tr, #ixqgnjgdef td, #ixqgnjgdef th {
+#gzktpbvznp thead, #gzktpbvznp tbody, #gzktpbvznp tfoot, #gzktpbvznp tr, #gzktpbvznp td, #gzktpbvznp th {
   border-style: none;
 }
 
-#ixqgnjgdef p {
+#gzktpbvznp p {
   margin: 0;
   padding: 0;
 }
 
-#ixqgnjgdef .gt_table {
+#gzktpbvznp .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -872,12 +872,12 @@ this using the <code>top</code> argument:</p>
   border-left-color: #D9D9D9;
 }
 
-#ixqgnjgdef .gt_caption {
+#gzktpbvznp .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ixqgnjgdef .gt_title {
+#gzktpbvznp .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -889,7 +889,7 @@ this using the <code>top</code> argument:</p>
   border-bottom-width: 0;
 }
 
-#ixqgnjgdef .gt_subtitle {
+#gzktpbvznp .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -901,7 +901,7 @@ this using the <code>top</code> argument:</p>
   border-top-width: 0;
 }
 
-#ixqgnjgdef .gt_heading {
+#gzktpbvznp .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -913,13 +913,13 @@ this using the <code>top</code> argument:</p>
   border-right-color: #D3D3D3;
 }
 
-#ixqgnjgdef .gt_bottom_border {
+#gzktpbvznp .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ixqgnjgdef .gt_col_headings {
+#gzktpbvznp .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -934,7 +934,7 @@ this using the <code>top</code> argument:</p>
   border-right-color: #D3D3D3;
 }
 
-#ixqgnjgdef .gt_col_heading {
+#gzktpbvznp .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -954,7 +954,7 @@ this using the <code>top</code> argument:</p>
   overflow-x: hidden;
 }
 
-#ixqgnjgdef .gt_column_spanner_outer {
+#gzktpbvznp .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -966,15 +966,15 @@ this using the <code>top</code> argument:</p>
   padding-right: 4px;
 }
 
-#ixqgnjgdef .gt_column_spanner_outer:first-child {
+#gzktpbvznp .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ixqgnjgdef .gt_column_spanner_outer:last-child {
+#gzktpbvznp .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ixqgnjgdef .gt_column_spanner {
+#gzktpbvznp .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -986,11 +986,11 @@ this using the <code>top</code> argument:</p>
   width: 100%;
 }
 
-#ixqgnjgdef .gt_spanner_row {
+#gzktpbvznp .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ixqgnjgdef .gt_group_heading {
+#gzktpbvznp .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1016,7 +1016,7 @@ this using the <code>top</code> argument:</p>
   text-align: left;
 }
 
-#ixqgnjgdef .gt_empty_group_heading {
+#gzktpbvznp .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1031,15 +1031,15 @@ this using the <code>top</code> argument:</p>
   vertical-align: middle;
 }
 
-#ixqgnjgdef .gt_from_md > :first-child {
+#gzktpbvznp .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ixqgnjgdef .gt_from_md > :last-child {
+#gzktpbvznp .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ixqgnjgdef .gt_row {
+#gzktpbvznp .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1058,7 +1058,7 @@ this using the <code>top</code> argument:</p>
   overflow-x: hidden;
 }
 
-#ixqgnjgdef .gt_stub {
+#gzktpbvznp .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1071,7 +1071,7 @@ this using the <code>top</code> argument:</p>
   padding-right: 5px;
 }
 
-#ixqgnjgdef .gt_stub_row_group {
+#gzktpbvznp .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1085,15 +1085,15 @@ this using the <code>top</code> argument:</p>
   vertical-align: top;
 }
 
-#ixqgnjgdef .gt_row_group_first td {
+#gzktpbvznp .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ixqgnjgdef .gt_row_group_first th {
+#gzktpbvznp .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ixqgnjgdef .gt_summary_row {
+#gzktpbvznp .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1103,16 +1103,16 @@ this using the <code>top</code> argument:</p>
   padding-right: 5px;
 }
 
-#ixqgnjgdef .gt_first_summary_row {
+#gzktpbvznp .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ixqgnjgdef .gt_first_summary_row.thick {
+#gzktpbvznp .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ixqgnjgdef .gt_last_summary_row {
+#gzktpbvznp .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1122,7 +1122,7 @@ this using the <code>top</code> argument:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#ixqgnjgdef .gt_grand_summary_row {
+#gzktpbvznp .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1132,7 +1132,7 @@ this using the <code>top</code> argument:</p>
   padding-right: 5px;
 }
 
-#ixqgnjgdef .gt_first_grand_summary_row {
+#gzktpbvznp .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1142,7 +1142,7 @@ this using the <code>top</code> argument:</p>
   border-top-color: #D3D3D3;
 }
 
-#ixqgnjgdef .gt_last_grand_summary_row_top {
+#gzktpbvznp .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1152,11 +1152,11 @@ this using the <code>top</code> argument:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#ixqgnjgdef .gt_striped {
+#gzktpbvznp .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ixqgnjgdef .gt_table_body {
+#gzktpbvznp .gt_table_body {
   border-top-style: solid;
   border-top-width: 3px;
   border-top-color: #D9D9D9;
@@ -1165,7 +1165,7 @@ this using the <code>top</code> argument:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#ixqgnjgdef .gt_footnotes {
+#gzktpbvznp .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1179,7 +1179,7 @@ this using the <code>top</code> argument:</p>
   border-right-color: #D3D3D3;
 }
 
-#ixqgnjgdef .gt_footnote {
+#gzktpbvznp .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1188,7 +1188,7 @@ this using the <code>top</code> argument:</p>
   padding-right: 5px;
 }
 
-#ixqgnjgdef .gt_sourcenotes {
+#gzktpbvznp .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1202,7 +1202,7 @@ this using the <code>top</code> argument:</p>
   border-right-color: #D3D3D3;
 }
 
-#ixqgnjgdef .gt_sourcenote {
+#gzktpbvznp .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1210,72 +1210,72 @@ this using the <code>top</code> argument:</p>
   padding-right: 5px;
 }
 
-#ixqgnjgdef .gt_left {
+#gzktpbvznp .gt_left {
   text-align: left;
 }
 
-#ixqgnjgdef .gt_center {
+#gzktpbvznp .gt_center {
   text-align: center;
 }
 
-#ixqgnjgdef .gt_right {
+#gzktpbvznp .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ixqgnjgdef .gt_font_normal {
+#gzktpbvznp .gt_font_normal {
   font-weight: normal;
 }
 
-#ixqgnjgdef .gt_font_bold {
+#gzktpbvznp .gt_font_bold {
   font-weight: bold;
 }
 
-#ixqgnjgdef .gt_font_italic {
+#gzktpbvznp .gt_font_italic {
   font-style: italic;
 }
 
-#ixqgnjgdef .gt_super {
+#gzktpbvznp .gt_super {
   font-size: 65%;
 }
 
-#ixqgnjgdef .gt_footnote_marks {
+#gzktpbvznp .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ixqgnjgdef .gt_asterisk {
+#gzktpbvznp .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ixqgnjgdef .gt_indent_1 {
+#gzktpbvznp .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ixqgnjgdef .gt_indent_2 {
+#gzktpbvznp .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ixqgnjgdef .gt_indent_3 {
+#gzktpbvznp .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ixqgnjgdef .gt_indent_4 {
+#gzktpbvznp .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ixqgnjgdef .gt_indent_5 {
+#gzktpbvznp .gt_indent_5 {
   text-indent: 25px;
 }
 
-#ixqgnjgdef .katex-display {
+#gzktpbvznp .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#ixqgnjgdef div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#gzktpbvznp div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1337,23 +1337,23 @@ argument:</p>
 <span>  countBy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"record"</span>, <span class="st">"person"</span><span class="op">)</span></span>
 <span><span class="op">)</span> </span>
 <span><span class="fu"><a href="../reference/tableTopConceptCounts.html">tableTopConceptCounts</a></span><span class="op">(</span><span class="va">result</span>, countBy <span class="op">=</span> <span class="st">"person"</span><span class="op">)</span></span></code></pre></div>
-<div id="sbsnnpsmim" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#sbsnnpsmim table {
+<div id="utqikgjuku" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#utqikgjuku table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#sbsnnpsmim thead, #sbsnnpsmim tbody, #sbsnnpsmim tfoot, #sbsnnpsmim tr, #sbsnnpsmim td, #sbsnnpsmim th {
+#utqikgjuku thead, #utqikgjuku tbody, #utqikgjuku tfoot, #utqikgjuku tr, #utqikgjuku td, #utqikgjuku th {
   border-style: none;
 }
 
-#sbsnnpsmim p {
+#utqikgjuku p {
   margin: 0;
   padding: 0;
 }
 
-#sbsnnpsmim .gt_table {
+#utqikgjuku .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1379,12 +1379,12 @@ argument:</p>
   border-left-color: #D9D9D9;
 }
 
-#sbsnnpsmim .gt_caption {
+#utqikgjuku .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#sbsnnpsmim .gt_title {
+#utqikgjuku .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1396,7 +1396,7 @@ argument:</p>
   border-bottom-width: 0;
 }
 
-#sbsnnpsmim .gt_subtitle {
+#utqikgjuku .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1408,7 +1408,7 @@ argument:</p>
   border-top-width: 0;
 }
 
-#sbsnnpsmim .gt_heading {
+#utqikgjuku .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1420,13 +1420,13 @@ argument:</p>
   border-right-color: #D3D3D3;
 }
 
-#sbsnnpsmim .gt_bottom_border {
+#utqikgjuku .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#sbsnnpsmim .gt_col_headings {
+#utqikgjuku .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1441,7 +1441,7 @@ argument:</p>
   border-right-color: #D3D3D3;
 }
 
-#sbsnnpsmim .gt_col_heading {
+#utqikgjuku .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1461,7 +1461,7 @@ argument:</p>
   overflow-x: hidden;
 }
 
-#sbsnnpsmim .gt_column_spanner_outer {
+#utqikgjuku .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1473,15 +1473,15 @@ argument:</p>
   padding-right: 4px;
 }
 
-#sbsnnpsmim .gt_column_spanner_outer:first-child {
+#utqikgjuku .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#sbsnnpsmim .gt_column_spanner_outer:last-child {
+#utqikgjuku .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#sbsnnpsmim .gt_column_spanner {
+#utqikgjuku .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1493,11 +1493,11 @@ argument:</p>
   width: 100%;
 }
 
-#sbsnnpsmim .gt_spanner_row {
+#utqikgjuku .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#sbsnnpsmim .gt_group_heading {
+#utqikgjuku .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1523,7 +1523,7 @@ argument:</p>
   text-align: left;
 }
 
-#sbsnnpsmim .gt_empty_group_heading {
+#utqikgjuku .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1538,15 +1538,15 @@ argument:</p>
   vertical-align: middle;
 }
 
-#sbsnnpsmim .gt_from_md > :first-child {
+#utqikgjuku .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#sbsnnpsmim .gt_from_md > :last-child {
+#utqikgjuku .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#sbsnnpsmim .gt_row {
+#utqikgjuku .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1565,7 +1565,7 @@ argument:</p>
   overflow-x: hidden;
 }
 
-#sbsnnpsmim .gt_stub {
+#utqikgjuku .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1578,7 +1578,7 @@ argument:</p>
   padding-right: 5px;
 }
 
-#sbsnnpsmim .gt_stub_row_group {
+#utqikgjuku .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1592,15 +1592,15 @@ argument:</p>
   vertical-align: top;
 }
 
-#sbsnnpsmim .gt_row_group_first td {
+#utqikgjuku .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#sbsnnpsmim .gt_row_group_first th {
+#utqikgjuku .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#sbsnnpsmim .gt_summary_row {
+#utqikgjuku .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1610,16 +1610,16 @@ argument:</p>
   padding-right: 5px;
 }
 
-#sbsnnpsmim .gt_first_summary_row {
+#utqikgjuku .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#sbsnnpsmim .gt_first_summary_row.thick {
+#utqikgjuku .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#sbsnnpsmim .gt_last_summary_row {
+#utqikgjuku .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1629,7 +1629,7 @@ argument:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#sbsnnpsmim .gt_grand_summary_row {
+#utqikgjuku .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1639,7 +1639,7 @@ argument:</p>
   padding-right: 5px;
 }
 
-#sbsnnpsmim .gt_first_grand_summary_row {
+#utqikgjuku .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1649,7 +1649,7 @@ argument:</p>
   border-top-color: #D3D3D3;
 }
 
-#sbsnnpsmim .gt_last_grand_summary_row_top {
+#utqikgjuku .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1659,11 +1659,11 @@ argument:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#sbsnnpsmim .gt_striped {
+#utqikgjuku .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#sbsnnpsmim .gt_table_body {
+#utqikgjuku .gt_table_body {
   border-top-style: solid;
   border-top-width: 3px;
   border-top-color: #D9D9D9;
@@ -1672,7 +1672,7 @@ argument:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#sbsnnpsmim .gt_footnotes {
+#utqikgjuku .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1686,7 +1686,7 @@ argument:</p>
   border-right-color: #D3D3D3;
 }
 
-#sbsnnpsmim .gt_footnote {
+#utqikgjuku .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1695,7 +1695,7 @@ argument:</p>
   padding-right: 5px;
 }
 
-#sbsnnpsmim .gt_sourcenotes {
+#utqikgjuku .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1709,7 +1709,7 @@ argument:</p>
   border-right-color: #D3D3D3;
 }
 
-#sbsnnpsmim .gt_sourcenote {
+#utqikgjuku .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1717,72 +1717,72 @@ argument:</p>
   padding-right: 5px;
 }
 
-#sbsnnpsmim .gt_left {
+#utqikgjuku .gt_left {
   text-align: left;
 }
 
-#sbsnnpsmim .gt_center {
+#utqikgjuku .gt_center {
   text-align: center;
 }
 
-#sbsnnpsmim .gt_right {
+#utqikgjuku .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#sbsnnpsmim .gt_font_normal {
+#utqikgjuku .gt_font_normal {
   font-weight: normal;
 }
 
-#sbsnnpsmim .gt_font_bold {
+#utqikgjuku .gt_font_bold {
   font-weight: bold;
 }
 
-#sbsnnpsmim .gt_font_italic {
+#utqikgjuku .gt_font_italic {
   font-style: italic;
 }
 
-#sbsnnpsmim .gt_super {
+#utqikgjuku .gt_super {
   font-size: 65%;
 }
 
-#sbsnnpsmim .gt_footnote_marks {
+#utqikgjuku .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#sbsnnpsmim .gt_asterisk {
+#utqikgjuku .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#sbsnnpsmim .gt_indent_1 {
+#utqikgjuku .gt_indent_1 {
   text-indent: 5px;
 }
 
-#sbsnnpsmim .gt_indent_2 {
+#utqikgjuku .gt_indent_2 {
   text-indent: 10px;
 }
 
-#sbsnnpsmim .gt_indent_3 {
+#utqikgjuku .gt_indent_3 {
   text-indent: 15px;
 }
 
-#sbsnnpsmim .gt_indent_4 {
+#utqikgjuku .gt_indent_4 {
   text-indent: 20px;
 }
 
-#sbsnnpsmim .gt_indent_5 {
+#utqikgjuku .gt_indent_5 {
   text-indent: 25px;
 }
 
-#sbsnnpsmim .katex-display {
+#utqikgjuku .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#sbsnnpsmim div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#utqikgjuku div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1816,32 +1816,32 @@ argument:</p>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">3</span></td>
 <td headers="drug_exposure  [header_name]Cdm name
-[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: 1 ML medroxyprogesterone acetate 150 MG/ML Injection (40224805) <br> Source: No matching concept (0) <br> 71</span></td>
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: 120 ACTUAT Fluticasone propionate 0.044 MG/ACTUAT Metered Dose Inhaler (40169216) <br> Source: No matching concept (0) <br> 71</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">4</span></td>
 <td headers="drug_exposure  [header_name]Cdm name
-[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: 120 ACTUAT Fluticasone propionate 0.044 MG/ACTUAT Metered Dose Inhaler (40169216) <br> Source: No matching concept (0) <br> 71</span></td>
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: 1 ML medroxyprogesterone acetate 150 MG/ML Injection (40224805) <br> Source: No matching concept (0) <br> 71</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">5</span></td>
 <td headers="drug_exposure  [header_name]Cdm name
-[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Piperacillin (1746114) <br> Source: No matching concept (0) <br> 70</span></td>
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Sodium Chloride (967823) <br> Source: No matching concept (0) <br> 70</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">6</span></td>
 <td headers="drug_exposure  [header_name]Cdm name
-[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Sodium Chloride (967823) <br> Source: No matching concept (0) <br> 70</span></td>
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Tacrine (836654) <br> Source: No matching concept (0) <br> 70</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">7</span></td>
 <td headers="drug_exposure  [header_name]Cdm name
-[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Tacrine (836654) <br> Source: No matching concept (0) <br> 70</span></td>
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: norgestimate (1515774) <br> Source: No matching concept (0) <br> 70</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">8</span></td>
 <td headers="drug_exposure  [header_name]Cdm name
-[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: norgestimate (1515774) <br> Source: No matching concept (0) <br> 70</span></td>
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Piperacillin (1746114) <br> Source: No matching concept (0) <br> 70</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">9</span></td>
@@ -1851,7 +1851,7 @@ argument:</p>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">10</span></td>
 <td headers="drug_exposure  [header_name]Cdm name
-[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Warfarin Sodium 5 MG Oral Tablet (40163554) <br> Source: No matching concept (0) <br> 69</span></td>
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Terfenadine (1150836) <br> Source: No matching concept (0) <br> 69</span></td>
 </tr>
 </tbody>
 </table>

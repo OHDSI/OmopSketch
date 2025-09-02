@@ -100,8 +100,8 @@ dataset.</p>
 <span></span>
 <span></span>
 <span><span class="co"># Connect to Eunomia database</span></span>
-<span><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu">duckdb</span><span class="fu">::</span><span class="fu"><a href="https://r.duckdb.org/reference/duckdb.html" class="external-link">duckdb</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu">CDMConnector</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/CDMConnector/reference/eunomiaDir.html" class="external-link">eunomiaDir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu">CDMConnector</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/CDMConnector/reference/cdmFromCon.html" class="external-link">cdmFromCon</a></span><span class="op">(</span></span>
+<span><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span>drv <span class="op">=</span> <span class="fu"><a href="https://r.duckdb.org/reference/duckdb.html" class="external-link">duckdb</a></span><span class="op">(</span>dbdir <span class="op">=</span> <span class="fu"><a href="https://darwin-eu.github.io/CDMConnector/reference/eunomiaDir.html" class="external-link">eunomiaDir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://darwin-eu.github.io/CDMConnector/reference/cdmFromCon.html" class="external-link">cdmFromCon</a></span><span class="op">(</span></span>
 <span>  con <span class="op">=</span> <span class="va">con</span>, cdmSchema <span class="op">=</span> <span class="st">"main"</span>, writeSchema <span class="op">=</span> <span class="st">"main"</span>, cdmName <span class="op">=</span> <span class="st">"Eunomia"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -623,7 +623,7 @@ the <code>observation_period</code> table</p>
 <tr>
 <td headers="Cdm  Estimate" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Version</td>
 <td headers="Cdm  [header_name]Database name
-[header_level]Eunomia" class="gt_row gt_left" style="text-align: right;">v5.3.1</td>
+[header_level]Eunomia" class="gt_row gt_left" style="text-align: right;">5.3</td>
 </tr>
 <tr>
 <td headers="Cdm  Estimate" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Holder name</td>
@@ -651,7 +651,7 @@ the <code>observation_period</code> table</p>
 <tr class="gt_row_group_first">
 <td headers="Observation period  Estimate" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">N</td>
 <td headers="Observation period  [header_name]Database name
-[header_level]Eunomia" class="gt_row gt_left" style="text-align: right;">5,343</td>
+[header_level]Eunomia" class="gt_row gt_left" style="text-align: right;">2,694</td>
 </tr>
 <tr>
 <td headers="Observation period  Estimate" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Start date</td>
@@ -16632,12 +16632,12 @@ OMOP tables.</p>
 <span><span class="co">#&gt; $ group_name       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "omop_table"<span style="color: #949494;">, </span>"omop_table"<span style="color: #949494;">, </span>"omop_table"<span style="color: #949494;">, </span>"omop_table…</span></span>
 <span><span class="co">#&gt; $ group_level      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "visit_occurrence"<span style="color: #949494;">, </span>"visit_occurrence"<span style="color: #949494;">, </span>"visit_occurr…</span></span>
 <span><span class="co">#&gt; $ strata_name      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"age_group"<span style="color: #949494;">, </span>"age_group"<span style="color: #949494;">, </span>"sex"<span style="color: #949494;">, </span>"sex"<span style="color: #949494;">, </span>"o…</span></span>
-<span><span class="co">#&gt; $ strata_level     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"0 to 59"<span style="color: #949494;">, </span>"60 or above"<span style="color: #949494;">, </span>"Female"<span style="color: #949494;">, </span>"Male"…</span></span>
+<span><span class="co">#&gt; $ strata_level     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"60 or above"<span style="color: #949494;">, </span>"0 to 59"<span style="color: #949494;">, </span>"Female"<span style="color: #949494;">, </span>"Male"…</span></span>
 <span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Inpatient Visit"<span style="color: #949494;">, </span>"Inpatient Visit"<span style="color: #949494;">, </span>"Inpatient Visi…</span></span>
 <span><span class="co">#&gt; $ variable_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "9201"<span style="color: #949494;">, </span>"9201"<span style="color: #949494;">, </span>"9201"<span style="color: #949494;">, </span>"9201"<span style="color: #949494;">, </span>"9201"<span style="color: #949494;">, </span>"9201"<span style="color: #949494;">, </span>"9201…</span></span>
 <span><span class="co">#&gt; $ estimate_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"c…</span></span>
 <span><span class="co">#&gt; $ estimate_type    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "integer"<span style="color: #949494;">, </span>"integer"<span style="color: #949494;">, </span>"integer"<span style="color: #949494;">, </span>"integer"<span style="color: #949494;">, </span>"integer"…</span></span>
-<span><span class="co">#&gt; $ estimate_value   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "163"<span style="color: #949494;">, </span>"131"<span style="color: #949494;">, </span>"32"<span style="color: #949494;">, </span>"85"<span style="color: #949494;">, </span>"78"<span style="color: #949494;">, </span>"17"<span style="color: #949494;">, </span>"20"<span style="color: #949494;">, </span>"9"<span style="color: #949494;">, </span>"19"…</span></span>
+<span><span class="co">#&gt; $ estimate_value   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "163"<span style="color: #949494;">, </span>"32"<span style="color: #949494;">, </span>"131"<span style="color: #949494;">, </span>"85"<span style="color: #949494;">, </span>"78"<span style="color: #949494;">, </span>"20"<span style="color: #949494;">, </span>"17"<span style="color: #949494;">, </span>"23"<span style="color: #949494;">, </span>"30…</span></span>
 <span><span class="co">#&gt; $ additional_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "source_concept_id &amp;&amp;&amp; source_concept_name"<span style="color: #949494;">, </span>"source_…</span></span>
 <span><span class="co">#&gt; $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "0 &amp;&amp;&amp; No matching concept"<span style="color: #949494;">, </span>"0 &amp;&amp;&amp; No matching conce…</span></span></code></pre></div>
 </div>
@@ -16692,6 +16692,7 @@ observation period (1st, 2nd, etc.). This can be done using the
 <span>  ageGroup <span class="op">=</span> <span class="va">ageGroup</span>,</span>
 <span>  dateRange <span class="op">=</span> <span class="va">dateRange</span></span>
 <span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> retrieving cdm object from <span style="font-style: italic;">cdm_table</span>.</span></span>
 <span></span>
 <span><span class="va">result_observationPeriod</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/plotObservationPeriod.html">plotObservationPeriod</a></span><span class="op">(</span></span>

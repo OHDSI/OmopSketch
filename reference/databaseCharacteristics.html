@@ -111,17 +111,16 @@ If <code>dateRange</code> is <code>NULL</code>, no restriction is applied.</p></
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://OHDSI.github.io/OmopSketch/">OmopSketch</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="mockOmopSketch.html">mockOmopSketch</a></span><span class="op">(</span>numberIndividuals <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">databaseCharacteristics</span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span>,</span></span>
-<span class="r-in"><span>omopTableNam <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"drug_exposure"</span>, <span class="st">"condition_occurrence"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>omopTableName <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"drug_exposure"</span>, <span class="st">"condition_occurrence"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>sex <span class="op">=</span> <span class="cn">TRUE</span>, ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">50</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">51</span>,<span class="fl">100</span><span class="op">)</span><span class="op">)</span>, interval <span class="op">=</span> <span class="st">"years"</span>, conceptIdCounts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The characterisation will focus on the following OMOP tables: drug_exposure and</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> condition_occurrence</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → Getting cdm snapshot</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span><span style="color: #BB0000;">✖</span> Vocabulary version in `cdm_source` (<span style="font-style: italic;">NA</span>) doesn't match the one in the</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>   `vocabulary` table (<span style="font-style: italic;">v5.0 18-JAN-19</span>).</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → Getting population characteristics</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Building new trimmed cohort</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding demographics information</span>
@@ -166,8 +165,8 @@ If <code>dateRange</code> is <code>NULL</code>, no restriction is applied.</p></
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">"period_type_concept_id"</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → Summarising trends: records, subjects, person-days, age and sex</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → The number of person-days is not computed for event tables</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ☺ Database characterisation finished. Code ran in 0 min and 55 sec</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> 1 table created: <span style="color: #0000BB;">"og_008_1756815685"</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ☺ Database characterisation finished. Code ran in 0 min and 56 sec</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> 1 table created: <span style="color: #0000BB;">"og_008_1756830740"</span>.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">PatientProfiles</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/PatientProfiles/reference/mockDisconnect.html" class="external-link">mockDisconnect</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
