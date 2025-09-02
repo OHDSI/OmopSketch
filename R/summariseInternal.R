@@ -34,7 +34,7 @@ summariseMissingInternal <- function(x, strata, columns, cdm, table) {
     rlang::set_names(columns) |>
     rlang::parse_exprs()
 
-  columns_zero <- omopgenerics::omopTableFields(cdmVersion = CDMConnector::cdmVersion(cdm)) |>
+  columns_zero <- omopgenerics::omopTableFields(cdmVersion = omopgenerics::cdmVersion(cdm)) |>
     dplyr::filter(.data$cdm_table_name == table & .data$cdm_field_name %in% columns[grepl("_id$", columns)] & .data$cdm_datatype == "integer") |>
     dplyr::pull(.data$cdm_field_name)
   q_zero <- "sum(as.integer(.data${columns_zero}==0), na.rm = TRUE)" |>
@@ -206,6 +206,7 @@ addSexAgeGroup <- function(x, sex, ageGroup, indexDate) {
   if (age) {
     qAge <- ageGroupQuery(ageGroup)
     x <- x %>%
+      datediffYear(start = "birth_date", end = indexDate, name = "xyz_age") |>
       dplyr::mutate(!!!qAge) |>
       dplyr::select(!c("birth_date", "xyz_age"))
   }
@@ -218,16 +219,14 @@ ageGroupQuery <- function(ageGroup) {
       if (is.infinite(x[2])) {
         paste0(".data$xyz_age >= ", x[1], "L ~ '", nm, "'")
       } else {
-        paste0(".data$xyz_age >= ", x[1], "L && .data$xyz_age <= ", x[2], "L ~ '", nm, "'")
+        paste0(".data$xyz_age >= ", x[1], "L & .data$xyz_age <= ", x[2], "L ~ '", nm, "'")
       }
     }),
     '.default = "None"'
   ) |>
     paste0(collapse = ", ")
-  c(
-    xyz_age = 'as.integer(local(CDMConnector::datediff(start = "birth_date", end = indexDate, interval = "year")))',
-    age_group = paste0("dplyr::case_when(", x, ")")
-  ) |>
+  paste0("dplyr::case_when(", x, ")") |>
+    rlang::set_names(nm = "age_group") |>
     rlang::parse_exprs()
 }
 restrictStudyPeriod <- function(omopTable, dateRange) {

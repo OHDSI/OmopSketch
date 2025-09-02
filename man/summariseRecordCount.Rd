@@ -42,6 +42,7 @@ records that fall within the observation period are considered.
 }
 \examples{
 \donttest{
+library(OmopSketch)
 library(dplyr, warn.conflicts = FALSE)
 
 cdm <- mockOmopSketch()

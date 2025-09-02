@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 )
 
 library(CDMConnector)
-CDMConnector::requireEunomia()
+requireEunomia()
 ```
 
 In this vignette, we explore how *OmopSketch* functions can serve as a valuable tool for characterising databases containing electronic health records mapped to the OMOP Common Data Model.
@@ -39,8 +39,8 @@ library(OmopSketch)
 
 
 # Connect to Eunomia database
-con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomiaDir())
-cdm <- CDMConnector::cdmFromCon(
+con <- dbConnect(drv = duckdb(dbdir = eunomiaDir()))
+cdm <- cdmFromCon(
   con = con, cdmSchema = "main", writeSchema = "main", cdmName = "Eunomia"
 )
 

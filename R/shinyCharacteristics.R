@@ -20,8 +20,8 @@
 #'
 #' @examples
 #' \dontrun{
-#'
 #' library(OmopSketch)
+#'
 #' cdm <- mockOmopSketch()
 #' res <- databaseCharacteristics(cdm = cdm)
 #' shinyCharacteristics(result = res, directory = here::here())
@@ -36,11 +36,11 @@ shinyCharacteristics <- function(result,
                                  theme = NULL) {
   rlang::check_installed(pkg = "OmopViewer", version = "0.4.0")
 
-  omopgenerics::validateResultArgument(result)
+  result <- omopgenerics::validateResultArgument(result)
   omopgenerics::assertCharacter(directory, length = 1)
   omopgenerics::assertCharacter(logo, length = 1, null = TRUE)
   omopgenerics::assertCharacter(theme, length = 1, null = TRUE)
-  validateBackground(background)
+  background <- validateBackground(background)
 
   # check directory
   correct <- function(x) {
@@ -235,6 +235,7 @@ shinyCharacteristics <- function(result,
       multiple = FALSE
     )
   }
+
   # define structure
   panelStructure <- list(
     "summarise_omop_snapshot",

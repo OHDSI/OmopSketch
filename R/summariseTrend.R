@@ -30,6 +30,7 @@
 #' @export
 #' @examples
 #' \donttest{
+#' library(OmopSketch)
 #'
 #' cdm <- mockOmopSketch()
 #'
@@ -334,7 +335,7 @@ if ("age" %in% output) {
 
 if ("person-days" %in% output) {
   res$personDays <- x %>%
-    dplyr::mutate(person_days = as.integer(!!CDMConnector::datediff("start_date", "end_date", interval = "day") + 1)) |>
+    datediffDays(start = "start_date", end = "end_date", name = "person_days", offset = 1) |>
     summariseSumInternal(strata = strata, variable = "person_days") |>
     dplyr::mutate(variable_name = "Person-days")
 }
@@ -440,8 +441,8 @@ getDenominator <- function(omopTable, output) {
     end_date_name <- omopgenerics::omopColumns(table = tableName, field = "end_date")
     y <- omopTable |>
       dplyr::ungroup() |>
-      dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
-      dplyr::mutate(n = !!CDMConnector::datediff(start_date_name, end_date_name, interval = "day") + 1) |>
+      dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") |>
+      datediffDays(start = start_date_name, end = end_date_name, name = "n", offset = 1) |>
       dplyr::summarise("n" = sum(.data$n, na.rm = TRUE)) |>
       dplyr::pull("n") |>
       as.numeric()
