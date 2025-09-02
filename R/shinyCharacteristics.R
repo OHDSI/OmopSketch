@@ -219,7 +219,7 @@ shinyCharacteristics <- function(result,
       omopgenerics::filterSettings(type == 'event') |>
       dplyr::distinct(.data$variable_name) |>
       dplyr::pull()
-
+  }
   # define structure
   panelStructure <- list(
     "summarise_omop_snapshot",

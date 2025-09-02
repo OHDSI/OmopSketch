@@ -1,6 +1,7 @@
 #' Create a visual table from a summariseObservationPeriod() result.
 #' @param result A summarised_result object.
 #' @param  type Type of formatting output table. See `visOmopResults::tableType()` for allowed options. Default is `"gt"`.
+#' @inheritParams style
 #' @return A formatted table object with the summarised data.
 #' @export
 #' @examples
@@ -14,7 +15,8 @@
 #' PatientProfiles::mockDisconnect(cdm = cdm)
 #' }
 tableObservationPeriod <- function(result,
-                                   type = "gt") {
+                                   type = "gt",
+                                   style = "default") {
   # initial checks
   rlang::check_installed("visOmopResults")
   omopgenerics::validateResultArgument(result)
@@ -56,6 +58,7 @@ tableObservationPeriod <- function(result,
         "result_id", "estimate_type", "strata_name"
       ),
       type = type,
+      style = style,
       .options = list(keepNotFormatted = FALSE) # to consider removing this? If
       # the user adds some custom estimates they are not going to be displayed in
     )

@@ -4,12 +4,18 @@
 \alias{tableMissingData}
 \title{Create a visual table from a summariseMissingData() result.}
 \usage{
-tableMissingData(result, type = "gt")
+tableMissingData(result, type = "gt", style = "default")
 }
 \arguments{
 \item{result}{A summarised_result object.}
 
 \item{type}{Type of formatting output table. See \code{visOmopResults::tableType()} for allowed options. Default is \code{"gt"}.}
+
+\item{style}{Named list that specifies how to style the different parts of the gt or flextable table generated.
+Accepted style entries are: title, subtitle, header, header_name, header_level, column_name, group_label, and body.
+Alternatively, use "default" to get visOmopResults style, or NULL for gt/flextable style.
+Keep in mind that styling code is different for gt and flextable. Additionally, "datatable" and "reactable" have their own style functions.
+To see style options for each table type use \code{visOmopResults::tableStyle()}}
 }
 \value{
 A formatted table object with the summarised data.

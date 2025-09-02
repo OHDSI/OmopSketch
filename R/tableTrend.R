@@ -1,6 +1,7 @@
 #' Create a visual table from a summariseTrend() result.
 #' @param result A summarised_result object.
-#' @param  type Type of formatting output table between `gt`, `datatable` and `reactable`. Default is `"gt"`.
+#' @param type Type of formatting output table between `gt`, `datatable` and `reactable`. Default is `"gt"`.
+#' @inheritParams style
 #' @return A formatted table object with the summarised data.
 #' @export
 #' @examples
@@ -23,7 +24,8 @@
 #' PatientProfiles::mockDisconnect(cdm = cdm)
 #' }
 tableTrend <- function(result,
-                       type = "gt") {
+                       type = "gt",
+                       style = "default") {
   # initial checks
   rlang::check_installed("visOmopResults")
   omopgenerics::validateResultArgument(result)
@@ -60,6 +62,7 @@ tableTrend <- function(result,
     groupColumn = c("type", "omop_table"),
     rename = rename_vec,
     type = type,
+    style = style,
     hide = "variable_level",
     columnOrder = c("variable_name", additionals, strata, "estimate_name"),
     .options = list(merge = "all_columns")
