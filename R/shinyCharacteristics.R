@@ -219,7 +219,22 @@ shinyCharacteristics <- function(result,
       omopgenerics::filterSettings(type == 'event') |>
       dplyr::distinct(.data$variable_name) |>
       dplyr::pull()
-
+    
+    panelDetails$summarise_trend_event$content$plot$reactive <- "<filtered_data> |>
+    omopgenerics::filterSettings(type == 'event')  |>
+    dplyr::filter(.data$variable_name == input$variable) |>
+    OmopSketch::plotTrend(
+      facet = input$facet,
+      colour = input$colour
+    )"
+    panelDetails$summarise_trend_event$content$plot$filters$variable <- list(
+      button_type = "pickerInput",
+      label = "Variable",
+      choices = variable_names,
+      selected = "Records in observation",
+      multiple = FALSE
+    )
+  }
   # define structure
   panelStructure <- list(
     "summarise_omop_snapshot",
