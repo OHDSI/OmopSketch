@@ -36,6 +36,8 @@
 #' @export
 #' @examples
 #' \donttest{
+#' library(OmopSketch)
+#'
 #' cdm <- mockOmopSketch()
 #'
 #' summarisedResult <- summariseClinicalRecords(
@@ -451,26 +453,26 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
     # Add in_observation flag
     obs_tbl <- cdm[["observation_period"]] |>
       dplyr::select(
-        person_id,
-        obs_start = observation_period_start_date,
-        obs_end = observation_period_end_date
+        "person_id",
+        obs_start = "observation_period_start_date",
+        obs_end = "observation_period_end_date"
       )
 
     x <- x |>
       dplyr::left_join(
         x |>
           dplyr::inner_join(obs_tbl, by = "person_id") |>
-          dplyr::filter(start_date >= obs_start & end_date <= obs_end) |>
+          dplyr::filter(.data$start_date >= .data$obs_start & .data$end_date <= .data$obs_end) |>
           dplyr::mutate(in_observation = 1L) |>
-          dplyr::select(id, person_id, in_observation),
+          dplyr::select("id", "person_id", "in_observation"),
         by = c("person_id", "id")
       ) |>
-      dplyr::mutate(in_observation = dplyr::coalesce(in_observation, 0L))
+      dplyr::mutate(in_observation = dplyr::coalesce(.data$in_observation, 0L))
 
     # Add end_before_start flag
     x <- x |>
       dplyr::mutate(
-        end_before_start = dplyr::if_else(end_date < start_date, 1L, 0L)
+        end_before_start = dplyr::if_else(.data$end_date < .data$start_date, 1L, 0L)
       )
     birth_expr <- rlang::parse_expr(
       "as.Date(paste0(
@@ -484,7 +486,7 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
     person_tbl <- if (!("birth_datetime" %in% colnames(cdm$person))) {
       cdm$person |>
         dplyr::mutate(birthdate = !!birth_expr) |>
-        dplyr::select(person_id, birthdate)
+        dplyr::select("person_id", "birthdate")
     } else {
       cdm$person |>
         dplyr::mutate(
@@ -493,7 +495,7 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
             TRUE ~ !!birth_expr
           )
         ) |>
-        dplyr::select(person_id, birthdate)
+        dplyr::select("person_id", "birthdate")
     }
 
 

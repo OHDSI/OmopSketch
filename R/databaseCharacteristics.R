@@ -13,6 +13,7 @@
 #' @export
 #' @examples
 #' \donttest{
+#' library(OmopSketch)
 #'
 #' cdm <- mockOmopSketch(numberIndividuals = 100)
 #'
@@ -60,7 +61,7 @@ databaseCharacteristics <- function(cdm,
   cli::cli_inform(paste("The characterisation will focus on the following OMOP tables: {omopTableName}"))
 
   startTime <- Sys.time()
-  startTables <- CDMConnector::listSourceTables(cdm)
+  startTables <- omopgenerics::listSourceTables(cdm)
   result <- list()
   # Snapshot
   cli::cli_inform(paste(cli::symbol$arrow_right,"Getting cdm snapshot"))
@@ -203,7 +204,7 @@ databaseCharacteristics <- function(cdm,
       dur %% 60 %/% 1, "sec"
     )
   )
-  endTables <- CDMConnector::listSourceTables(cdm)
+  endTables <- omopgenerics::listSourceTables(cdm)
   newTables <- setdiff(endTables, startTables)
 
   if(length(newTables)) {

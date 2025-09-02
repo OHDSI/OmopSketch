@@ -29,8 +29,13 @@
 #' con <- dbConnect(duckdb(), eunomiaDir())
 #' cdm <- cdmFromCon(con = con, cdmSchema = "main", writeSchema = "main")
 #'
-#' summariseConceptIdCounts(cdm = cdm, omopTableName = "condition_occurrence",
-#' countBy = c("record", "person"), sex = TRUE)
+#' summariseConceptIdCounts(
+#'   cdm = cdm,
+#'   omopTableName = "condition_occurrence",
+#'   countBy = c("record", "person"),
+#'   sex = TRUE
+#' )
+#'
 #' }
 #'
 summariseConceptIdCounts <- function(cdm,
@@ -47,9 +52,9 @@ summariseConceptIdCounts <- function(cdm,
 
     if (isTRUE(year) & missing(interval)) {
       interval <- "years"
-      cli::cli_inform("interval argument set to 'years'")
+      cli::cli_inform(c(i = "interval argument set to 'years'"))
     } else if (isTRUE(year) & !missing(interval)) {
-      cli::cli_inform("year argument will be ignored")
+      cli::cli_inform(c(i = "year argument will be ignored"))
     }
   }
 
@@ -59,8 +64,8 @@ summariseConceptIdCounts <- function(cdm,
   omopgenerics::assertChoice(interval, c("overall", "years", "quarters", "months"), length = 1)
   omopgenerics::assertLogical(sex, length = 1)
   omopgenerics::assertChoice(omopTableName, choices = omopgenerics::omopTables(), unique = TRUE)
-  ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup)
-  dateRange <- validateStudyPeriod(cdm, dateRange)
+  ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup = ageGroup)
+  dateRange <- validateStudyPeriod(cdm = cdm, studyPeriod = dateRange)
   omopgenerics::assertNumeric(sample, integerish = TRUE, min = 1, null = TRUE, length = 1)
 
   # settings for the created results

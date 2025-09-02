@@ -28,7 +28,7 @@ summariseConceptCounts <- function(cdm,
   lifecycle::deprecate_warn(
     when = "0.2.0",
     what = "summariseConceptCounts()",
-    with = "summariseConceptSetCounts()"
+    with = NULL
   )
   summariseConceptSetCounts(
     cdm = cdm,

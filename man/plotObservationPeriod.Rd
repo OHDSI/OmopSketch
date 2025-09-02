@@ -39,6 +39,8 @@ Create a plot from the output of summariseObservationPeriod().
 }
 \examples{
 \donttest{
+library(OmopSketch)
+
 cdm <- mockOmopSketch(numberIndividuals = 100)
 
 result <- summariseObservationPeriod(observationPeriod = cdm$observation_period)

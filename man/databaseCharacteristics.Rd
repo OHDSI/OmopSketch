@@ -45,6 +45,7 @@ Summarise Database Characteristics for OMOP CDM
 }
 \examples{
 \donttest{
+library(OmopSketch)
 
 cdm <- mockOmopSketch(numberIndividuals = 100)
 

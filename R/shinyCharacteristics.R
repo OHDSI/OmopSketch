@@ -20,8 +20,8 @@
 #'
 #' @examples
 #' \dontrun{
-#'
 #' library(OmopSketch)
+#'
 #' cdm <- mockOmopSketch()
 #' res <- databaseCharacteristics(cdm = cdm)
 #' shinyCharacteristics(result = res, directory = here::here())
@@ -36,11 +36,11 @@ shinyCharacteristics <- function(result,
                                  theme = NULL) {
   rlang::check_installed(pkg = "OmopViewer", version = "0.4.0")
 
-  omopgenerics::validateResultArgument(result)
+  result <- omopgenerics::validateResultArgument(result)
   omopgenerics::assertCharacter(directory, length = 1)
   omopgenerics::assertCharacter(logo, length = 1, null = TRUE)
   omopgenerics::assertCharacter(theme, length = 1, null = TRUE)
-  validateBackground(background)
+  background <- validateBackground(background)
 
   # check directory
   correct <- function(x) {
@@ -219,7 +219,23 @@ shinyCharacteristics <- function(result,
       omopgenerics::filterSettings(type == 'event') |>
       dplyr::distinct(.data$variable_name) |>
       dplyr::pull()
+    
+    panelDetails$summarise_trend_event$content$plot$reactive <- "<filtered_data> |>
+    omopgenerics::filterSettings(type == 'event')  |>
+    dplyr::filter(.data$variable_name == input$variable) |>
+    OmopSketch::plotTrend(
+      facet = input$facet,
+      colour = input$colour
+    )"
+    panelDetails$summarise_trend_event$content$plot$filters$variable <- list(
+      button_type = "pickerInput",
+      label = "Variable",
+      choices = variable_names,
+      selected = "Records in observation",
+      multiple = FALSE
+    )
   }
+
   # define structure
   panelStructure <- list(
     "summarise_omop_snapshot",

@@ -106,6 +106,8 @@ createSettings <- function(result_type, result_id = 1L, study_period = NULL) {
 #' @export
 #'
 #' @examples
+#' library(OmopSketch)
+#'
 #' clinicalTables()
 #'
 clinicalTables <- function(){

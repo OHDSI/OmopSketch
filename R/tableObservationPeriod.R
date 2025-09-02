@@ -6,6 +6,8 @@
 #' @export
 #' @examples
 #' \donttest{
+#' library(OmopSketch)
+#'
 #' cdm <- mockOmopSketch(numberIndividuals = 100)
 #'
 #' result <- summariseObservationPeriod(observationPeriod = cdm$observation_period)

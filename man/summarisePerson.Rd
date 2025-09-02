@@ -17,6 +17,7 @@ Summarise the person table
 }
 \examples{
 \donttest{
+library(OmopSketch)
 library(dplyr, warn.conflicts = FALSE)
 
 cdm <- mockOmopSketch(numberIndividuals = 100)

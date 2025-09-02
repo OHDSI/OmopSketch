@@ -41,6 +41,7 @@ Create a ggplot2 plot from the output of summariseTrend().
 \examples{
 \donttest{
 library(dplyr)
+library(OmopSketch)
 
 cdm <- mockOmopSketch()
 

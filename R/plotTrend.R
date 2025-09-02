@@ -16,6 +16,7 @@
 #' @examples
 #' \donttest{
 #' library(dplyr)
+#' library(OmopSketch)
 #'
 #' cdm <- mockOmopSketch()
 #'

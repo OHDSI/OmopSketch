@@ -50,6 +50,8 @@ Summarise missing data in omop tables
 }
 \examples{
 \donttest{
+library(OmopSketch)
+
 cdm <- mockOmopSketch(numberIndividuals = 100)
 
 result <- summariseMissingData (cdm = cdm,
