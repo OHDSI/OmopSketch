@@ -123,7 +123,7 @@ shinyCharacteristics <- function(result,
     panelDetails$summarise_observation_period$content$table$reactive <- "<filtered_data> |>
     dplyr::filter(!(grepl('na',.data$estimate_name) | grepl('zero',.data$estimate_name))) |>
     OmopSketch::tableObservationPeriod()"
-    panelDetails$summarise_observation_period$content$tableMissing <- panelDetails$summarise_clinical_records$content$table
+    panelDetails$summarise_observation_period$content$tableMissing <- panelDetails$summarise_observation_period$content$table
     panelDetails$summarise_observation_period$content$tableMissing$title <- "Table Missing Data"
     panelDetails$summarise_observation_period$content$tableMissing$reactive <- "<filtered_data> |>
     OmopSketch::tableMissingData()"
@@ -135,6 +135,16 @@ shinyCharacteristics <- function(result,
     # customise summarise_clinical_records
     panelDetails$summarise_clinical_records$icon <- NULL
     panelDetails$summarise_clinical_records$title <- "Clinical Tables Summary"
+    panelDetails$summarise_clinical_records$content$tidy <- NULL
+    panelDetails$summarise_clinical_records$content$table$reactive <- "<filtered_data> |>
+    dplyr::filter(!(grepl('na',.data$estimate_name) | grepl('zero',.data$estimate_name))) |>
+    OmopSketch::tableClinicalRecords()"
+    panelDetails$summarise_clinical_records$content$tableMissing <- panelDetails$summarise_clinical_records$content$table
+    panelDetails$summarise_clinical_records$content$tableMissing$title <- "Table Missing Data"
+    panelDetails$summarise_clinical_records$content$tableMissing$reactive <- "<filtered_data> |>
+    OmopSketch::tableMissingData()"
+    panelDetails$summarise_clinical_records$content$tableMissing$download$filename <- "paste0(\"table_missing_data_clinical_records.\", input$format)"
+
   }
 
   if ("summarise_record_count" %in% resultTypes) {
@@ -183,6 +193,7 @@ shinyCharacteristics <- function(result,
     panelDetails$summarise_trend_episode <- panelDetails$summarise_trend
     panelDetails$summarise_trend_episode$icon <- NULL
     panelDetails$summarise_trend_episode$title <- "Observation Period Trends"
+    panelDetails$summarise_trend_episode$content$tidy <- NULL
     panelDetails$summarise_trend_episode$content$table$reactive <- "<filtered_data> |>
     omopgenerics::filterSettings(type == 'episode')  |>
     OmopSketch::tableTrend()"
@@ -210,6 +221,7 @@ shinyCharacteristics <- function(result,
     panelDetails$summarise_trend_event <- panelDetails$summarise_trend
     panelDetails$summarise_trend_event$icon <- NULL
     panelDetails$summarise_trend_event$title <- "Clinical Tables Trends"
+    panelDetails$summarise_trend_event$content$tidy <- NULL
     panelDetails$summarise_trend_event$content$table$reactive <- "<filtered_data> |>
     omopgenerics::filterSettings(type == 'event')  |>
     OmopSketch::tableTrend()"
@@ -219,7 +231,7 @@ shinyCharacteristics <- function(result,
       omopgenerics::filterSettings(type == 'event') |>
       dplyr::distinct(.data$variable_name) |>
       dplyr::pull()
-    
+
     panelDetails$summarise_trend_event$content$plot$reactive <- "<filtered_data> |>
     omopgenerics::filterSettings(type == 'event')  |>
     dplyr::filter(.data$variable_name == input$variable) |>
@@ -234,6 +246,8 @@ shinyCharacteristics <- function(result,
       selected = "Records in observation",
       multiple = FALSE
     )
+    panelDetails$summarise_trend <- NULL
+
   }
 
   # define structure
