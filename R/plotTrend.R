@@ -10,6 +10,7 @@
 #' columns to face by with: `visOmopResults::tidyColumns()`.
 #' @param colour Columns to colour by. See possible columns to colour by with:
 #' `visOmopResults::tidyColumns()`.
+#' @inheritParams style-plot
 #' @return A ggplot showing the table counts
 #' @export
 #' @examples
@@ -35,7 +36,8 @@
 plotTrend <- function(result,
                       output = NULL,
                       facet = "type",
-                      colour = NULL) {
+                      colour = NULL,
+                      style = "default") {
 
   rlang::check_installed("ggplot2")
   rlang::check_installed("visOmopResults")
@@ -83,6 +85,7 @@ plotTrend <- function(result,
         ymax = NULL,
         facet = facet,
         colour = colour,
+        style = style,
         group = c("cdm_name", "omop_table", omopgenerics::strataColumns(result))
       ) +
       ggplot2::labs(
@@ -111,7 +114,8 @@ plotTrend <- function(result,
         x = "variable_name",
         y = estimate,
         facet = facet,
-        colour = colour
+        colour = colour,
+        style = style
       )
   }
   p + ggplot2::theme(legend.position = "top")

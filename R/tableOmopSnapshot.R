@@ -1,6 +1,7 @@
 #' Create a visual table from a summarise_omop_snapshot result.
 #' @param result  Output from summariseOmopSnapshot().
 #' @param  type Type of formatting output table. See `visOmopResults::tableType()` for allowed options. Default is `"gt"`.
+#' @inheritParams style
 #' @return A formatted table object with the summarised data.
 #' @export
 #' @examples
@@ -16,7 +17,8 @@
 #' PatientProfiles::mockDisconnect(cdm)
 #' }
 tableOmopSnapshot <- function(result,
-                              type = "gt") {
+                              type = "gt",
+                              style = "default") {
   # initial checks
   rlang::check_installed("visOmopResults")
   omopgenerics::validateResultArgument(result)
@@ -40,6 +42,7 @@ tableOmopSnapshot <- function(result,
     formatColumn(c("variable_name", "estimate_name")) |>
     visOmopResults::visOmopTable(
       type = type,
+      style = style,
       hide = c("variable_level"),
       estimateName = c("N" = "<Count>"),
       header = header,

@@ -4,7 +4,13 @@
 \alias{plotTrend}
 \title{Create a ggplot2 plot from the output of summariseTrend().}
 \usage{
-plotTrend(result, output = NULL, facet = "type", colour = NULL)
+plotTrend(
+  result,
+  output = NULL,
+  facet = "type",
+  colour = NULL,
+  style = "default"
+)
 }
 \arguments{
 \item{result}{A summarised_result object (output of summariseTrend).}
@@ -22,6 +28,9 @@ columns to face by with: \code{visOmopResults::tidyColumns()}.}
 
 \item{colour}{Columns to colour by. See possible columns to colour by with:
 \code{visOmopResults::tidyColumns()}.}
+
+\item{style}{Which style to apply to the plot, options are: "default", "darwin"
+and NULL (default ggplot style). Customised styles can be achieved by modifying the returned ggplot object.}
 }
 \value{
 A ggplot showing the table counts
