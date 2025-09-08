@@ -116,3 +116,52 @@ clinicalTables <- function(){
    "observation","death", "note", "specimen", "payer_plan_period", "drug_era",
    "dose_era", "condition_era")
 }
+
+
+sampleCDM <- function(cdm, tables, sample) {
+  if(omopgenerics::sourceType(cdm) == "local") {
+    return(subsetLocalCdm(cdm = cdm, tables = tables, sample = sample))
+  } else {
+    return(subsetSourceCdm(cdm = cdm, sample = sample))
+  }
+}
+
+
+subsetLocalCdm <- function(cdm, tables, sample){
+  if(is.numeric(sample)){
+    cdm[["person"]] <- sampleOmopTable(x = cdm[["person"]], sample = sample)
+
+  } else if(is.character(sample)) {
+    cohort <- cdm[[sample]]
+    if (is.null(cohort)) {
+      cli::cli_warn("The cdm doesn't contain the {sample} cohort. The cdm will not be sampled.")
+      return(cdm)
+    }
+
+    cdm[["person"]] <- cdm[["person"]] |>
+      dplyr::semi_join(cohort, by = c("person_id" = "subject_id"))
+
+  } else {
+    return(cdm)
+  }
+  tables <- intersect(names(cdm), omopgenerics::omopTables())
+  tables <- table[tables != "person"]
+  for (table in tables) {
+    cdm[[table]] <- cdm[[table]] |>
+      dplyr::semi_join(cdm[["person"]], by = "person_id")
+  }
+  return(cdm)
+}
+
+
+subsetSourceCdm <- function(cdm, sample){
+  if(is.numeric(sample)){
+    return(CDMConnector::cdmSample(cdm = cdm, n = sample, name = "person"))
+  } else if(is.character(sample)) {
+    return(CDMConnector::cdmSubsetCohort(cdm = cdm, cohortTable = sample))
+  } else{
+    return(cdm)
+  }
+}
+
+
