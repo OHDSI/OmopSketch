@@ -50,7 +50,13 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plotTrend</span><span class="op">(</span><span class="va">result</span>, output <span class="op">=</span> <span class="cn">NULL</span>, facet <span class="op">=</span> <span class="st">"type"</span>, colour <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plotTrend</span><span class="op">(</span></span>
+<span>  <span class="va">result</span>,</span>
+<span>  output <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  facet <span class="op">=</span> <span class="st">"type"</span>,</span>
+<span>  colour <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  style <span class="op">=</span> <span class="st">"default"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -77,6 +83,11 @@ columns to face by with: <code><a href="https://darwin-eu.github.io/omopgenerics
 <dt id="arg-colour">colour<a class="anchor" aria-label="anchor" href="#arg-colour"></a></dt>
 <dd><p>Columns to colour by. See possible columns to colour by with:
 <code><a href="https://darwin-eu.github.io/omopgenerics/reference/tidyColumns.html" class="external-link">visOmopResults::tidyColumns()</a></code>.</p></dd>
+
+
+<dt id="arg-style">style<a class="anchor" aria-label="anchor" href="#arg-style"></a></dt>
+<dd><p>Which style to apply to the plot, options are: "default", "darwin"
+and NULL (default ggplot style). Customised styles can be achieved by modifying the returned ggplot object.</p></dd>
 
 </dl></div>
     <div class="section level2">

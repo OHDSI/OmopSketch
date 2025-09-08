@@ -55,7 +55,8 @@
 <span>  variableName <span class="op">=</span> <span class="st">"Number subjects"</span>,</span>
 <span>  plotType <span class="op">=</span> <span class="st">"barplot"</span>,</span>
 <span>  facet <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  colour <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  colour <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  style <span class="op">=</span> <span class="st">"default"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -85,6 +86,11 @@
 <dt id="arg-colour">colour<a class="anchor" aria-label="anchor" href="#arg-colour"></a></dt>
 <dd><p>Columns to colour by. See possible columns to colour by with:
 <code><a href="https://darwin-eu.github.io/omopgenerics/reference/tidyColumns.html" class="external-link">visOmopResults::tidyColumns()</a></code>.</p></dd>
+
+
+<dt id="arg-style">style<a class="anchor" aria-label="anchor" href="#arg-style"></a></dt>
+<dd><p>Which style to apply to the plot, options are: "default", "darwin"
+and NULL (default ggplot style). Customised styles can be achieved by modifying the returned ggplot object.</p></dd>
 
 </dl></div>
     <div class="section level2">
