@@ -1,7 +1,7 @@
 
 pak::pkg_install(c(
   "OmopViewer", "ggplot2", "gt", "visOmopResults", "duckdb", "omock", "renv",
-  "reactable", "here", "CohortCharacteristics"
+  "reactable", "here", "CohortCharacteristics", "shinyWidgets"
 ))
 
 pkg <- "OmopViewer"
