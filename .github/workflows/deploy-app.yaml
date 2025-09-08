@@ -33,13 +33,23 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
-      - uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          extra-packages: any::rcmdcheck
-          needs: check
+      - name: Install pak
+        run: Rscript -e 'install.packages("pak")'
 
-      - name: Install OmopViewer Suggests
-        run: Rscript extras/OmopViewerSuggests.R
+      - name: Install OmopSketch from branch
+        if: github.event_name == 'pull_request'
+        run: |
+          BRANCH_NAME=${GITHUB_HEAD_REF:-${GITHUB_REF##*/}}
+          echo "Current branch: $BRANCH_NAME"
+          Rscript -e "pak::pkg_install('ohdsi/OmopSketch@$BRANCH_NAME')"
+
+      - name: install OmopSketch from main
+        if: github.event_name != 'pull_request'
+        run: |
+          Rscript -e 'pak::pkg_install("ohdsi/OmopSketch")'
+
+      - name: Install extra packages
+        run: Rscript extras/installExtraPackages.R
 
       - name: Create shiny app
         run: Rscript extras/createShiny.R

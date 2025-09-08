@@ -1,4 +1,9 @@
 
+pak::pkg_install(c(
+  "OmopViewer", "ggplot2", "gt", "visOmopResults", "duckdb", "omock", "renv",
+  "reactable", "here", "CohortCharacteristics"
+))
+
 pkg <- "OmopViewer"
 
 # Get suggested packages
@@ -9,7 +14,7 @@ suggests_to_install <- setdiff(suggests, rownames(installed.packages()))
 
 # Install them
 if (length(suggests_to_install) > 0) {
-  install.packages(suggests_to_install)
+  pak::pkg_install(suggests_to_install)
 } else {
   message("All suggested packages are already installed.")
 }
