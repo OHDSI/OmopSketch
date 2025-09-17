@@ -85,7 +85,7 @@ summarisedResult |>
   glimpse()
 ```
 
-Finally, you can summarise concept counts on a subset of records by specifying the `sample` argument.
+Finally, you can restrict concept counts to a subset of subjects via the `sample` argument: provide an integer to randomly select that many `person_id`s from the `person` table, or a character string naming a `cohort` table to limit counts to its `subject_id`s.
 
 ```{r}
 summariseConceptIdCounts(cdm,
