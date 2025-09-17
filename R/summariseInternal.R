@@ -137,13 +137,23 @@ sampleOmopTable <- function(x, sample) {
   if (is.infinite(sample)) {
     return(x)
   }
-  if (x |> dplyr::tally() |> dplyr::pull() <= sample) {
+  if (is.numeric(sample) & x |> dplyr::tally() |> dplyr::pull() <= sample) {
     return(x)
   }
-
-  x <- x |>
+  if (is.numeric(sample)){
+    x <- x |>
     dplyr::slice_sample(n = sample)
-
+  }
+  if (is.character(sample)) {
+    cdm <- omopgenerics::cdmReference(x)
+    if (sample %in% names(cdm)){
+      x <- x |>
+        dplyr::semi_join(cdm[[sample]], by = c("person_id" == "subject_id"))
+    } else {
+      cli::cli_warn("The cdm doesn't contain the {sample} cohort. The tables will not be sampled.", call = parent.frame())
+      return(x)
+    }
+  }
 
   return(x)
 }

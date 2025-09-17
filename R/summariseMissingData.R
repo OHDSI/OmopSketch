@@ -10,8 +10,7 @@
 #' @inheritParams interval
 #' @param ageGroup A list of ageGroup vectors of length two. Code use will be
 #' thus summarised by age groups.
-#' @param sample An integer to sample the table to only that number of records.
-#' If NULL no sample is done.
+#' @inheritParams sample
 #' @inheritParams dateRange-startDate
 #'
 #' @return A summarised_result object with results overall and, if specified, by
@@ -55,7 +54,7 @@ summariseMissingData <- function(cdm,
   # should i still check the year argument
   omopgenerics::assertChoice(interval, c("overall", "years", "quarters", "months"), length = 1)
   omopgenerics::assertChoice(omopTableName, choices = omopgenerics::omopTables(), unique = TRUE)
-  omopgenerics::assertNumeric(sample, null = TRUE, integerish = TRUE, length = 1, min = 1)
+  sample <- validateSample(sample = sample)
   dateRange <- validateStudyPeriod(cdm, dateRange)
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, multipleAgeGroup = FALSE, null = TRUE, ageGroupName = "age_group")
 
@@ -65,7 +64,7 @@ summariseMissingData <- function(cdm,
     if (!is.null(dateRange)) cli::cli_warn("dateRange restriction is not applied for person table")
 
     omopTableName <- omopTableName[omopTableName != "person"]
-    strata <- c(list(character()), list("sex"[sex]))
+    strata <- list(c(character(),"sex"[sex]))
     result_person <- summariseMissingDataFromTable(omopTable = cdm[["person"]], table = "person", cdm = cdm, col = col, dateRange = NULL, sample = sample, sex = sex, ageGroup = NULL, interval = "overall", strata = strata)
   } else {
     result_person <- tibble::tibble()
@@ -173,6 +172,7 @@ summariseMissingDataFromTable <- function(omopTable, table, cdm, col, dateRange,
     sampleOmopTable(
       sample = sample
     ) |>
+    dplyr::compute(omopgenerics::uniqueTableName(prefix)) |>
     # add stratifications
     addStratifications(
       indexDate = omopgenerics::omopColumns(table, "start_date"),

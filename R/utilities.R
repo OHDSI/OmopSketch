@@ -118,50 +118,43 @@ clinicalTables <- function(){
 }
 
 
-sampleCDM <- function(cdm, tables, sample) {
-  if(omopgenerics::sourceType(cdm) == "local") {
-    return(subsetLocalCdm(cdm = cdm, tables = tables, sample = sample))
-  } else {
-    return(subsetSourceCdm(cdm = cdm, sample = sample))
-  }
-}
+sampleCdm <- function(cdm, tables, sample, call = parent.frame()){
 
-
-subsetLocalCdm <- function(cdm, tables, sample){
   if(is.numeric(sample)){
-    cdm[["person"]] <- sampleOmopTable(x = cdm[["person"]], sample = sample)
-
-  } else if(is.character(sample)) {
-    cohort <- cdm[[sample]]
-    if (is.null(cohort)) {
-      cli::cli_warn("The cdm doesn't contain the {sample} cohort. The cdm will not be sampled.")
+    if (sample >= omopgenerics::numberSubjects(cdm[["person"]])) {
+      cli::cli_inform("The {.field person} table has \u2264 {.val {sample}} subjects; skipping sampling of the CDM.", call = call)
       return(cdm)
     }
+    ids <- cdm[["person"]] |>
+      dplyr::select("person_id") |>
+      dplyr::slice_sample(n = as.integer(sample)) |>
+      dplyr::pull("person_id")
 
-    cdm[["person"]] <- cdm[["person"]] |>
-      dplyr::semi_join(cohort, by = c("person_id" = "subject_id"))
-
+  } else if(is.character(sample)) {
+    if (!(sample %in% names(cdm))) {
+      cli::cli_inform("The CDM doesn't contain the {.val {sample}} cohort; skipping sampling of the CDM.", call = call)
+      return(cdm)
+    }
+    cohort <- cdm[[sample]]
+    ids <- cdm[[sample]] |>
+      dplyr::pull("subject_id")
   } else {
     return(cdm)
   }
-  tables <- intersect(names(cdm), omopgenerics::omopTables())
-  tables <- table[tables != "person"]
   for (table in tables) {
     cdm[[table]] <- cdm[[table]] |>
-      dplyr::semi_join(cdm[["person"]], by = "person_id")
+      dplyr::filter(.data$person_id %in% ids)
   }
   return(cdm)
 }
 
-
-subsetSourceCdm <- function(cdm, sample){
-  if(is.numeric(sample)){
-    return(CDMConnector::cdmSample(cdm = cdm, n = sample, name = "person"))
-  } else if(is.character(sample)) {
-    return(CDMConnector::cdmSubsetCohort(cdm = cdm, cohortTable = sample))
-  } else{
-    return(cdm)
+sampleOmopTable <- function(omopTable, sample) {
+  if (is.null(sample)){
+    return(omopTable)
   }
+  cdm <- omopgenerics::cdmReference(omopTable)
+  tableName <- omopgenerics::tableName(omopTable)
+  cdm <- sampleCdm(cdm = cdm, tables = tableName, sample = sample)
+  return(cdm[[tableName]])
 }
-
 

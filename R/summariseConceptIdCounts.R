@@ -10,8 +10,7 @@
 #' @param sex TRUE or FALSE. If TRUE code use will be summarised by sex.
 #' @param ageGroup A list of ageGroup vectors of length two. Code use will be
 #' thus summarised by age groups.
-#' @param sample An integer to sample the tables to only that number of records.
-#' If NULL no sample is done.
+#' @inheritParams sample
 #' @inheritParams dateRange-startDate
 #'
 #' @return A summarised_result object with results overall and, if specified, by
@@ -63,11 +62,10 @@ summariseConceptIdCounts <- function(cdm,
   omopgenerics::assertChoice(countBy, choices = c("record", "person"))
   omopgenerics::assertChoice(interval, c("overall", "years", "quarters", "months"), length = 1)
   omopgenerics::assertLogical(sex, length = 1)
-  omopgenerics::assertChoice(omopTableName, choices = omopgenerics::omopTables(), unique = TRUE)
+  omopgenerics::assertChoice(omopTableName, choices = clinicalTables(), unique = TRUE)
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup = ageGroup)
   dateRange <- validateStudyPeriod(cdm = cdm, studyPeriod = dateRange)
-  omopgenerics::assertNumeric(sample, integerish = TRUE, min = 1, null = TRUE, length = 1)
-
+  sample <- validateSample(sample = sample)
   # settings for the created results
   set <- createSettings(result_type = "summarise_concept_id_counts", study_period = dateRange)
 
@@ -88,7 +86,10 @@ summariseConceptIdCounts <- function(cdm,
     conceptId <- omopgenerics::omopColumns(table = table, field = "standard_concept")
     sourceConceptId <- omopgenerics::omopColumns(table = table, field = "source_concept")
 
-
+    if(omopgenerics::isTableEmpty(omopTable)) {
+      cli::cli_warn(c("!" = "{table} omop table is empty."))
+      return(NULL)
+    }
     if (is.na(conceptId)) {
       cli::cli_warn(c("!" = "No standard concept identified for {table}."))
       return(NULL)

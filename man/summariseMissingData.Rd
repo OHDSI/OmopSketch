@@ -34,8 +34,14 @@ If \code{NULL}, all columns in the specified tables are checked. Default is \cod
 \item{ageGroup}{A list of ageGroup vectors of length two. Code use will be
 thus summarised by age groups.}
 
-\item{sample}{An integer to sample the table to only that number of records.
-If NULL no sample is done.}
+\item{sample}{Either an integer or a character string.
+If an integer (n > 0), the function will first sample \code{n} distinct
+\code{person_id}s from the \code{person} table and then subset the input tables to
+those subjects.
+If a character string, it must be the name of a cohort in the \code{cdm}; in
+this case, the input tables are subset to subjects (\code{subject_id}) belonging
+to that cohort.
+Use \code{NULL} to disable subsetting.}
 
 \item{dateRange}{A vector of two dates defining the desired study period.
 Only the \code{start_date} column of the OMOP table is checked to ensure it falls within this range.

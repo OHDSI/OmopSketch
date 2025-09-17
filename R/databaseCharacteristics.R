@@ -3,6 +3,7 @@
 #' @param cdm A `cdm_reference` object representing the Common Data Model (CDM) reference.
 #' @param omopTableName A character vector specifying the OMOP tables from the CDM to include in the analysis.
 #' If "person" is present, it will only be used for missing value summarisation.
+#' @inheritParams sample
 #' @inheritParams interval
 #' @param ageGroup A list of age groups to stratify the results by. Each element represents a specific age range.
 #' @param sex Logical; whether to stratify results by sex (`TRUE`) or not (`FALSE`).
@@ -30,6 +31,7 @@ databaseCharacteristics <- function(cdm,
                                       "condition_occurrence", "drug_exposure", "procedure_occurrence",
                                       "device_exposure", "measurement", "observation", "death"
                                       ),
+                                    sample = NULL,
                                     sex = FALSE,
                                     ageGroup = NULL,
                                     dateRange = NULL,
@@ -50,7 +52,7 @@ databaseCharacteristics <- function(cdm,
   dateRange <- validateStudyPeriod(cdm, dateRange)
   omopgenerics::assertChoice(interval, c("overall", "years", "quarters", "months"), length = 1)
   omopgenerics::assertLogical(conceptIdCounts, length = 1)
-
+  sample <- validateSample(sample)
   args_list <- list(...)
 
   empty_tables <- c()
@@ -62,6 +64,11 @@ databaseCharacteristics <- function(cdm,
 
   startTime <- Sys.time()
   startTables <- omopgenerics::listSourceTables(cdm)
+
+  if (!is.null(sample)) {
+    cli::cli_inform(paste("The cdm is sampled to {sample}"))
+    cdm <- sampleCDM(cdm = cdm, tables = omopTableName, sample = sample)
+  }
   result <- list()
   # Snapshot
   cli::cli_inform(paste(cli::symbol$arrow_right,"Getting cdm snapshot"))

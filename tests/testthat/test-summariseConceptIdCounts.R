@@ -289,3 +289,28 @@ test_that("tableTopConceptCounts works", {
 
 
 })
+
+
+
+test_that("sample argument works", {
+  skip_on_cran()
+  # Load mock database ----
+  cdm <- cdmEunomia()
+  n_person <- cdm$person |> dplyr::tally() |> dplyr::pull("n")
+  expect_no_error(summariseConceptIdCounts(cdm, "drug_exposure", sample =  n_person - 1))
+  expect_message(summariseConceptIdCounts(cdm, "drug_exposure", sample = n_person))
+  expect_message(summariseConceptIdCounts(cdm, "drug_exposure", sample = n_person+1))
+  expect_message(summariseConceptIdCounts(cdm, "drug_exposure", sample = "pajfn"))
+  cdm[["pharyngitis"]] <- CohortConstructor::conceptCohort(cdm, conceptSet = list("pharyngitis" = 4112343), name = "pharyngitis")
+  expect_no_error(x <- summariseConceptIdCounts(cdm, "drug_exposure", sample = "pharyngitis"))
+
+
+  expect_no_error(x <- summariseConceptIdCounts(cdm, "condition_occurrence", sample =  n_person - 1, countBy = "person"))
+  expect_true(all(x |> omopgenerics::tidy() |> dplyr::pull("count_subjects") <= n_person - 1))
+
+  expect_no_error(x <- summariseConceptIdCounts(cdm, "condition_occurrence", sample = "pharyngitis", countBy = "record"))
+  expect_equal(x |> omopgenerics::tidy() |> dplyr::filter(.data$variable_level == "4112343") |> dplyr::pull("count_records"),  omopgenerics::numberRecords(cdm$pharyngitis))
+
+
+  PatientProfiles::mockDisconnect(cdm = cdm)
+})
