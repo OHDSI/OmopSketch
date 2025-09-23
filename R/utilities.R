@@ -111,7 +111,7 @@ createSettings <- function(result_type, result_id = 1L, study_period = NULL) {
 #' clinicalTables()
 #'
 clinicalTables <- function(){
- c("visit_occurrence", "visit_detail", "condition_occurrence",
+ c("visit_occurrence", "visit_detail", "condition_occurrence", "observation_period",
    "drug_exposure", "procedure_occurrence", "device_exposure", "measurement",
    "observation","death", "note", "specimen", "payer_plan_period", "drug_era",
    "dose_era", "condition_era")
