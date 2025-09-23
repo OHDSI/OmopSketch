@@ -119,7 +119,7 @@ result_missingData <- summariseMissingData(cdm = cdm,
 
 ### Summarise in sample of OMOP CDM
 
-Finally, you can summarise missing data on a sample of records from the OMOP CDM tables by specifying the desired number of records with the `sample` argument.
+Finally, you can summarise missing data on a subset of subjects via the `sample` argument: provide an integer to randomly select that many `person_id`s from the `person` table, or a character string naming a `cohort` table to limit counts to its `subject_id`s.
 
 ```{r, warning=FALSE, eval = FALSE}
 result_missingData <- summariseMissingData(cdm = cdm, 
@@ -139,7 +139,7 @@ result_missingData <- summariseMissingData(cdm,
   ageGroup = list(c(0, 17), c(18, 64), c(65, 150)),
   interval = "years",
   dateRange = as.Date(c("2012-01-01", "2019-01-01")),
-  sample = 100000
+  sample = 1000
 )
 result_missingData |> tableMissingData()
 ```
