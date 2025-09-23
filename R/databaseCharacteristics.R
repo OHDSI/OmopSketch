@@ -67,7 +67,7 @@ databaseCharacteristics <- function(cdm,
 
   if (!is.null(sample)) {
     cli::cli_inform(paste("The cdm is sampled to {sample}"))
-    cdm <- sampleCDM(cdm = cdm, tables = omopTableName, sample = sample)
+    cdm <- sampleCdm(cdm = cdm, tables = omopTableName, sample = sample)
   }
   result <- list()
   # Snapshot
@@ -131,7 +131,8 @@ databaseCharacteristics <- function(cdm,
     summariseMissingData,
     c(list(
       cdm,
-      omopTableName = "person"
+      omopTableName = "person",
+      sample = NULL
     ), filter_args(summariseMissingData, args_list))
   )
   }
