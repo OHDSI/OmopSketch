@@ -37,7 +37,7 @@ tableTrend <- function(result,
     omopgenerics::filterSettings(
       .data$result_type == "summarise_trend"
     ) |>
-    dplyr::arrange(.data$additional_level)
+    dplyr::arrange(.data$variable_name, .data$additional_level)
   additionals <- omopgenerics::additionalColumns(result)
   strata <- omopgenerics::strataColumns(result)
 
