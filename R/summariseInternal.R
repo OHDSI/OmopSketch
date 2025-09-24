@@ -130,33 +130,7 @@ summariseMissingInternal <- function(x, strata, columns, cdm, table) {
   }) |>
     dplyr::bind_rows()
 }
-sampleOmopTable <- function(x, sample) {
-  if (is.null(sample)) {
-    return(x)
-  }
-  if (is.infinite(sample)) {
-    return(x)
-  }
-  if (is.numeric(sample) & x |> dplyr::tally() |> dplyr::pull() <= sample) {
-    return(x)
-  }
-  if (is.numeric(sample)){
-    x <- x |>
-    dplyr::slice_sample(n = sample)
-  }
-  if (is.character(sample)) {
-    cdm <- omopgenerics::cdmReference(x)
-    if (sample %in% names(cdm)){
-      x <- x |>
-        dplyr::semi_join(cdm[[sample]], by = c("person_id" == "subject_id"))
-    } else {
-      cli::cli_warn("The cdm doesn't contain the {sample} cohort. The tables will not be sampled.", call = parent.frame())
-      return(x)
-    }
-  }
 
-  return(x)
-}
 addStratifications <- function(x, indexDate, sex, ageGroup, interval, intervalName, name) {
   # add sex and age_group if needed
   x <- x |>

@@ -162,17 +162,16 @@ summariseMissingDataFromTable <- function(omopTable, table, cdm, col, dateRange,
   )
 
   # restrict study period
-  omopTable <- restrictStudyPeriod(omopTable, dateRange)
+  omopTable <- omopTable |>
+    sampleOmopTable(
+      sample = sample
+      ) |>
+    restrictStudyPeriod(dateRange = dateRange)
   if (is.null(omopTable)) {
     return(NULL)
   }
 
   resultsOmopTable <- omopTable |>
-    # sample if needed
-    sampleOmopTable(
-      sample = sample
-    ) |>
-    dplyr::compute(omopgenerics::uniqueTableName(prefix)) |>
     # add stratifications
     addStratifications(
       indexDate = omopgenerics::omopColumns(table, "start_date"),

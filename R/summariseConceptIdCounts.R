@@ -98,14 +98,13 @@ summariseConceptIdCounts <- function(cdm,
     prefix <- omopgenerics::tmpPrefix()
 
     # restrict study period
-    omopTable <- restrictStudyPeriod(omopTable, dateRange)
+    omopTable <- omopTable |>
+      sampleOmopTable(sample = sample) |>
+      restrictStudyPeriod(dateRange = dateRange)
+
     if (is.null(omopTable)) {
       return(NULL)
     }
-
-    # sample table
-    omopTable <- omopTable |>
-      sampleOmopTable(sample = sample)
 
     startDate <- omopgenerics::omopColumns(table = table, field = "start_date")
 
