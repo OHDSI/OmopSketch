@@ -1,6 +1,6 @@
 
 pak::pkg_install(c(
-  "OmopViewer", "ggplot2", "gt", "visOmopResults", "duckdb", "omock", "renv",
+  "OHDSI/OmopViewer", "ggplot2", "gt", "visOmopResults", "duckdb", "omock", "renv",
   "reactable", "here", "CohortCharacteristics", "shinyWidgets"
 ))
 

@@ -193,10 +193,9 @@ shinyCharacteristics <- function(result,
     panelDetails$summarise_trend_episode <- panelDetails$summarise_trend
     panelDetails$summarise_trend_episode$icon <- NULL
     panelDetails$summarise_trend_episode$title <- "Observation Period Trends"
+    panelDetails$summarise_trend_episode$data$type <- "episode"
     panelDetails$summarise_trend_episode$content$tidy <- NULL
-    panelDetails$summarise_trend_episode$content$table$reactive <- "<filtered_data> |>
-    omopgenerics::filterSettings(type == 'episode')  |>
-    OmopSketch::tableTrend()"
+
 
     variable_names <- result |>
       omopgenerics::filterSettings(.data$result_type == "summarise_trend") |>
@@ -205,7 +204,6 @@ shinyCharacteristics <- function(result,
       dplyr::pull()
 
     panelDetails$summarise_trend_episode$content$plot$reactive <- "<filtered_data> |>
-    omopgenerics::filterSettings(type == 'episode')  |>
     dplyr::filter(.data$variable_name == input$variable) |>
     OmopSketch::plotTrend(
       facet = input$facet,
@@ -221,10 +219,8 @@ shinyCharacteristics <- function(result,
     panelDetails$summarise_trend_event <- panelDetails$summarise_trend
     panelDetails$summarise_trend_event$icon <- NULL
     panelDetails$summarise_trend_event$title <- "Clinical Tables Trends"
+    panelDetails$summarise_trend_event$data$type <- "event"
     panelDetails$summarise_trend_event$content$tidy <- NULL
-    panelDetails$summarise_trend_event$content$table$reactive <- "<filtered_data> |>
-    omopgenerics::filterSettings(type == 'event')  |>
-    OmopSketch::tableTrend()"
 
     variable_names <- result |>
       omopgenerics::filterSettings(.data$result_type == "summarise_trend") |>
@@ -233,7 +229,6 @@ shinyCharacteristics <- function(result,
       dplyr::pull()
 
     panelDetails$summarise_trend_event$content$plot$reactive <- "<filtered_data> |>
-    omopgenerics::filterSettings(type == 'event')  |>
     dplyr::filter(.data$variable_name == input$variable) |>
     OmopSketch::plotTrend(
       facet = input$facet,
