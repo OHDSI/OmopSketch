@@ -16,8 +16,8 @@ plotObservationPeriod(
 \arguments{
 \item{result}{A summarised_result object.}
 
-\item{variableName}{The variable to plot it can be: "number subjects",
-"records per person", "duration" or "days to next observation period".}
+\item{variableName}{The variable to plot it can be: "Number subjects",
+"Records per person", "Duration in days" or "Days to next observation period".}
 
 \item{plotType}{The plot type, it can be: "barplot", "boxplot" or
 "densityplot".}
