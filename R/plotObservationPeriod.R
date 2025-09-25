@@ -1,8 +1,8 @@
 #' Create a plot from the output of summariseObservationPeriod().
 #'
 #' @param result A summarised_result object.
-#' @param variableName The variable to plot it can be: "number subjects",
-#' "records per person", "duration" or "days to next observation period".
+#' @param variableName The variable to plot it can be: "Number subjects",
+#' "Records per person", "Duration in days" or "Days to next observation period".
 #' @param plotType The plot type, it can be: "barplot", "boxplot" or
 #' "densityplot".
 #' @param facet Columns to colour by. See possible columns to colour by with:
