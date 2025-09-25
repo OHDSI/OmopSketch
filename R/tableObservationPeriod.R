@@ -37,7 +37,8 @@ tableObservationPeriod <- function(result,
   }
 
   header <- c("cdm_name")
-
+  byOrdinal <- result |> dplyr::summarise(n = dplyr::n_distinct(.data$group_level)) |> dplyr::pull("n") > 1
+  hide <- c("result_id", "estimate_type", "strata_name","observation_period_ordinal"[!byOrdinal])
   result |>
     dplyr::filter(!grepl("density", .data$estimate_name)) |>
     formatColumn("variable_name") |>
@@ -49,19 +50,17 @@ tableObservationPeriod <- function(result,
       estimateName = c(
         "N (%)" = "<count> (<percentage>%)",
         "N" = "<count>",
-        "mean (sd)" = "<mean> (<sd>)",
-        "median [Q25 - Q75]" = "<median> [<q25> - <q75>]",
+        "Mean (SD)" = "<mean> (<sd>)",
+        "Median [Q25 - Q75]" = "<median> [<q25> - <q75>]",
         "N missing data (%)" = "<na_count> (<na_percentage>%)",
         "N zeros (%)" = "<zero_count> (<zero_percentage>%)"
       ),
       header = header,
       groupColumn = omopgenerics::strataColumns(result),
-      hide = c(
-        "result_id", "estimate_type", "strata_name"
-      ),
+      hide = hide,
       type = type,
       style = style,
       .options = list(keepNotFormatted = FALSE) # to consider removing this? If
       # the user adds some custom estimates they are not going to be displayed in
-    )
+    ) |> suppressMessages()
 }
