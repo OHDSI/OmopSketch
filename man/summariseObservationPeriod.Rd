@@ -22,8 +22,8 @@ summariseObservationPeriod(
 \item{cdm}{A cdm_reference object.}
 
 \item{estimates}{Estimates to summarise the variables of interest (
-\verb{records per person}, \verb{duration in days} and
-\verb{days to next observation period}).}
+\verb{Records per person}, \verb{Duration in days} and
+\verb{Days to next observation period}).}
 
 \item{missingData}{Logical. If \code{TRUE}, includes a summary of missing data for relevant fields.}
 
