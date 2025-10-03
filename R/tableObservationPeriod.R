@@ -42,7 +42,7 @@ tableObservationPeriod <- function(result,
 
   hide <- c("result_id", "estimate_type", "strata_name","observation_period_ordinal"[!byOrdinal])
 
-  custom_order <- c("Number records", "Number subjects", "Subjects not in person table", "Records per person", "Duration in days", "Type concept id", "Start date before birth date", "End date before start date", "Column name")
+  custom_order <- c("Number records", "Number subjects", "Subjects not in person table", "Records per person", "Duration in days","Days to next observation period", "Type concept id", "Start date before birth date", "End date before start date", "Column name")
 
   result |>
     dplyr::filter(!grepl("density", .data$estimate_name)) |>
