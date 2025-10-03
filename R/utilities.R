@@ -141,9 +141,12 @@ sampleCdm <- function(cdm, tables, sample, call = parent.frame()){
   } else {
     return(cdm)
   }
+  cdm <- omopgenerics::insertTable(cdm = cdm, name = "person_sample",
+                                   table = tibble::tibble("person_id" = sort(ids)))
+
   for (table in tables) {
     cdm[[table]] <- cdm[[table]] |>
-      dplyr::filter(.data$person_id %in% ids)
+      dplyr::inner_join(cdm[["person_sample"]], by = "person_id")
   }
   return(cdm)
 }
