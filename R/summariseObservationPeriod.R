@@ -3,8 +3,8 @@
 #'
 #' @param cdm A cdm_reference object.
 #' @param estimates Estimates to summarise the variables of interest (
-#' `records per person`, `duration in days` and
-#' `days to next observation period`).
+#' `Records per person`, `Duration in days` and
+#' `Days to next observation period`).
 #' @param missingData Logical. If `TRUE`, includes a summary of missing data for relevant fields.
 #' @param quality Logical. If `TRUE`, performs basic data quality checks, including:
 #' \itemize{
