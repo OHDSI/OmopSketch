@@ -135,14 +135,13 @@ sampleCdm <- function(cdm, tables, sample, call = parent.frame()){
       cli::cli_inform("The CDM doesn't contain the {.val {sample}} cohort; skipping sampling of the CDM.", call = call)
       return(cdm)
     }
-    cohort <- cdm[[sample]]
     ids <- cdm[[sample]] |>
       dplyr::pull("subject_id")
   } else {
     return(cdm)
   }
   cdm <- omopgenerics::insertTable(cdm = cdm, name = "person_sample",
-                                   table = tibble::tibble("person_id" = sort(ids)))
+                                   table = tibble::tibble("person_id" = sort(unique(ids))))
 
   for (table in tables) {
     cdm[[table]] <- cdm[[table]] |>

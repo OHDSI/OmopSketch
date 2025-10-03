@@ -10,7 +10,14 @@
 #' @inheritParams interval
 #' @param ageGroup A list of ageGroup vectors of length two. Code use will be
 #' thus summarised by age groups.
-#' @inheritParams sample
+#' @param sample Either an integer or a character string.
+#'   If an integer (n > 0), the function will first sample `n` distinct
+#'   `person_id`s from the `person` table and then subset the input tables to
+#'   those subjects.
+#'   If a character string, it must be the name of a cohort in the `cdm`; in
+#'   this case, the input tables are subset to subjects (`subject_id`) belonging
+#'   to that cohort.
+#'   Use `NULL` to disable subsetting. By default `sample = 100000`
 #' @inheritParams dateRange-startDate
 #'
 #' @return A summarised_result object with results overall and, if specified, by
@@ -35,7 +42,7 @@ summariseMissingData <- function(cdm,
                                  year = lifecycle::deprecated(),
                                  interval = "overall",
                                  ageGroup = NULL,
-                                 sample = 1000000,
+                                 sample = 100000,
                                  dateRange = NULL) {
   if (lifecycle::is_present(year)) {
     lifecycle::deprecate_warn("0.2.3", "summariseMissingData(year)", "summariseMissingData(interval = 'years')")

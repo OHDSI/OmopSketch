@@ -11,7 +11,7 @@ those subjects.
 If a character string, it must be the name of a cohort in the \code{cdm}; in
 this case, the input tables are subset to subjects (\code{subject_id}) belonging
 to that cohort.
-Use \code{NULL} to disable subsetting.}
+Use \code{NULL} to disable subsetting (default value).}
 }
 \description{
 Helper for consistent documentation of \code{sample}.

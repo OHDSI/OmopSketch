@@ -41,7 +41,7 @@ those subjects.
 If a character string, it must be the name of a cohort in the \code{cdm}; in
 this case, the input tables are subset to subjects (\code{subject_id}) belonging
 to that cohort.
-Use \code{NULL} to disable subsetting.}
+Use \code{NULL} to disable subsetting (default value).}
 
 \item{dateRange}{A vector of two dates defining the desired study period.
 Only the \code{start_date} column of the OMOP table is checked to ensure it falls within this range.

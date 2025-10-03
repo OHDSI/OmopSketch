@@ -12,7 +12,7 @@ summariseMissingData(
   year = lifecycle::deprecated(),
   interval = "overall",
   ageGroup = NULL,
-  sample = 1e+06,
+  sample = 1e+05,
   dateRange = NULL
 )
 }
@@ -41,7 +41,7 @@ those subjects.
 If a character string, it must be the name of a cohort in the \code{cdm}; in
 this case, the input tables are subset to subjects (\code{subject_id}) belonging
 to that cohort.
-Use \code{NULL} to disable subsetting.}
+Use \code{NULL} to disable subsetting. By default \code{sample = 100000}}
 
 \item{dateRange}{A vector of two dates defining the desired study period.
 Only the \code{start_date} column of the OMOP table is checked to ensure it falls within this range.

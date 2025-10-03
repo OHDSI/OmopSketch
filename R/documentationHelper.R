@@ -55,7 +55,7 @@ NULL
 #'   If a character string, it must be the name of a cohort in the `cdm`; in
 #'   this case, the input tables are subset to subjects (`subject_id`) belonging
 #'   to that cohort.
-#'   Use `NULL` to disable subsetting.
+#'   Use `NULL` to disable subsetting (default value).
 #'
 #'
 #' @name sample
