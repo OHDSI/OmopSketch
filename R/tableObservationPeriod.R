@@ -52,6 +52,7 @@ tableObservationPeriod <- function(result,
         "N" = "<count>",
         "Mean (SD)" = "<mean> (<sd>)",
         "Median [Q25 - Q75]" = "<median> [<q25> - <q75>]",
+        "Range [min to max]" = "[<min> to <max>]",
         "N missing data (%)" = "<na_count> (<na_percentage>%)",
         "N zeros (%)" = "<zero_count> (<zero_percentage>%)"
       ),
