@@ -22,10 +22,11 @@ knitr::opts_chunk$set(
 )
 ```
 
-In this vignette, we will explore the *OmopSketch* functions designed to provide an overview of the `observation_period` table. Specifically, there are six key functions that facilitate this:
+In this vignette, we will explore the *OmopSketch* functions designed to provide an overview of the `observation_period` table. Specifically, there are 3 key functions that facilitate this:
 
--   `summariseObservationPeriod()`, `plotObservationPeriod()` and `tableObservationPeriod()`: Use them to get some overall statistics describing the `observation_period` table
--   `summariseInObservation()`, `plotInObservation()`, `tableInObservation()`: Use them to summarise the trend in the number of records, individuals, person-days and females in observation during specific intervals of time and how the median age varies.
+-   `summariseObservationPeriod()`: get some overall statistics describing the `observation_period` table
+- `plotObservationPeriod()`: create plots showing the results
+- `tableObservationPeriod()`: display the results in a formatted table
 
 ## Create a mock cdm
 
@@ -41,7 +42,9 @@ cdm <- mockOmopSketch()
 
 # Summarise observation periods
 
-Let's now use the `summariseObservationPeriod()` function from the OmopSketch package to help us have an overview of one of the `observation_period` table, including some statistics such as the `Number of subjects` and `Duration in days` for each observation period (e.g., 1st, 2nd)
+Let's now use the `summariseObservationPeriod()` function from the **OmopSketch** package to generate an overview of the `observation_period` table.  
+This function provides both a general summary of the table and some detailed statistics, such as the **number of subjects** and the **duration (in days)** for each observation period (e.g., first, second, etc.).
+
 
 ```{r, warning=FALSE}
 summarisedResult <- summariseObservationPeriod(cdm = cdm)
@@ -49,9 +52,9 @@ summarisedResult <- summariseObservationPeriod(cdm = cdm)
 summarisedResult
 ```
 
-Notice that the output is in the summarised result format.
+Notice that the output is in the [summarised result](https://darwin-eu.github.io/omopgenerics/articles/summarised_result.html) format.
 
-We can use the arguments to specify which statistics we want to perform. For example, use the argument `estimates` to indicate which estimates you are interested regarding the `Duration in days` of the observation period.
+We can use the arguments to specify which statistics we want to perform. For example, use the argument `estimates` to indicate which estimates you are interested regarding the `Duration in days` of the observation period and the number of `Records per person`.
 
 ```{r, warning=FALSE}
 summarisedResult <- summariseObservationPeriod(
@@ -63,8 +66,48 @@ summarisedResult |>
   filter(variable_name == "Duration in days") |>
   select(group_level, variable_name, estimate_name, estimate_value)
 ```
+## Missingness
 
-Additionally, you can stratify the results by sex and age groups, and specify a date range of interest:
+When the argument `missing = TRUE` is set, the results will include an overall summary of missing data in the table, including the number of `0`s in the concept columns. 
+This output is analogous to the results produced by the OmopSketch function `summariseMissingData()`.
+
+```{r, warning=FALSE}
+summarisedResult <- summariseObservationPeriod(
+  cdm = cdm,
+  estimates = c("mean", "sd", "q05", "q95"), 
+  missing = TRUE
+)
+
+summarisedResult |>
+  filter(variable_name == "Column name") |>
+  select(group_level, variable_name, estimate_name, estimate_value)
+```
+
+
+## Quality
+When the argument `quality = TRUE` is set, the results will include a quality assessment of the observation period table.  
+This assessment provides information such as:
+
+- Issues with date columns (e.g., start dates occurring after end dates, or dates preceding a subject’s birth date).  
+- The presence of `person_id` values that do not exist in the `person` table.
+- A summary of the types of concept_id available in the table.
+
+```{r, warning=FALSE}
+summarisedResult <- summariseObservationPeriod(
+  cdm = cdm,
+  estimates = c("mean"), 
+  missing = FALSE, 
+  quality = TRUE
+)
+
+summarisedResult |>
+  
+  select(group_level, variable_name, variable_level, estimate_name, estimate_value)
+```
+
+## Strata
+
+It is also possible to stratify the results by sex and age groups:
 
 ```{r, warning=FALSE, eval=FALSE}
 summarisedResult <- summariseObservationPeriod(
@@ -72,12 +115,15 @@ summarisedResult <- summariseObservationPeriod(
   estimates = c("mean", "sd", "q05", "q95"),
   sex = TRUE,
   ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf)),
-  dateRange = as.Date(c("1970-01-01", "2010-01-01"))
 )
 
 ```
 
-Notice that, by default, the "overall" group will be also included, as well as crossed strata (that means, sex == "Female" and ageGroup == "\>35").
+Notice that, by default, the "overall" group will be also included, as well as crossed strata (that means, `sex == "Female"` and `ageGroup == "\>35"`).
+
+## Summary by ordinal observation period
+
+
 
 ## Tidy the summarised object
 
