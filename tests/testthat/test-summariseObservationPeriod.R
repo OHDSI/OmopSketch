@@ -302,7 +302,7 @@ test_that("check summariseObservationPeriod works", {
 
 test_that("check it works with mockOmopSketch", {
   skip_on_cran()
-  cdm <- mockOmopSketch(numberIndividuals = 5, seed = 1)
+  cdm <- mockOmopSketch(numberIndividuals = 5)
 
   sop <- summariseObservationPeriod(cdm$observation_period)
 

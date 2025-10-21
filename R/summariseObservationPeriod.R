@@ -98,7 +98,7 @@ summariseObservationPeriod <- function(cdm,
     return(omopgenerics::emptySummarisedResult(settings = set))
   }
 
-  observationPeriodStrata <- observationPeriod|>
+  observationPeriodStrata <- observationPeriod |>
     addSexAgeGroup(sex = sex, ageGroup = ageGroup, indexDate = start_date_name) |>
     dplyr::compute(name = omopgenerics::uniqueTableName(prefix = tablePrefix), temporary = FALSE)
 
@@ -122,9 +122,9 @@ summariseObservationPeriod <- function(cdm,
     return(omopgenerics::emptySummarisedResult(settings = set))
   }
 
- result <- list()
+  result <- list()
 
- summarisedResult <- obs |>
+  summarisedResult <- obs |>
     PatientProfiles::summariseResult(
       strata = strata,
       group = "id"[byOrdinal],
@@ -162,97 +162,108 @@ summariseObservationPeriod <- function(cdm,
     )
 
 
- strataType <- lapply(strata, function(x) c(x, "period_type_concept_id"))
+  strataType <- lapply(strata, function(x) c(x, "period_type_concept_id"))
 
- result$typeConcept <- observationPeriodStrata |>
-   summariseCountsInternal(strata = strataType, counts = "records") |>
-   dplyr::mutate(
-     estimate_name = "count",
-     variable_name = "Type concept id",
-     period_type_concept_id = as.integer(.data$period_type_concept_id)
-   ) |>
-   dplyr::left_join(conceptTypes, by = c("period_type_concept_id" = "type_concept") )|>
-   dplyr::mutate(type_name = dplyr::coalesce(
-     .data$type_name, paste0("Unknown type concept: ", .data$period_type_concept_id)
-   )) |>
-   dplyr::rename(variable_level = "type_name") |>
-   dplyr::select(!"period_type_concept_id")
+  result$typeConcept <- observationPeriodStrata |>
+    summariseCountsInternal(strata = strataType, counts = "records") |>
+    dplyr::mutate(
+      estimate_name = "count",
+      variable_name = "Type concept id",
+      period_type_concept_id = as.integer(.data$period_type_concept_id)
+    ) |>
+    dplyr::left_join(conceptTypes, by = c("period_type_concept_id" = "type_concept")) |>
+    dplyr::mutate(type_name = dplyr::coalesce(
+      .data$type_name, paste0("Unknown type concept: ", .data$period_type_concept_id)
+    )) |>
+    dplyr::rename(variable_level = "type_name") |>
+    dplyr::select(!"period_type_concept_id")
 
-  if (quality){
-    number_subjects <-observationPeriod |> omopgenerics::numberSubjects()
-  number_subjects_no_person <- observationPeriod |>
-    dplyr::anti_join(cdm$person, by = "person_id") |>
-    omopgenerics::numberSubjects() |>
-    as.numeric()
-  result$notInPerson <- dplyr::tibble(
-    count = as.character(as.integer(number_subjects_no_person)),
-    percentage = sprintf("%.2f", 100 * number_subjects_no_person / number_subjects)
-  ) |>
-    tidyr::pivot_longer(
-    cols = dplyr::everything(),
-    names_to = "estimate_name",
-    values_to = "estimate_value"
-  ) |>
-    dplyr::mutate(variable_name = "Subjects not in person table",
-                     variable_level = NA_character_,
-                     estimate_type = dplyr::case_when(.data$estimate_name == "count"  ~ "integer",
-                                                      .data$estimate_name == "percentage"  ~ "percentage")
+  if (quality) {
+    number_subjects <- observationPeriod |> omopgenerics::numberSubjects()
+    number_subjects_no_person <- observationPeriod |>
+      dplyr::anti_join(cdm$person, by = "person_id") |>
+      omopgenerics::numberSubjects() |>
+      as.numeric()
+    result$notInPerson <- dplyr::tibble(
+      count = as.character(as.integer(number_subjects_no_person)),
+      percentage = sprintf("%.2f", 100 * number_subjects_no_person / number_subjects)
+    ) |>
+      tidyr::pivot_longer(
+        cols = dplyr::everything(),
+        names_to = "estimate_name",
+        values_to = "estimate_value"
+      ) |>
+      dplyr::mutate(
+        variable_name = "Subjects not in person table",
+        variable_level = NA_character_,
+        estimate_type = dplyr::case_when(
+          .data$estimate_name == "count" ~ "integer",
+          .data$estimate_name == "percentage" ~ "percentage"
+        )
+      )
+    if (number_subjects_no_person > 0) {
+      cli::cli_warn(c("!" = "There {?is/are} {number_subjects_no_person} individual{?s} not included in the person table."))
+    }
 
-    )
-  if (number_subjects_no_person > 0) {
-    cli::cli_warn(c("!" = "There {?is/are} {number_subjects_no_person} individual{?s} not included in the person table."))
-  }
+    x <- observationPeriodStrata |>
+      addVariables(tableName = "observation_period", quality = quality, conceptSummary = FALSE) |>
+      dplyr::compute(name = omopgenerics::uniqueTableName(tablePrefix))
 
-  x <- observationPeriodStrata |>
-    addVariables(tableName = "observation_period", quality = quality, conceptSummary = FALSE) |>
-    dplyr::compute(name = omopgenerics::uniqueTableName(tablePrefix))
-
-  result$endBeforeStart <- x |>
-    dplyr::filter(.data$end_before_start == 1) |>
-    summariseCountsInternal(strata = strata, counts = "records") |>
-    dplyr::mutate(estimate_name = "count",
-                  variable_name = "End date before start date")
+    result$endBeforeStart <- x |>
+      dplyr::filter(.data$end_before_start == 1) |>
+      summariseCountsInternal(strata = strata, counts = "records") |>
+      dplyr::mutate(
+        estimate_name = "count",
+        variable_name = "End date before start date"
+      )
 
 
- result$startBeforeBirth <- x|>
-   dplyr::filter(.data$start_before_birth == 1) |>
-    summariseCountsInternal(strata = strata, counts = "records")|>
-    dplyr::mutate(estimate_name = "count",
-                  variable_name = "Start date before birth date")
-
+    result$startBeforeBirth <- x |>
+      dplyr::filter(.data$start_before_birth == 1) |>
+      summariseCountsInternal(strata = strata, counts = "records") |>
+      dplyr::mutate(
+        estimate_name = "count",
+        variable_name = "Start date before birth date"
+      )
   }
 
 
   if (missingData) {
-    result$missingData <- summariseMissingDataFromTable(omopTable = observationPeriodStrata, table = "observation_period", cdm = cdm, strata = strata, col = NULL, sex = FALSE, ageGroup = NULL, dateRange = NULL,  sample = NULL, interval = "overall") |>
-      dplyr::mutate(variable_name = "Column name",
-                    variable_level = .data$column_name) |>
+    result$missingData <- summariseMissingDataFromTable(omopTable = observationPeriodStrata, table = "observation_period", cdm = cdm, strata = strata, col = NULL, sex = FALSE, ageGroup = NULL, dateRange = NULL, sample = NULL, interval = "overall") |>
+      dplyr::mutate(
+        variable_name = "Column name",
+        variable_level = .data$column_name
+      ) |>
       dplyr::select(!c("omop_table", "column_name"))
   }
 
- variables_percentage <- c("Start date before birth date", "End date before start date", "Type concept id")
- denominator <- summarisedResult |>
-   dplyr::filter(.data$variable_name == "Number records" & .data$group_level == "all") |>
-   dplyr::select("strata_name", "strata_level", den = "estimate_value")
+  variables_percentage <- c("Start date before birth date", "End date before start date", "Type concept id")
+  denominator <- summarisedResult |>
+    dplyr::filter(.data$variable_name == "Number records" & .data$group_level == "all") |>
+    dplyr::select("strata_name", "strata_level", den = "estimate_value")
 
- summarisedResult <- summarisedResult |> dplyr::bind_rows(
-   result |> dplyr::bind_rows() |>
-   omopgenerics::uniteAdditional() |>
-   omopgenerics::uniteStrata(cols = strataCols(sex = sex, ageGroup = ageGroup)) |>
-   dplyr::mutate(group_name = "observation_period_ordinal",
-                 group_level = "all",
-                 result_id = 1L) )
- summarisedResult <- summarisedResult |> dplyr::bind_rows(summarisedResult |>
-                              dplyr::filter(.data$variable_name %in% variables_percentage & .data$estimate_name == "count") |>
-                              dplyr:: left_join(denominator, by = c("strata_name", "strata_level") )|>
-                              dplyr::mutate(
-                                estimate_value = sprintf("%.2f", 100 * as.numeric(.data$estimate_value) / as.numeric(.data$den)),
-                                estimate_name = "percentage",
-                                estimate_type = "percentage"
-                              ) |>
-                                dplyr::select(!"den")) |>
-   dplyr::mutate("cdm_name" = omopgenerics::cdmName(cdm)) |>
-   omopgenerics::newSummarisedResult(settings = set)
+  summarisedResult <- summarisedResult |> dplyr::bind_rows(
+    result |> dplyr::bind_rows() |>
+      omopgenerics::uniteAdditional() |>
+      omopgenerics::uniteStrata(cols = strataCols(sex = sex, ageGroup = ageGroup)) |>
+      dplyr::mutate(
+        group_name = "observation_period_ordinal",
+        group_level = "all",
+        result_id = 1L
+      )
+  )
+  summarisedResult <- summarisedResult |>
+    dplyr::bind_rows(summarisedResult |>
+      dplyr::filter(.data$variable_name %in% variables_percentage & .data$estimate_name == "count") |>
+      dplyr::left_join(denominator, by = c("strata_name", "strata_level")) |>
+      dplyr::mutate(
+        estimate_value = sprintf("%.2f", 100 * as.numeric(.data$estimate_value) / as.numeric(.data$den)),
+        estimate_name = "percentage",
+        estimate_type = "percentage"
+      ) |>
+      dplyr::select(!"den")) |>
+    dplyr::mutate("cdm_name" = omopgenerics::cdmName(cdm)) |>
+    omopgenerics::newSummarisedResult(settings = set)
 
   omopgenerics::dropSourceTable(cdm, name = dplyr::starts_with(tablePrefix))
 

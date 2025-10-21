@@ -521,7 +521,7 @@ test_that("dateRange argument works", {
 
   expect_no_error(summariseTrend(cdm, "observation_period",
                                        interval = "years",
-                                       dateRange = as.Date(c("2012-01-01", NA))
+                                       dateRange = as.Date(c("1950-01-01", NA))
   ))
 
   PatientProfiles::mockDisconnect(cdm = cdm)
@@ -806,7 +806,7 @@ test_that("overall time interval work", {
 
   age <- cdm$observation_period |>
     PatientProfiles::addAgeQuery(indexDate = "observation_period_start_date") |>
-    dplyr::summarise(median = stats::median(.data$age), na.rm = TRUE) |>
+    dplyr::summarise(median = stats::median(.data$age, na.rm = TRUE), na.rm = TRUE) |>
     dplyr::pull(.data$median)
 
   expect_equal(x |> dplyr::filter(variable_name == "Records in observation") |> dplyr::pull(.data$estimate_value), as.character(records))

@@ -23,13 +23,13 @@ test_that("summariseClinicalRecords() works", {
   expect_equal(
     dplyr::bind_rows(c, vo, m) |>
       dplyr::mutate(estimate_value = dplyr::if_else(
-        .data$variable_name == "records_per_person",
+        .data$variable_name == "Records per person",
         as.character(round(as.numeric(.data$estimate_value), 3)),
         .data$estimate_value
       )) |> dplyr::arrange(.data$group_level, .data$variable_name, .data$variable_level, .data$estimate_name),
     all |>
       dplyr::mutate(estimate_value = dplyr::if_else(
-        .data$variable_name == "records_per_person",
+        .data$variable_name == "Records per person",
         as.character(round(as.numeric(.data$estimate_value), 3)),
         .data$estimate_value
       )) |> dplyr::arrange( .data$group_level, .data$variable_name, .data$variable_level, .data$estimate_name)
@@ -39,7 +39,7 @@ test_that("summariseClinicalRecords() works", {
   expect_true(summariseClinicalRecords(cdm, "condition_occurrence",
     recordsPerPerson = NULL
   ) |>
-    dplyr::filter(variable_name %in% "records_per_person") |>
+    dplyr::filter(variable_name %in% "Records per person") |>
     dplyr::tally() |>
     dplyr::pull() == 0)
   q <- summariseClinicalRecords(cdm, "condition_occurrence",
@@ -452,6 +452,17 @@ test_that("argument missingData works", {
 
   expect_equal(x |> dplyr::filter(variable_name == "Column name") |> dplyr::arrange(.data$variable_level), y |> dplyr::arrange(.data$variable_level), ignore_attr = TRUE)
 
+
+ person_to_remove <- cdm$procedure_occurrence |> head(1) |>dplyr::pull(.data$person_id)
+
+cdm$person <- cdm$person |>
+  dplyr::filter(!(.data$person_id %in% person_to_remove) )
+
+ expect_warning(x <- summariseClinicalRecords(cdm, "procedure_occurrence"))
+ expect_equal(x |>
+               dplyr::filter(.data$variable_name == "Subjects not in person table", .data$estimate_name == "count") |>
+               dplyr::pull(.data$estimate_value) |> as.numeric(),
+             1)
 
   omopgenerics::cdmDisconnect(cdm)
 
