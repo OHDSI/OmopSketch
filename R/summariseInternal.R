@@ -130,23 +130,7 @@ summariseMissingInternal <- function(x, strata, columns, cdm, table) {
   }) |>
     dplyr::bind_rows()
 }
-sampleOmopTable <- function(x, sample) {
-  if (is.null(sample)) {
-    return(x)
-  }
-  if (is.infinite(sample)) {
-    return(x)
-  }
-  if (x |> dplyr::tally() |> dplyr::pull() <= sample) {
-    return(x)
-  }
 
-  x <- x |>
-    dplyr::slice_sample(n = sample)
-
-
-  return(x)
-}
 addStratifications <- function(x, indexDate, sex, ageGroup, interval, intervalName, name) {
   # add sex and age_group if needed
   x <- x |>
