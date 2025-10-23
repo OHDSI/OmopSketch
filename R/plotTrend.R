@@ -111,6 +111,7 @@ plotTrend <- function(result,
   p <-  result |>
       dplyr::filter(.data$estimate_name == estimate) |>
       visOmopResults::barPlot(
+        width = 0.8,
         x = "variable_name",
         y = estimate,
         facet = facet,

@@ -74,7 +74,7 @@ test_that("summariseClinicalRecords() works", {
   ) |>
     dplyr::tally() |> dplyr::pull() == 3)
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 test_that("summariseClinicalRecords() sex and ageGroup argument work", {
@@ -185,7 +185,7 @@ test_that("summariseClinicalRecords() sex and ageGroup argument work", {
 
   expect_equal(x$n[[1]], x$n[[2]])
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 
   })
 
@@ -228,7 +228,7 @@ test_that("tableClinicalRecords() works", {
   expect_warning(t <- summariseClinicalRecords(cdm, "death"))
   expect_warning(inherits(tableClinicalRecords(t), "gt_tbl"))
   expect_no_error(x <- tableClinicalRecords(summariseClinicalRecords(cdm, "condition_occurrence"), type = "datatable"))
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 test_that("summariseClinicalRecords() works with mock data", {
@@ -242,7 +242,7 @@ test_that("summariseClinicalRecords() works with mock data", {
   expect_no_error(summariseClinicalRecords(cdm, "procedure_occurrence"))
   expect_no_error(summariseClinicalRecords(cdm, "death"))
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 test_that("no tables created", {
@@ -269,7 +269,7 @@ test_that("no tables created", {
   expect_true(length(setdiff(endNames, startNames)) == 0)
 
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 test_that("record outside observaton period", {
@@ -323,7 +323,7 @@ test_that("record outside observaton period", {
     dplyr::pull(summ)
   expect_true(sum(percentages > 100) == 0)
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 test_that("argument quality works", {
   skip_on_cran()

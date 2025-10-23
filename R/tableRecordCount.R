@@ -20,7 +20,7 @@
 #'
 #' tableRecordCount(result = summarisedResult)
 #'
-#' PatientProfiles::mockDisconnect(cdm = cdm)
+#' CDMConnector::cdmDisconnect(cdm = cdm)
 #' }
 tableRecordCount <- function(result,
                              type = "gt") {

@@ -7,5 +7,5 @@ test_that("check mockOmopSketch", {
   expect_true(omopgenerics::sourceType(cdm) == "duckdb")
 
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })

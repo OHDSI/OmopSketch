@@ -22,7 +22,7 @@
 #'
 #' tableTrend(result = summarisedResult)
 #'
-#' PatientProfiles::mockDisconnect(cdm = cdm)
+#' CDMConnector::cdmDisconnect(cdm = cdm)
 #' }
 tableTrend <- function(result,
                        type = "gt",

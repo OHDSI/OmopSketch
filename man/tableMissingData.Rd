@@ -33,6 +33,6 @@ omopTableName = c("condition_occurrence", "visit_occurrence"))
 
 tableMissingData(result = result)
 
-PatientProfiles::mockDisconnect(cdm = cdm)
+CDMConnector::cdmDisconnect(cdm = cdm)
 }
 }

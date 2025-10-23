@@ -47,7 +47,7 @@
 #' summarisedResult |>
 #'   dplyr::glimpse()
 #'
-#' PatientProfiles::mockDisconnect(cdm = cdm)
+#' CDMConnector::cdmDisconnect(cdm = cdm)
 #' }
 summariseTrend <- function(cdm,
                            event = NULL,

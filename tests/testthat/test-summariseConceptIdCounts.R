@@ -100,7 +100,7 @@ test_that("dateRange argument works", {
   expect_equal(y, omopgenerics::emptySummarisedResult(), ignore_attr = TRUE)
   expect_equal(settings(y)$result_type, settings(x)$result_type)
   expect_equal(colnames(settings(y)), colnames(settings(x)))
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 test_that("sample argument works", {
@@ -120,7 +120,7 @@ test_that("sample argument works", {
     dplyr::pull(.data$estimate_value) |>
     as.integer(), 1L)
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 test_that("tableConceptIdCounts() works", {
@@ -149,7 +149,7 @@ test_that("tableConceptIdCounts() works", {
   expect_warning(tableConceptIdCounts(summariseConceptIdCounts(cdm, "condition_occurrence"), display = "missing source", type = "reactable"))
   expect_warning(tableConceptIdCounts(summariseConceptIdCounts(cdm, "condition_occurrence"), display = "missing standard", type = "reactable"))
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 test_that("interval argument works", {
@@ -261,7 +261,7 @@ test_that("interval argument works", {
     dplyr::arrange(year)
 
   expect_equal(q_year |> sortTibble(), y_year |> sortTibble())
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 test_that("tableTopConceptCounts works", {

@@ -14,7 +14,7 @@
 #'
 #' tableObservationPeriod(result = result)
 #'
-#' PatientProfiles::mockDisconnect(cdm = cdm)
+#' CDMConnector::cdmDisconnect(cdm = cdm)
 #' }
 tableObservationPeriod <- function(result,
                                    type = "gt",
