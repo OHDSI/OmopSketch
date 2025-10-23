@@ -85,7 +85,8 @@ plotObservationPeriod <- function(result,
       y = "count",
       facet = facet,
       colour = colour,
-      style = style
+      style = style,
+      width = 0.8
     ) +
       ggplot2::ylab(stringr::str_to_sentence(unique(result$variable_name)))
   } else if (plotType == "boxplot") {

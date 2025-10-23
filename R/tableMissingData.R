@@ -14,7 +14,7 @@
 #'
 #' tableMissingData(result = result)
 #'
-#' PatientProfiles::mockDisconnect(cdm = cdm)
+#' CDMConnector::cdmDisconnect(cdm = cdm)
 #' }
 tableMissingData <- function(result,
                              type = "gt",

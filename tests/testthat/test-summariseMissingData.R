@@ -77,7 +77,7 @@ test_that("dateRange argument works", {
   expect_equal(summariseMissingData(cdm, "drug_exposure", dateRange = as.Date(c("2012-01-01", NA))), y, ignore_attr = TRUE)
   checkResultType(z, "summarise_missing_data")
   expect_equal(colnames(settings(z)), colnames(settings(x)))
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 test_that("tableMissingData() works", {
@@ -96,7 +96,7 @@ test_that("tableMissingData() works", {
   expect_warning(t <- summariseMissingData(cdm, "death"))
   expect_warning(inherits(tableMissingData(t), "gt_tbl"))
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 test_that("col not present in table", {
@@ -135,7 +135,7 @@ test_that("col not present in table", {
 
   expect_no_error(expect_message(summariseMissingData(cdm, "person", col = NULL)))
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 test_that("no tables created", {
@@ -164,7 +164,7 @@ test_that("no tables created", {
   expect_true(length(setdiff(endNames, startNames)) == 0)
 
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 test_that("interval argument works", {
@@ -281,7 +281,7 @@ test_that("interval argument works", {
 
   expect_no_error(x <- summariseMissingData(cdm, "drug_exposure", sex = TRUE, interval = "years"))
   expect_true(x |> dplyr::distinct(.data$additional_level) |> dplyr::tally() > 1)
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 test_that("summariseMissingData() works", {
@@ -363,7 +363,7 @@ test_that("dateRange argument works", {
   expect_equal(summariseMissingData(cdm, "drug_exposure", dateRange = as.Date(c("2012-01-01", NA))), y, ignore_attr = TRUE)
   checkResultType(z, "summarise_missing_data")
   expect_equal(colnames(settings(z)), colnames(settings(x)))
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 test_that("tableMissingData() works", {
@@ -382,7 +382,7 @@ test_that("tableMissingData() works", {
   expect_warning(t <- summariseMissingData(cdm, "death"))
   expect_warning(inherits(tableMissingData(t), "gt_tbl"))
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 test_that("col not present in table", {
@@ -421,7 +421,7 @@ test_that("col not present in table", {
 
   expect_no_error(expect_message(summariseMissingData(cdm, "person", col = NULL)))
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 test_that("no tables created", {
@@ -450,7 +450,7 @@ test_that("no tables created", {
   expect_true(length(setdiff(endNames, startNames)) == 0)
 
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 test_that("zero count argument works", {
@@ -472,5 +472,5 @@ test_that("zero count argument works", {
     dplyr::pull() |> sort(), columns_zero |> sort())
 
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })

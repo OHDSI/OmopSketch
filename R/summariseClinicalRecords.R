@@ -51,7 +51,7 @@
 #'
 #' summarisedResult
 #'
-#' PatientProfiles::mockDisconnect(cdm = cdm)
+#' CDMConnector::cdmDisconnect(cdm = cdm)
 #' }
 summariseClinicalRecords <- function(cdm,
                                      omopTableName,

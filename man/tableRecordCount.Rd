@@ -34,6 +34,6 @@ summarisedResult <- summariseRecordCount(
 
 tableRecordCount(result = summarisedResult)
 
-PatientProfiles::mockDisconnect(cdm = cdm)
+CDMConnector::cdmDisconnect(cdm = cdm)
 }
 }
