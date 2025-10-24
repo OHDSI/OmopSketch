@@ -70,8 +70,8 @@ You can further specify if you want to include the number of records in observat
 ```{r, warning=FALSE}
 summarisedResult <- summariseClinicalRecords(cdm,
   "condition_occurrence",
-  recordsPerPerson = c("mean", "sd", "q05", "q95"), 
-  conceptSummary = TRUE, 
+  recordsPerPerson = c("mean", "sd", "q05", "q95"),
+  conceptSummary = TRUE,
   quality = TRUE
 )
 
@@ -86,7 +86,7 @@ Additionally, you can also stratify the previous results by sex and age groups:
 summarisedResult <- summariseClinicalRecords(cdm,
   "condition_occurrence",
   recordsPerPerson = c("mean", "sd", "q05", "q95"),
-  quality = TRUE, 
+  quality = TRUE,
   conceptSummary = TRUE,
   sex = TRUE,
   ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf))
@@ -119,10 +119,11 @@ We can also filter the clinical table to a specific time window by setting the d
 
 ```{r}
 summarisedResult <- summariseClinicalRecords(cdm, "drug_exposure",
-  dateRange = as.Date(c("1990-01-01", "2010-01-01"))) 
+  dateRange = as.Date(c("1990-01-01", "2010-01-01"))
+)
 
 summarisedResult |>
-  omopgenerics::settings()|>
+  omopgenerics::settings() |>
   glimpse()
 ```
 
@@ -135,7 +136,7 @@ summarisedResult |>
 summarisedResult <- summariseClinicalRecords(cdm,
   "condition_occurrence",
   recordsPerPerson = c("mean", "sd", "q05", "q95"),
-  quality = T, 
+  quality = T,
   conceptSummary = T,
   sex = TRUE
 )
@@ -153,7 +154,6 @@ We can also use `tableRecordCount()` to display results in a table of type [gt](
 summarisedResult <- summariseRecordCount(cdm, "drug_exposure", interval = "years")
 
 summarisedResult |> tableRecordCount(type = "gt")
-
 ```
 
 Note that you can adjust the time interval period using the `interval` argument, which can be set to either "years", "months" or "quarters". See the example below, where it shows the number of records every 18 months:
@@ -209,10 +209,10 @@ We can also filter the clinical table to a specific time window by setting the d
 ```{r}
 summariseRecordCount(cdm, "drug_exposure",
   interval = "years",
-  sex = TRUE, 
-  dateRange = as.Date(c("1990-01-01", "2010-01-01"))) |>
+  sex = TRUE,
+  dateRange = as.Date(c("1990-01-01", "2010-01-01"))
+) |>
   tableRecordCount(type = "gt")
-
 ```
 
 

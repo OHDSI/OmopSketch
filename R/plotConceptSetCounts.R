@@ -17,7 +17,7 @@
 #' result <- summariseConceptSetCounts(
 #'   cdm = cdm,
 #'   conceptSet = list(
-#'     "asthma" = c(4051466, 317009) ,
+#'     "asthma" = c(4051466, 317009),
 #'     "rhinitis" = c(4280726, 4048171, 40486433)
 #'   )
 #' )
@@ -31,7 +31,6 @@
 plotConceptSetCounts <- function(result,
                                  facet = NULL,
                                  colour = NULL) {
-
   lifecycle::deprecate_warn(
     when = "0.5.0",
     what = "plotConceptSetCounts()",

@@ -194,7 +194,6 @@ test_that("interval argument works", {
   ))
 
 
-
   m_quarters <- m |>
     omopgenerics::splitAdditional() |>
     omopgenerics::pivotEstimates() |>

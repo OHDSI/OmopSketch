@@ -12,6 +12,7 @@ summariseTrend(
   interval = "overall",
   ageGroup = NULL,
   sex = FALSE,
+  inObservation = FALSE,
   dateRange = NULL
 )
 }
@@ -32,6 +33,8 @@ If included, the number of person-days is computed only for episode tables.}
 \item{ageGroup}{A list of age groups to stratify results by.}
 
 \item{sex}{Logical. If \code{TRUE}, stratify results by sex.}
+
+\item{inObservation}{Logical. If \code{TRUE}, the results are stratified to indicate whether each record occurs within an observation period.}
 
 \item{dateRange}{A vector of two dates defining the desired study period.
 If \code{dateRange} is \code{NULL}, no restriction is applied.}

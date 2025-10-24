@@ -1,4 +1,3 @@
-
 datediffYear <- function(x, start, end, name) {
   if (inherits(x, "data.frame")) {
     q <- "as.integer(clock::date_count_between(start = .data[[start]], end = .data[[end]], precision = 'year'))"

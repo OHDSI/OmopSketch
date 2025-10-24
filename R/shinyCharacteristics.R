@@ -56,7 +56,7 @@ shinyCharacteristics <- function(result,
       msg <- c(i = "Do you want to overwrite it? Y/n")
       cli::cli_inform(message = msg)
       x <- correct(readline())
-      while(!x %in% c("y", "n")) {
+      while (!x %in% c("y", "n")) {
         cli::cli_inform(message = c("!" = "Please answer 'yes' or 'no'.", msg))
         x <- correct(readline())
       }
@@ -128,7 +128,6 @@ shinyCharacteristics <- function(result,
     panelDetails$summarise_observation_period$content$tableMissing$reactive <- "<filtered_data> |>
     OmopSketch::tableMissingData()"
     panelDetails$summarise_observation_period$content$tableMissing$download$filename <- "paste0(\"table_missing_data_observation_period.\", input$format)"
-
   }
 
   if ("summarise_clinical_records" %in% resultTypes) {
@@ -145,7 +144,6 @@ shinyCharacteristics <- function(result,
   if ("summarise_missing_data" %in% resultTypes) {
     # customise summarise_missing_data
     panelDetails$summarise_missing_data$icon <- NULL
-
   }
 
   if ("summarise_table_quality" %in% resultTypes) {
@@ -179,7 +177,6 @@ shinyCharacteristics <- function(result,
   }
 
   if ("summarise_trend" %in% resultTypes) {
-
     panelDetails$summarise_trend_episode <- panelDetails$summarise_trend
     panelDetails$summarise_trend_episode$icon <- NULL
     panelDetails$summarise_trend_episode$title <- "Observation Period Trends"
@@ -189,7 +186,7 @@ shinyCharacteristics <- function(result,
 
     variable_names <- result |>
       omopgenerics::filterSettings(.data$result_type == "summarise_trend") |>
-      omopgenerics::filterSettings(type == 'episode') |>
+      omopgenerics::filterSettings(type == "episode") |>
       dplyr::distinct(.data$variable_name) |>
       dplyr::pull()
 
@@ -204,7 +201,7 @@ shinyCharacteristics <- function(result,
       button_type = "pickerInput",
       label = "Variable",
       choices = variable_names,
-      selected = "Records in observation",
+      selected = "Number of records",
       multiple = FALSE
     )
     panelDetails$summarise_trend_event <- panelDetails$summarise_trend
@@ -216,10 +213,10 @@ shinyCharacteristics <- function(result,
 
     variable_names <- result |>
       omopgenerics::filterSettings(.data$result_type == "summarise_trend") |>
-      omopgenerics::filterSettings(type == 'event') |>
+      omopgenerics::filterSettings(type == "event") |>
       dplyr::distinct(.data$variable_name) |>
       dplyr::pull()
-    
+
     panelDetails$summarise_trend_event$content$plot$reactive <- "<filtered_data> |>
     omopgenerics::filterSettings(type == 'event')  |>
     dplyr::filter(.data$variable_name == input$variable) |>
@@ -231,7 +228,7 @@ shinyCharacteristics <- function(result,
       button_type = "pickerInput",
       label = "Variable",
       choices = variable_names,
-      selected = "Records in observation",
+      selected = "Number of records",
       multiple = FALSE
     )
   }

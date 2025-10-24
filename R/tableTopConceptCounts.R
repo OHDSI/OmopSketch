@@ -30,7 +30,6 @@ tableTopConceptCounts <- function(result,
                                   countBy = NULL,
                                   type = "gt",
                                   style = "default") {
-
   # initial checks
   rlang::check_installed("visOmopResults")
   omopgenerics::validateResultArgument(result)
@@ -67,7 +66,7 @@ tableTopConceptCounts <- function(result,
   result <- result |>
     omopgenerics::splitAll() |>
     omopgenerics::pivotEstimates() |>
-    dplyr::select(!c("result_id", opts[opts!=countBy])) |>
+    dplyr::select(!c("result_id", opts[opts != countBy])) |>
     dplyr::rename(
       count = dplyr::all_of(countBy),
       standard_concept_name = "variable_name",

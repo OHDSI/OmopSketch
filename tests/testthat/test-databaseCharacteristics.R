@@ -1,29 +1,27 @@
-
-
 test_that("databaseCharacteristics works", {
   skip_on_cran()
   cdm <- mockOmopSketch()
 
   expect_no_error(databaseCharacteristics(cdm) |> suppressWarnings())
-  expect_no_error(databaseCharacteristics(cdm, sex = TRUE ) |> suppressWarnings())
-  expect_no_error(databaseCharacteristics(cdm, sex = TRUE, ageGroup = list(c(0,50), c(51,Inf)) ) |> suppressWarnings())
-  expect_no_error(databaseCharacteristics(cdm, sex = TRUE, ageGroup = list(c(0,50), c(51,Inf)), dateRange = as.Date(c("1970-01-01", NA)) ) |> suppressWarnings())
-  expect_no_error(databaseCharacteristics(cdm, sex = TRUE, ageGroup = list(c(0,50), c(51,Inf)), dateRange = as.Date(c("1970-01-01", NA)), conceptIdCounts = TRUE) |> suppressWarnings())
-  expect_no_error(databaseCharacteristics(cdm, sex = TRUE, ageGroup = list(c(0,50), c(51,Inf)), dateRange = as.Date(c("1970-01-01", NA)), conceptIdCounts = TRUE, interval = "years") |> suppressWarnings())
+  expect_no_error(databaseCharacteristics(cdm, sex = TRUE) |> suppressWarnings())
+  expect_no_error(databaseCharacteristics(cdm, sex = TRUE, ageGroup = list(c(0, 50), c(51, Inf))) |> suppressWarnings())
+  expect_no_error(databaseCharacteristics(cdm, sex = TRUE, ageGroup = list(c(0, 50), c(51, Inf)), dateRange = as.Date(c("1970-01-01", NA))) |> suppressWarnings())
+  expect_no_error(databaseCharacteristics(cdm, sex = TRUE, ageGroup = list(c(0, 50), c(51, Inf)), dateRange = as.Date(c("1970-01-01", NA)), conceptIdCounts = TRUE) |> suppressWarnings())
+  expect_no_error(databaseCharacteristics(cdm, sex = TRUE, ageGroup = list(c(0, 50), c(51, Inf)), dateRange = as.Date(c("1970-01-01", NA)), conceptIdCounts = TRUE, interval = "years") |> suppressWarnings())
   x <- databaseCharacteristics(cdm, omopTableName = "drug_exposure", missingData = FALSE) |> suppressWarnings()
-  expect_equal(x |> omopgenerics::filterSettings(result_type == "summarise_clinical_records")|>
-                 dplyr::filter(estimate_name == "na_count") |>
-                 nrow(),
-              0)
-
+  expect_equal(
+    x |> omopgenerics::filterSettings(result_type == "summarise_clinical_records") |>
+      dplyr::filter(estimate_name == "na_count") |>
+      nrow(),
+    0
+  )
 })
 
 test_that("shinyCharacteristics works", {
-
   skip_on_cran()
   cdm <- mockOmopSketch()
   dir <- tempdir()
-  expect_no_error(result <- databaseCharacteristics(cdm, sex = TRUE, conceptIdCounts = TRUE ) |> suppressWarnings())
+  expect_no_error(result <- databaseCharacteristics(cdm, sex = TRUE, conceptIdCounts = TRUE) |> suppressWarnings())
   expect_false("OmopSketchShiny" %in% list.files(dir))
   expect_no_error(shinyCharacteristics(
     result = omopgenerics::emptySummarisedResult(),
@@ -38,4 +36,3 @@ test_that("shinyCharacteristics works", {
 
   unlink(file.path(dir, "OmopSketchShiny"), recursive = TRUE)
 })
-

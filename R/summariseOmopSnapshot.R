@@ -1,4 +1,3 @@
-
 #' Summarise a cdm_reference object creating a snapshot with the metadata of the
 #' cdm_reference object.
 #'
@@ -79,7 +78,7 @@ summariseOmopSnapshot <- function(cdm) {
   } else {
     x <- dplyr::tibble(start_date = NA_character_, end_date = NA_character_)
   }
-  result$observation_period = dplyr::tibble(
+  result$observation_period <- dplyr::tibble(
     estimate_name = c("count", "start_date", "end_date"),
     estimate_type = c("integer", "date", "date"),
     estimate_value = c(opCount, x$start_date, x$end_date)
@@ -158,13 +157,13 @@ extractCdmSource <- function(cdm) {
 }
 colsCdmSource <- function() {
   c(
-    "cdm_source_name" = 'NA_character_',
-    "cdm_holder" = 'NA_character_',
-    "source_description" = 'NA_character_' ,
-    "cdm_release_date" = 'as.Date(NA_character_)',
-    "source_documentation_reference" = 'NA_character_',
-    "cdm_version" = 'NA_character_',
-    "vocabulary_version" = 'NA_character_'
+    "cdm_source_name" = "NA_character_",
+    "cdm_holder" = "NA_character_",
+    "source_description" = "NA_character_",
+    "cdm_release_date" = "as.Date(NA_character_)",
+    "source_documentation_reference" = "NA_character_",
+    "cdm_version" = "NA_character_",
+    "vocabulary_version" = "NA_character_"
   ) |>
     rlang::parse_exprs()
 }

@@ -36,7 +36,6 @@ test_that("summariseConceptIdCount works", {
   )
 
 
-
   expect_warning(summariseConceptIdCounts(cdm, "observation_period"))
   expect_error(summariseConceptIdCounts(cdm, omopTableName = ""))
   expect_error(summariseConceptIdCounts(cdm, omopTableName = "visit_occurrence", countBy = "dd"))
@@ -268,7 +267,7 @@ test_that("tableTopConceptCounts works", {
   skip_on_cran()
   cdm <- cdmEunomia()
 
-  expect_no_error(result <- summariseConceptIdCounts(cdm, "drug_exposure", sex = TRUE, ageGroup = list(c(0,50))))
+  expect_no_error(result <- summariseConceptIdCounts(cdm, "drug_exposure", sex = TRUE, ageGroup = list(c(0, 50))))
   expect_no_error(tableTopConceptCounts(result))
   expect_no_error(tableTopConceptCounts(result, top = 5))
   expect_error(tableTopConceptCounts(result, top = 0.5))
@@ -284,8 +283,34 @@ test_that("tableTopConceptCounts works", {
   expect_no_error(tableTopConceptCounts(result))
 
   expect_no_error(result <- summariseConceptIdCounts(cdm, "drug_exposure", countBy = c("record", "person")))
-  expect_no_error(tableTopConceptCounts(result, countBy = "record" ))
+  expect_no_error(tableTopConceptCounts(result, countBy = "record"))
 
 
+  CDMConnector::cdmDisconnect(cdm)
+})
 
+test_that("inObservation argument works", {
+  skip_on_cran()
+  cdm <- cdmEunomia()
+
+  expect_no_error(result <- summariseConceptIdCounts(cdm, "drug_exposure", inObservation = TRUE))
+  x <- result |>
+    omopgenerics::filterStrata(.data$in_observation == TRUE) |>
+    dplyr::select(!c("strata_name", "strata_level"))
+
+  cdm$drug_exposure <- cdm$drug_exposure |>
+    dplyr::inner_join(cdm[["observation_period"]] |>
+      dplyr::select(
+        "obs_start" = "observation_period_start_date",
+        "obs_end" = "observation_period_end_date",
+        "person_id"
+      ), by = "person_id") |>
+    dplyr::filter(.data$drug_exposure_start_date >= .data$obs_start & .data$drug_exposure_start_date <= .data$obs_end)
+
+  expect_no_error(resultInObs <- summariseConceptIdCounts(cdm, "drug_exposure"))
+  expect_equal(x |> dplyr::arrange(.data$variable_level), resultInObs |>
+    dplyr::select(!c("strata_name", "strata_level")) |> dplyr::arrange(.data$variable_level), ignore_attr = TRUE)
+
+  expect_no_error(summariseConceptIdCounts(cdm, "drug_exposure", inObservation = TRUE, sex = TRUE, ageGroup = list(c(0, 70))))
+  CDMConnector::cdmDisconnect(cdm)
 })

@@ -43,7 +43,7 @@ tableConceptIdCounts <- function(result,
     dplyr::rename("standard_concept_id" = "variable_level", "standard_concept_name" = "variable_name")
 
   if (display == "overall") {
-    cols_to_format <- c("standard_concept_name", "standard_concept_id","source_concept_name", "source_concept_id")
+    cols_to_format <- c("standard_concept_name", "standard_concept_id", "source_concept_name", "source_concept_id")
   } else if (display == "standard") {
     cols_to_format <- c("standard_concept_name", "standard_concept_id")
     result <- result |>
@@ -95,9 +95,6 @@ tableConceptIdCounts <- function(result,
       dplyr::everything()
     )
   if (type == "datatable") {
-
-
-
     rename_vec <- c(
       "Database name" = "cdm_name",
       "OMOP table" = "group_level",
@@ -106,7 +103,8 @@ tableConceptIdCounts <- function(result,
       "Source concept name" = "source_concept_name",
       "Source concept id" = "source_concept_id",
       "Sex" = "sex",
-      "Age group" = "age_group"
+      "Age group" = "age_group",
+      "In observation" = "in_observation"
     )
 
     rename_vec <- rename_vec[rename_vec %in% names(formatted_result)]
@@ -120,9 +118,7 @@ tableConceptIdCounts <- function(result,
       ) |>
       dplyr::select(!"estimate_type") |>
       visOmopResults::formatTable(type = "datatable", groupColumn = list(" " = c("OMOP table", additional_cols)))
-
   } else if (type == "reactable") {
-
     rlang::check_installed("reactable")
 
     formatted_result |>
@@ -138,6 +134,7 @@ tableConceptIdCounts <- function(result,
           time_interval = reactable::colDef(name = "Time Interval"),
           sex = reactable::colDef(name = "Sex"),
           age_group = reactable::colDef(name = "Age Group"),
+          in_observation = reactable::colDef(name = "In observation"),
           cdm_name = reactable::colDef(name = "Database name"),
           group_level = reactable::colDef(name = "OMOP table"),
           standard_concept_name = reactable::colDef(name = "Standard concept name"),
