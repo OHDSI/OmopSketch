@@ -74,7 +74,6 @@ summarisedResult <- summariseObservationPeriod(
   ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf)),
   dateRange = as.Date(c("1970-01-01", "2010-01-01"))
 )
-
 ```
 
 Notice that, by default, the "overall" group will be also included, as well as crossed strata (that means, sex == "Female" and ageGroup == "\>35").
@@ -151,14 +150,14 @@ Note that you can adjust the time interval period using the `interval` argument,
 summarisedResult <- summariseInObservation(cdm$observation_period,
   interval = "months"
 )
-
 ```
 
 Along with the number of records in observation, you can also calculate the number of person-days by setting the `output` argument to c("record", "person-days").
 
 ```{r, warning=FALSE}
-summarisedResult <- summariseInObservation(cdm$observation_period, 
-                                           output = c("record", "person-days"))                                        
+summarisedResult <- summariseInObservation(cdm$observation_period,
+  output = c("record", "person-days")
+)
 
 
 summarisedResult |>
@@ -168,13 +167,13 @@ summarisedResult |>
 We can further stratify our counts by sex (setting argument `sex = TRUE`) or by age (providing an age group). Notice that in both cases, the function will automatically create a group called *overall* with all the sex groups and all the age groups. We can also define a date range of interest to filter the `observation_period` table accordingly.
 
 ```{r, warning=FALSE, eval = FALSE}
-
-summarisedResult <- summariseInObservation(cdm$observation_period, 
-                                           output = c("record", "person-days"),
-                                           interval = "quarters",
-                                           sex = TRUE, 
-                                           ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf)), 
-                                           dateRange = as.Date(c("1970-01-01", "2010-01-01")))                                        
+summarisedResult <- summariseInObservation(cdm$observation_period,
+  output = c("record", "person-days"),
+  interval = "quarters",
+  sex = TRUE,
+  ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf)),
+  dateRange = as.Date(c("1970-01-01", "2010-01-01"))
+)
 
 
 summarisedResult |>
@@ -186,12 +185,12 @@ You can include additional output metrics by them to the output argument:
 If `output = "person"`, the trend in the number of individuals in observation is returned.
 
 ```{r}
-summarisedResult <- summariseInObservation(cdm$observation_period, 
-                                           output = c("person"),
-                                           interval = "years",
-                                           sex = TRUE, 
-                                           ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf)), 
-                                           )                                        
+summarisedResult <- summariseInObservation(cdm$observation_period,
+  output = c("person"),
+  interval = "years",
+  sex = TRUE,
+  ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf)),
+)
 
 
 summarisedResult |>
@@ -201,12 +200,12 @@ summarisedResult |>
 If `output = "sex"`, the trend in the number of females in observation is returned. If `sex = TRUE` is specified, this stratification is ignored.
 
 ```{r}
-summarisedResult <- summariseInObservation(cdm$observation_period, 
-                                           output = c("sex"),
-                                           interval = "years",
-                                           sex = TRUE, 
-                                           ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf)), 
-                                           )                                        
+summarisedResult <- summariseInObservation(cdm$observation_period,
+  output = c("sex"),
+  interval = "years",
+  sex = TRUE,
+  ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf)),
+)
 
 
 summarisedResult |>
@@ -217,11 +216,11 @@ If `output = "age`, the trend in the median age of the population in observation
 
 ```{r}
 summarisedResult <- summariseInObservation(
-  observationPeriod = cdm$observation_period, 
+  observationPeriod = cdm$observation_period,
   output = c("age"),
   interval = "years",
-  ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf)) 
-)                                        
+  ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf))
+)
 
 
 summarisedResult |>
@@ -233,9 +232,10 @@ summarisedResult |>
 `tableInObservartion()` will help you to create a table of type [gt](https://gt.rstudio.com/), [reactable](https://glin.github.io/reactable/) or [datatable](https://rstudio.github.io/DT/). By default it creates a [gt](https://gt.rstudio.com/) table.
 
 ```{r, warning=FALSE}
-summarisedResult <- summariseInObservation(cdm$observation_period, 
-                                           output = c("person", "person-days", "sex"),
-                                           sex = TRUE)
+summarisedResult <- summariseInObservation(cdm$observation_period,
+  output = c("person", "person-days", "sex"),
+  sex = TRUE
+)
 
 summarisedResult |>
   tableInObservation(type = "gt")
@@ -257,18 +257,18 @@ Notice that one output at a time can be plotted. If more outputs have been inclu
 Additionally, if results were stratified by sex or age group, we can further use `facet` or `colour` arguments to highlight the different results in the plot. To help us identify by which variables we can colour or facet by, we can use [visOmopResult](https://darwin-eu.github.io/visOmopResults/) package.
 
 ```{r, warning=FALSE}
-
-summarisedResult <- summariseInObservation(cdm$observation_period, 
-                       interval = "years",
-                       output = c("record", "age"),
-                       sex = TRUE,
-                       ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf))) 
-plotInObservation(summarisedResult |> 
-  filter(variable_name == "Age in observation"),
-  colour = "sex", 
-  facet = "age_group")
-  
-
+summarisedResult <- summariseInObservation(cdm$observation_period,
+  interval = "years",
+  output = c("record", "age"),
+  sex = TRUE,
+  ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf))
+)
+plotInObservation(
+  summarisedResult |>
+    filter(variable_name == "Age in observation"),
+  colour = "sex",
+  facet = "age_group"
+)
 ```
 
 Finally, disconnect from the cdm

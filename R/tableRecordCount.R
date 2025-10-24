@@ -29,5 +29,5 @@ tableRecordCount <- function(result,
     what = "tableRecordCount()",
     with = "tableTrend()"
   )
-return(tableTrend(result = result, type = type))
+  return(tableTrend(result = result, type = type))
 }

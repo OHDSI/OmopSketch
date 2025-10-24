@@ -12,6 +12,7 @@ summariseConceptIdCounts(
   interval = "overall",
   sex = FALSE,
   ageGroup = NULL,
+  inObservation = FALSE,
   sample = NULL,
   dateRange = NULL
 )
@@ -33,6 +34,8 @@ person-level counts}
 
 \item{ageGroup}{A list of ageGroup vectors of length two. Code use will be
 thus summarised by age groups.}
+
+\item{inObservation}{Logical. If \code{TRUE}, the results are stratified to indicate whether each record occurs within an observation period.}
 
 \item{sample}{An integer to sample the tables to only that number of records.
 If NULL no sample is done.}

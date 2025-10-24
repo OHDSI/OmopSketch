@@ -30,7 +30,7 @@ tableTrend <- function(result,
   # initial checks
   rlang::check_installed("visOmopResults")
   omopgenerics::validateResultArgument(result)
-  omopgenerics::assertChoice(type, c("gt","reactable", "datatable"))
+  omopgenerics::assertChoice(type, c("gt", "reactable", "datatable"))
   strata_cols <- omopgenerics::strataColumns(result)
   additional_cols <- omopgenerics::additionalColumns(result)
 
@@ -53,22 +53,21 @@ tableTrend <- function(result,
     "Median" = "<median>"
   )
   rename_vec <- c(
-      "Database name" = "cdm_name",
-      "OMOP table" = "omop_table"
-    )
-  result |> visOmopResults::visOmopTable(
-    header = c("cdm_name"),
-    estimateName = formatEstimates,
-    settingsColumn = "type",
-    groupColumn = c("type", "omop_table"),
-    rename = rename_vec,
-    type = type,
-    style = style,
-    hide = "variable_level",
-    columnOrder = c("variable_name", additionals, strata, "estimate_name"),
-    .options = list(merge = "all_columns")
-
-  )|>
+    "Database name" = "cdm_name",
+    "OMOP table" = "omop_table"
+  )
+  result |>
+    visOmopResults::visOmopTable(
+      header = c("cdm_name"),
+      estimateName = formatEstimates,
+      settingsColumn = "type",
+      groupColumn = c("type", "omop_table"),
+      rename = rename_vec,
+      type = type,
+      style = style,
+      hide = "variable_level",
+      columnOrder = c("variable_name", additionals, strata, "estimate_name"),
+      .options = list(merge = "all_columns")
+    ) |>
     suppressMessages()
-
 }

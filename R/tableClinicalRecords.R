@@ -69,5 +69,6 @@ tableClinicalRecords <- function(result,
       header = header,
       rename = c("Database name" = "cdm_name"),
       groupColumn = c("omop_table", omopgenerics::strataColumns(result))
-    ) |> suppressMessages()
+    ) |>
+    suppressMessages()
 }

@@ -16,7 +16,7 @@
 #'
 #' result <- summariseInObservation(
 #'   observationPeriod = cdm$observation_period,
-#'   output = c("person-days","record"),
+#'   output = c("person-days", "record"),
 #'   ageGroup = list("<=40" = c(0, 40), ">40" = c(41, Inf)),
 #'   sex = TRUE
 #' )
