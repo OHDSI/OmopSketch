@@ -272,8 +272,8 @@ warningEmptyStudyPeriod <- function(omopTable) {
   }
   return(omopTable)
 }
-strataCols <- function(sex = FALSE, ageGroup = NULL, interval = "overall") {
-  c(names(ageGroup), "sex"[sex], "interval"[interval != "overall"])
+strataCols <- function(sex = FALSE, ageGroup = NULL, interval = "overall", inObservation = FALSE) {
+  c(names(ageGroup), "sex"[sex], "interval"[interval != "overall"], "in_observation"[inObservation])
 }
 
 summariseSumInternal <- function(x, strata, variable) {
@@ -315,4 +315,29 @@ summariseMedianAge <- function(x, index_date, strata) {
 
 }
 
+addInObservation <- function(x, inObservation, cdm, episode, name){
 
+  if(!inObservation){
+    return(x)
+  }
+
+  if (episode) {
+    x <- x |>
+      dplyr::left_join(cdm[["observation_period"]] |> dplyr::select("person_id","observation_period_start_date", "observation_period_end_date"), by = "person_id") |>
+      dplyr::mutate("in_observation" = dplyr::if_else(!is.na(.data$observation_period_start_date) &
+                                                        .data$start_date >= .data$observation_period_start_date &
+                                                        .data$start_date <= .data$observation_period_end_date &
+                                                        .data$end_date >= .data$observation_period_start_date &
+                                                        .data$end_date <= .data$observation_period_end_date,
+                                                      TRUE, FALSE)) |>
+      dplyr::select(-"observation_period_start_date", -"observation_period_end_date") |>
+      dplyr::compute(name = name)
+  } else {
+    x <- x |>
+      dplyr::left_join(cdm[["observation_period"]] |> dplyr::select("person_id","observation_period_start_date", "observation_period_end_date"), by = "person_id") |>
+      dplyr::mutate("in_observation" = dplyr::if_else(!is.na(.data$observation_period_start_date) & .data$start_date >= .data$observation_period_start_date & .data$start_date <= .data$observation_period_end_date, TRUE, FALSE)) |>
+      dplyr::select(-"observation_period_start_date", -"observation_period_end_date") |>
+      dplyr::compute(name = name)
+  }
+  return(x)
+}
