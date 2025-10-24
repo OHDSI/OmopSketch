@@ -231,11 +231,26 @@ summariseEpisodeTrend <- function(cdm, omopTableName, output, interval, sex, age
 
       x <- cdm[[paste0(prefix, "interval")]] |>
         dplyr::cross_join(omopTable |>
-          dplyr::mutate("start_date" = as.Date(paste0(as.character(as.integer(clock::get_year(.data[[start_date_name]]))), "-", as.character(as.integer(clock::get_month(.data[[start_date_name]]))), "-01"))) |>
-          dplyr::mutate("end_date" = as.Date(paste0(as.character(as.integer(clock::get_year(.data[[end_date_name]]))), "-", as.character(as.integer(clock::get_month(.data[[end_date_name]]))), "-01")))
-          ) |>
-        dplyr::filter((.data$start_date < .data$interval_start_date & .data$end_date >= .data$interval_start_date) |
-          (.data$start_date >= .data$interval_start_date & .data$start_date <= .data$interval_end_date)) |>
+                            dplyr::mutate(
+                              start_date = as.Date(paste0(
+                                as.character(as.integer(clock::get_year(.data[[start_date_name]]))), "-",
+                                as.character(as.integer(clock::get_month(.data[[start_date_name]]))), "-01"
+                              )),
+                              end_date = dplyr::if_else(
+                                is.na(.data[[end_date_name]]),
+                                as.Date(NA),
+                                as.Date(paste0(
+                                  as.character(as.integer(clock::get_year(.data[[end_date_name]]))), "-",
+                                  as.character(as.integer(clock::get_month(.data[[end_date_name]]))), "-01"
+                                ))
+                              )
+                            ) ) |>
+        dplyr::filter(
+          (.data$start_date < .data$interval_start_date &
+             (!is.na(.data$end_date) & .data$end_date >= .data$interval_start_date)) |
+            (.data$start_date >= .data$interval_start_date &
+               .data$start_date <= .data$interval_end_date)
+        ) |>
         dplyr::mutate(
           start_date = dplyr::if_else(
             .data[[start_date_name]] > .data$interval_start_date,
@@ -243,7 +258,7 @@ summariseEpisodeTrend <- function(cdm, omopTableName, output, interval, sex, age
             .data$interval_start_date
           ),
           end_date = dplyr::if_else(
-            .data[[end_date_name]] < .data$interval_end_date,
+            !is.na(.data[[end_date_name]]) & .data[[end_date_name]] < .data$interval_end_date,
             .data[[end_date_name]],
             .data$interval_end_date
           )
@@ -433,7 +448,6 @@ getDenominator <- function(omopTable, output) {
     end_date_name <- omopgenerics::omopColumns(table = tableName, field = "end_date")
     y <- omopTable |>
       dplyr::ungroup() |>
-      dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") |>
       datediffDays(start = start_date_name, end = end_date_name, name = "n", offset = 1) |>
       dplyr::summarise("n" = sum(.data$n, na.rm = TRUE)) |>
       dplyr::pull("n") |>

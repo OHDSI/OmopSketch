@@ -327,8 +327,11 @@ addInObservation <- function(x, inObservation, cdm, episode, name){
       dplyr::mutate("in_observation" = dplyr::if_else(!is.na(.data$observation_period_start_date) &
                                                         .data$start_date >= .data$observation_period_start_date &
                                                         .data$start_date <= .data$observation_period_end_date &
-                                                        .data$end_date >= .data$observation_period_start_date &
-                                                        .data$end_date <= .data$observation_period_end_date,
+                                                        (
+                                                          is.na(.data$end_date) |
+                                                            (.data$end_date >= .data$observation_period_start_date &
+                                                               .data$end_date <= .data$observation_period_end_date)
+                                                        ),
                                                       TRUE, FALSE)) |>
       dplyr::select(-"observation_period_start_date", -"observation_period_end_date") |>
       dplyr::compute(name = name)

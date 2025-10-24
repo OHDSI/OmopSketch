@@ -124,32 +124,32 @@ plotTrend <- function(result,
 }
 fromOutputToVariableName <- function(output){
   if (output == "record") {
-    return("Records in observation")
+    return("Number of records")
   } else if(output == "person") {
-    return("Subjects in observation")
+    return("Number of subjects")
   } else if(output == "person-days"){
     return("Person-days")
   } else if(output == "age") {
-    return("Age in observation")
+    return("Age")
   } else if (output == "sex"){
-    return("Females in observation")
+    return("Number of females")
   }
 }
 fromVariableNameToOutput <- function(variableName) {
   output <- c()
-  if ("Records in observation" %in% variableName) {
+  if ("Number of records" %in% variableName) {
     output <- c(output, "record")
   }
-  if ("Subjects in observation" %in% variableName) {
+  if ("Number of subjects" %in% variableName) {
     output <- c(output, "person")
   }
   if ("Person-days" %in% variableName) {
     output <- c(output, "person-days")
   }
-  if ("Age in observation" %in% variableName) {
+  if ("Age" %in% variableName) {
     output <- c(output, "age")
   }
-  if ("Females in observation" %in% variableName) {
+  if ("Number of females" %in% variableName) {
     output <- c(output, "sex")
   }
   return(output)

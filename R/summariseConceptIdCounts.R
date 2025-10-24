@@ -114,7 +114,7 @@ summariseConceptIdCounts <- function(cdm,
     result <- omopTable |>
       dplyr::rename(concept_id = dplyr::all_of(conceptId),
                     source_concept_id = dplyr::all_of(sourceConceptId),
-                    start_date = startDate) |>
+                    start_date = dplyr::all_of(startDate)) |>
       dplyr::mutate(source_concept_id = dplyr::coalesce(.data$source_concept_id, 0L)) |>
       dplyr::left_join(
         cdm$concept |>
