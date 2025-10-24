@@ -265,7 +265,7 @@ summarisedResult <- summariseInObservation(cdm$observation_period,
 )
 plotInObservation(
   summarisedResult |>
-    filter(variable_name == "Age in observation"),
+    filter(variable_name == "Age"),
   colour = "sex",
   facet = "age_group"
 )

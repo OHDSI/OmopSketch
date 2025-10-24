@@ -201,7 +201,7 @@ shinyCharacteristics <- function(result,
       button_type = "pickerInput",
       label = "Variable",
       choices = variable_names,
-      selected = "Records in observation",
+      selected = "Number of records",
       multiple = FALSE
     )
     panelDetails$summarise_trend_event <- panelDetails$summarise_trend
@@ -228,7 +228,7 @@ shinyCharacteristics <- function(result,
       button_type = "pickerInput",
       label = "Variable",
       choices = variable_names,
-      selected = "Records in observation",
+      selected = "Number of records",
       multiple = FALSE
     )
   }
