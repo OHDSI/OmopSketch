@@ -30,7 +30,7 @@ databaseCharacteristics <- function(cdm,
                                     omopTableName = c(
                                       "person", "visit_occurrence",
                                       "condition_occurrence", "drug_exposure", "procedure_occurrence",
-                                      "device_exposure", "measurement", "observation", "death"
+                                      "device_exposure", "measurement", "observation", "death"),
                                     sample = NULL,
                                     sex = FALSE,
                                     ageGroup = NULL,
