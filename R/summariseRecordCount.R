@@ -29,7 +29,7 @@
 #' summarisedResult |>
 #'   glimpse()
 #'
-#' PatientProfiles::mockDisconnect(cdm = cdm)
+#' CDMConnector::cdmDisconnect(cdm = cdm)
 #' }
 summariseRecordCount <- function(cdm,
                                  omopTableName,

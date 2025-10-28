@@ -192,7 +192,7 @@ addSexAgeGroup <- function(x, sex, ageGroup, indexDate) {
     dplyr::select(dplyr::any_of(c("person_id", "sex", "birth_date")))
 
   x <- x |>
-    dplyr::inner_join(person, by = "person_id")
+    dplyr::left_join(person, by = "person_id")
 
   if (sex) {
     x <- x |>

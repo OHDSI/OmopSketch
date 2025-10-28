@@ -297,12 +297,12 @@ test_that("check summariseObservationPeriod works", {
       )
   )
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 test_that("check it works with mockOmopSketch", {
   skip_on_cran()
-  cdm <- mockOmopSketch(numberIndividuals = 5, seed = 1)
+  cdm <- mockOmopSketch(numberIndividuals = 5)
 
   sop <- summariseObservationPeriod(cdm$observation_period)
 
@@ -356,7 +356,7 @@ test_that("check it works with mockOmopSketch", {
   # plot works
   expect_no_error(plotObservationPeriod(sop))
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 test_that("check summariseObservationPeriod strata works", {
@@ -514,7 +514,7 @@ test_that("check summariseObservationPeriod strata works", {
       )
   )
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 
@@ -548,7 +548,7 @@ test_that("dateRnge argument works", {
     dplyr::tally() |> dplyr::pull(n)
   expect_equal(x,y)
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 
@@ -575,7 +575,7 @@ test_that("no tables created", {
   expect_true(length(setdiff(endNames, startNames)) == 0)
 
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 test_that("missingData works", {
@@ -604,7 +604,7 @@ test_that("missingData works", {
 
 
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 test_that("quality works", {
   skip_on_cran()
@@ -631,7 +631,7 @@ test_that("quality works", {
   expect_equal(y |> dplyr::filter(.data$variable_name == "Subjects not in person table" & .data$estimate_name== "count" )|> dplyr::pull(.data$estimate_value), "1")
   expect_equal(y |> dplyr::filter(.data$variable_name == "Subjects not in person table" & .data$estimate_name== "percentage" )|> dplyr::pull(.data$estimate_value), sprintf("%.2f", 100*1/n_subjects))
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 
   cdm <- cdmEunomia()
   ids <- cdm$observation_period |> dplyr::distinct(observation_period_id) |> dplyr::pull()
@@ -685,5 +685,5 @@ test_that("quality works", {
 
 
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })

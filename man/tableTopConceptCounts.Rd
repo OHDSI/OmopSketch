@@ -5,7 +5,13 @@
 \title{Create a visual table of the most common concepts from \code{summariseConceptIdCounts()} output.
 This function takes a \code{summarised_result} object and generates a formatted table highlighting the most frequent concepts.}
 \usage{
-tableTopConceptCounts(result, top = 10, countBy = NULL, type = "gt")
+tableTopConceptCounts(
+  result,
+  top = 10,
+  countBy = NULL,
+  type = "gt",
+  style = "default"
+)
 }
 \arguments{
 \item{result}{A \code{summarised_result} object, typically returned by \code{summariseConceptIdCounts()}.}
@@ -16,6 +22,12 @@ tableTopConceptCounts(result, top = 10, countBy = NULL, type = "gt")
 is used.}
 
 \item{type}{Character. The output table format. Defaults to \code{"gt"}. Use \code{visOmopResults::tableType()} to see all supported formats.}
+
+\item{style}{Named list that specifies how to style the different parts of the gt or flextable table generated.
+Accepted style entries are: title, subtitle, header, header_name, header_level, column_name, group_label, and body.
+Alternatively, use "default" to get visOmopResults style, or NULL for gt/flextable style.
+Keep in mind that styling code is different for gt and flextable. Additionally, "datatable" and "reactable" have their own style functions.
+To see style options for each table type use \code{visOmopResults::tableStyle()}}
 }
 \value{
 A formatted table object displaying the top concepts from the summarised data.

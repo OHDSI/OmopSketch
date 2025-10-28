@@ -219,5 +219,5 @@ summariseRecordCount(cdm, "drug_exposure",
 Finally, disconnect from the cdm
 
 ```{r, warning=FALSE}
-PatientProfiles::mockDisconnect(cdm = cdm)
+CDMConnector::cdmDisconnect(cdm = cdm)
 ```

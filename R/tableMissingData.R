@@ -1,6 +1,7 @@
 #' Create a visual table from a summariseMissingData() result.
 #' @param result A summarised_result object.
 #' @param  type Type of formatting output table. See `visOmopResults::tableType()` for allowed options. Default is `"gt"`.
+#' @inheritParams style
 #' @return A formatted table object with the summarised data.
 #' @export
 #' @examples
@@ -13,10 +14,11 @@
 #'
 #' tableMissingData(result = result)
 #'
-#' PatientProfiles::mockDisconnect(cdm = cdm)
+#' CDMConnector::cdmDisconnect(cdm = cdm)
 #' }
 tableMissingData <- function(result,
-                             type = "gt") {
+                             type = "gt",
+                             style = "default") {
   # initial checks
   rlang::check_installed("visOmopResults")
   omopgenerics::validateResultArgument(result)
@@ -51,6 +53,7 @@ tableMissingData <- function(result,
 
     visOmopResults::visOmopTable(
       type = type,
+      style = style,
       estimateName = c("N missing data (%)" = "<na_count> (<na_percentage>%)",
                        "N zeros (%)" = "<zero_count> (<zero_percentage>%)"),
       header = header,

@@ -75,6 +75,6 @@ summarisedResult <- summariseTrend(
 summarisedResult |>
   dplyr::glimpse()
 
-PatientProfiles::mockDisconnect(cdm = cdm)
+CDMConnector::cdmDisconnect(cdm = cdm)
 }
 }

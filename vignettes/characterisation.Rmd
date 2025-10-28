@@ -194,7 +194,7 @@ result_observationPeriod |>
 Finally, disconnect from the cdm
 
 ```{r, warning=FALSE}
-PatientProfiles::mockDisconnect(cdm = cdm)
+CDMConnector::cdmDisconnect(cdm = cdm)
 ```
 
 The results of the characterisation using `OmopSketch` can be further explored through the ShinyApp at <https://dpa-pde-oxford.shinyapps.io/OmopSketch-vignette/>

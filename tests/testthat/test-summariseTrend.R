@@ -127,7 +127,7 @@ test_that("summariseTrend - episode works", {
     dplyr::pull("n") |>
     as.numeric()
   expect_equal(x, y)
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 test_that("summariseTrend - event works", {
   skip_on_cran()
@@ -224,7 +224,7 @@ test_that("summariseTrend - event works", {
   result <- summariseTrend(cdm, event = "observation_period", interval = "months")
   checkResultType(result, "summarise_trend")
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 test_that("check sex argument works", {
@@ -304,7 +304,7 @@ test_that("check sex argument works", {
   expect_equal(x, sprintf("%.2f", y))
 
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 test_that("check ageGroup argument works", {
@@ -383,7 +383,7 @@ test_that("check ageGroup argument works", {
   expect_equal(x, y)
 
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 test_that("check person-days output works", {
@@ -468,7 +468,7 @@ test_that("check person-days output works", {
   expect_message(x <- summariseTrend(cdm, event = "observation_period", output = "person-days"))
   expect_equal(x, omopgenerics::emptySummarisedResult(), ignore_attr = TRUE)
   expect_equal(summariseTrend(cdm, event = "observation_period", output = c("record","person-days")),summariseTrend(cdm, event = "observation_period", output = c("record")) )
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 test_that("dateRange argument works", {
@@ -515,16 +515,16 @@ test_that("dateRange argument works", {
   expect_equal(z, omopgenerics::emptySummarisedResult(), ignore_attr = TRUE)
   expect_equal(summariseTrend(cdm, event = "drug_exposure", dateRange = as.Date(c("2012-01-01", NA))), y, ignore_attr = TRUE)
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 
   cdm <- cdmEunomia()
 
   expect_no_error(summariseTrend(cdm, "observation_period",
                                        interval = "years",
-                                       dateRange = as.Date(c("2012-01-01", NA))
+                                       dateRange = as.Date(c("1950-01-01", NA))
   ))
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 test_that("no tables created", {
@@ -553,7 +553,7 @@ test_that("no tables created", {
 
   expect_true(length(setdiff(endNames, startNames)) == 0)
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 test_that("age and sex output work", {
   skip_on_cran()
@@ -601,9 +601,9 @@ test_that("age and sex output work", {
   expect_no_error(x <- summariseTrend(cdm, episode = "observation_period", output = "sex"))
   y <- cdm$observation_period |>
     PatientProfiles::addSexQuery() |>
-    dplyr::mutate("n_tot" = dplyr::n_distinct("person_id")) |>
+    dplyr::mutate("n_tot" = dplyr::n_distinct(.data$person_id)) |>
     dplyr::filter(.data$sex == "Female") |>
-    dplyr::summarise("n_females" = dplyr::n_distinct("person_id"), n_tot = dplyr::first(.data$n_tot)) |>
+    dplyr::summarise("n_females" = dplyr::n_distinct(.data$person_id), n_tot = dplyr::first(.data$n_tot)) |>
     dplyr::collect()
   expect_equal(sprintf("%.2f", 100 * y$n_females / y$n_tot), x |> dplyr::filter(estimate_type == "percentage") |> dplyr::pull(estimate_value))
   expect_equal(x, summariseTrend(cdm, episode = "observation_period", sex = TRUE, output = "sex"))
@@ -620,7 +620,7 @@ test_that("age and sex output work", {
         dplyr::filter(.data$gender_concept_id %in% c(8507, 8532)),
       by = "person_id"
     ) |>
-    dplyr::mutate("n_tot" = dplyr::n_distinct("person_id")) |>
+    dplyr::mutate("n_tot" = dplyr::n_distinct(.data$person_id)) |>
     dplyr::mutate("start_date" = as.Date("2019-01-01")) |>
     dplyr::filter(observation_period_start_date < as.Date("2019-01-01") & observation_period_end_date >= as.Date("2019-01-01") |
                     (observation_period_start_date >= as.Date("2019-01-01") & observation_period_start_date <= as.Date("2019-12-31"))) |>
@@ -629,7 +629,7 @@ test_that("age and sex output work", {
     ) |>
     PatientProfiles::addDemographicsQuery(indexDate = "index_date", age = TRUE, ageGroup = list(c(0, 50)), sex = TRUE, priorObservation = FALSE, futureObservation = TRUE) |>
     dplyr::filter(.data$age_group == "0 to 50" & .data$sex == "Female") |>
-    dplyr::summarise("n_females" = dplyr::n_distinct("person_id"), n_tot = dplyr::first(.data$n_tot)) |>
+    dplyr::summarise("n_females" = dplyr::n_distinct(.data$person_id), n_tot = dplyr::first(.data$n_tot)) |>
     dplyr::collect()
 
   expect_equal(sprintf("%.2f", 100 * z$n_females / z$n_tot), y)
@@ -710,7 +710,7 @@ test_that("age and sex output work", {
     dplyr::select(!c("obs_start", "obs_end")) |>
     PatientProfiles::addSexQuery() |>
     dplyr::filter(.data$sex == "Female") |>
-    dplyr::summarise("n_females" = dplyr::n_distinct("person_id")) |>
+    dplyr::summarise("n_females" = dplyr::n_distinct(.data$person_id)) |>
     dplyr::collect()
   expect_equal(sprintf("%.2f", 100 * y$n_females / n_tot), x |> dplyr::filter(estimate_type == "percentage") |> dplyr::pull(estimate_value))
   expect_equal(x, summariseTrend(cdm, event = "drug_exposure", sex = TRUE, output = "sex"))
@@ -765,14 +765,14 @@ test_that("age and sex output work", {
     ) |>
     PatientProfiles::addDemographicsQuery(indexDate = "index_date", age = TRUE, ageGroup = list(c(0, 50)), sex = TRUE, priorObservation = FALSE, futureObservation = FALSE) |>
     dplyr::filter(.data$age_group == "0 to 50" & .data$sex == "Female") |>
-    dplyr::summarise("n_females" = dplyr::n_distinct("person_id")) |>
+    dplyr::summarise("n_females" = dplyr::n_distinct(.data$person_id)) |>
     dplyr::collect()
 
   expect_equal(sprintf("%.2f", 100 * z$n_females / n_tot), y)
 
 
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 test_that("overall time interval work", {
@@ -806,7 +806,7 @@ test_that("overall time interval work", {
 
   age <- cdm$observation_period |>
     PatientProfiles::addAgeQuery(indexDate = "observation_period_start_date") |>
-    dplyr::summarise(median = stats::median(.data$age), na.rm = TRUE) |>
+    dplyr::summarise(median = stats::median(.data$age, na.rm = TRUE), na.rm = TRUE) |>
     dplyr::pull(.data$median)
 
   expect_equal(x |> dplyr::filter(variable_name == "Records in observation") |> dplyr::pull(.data$estimate_value), as.character(records))
@@ -819,7 +819,7 @@ test_that("overall time interval work", {
   expect_equal(y |> dplyr::filter(variable_name == "Females in observation") |> dplyr::pull(.data$estimate_value), as.character(sex))
   expect_equal(y |> dplyr::filter(variable_name == "Age in observation") |> dplyr::pull(.data$estimate_value), as.character(age))
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 
@@ -843,7 +843,7 @@ test_that("tableTrend() works", {
   expect_no_error(tableTrend(summariseTrend(cdm, event = "condition_occurrence", output = "age")))
   expect_no_error(tableTrend(summariseTrend(cdm, episode = "drug_exposure", event = "condition_occurrence",interval = "years", output = c("age", "record"), sex = TRUE)))
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 test_that("plotTrend() works", {
@@ -862,5 +862,5 @@ test_that("plotTrend() works", {
 
   expect_warning(plotTrend(summariseTrend(cdm, episode = "condition_occurrence", event = "drug_exposure"), colour = NULL, facet = NULL))
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })

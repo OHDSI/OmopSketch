@@ -51,7 +51,7 @@
 #'
 #' summarisedResult
 #'
-#' PatientProfiles::mockDisconnect(cdm = cdm)
+#' CDMConnector::cdmDisconnect(cdm = cdm)
 #' }
 summariseClinicalRecords <- function(cdm,
                                      omopTableName,
@@ -169,6 +169,38 @@ summariseClinicalRecords <- function(cdm,
     if (length(variables)) {
     res <- list()
     if (quality) {
+
+      cli::cli_inform(c("i" = "Summarising subjects not in person table in {.pkg {table}}."))
+      number_subjects <- result$recordPerPerson |>
+        dplyr::filter(.data$variable_name == "Number subjects" & .data$strata_level == "overall" & .data$estimate_name == "count") |>
+        dplyr::pull(estimate_value) |>
+        as.numeric()
+      number_subjects_no_person <- x |>
+        dplyr::anti_join(cdm[["person"]], by = "person_id") |>
+        omopgenerics::numberSubjects() |>
+        as.numeric()
+      res$notInPerson <- dplyr::tibble(
+        count = as.character(as.integer(number_subjects_no_person)),
+        percentage = sprintf("%.2f", 100 * number_subjects_no_person / number_subjects)
+      ) |>
+        tidyr::pivot_longer(
+          cols = dplyr::everything(),
+          names_to = "estimate_name",
+          values_to = "estimate_value"
+        ) |>
+        dplyr::mutate(
+          variable_name = "Subjects not in person table",
+          variable_level = NA_character_,
+          estimate_type = dplyr::case_when(
+            .data$estimate_name == "count" ~ "integer",
+            .data$estimate_name == "percentage" ~ "percentage"
+          )
+        )
+
+      if (number_subjects_no_person > 0) {
+        cli::cli_warn(c("!" = "There {?is/are} {number_subjects_no_person} individual{?s} not included in the person table."))
+      }
+
       cli::cli_inform(c("i" = "Summarising records in observation in {.pkg {table}}."))
       strataInObs <- lapply(strata, function(x) c(x, "in_observation"))
       res$inObs <- x |>
@@ -263,6 +295,7 @@ summariseClinicalRecords <- function(cdm,
     result$variables <- res |>
       dplyr::bind_rows(
         res |>
+          dplyr::filter(.data$variable_name != "Subjects not in person table") |>
           dplyr::select("strata_name", "strata_level", "variable_name", "variable_level", "estimate_value") |>
           dplyr::left_join(denominator, by = c("strata_name", "strata_level")) |>
           dplyr::mutate(
@@ -366,7 +399,7 @@ summariseRecordsPerPerson <- function(x, den, strata, estimates) {
     dplyr::mutate(
       variable_name = dplyr::if_else(
         .data$variable_name == "n",
-        dplyr::if_else(.data$estimate_name == "sum", "Number records", "records_per_person"),
+        dplyr::if_else(.data$estimate_name == "sum", "Number records", "Records per person"),
         .data$variable_name
       ),
       estimate_name = dplyr::if_else(
@@ -450,6 +483,7 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
     dplyr::mutate(end_date = dplyr::coalesce(.data$end_date, .data$start_date))
 
   if (quality) {
+
     # Add in_observation flag
     obs_tbl <- cdm[["observation_period"]] |>
       dplyr::select(

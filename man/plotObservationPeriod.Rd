@@ -9,14 +9,15 @@ plotObservationPeriod(
   variableName = "Number subjects",
   plotType = "barplot",
   facet = NULL,
-  colour = NULL
+  colour = NULL,
+  style = "default"
 )
 }
 \arguments{
 \item{result}{A summarised_result object.}
 
-\item{variableName}{The variable to plot it can be: "number subjects",
-"records per person", "duration" or "days to next observation period".}
+\item{variableName}{The variable to plot it can be: "Number subjects",
+"Records per person", "Duration in days" or "Days to next observation period".}
 
 \item{plotType}{The plot type, it can be: "barplot", "boxplot" or
 "densityplot".}
@@ -26,6 +27,9 @@ plotObservationPeriod(
 
 \item{colour}{Columns to colour by. See possible columns to colour by with:
 \code{visOmopResults::tidyColumns()}.}
+
+\item{style}{Which style to apply to the plot, options are: "default", "darwin"
+and NULL (default ggplot style). Customised styles can be achieved by modifying the returned ggplot object.}
 }
 \value{
 A ggplot2 object.

@@ -2,6 +2,7 @@
 #'
 #' @param result Output from summariseClinicalRecords().
 #' @param type Type of formatting output table. See `visOmopResults::tableType()` for allowed options.
+#' @inheritParams style
 #' @return A formatted table object with the summarised data.
 #' @export
 #' @examples
@@ -28,7 +29,8 @@
 #' PatientProfiles::mockDisconnect(cdm)
 #' }
 tableClinicalRecords <- function(result,
-                                 type = "gt") {
+                                 type = "gt",
+                                 style = "default") {
   # initial checks
   rlang::check_installed("visOmopResults")
   omopgenerics::validateResultArgument(result)
@@ -47,13 +49,14 @@ tableClinicalRecords <- function(result,
   }
 
   header <- c("cdm_name")
-  custom_order <- c("Number records", "Number subjects", "Records per person", "In observation", "Domain", "Source vocabulary", "Standard concept", "Type concept id", "Start date before birth date", "End date before start date", "Column name")
+  custom_order <- c("Number records", "Number subjects", "Subjects not in person table", "Records per person", "In observation", "Domain", "Source vocabulary", "Standard concept", "Type concept id", "Start date before birth date", "End date before start date", "Column name")
   result |>
     formatColumn(c("variable_name", "variable_level")) |>
     dplyr::mutate(variable_name = factor(.data$variable_name, levels = custom_order)) |>
     dplyr::arrange(.data$variable_name, .data$variable_level) |>
     visOmopResults::visOmopTable(
       type = type,
+      style = style,
       estimateName = c(
         "N (%)" = "<count> (<percentage>%)",
         "N" = "<count>",

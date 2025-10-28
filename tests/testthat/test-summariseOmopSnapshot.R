@@ -3,7 +3,7 @@ test_that("summarise omop snapshot works", {
   cdm <- cdmEunomia()
   expect_no_error(result <- summariseOmopSnapshot(cdm))
   expect_true(inherits(summariseOmopSnapshot(cdm), "summarised_result"))
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 test_that("table omop snapshot works", {
@@ -20,7 +20,7 @@ test_that("table omop snapshot works", {
   # Check result type
   checkResultType(x, "summarise_omop_snapshot")
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 test_that("works with mockOmopSketch", {
@@ -35,5 +35,5 @@ test_that("works with mockOmopSketch", {
   # Check result type
   checkResultType(x, "summarise_omop_snapshot")
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
