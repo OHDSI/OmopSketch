@@ -4,7 +4,7 @@ test_that("summariseConceptIdCount works", {
   cdm <- cdmEunomia()
 
   expect_true(inherits(summariseConceptIdCounts(cdm, "drug_exposure"), "summarised_result"))
-  expect_warning(summariseConceptIdCounts(cdm, "observation_period"))
+  expect_error(summariseConceptIdCounts(cdm, "observation_period"))
   expect_no_error(x <- summariseConceptIdCounts(cdm, "visit_occurrence"))
   checkResultType(x, "summarise_concept_id_counts")
   expect_no_error(summariseConceptIdCounts(cdm, "condition_occurrence", countBy = c("record", "person")))
@@ -35,8 +35,6 @@ test_that("summariseConceptIdCount works", {
     ignore_attr = TRUE
   )
 
-
-  expect_warning(summariseConceptIdCounts(cdm, "observation_period"))
   expect_error(summariseConceptIdCounts(cdm, omopTableName = ""))
   expect_error(summariseConceptIdCounts(cdm, omopTableName = "visit_occurrence", countBy = "dd"))
   expect_equal(settings(y)$result_type, settings(p)$result_type)
@@ -318,5 +316,5 @@ test_that("sample argument works", {
   expect_equal(x |> omopgenerics::tidy() |> dplyr::filter(.data$variable_level == "4112343") |> dplyr::pull("count_records"),  omopgenerics::numberRecords(cdm$pharyngitis))
 
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm)
 })

@@ -326,5 +326,5 @@ test_that("sample argument works", {
   expect_equal(x |> omopgenerics::tidy() |> dplyr::filter(.data$variable_level == "gender_source_concept_id") |> dplyr::pull("zero_count"),  omopgenerics::numberSubjects(cdm$adult_males))
 
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })

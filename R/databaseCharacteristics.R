@@ -28,7 +28,7 @@
 #' }
 databaseCharacteristics <- function(cdm,
                                     omopTableName = c(
-                                      "person", "visit_occurrence",
+                                      "person", "visit_occurrence", "visit_detail",
                                       "condition_occurrence", "drug_exposure", "procedure_occurrence",
                                       "device_exposure", "measurement", "observation", "death"),
                                     sample = NULL,
@@ -41,10 +41,13 @@ databaseCharacteristics <- function(cdm,
   rlang::check_installed("CohortCharacteristics")
   rlang::check_installed("CohortConstructor")
 
-
   cdm <- omopgenerics::validateCdmArgument(cdm)
   opts <- omopgenerics::omopTables()
   opts <- opts[opts %in% names(cdm)]
+  if (missing(omopTableName)) {
+    omopTableName <- omopTableName[omopTableName %in% names(cdm)]
+  }
+
   omopgenerics::assertChoice(omopTableName, choices = opts)
   omopgenerics::assertLogical(sex, length = 1)
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, multipleAgeGroup = FALSE)
@@ -66,7 +69,7 @@ databaseCharacteristics <- function(cdm,
 
   if (!is.null(sample)) {
     cli::cli_inform(paste("The cdm is sampled to {sample}"))
-    cdm <- sampleCdm(cdm = cdm, tables = omopTableName, sample = sample)
+    cdm <- sampleCdm(cdm = cdm, tables = c(omopTableName, "observation_period"), sample = sample)
   }
   result <- list()
   # Snapshot
@@ -186,7 +189,7 @@ databaseCharacteristics <- function(cdm,
     c(list(
       cdm = cdm,
       episode = "observation_period",
-      event = omopTableName,
+      event = c(omopTableName, "observation_period"),
       output = c("record", "person", "person-days", "age", "sex"),
       interval = interval,
       sex = sex,

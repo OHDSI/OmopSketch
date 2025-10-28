@@ -56,8 +56,5 @@ test_that("sample works", {
  expect_true(all(x |> omopgenerics::filterSettings(grepl("observation_period",result_type)) |> dplyr::filter(.data$variable_name ==  "Number subjects") |> dplyr::pull(.data$estimate_value) |> as.numeric() <= n_subjects))
 
 
-
-
-
  })
 
