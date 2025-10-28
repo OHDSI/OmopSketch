@@ -6,7 +6,7 @@
 \usage{
 databaseCharacteristics(
   cdm,
-  omopTableName = c("person", "visit_occurrence", "condition_occurrence",
+  omopTableName = c("person", "visit_occurrence", "visit_detail", "condition_occurrence",
     "drug_exposure", "procedure_occurrence", "device_exposure", "measurement",
     "observation", "death"),
   sample = NULL,
@@ -59,9 +59,11 @@ library(OmopSketch)
 
 cdm <- mockOmopSketch(numberIndividuals = 100)
 
-result <- databaseCharacteristics(cdm = cdm,
-omopTableName = c("drug_exposure", "condition_occurrence"),
-sex = TRUE, ageGroup = list(c(0,50), c(51,100)), interval = "years", conceptIdCounts = FALSE)
+result <- databaseCharacteristics(
+  cdm = cdm,
+  omopTableName = c("drug_exposure", "condition_occurrence"),
+  sex = TRUE, ageGroup = list(c(0, 50), c(51, 100)), interval = "years", conceptIdCounts = FALSE
+)
 
 PatientProfiles::mockDisconnect(cdm)
 }

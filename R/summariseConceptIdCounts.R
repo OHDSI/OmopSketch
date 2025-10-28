@@ -10,6 +10,8 @@
 #' @param sex TRUE or FALSE. If TRUE code use will be summarised by sex.
 #' @param ageGroup A list of ageGroup vectors of length two. Code use will be
 #' thus summarised by age groups.
+#' @param inObservation Logical. If `TRUE`, the results are stratified to indicate whether each record occurs within an observation period.
+
 #' @inheritParams sample
 #' @inheritParams dateRange-startDate
 #'
