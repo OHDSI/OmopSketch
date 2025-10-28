@@ -67,6 +67,7 @@ number of records, number of subjects, person-days, median age, and number of fe
 <span>  interval <span class="op">=</span> <span class="st">"overall"</span>,</span>
 <span>  ageGroup <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  sex <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  inObservation <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  dateRange <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -104,6 +105,10 @@ If included, the number of person-days is computed only for episode tables.</p><
 
 <dt id="arg-sex">sex<a class="anchor" aria-label="anchor" href="#arg-sex"></a></dt>
 <dd><p>Logical. If <code>TRUE</code>, stratify results by sex.</p></dd>
+
+
+<dt id="arg-inobservation">inObservation<a class="anchor" aria-label="anchor" href="#arg-inobservation"></a></dt>
+<dd><p>Logical. If <code>TRUE</code>, the results are stratified to indicate whether each record occurs within an observation period.</p></dd>
 
 
 <dt id="arg-daterange">dateRange<a class="anchor" aria-label="anchor" href="#arg-daterange"></a></dt>
@@ -155,7 +160,7 @@ overlapping time intervals between start and end dates.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ group_level      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "condition_occurrence"<span style="color: #949494;">, </span>"condition_occurrence"<span style="color: #949494;">, </span>"cond…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ strata_name      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"age_group"<span style="color: #949494;">, </span>"sex"<span style="color: #949494;">, </span>"sex &amp;&amp;&amp; age_group"<span style="color: #949494;">, </span>"…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ strata_level     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"&lt;=20"<span style="color: #949494;">, </span>"Male"<span style="color: #949494;">, </span>"Male &amp;&amp;&amp; &lt;=20"<span style="color: #949494;">, </span>"overall"…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Records in observation"<span style="color: #949494;">, </span>"Records in observation"<span style="color: #949494;">, </span>"…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Number of records"<span style="color: #949494;">, </span>"Number of records"<span style="color: #949494;">, </span>"Number of …</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ variable_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">N</span>…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ estimate_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count"<span style="color: #949494;">, </span>"count"<span style="color: #949494;">, </span>"count"<span style="color: #949494;">, </span>"count"<span style="color: #949494;">, </span>"percentage"<span style="color: #949494;">, </span>"pe…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ estimate_type    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "integer"<span style="color: #949494;">, </span>"integer"<span style="color: #949494;">, </span>"integer"<span style="color: #949494;">, </span>"integer"<span style="color: #949494;">, </span>"percenta…</span>
