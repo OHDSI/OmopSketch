@@ -20,10 +20,11 @@
 #'
 #' result <- summariseObservationPeriod(observationPeriod = cdm$observation_period)
 #'
-#' plotObservationPeriod(result = result,
-#'     variableName = "Duration in days",
-#'     plotType = "boxplot"
-#'   )
+#' plotObservationPeriod(
+#'   result = result,
+#'   variableName = "Duration in days",
+#'   plotType = "boxplot"
+#' )
 #'
 #' PatientProfiles::mockDisconnect(cdm)
 #' }

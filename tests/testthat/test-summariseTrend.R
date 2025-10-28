@@ -6,18 +6,16 @@ test_that("summariseTrend - episode works", {
   # Check all tables work ----
   expect_true(inherits(summariseTrend(cdm), "summarised_result"))
   expect_equal(summariseTrend(cdm), omopgenerics::emptySummarisedResult(), ignore_attr = TRUE)
-  expect_no_error(summariseTrend(cdm,episode = "drug_exposure", event = "condition_occurrence", interval = "months"))
-  expect_true(inherits(summariseTrend(cdm,episode = "drug_exposure", event = "condition_occurrence", interval = "months"), "summarised_result"))
-
+  expect_no_error(summariseTrend(cdm, episode = "drug_exposure", event = "condition_occurrence", interval = "months"))
+  expect_true(inherits(summariseTrend(cdm, episode = "drug_exposure", event = "condition_occurrence", interval = "months"), "summarised_result"))
 
 
   # Check inputs ----
-  x <- summariseTrend(cdm, episode ="observation_period", interval = "years") |>
+  x <- summariseTrend(cdm, episode = "observation_period", interval = "years") |>
     dplyr::filter(additional_level == "1909-01-01 to 1909-12-31", estimate_name == "count") |>
     dplyr::pull("estimate_value") |>
     as.numeric()
   y <- cdm$observation_period %>%
-    dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") |>
     getYear(date = "observation_period_start_date", name = "start_year") |>
     getYear(date = "observation_period_end_date", name = "end_year") |>
     dplyr::filter(start_year <= 1909, end_year >= 1909) |>
@@ -26,9 +24,9 @@ test_that("summariseTrend - episode works", {
     as.numeric()
   expect_equal(x, y)
 
-  x <- summariseTrend(cdm, episode ="observation_period", interval = "years")
+  x <- summariseTrend(cdm, episode = "observation_period", interval = "years")
   expect_equal(x |> dplyr::filter(additional_level != "overall") |> dplyr::pull("additional_name") |> unique(), "time_interval")
-  x <- summariseTrend(cdm, episode ="drug_exposure", interval = "overall")
+  x <- summariseTrend(cdm, episode = "drug_exposure", interval = "overall")
   expect_equal(x |> dplyr::filter(additional_level == "overall") |> dplyr::pull("additional_name") |> unique(), "overall")
 
   x <- summariseTrend(cdm, episode = "drug_exposure", interval = "years") |>
@@ -36,14 +34,10 @@ test_that("summariseTrend - episode works", {
     dplyr::pull("estimate_value") |>
     as.numeric()
   y <- cdm$drug_exposure %>%
-    dplyr::inner_join(cdm[["observation_period"]] |> dplyr::select("person_id", "observation_period_start_date", "observation_period_end_date"), by = "person_id") %>%
-    dplyr::filter(
-      .data$drug_exposure_start_date >= .data$observation_period_start_date & .data$drug_exposure_end_date <= .data$observation_period_end_date
-    ) %>%
     getYear(date = "drug_exposure_start_date", name = "start") |>
     getYear(date = "drug_exposure_end_date", name = "end") |>
     dplyr::filter((.data$start < 1936 & .data$end >= 1936) |
-                    (.data$start >= 1936 & .data$start <= 1936)) |>
+      (.data$start >= 1936 & .data$start <= 1936)) |>
     dplyr::tally() |>
     dplyr::pull("n") |>
     as.numeric()
@@ -54,11 +48,10 @@ test_that("summariseTrend - episode works", {
     dplyr::pull("estimate_value") |>
     as.numeric()
   y <- cdm$observation_period %>%
-    dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
     getYear(date = "observation_period_start_date", name = "start") |>
     getYear(date = "observation_period_end_date", name = "end") |>
     dplyr::filter((.data$start < 1936 & .data$end >= 1936) |
-                    (.data$start >= 1936 & .data$start <= 1936)) |>
+      (.data$start >= 1936 & .data$start <= 1936)) |>
     dplyr::tally() |>
     dplyr::pull("n") |>
     as.numeric()
@@ -69,11 +62,10 @@ test_that("summariseTrend - episode works", {
     dplyr::pull("estimate_value") |>
     as.numeric()
   y <- cdm$observation_period %>%
-    dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
     getYear(date = "observation_period_start_date", name = "start") |>
     getYear(date = "observation_period_end_date", name = "end") |>
     dplyr::filter((.data$start < 1996 & .data$end >= 1996) |
-                    (.data$start >= 1996 & .data$start <= 1996)) |>
+      (.data$start >= 1996 & .data$start <= 1996)) |>
     dplyr::distinct(.data$person_id) |>
     dplyr::tally() |>
     dplyr::pull("n") |>
@@ -85,14 +77,10 @@ test_that("summariseTrend - episode works", {
     dplyr::pull("estimate_value") |>
     as.numeric()
   y <- cdm$condition_occurrence %>%
-    dplyr::inner_join(cdm[["observation_period"]] |> dplyr::select("person_id", "observation_period_start_date", "observation_period_end_date"), by = "person_id") %>%
-    dplyr::filter(
-      .data$condition_start_date >= .data$observation_period_start_date & .data$condition_end_date <= .data$observation_period_end_date
-    ) %>%
     getYear(date = "condition_start_date", name = "start") |>
     getYear(date = "condition_end_date", name = "end") |>
     dplyr::filter((.data$start < 1998 & .data$end >= 1998) |
-                    (.data$start >= 1998 & .data$start <= 1998)) |>
+      (.data$start >= 1998 & .data$start <= 1998)) |>
     dplyr::tally() |>
     dplyr::pull("n") |>
     as.numeric()
@@ -103,7 +91,6 @@ test_that("summariseTrend - episode works", {
     dplyr::pull("estimate_value") |>
     as.numeric()
   y <- cdm$observation_period %>%
-    dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
     dplyr::filter(
       (observation_period_start_date < as.Date("1942-03-01") & observation_period_end_date >= as.Date("1942-03-01")) |
         (observation_period_start_date >= as.Date("1942-03-01") & observation_period_start_date <= as.Date("1942-03-31"))
@@ -118,7 +105,6 @@ test_that("summariseTrend - episode works", {
     dplyr::pull("estimate_value") |>
     as.numeric()
   y <- cdm$observation_period %>%
-    dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
     dplyr::filter(
       (observation_period_start_date < as.Date("1942-03-01") & observation_period_end_date >= as.Date("1942-03-01")) |
         (observation_period_start_date >= as.Date("1942-03-01") & observation_period_start_date <= as.Date("1942-03-31"))
@@ -158,16 +144,15 @@ test_that("summariseTrend - event works", {
   # Check inputs ----
   expect_true(
     (summariseTrend(cdm, event = "observation_period", interval = "years") |>
-       dplyr::filter(additional_level == "1963-01-01 to 1963-12-31", estimate_name == "count") |>
-       dplyr::pull("estimate_value") |>
-       as.numeric()) ==
+      dplyr::filter(additional_level == "1963-01-01 to 1963-12-31", estimate_name == "count") |>
+      dplyr::pull("estimate_value") |>
+      as.numeric()) ==
       (cdm$observation_period |>
-         dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") |>
-         dplyr::ungroup() |>
-         dplyr::mutate(year = clock::get_year(observation_period_start_date)) |>
-         dplyr::filter(year == 1963) |>
-         dplyr::tally() |>
-         dplyr::pull("n"))
+        dplyr::ungroup() |>
+        dplyr::mutate(year = clock::get_year(observation_period_start_date)) |>
+        dplyr::filter(year == 1963) |>
+        dplyr::tally() |>
+        dplyr::pull("n"))
   )
 
   expect_true(
@@ -176,48 +161,45 @@ test_that("summariseTrend - event works", {
       dplyr::pull("estimate_value") |>
       as.numeric() ==
       (cdm$condition_occurrence |>
-         dplyr::ungroup() |>
-         dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") |>
-         dplyr::mutate(year = clock::get_year(condition_start_date)) |>
-         dplyr::mutate(month = clock::get_month(condition_start_date)) |>
-         dplyr::filter(year == 1961, month == 2) |>
-         dplyr::tally() |>
-         dplyr::pull("n"))
+        dplyr::ungroup() |>
+        dplyr::mutate(year = clock::get_year(condition_start_date)) |>
+        dplyr::mutate(month = clock::get_month(condition_start_date)) |>
+        dplyr::filter(year == 1961, month == 2) |>
+        dplyr::tally() |>
+        dplyr::pull("n"))
   )
 
   expect_true(
     (summariseTrend(cdm, event = "condition_occurrence", interval = "months") |>
-       dplyr::filter(additional_level %in% c("1984-01-01 to 1984-01-31", "1984-02-01 to 1984-02-29", "1984-03-01 to 1984-03-31"), estimate_name == "count") |>
-       dplyr::summarise("estimate_value" = sum(as.numeric(estimate_value), na.rm = TRUE)) |>
-       dplyr::pull("estimate_value") |>
-       as.numeric()) ==
+      dplyr::filter(additional_level %in% c("1984-01-01 to 1984-01-31", "1984-02-01 to 1984-02-29", "1984-03-01 to 1984-03-31"), estimate_name == "count") |>
+      dplyr::summarise("estimate_value" = sum(as.numeric(estimate_value), na.rm = TRUE)) |>
+      dplyr::pull("estimate_value") |>
+      as.numeric()) ==
       (cdm$condition_occurrence |>
-         dplyr::ungroup() |>
-         dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") |>
-         dplyr::mutate(year = clock::get_year(condition_start_date)) |>
-         dplyr::mutate(month = clock::get_month(condition_start_date)) |>
-         dplyr::filter(year == 1984, month %in% c(1:3)) |>
-         dplyr::tally() |>
-         dplyr::pull("n"))
+        dplyr::ungroup() |>
+        dplyr::mutate(year = clock::get_year(condition_start_date)) |>
+        dplyr::mutate(month = clock::get_month(condition_start_date)) |>
+        dplyr::filter(year == 1984, month %in% c(1:3)) |>
+        dplyr::tally() |>
+        dplyr::pull("n"))
   )
 
   expect_true(
     (summariseTrend(cdm, event = "drug_exposure", interval = "years") |>
-       dplyr::filter(additional_level %in% c(
-         "1981-01-01 to 1981-12-31", "1982-01-01 to 1982-12-31", "1983-01-01 to 1983-12-31",
-         "1984-01-01 to 1984-12-31", "1985-01-01 to 1985-12-31", "1986-01-01 to 1986-12-31",
-         "1987-01-01 to 1987-12-31", "1988-01-01 to 1988-12-31"
-       ), estimate_name == "count") |>
-       dplyr::summarise("estimate_value" = sum(as.numeric(.data$estimate_value), na.rm = TRUE)) |>
-       dplyr::pull("estimate_value") |>
-       as.numeric()) ==
+      dplyr::filter(additional_level %in% c(
+        "1981-01-01 to 1981-12-31", "1982-01-01 to 1982-12-31", "1983-01-01 to 1983-12-31",
+        "1984-01-01 to 1984-12-31", "1985-01-01 to 1985-12-31", "1986-01-01 to 1986-12-31",
+        "1987-01-01 to 1987-12-31", "1988-01-01 to 1988-12-31"
+      ), estimate_name == "count") |>
+      dplyr::summarise("estimate_value" = sum(as.numeric(.data$estimate_value), na.rm = TRUE)) |>
+      dplyr::pull("estimate_value") |>
+      as.numeric()) ==
       (cdm$drug_exposure |>
-         dplyr::ungroup() |>
-         dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") |>
-         dplyr::mutate(year = clock::get_year(drug_exposure_start_date)) |>
-         dplyr::filter(year %in% c(1981:1988)) |>
-         dplyr::tally() |>
-         dplyr::pull("n"))
+        dplyr::ungroup() |>
+        dplyr::mutate(year = clock::get_year(drug_exposure_start_date)) |>
+        dplyr::filter(year %in% c(1981:1988)) |>
+        dplyr::tally() |>
+        dplyr::pull("n"))
   )
 
   # Check result type
@@ -250,28 +232,23 @@ test_that("check sex argument works", {
   expect_equal(x, y)
 
   y <- cdm$visit_occurrence |>
-    dplyr::inner_join(cdm[["observation_period"]] |> dplyr::select("person_id", "observation_period_start_date", "observation_period_end_date"), by = "person_id") %>%
-    dplyr::filter(
-      .data$visit_start_date >= .data$observation_period_start_date & .data$visit_end_date <= .data$observation_period_end_date
-    ) %>%
     dplyr::filter(visit_start_date < as.Date("1923-01-01") & visit_end_date >= as.Date("1923-01-01") |
-                    (visit_start_date >= as.Date("1923-01-01") & visit_start_date <= as.Date("1923-12-31"))) |>
+      (visit_start_date >= as.Date("1923-01-01") & visit_start_date <= as.Date("1923-12-31"))) |>
     dplyr::tally() |>
     dplyr::pull() |>
     as.numeric()
   expect_equal(x, y)
 
   # Check a random group
-  x <- summariseTrend(cdm, episode ="observation_period", interval = "years", sex = TRUE) |>
+  x <- summariseTrend(cdm, episode = "observation_period", interval = "years", sex = TRUE) |>
     dplyr::filter(strata_level == "Male", additional_level == "1915-01-01 to 1915-12-31", estimate_name == "count") |>
     dplyr::pull(estimate_value) |>
     as.numeric()
   y <- cdm$observation_period |>
-    dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
     PatientProfiles::addSexQuery() |>
     dplyr::filter(sex == "Male") |>
     dplyr::filter(observation_period_start_date < as.Date("1915-01-01") & observation_period_end_date >= as.Date("1915-01-01") |
-                    (observation_period_start_date >= as.Date("1915-01-01") & observation_period_start_date <= as.Date("1915-12-31"))) |>
+      (observation_period_start_date >= as.Date("1915-01-01") & observation_period_start_date <= as.Date("1915-12-31"))) |>
     dplyr::tally() |>
     dplyr::pull() |>
     as.numeric()
@@ -281,11 +258,11 @@ test_that("check sex argument works", {
     dplyr::filter(strata_level == "Male", additional_level == "1918-01-01 to 1918-12-31", estimate_name == "percentage") |>
     dplyr::pull(estimate_value)
   y <- (cdm$observation_period |>
-          PatientProfiles::addSexQuery() |>
-          dplyr::filter(sex == "Male") |>
-          dplyr::filter(observation_period_start_date >= as.Date("1918-01-01") & observation_period_start_date <= as.Date("1918-12-31")) |>
-          dplyr::tally() |>
-          dplyr::pull()) / (cdm[["observation_period"]] |> dplyr::tally() |> dplyr::pull() |> as.numeric()) * 100
+    PatientProfiles::addSexQuery() |>
+    dplyr::filter(sex == "Male") |>
+    dplyr::filter(observation_period_start_date >= as.Date("1918-01-01") & observation_period_start_date <= as.Date("1918-12-31")) |>
+    dplyr::tally() |>
+    dplyr::pull()) / (cdm[["observation_period"]] |> dplyr::tally() |> dplyr::pull() |> as.numeric()) * 100
   expect_equal(x, sprintf("%.2f", y))
 
   expect_no_error(x <- summariseTrend(cdm, event = "observation_period", output = "person", interval = "years", sex = TRUE))
@@ -319,9 +296,8 @@ test_that("check ageGroup argument works", {
     dplyr::pull(estimate_value) |>
     as.numeric()
   y <- cdm$observation_period |>
-    dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
     dplyr::filter(observation_period_start_date < as.Date("1928-01-01") & observation_period_end_date >= as.Date("1928-01-01") |
-                    (observation_period_start_date >= as.Date("1928-01-01") & observation_period_start_date <= as.Date("1928-12-31"))) |>
+      (observation_period_start_date >= as.Date("1928-01-01") & observation_period_start_date <= as.Date("1928-12-31"))) |>
     dplyr::mutate("start" = as.Date("1928-01-01"), "end" = as.Date("1928-12-31")) |>
     PatientProfiles::addAgeQuery(indexDate = "start", ageName = "age_start") %>%
     dplyr::mutate(age_end = age_start + 10) |>
@@ -336,7 +312,6 @@ test_that("check ageGroup argument works", {
     dplyr::pull(estimate_value) |>
     as.numeric()
   y <- cdm$observation_period |>
-    dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
     dplyr::filter(observation_period_start_date >= as.Date("1928-01-01") & observation_period_start_date <= as.Date("1928-12-31")) |>
     dplyr::mutate("start" = as.Date("1928-01-01"), "end" = as.Date("1928-12-31")) |>
     PatientProfiles::addAgeQuery(indexDate = "start", ageName = "age_start") %>%
@@ -354,9 +329,8 @@ test_that("check ageGroup argument works", {
     dplyr::pull(estimate_value) |>
     as.numeric()
   y <- cdm$observation_period |>
-    dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
     dplyr::filter(observation_period_start_date < as.Date("1928-01-01") & observation_period_end_date >= as.Date("1928-01-01") |
-                    (observation_period_start_date >= as.Date("1928-01-01") & observation_period_start_date <= as.Date("1928-12-31"))) |>
+      (observation_period_start_date >= as.Date("1928-01-01") & observation_period_start_date <= as.Date("1928-12-31"))) |>
     dplyr::mutate("start" = as.Date("1928-01-01"), "end" = as.Date("1928-12-31")) |>
     PatientProfiles::addAgeQuery(indexDate = "start", ageName = "age_start") %>%
     dplyr::mutate(age_end = age_start + 10) |>
@@ -372,7 +346,6 @@ test_that("check ageGroup argument works", {
     dplyr::pull(estimate_value) |>
     as.numeric()
   y <- cdm$observation_period |>
-    dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
     dplyr::filter(observation_period_start_date >= as.Date("1928-01-01") & observation_period_start_date <= as.Date("1928-12-31")) |>
     dplyr::mutate("start" = as.Date("1928-01-01"), "end" = as.Date("1928-12-31")) |>
     PatientProfiles::addAgeQuery(indexDate = "start", ageName = "age_start") %>%
@@ -398,9 +371,8 @@ test_that("check person-days output works", {
     dplyr::pull("estimate_value") |>
     as.numeric()
   y <- cdm$observation_period |>
-    dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
     dplyr::filter(observation_period_start_date < as.Date("1970-01-01") & observation_period_end_date >= as.Date("1970-01-01") |
-                    (observation_period_start_date >= as.Date("1970-01-01") & observation_period_start_date <= as.Date("1970-12-31"))) |>
+      (observation_period_start_date >= as.Date("1970-01-01") & observation_period_start_date <= as.Date("1970-12-31"))) |>
     dplyr::mutate("start_date" = as.Date("1970-01-01"), "end_date" = as.Date("1970-12-31")) %>%
     dplyr::mutate(
       "start_date" = pmax(start_date, observation_period_start_date, na.rm = TRUE),
@@ -414,7 +386,6 @@ test_that("check person-days output works", {
 
   # Check percentage
   den <- cdm$observation_period |>
-    dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") |>
     datediffDays(start = "observation_period_start_date", end = "observation_period_end_date", name = "days", offset = 1) |>
     dplyr::summarise(n = sum(days, na.rm = TRUE)) |>
     dplyr::pull("n")
@@ -422,9 +393,8 @@ test_that("check person-days output works", {
     dplyr::filter(variable_name == "Person-days", additional_level == "1964-01-01 to 1964-12-31", estimate_type == "percentage") |>
     dplyr::pull("estimate_value")
   y <- cdm$observation_period |>
-    dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
     dplyr::filter(observation_period_start_date < as.Date("1964-01-01") & observation_period_end_date >= as.Date("1964-01-01") |
-                    (observation_period_start_date >= as.Date("1964-01-01") & observation_period_start_date <= as.Date("1964-12-31"))) |>
+      (observation_period_start_date >= as.Date("1964-01-01") & observation_period_start_date <= as.Date("1964-12-31"))) |>
     dplyr::mutate("start_date" = as.Date("1964-01-01"), "end_date" = as.Date("1964-12-31")) %>%
     dplyr::mutate(
       "start_date" = pmax(start_date, observation_period_start_date, na.rm = TRUE),
@@ -467,7 +437,7 @@ test_that("check person-days output works", {
 
   expect_message(x <- summariseTrend(cdm, event = "observation_period", output = "person-days"))
   expect_equal(x, omopgenerics::emptySummarisedResult(), ignore_attr = TRUE)
-  expect_equal(summariseTrend(cdm, event = "observation_period", output = c("record","person-days")),summariseTrend(cdm, event = "observation_period", output = c("record")) )
+  expect_equal(summariseTrend(cdm, event = "observation_period", output = c("record", "person-days")), summariseTrend(cdm, event = "observation_period", output = c("record")))
   CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
@@ -495,10 +465,10 @@ test_that("dateRange argument works", {
   x <- summariseTrend(cdm, episode = "observation_period", dateRange = as.Date(c("1940-01-01", "1940-12-31"))) |>
     dplyr::filter(estimate_name == "count") |>
     dplyr::pull(estimate_value)
-  y  <- summariseTrend(cdm, event = "observation_period", dateRange = as.Date(c("1940-01-01", "1940-12-31"))) |>
+  y <- summariseTrend(cdm, event = "observation_period", dateRange = as.Date(c("1940-01-01", "1940-12-31"))) |>
     dplyr::filter(estimate_name == "count") |>
     dplyr::pull(estimate_value)
-  expect_false(x==y)
+  expect_false(x == y)
 
   expect_no_error(summariseTrend(cdm, event = "condition_occurrence", dateRange = as.Date(c("2012-01-01", "2018-01-01"))))
   expect_message(x <- summariseTrend(cdm, event = "drug_exposure", dateRange = as.Date(c("2012-01-01", "2025-01-01"))))
@@ -520,8 +490,8 @@ test_that("dateRange argument works", {
   cdm <- cdmEunomia()
 
   expect_no_error(summariseTrend(cdm, "observation_period",
-                                       interval = "years",
-                                       dateRange = as.Date(c("1950-01-01", NA))
+    interval = "years",
+    dateRange = as.Date(c("1950-01-01", NA))
   ))
 
   CDMConnector::cdmDisconnect(cdm = cdm)
@@ -534,19 +504,19 @@ test_that("no tables created", {
 
   startNames <- omopgenerics::listSourceTables(cdm)
 
-  results <- summariseTrend(cdm, episode = "observation_period",
-                            event = "drug_exposure",
-                                    output = c("age", "sex", "record", "person-days", "person"),
-                                    interval = "years",
-                                    sex = TRUE,
-                                    ageGroup = list(
-                                      c(0, 17),
-                                      c(18, 65),
-                                      c(66, 100)
-                                    ),
-                                    dateRange = as.Date(c("2012-01-01", "2018-01-01"))
+  results <- summariseTrend(cdm,
+    episode = "observation_period",
+    event = "drug_exposure",
+    output = c("age", "sex", "record", "person-days", "person"),
+    interval = "years",
+    sex = TRUE,
+    ageGroup = list(
+      c(0, 17),
+      c(18, 65),
+      c(66, 100)
+    ),
+    dateRange = as.Date(c("2012-01-01", "2018-01-01"))
   )
-
 
 
   endNames <- omopgenerics::listSourceTables(cdm)
@@ -561,9 +531,9 @@ test_that("age and sex output work", {
   cdm <- cdmEunomia()
   expect_no_error(x <- summariseTrend(cdm, episode = "observation_period", output = "age"))
   expect_equal(cdm$observation_period |>
-                 PatientProfiles::addAgeQuery(indexDate = "observation_period_start_date") |>
-                 dplyr::pull("age") |>
-                 stats::median(), as.numeric(x$estimate_value))
+    PatientProfiles::addAgeQuery(indexDate = "observation_period_start_date") |>
+    dplyr::pull("age") |>
+    stats::median(), as.numeric(x$estimate_value))
   expect_no_error(y <- summariseTrend(cdm, episode = "observation_period", output = "age", sex = TRUE, ageGroup = list(c(0, 50))))
   y <- y |>
     omopgenerics::splitStrata() |>
@@ -585,7 +555,7 @@ test_that("age and sex output work", {
     as.numeric()
   z <- cdm$observation_period |>
     dplyr::filter(observation_period_start_date < as.Date("2019-01-01") & observation_period_end_date >= as.Date("2019-01-01") |
-                    (observation_period_start_date >= as.Date("2019-01-01") & observation_period_start_date <= as.Date("2019-12-31"))) |>
+      (observation_period_start_date >= as.Date("2019-01-01") & observation_period_start_date <= as.Date("2019-12-31"))) |>
     dplyr::mutate("start_date" = as.Date("2019-01-01")) |>
     dplyr::mutate(
       "index_date" = pmax(start_date, observation_period_start_date, na.rm = TRUE)
@@ -623,7 +593,7 @@ test_that("age and sex output work", {
     dplyr::mutate("n_tot" = dplyr::n_distinct(.data$person_id)) |>
     dplyr::mutate("start_date" = as.Date("2019-01-01")) |>
     dplyr::filter(observation_period_start_date < as.Date("2019-01-01") & observation_period_end_date >= as.Date("2019-01-01") |
-                    (observation_period_start_date >= as.Date("2019-01-01") & observation_period_start_date <= as.Date("2019-12-31"))) |>
+      (observation_period_start_date >= as.Date("2019-01-01") & observation_period_start_date <= as.Date("2019-12-31"))) |>
     dplyr::mutate(
       "index_date" = pmax(start_date, observation_period_start_date, na.rm = TRUE)
     ) |>
@@ -638,9 +608,9 @@ test_that("age and sex output work", {
 
   expect_no_error(x <- summariseTrend(cdm, event = "observation_period", output = "age"))
   expect_equal(cdm$observation_period |>
-                 PatientProfiles::addAgeQuery(indexDate = "observation_period_start_date") |>
-                 dplyr::pull("age") |>
-                 stats::median(), as.numeric(x$estimate_value))
+    PatientProfiles::addAgeQuery(indexDate = "observation_period_start_date") |>
+    dplyr::pull("age") |>
+    stats::median(), as.numeric(x$estimate_value))
   expect_no_error(y <- summariseTrend(cdm, event = "observation_period", output = "age", sex = TRUE, ageGroup = list(c(0, 50))))
   y <- y |>
     omopgenerics::splitStrata() |>
@@ -661,7 +631,7 @@ test_that("age and sex output work", {
     dplyr::pull("estimate_value") |>
     as.numeric()
   z <- cdm$drug_exposure |>
-    dplyr::filter(drug_exposure_start_date >= as.Date("1985-01-01") & drug_exposure_start_date <= as.Date("1985-12-31"))|>
+    dplyr::filter(drug_exposure_start_date >= as.Date("1985-01-01") & drug_exposure_start_date <= as.Date("1985-12-31")) |>
     dplyr::mutate("start_date" = as.Date("1985-01-01")) |>
     dplyr::mutate(
       "index_date" = pmax(start_date, drug_exposure_start_date, na.rm = TRUE)
@@ -676,38 +646,12 @@ test_that("age and sex output work", {
 
   expect_no_error(x <- summariseTrend(cdm, event = "drug_exposure", output = "sex"))
   n_tot <- cdm$drug_exposure |>
-    dplyr::inner_join(
-      cdm[["observation_period"]] |>
-        dplyr::select(
-          "person_id",
-          obs_start = "observation_period_start_date",
-          obs_end = "observation_period_end_date"
-        ),
-      by = "person_id"
-    ) |>
-    dplyr::filter(
-      .data$drug_exposure_start_date >= .data$obs_start & .data$drug_exposure_start_date <= .data$obs_end
-    ) |>
-    dplyr::select(!c("obs_start", "obs_end")) |>
     dplyr::inner_join(cdm[["person"]] |>
-                        dplyr::filter(.data$gender_concept_id %in% c(8507, 8532)), by = "person_id") |>
+      dplyr::filter(.data$gender_concept_id %in% c(8507, 8532)), by = "person_id") |>
     dplyr::summarise("n" = dplyr::n_distinct(.data$person_id)) |>
     dplyr::pull("n")
 
   y <- cdm$drug_exposure |>
-    dplyr::inner_join(
-      cdm[["observation_period"]] |>
-        dplyr::select(
-          "person_id",
-          obs_start = "observation_period_start_date",
-          obs_end = "observation_period_end_date"
-        ),
-      by = "person_id"
-    ) |>
-    dplyr::filter(
-      .data$drug_exposure_start_date >= .data$obs_start & .data$drug_exposure_start_date <= .data$obs_end
-    ) |>
-    dplyr::select(!c("obs_start", "obs_end")) |>
     PatientProfiles::addSexQuery() |>
     dplyr::filter(.data$sex == "Female") |>
     dplyr::summarise("n_females" = dplyr::n_distinct(.data$person_id)) |>
@@ -722,37 +666,11 @@ test_that("age and sex output work", {
     dplyr::pull("estimate_value")
 
   n_tot <- cdm$condition_occurrence |>
-    dplyr::inner_join(
-      cdm[["observation_period"]] |>
-        dplyr::select(
-          "person_id",
-          obs_start = "observation_period_start_date",
-          obs_end = "observation_period_end_date"
-        ),
-      by = "person_id"
-    ) |>
-    dplyr::filter(
-      .data$condition_start_date >= .data$obs_start & .data$condition_start_date <= .data$obs_end
-    ) |>
-    dplyr::select(!c("obs_start", "obs_end")) |>
     dplyr::inner_join(cdm[["person"]] |>
-                        dplyr::filter(.data$gender_concept_id %in% c(8507, 8532)), by = "person_id") |>
+      dplyr::filter(.data$gender_concept_id %in% c(8507, 8532)), by = "person_id") |>
     dplyr::summarise("n" = dplyr::n_distinct(.data$person_id)) |>
     dplyr::pull("n")
   z <- cdm$condition_occurrence |>
-    dplyr::inner_join(
-      cdm[["observation_period"]] |>
-        dplyr::select(
-          "person_id",
-          obs_start = "observation_period_start_date",
-          obs_end = "observation_period_end_date"
-        ),
-      by = "person_id"
-    ) |>
-    dplyr::filter(
-      .data$condition_start_date >= .data$obs_start & .data$condition_start_date <= .data$obs_end
-    ) |>
-    dplyr::select(!c("obs_start", "obs_end")) |>
     dplyr::inner_join(
       cdm$person |>
         dplyr::filter(.data$gender_concept_id %in% c(8507, 8532)),
@@ -769,7 +687,6 @@ test_that("age and sex output work", {
     dplyr::collect()
 
   expect_equal(sprintf("%.2f", 100 * z$n_females / n_tot), y)
-
 
 
   CDMConnector::cdmDisconnect(cdm = cdm)
@@ -809,15 +726,15 @@ test_that("overall time interval work", {
     dplyr::summarise(median = stats::median(.data$age, na.rm = TRUE), na.rm = TRUE) |>
     dplyr::pull(.data$median)
 
-  expect_equal(x |> dplyr::filter(variable_name == "Records in observation") |> dplyr::pull(.data$estimate_value), as.character(records))
-  expect_equal(x |> dplyr::filter(variable_name == "Subjects in observation") |> dplyr::pull(.data$estimate_value), as.character(person))
-  expect_equal(x |> dplyr::filter(variable_name == "Females in observation") |> dplyr::pull(.data$estimate_value), as.character(sex))
-  expect_equal(x |> dplyr::filter(variable_name == "Age in observation") |> dplyr::pull(.data$estimate_value), as.character(age))
+  expect_equal(x |> dplyr::filter(variable_name == "Number of records") |> dplyr::pull(.data$estimate_value), as.character(records))
+  expect_equal(x |> dplyr::filter(variable_name == "Number of subjects") |> dplyr::pull(.data$estimate_value), as.character(person))
+  expect_equal(x |> dplyr::filter(variable_name == "Number of females") |> dplyr::pull(.data$estimate_value), as.character(sex))
+  expect_equal(x |> dplyr::filter(variable_name == "Age") |> dplyr::pull(.data$estimate_value), as.character(age))
 
-  expect_equal(y |> dplyr::filter(variable_name == "Records in observation") |> dplyr::pull(.data$estimate_value), as.character(records))
-  expect_equal(y |> dplyr::filter(variable_name == "Subjects in observation") |> dplyr::pull(.data$estimate_value), as.character(person))
-  expect_equal(y |> dplyr::filter(variable_name == "Females in observation") |> dplyr::pull(.data$estimate_value), as.character(sex))
-  expect_equal(y |> dplyr::filter(variable_name == "Age in observation") |> dplyr::pull(.data$estimate_value), as.character(age))
+  expect_equal(y |> dplyr::filter(variable_name == "Number of records") |> dplyr::pull(.data$estimate_value), as.character(records))
+  expect_equal(y |> dplyr::filter(variable_name == "Number of subjects") |> dplyr::pull(.data$estimate_value), as.character(person))
+  expect_equal(y |> dplyr::filter(variable_name == "Number of females") |> dplyr::pull(.data$estimate_value), as.character(sex))
+  expect_equal(y |> dplyr::filter(variable_name == "Age") |> dplyr::pull(.data$estimate_value), as.character(age))
 
   CDMConnector::cdmDisconnect(cdm = cdm)
 })
@@ -841,7 +758,7 @@ test_that("tableTrend() works", {
   expect_no_error(x <- tableTrend(summariseTrend(cdm, episode = "condition_occurrence"), type = "datatable"))
   expect_no_error(x <- tableTrend(summariseTrend(cdm, event = "condition_occurrence"), type = "reactable"))
   expect_no_error(tableTrend(summariseTrend(cdm, event = "condition_occurrence", output = "age")))
-  expect_no_error(tableTrend(summariseTrend(cdm, episode = "drug_exposure", event = "condition_occurrence",interval = "years", output = c("age", "record"), sex = TRUE)))
+  expect_no_error(tableTrend(summariseTrend(cdm, episode = "drug_exposure", event = "condition_occurrence", interval = "years", output = c("age", "record"), sex = TRUE)))
 
   CDMConnector::cdmDisconnect(cdm = cdm)
 })
@@ -861,6 +778,55 @@ test_that("plotTrend() works", {
   expect_no_error(plotTrend(summariseTrend(cdm, episode = "observation_period", output = c("age", "sex")), output = "sex"))
 
   expect_warning(plotTrend(summariseTrend(cdm, episode = "condition_occurrence", event = "drug_exposure"), colour = NULL, facet = NULL))
+
+  CDMConnector::cdmDisconnect(cdm = cdm)
+})
+
+test_that("argument inObservation works", {
+  skip_on_cran()
+  # Load mock database ----
+  cdm <- cdmEunomia()
+
+  expect_equal(summariseTrend(cdm, event = "observation_period", inObservation = TRUE), summariseTrend(cdm, event = "observation_period", inObservation = FALSE))
+  expect_equal(summariseTrend(cdm, episode = "observation_period", inObservation = TRUE), summariseTrend(cdm, episode = "observation_period", inObservation = FALSE))
+  expect_equal(summariseTrend(cdm, episode = "observation_period", inObservation = TRUE, interval = "years"), summariseTrend(cdm, episode = "observation_period", inObservation = FALSE, interval = "years"))
+
+  expect_no_error(result <- summariseTrend(cdm, event = "condition_occurrence", episode = "drug_exposure", inObservation = TRUE, sex = TRUE, output = c("record", "person", "age", "sex", "person-days")))
+
+  result <- result |>
+    omopgenerics::splitStrata() |>
+    dplyr::filter(.data$in_observation == TRUE) |>
+    dplyr::select(!"in_observation") |>
+    omopgenerics::uniteStrata(cols = "sex")
+
+  cdm$condition_occurrence <- cdm$condition_occurrence |>
+    dplyr::inner_join(
+      cdm$observation_period |> dplyr::select("person_id",
+        "obs_start" = "observation_period_start_date",
+        "obs_end" = "observation_period_end_date"
+      ),
+      by = "person_id"
+    ) |>
+    dplyr::filter(.data$condition_start_date >= .data$obs_start & .data$condition_start_date <= .data$obs_end) |>
+    dplyr::select(!c("obs_start", "obs_end"))
+
+  cdm$drug_exposure <- cdm$drug_exposure |>
+    dplyr::inner_join(
+      cdm$observation_period |> dplyr::select("person_id",
+        "obs_start" = "observation_period_start_date",
+        "obs_end" = "observation_period_end_date"
+      ),
+      by = "person_id"
+    ) |>
+    dplyr::filter(.data$drug_exposure_start_date >= .data$obs_start & .data$drug_exposure_start_date <= .data$obs_end &
+      .data$drug_exposure_end_date >= .data$obs_start & .data$drug_exposure_end_date <= .data$obs_end) |>
+    dplyr::select(!c("obs_start", "obs_end"))
+
+
+  expect_no_error(resultInObs <- summariseTrend(cdm, event = "condition_occurrence", episode = "drug_exposure", inObservation = FALSE, sex = TRUE, output = c("record", "person", "age", "sex", "person-days")))
+
+  expect_equal(result |> dplyr::filter(.data$estimate_name != "percentage") |> dplyr::arrange(dplyr::across(dplyr::everything())), resultInObs |> dplyr::filter(.data$estimate_name != "percentage") |> dplyr::arrange(dplyr::across(dplyr::everything())), ignore_attr = TRUE)
+
 
   CDMConnector::cdmDisconnect(cdm = cdm)
 })

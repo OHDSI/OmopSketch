@@ -1,8 +1,10 @@
 warnFacetColour <- function(result, cols) {
   colsToWarn <- result |>
     dplyr::select(
-      dplyr::any_of(c("cdm_name", "group_name", "group_level", "strata_name", "strata_level",
-      "variable_name", "variable_level", "type"))
+      dplyr::any_of(c(
+        "cdm_name", "group_name", "group_level", "strata_name", "strata_level",
+        "variable_name", "variable_level", "type"
+      ))
     ) |>
     dplyr::distinct() |>
     omopgenerics::splitAll() |>
@@ -110,9 +112,11 @@ createSettings <- function(result_type, result_id = 1L, study_period = NULL) {
 #'
 #' clinicalTables()
 #'
-clinicalTables <- function(){
- c("visit_occurrence", "visit_detail", "condition_occurrence",
-   "drug_exposure", "procedure_occurrence", "device_exposure", "measurement",
-   "observation","death", "note", "specimen", "payer_plan_period", "drug_era",
-   "dose_era", "condition_era")
+clinicalTables <- function() {
+  c(
+    "visit_occurrence", "visit_detail", "condition_occurrence",
+    "drug_exposure", "procedure_occurrence", "device_exposure", "measurement",
+    "observation", "death", "note", "specimen", "payer_plan_period", "drug_era",
+    "dose_era", "condition_era"
+  )
 }

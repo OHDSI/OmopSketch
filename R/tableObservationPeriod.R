@@ -37,12 +37,14 @@ tableObservationPeriod <- function(result,
   }
 
   header <- c("cdm_name")
-  byOrdinal <- result |> dplyr::summarise(n = dplyr::n_distinct(.data$group_level)) |> dplyr::pull("n") > 1
+  byOrdinal <- result |>
+    dplyr::summarise(n = dplyr::n_distinct(.data$group_level)) |>
+    dplyr::pull("n") > 1
 
 
-  hide <- c("result_id", "estimate_type", "strata_name","observation_period_ordinal"[!byOrdinal])
+  hide <- c("result_id", "estimate_type", "strata_name", "observation_period_ordinal"[!byOrdinal])
 
-  custom_order <- c("Number records", "Number subjects", "Subjects not in person table", "Records per person", "Duration in days","Days to next observation period", "Type concept id", "Start date before birth date", "End date before start date", "Column name")
+  custom_order <- c("Number records", "Number subjects", "Subjects not in person table", "Records per person", "Duration in days", "Days to next observation period", "Type concept id", "Start date before birth date", "End date before start date", "Column name")
 
   result |>
     dplyr::filter(!grepl("density", .data$estimate_name)) |>
@@ -70,5 +72,6 @@ tableObservationPeriod <- function(result,
       style = style,
       .options = list(keepNotFormatted = FALSE) # to consider removing this? If
       # the user adds some custom estimates they are not going to be displayed in
-    ) |> suppressMessages()
+    ) |>
+    suppressMessages()
 }

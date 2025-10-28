@@ -45,12 +45,11 @@ summariseRecordCount <- function(cdm,
   )
 
   return(summariseTrend(cdm,
-                        episode = omopTableName,
-                        output = "record",
-                        ageGroup = ageGroup,
-                        interval = interval,
-                        sex = sex,
-                        dateRange = dateRange))
+    episode = omopTableName,
+    output = "record",
+    ageGroup = ageGroup,
+    interval = interval,
+    sex = sex,
+    dateRange = dateRange
+  ))
 }
-
-
