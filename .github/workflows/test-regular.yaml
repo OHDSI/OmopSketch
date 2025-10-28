@@ -1,0 +1,19 @@
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+name: regular-tests
+
+jobs:
+  duckdb-CDMConnector:
+    uses: ./.github/workflows/test-template.yaml
+    with:
+      DB_TO_TEST: duckdb-CDMConnector
+
+  local-omopgenerics:
+    uses: ./.github/workflows/test-template.yaml
+    with:
+      DB_TO_TEST: local-omopgenerics

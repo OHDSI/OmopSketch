@@ -1,17 +1,7 @@
-on_github <- function() {
-  !interactive() && !identical(Sys.getenv("NOT_CRAN"), "false")
-}
-# if (on_github()) {
-#   withr::local_envvar(
-#     R_USER_CACHE_DIR = tempfile(),
-#     .local_envir = testthat::teardown_env(),
-#     EUNOMIA_DATA_FOLDER = Sys.getenv("EUNOMIA_DATA_FOLDER", unset = tempfile())
-#   )
-#   CDMConnector::downloadEunomiaData(overwrite = TRUE)
-# }
-schema <- function(type = Sys.getenv("DB_TO_TEST", "duckdb")) {
+
+schema <- function(type = Sys.getenv("DB_TO_TEST", "duckdb-CDMConnector")) {
   switch(type,
-    "duckdb" = c(schema = "main", prefix = "omop_sketch_"),
+    "duckdb-CDMConnector" = c(schema = "main", prefix = "omop_sketch_"),
     "postgres" = c(schema = "results", prefix = "os_"),
     "sql server" = c(catalog = "ohdsi", schema = "dbo", prefix = prefix),
     "redshift" = c(schema = "resultsv281", prefix = prefix)
@@ -50,9 +40,9 @@ cdmEunomia <- function() {
 
   return(cdm)
 }
-connection <- function(dbToTest = Sys.getenv("DB_TO_TEST", "duckdb")) {
+connection <- function(dbToTest = Sys.getenv("DB_TO_TEST", "duckdb-CDMConnector")) {
   switch(dbToTest,
-    "duckdb" = DBI::dbConnect(duckdb::duckdb(), ":memory:"),
+    "duckdb-CDMConnector" = DBI::dbConnect(duckdb::duckdb(), ":memory:"),
     "sql server" = DBI::dbConnect(
       odbc::odbc(),
       Driver = "ODBC Driver 18 for SQL Server",
