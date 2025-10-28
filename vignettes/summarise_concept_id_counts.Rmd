@@ -18,7 +18,6 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-
 ```
 
 # Introduction
@@ -57,7 +56,7 @@ summariseConceptIdCounts(cdm,
   omopTableName = "drug_exposure",
   countBy = c("record", "person")
 ) |>
-  select( variable_name, estimate_name, estimate_value) 
+  select(variable_name, estimate_name, estimate_value)
 ```
 
 Further stratification can be applied using the `interval`, `sex`, and `ageGroup` arguments. The interval argument supports "overall" (no time stratification), "years", "quarters", or "months".
@@ -78,10 +77,11 @@ We can also filter the clinical table to a specific time window by setting the d
 
 ```{r}
 summarisedResult <- summariseConceptIdCounts(cdm,
-                                             omopTableName = "condition_occurrence",
-                                             dateRange = as.Date(c("1990-01-01", "2010-01-01"))) 
+  omopTableName = "condition_occurrence",
+  dateRange = as.Date(c("1990-01-01", "2010-01-01"))
+)
 summarisedResult |>
-  omopgenerics::settings()|>
+  omopgenerics::settings() |>
   glimpse()
 ```
 
@@ -89,11 +89,11 @@ Finally, you can restrict concept counts to a subset of subjects via the `sample
 
 ```{r}
 summariseConceptIdCounts(cdm,
-                         omopTableName = "condition_occurrence",
-                         sample = 50) |>
+  omopTableName = "condition_occurrence",
+  sample = 50
+) |>
   select(group_level, variable_name, estimate_name) |>
   glimpse()
-
 ```
 
 ## Display the results
@@ -104,7 +104,7 @@ Finally, concept counts can be visualised using `tableConceptIdCounts()`. By def
 result <- summariseConceptIdCounts(cdm,
   omopTableName = "measurement",
   countBy = "record"
-) 
+)
 tableConceptIdCounts(result, type = "reactable")
 ```
 
@@ -116,35 +116,30 @@ The `display` argument in tableConceptIdCounts() controls which concept counts a
 
 ```{r}
 tableConceptIdCounts(result, display = "overall")
-
 ```
 
 If `display = "standard"` the table shows only **standard** concept_id and concept_name counts.
 
 ```{r}
 tableConceptIdCounts(result, display = "standard")
-
 ```
 
 If `display = "source"` the table shows only **source** concept_id and concept_name counts.
 
 ```{r}
 tableConceptIdCounts(result, display = "source")
-
 ```
 
 If `display = "missing source"` the table shows only counts for concept ids that are missing a corresponding source concept id.
 
 ```{r}
 tableConceptIdCounts(result, display = "missing source")
-
 ```
 
 If `display = "missing standard"` the table shows only counts for source concept ids that are missing a mapped standard concept id.
 
 ```{r}
 tableConceptIdCounts(result, display = "missing standard")
-
 ```
 
 ## Display the most frequent concepts
@@ -155,7 +150,7 @@ You can use the `tableTopConceptCounts()` function to display the most frequent 
 result <- summariseConceptIdCounts(cdm,
   omopTableName = "drug_exposure",
   countBy = "record"
-) 
+)
 tableTopConceptCounts(result, type = "gt")
 ```
 
@@ -175,6 +170,6 @@ If your summary includes both record and person counts, you must specify which t
 result <- summariseConceptIdCounts(cdm,
   omopTableName = "drug_exposure",
   countBy = c("record", "person")
-) 
+)
 tableTopConceptCounts(result, countBy = "person")
 ```

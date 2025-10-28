@@ -41,6 +41,6 @@ summarisedResult <- summariseTrend(
 
 tableTrend(result = summarisedResult)
 
-PatientProfiles::mockDisconnect(cdm = cdm)
+CDMConnector::cdmDisconnect(cdm = cdm)
 }
 }

@@ -29,9 +29,11 @@
 #'
 #' cdm <- mockOmopSketch(numberIndividuals = 100)
 #'
-#' result <- summariseMissingData (cdm = cdm,
-#' omopTableName = c("condition_occurrence", "visit_occurrence"),
-#' sample = 10000)
+#' result <- summariseMissingData(
+#'   cdm = cdm,
+#'   omopTableName = c("condition_occurrence", "visit_occurrence"),
+#'   sample = 10000
+#' )
 #'
 #' PatientProfiles::mockDisconnect(cdm)
 #' }
@@ -152,10 +154,7 @@ columnsToSummarise <- function(col, cols, table, version) {
 }
 
 
-
-
 summariseMissingDataFromTable <- function(omopTable, table, cdm, col, dateRange, sample, sex, ageGroup, interval, strata) {
-
   prefix <- omopgenerics::tmpPrefix()
 
   # check if table is empty
@@ -194,7 +193,6 @@ summariseMissingDataFromTable <- function(omopTable, table, cdm, col, dateRange,
       columns = col_table,
       cdm = cdm,
       table = table
-
     ) |>
     dplyr::mutate(omop_table = table) |>
     # order columns

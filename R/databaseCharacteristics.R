@@ -18,19 +18,19 @@
 #'
 #' cdm <- mockOmopSketch(numberIndividuals = 100)
 #'
-#' result <- databaseCharacteristics(cdm = cdm,
-#' omopTableName = c("drug_exposure", "condition_occurrence"),
-#' sex = TRUE, ageGroup = list(c(0,50), c(51,100)), interval = "years", conceptIdCounts = FALSE)
+#' result <- databaseCharacteristics(
+#'   cdm = cdm,
+#'   omopTableName = c("drug_exposure", "condition_occurrence"),
+#'   sex = TRUE, ageGroup = list(c(0, 50), c(51, 100)), interval = "years", conceptIdCounts = FALSE
+#' )
 #'
 #' PatientProfiles::mockDisconnect(cdm)
 #' }
-
 databaseCharacteristics <- function(cdm,
                                     omopTableName = c(
                                       "person", "visit_occurrence",
                                       "condition_occurrence", "drug_exposure", "procedure_occurrence",
                                       "device_exposure", "measurement", "observation", "death"
-                                      ),
                                     sample = NULL,
                                     sex = FALSE,
                                     ageGroup = NULL,
@@ -38,7 +38,6 @@ databaseCharacteristics <- function(cdm,
                                     interval = "overall",
                                     conceptIdCounts = FALSE,
                                     ...) {
-
   rlang::check_installed("CohortCharacteristics")
   rlang::check_installed("CohortConstructor")
 
@@ -71,11 +70,11 @@ databaseCharacteristics <- function(cdm,
   }
   result <- list()
   # Snapshot
-  cli::cli_inform(paste(cli::symbol$arrow_right,"Getting cdm snapshot"))
+  cli::cli_inform(paste(cli::symbol$arrow_right, "Getting cdm snapshot"))
   result$snapshot <- summariseOmopSnapshot(cdm)
 
   # Population Characteristics
-  cli::cli_inform(paste(cli::symbol$arrow_right,"Getting population characteristics"))
+  cli::cli_inform(paste(cli::symbol$arrow_right, "Getting population characteristics"))
 
   sexCohort <- if (sex) "Both"
   dateRangeCohort <- dateRange %||% c(NA, NA)
@@ -140,8 +139,7 @@ databaseCharacteristics <- function(cdm,
   omopTableName <- omopTableName[omopTableName != "person"]
 
   if (conceptIdCounts) {
-
-    cli::cli_inform(paste(cli::symbol$arrow_right,"Summarising concept id counts"))
+    cli::cli_inform(paste(cli::symbol$arrow_right, "Summarising concept id counts"))
     result$conceptIdCounts <- do.call(
       summariseConceptIdCounts,
       c(list(
@@ -156,7 +154,7 @@ databaseCharacteristics <- function(cdm,
   }
 
   # Summarise clinical records
-  cli::cli_inform(paste(cli::symbol$arrow_right,"Summarising clinical records"))
+  cli::cli_inform(paste(cli::symbol$arrow_right, "Summarising clinical records"))
   result$clinicalRecords <- do.call(
     summariseClinicalRecords,
     c(list(
@@ -182,7 +180,7 @@ databaseCharacteristics <- function(cdm,
   )
 
   # Summarize in observation records
-  cli::cli_inform(paste(cli::symbol$arrow_right,"Summarising trends: records, subjects, person-days, age and sex"))
+  cli::cli_inform(paste(cli::symbol$arrow_right, "Summarising trends: records, subjects, person-days, age and sex"))
   result$trend <- do.call(
     summariseTrend,
     c(list(
@@ -215,7 +213,7 @@ databaseCharacteristics <- function(cdm,
   endTables <- omopgenerics::listSourceTables(cdm)
   newTables <- setdiff(endTables, startTables)
 
-  if(length(newTables)) {
+  if (length(newTables)) {
     cli::cli_inform(c(
       "i" = "{length(newTables)} table{?s} created: {.val {newTables}}."
     ))

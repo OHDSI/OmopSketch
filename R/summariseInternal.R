@@ -176,7 +176,7 @@ addSexAgeGroup <- function(x, sex, ageGroup, indexDate) {
     dplyr::select(dplyr::any_of(c("person_id", "sex", "birth_date")))
 
   x <- x |>
-    dplyr::inner_join(person, by = "person_id")
+    dplyr::left_join(person, by = "person_id")
 
   if (sex) {
     x <- x |>
@@ -256,18 +256,17 @@ warningEmptyStudyPeriod <- function(omopTable) {
   }
   return(omopTable)
 }
-strataCols <- function(sex = FALSE, ageGroup = NULL, interval = "overall") {
-  c(names(ageGroup), "sex"[sex], "interval"[interval != "overall"])
+strataCols <- function(sex = FALSE, ageGroup = NULL, interval = "overall", inObservation = FALSE) {
+  c(names(ageGroup), "sex"[sex], "interval"[interval != "overall"], "in_observation"[inObservation])
 }
 
 summariseSumInternal <- function(x, strata, variable) {
-
   purrr::map(strata, \(stratak) {
     x |>
       dplyr::group_by(dplyr::across(dplyr::all_of(stratak))) |>
       dplyr::summarise(estimate_value = sum(.data[[variable]], na.rm = TRUE), .groups = "drop") |>
       dplyr::collect() |>
-      dplyr::mutate(estimate_value =  sprintf("%i", as.integer(.data$estimate_value))) |>
+      dplyr::mutate(estimate_value = sprintf("%i", as.integer(.data$estimate_value))) |>
       dplyr::mutate(estimate_type = "integer", estimate_name = "count") |>
       dplyr::select(dplyr::all_of(c(
         stratak, "estimate_name", "estimate_type",
@@ -278,25 +277,50 @@ summariseSumInternal <- function(x, strata, variable) {
 }
 
 
-
 summariseMedianAge <- function(x, index_date, strata) {
-
   x <- x |>
     PatientProfiles::addAgeQuery(indexDate = index_date)
 
   purrr::map(strata, \(stratak) {
-
     x |>
       dplyr::collect() |>
       dplyr::group_by(dplyr::across(dplyr::all_of(stratak))) |>
       dplyr::summarise("estimate_value" = stats::median(.data$age))
-
   }) |>
     dplyr::bind_rows() |>
-    dplyr::mutate(estimate_name = "median",
-                  estimate_type = "numeric",
-                  estimate_value =  sprintf("%i", as.integer(.data$estimate_value)))
-
+    dplyr::mutate(
+      estimate_name = "median",
+      estimate_type = "numeric",
+      estimate_value = sprintf("%i", as.integer(.data$estimate_value))
+    )
 }
 
+addInObservation <- function(x, inObservation, cdm, episode, name) {
+  if (!inObservation) {
+    return(x)
+  }
 
+  if (episode) {
+    x <- x |>
+      dplyr::left_join(cdm[["observation_period"]] |> dplyr::select("person_id", "observation_period_start_date", "observation_period_end_date"), by = "person_id") |>
+      dplyr::mutate("in_observation" = dplyr::if_else(!is.na(.data$observation_period_start_date) &
+        .data$start_date >= .data$observation_period_start_date &
+        .data$start_date <= .data$observation_period_end_date &
+        (
+          is.na(.data$end_date) |
+            (.data$end_date >= .data$observation_period_start_date &
+              .data$end_date <= .data$observation_period_end_date)
+        ),
+      TRUE, FALSE
+      )) |>
+      dplyr::select(-"observation_period_start_date", -"observation_period_end_date") |>
+      dplyr::compute(name = name)
+  } else {
+    x <- x |>
+      dplyr::left_join(cdm[["observation_period"]] |> dplyr::select("person_id", "observation_period_start_date", "observation_period_end_date"), by = "person_id") |>
+      dplyr::mutate("in_observation" = dplyr::if_else(!is.na(.data$observation_period_start_date) & .data$start_date >= .data$observation_period_start_date & .data$start_date <= .data$observation_period_end_date, TRUE, FALSE)) |>
+      dplyr::select(-"observation_period_start_date", -"observation_period_end_date") |>
+      dplyr::compute(name = name)
+  }
+  return(x)
+}

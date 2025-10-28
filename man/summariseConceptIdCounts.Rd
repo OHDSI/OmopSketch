@@ -12,6 +12,7 @@ summariseConceptIdCounts(
   interval = "overall",
   sex = FALSE,
   ageGroup = NULL,
+  inObservation = FALSE,
   sample = NULL,
   dateRange = NULL
 )
@@ -33,7 +34,6 @@ person-level counts}
 
 \item{ageGroup}{A list of ageGroup vectors of length two. Code use will be
 thus summarised by age groups.}
-
 \item{sample}{Either an integer or a character string.
 If an integer (n > 0), the function will first sample \code{n} distinct
 \code{person_id}s from the \code{person} table and then subset the input tables to
@@ -42,7 +42,7 @@ If a character string, it must be the name of a cohort in the \code{cdm}; in
 this case, the input tables are subset to subjects (\code{subject_id}) belonging
 to that cohort.
 Use \code{NULL} to disable subsetting (default value).}
-
+\item{inObservation}{Logical. If \code{TRUE}, the results are stratified to indicate whether each record occurs within an observation period.}
 \item{dateRange}{A vector of two dates defining the desired study period.
 Only the \code{start_date} column of the OMOP table is checked to ensure it falls within this range.
 If \code{dateRange} is \code{NULL}, no restriction is applied.}

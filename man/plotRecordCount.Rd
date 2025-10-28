@@ -36,6 +36,6 @@ summarisedResult <- summariseRecordCount(
 
 plotRecordCount(result = summarisedResult, colour = "age_group", facet = sex ~ .)
 
-PatientProfiles::mockDisconnect(cdm = cdm)
+CDMConnector::cdmDisconnect(cdm = cdm)
 }
 }

@@ -1,4 +1,3 @@
-
 #' Summarise the person table
 #'
 #' @param cdm A cdm_reference object.
@@ -158,17 +157,21 @@ summariseNumeric2 <- function(x, variable, den) {
   x |>
     dplyr::rename(variable_level = !!variable) |>
     dplyr::summarise(
-      count_missing = as.integer(sum(as.numeric(is.na(.data$variable_level)), na.rm = TRUE)),
-      count_0 = as.integer(sum(as.numeric(.data$variable_level == 0), na.rm = TRUE)),
+      # The previous method `sum(as.numeric(is.na(...)))` generates a
+      # `CAST(boolean AS NUMERIC)` SQL statement, which fails on PostgreSQL.
+      # Using `if_else` generates a portable `CASE WHEN` statement that is
+      # compatible with all database backends.
+      count_missing = sum(if_else(is.na(.data$variable_level), 1L, 0L), na.rm = TRUE),
+      count_0 = sum(if_else(.data$variable_level == 0, 1L, 0L), na.rm = TRUE),
       distinct_values = as.integer(dplyr::n_distinct(.data$variable_level))
     ) |>
     dplyr::collect() |>
     dplyr::mutate(
-      count_missing = dplyr::coalesce(.data$count_missing, 0L),
-      count_0 = dplyr::coalesce(.data$count_0, 0L),
-      distinct_values = dplyr::coalesce(.data$distinct_values, 0L),
+      count_missing = dplyr::coalesce(as.integer(.data$count_missing), 0L),
+      count_0 = dplyr::coalesce(as.integer(.data$count_0), 0L),
+      distinct_values = dplyr::coalesce(as.integer(.data$distinct_values), 0L),
       percentage_missing = 100 * as.numeric(.data$count_missing) / .env$den,
-      percentage_0 =  100 * as.numeric(.data$count_0) / .env$den,
+      percentage_0 = 100 * as.numeric(.data$count_0) / .env$den
     )
 }
 

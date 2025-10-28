@@ -20,7 +20,7 @@
 #'
 #' tableRecordCount(result = summarisedResult)
 #'
-#' PatientProfiles::mockDisconnect(cdm = cdm)
+#' CDMConnector::cdmDisconnect(cdm = cdm)
 #' }
 tableRecordCount <- function(result,
                              type = "gt") {
@@ -29,5 +29,5 @@ tableRecordCount <- function(result,
     what = "tableRecordCount()",
     with = "tableTrend()"
   )
-return(tableTrend(result = result, type = type))
+  return(tableTrend(result = result, type = type))
 }

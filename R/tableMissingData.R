@@ -9,12 +9,14 @@
 #' library(OmopSketch)
 #' cdm <- mockOmopSketch(numberIndividuals = 100)
 #'
-#' result <- summariseMissingData(cdm = cdm,
-#' omopTableName = c("condition_occurrence", "visit_occurrence"))
+#' result <- summariseMissingData(
+#'   cdm = cdm,
+#'   omopTableName = c("condition_occurrence", "visit_occurrence")
+#' )
 #'
 #' tableMissingData(result = result)
 #'
-#' PatientProfiles::mockDisconnect(cdm = cdm)
+#' CDMConnector::cdmDisconnect(cdm = cdm)
 #' }
 tableMissingData <- function(result,
                              type = "gt",
@@ -27,17 +29,18 @@ tableMissingData <- function(result,
   # subset to result_type of interest
   result <- result |>
     omopgenerics::filterSettings(
-      .data$result_type %in% c( "summarise_missing_data", "summarise_clinical_records")
+      .data$result_type %in% c("summarise_missing_data", "summarise_clinical_records")
     ) |>
-    dplyr::filter(grepl("na",.data$estimate_name) | grepl("zero",.data$estimate_name)) |>
-   omopgenerics::bind(
+    dplyr::filter(grepl("na", .data$estimate_name) | grepl("zero", .data$estimate_name)) |>
+    omopgenerics::bind(
       result |>
         omopgenerics::filterSettings(
-          .data$result_type == "summarise_observation_period") |>
-        dplyr::filter(grepl("na",.data$estimate_name) | grepl("zero",.data$estimate_name)) |>
+          .data$result_type == "summarise_observation_period"
+        ) |>
+        dplyr::filter(grepl("na", .data$estimate_name) | grepl("zero", .data$estimate_name)) |>
         dplyr::select(!c("group_name", "group_level")) |>
         dplyr::mutate("omop_table" = "observation_period") |>
-        omopgenerics::uniteGroup(cols = "omop_table")|>
+        omopgenerics::uniteGroup(cols = "omop_table") |>
         omopgenerics::newSummarisedResult()
     )
 
@@ -54,11 +57,14 @@ tableMissingData <- function(result,
     visOmopResults::visOmopTable(
       type = type,
       style = style,
-      estimateName = c("N missing data (%)" = "<na_count> (<na_percentage>%)",
-                       "N zeros (%)" = "<zero_count> (<zero_percentage>%)"),
+      estimateName = c(
+        "N missing data (%)" = "<na_count> (<na_percentage>%)",
+        "N zeros (%)" = "<zero_count> (<zero_percentage>%)"
+      ),
       header = header,
       rename = c("Database name" = "cdm_name", "Column name" = "variable_level"),
       groupColumn = c("omop_table", omopgenerics::strataColumns(result)),
       hide = c("variable_name")
-    ) |> suppressMessages()
+    ) |>
+    suppressMessages()
 }

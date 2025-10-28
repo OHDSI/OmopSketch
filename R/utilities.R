@@ -1,8 +1,10 @@
 warnFacetColour <- function(result, cols) {
   colsToWarn <- result |>
     dplyr::select(
-      dplyr::any_of(c("cdm_name", "group_name", "group_level", "strata_name", "strata_level",
-      "variable_name", "variable_level", "type"))
+      dplyr::any_of(c(
+        "cdm_name", "group_name", "group_level", "strata_name", "strata_level",
+        "variable_name", "variable_level", "type"
+      ))
     ) |>
     dplyr::distinct() |>
     omopgenerics::splitAll() |>

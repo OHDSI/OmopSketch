@@ -58,6 +58,6 @@ summarisedResult <- summariseRecordCount(
 summarisedResult |>
   glimpse()
 
-PatientProfiles::mockDisconnect(cdm = cdm)
+CDMConnector::cdmDisconnect(cdm = cdm)
 }
 }

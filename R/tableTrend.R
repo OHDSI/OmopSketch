@@ -22,7 +22,7 @@
 #'
 #' tableTrend(result = summarisedResult)
 #'
-#' PatientProfiles::mockDisconnect(cdm = cdm)
+#' CDMConnector::cdmDisconnect(cdm = cdm)
 #' }
 tableTrend <- function(result,
                        type = "gt",
@@ -30,7 +30,7 @@ tableTrend <- function(result,
   # initial checks
   rlang::check_installed("visOmopResults")
   omopgenerics::validateResultArgument(result)
-  omopgenerics::assertChoice(type, c("gt","reactable", "datatable"))
+  omopgenerics::assertChoice(type, c("gt", "reactable", "datatable"))
   strata_cols <- omopgenerics::strataColumns(result)
   additional_cols <- omopgenerics::additionalColumns(result)
 
@@ -39,7 +39,7 @@ tableTrend <- function(result,
     omopgenerics::filterSettings(
       .data$result_type == "summarise_trend"
     ) |>
-    dplyr::arrange(.data$additional_level)
+    dplyr::arrange(.data$variable_name, .data$additional_level)
   additionals <- omopgenerics::additionalColumns(result)
   strata <- omopgenerics::strataColumns(result)
 
@@ -53,22 +53,21 @@ tableTrend <- function(result,
     "Median" = "<median>"
   )
   rename_vec <- c(
-      "Database name" = "cdm_name",
-      "OMOP table" = "omop_table"
-    )
-  result |> visOmopResults::visOmopTable(
-    header = c("cdm_name"),
-    estimateName = formatEstimates,
-    settingsColumn = "type",
-    groupColumn = c("type", "omop_table"),
-    rename = rename_vec,
-    type = type,
-    style = style,
-    hide = "variable_level",
-    columnOrder = c("variable_name", additionals, strata, "estimate_name"),
-    .options = list(merge = "all_columns")
-
-  )|>
+    "Database name" = "cdm_name",
+    "OMOP table" = "omop_table"
+  )
+  result |>
+    visOmopResults::visOmopTable(
+      header = c("cdm_name"),
+      estimateName = formatEstimates,
+      settingsColumn = "type",
+      groupColumn = c("type", "omop_table"),
+      rename = rename_vec,
+      type = type,
+      style = style,
+      hide = "variable_level",
+      columnOrder = c("variable_name", additionals, strata, "estimate_name"),
+      .options = list(merge = "all_columns")
+    ) |>
     suppressMessages()
-
 }
