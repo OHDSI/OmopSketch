@@ -171,7 +171,7 @@ validateFacet <- function(facet, result, call = parent.frame()) {
 }
 
 #' @noRd
-validateBackground <- function(background) {
+validateBackground <- function(background, call = parent.frame()) {
   msg <- "'background' must be either TRUE/FALSE or a path to an existing `.md` file."
   if (is.logical(background)) {
     omopgenerics::assertLogical(background, length = 1, call = call, msg = msg)
@@ -185,3 +185,19 @@ validateBackground <- function(background) {
   }
   return(invisible(background))
 }
+
+#' @noRd
+validateSample <- function( sample, call = parent.frame()) {
+  if(!is.null(sample)) {
+  msg <- "'sample' must be either an integer or the name of an existing cohort in the cdm"
+  if (is.numeric(sample)) {
+    omopgenerics::assertNumeric(sample,integerish = TRUE, min = 1, length = 1, null = TRUE, call = call, msg = msg)
+  } else if (is.character(sample)) {
+    omopgenerics::assertCharacter(sample, length = 1, call = call, msg = msg)
+  } else {
+    cli::cli_abort(message = msg, call = call)
+  }
+  }
+  return(invisible(sample))
+}
+

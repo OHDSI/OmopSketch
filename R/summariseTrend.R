@@ -118,8 +118,8 @@ summariseTrend <- function(cdm,
 
 summariseEventTrend <- function(cdm, omopTableName, output, interval, sex, ageGroup, dateRange, inObservation) {
   prefix <- omopgenerics::tmpPrefix()
-
   if ("person-days" %in% output) {
+
     cli::cli_alert("The number of person-days is not computed for event tables")
     output <- output[output != "person-days"]
   }

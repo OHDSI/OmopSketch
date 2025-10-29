@@ -125,6 +125,7 @@ summariseClinicalRecords <- function(cdm,
   )
 
   result <- purrr::map(omopTableName, \(table) {
+
     # check that table is not empty
     omopTable <- dplyr::ungroup(cdm[[table]])
     if (omopgenerics::isTableEmpty(omopTable)) {
@@ -545,7 +546,8 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
         cdm$concept |>
           dplyr::select(
             standard = "concept_id", "domain_id", "standard_concept",
-            source = "concept_id", source_vocabulary = "vocabulary_id"
+            source = "concept_id",
+            source_vocabulary = "vocabulary_id"
           ),
         by = c("standard", "source")
       ) |>

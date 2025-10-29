@@ -450,17 +450,17 @@ test_that("argument missingData works", {
 
   expect_no_error(x <- summariseClinicalRecords(cdm, "drug_exposure", recordsPerPerson = NULL, quality = F, conceptSummary = F))
 
-  y <- summariseMissingData(cdm, "drug_exposure")
+  y <- summariseMissingData(cdm, "drug_exposure",  sample = NULL)
 
   expect_equal(x |> dplyr::filter(variable_name == "Column name"), y, ignore_attr = TRUE)
 
-  expect_no_error(x <- summariseClinicalRecords(cdm, "drug_exposure", sex = T, ageGroup = list(c(0, 50), c(51, 100)), recordsPerPerson = NULL, quality = F, conceptSummary = F))
-  y <- summariseMissingData(cdm, "drug_exposure", sex = T, ageGroup = list(c(0, 50), c(51, 100)))
+  expect_no_error(x <- summariseClinicalRecords(cdm, "drug_exposure",sex = T, ageGroup = list(c(0,50), c(51, 100)), recordsPerPerson = NULL,quality = F, conceptSummary = F))
+  y <- summariseMissingData(cdm, "drug_exposure", sex = T,  sample = NULL, ageGroup = list(c(0,50), c(51, 100)))
 
   expect_equal(x |> dplyr::filter(variable_name == "Column name") |> dplyr::arrange(.data$variable_level, .data$strata_name, .data$strata_level), y |> dplyr::arrange(.data$variable_level, .data$strata_name, .data$strata_level), ignore_attr = TRUE)
 
   expect_no_error(x <- summariseClinicalRecords(cdm, "drug_exposure", dateRange = as.Date(c("1990-01-01", "1999-12-31")), recordsPerPerson = NULL, quality = F, conceptSummary = F))
-  y <- summariseMissingData(cdm, "drug_exposure", dateRange = as.Date(c("1990-01-01", "1999-12-31")))
+  y <- summariseMissingData(cdm, "drug_exposure",  sample = NULL, dateRange = as.Date(c("1990-01-01", "1999-12-31")))
 
   expect_equal(x |> dplyr::filter(variable_name == "Column name") |> dplyr::arrange(.data$variable_level), y |> dplyr::arrange(.data$variable_level), ignore_attr = TRUE)
 

@@ -53,6 +53,7 @@ tableMissingData <- function(result,
   header <- c("cdm_name")
 
   result |>
+    dplyr::arrange(.data$variable_level, .data$additional_level) |>
     visOmopResults::visOmopTable(
       type = type,
       style = style,
