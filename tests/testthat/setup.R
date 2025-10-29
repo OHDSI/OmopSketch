@@ -1,5 +1,5 @@
 
-
+dbToTest <- Sys.getenv("DB_TO_TEST", "duckdb-CDMConnector")
 cdmEunomia <- function() {
 
   cdmLocal <- omock::mockCdmFromDataset(datasetName = "GiBleed")
