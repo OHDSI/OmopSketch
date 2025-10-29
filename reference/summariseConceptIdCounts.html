@@ -104,8 +104,14 @@ thus summarised by age groups.</p></dd>
 
 
 <dt id="arg-sample">sample<a class="anchor" aria-label="anchor" href="#arg-sample"></a></dt>
-<dd><p>An integer to sample the tables to only that number of records.
-If NULL no sample is done.</p></dd>
+<dd><p>Either an integer or a character string.
+If an integer (n &gt; 0), the function will first sample <code>n</code> distinct
+<code>person_id</code>s from the <code>person</code> table and then subset the input tables to
+those subjects.
+If a character string, it must be the name of a cohort in the <code>cdm</code>; in
+this case, the input tables are subset to subjects (<code>subject_id</code>) belonging
+to that cohort.
+Use <code>NULL</code> to disable subsetting (default value).</p></dd>
 
 
 <dt id="arg-daterange">dateRange<a class="anchor" aria-label="anchor" href="#arg-daterange"></a></dt>
@@ -128,11 +134,11 @@ strata.</p>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r.duckdb.org/" class="external-link">duckdb</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://darwin-eu.github.io/CDMConnector/reference/requireEunomia.html" class="external-link">requireEunomia</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> `EUNOMIA_DATA_FOLDER` set to: <span style="color: #0000BB;">/tmp/RtmpSHzPZd</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> `EUNOMIA_DATA_FOLDER` set to: <span style="color: #0000BB;">/tmp/RtmpdPUXWG</span>.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Download completed!</span>
 <span class="r-in"><span><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu"><a href="https://r.duckdb.org/reference/duckdb.html" class="external-link">duckdb</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="https://darwin-eu.github.io/CDMConnector/reference/eunomiaDir.html" class="external-link">eunomiaDir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Creating CDM database /tmp/RtmpSHzPZd/GiBleed_5.3.zip</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Creating CDM database /tmp/RtmpdPUXWG/GiBleed_5.3.zip</span>
 <span class="r-in"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://darwin-eu.github.io/CDMConnector/reference/cdmFromCon.html" class="external-link">cdmFromCon</a></span><span class="op">(</span>con <span class="op">=</span> <span class="va">con</span>, cdmSchema <span class="op">=</span> <span class="st">"main"</span>, writeSchema <span class="op">=</span> <span class="st">"main"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">summariseConceptIdCounts</span><span class="op">(</span></span></span>
@@ -158,7 +164,6 @@ strata.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 7 more variables: variable_name &lt;chr&gt;, variable_level &lt;chr&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   estimate_name &lt;chr&gt;, estimate_type &lt;chr&gt;, estimate_value &lt;chr&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   additional_name &lt;chr&gt;, additional_level &lt;chr&gt;</span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
