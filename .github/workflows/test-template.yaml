@@ -1,0 +1,49 @@
+name: Reusable test workflow
+
+on:
+  workflow_call:
+    inputs:
+      DB_TO_TEST:
+        required: true
+        type: string
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+    env:
+      DB_TO_TEST: ${{ inputs.DB_TO_TEST }}
+
+    strategy:
+      fail-fast: true
+      matrix:
+        config:
+          - {os: ubuntu-latest,   r: 'release'}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: ${{ matrix.config.r }}
+          http-user-agent: ${{ matrix.config.http-user-agent }}
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::devtools
+          needs: check
+
+      - name: Run tests with source
+        run: |
+          td <- file.path(tempdir(), "mockDatasets")
+          dir.create(td)
+          Sys.setenv(MOCK_DATASETS_FOLDER = td)
+          omock::downloadMockDataset(datasetName = "GiBleed")
+          x <- devtools::test()
+          error <- sum(as.numeric(dplyr::as_tibble(x)$error))
+          failed <- sum(as.numeric(dplyr::as_tibble(x)$failed))
+          if (error + failed > 0) cli::cli_abort(c(x = "Tests failed"))
+        shell: Rscript {0}

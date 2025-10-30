@@ -660,7 +660,7 @@ test_that("quality works", {
     dplyr::filter(.data$observation_period_end_date < .data$observation_period_start_date)
   z <- cdm$observation_period |>
     dplyr::inner_join(cdm$person |> dplyr::select(person_id, birth_datetime), by = "person_id") |>
-    dplyr::filter(.data$observation_period_start_date < .data$birth_datetime)
+    dplyr::filter(.data$observation_period_start_date < as.Date(.data$birth_datetime))
 
   expect_equal(
     y |> dplyr::tally() |> dplyr::pull(n),
