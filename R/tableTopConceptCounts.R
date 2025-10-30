@@ -84,6 +84,7 @@ tableTopConceptCounts <- function(result,
     "standard_concept_name", "standard_concept_id", "source_concept_name",
     "source_concept_id", "count"
   )
+  tables <- result$omop_table |> unique()
   result <- result |>
     dplyr::group_by(dplyr::across(!dplyr::all_of(colsGroup))) |>
     dplyr::arrange(dplyr::desc(.data$count)) |>
@@ -110,7 +111,9 @@ tableTopConceptCounts <- function(result,
       estimateName = NULL,
       hide = c("estimate_name", "estimate_type"),
       group = group,
-      .options = list(merge = "all_columns"),
+      .options = list(merge = "all_columns",
+                      caption = paste0("Top ", as.character(top), " concepts in ", paste(tables, collapse = ", "), ifelse(length(tables) > 1, " tables", " table"))
+                      ),
       type = type,
       style = style
     )
