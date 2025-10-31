@@ -69,7 +69,7 @@ databaseCharacteristics <- function(cdm,
 
   if (!is.null(sample)) {
     cli::cli_inform(paste("The cdm is sampled to {sample}"))
-    cdm <- sampleCdm(cdm = cdm, tables = c(omopTableName, "observation_period"), sample = sample)
+    cdm <- sampleCdm(cdm = cdm, tables = c(omopTableName, "observation_period", "person"), sample = sample)
   }
   result <- list()
   # Snapshot
@@ -129,7 +129,10 @@ databaseCharacteristics <- function(cdm,
   # Summarising Person table
   cli::cli_inform(paste(cli::symbol$arrow_right, "Summarising person table"))
 
-  result$person <- summarisePerson(cdm = cdm)
+  result$person <- do.call(
+    summarisePerson,
+    c(list(cdm), filter_args(summarisePerson, args_list))
+  )
 
   if (conceptIdCounts) {
     cli::cli_inform(paste(cli::symbol$arrow_right, "Summarising concept id counts"))
