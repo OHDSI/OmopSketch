@@ -1,6 +1,6 @@
 #' Summarise the number of people in observation during a specific interval of
 #' time.
-#'
+#'`r lifecycle::badge('deprecated')`
 #' @param observationPeriod An observation_period omop table. It must be part of
 #' a cdm_reference object.
 #' @inheritParams interval

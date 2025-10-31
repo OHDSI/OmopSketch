@@ -1,8 +1,9 @@
 #' Summarise Database Characteristics for OMOP CDM
 #'
 #' @param cdm A `cdm_reference` object representing the Common Data Model (CDM) reference.
-#' @param omopTableName A character vector specifying the OMOP tables from the CDM to include in the analysis.
-#' If "person" is present, it will only be used for missing value summarisation.
+#' @param omopTableName A character vector of the names of the tables to
+#' summarise in the cdm object. Run `OmopSketch::clinicalTables()` to check the
+#' available options.
 #' @inheritParams sample
 #' @inheritParams interval
 #' @param ageGroup A list of age groups to stratify the results by. Each element represents a specific age range.
@@ -27,8 +28,7 @@
 #' PatientProfiles::mockDisconnect(cdm)
 #' }
 databaseCharacteristics <- function(cdm,
-                                    omopTableName = c(
-                                      "person", "visit_occurrence", "visit_detail",
+                                    omopTableName = c("visit_occurrence", "visit_detail",
                                       "condition_occurrence", "drug_exposure", "procedure_occurrence",
                                       "device_exposure", "measurement", "observation", "death"),
                                     sample = NULL,
@@ -42,7 +42,7 @@ databaseCharacteristics <- function(cdm,
   rlang::check_installed("CohortConstructor")
 
   cdm <- omopgenerics::validateCdmArgument(cdm)
-  opts <- omopgenerics::omopTables()
+  opts <- clinicalTables()
   opts <- opts[opts %in% names(cdm)]
   if (missing(omopTableName)) {
     omopTableName <- omopTableName[omopTableName %in% names(cdm)]
@@ -126,20 +126,10 @@ databaseCharacteristics <- function(cdm,
 
   omopgenerics::dropSourceTable(cdm = cdm, c("population_1", "population_2", "population"))
 
-  if ("person" %in% omopTableName){
-  # Summarise missing data
-  cli::cli_inform(paste(cli::symbol$arrow_right, "Summarising missing data in person table"))
-  result$missingData <- do.call(
-    summariseMissingData,
-    c(list(
-      cdm,
-      omopTableName = "person",
-      sample = NULL
-    ), filter_args(summariseMissingData, args_list))
-  )
-  }
+  # Summarising Person table
+  cli::cli_inform(paste(cli::symbol$arrow_right, "Summarising person table"))
 
-  omopTableName <- omopTableName[omopTableName != "person"]
+  result$person <- summarisePerson(cdm = cdm)
 
   if (conceptIdCounts) {
     cli::cli_inform(paste(cli::symbol$arrow_right, "Summarising concept id counts"))

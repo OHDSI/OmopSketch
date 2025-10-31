@@ -1,5 +1,5 @@
 #' Plot the concept counts of a summariseConceptSetCounts output.
-#'
+#' `r lifecycle::badge('deprecated')`
 #' @param result A summarised_result object (output of summariseConceptSetCounts).
 #' @param facet Columns to face by. Formula format can be provided. See possible
 #' columns to face by with: `visOmopResults::tidyColumns()`.
