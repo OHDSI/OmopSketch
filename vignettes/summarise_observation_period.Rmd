@@ -25,8 +25,8 @@ knitr::opts_chunk$set(
 In this vignette, we will explore the *OmopSketch* functions designed to provide an overview of the `observation_period` table. Specifically, there are 3 key functions that facilitate this:
 
 -   `summariseObservationPeriod()`: get some overall statistics describing the `observation_period` table
-- `plotObservationPeriod()`: create plots showing the results
-- `tableObservationPeriod()`: display the results in a formatted table
+-   `plotObservationPeriod()`: create plots showing the results
+-   `tableObservationPeriod()`: display the results in a formatted table
 
 ## Create a mock cdm
 
