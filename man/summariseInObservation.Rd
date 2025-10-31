@@ -3,7 +3,8 @@
 \name{summariseInObservation}
 \alias{summariseInObservation}
 \title{Summarise the number of people in observation during a specific interval of
-time.}
+time.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 \usage{
 summariseInObservation(
   observationPeriod,
@@ -40,6 +41,7 @@ A summarised_result object.
 \description{
 Summarise the number of people in observation during a specific interval of
 time.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 }
 \examples{
 \donttest{

@@ -37,8 +37,7 @@ If \code{dateRange} is \code{NULL}, no restriction is applied.}
 A summarised_result object.
 }
 \description{
-Summarise record counts of an omop_table using a specific time interval. Only
-records that fall within the observation period are considered.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 }
 \examples{
 \donttest{

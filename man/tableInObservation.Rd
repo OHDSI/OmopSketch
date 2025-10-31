@@ -2,7 +2,8 @@
 % Please edit documentation in R/tableInObservation.R
 \name{tableInObservation}
 \alias{tableInObservation}
-\title{Create a visual table from a summariseInObservation() result.}
+\title{Create a visual table from a summariseInObservation() result.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 \usage{
 tableInObservation(result, type = "gt")
 }
@@ -16,6 +17,7 @@ A formatted table object with the summarised data.
 }
 \description{
 Create a visual table from a summariseInObservation() result.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 }
 \examples{
 \donttest{

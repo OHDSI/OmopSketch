@@ -6,7 +6,7 @@
 \usage{
 databaseCharacteristics(
   cdm,
-  omopTableName = c("person", "visit_occurrence", "visit_detail", "condition_occurrence",
+  omopTableName = c("visit_occurrence", "visit_detail", "condition_occurrence",
     "drug_exposure", "procedure_occurrence", "device_exposure", "measurement",
     "observation", "death"),
   sample = NULL,
@@ -21,8 +21,9 @@ databaseCharacteristics(
 \arguments{
 \item{cdm}{A \code{cdm_reference} object representing the Common Data Model (CDM) reference.}
 
-\item{omopTableName}{A character vector specifying the OMOP tables from the CDM to include in the analysis.
-If "person" is present, it will only be used for missing value summarisation.}
+\item{omopTableName}{A character vector of the names of the tables to
+summarise in the cdm object. Run \code{OmopSketch::clinicalTables()} to check the
+available options.}
 
 \item{sample}{Either an integer or a character string.
 If an integer (n > 0), the function will first sample \code{n} distinct

@@ -1,5 +1,5 @@
 #' Create a ggplot2 plot from the output of summariseInObservation().
-#'
+#' `r lifecycle::badge('deprecated')`
 #' @param result A summarised_result object (output of summariseInObservation).
 #' @param facet Columns to face by. Formula format can be provided. See possible
 #' columns to face by with: `visOmopResults::tidyColumns()`.

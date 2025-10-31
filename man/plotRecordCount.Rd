@@ -2,7 +2,8 @@
 % Please edit documentation in R/plotRecordCount.R
 \name{plotRecordCount}
 \alias{plotRecordCount}
-\title{Create a ggplot of the records' count trend.}
+\title{Create a ggplot of the records' count trend.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 \usage{
 plotRecordCount(result, facet = NULL, colour = NULL)
 }
@@ -20,6 +21,7 @@ A ggplot showing the table counts
 }
 \description{
 Create a ggplot of the records' count trend.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 }
 \examples{
 \donttest{
