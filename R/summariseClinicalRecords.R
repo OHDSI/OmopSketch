@@ -51,7 +51,7 @@
 #'
 #' summarisedResult
 #'
-#' PatientProfiles::mockDisconnect(cdm = cdm)
+#' CDMConnector::cdmDisconnect(cdm = cdm)
 #' }
 summariseClinicalRecords <- function(cdm,
                                      omopTableName,
@@ -71,7 +71,6 @@ summariseClinicalRecords <- function(cdm,
   # Check for deprecated arguments
   if (lifecycle::is_present(inObservation)) {
     lifecycle::deprecate_warn("1.0.0", "summariseClinicalRecords(inObservation)", "summariseClinicalRecords(quality)")
-
   }
 
   if (lifecycle::is_present(standardConcept)) {
@@ -126,6 +125,7 @@ summariseClinicalRecords <- function(cdm,
   )
 
   result <- purrr::map(omopTableName, \(table) {
+
     # check that table is not empty
     omopTable <- dplyr::ungroup(cdm[[table]])
     if (omopgenerics::isTableEmpty(omopTable)) {
@@ -154,7 +154,6 @@ summariseClinicalRecords <- function(cdm,
         tableName = table,
         quality = quality,
         conceptSummary = conceptSummary
-
       ) |>
       dplyr::compute(name = omopgenerics::uniqueTableName(prefix))
     result <- list()
@@ -167,20 +166,51 @@ summariseClinicalRecords <- function(cdm,
     variables <- variablesToSummarise(quality = quality, conceptSummary = conceptSummary)
 
     if (length(variables)) {
-    res <- list()
-    if (quality) {
-      cli::cli_inform(c("i" = "Summarising records in observation in {.pkg {table}}."))
-      strataInObs <- lapply(strata, function(x) c(x, "in_observation"))
-      res$inObs <- x |>
-        summariseCountsInternal(strata = strataInObs, counts = "records") |>
-        dplyr::mutate(
-          estimate_name = "count",
-          variable_name = "In observation",
-          variable_level = dplyr::if_else(.data$in_observation == 1, "Yes", "No")
-        )
+      res <- list()
+      if (quality) {
+        cli::cli_inform(c("i" = "Summarising subjects not in person table in {.pkg {table}}."))
+        number_subjects <- result$recordPerPerson |>
+          dplyr::filter(.data$variable_name == "Number subjects" & .data$strata_level == "overall" & .data$estimate_name == "count") |>
+          dplyr::pull(estimate_value) |>
+          as.numeric()
+        number_subjects_no_person <- x |>
+          dplyr::anti_join(cdm[["person"]], by = "person_id") |>
+          omopgenerics::numberSubjects() |>
+          as.numeric()
+        res$notInPerson <- dplyr::tibble(
+          count = as.character(as.integer(number_subjects_no_person)),
+          percentage = sprintf("%.2f", 100 * number_subjects_no_person / number_subjects)
+        ) |>
+          tidyr::pivot_longer(
+            cols = dplyr::everything(),
+            names_to = "estimate_name",
+            values_to = "estimate_value"
+          ) |>
+          dplyr::mutate(
+            variable_name = "Subjects not in person table",
+            variable_level = NA_character_,
+            estimate_type = dplyr::case_when(
+              .data$estimate_name == "count" ~ "integer",
+              .data$estimate_name == "percentage" ~ "percentage"
+            )
+          )
 
-      cli::cli_inform(c("i" = "Summarising records with start before birth date in {.pkg {table}}."))
-      res$sbb <- x |>
+        if (number_subjects_no_person > 0) {
+          cli::cli_warn(c("!" = "There {?is/are} {number_subjects_no_person} individual{?s} not included in the person table."))
+        }
+
+        cli::cli_inform(c("i" = "Summarising records in observation in {.pkg {table}}."))
+        strataInObs <- lapply(strata, function(x) c(x, "in_observation"))
+        res$inObs <- x |>
+          summariseCountsInternal(strata = strataInObs, counts = "records") |>
+          dplyr::mutate(
+            estimate_name = "count",
+            variable_name = "In observation",
+            variable_level = dplyr::if_else(.data$in_observation == 1, "Yes", "No")
+          )
+
+        cli::cli_inform(c("i" = "Summarising records with start before birth date in {.pkg {table}}."))
+        res$sbb <- x |>
           dplyr::filter(.data$start_before_birth == 1) |>
           summariseCountsInternal(strata = strata, counts = "records") |>
           dplyr::mutate(
@@ -190,8 +220,8 @@ summariseClinicalRecords <- function(cdm,
           )
 
 
-      cli::cli_inform(c("i" = "Summarising records with end date before start date in {.pkg {table}}."))
-      res$ebs <- x |>
+        cli::cli_inform(c("i" = "Summarising records with end date before start date in {.pkg {table}}."))
+        res$ebs <- x |>
           dplyr::filter(.data$end_before_start == 1) |>
           summariseCountsInternal(strata = strata, counts = "records") |>
           dplyr::mutate(
@@ -199,80 +229,80 @@ summariseClinicalRecords <- function(cdm,
             variable_name = "End date before start date",
             variable_level = NA_character_
           )
-    }
-    if (conceptSummary) {
-      cli::cli_inform(c("i" = "Summarising domains in {.pkg {table}}."))
-      strataDomain <- lapply(strata, function(x) c(x, "domain_id"))
-      res$domain <- x |>
-        summariseCountsInternal(strata = strataDomain, counts = "records") |>
-        dplyr::mutate(
-          estimate_name = "count",
-          variable_name = "Domain",
-          variable_level = .data$domain_id
-        )
-
-      cli::cli_inform(c("i" = "Summarising standard concepts in {.pkg {table}}."))
-      strataStandard <- lapply(strata, function(x) c(x, "standard_concept"))
-      res$standardConcept <- x |>
-        summariseCountsInternal(strata = strataStandard, counts = "records") |>
-        dplyr::mutate(
-          estimate_name = "count",
-          variable_name = "Standard concept",
-          variable_level = .data$standard_concept
-        )
-
-      cli::cli_inform(c("i" = "Summarising source vocabularies in {.pkg {table}}."))
-      strataSource <- lapply(strata, function(x) c(x, "source_vocabulary"))
-
-      # Summarise and annotate
-      res$sourceVocab <- x |>
-        summariseCountsInternal(strata = strataSource, counts = "records") |>
-        dplyr::mutate(
-          estimate_name = "count",
-          variable_name = "Source vocabulary",
-          variable_level = .data$source_vocabulary
-        )
-
-      cli::cli_inform(c("i" = "Summarising concept types in {.pkg {table}}."))
-      strataType <- lapply(strata, function(x) c(x, "type_concept"))
-      res$typeConcept <- x |>
-        summariseCountsInternal(strata = strataType, counts = "records") |>
-        dplyr::mutate(
-          estimate_name = "count",
-          variable_name = "Type concept id",
-          type_concept = as.integer(.data$type_concept)
-        ) |>
-        dplyr::left_join(conceptTypes, by = "type_concept") |>
-        dplyr::mutate(type_name = dplyr::coalesce(
-          .data$type_name, paste0("Unknown type concept: ", .data$type_concept)
-        )) |>
-        dplyr::rename(variable_level = "type_name")
-    }
-
-
-
-    denominator <- result$recordPerPerson |>
-      dplyr::filter(.data$variable_name == "Number records") |>
-      dplyr::select("strata_name", "strata_level", den = "estimate_value")
-
-    res <- res |>
-      dplyr::bind_rows() |>
-      dplyr::select(!dplyr::any_of(variables)) |>
-      omopgenerics::uniteStrata(cols = strataCols(sex = sex, ageGroup = ageGroup))
-
-    result$variables <- res |>
-      dplyr::bind_rows(
-        res |>
-          dplyr::select("strata_name", "strata_level", "variable_name", "variable_level", "estimate_value") |>
-          dplyr::left_join(denominator, by = c("strata_name", "strata_level")) |>
+      }
+      if (conceptSummary) {
+        cli::cli_inform(c("i" = "Summarising domains in {.pkg {table}}."))
+        strataDomain <- lapply(strata, function(x) c(x, "domain_id"))
+        res$domain <- x |>
+          summariseCountsInternal(strata = strataDomain, counts = "records") |>
           dplyr::mutate(
-            estimate_value = sprintf("%.2f", 100 * as.numeric(.data$estimate_value) / as.numeric(.data$den)),
-            estimate_name = "percentage",
-            estimate_type = "percentage"
+            estimate_name = "count",
+            variable_name = "Domain",
+            variable_level = .data$domain_id
           )
-      ) |>
-      dplyr::select(!"den") |>
-      omopgenerics::uniteAdditional()
+
+        cli::cli_inform(c("i" = "Summarising standard concepts in {.pkg {table}}."))
+        strataStandard <- lapply(strata, function(x) c(x, "standard_concept"))
+        res$standardConcept <- x |>
+          summariseCountsInternal(strata = strataStandard, counts = "records") |>
+          dplyr::mutate(
+            estimate_name = "count",
+            variable_name = "Standard concept",
+            variable_level = .data$standard_concept
+          )
+
+        cli::cli_inform(c("i" = "Summarising source vocabularies in {.pkg {table}}."))
+        strataSource <- lapply(strata, function(x) c(x, "source_vocabulary"))
+
+        # Summarise and annotate
+        res$sourceVocab <- x |>
+          summariseCountsInternal(strata = strataSource, counts = "records") |>
+          dplyr::mutate(
+            estimate_name = "count",
+            variable_name = "Source vocabulary",
+            variable_level = .data$source_vocabulary
+          )
+
+        cli::cli_inform(c("i" = "Summarising concept types in {.pkg {table}}."))
+        strataType <- lapply(strata, function(x) c(x, "type_concept"))
+        res$typeConcept <- x |>
+          summariseCountsInternal(strata = strataType, counts = "records") |>
+          dplyr::mutate(
+            estimate_name = "count",
+            variable_name = "Type concept id",
+            type_concept = as.integer(.data$type_concept)
+          ) |>
+          dplyr::left_join(conceptTypes, by = "type_concept") |>
+          dplyr::mutate(type_name = dplyr::coalesce(
+            .data$type_name, paste0("Unknown type concept: ", .data$type_concept)
+          )) |>
+          dplyr::rename(variable_level = "type_name")
+      }
+
+
+      denominator <- result$recordPerPerson |>
+        dplyr::filter(.data$variable_name == "Number records") |>
+        dplyr::select("strata_name", "strata_level", den = "estimate_value")
+
+      res <- res |>
+        dplyr::bind_rows() |>
+        dplyr::select(!dplyr::any_of(variables)) |>
+        omopgenerics::uniteStrata(cols = strataCols(sex = sex, ageGroup = ageGroup))
+
+      result$variables <- res |>
+        dplyr::bind_rows(
+          res |>
+            dplyr::filter(.data$variable_name != "Subjects not in person table") |>
+            dplyr::select("strata_name", "strata_level", "variable_name", "variable_level", "estimate_value") |>
+            dplyr::left_join(denominator, by = c("strata_name", "strata_level")) |>
+            dplyr::mutate(
+              estimate_value = sprintf("%.2f", 100 * as.numeric(.data$estimate_value) / as.numeric(.data$den)),
+              estimate_name = "percentage",
+              estimate_type = "percentage"
+            )
+        ) |>
+        dplyr::select(!"den") |>
+        omopgenerics::uniteAdditional()
     }
 
     if (missingData) {
@@ -301,7 +331,7 @@ summariseClinicalRecords <- function(cdm,
   }) |>
     dplyr::bind_rows()
 
-  if(rlang::is_empty(result)){
+  if (rlang::is_empty(result)) {
     return(omopgenerics::emptySummarisedResult(settings = set))
   }
 
@@ -366,7 +396,7 @@ summariseRecordsPerPerson <- function(x, den, strata, estimates) {
     dplyr::mutate(
       variable_name = dplyr::if_else(
         .data$variable_name == "n",
-        dplyr::if_else(.data$estimate_name == "sum", "Number records", "records_per_person"),
+        dplyr::if_else(.data$estimate_name == "sum", "Number records", "Records per person"),
         .data$variable_name
       ),
       estimate_name = dplyr::if_else(
@@ -380,10 +410,11 @@ summariseRecordsPerPerson <- function(x, den, strata, estimates) {
   return(result)
 }
 variablesToSummarise <- function(quality, conceptSummary) {
-  c(c("standard_concept",
+  c(c(
+    "standard_concept",
     "source_vocabulary", "domain_id",
-    "type_concept")[conceptSummary], c("in_observation", "start_before_birth", "end_before_start")[quality]
-  )
+    "type_concept"
+  )[conceptSummary], c("in_observation", "start_before_birth", "end_before_start")[quality])
 }
 
 denominator <- function(cdm, sex, ageGroup, name) {
@@ -430,7 +461,6 @@ denominator <- function(cdm, sex, ageGroup, name) {
   return(demographics)
 }
 addVariables <- function(x, tableName, quality, conceptSummary) {
-
   newNames <- c(
     # here to support death table
     person_id = "person_id",
@@ -508,30 +538,27 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
           0L
         )
       )
-
   }
 
   if (conceptSummary) {
-
     x <- x |>
       dplyr::left_join(
         cdm$concept |>
           dplyr::select(
             standard = "concept_id", "domain_id", "standard_concept",
-            source = "concept_id", source_vocabulary = "vocabulary_id"
+            source = "concept_id",
+            source_vocabulary = "vocabulary_id"
           ),
         by = c("standard", "source")
       ) |>
-        dplyr::mutate(standard = dplyr::case_when(
-          .data$standard == 0 ~ "No matching concept",
-          .data$standard_concept == "S" ~ "Standard",
-          .data$standard_concept == "C" ~ "Classification",
-          .default = "Source"
-        ), source_vocabulary = dplyr::coalesce(
+      dplyr::mutate(standard = dplyr::case_when(
+        .data$standard == 0 ~ "No matching concept",
+        .data$standard_concept == "S" ~ "Standard",
+        .data$standard_concept == "C" ~ "Classification",
+        .default = "Source"
+      ), source_vocabulary = dplyr::coalesce(
         .data$source_vocabulary, "No matching concept"
       ))
-
-
   }
   variables <- c("id", "person_id", "start_date", "sex", "age_group", variablesToSummarise(quality = quality, conceptSummary = conceptSummary))
 

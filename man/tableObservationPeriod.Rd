@@ -33,6 +33,6 @@ result <- summariseObservationPeriod(observationPeriod = cdm$observation_period)
 
 tableObservationPeriod(result = result)
 
-PatientProfiles::mockDisconnect(cdm = cdm)
+CDMConnector::cdmDisconnect(cdm = cdm)
 }
 }

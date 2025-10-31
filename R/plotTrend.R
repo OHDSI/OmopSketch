@@ -22,7 +22,7 @@
 #'
 #' result <- summariseTrend(cdm,
 #'   episode = "observation_period",
-#'   output = c("person-days","record"),
+#'   output = c("person-days", "record"),
 #'   interval = "years",
 #'   ageGroup = list("<=40" = c(0, 40), ">40" = c(41, Inf)),
 #'   sex = TRUE
@@ -38,17 +38,16 @@ plotTrend <- function(result,
                       facet = "type",
                       colour = NULL,
                       style = "default") {
-
   rlang::check_installed("ggplot2")
   rlang::check_installed("visOmopResults")
   # initial checks
   omopgenerics::validateResultArgument(result)
   validateFacet(facet, result) # To remove when there's a version in omopgenerics
   available_output <- fromVariableNameToOutput(unique(result$variable_name))
-  if (is.null(output)){
-    if (length(available_output) == 1){
+  if (is.null(output)) {
+    if (length(available_output) == 1) {
       output <- available_output
-    } else{
+    } else {
       output <- "record"
     }
   }
@@ -106,11 +105,11 @@ plotTrend <- function(result,
         axis.text.x = ggplot2::element_text(angle = 90, hjust = 1, size = 8),
         plot.margin = ggplot2::margin(t = 5, r = 5, b = 30, l = 5)
       )
-
   } else {
-  p <-  result |>
+    p <- result |>
       dplyr::filter(.data$estimate_name == estimate) |>
       visOmopResults::barPlot(
+        width = 0.8,
         x = "variable_name",
         y = estimate,
         facet = facet,
@@ -119,38 +118,36 @@ plotTrend <- function(result,
       )
   }
   p + ggplot2::theme(legend.position = "top")
-
 }
-fromOutputToVariableName <- function(output){
+fromOutputToVariableName <- function(output) {
   if (output == "record") {
-    return("Records in observation")
-  } else if(output == "person") {
-    return("Subjects in observation")
-  } else if(output == "person-days"){
+    return("Number of records")
+  } else if (output == "person") {
+    return("Number of subjects")
+  } else if (output == "person-days") {
     return("Person-days")
-  } else if(output == "age") {
-    return("Age in observation")
-  } else if (output == "sex"){
-    return("Females in observation")
+  } else if (output == "age") {
+    return("Age")
+  } else if (output == "sex") {
+    return("Number of females")
   }
 }
 fromVariableNameToOutput <- function(variableName) {
   output <- c()
-  if ("Records in observation" %in% variableName) {
+  if ("Number of records" %in% variableName) {
     output <- c(output, "record")
   }
-  if ("Subjects in observation" %in% variableName) {
+  if ("Number of subjects" %in% variableName) {
     output <- c(output, "person")
   }
   if ("Person-days" %in% variableName) {
     output <- c(output, "person-days")
   }
-  if ("Age in observation" %in% variableName) {
+  if ("Age" %in% variableName) {
     output <- c(output, "age")
   }
-  if ("Females in observation" %in% variableName) {
+  if ("Number of females" %in% variableName) {
     output <- c(output, "sex")
   }
   return(output)
 }
-

@@ -10,8 +10,14 @@
 #' @inheritParams interval
 #' @param ageGroup A list of ageGroup vectors of length two. Code use will be
 #' thus summarised by age groups.
-#' @param sample An integer to sample the table to only that number of records.
-#' If NULL no sample is done.
+#' @param sample Either an integer or a character string.
+#'   If an integer (n > 0), the function will first sample `n` distinct
+#'   `person_id`s from the `person` table and then subset the input tables to
+#'   those subjects.
+#'   If a character string, it must be the name of a cohort in the `cdm`; in
+#'   this case, the input tables are subset to subjects (`subject_id`) belonging
+#'   to that cohort.
+#'   Use `NULL` to disable subsetting. By default `sample = 100000`
 #' @inheritParams dateRange-startDate
 #'
 #' @return A summarised_result object with results overall and, if specified, by
@@ -23,9 +29,11 @@
 #'
 #' cdm <- mockOmopSketch(numberIndividuals = 100)
 #'
-#' result <- summariseMissingData (cdm = cdm,
-#' omopTableName = c("condition_occurrence", "visit_occurrence"),
-#' sample = 10000)
+#' result <- summariseMissingData(
+#'   cdm = cdm,
+#'   omopTableName = c("condition_occurrence", "visit_occurrence"),
+#'   sample = 10000
+#' )
 #'
 #' PatientProfiles::mockDisconnect(cdm)
 #' }
@@ -36,7 +44,7 @@ summariseMissingData <- function(cdm,
                                  year = lifecycle::deprecated(),
                                  interval = "overall",
                                  ageGroup = NULL,
-                                 sample = 1000000,
+                                 sample = 100000,
                                  dateRange = NULL) {
   if (lifecycle::is_present(year)) {
     lifecycle::deprecate_warn("0.2.3", "summariseMissingData(year)", "summariseMissingData(interval = 'years')")
@@ -55,7 +63,7 @@ summariseMissingData <- function(cdm,
   # should i still check the year argument
   omopgenerics::assertChoice(interval, c("overall", "years", "quarters", "months"), length = 1)
   omopgenerics::assertChoice(omopTableName, choices = omopgenerics::omopTables(), unique = TRUE)
-  omopgenerics::assertNumeric(sample, null = TRUE, integerish = TRUE, length = 1, min = 1)
+  sample <- validateSample(sample = sample)
   dateRange <- validateStudyPeriod(cdm, dateRange)
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, multipleAgeGroup = FALSE, null = TRUE, ageGroupName = "age_group")
 
@@ -65,7 +73,7 @@ summariseMissingData <- function(cdm,
     if (!is.null(dateRange)) cli::cli_warn("dateRange restriction is not applied for person table")
 
     omopTableName <- omopTableName[omopTableName != "person"]
-    strata <- c(list(character()), list("sex"[sex]))
+    strata <- list(c(character(),"sex"[sex]))
     result_person <- summariseMissingDataFromTable(omopTable = cdm[["person"]], table = "person", cdm = cdm, col = col, dateRange = NULL, sample = sample, sex = sex, ageGroup = NULL, interval = "overall", strata = strata)
   } else {
     result_person <- tibble::tibble()
@@ -146,10 +154,7 @@ columnsToSummarise <- function(col, cols, table, version) {
 }
 
 
-
-
 summariseMissingDataFromTable <- function(omopTable, table, cdm, col, dateRange, sample, sex, ageGroup, interval, strata) {
-
   prefix <- omopgenerics::tmpPrefix()
 
   # check if table is empty
@@ -163,16 +168,16 @@ summariseMissingDataFromTable <- function(omopTable, table, cdm, col, dateRange,
   )
 
   # restrict study period
-  omopTable <- restrictStudyPeriod(omopTable, dateRange)
+  omopTable <- omopTable |>
+    sampleOmopTable(
+      sample = sample
+      ) |>
+    restrictStudyPeriod(dateRange = dateRange)
   if (is.null(omopTable)) {
     return(NULL)
   }
 
   resultsOmopTable <- omopTable |>
-    # sample if needed
-    sampleOmopTable(
-      sample = sample
-    ) |>
     # add stratifications
     addStratifications(
       indexDate = omopgenerics::omopColumns(table, "start_date"),
@@ -188,7 +193,6 @@ summariseMissingDataFromTable <- function(omopTable, table, cdm, col, dateRange,
       columns = col_table,
       cdm = cdm,
       table = table
-
     ) |>
     dplyr::mutate(omop_table = table) |>
     # order columns

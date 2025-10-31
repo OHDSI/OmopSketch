@@ -20,10 +20,11 @@
 #'
 #' result <- summariseObservationPeriod(observationPeriod = cdm$observation_period)
 #'
-#' plotObservationPeriod(result = result,
-#'     variableName = "Duration in days",
-#'     plotType = "boxplot"
-#'   )
+#' plotObservationPeriod(
+#'   result = result,
+#'   variableName = "Duration in days",
+#'   plotType = "boxplot"
+#' )
 #'
 #' PatientProfiles::mockDisconnect(cdm)
 #' }
@@ -85,7 +86,8 @@ plotObservationPeriod <- function(result,
       y = "count",
       facet = facet,
       colour = colour,
-      style = style
+      style = style,
+      width = 0.8
     ) +
       ggplot2::ylab(stringr::str_to_sentence(unique(result$variable_name)))
   } else if (plotType == "boxplot") {

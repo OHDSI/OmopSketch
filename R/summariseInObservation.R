@@ -46,10 +46,11 @@ summariseInObservation <- function(observationPeriod,
   )
   cdm <- omopgenerics::cdmReference(observationPeriod)
   return(summariseTrend(cdm,
-                        episode = "observation_period",
-                        output = output,
-                        ageGroup = ageGroup,
-                        interval = interval,
-                        sex = sex,
-                        dateRange = dateRange))
+    episode = "observation_period",
+    output = output,
+    ageGroup = ageGroup,
+    interval = interval,
+    sex = sex,
+    dateRange = dateRange
+  ))
 }

@@ -4,7 +4,7 @@ test_that("summariseConceptIdCount works", {
   cdm <- cdmEunomia()
 
   expect_true(inherits(summariseConceptIdCounts(cdm, "drug_exposure"), "summarised_result"))
-  expect_warning(summariseConceptIdCounts(cdm, "observation_period"))
+  expect_error(summariseConceptIdCounts(cdm, "observation_period"))
   expect_no_error(x <- summariseConceptIdCounts(cdm, "visit_occurrence"))
   checkResultType(x, "summarise_concept_id_counts")
   expect_no_error(summariseConceptIdCounts(cdm, "condition_occurrence", countBy = c("record", "person")))
@@ -35,9 +35,6 @@ test_that("summariseConceptIdCount works", {
     ignore_attr = TRUE
   )
 
-
-
-  expect_warning(summariseConceptIdCounts(cdm, "observation_period"))
   expect_error(summariseConceptIdCounts(cdm, omopTableName = ""))
   expect_error(summariseConceptIdCounts(cdm, omopTableName = "visit_occurrence", countBy = "dd"))
   expect_equal(settings(y)$result_type, settings(p)$result_type)
@@ -100,28 +97,9 @@ test_that("dateRange argument works", {
   expect_equal(y, omopgenerics::emptySummarisedResult(), ignore_attr = TRUE)
   expect_equal(settings(y)$result_type, settings(x)$result_type)
   expect_equal(colnames(settings(y)), colnames(settings(x)))
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
-test_that("sample argument works", {
-  skip_on_cran()
-  # Load mock database ----
-  cdm <- cdmEunomia()
-
-  expect_no_error(x <- summariseConceptIdCounts(cdm, "drug_exposure", sample = 50))
-  expect_no_error(y <- summariseConceptIdCounts(cdm, "drug_exposure"))
-  n <- cdm$drug_exposure |>
-    dplyr::tally() |>
-    dplyr::pull(n)
-  expect_no_error(z <- summariseConceptIdCounts(cdm, "drug_exposure", sample = n))
-  expect_equal(y |> sortTibble(), z |> sortTibble())
-  expect_equal(summariseConceptIdCounts(cdm, "drug_exposure", sample = 1) |>
-    dplyr::filter(.data$estimate_name == "count_records") |>
-    dplyr::pull(.data$estimate_value) |>
-    as.integer(), 1L)
-
-  PatientProfiles::mockDisconnect(cdm = cdm)
-})
 
 test_that("tableConceptIdCounts() works", {
   skip_on_cran()
@@ -149,7 +127,7 @@ test_that("tableConceptIdCounts() works", {
   expect_warning(tableConceptIdCounts(summariseConceptIdCounts(cdm, "condition_occurrence"), display = "missing source", type = "reactable"))
   expect_warning(tableConceptIdCounts(summariseConceptIdCounts(cdm, "condition_occurrence"), display = "missing standard", type = "reactable"))
 
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 test_that("interval argument works", {
@@ -261,14 +239,14 @@ test_that("interval argument works", {
     dplyr::arrange(year)
 
   expect_equal(q_year |> sortTibble(), y_year |> sortTibble())
-  PatientProfiles::mockDisconnect(cdm = cdm)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
 test_that("tableTopConceptCounts works", {
   skip_on_cran()
   cdm <- cdmEunomia()
 
-  expect_no_error(result <- summariseConceptIdCounts(cdm, "drug_exposure", sex = TRUE, ageGroup = list(c(0,50))))
+  expect_no_error(result <- summariseConceptIdCounts(cdm, "drug_exposure", sex = TRUE, ageGroup = list(c(0, 50))))
   expect_no_error(tableTopConceptCounts(result))
   expect_no_error(tableTopConceptCounts(result, top = 5))
   expect_error(tableTopConceptCounts(result, top = 0.5))
@@ -284,8 +262,59 @@ test_that("tableTopConceptCounts works", {
   expect_no_error(tableTopConceptCounts(result))
 
   expect_no_error(result <- summariseConceptIdCounts(cdm, "drug_exposure", countBy = c("record", "person")))
-  expect_no_error(tableTopConceptCounts(result, countBy = "record" ))
+  expect_no_error(tableTopConceptCounts(result, countBy = "record"))
+
+
+  CDMConnector::cdmDisconnect(cdm)
+})
+
+test_that("inObservation argument works", {
+  skip_on_cran()
+  cdm <- cdmEunomia()
+
+  expect_no_error(result <- summariseConceptIdCounts(cdm, "drug_exposure", inObservation = TRUE))
+  x <- result |>
+    omopgenerics::filterStrata(.data$in_observation == TRUE) |>
+    dplyr::select(!c("strata_name", "strata_level"))
+
+  cdm$drug_exposure <- cdm$drug_exposure |>
+    dplyr::inner_join(cdm[["observation_period"]] |>
+      dplyr::select(
+        "obs_start" = "observation_period_start_date",
+        "obs_end" = "observation_period_end_date",
+        "person_id"
+      ), by = "person_id") |>
+    dplyr::filter(.data$drug_exposure_start_date >= .data$obs_start & .data$drug_exposure_start_date <= .data$obs_end)
+
+  expect_no_error(resultInObs <- summariseConceptIdCounts(cdm, "drug_exposure"))
+  expect_equal(x |> dplyr::arrange(.data$variable_level), resultInObs |>
+    dplyr::select(!c("strata_name", "strata_level")) |> dplyr::arrange(.data$variable_level), ignore_attr = TRUE)
+
+  expect_no_error(summariseConceptIdCounts(cdm, "drug_exposure", inObservation = TRUE, sex = TRUE, ageGroup = list(c(0, 70))))
+  CDMConnector::cdmDisconnect(cdm)
+})
 
 
 
+test_that("sample argument works", {
+  skip_on_cran()
+  # Load mock database ----
+  cdm <- cdmEunomia()
+  n_person <- cdm$person |> dplyr::tally() |> dplyr::pull("n")
+  expect_no_error(summariseConceptIdCounts(cdm, "drug_exposure", sample =  n_person - 1))
+  expect_message(summariseConceptIdCounts(cdm, "drug_exposure", sample = n_person))
+  expect_message(summariseConceptIdCounts(cdm, "drug_exposure", sample = n_person+1))
+  expect_message(summariseConceptIdCounts(cdm, "drug_exposure", sample = "pajfn"))
+  cdm[["pharyngitis"]] <- CohortConstructor::conceptCohort(cdm, conceptSet = list("pharyngitis" = 4112343), name = "pharyngitis")
+  expect_no_error(x <- summariseConceptIdCounts(cdm, "drug_exposure", sample = "pharyngitis"))
+
+
+  expect_no_error(x <- summariseConceptIdCounts(cdm, "condition_occurrence", sample =  n_person - 1, countBy = "person"))
+  expect_true(all(x |> omopgenerics::tidy() |> dplyr::pull("count_subjects") <= n_person - 1))
+
+  expect_no_error(x <- summariseConceptIdCounts(cdm, "condition_occurrence", sample = "pharyngitis", countBy = "record"))
+  expect_equal(x |> omopgenerics::tidy() |> dplyr::filter(.data$variable_level == "4112343") |> dplyr::pull("count_records"),  omopgenerics::numberRecords(cdm$pharyngitis))
+
+
+  CDMConnector::cdmDisconnect(cdm)
 })

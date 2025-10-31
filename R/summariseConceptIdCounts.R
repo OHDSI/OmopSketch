@@ -10,8 +10,9 @@
 #' @param sex TRUE or FALSE. If TRUE code use will be summarised by sex.
 #' @param ageGroup A list of ageGroup vectors of length two. Code use will be
 #' thus summarised by age groups.
-#' @param sample An integer to sample the tables to only that number of records.
-#' If NULL no sample is done.
+#' @param inObservation Logical. If `TRUE`, the results are stratified to indicate whether each record occurs within an observation period.
+
+#' @inheritParams sample
 #' @inheritParams dateRange-startDate
 #'
 #' @return A summarised_result object with results overall and, if specified, by
@@ -35,7 +36,6 @@
 #'   countBy = c("record", "person"),
 #'   sex = TRUE
 #' )
-#'
 #' }
 #'
 summariseConceptIdCounts <- function(cdm,
@@ -45,6 +45,7 @@ summariseConceptIdCounts <- function(cdm,
                                      interval = "overall",
                                      sex = FALSE,
                                      ageGroup = NULL,
+                                     inObservation = FALSE,
                                      sample = NULL,
                                      dateRange = NULL) {
   if (lifecycle::is_present(year)) {
@@ -63,22 +64,24 @@ summariseConceptIdCounts <- function(cdm,
   omopgenerics::assertChoice(countBy, choices = c("record", "person"))
   omopgenerics::assertChoice(interval, c("overall", "years", "quarters", "months"), length = 1)
   omopgenerics::assertLogical(sex, length = 1)
-  omopgenerics::assertChoice(omopTableName, choices = omopgenerics::omopTables(), unique = TRUE)
+  omopgenerics::assertChoice(omopTableName, choices = clinicalTables(), unique = TRUE)
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup = ageGroup)
   dateRange <- validateStudyPeriod(cdm = cdm, studyPeriod = dateRange)
-  omopgenerics::assertNumeric(sample, integerish = TRUE, min = 1, null = TRUE, length = 1)
+
+  sample <- validateSample(sample = sample)
+
+  omopgenerics::assertLogical(inObservation, length = 1)
 
   # settings for the created results
   set <- createSettings(result_type = "summarise_concept_id_counts", study_period = dateRange)
 
   # get strata
-  strata <- omopgenerics::combineStrata(strataCols(sex = sex, ageGroup = ageGroup, interval = interval))
+  strata <- omopgenerics::combineStrata(strataCols(sex = sex, ageGroup = ageGroup, interval = interval, inObservation = inObservation))
   concepts <- c("concept_id", "concept_name", "source_concept_id", "source_concept_name")
   stratax <- c(list(concepts), purrr::map(strata, \(x) c(concepts, x)))
   additional <- c("time_interval", "source_concept_id", "source_concept_name")
   # how to count
   counts <- c("records", "person_id")[c("record", "person") %in% countBy]
-
 
 
   # summarise counts
@@ -88,7 +91,10 @@ summariseConceptIdCounts <- function(cdm,
     conceptId <- omopgenerics::omopColumns(table = table, field = "standard_concept")
     sourceConceptId <- omopgenerics::omopColumns(table = table, field = "source_concept")
 
-
+    if(omopgenerics::isTableEmpty(omopTable)) {
+      cli::cli_warn(c("!" = "{table} omop table is empty."))
+      return(NULL)
+    }
     if (is.na(conceptId)) {
       cli::cli_warn(c("!" = "No standard concept identified for {table}."))
       return(NULL)
@@ -97,34 +103,22 @@ summariseConceptIdCounts <- function(cdm,
     prefix <- omopgenerics::tmpPrefix()
 
     # restrict study period
-    omopTable <- restrictStudyPeriod(omopTable, dateRange)
+    omopTable <- omopTable |>
+      sampleOmopTable(sample = sample) |>
+      restrictStudyPeriod(dateRange = dateRange)
+
     if (is.null(omopTable)) {
       return(NULL)
     }
 
-    # sample table
-    omopTable <- omopTable |>
-      sampleOmopTable(sample = sample)
-
     startDate <- omopgenerics::omopColumns(table = table, field = "start_date")
 
     result <- omopTable |>
-      # restrct to counts in observation
-      dplyr::inner_join(
-        cdm[["observation_period"]] |>
-          dplyr::select(
-            "person_id",
-            obs_start = "observation_period_start_date",
-            obs_end = "observation_period_end_date"
-          ),
-        by = "person_id"
+      dplyr::rename(
+        concept_id = dplyr::all_of(conceptId),
+        source_concept_id = dplyr::all_of(sourceConceptId),
+        start_date = dplyr::all_of(startDate)
       ) |>
-      dplyr::filter(
-        .data[[startDate]] >= .data$obs_start & .data[[startDate]] <= .data$obs_end
-      ) |>
-      dplyr::select(!c("obs_start", "obs_end")) |>
-      # add concept names
-      dplyr::rename(concept_id = dplyr::all_of(conceptId), source_concept_id = dplyr::all_of(sourceConceptId) ) |>
       dplyr::mutate(source_concept_id = dplyr::coalesce(.data$source_concept_id, 0L)) |>
       dplyr::left_join(
         cdm$concept |>
@@ -141,13 +135,14 @@ summariseConceptIdCounts <- function(cdm,
       ) |>
       # add demographics and year
       addStratifications(
-        indexDate = omopgenerics::omopColumns(table = table, field = "start_date"),
+        indexDate = "start_date",
         sex = sex,
         ageGroup = ageGroup,
         interval = interval,
         intervalName = "interval",
         name = omopgenerics::uniqueTableName(prefix)
       ) |>
+      addInObservation(inObservation = inObservation, cdm = cdm, episode = FALSE, name = omopgenerics::uniqueTableName(prefix)) |>
       # summarise results
       summariseCountsInternal(stratax, counts) |>
       dplyr::mutate(omop_table = .env$table)
@@ -170,7 +165,7 @@ summariseConceptIdCounts <- function(cdm,
       cdm_name = omopgenerics::cdmName(cdm)
     ) |>
     omopgenerics::uniteGroup(cols = "omop_table") |>
-    omopgenerics::uniteStrata(cols = c(names(ageGroup), "sex"[sex], character())) |>
+    omopgenerics::uniteStrata(cols = c(names(ageGroup), "sex"[sex], "in_observation"[inObservation], character())) |>
     addTimeInterval() |>
     dplyr::mutate(
       estimate_value = as.character(.data$estimate_value),

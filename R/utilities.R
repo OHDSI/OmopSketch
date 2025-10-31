@@ -1,8 +1,10 @@
 warnFacetColour <- function(result, cols) {
   colsToWarn <- result |>
     dplyr::select(
-      dplyr::any_of(c("cdm_name", "group_name", "group_level", "strata_name", "strata_level",
-      "variable_name", "variable_level", "type"))
+      dplyr::any_of(c(
+        "cdm_name", "group_name", "group_level", "strata_name", "strata_level",
+        "variable_name", "variable_level", "type"
+      ))
     ) |>
     dplyr::distinct() |>
     omopgenerics::splitAll() |>
@@ -116,3 +118,47 @@ clinicalTables <- function(){
    "observation","death", "note", "specimen", "payer_plan_period", "drug_era",
    "dose_era", "condition_era")
 }
+
+
+sampleCdm <- function(cdm, tables, sample, call = parent.frame()){
+
+  if(is.numeric(sample)){
+    if (sample >= omopgenerics::numberSubjects(cdm[["person"]])) {
+      cli::cli_inform("The {.field person} table has \u2264 {.val {sample}} subjects; skipping sampling of the CDM.", call = call)
+      return(cdm)
+    }
+    ids <- cdm[["person"]] |>
+      dplyr::select("person_id") |>
+      dplyr::slice_sample(n = as.integer(sample)) |>
+      dplyr::pull("person_id")
+
+  } else if(is.character(sample)) {
+    if (!(sample %in% names(cdm))) {
+      cli::cli_inform("The CDM doesn't contain the {.val {sample}} cohort; skipping sampling of the CDM.", call = call)
+      return(cdm)
+    }
+    ids <- cdm[[sample]] |>
+      dplyr::pull("subject_id")
+  } else {
+    return(cdm)
+  }
+  cdm <- omopgenerics::insertTable(cdm = cdm, name = "person_sample",
+                                   table = tibble::tibble("person_id" = sort(unique(ids))))
+
+  for (table in tables) {
+    cdm[[table]] <- cdm[[table]] |>
+      dplyr::inner_join(cdm[["person_sample"]], by = "person_id")
+  }
+  return(cdm)
+}
+
+sampleOmopTable <- function(omopTable, sample) {
+  if (is.null(sample)){
+    return(omopTable)
+  }
+  cdm <- omopgenerics::cdmReference(omopTable)
+  tableName <- omopgenerics::tableName(omopTable)
+  cdm <- sampleCdm(cdm = cdm, tables = tableName, sample = sample)
+  return(cdm[[tableName]])
+}
+

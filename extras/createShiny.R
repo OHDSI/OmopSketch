@@ -1,9 +1,10 @@
 
+library(OmopSketch)
+
 # set timeout to 10 minutes
 options(timeout = 600)
 
 # databases to characterise
-devtools::load_all()
 databases <- omock::availableMockDatasets()
 databases <- databases[!databases %in% c("empty_cdm", "synpuf-1k_5.3")]
 databases <- c("synpuf-1k_5.4", "GiBleed", "synthea-allergies-10k", "synthea-covid19-200k")

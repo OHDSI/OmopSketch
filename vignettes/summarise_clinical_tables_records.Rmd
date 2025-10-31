@@ -131,7 +131,7 @@ It is also possible to stratify the results by sex and age groups:
 summarisedResult <- summariseClinicalRecords(cdm,
   omopTableName = "condition_occurrence",
   recordsPerPerson = c("mean", "sd", "q05", "q95"),
-  quality = TRUE, 
+  quality = TRUE,
   conceptSummary = TRUE,
   sex = TRUE,
   ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf))
@@ -161,12 +161,13 @@ summarisedResult |>
 We can also filter the clinical table to a specific time window by setting the `dateRange` argument.
 
 ```{r}
+
 summarisedResult <- summariseClinicalRecords(cdm, 
                                              omopTableName ="drug_exposure",
                                              dateRange = as.Date(c("1990-01-01", "2010-01-01"))) 
 
 summarisedResult |>
-  omopgenerics::settings()|>
+  omopgenerics::settings() |>
   glimpse()
 ```
 
@@ -189,9 +190,8 @@ summarisedResult |>
 ```
 
 
-
 Finally, disconnect from the cdm
 
 ```{r, warning=FALSE}
-PatientProfiles::mockDisconnect(cdm = cdm)
+CDMConnector::cdmDisconnect(cdm = cdm)
 ```

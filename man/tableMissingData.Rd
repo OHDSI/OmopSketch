@@ -28,11 +28,13 @@ Create a visual table from a summariseMissingData() result.
 library(OmopSketch)
 cdm <- mockOmopSketch(numberIndividuals = 100)
 
-result <- summariseMissingData(cdm = cdm,
-omopTableName = c("condition_occurrence", "visit_occurrence"))
+result <- summariseMissingData(
+  cdm = cdm,
+  omopTableName = c("condition_occurrence", "visit_occurrence")
+)
 
 tableMissingData(result = result)
 
-PatientProfiles::mockDisconnect(cdm = cdm)
+CDMConnector::cdmDisconnect(cdm = cdm)
 }
 }
