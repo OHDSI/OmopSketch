@@ -41,6 +41,8 @@ tablePerson <- function(result,
     ),
     header = "cdm_name",
     style = style,
-    type = type
+    type = type,
+    .options = list(caption = "Summary of person table")
+
   )
 }

@@ -161,8 +161,8 @@ summariseNumeric2 <- function(x, variable, den) {
       # `CAST(boolean AS NUMERIC)` SQL statement, which fails on PostgreSQL.
       # Using `if_else` generates a portable `CASE WHEN` statement that is
       # compatible with all database backends.
-      count_missing = sum(if_else(is.na(.data$variable_level), 1L, 0L), na.rm = TRUE),
-      count_0 = sum(if_else(.data$variable_level == 0, 1L, 0L), na.rm = TRUE),
+      count_missing = sum(dplyr::if_else(is.na(.data$variable_level), 1L, 0L), na.rm = TRUE),
+      count_0 = sum(dplyr::if_else(.data$variable_level == 0, 1L, 0L), na.rm = TRUE),
       distinct_values = as.integer(dplyr::n_distinct(.data$variable_level))
     ) |>
     dplyr::collect() |>
