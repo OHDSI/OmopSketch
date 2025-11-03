@@ -55,7 +55,7 @@ mockOmopSketch <- function(numberIndividuals = 100,
     )
   }
 
-  cdm <- omock::mockCdmReference(cdmName = "mockOmopSketch", vocabularySet = "eunomia") |>
+  cdm <- omock::mockCdmReference(cdmName = "mockOmopSketch", vocabularySet = "mock") |>
     omock::mockPerson(nPerson = numberIndividuals) |>
     omock::mockObservationPeriod() |>
     omock::mockConditionOccurrence() |>
