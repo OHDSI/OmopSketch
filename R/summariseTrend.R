@@ -167,13 +167,13 @@ summariseEventTrend <- function(cdm, omopTableName, output, interval, sex, ageGr
 
     res <- res |>
       dplyr::bind_rows(res |>
-        dplyr::inner_join(denominator, by = "variable_name") |>
-        dplyr::mutate(
-          estimate_value = sprintf("%.2f", as.numeric(.data$estimate_value) / denominator * 100),
-          estimate_name = "percentage",
-          estimate_type = "percentage"
-        ) |>
-        dplyr::select(-c("denominator"))) |>
+                         dplyr::inner_join(denominator, by = "variable_name") |>
+                         dplyr::mutate(
+                           estimate_value = sprintf("%.2f", as.numeric(.data$estimate_value) / denominator * 100),
+                           estimate_name = "percentage",
+                           estimate_type = "percentage"
+                         ) |>
+                         dplyr::select(-c("denominator"))) |>
       dplyr::mutate(omop_table = .env$table)
   }) |>
     dplyr::bind_rows() |>
@@ -184,9 +184,10 @@ summariseEventTrend <- function(cdm, omopTableName, output, interval, sex, ageGr
 
 
 summariseEpisodeTrend <- function(cdm, omopTableName, output, interval, sex, ageGroup, dateRange, inObservation) {
-  prefix <- omopgenerics::tmpPrefix()
 
   result <- purrr::map(omopTableName, \(table) {
+    prefix <- omopgenerics::tmpPrefix()
+
     omopTable <- dplyr::ungroup(cdm[[table]])
 
     omopTable <- omopTable |>
@@ -225,35 +226,58 @@ summariseEpisodeTrend <- function(cdm, omopTableName, output, interval, sex, age
 
     res$timeOverall <- summariseTrendInternal(x = x, output = output, strata = strata)
 
-    if (interval != "overall") {
+    if (interval != "overall" & nrow(res$timeOverall) > 0) {
+      # add time_interval column
+
+      # calculate timeInterval
       timeInterval <- getIntervalTibbleForObservation(omopTable, start_date_name, end_date_name, interval)
+      n <- nrow(timeInterval)
 
-      cdm <- cdm |>
-        omopgenerics::insertTable(name = paste0(prefix, "interval"), table = timeInterval)
+      # split into 10 row chucks
+      rows <- split(seq_len(n), ceiling(seq_along(seq_len(n)) / 10))
 
+      for (i in seq_along(rows)) {
+        # insert time interval
+        nm <- omopgenerics::uniqueTableName(prefix = prefix)
+        cdm <- omopgenerics::insertTable(cdm = cdm, name = nm, table = timeInterval[rows[[i]],])
 
-      x <- cdm[[paste0(prefix, "interval")]] |>
-        dplyr::cross_join(omopTable |>
-          dplyr::mutate(
-            start_date = as.Date(paste0(
-              as.character(as.integer(clock::get_year(.data[[start_date_name]]))), "-",
-              as.character(as.integer(clock::get_month(.data[[start_date_name]]))), "-01"
-            )),
-            end_date = dplyr::if_else(
-              is.na(.data[[end_date_name]]),
-              as.Date(NA),
-              as.Date(paste0(
-                as.character(as.integer(clock::get_year(.data[[end_date_name]]))), "-",
-                as.character(as.integer(clock::get_month(.data[[end_date_name]]))), "-01"
-              ))
-            )
-          )) |>
-        dplyr::filter(
-          (.data$start_date < .data$interval_start_date &
-            (!is.na(.data$end_date) & .data$end_date >= .data$interval_start_date)) |
-            (.data$start_date >= .data$interval_start_date &
-              .data$start_date <= .data$interval_end_date)
-        ) |>
+        # do the cross_join and filter
+        xi <- cdm[[nm]] |>
+          dplyr::cross_join(
+            omopTable |>
+              dplyr::mutate(
+                start_date = as.Date(paste0(
+                  as.character(as.integer(clock::get_year(.data[[start_date_name]]))), "-",
+                  as.character(as.integer(clock::get_month(.data[[start_date_name]]))), "-01"
+                )),
+                end_date = dplyr::if_else(
+                  is.na(.data[[end_date_name]]),
+                  as.Date(NA),
+                  as.Date(paste0(
+                    as.character(as.integer(clock::get_year(.data[[end_date_name]]))), "-",
+                    as.character(as.integer(clock::get_month(.data[[end_date_name]]))), "-01"
+                  ))
+                )
+              )
+          ) |>
+          dplyr::filter(
+            (.data$start_date < .data$interval_start_date &
+               (!is.na(.data$end_date) & .data$end_date >= .data$interval_start_date)) |
+              (.data$start_date >= .data$interval_start_date &
+                 .data$start_date <= .data$interval_end_date)
+          ) |>
+          dplyr::compute(name = omopgenerics::uniqueTableName(prefix = prefix))
+
+        if (i == 1) {
+          x <- xi
+        } else {
+          x <- x |>
+            dplyr::union_all(xi) |>
+            dplyr::compute(name = omopgenerics::uniqueTableName(prefix = prefix))
+        }
+      }
+
+      x <- x |>
         dplyr::mutate(
           start_date = dplyr::if_else(
             .data[[start_date_name]] > .data$interval_start_date,
@@ -275,10 +299,11 @@ summariseEpisodeTrend <- function(cdm, omopTableName, output, interval, sex, age
           name = omopgenerics::uniqueTableName(prefix = prefix)
         )
 
-
       strata <- purrr::map(strata, \(x) c("time_interval", x))
 
       res$interval <- summariseTrendInternal(x = x, output = output, strata = strata)
+
+      omopgenerics::dropSourceTable(cdm = cdm, name = dplyr::starts_with(prefix))
     }
 
     if (rlang::is_empty(res)) {
@@ -290,18 +315,17 @@ summariseEpisodeTrend <- function(cdm, omopTableName, output, interval, sex, age
 
     res <- res |>
       dplyr::bind_rows(res |>
-        dplyr::inner_join(denominator, by = "variable_name") |>
-        dplyr::mutate(
-          estimate_value = sprintf("%.2f", as.numeric(.data$estimate_value) / denominator * 100),
-          estimate_name = "percentage",
-          estimate_type = "percentage"
-        ) |>
-        dplyr::select(-c("denominator"))) |>
+                         dplyr::inner_join(denominator, by = "variable_name") |>
+                         dplyr::mutate(
+                           estimate_value = sprintf("%.2f", as.numeric(.data$estimate_value) / denominator * 100),
+                           estimate_name = "percentage",
+                           estimate_type = "percentage"
+                         ) |>
+                         dplyr::select(-c("denominator"))) |>
       dplyr::mutate(omop_table = .env$table)
   }) |>
     dplyr::bind_rows()
 
-  omopgenerics::dropSourceTable(cdm = cdm, name = dplyr::starts_with(prefix))
   return(result)
 }
 
@@ -425,10 +449,10 @@ getDenominator <- function(omopTable, output) {
     denominator <- denominator |>
       dplyr::bind_rows(tibble::tibble(
         "denominator" = c(omopTable |>
-          dplyr::ungroup() |>
-          dplyr::summarise("n" = dplyr::n()) |>
-          dplyr::pull("n") |>
-          as.numeric()),
+                            dplyr::ungroup() |>
+                            dplyr::summarise("n" = dplyr::n()) |>
+                            dplyr::pull("n") |>
+                            as.numeric()),
         "variable_name" = "Number of records"
       ))
   }
@@ -436,11 +460,11 @@ getDenominator <- function(omopTable, output) {
     denominator <- denominator |>
       dplyr::bind_rows(tibble::tibble(
         "denominator" = c(cdm[["person"]] |>
-          dplyr::ungroup() |>
-          dplyr::select("person_id") |>
-          dplyr::summarise("n" = dplyr::n()) |>
-          dplyr::pull("n") |>
-          as.numeric()),
+                            dplyr::ungroup() |>
+                            dplyr::select("person_id") |>
+                            dplyr::summarise("n" = dplyr::n()) |>
+                            dplyr::pull("n") |>
+                            as.numeric()),
         "variable_name" = "Number of subjects"
       ))
   }
@@ -466,12 +490,12 @@ getDenominator <- function(omopTable, output) {
     denominator <- denominator |>
       dplyr::bind_rows(tibble::tibble(
         "denominator" = c(omopTable |>
-          dplyr::ungroup() |>
-          dplyr::inner_join(cdm[["person"]] |>
-            dplyr::filter(.data$gender_concept_id %in% c(8507, 8532)), by = "person_id") |>
-          dplyr::summarise("n" = dplyr::n_distinct(.data$person_id)) |>
-          dplyr::pull("n") |>
-          as.numeric()),
+                            dplyr::ungroup() |>
+                            dplyr::inner_join(cdm[["person"]] |>
+                                                dplyr::filter(.data$gender_concept_id %in% c(8507, 8532)), by = "person_id") |>
+                            dplyr::summarise("n" = dplyr::n_distinct(.data$person_id)) |>
+                            dplyr::pull("n") |>
+                            as.numeric()),
         "variable_name" = "Number of females"
       ))
   }
