@@ -51,6 +51,7 @@ tableMissingData <- function(result,
   }
 
   header <- c("cdm_name")
+  tables <- result$group_level |> unique()
 
   result |>
     dplyr::arrange(.data$variable_level, .data$additional_level) |>
@@ -64,7 +65,8 @@ tableMissingData <- function(result,
       header = header,
       rename = c("Database name" = "cdm_name", "Column name" = "variable_level"),
       groupColumn = c("omop_table", omopgenerics::strataColumns(result)),
-      hide = c("variable_name")
+      hide = c("variable_name"),
+      .options = list(caption = paste0("Summary of missingness in ", paste(tables, collapse = ", "), ifelse(length(tables) > 1, " tables", " table")))
     ) |>
     suppressMessages()
 }

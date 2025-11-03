@@ -45,7 +45,7 @@ tableTrend <- function(result,
 
   # check if it is empty
   if (nrow(result) == 0) {
-    warnEmpty("summarise_record_count")
+    warnEmpty("summarise_trend")
     return(emptyTable(type))
   }
   formatEstimates <- c(
@@ -56,6 +56,9 @@ tableTrend <- function(result,
     "Database name" = "cdm_name",
     "OMOP table" = "omop_table"
   )
+  variables <- result$variable_name |> unique()
+  time <- omopgenerics::settings(result) |> dplyr::pull(.data$interval) |> unique()
+  tables <- result$group_level |> unique()
   result |>
     visOmopResults::visOmopTable(
       header = c("cdm_name"),
@@ -67,7 +70,10 @@ tableTrend <- function(result,
       style = style,
       hide = "variable_level",
       columnOrder = c("variable_name", additionals, strata, "estimate_name"),
-      .options = list(merge = "all_columns")
+      .options = list(merge = "all_columns",
+                      caption = paste0("Summary of ",
+                                       paste(variables, collapse = ", "), ifelse(time != "overall", paste0(" by ", time), ""),
+                                       " in ", paste(tables, collapse = ", "), ifelse(length(tables) > 1, " tables", " table")))
     ) |>
     suppressMessages()
 }
