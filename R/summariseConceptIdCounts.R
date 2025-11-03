@@ -133,6 +133,8 @@ summariseConceptIdCounts <- function(cdm,
           ),
         by = "source_concept_id"
       ) |>
+      dplyr::mutate(source_concept_name = dplyr::coalesce(.data$source_concept_name, "No matching concept"),
+                    concept_name = dplyr::coalesce(.data$concept_name, "No matching concept")) |>
       # add demographics and year
       addStratifications(
         indexDate = "start_date",
