@@ -70,7 +70,8 @@ tableObservationPeriod <- function(result,
       hide = hide,
       type = type,
       style = style,
-      .options = list(keepNotFormatted = FALSE) # to consider removing this? If
+      .options = list(keepNotFormatted = FALSE,
+                     caption = "Summary of observation_period table") # to consider removing this? If
       # the user adds some custom estimates they are not going to be displayed in
     ) |>
     suppressMessages()

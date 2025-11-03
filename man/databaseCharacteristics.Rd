@@ -6,9 +6,10 @@
 \usage{
 databaseCharacteristics(
   cdm,
-  omopTableName = c("person", "visit_occurrence", "condition_occurrence",
+  omopTableName = c("visit_occurrence", "visit_detail", "condition_occurrence",
     "drug_exposure", "procedure_occurrence", "device_exposure", "measurement",
     "observation", "death"),
+  sample = NULL,
   sex = FALSE,
   ageGroup = NULL,
   dateRange = NULL,
@@ -20,8 +21,18 @@ databaseCharacteristics(
 \arguments{
 \item{cdm}{A \code{cdm_reference} object representing the Common Data Model (CDM) reference.}
 
-\item{omopTableName}{A character vector specifying the OMOP tables from the CDM to include in the analysis.
-If "person" is present, it will only be used for missing value summarisation.}
+\item{omopTableName}{A character vector of the names of the tables to
+summarise in the cdm object. Run \code{OmopSketch::clinicalTables()} to check the
+available options.}
+
+\item{sample}{Either an integer or a character string.
+If an integer (n > 0), the function will first sample \code{n} distinct
+\code{person_id}s from the \code{person} table and then subset the input tables to
+those subjects.
+If a character string, it must be the name of a cohort in the \code{cdm}; in
+this case, the input tables are subset to subjects (\code{subject_id}) belonging
+to that cohort.
+Use \code{NULL} to disable subsetting (default value).}
 
 \item{sex}{Logical; whether to stratify results by sex (\code{TRUE}) or not (\code{FALSE}).}
 
@@ -49,9 +60,11 @@ library(OmopSketch)
 
 cdm <- mockOmopSketch(numberIndividuals = 100)
 
-result <- databaseCharacteristics(cdm = cdm,
-omopTableName = c("drug_exposure", "condition_occurrence"),
-sex = TRUE, ageGroup = list(c(0,50), c(51,100)), interval = "years", conceptIdCounts = FALSE)
+result <- databaseCharacteristics(
+  cdm = cdm,
+  omopTableName = c("drug_exposure", "condition_occurrence"),
+  sex = TRUE, ageGroup = list(c(0, 50), c(51, 100)), interval = "years", conceptIdCounts = FALSE
+)
 
 PatientProfiles::mockDisconnect(cdm)
 }

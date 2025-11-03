@@ -11,8 +11,8 @@
 #' @param ageGroup A list of ageGroup vectors of length two. Code use will be
 #' thus summarised by age groups.
 #' @param inObservation Logical. If `TRUE`, the results are stratified to indicate whether each record occurs within an observation period.
-#' @param sample An integer to sample the tables to only that number of records.
-#' If NULL no sample is done.
+
+#' @inheritParams sample
 #' @inheritParams dateRange-startDate
 #'
 #' @return A summarised_result object with results overall and, if specified, by
@@ -64,10 +64,12 @@ summariseConceptIdCounts <- function(cdm,
   omopgenerics::assertChoice(countBy, choices = c("record", "person"))
   omopgenerics::assertChoice(interval, c("overall", "years", "quarters", "months"), length = 1)
   omopgenerics::assertLogical(sex, length = 1)
-  omopgenerics::assertChoice(omopTableName, choices = omopgenerics::omopTables(), unique = TRUE)
+  omopgenerics::assertChoice(omopTableName, choices = clinicalTables(), unique = TRUE)
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup = ageGroup)
   dateRange <- validateStudyPeriod(cdm = cdm, studyPeriod = dateRange)
-  omopgenerics::assertNumeric(sample, integerish = TRUE, min = 1, null = TRUE, length = 1)
+
+  sample <- validateSample(sample = sample)
+
   omopgenerics::assertLogical(inObservation, length = 1)
 
   # settings for the created results
@@ -89,7 +91,10 @@ summariseConceptIdCounts <- function(cdm,
     conceptId <- omopgenerics::omopColumns(table = table, field = "standard_concept")
     sourceConceptId <- omopgenerics::omopColumns(table = table, field = "source_concept")
 
-
+    if(omopgenerics::isTableEmpty(omopTable)) {
+      cli::cli_warn(c("!" = "{table} omop table is empty."))
+      return(NULL)
+    }
     if (is.na(conceptId)) {
       cli::cli_warn(c("!" = "No standard concept identified for {table}."))
       return(NULL)
@@ -98,14 +103,13 @@ summariseConceptIdCounts <- function(cdm,
     prefix <- omopgenerics::tmpPrefix()
 
     # restrict study period
-    omopTable <- restrictStudyPeriod(omopTable, dateRange)
+    omopTable <- omopTable |>
+      sampleOmopTable(sample = sample) |>
+      restrictStudyPeriod(dateRange = dateRange)
+
     if (is.null(omopTable)) {
       return(NULL)
     }
-
-    # sample table
-    omopTable <- omopTable |>
-      sampleOmopTable(sample = sample)
 
     startDate <- omopgenerics::omopColumns(table = table, field = "start_date")
 
@@ -129,6 +133,8 @@ summariseConceptIdCounts <- function(cdm,
           ),
         by = "source_concept_id"
       ) |>
+      dplyr::mutate(source_concept_name = dplyr::coalesce(.data$source_concept_name, "No matching concept"),
+                    concept_name = dplyr::coalesce(.data$concept_name, "No matching concept")) |>
       # add demographics and year
       addStratifications(
         indexDate = "start_date",

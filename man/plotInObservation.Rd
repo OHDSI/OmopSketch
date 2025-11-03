@@ -2,7 +2,8 @@
 % Please edit documentation in R/plotInObservation.R
 \name{plotInObservation}
 \alias{plotInObservation}
-\title{Create a ggplot2 plot from the output of summariseInObservation().}
+\title{Create a ggplot2 plot from the output of summariseInObservation().
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 \usage{
 plotInObservation(result, facet = NULL, colour = NULL)
 }
@@ -20,6 +21,7 @@ A ggplot showing the table counts
 }
 \description{
 Create a ggplot2 plot from the output of summariseInObservation().
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 }
 \examples{
 \donttest{
@@ -30,7 +32,7 @@ cdm <- mockOmopSketch()
 
 result <- summariseInObservation(
   observationPeriod = cdm$observation_period,
-  output = c("person-days","record"),
+  output = c("person-days", "record"),
   ageGroup = list("<=40" = c(0, 40), ">40" = c(41, Inf)),
   sex = TRUE
 )

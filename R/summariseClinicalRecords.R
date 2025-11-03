@@ -117,6 +117,7 @@ summariseClinicalRecords <- function(cdm,
   )
 
   result <- purrr::map(omopTableName, \(table) {
+
     # check that table is not empty
     omopTable <- dplyr::ungroup(cdm[[table]])
     if (omopgenerics::isTableEmpty(omopTable)) {
@@ -162,7 +163,7 @@ summariseClinicalRecords <- function(cdm,
         cli::cli_inform(c("i" = "Summarising subjects not in person table in {.pkg {table}}."))
         number_subjects <- result$recordPerPerson |>
           dplyr::filter(.data$variable_name == "Number subjects" & .data$strata_level == "overall" & .data$estimate_name == "count") |>
-          dplyr::pull(estimate_value) |>
+          dplyr::pull(.data$estimate_value) |>
           as.numeric()
         number_subjects_no_person <- x |>
           dplyr::anti_join(cdm[["person"]], by = "person_id") |>
@@ -533,7 +534,8 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
         cdm$concept |>
           dplyr::select(
             standard = "concept_id", "domain_id", "standard_concept",
-            source = "concept_id", source_vocabulary = "vocabulary_id"
+            source = "concept_id",
+            source_vocabulary = "vocabulary_id"
           ),
         by = c("standard", "source")
       ) |>

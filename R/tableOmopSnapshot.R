@@ -37,7 +37,7 @@ tableOmopSnapshot <- function(result,
   }
 
   header <- c("cdm_name")
-
+  cdms <- result$cdm_name |> unique()
   result <- result |>
     formatColumn(c("variable_name", "estimate_name")) |>
     visOmopResults::visOmopTable(
@@ -51,7 +51,8 @@ tableOmopSnapshot <- function(result,
         "Estimate" = "estimate_name",
         "Variable" = "variable_name"
       ),
-      groupColumn = "variable_name"
+      groupColumn = "variable_name",
+      .options = list(caption = paste0("Snapshot of the cdm ", paste(cdms, collapse = ", ")))
     )
 
   return(result)

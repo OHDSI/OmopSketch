@@ -2,7 +2,8 @@
 % Please edit documentation in R/plotConceptSetCounts.R
 \name{plotConceptSetCounts}
 \alias{plotConceptSetCounts}
-\title{Plot the concept counts of a summariseConceptSetCounts output.}
+\title{Plot the concept counts of a summariseConceptSetCounts output.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 \usage{
 plotConceptSetCounts(result, facet = NULL, colour = NULL)
 }
@@ -20,6 +21,7 @@ A ggplot2 object showing the concept counts.
 }
 \description{
 Plot the concept counts of a summariseConceptSetCounts output.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 }
 \examples{
 \donttest{
@@ -31,7 +33,7 @@ cdm <- mockOmopSketch()
 result <- summariseConceptSetCounts(
   cdm = cdm,
   conceptSet = list(
-    "asthma" = c(4051466, 317009) ,
+    "asthma" = c(4051466, 317009),
     "rhinitis" = c(4280726, 4048171, 40486433)
   )
 )
