@@ -1,6 +1,8 @@
 #' Summarise record counts of an omop_table using a specific time interval. Only
 #' records that fall within the observation period are considered.
 #'
+#'`r lifecycle::badge('deprecated')`
+#'
 #' @param cdm A cdm_reference object.
 #' @param omopTableName A character vector of omop tables from the cdm.
 #' @inheritParams interval

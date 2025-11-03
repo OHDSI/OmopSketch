@@ -1,5 +1,5 @@
 #' Create a ggplot of the records' count trend.
-#'
+#' `r lifecycle::badge('deprecated')`
 #' @param result Output from summariseRecordCount().
 #' @param facet Columns to face by. Formula format can be provided. See possible
 #' columns to face by with: `visOmopResults::tidyColumns()`.

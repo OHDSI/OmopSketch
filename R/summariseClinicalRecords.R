@@ -171,7 +171,7 @@ summariseClinicalRecords <- function(cdm,
         cli::cli_inform(c("i" = "Summarising subjects not in person table in {.pkg {table}}."))
         number_subjects <- result$recordPerPerson |>
           dplyr::filter(.data$variable_name == "Number subjects" & .data$strata_level == "overall" & .data$estimate_name == "count") |>
-          dplyr::pull(estimate_value) |>
+          dplyr::pull(.data$estimate_value) |>
           as.numeric()
         number_subjects_no_person <- x |>
           dplyr::anti_join(cdm[["person"]], by = "person_id") |>
