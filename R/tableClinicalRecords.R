@@ -49,7 +49,7 @@ tableClinicalRecords <- function(result,
   }
 
   header <- c("cdm_name")
-  custom_order <- c("Number records", "Number subjects", "Subjects not in person table", "Records per person", "In observation", "Domain", "Source vocabulary", "Standard concept", "Type concept id", "Start date before birth date", "End date before start date", "Column name")
+  custom_order <- c("Number records", "Number subjects", "Subjects not in person table", "Records per person", "In observation", "Domain", "Source vocabulary", "Standard concept", "Type concept id","Concept class", "Start date before birth date", "End date before start date", "Column name")
   tables <- result$group_level |> unique()
   result |>
     formatColumn(c("variable_name", "variable_level")) |>
