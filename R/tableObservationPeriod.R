@@ -36,7 +36,12 @@ tableObservationPeriod <- function(result,
     return(emptyTable(type))
   }
 
-  header <- c("cdm_name")
+
+
+
+  header <- c("cdm_name", intersect("name_observation_period", omopgenerics::settingsColumns(result)))
+
+
   byOrdinal <- result |>
     dplyr::summarise(n = dplyr::n_distinct(.data$group_level)) |>
     dplyr::pull("n") > 1
@@ -66,6 +71,7 @@ tableObservationPeriod <- function(result,
         "N zeros (%)" = "<zero_count> (<zero_percentage>%)"
       ),
       header = header,
+      settingsColumn = intersect("name_observation_period", omopgenerics::settingsColumns(result)),
       groupColumn = omopgenerics::strataColumns(result),
       hide = hide,
       type = type,
