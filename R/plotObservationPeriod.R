@@ -79,6 +79,22 @@ plotObservationPeriod <- function(result,
       dplyr::mutate(group_name = "observation_period_ordinal")
   }
 
+  main_title <- paste0(
+    stringr::str_to_sentence(variableName),
+    " (", stringr::str_to_sentence(plotType), ")"
+  )
+
+
+  # combine facet and colour names
+  vars <- c(colour, facet)
+  vars <- vars[vars != ""]
+
+  if (length(vars) > 0) {
+    # clean names: replace "_" or "-" with space and title case
+    clean_vars <- stringr::str_to_sentence(gsub("[-_]", " ", vars))
+    main_title <- paste(main_title, "by", paste(clean_vars, collapse = " and "))
+  }
+
   if (plotType == "barplot") {
     p <- visOmopResults::barPlot(
       result = result,
@@ -129,7 +145,9 @@ plotObservationPeriod <- function(result,
       )
     )
   p <- p +
-    ggplot2::theme(legend.position = "top")
+    ggplot2::theme(legend.position = "top") +
+    ggplot2::labs(title = main_title) +
+    ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5, face = "bold"))
   return(p)
 }
 
