@@ -80,7 +80,7 @@ summarisedResult <- summariseObservationPeriod(
 
 summarisedResult |>
   filter(variable_name == "Duration in days") |>
-  distinc(group_name, group_level)
+  distinct(group_name, group_level)
 ```
 
 ## Missingness
