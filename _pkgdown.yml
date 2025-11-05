@@ -25,7 +25,8 @@ articles:
       - summarise_clinical_tables_records
       - summarise_concept_id_counts
       - summarise_observation_period
-      - characterisation
+      - summarise_trend
+      - summarise_person
       - missing_data
       - database_characteristics
 
