@@ -112,14 +112,6 @@ summariseClinicalRecords <- function(cdm,
     omopgenerics::combineStrata(strataCols(sex = sex, ageGroup = ageGroup))
   )
 
-  # create denominator for record count
-  den <- denominator(
-    cdm = cdm,
-    sex = sex,
-    ageGroup = ageGroup,
-    name = omopgenerics::uniqueTableName(prefix)
-  )
-
   set <- createSettings(
     result_type = "summarise_clinical_records", study_period = dateRange
   )
@@ -159,7 +151,7 @@ summariseClinicalRecords <- function(cdm,
     result <- list()
     cli::cli_inform(c("i" = "Summarising records per person in {.pkg {table}}."))
     result$recordPerPerson <- summariseRecordsPerPerson(
-      x = x, den = den, strata = strata, estimates = recordsPerPerson
+      x = x, strata = strata, estimates = recordsPerPerson
     ) |>
       dplyr::select(!dplyr::starts_with("group_"))
 
@@ -349,7 +341,7 @@ summariseClinicalRecords <- function(cdm,
   return(result)
 }
 
-summariseRecordsPerPerson <- function(x, den, strata, estimates) {
+summariseRecordsPerPerson <- function(x, strata, estimates) {
   # strata
   strataCols <- unique(unlist(strata))
 
@@ -357,13 +349,9 @@ summariseRecordsPerPerson <- function(x, den, strata, estimates) {
   prefix <- omopgenerics::tmpPrefix()
   nm <- omopgenerics::uniqueTableName(prefix = prefix)
 
-  res <- den |>
-    dplyr::full_join(
-      x |>
+  res <- x |>
         dplyr::group_by(dplyr::across(dplyr::all_of(c("person_id", strataCols)))) |>
-        dplyr::summarise(n = as.integer(dplyr::n()), .groups = "drop"),
-      by = c("person_id", strataCols)
-    ) |>
+        dplyr::summarise(n = as.integer(dplyr::n()), .groups = "drop") |>
     dplyr::mutate(n = dplyr::coalesce(.data$n, 0L)) |>
     dplyr::compute(name = nm, temporary = FALSE)
 

@@ -80,7 +80,8 @@ test_that("summariseTrend - episode works", {
     getYear(date = "condition_start_date", name = "start") |>
     getYear(date = "condition_end_date", name = "end") |>
     dplyr::filter((.data$start < 1998 & .data$end >= 1998) |
-      (.data$start >= 1998 & .data$start <= 1998)) |>
+          (.data$start == 1998)) |>
+
     dplyr::tally() |>
     dplyr::pull("n") |>
     as.numeric()
@@ -153,6 +154,7 @@ test_that("summariseTrend - event works", {
         dplyr::filter(year == 1963) |>
         dplyr::tally() |>
         dplyr::pull("n"))
+
   )
 
   expect_true(
@@ -199,8 +201,7 @@ test_that("summariseTrend - event works", {
         dplyr::mutate(year = clock::get_year(drug_exposure_start_date)) |>
         dplyr::filter(year %in% c(1981:1988)) |>
         dplyr::tally() |>
-        dplyr::pull("n"))
-  )
+        dplyr::pull("n")) )
 
   # Check result type
   result <- summariseTrend(cdm, event = "observation_period", interval = "months")
@@ -791,6 +792,7 @@ test_that("argument inObservation works", {
   expect_equal(summariseTrend(cdm, episode = "observation_period", inObservation = TRUE), summariseTrend(cdm, episode = "observation_period", inObservation = FALSE))
   expect_equal(summariseTrend(cdm, episode = "observation_period", inObservation = TRUE, interval = "years"), summariseTrend(cdm, episode = "observation_period", inObservation = FALSE, interval = "years"))
 
+
   expect_no_error(result <- summariseTrend(cdm, event = "condition_occurrence", episode = "drug_exposure", inObservation = TRUE, sex = TRUE, output = c("record", "person", "age", "sex", "person-days")))
 
   result <- result |>
@@ -807,6 +809,7 @@ test_that("argument inObservation works", {
       ),
       by = "person_id"
     ) |>
+
     dplyr::filter(.data$condition_start_date >= .data$obs_start & .data$condition_start_date <= .data$obs_end) |>
     dplyr::select(!c("obs_start", "obs_end"))
 
@@ -830,3 +833,4 @@ test_that("argument inObservation works", {
 
   CDMConnector::cdmDisconnect(cdm = cdm)
 })
+

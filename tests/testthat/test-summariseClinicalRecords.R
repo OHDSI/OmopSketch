@@ -350,8 +350,8 @@ test_that("argument quality works", {
   y <- cdm$drug_exposure |>
     dplyr::filter(.data$drug_exposure_end_date < .data$drug_exposure_start_date)
   z <- cdm$drug_exposure |>
-    dplyr::inner_join(cdm$person |> dplyr::select(person_id, birth_datetime), by = "person_id") |>
-    dplyr::filter(.data$drug_exposure_start_date < .data$birth_datetime)
+    dplyr::left_join(cdm$person |> dplyr::select(person_id, birth_datetime), by = "person_id") |>
+    dplyr::filter(.data$drug_exposure_start_date < as.Date(.data$birth_datetime))
 
   expect_equal(
     y |> dplyr::tally() |> dplyr::pull(n),
@@ -428,7 +428,7 @@ test_that("argument quality works", {
 
   z <- cdm$visit_occurrence |>
     dplyr::inner_join(cdm$person |> dplyr::select(person_id, birth_datetime), by = "person_id") |>
-    dplyr::filter(.data$visit_start_date < .data$birth_datetime)
+    dplyr::filter(.data$visit_start_date < as.Date(.data$birth_datetime))
 
   expect_no_error(x <- summariseClinicalRecords(cdm, "visit_occurrence", recordsPerPerson = NULL, quality = T, conceptSummary = F, missingData = F))
   expect_equal(z |> dplyr::tally() |> dplyr::pull(n), x |> dplyr::filter(variable_name == "Start date before birth date" & estimate_name == "count") |> dplyr::pull(estimate_value) |> as.numeric())

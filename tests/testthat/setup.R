@@ -1,25 +1,7 @@
-on_github <- function() {
-  !interactive() && !identical(Sys.getenv("NOT_CRAN"), "false")
-}
-# if (on_github()) {
-#   withr::local_envvar(
-#     R_USER_CACHE_DIR = tempfile(),
-#     .local_envir = testthat::teardown_env(),
-#     EUNOMIA_DATA_FOLDER = Sys.getenv("EUNOMIA_DATA_FOLDER", unset = tempfile())
-#   )
-#   CDMConnector::downloadEunomiaData(overwrite = TRUE)
-# }
-schema <- function(type = Sys.getenv("DB_TO_TEST", "duckdb")) {
-  switch(type,
-    "duckdb" = c(schema = "main", prefix = "omop_sketch_"),
-    "postgres" = c(schema = "results", prefix = "os_"),
-    "sql server" = c(catalog = "ohdsi", schema = "dbo", prefix = prefix),
-    "redshift" = c(schema = "resultsv281", prefix = prefix)
-  )
-}
+
+dbToTest <- Sys.getenv("DB_TO_TEST", "duckdb-CDMConnector")
 cdmEunomia <- function() {
-  con <- connection()
-  schema <- schema()
+
   cdmLocal <- omock::mockCdmFromDataset(datasetName = "GiBleed")
   # correct eunomia problems
   tabs <- c(
@@ -45,37 +27,62 @@ cdmEunomia <- function() {
   }
 
   # insert cdm
-  to <- CDMConnector::dbSource(con = con, writeSchema = schema)
-  cdm <- omopgenerics::insertCdmTo(cdm = cdmLocal, to = to)
+  cdm <- cdmLocal |>
+    copyCdm()
 
   return(cdm)
 }
-connection <- function(dbToTest = Sys.getenv("DB_TO_TEST", "duckdb")) {
-  switch(dbToTest,
-    "duckdb" = DBI::dbConnect(duckdb::duckdb(), ":memory:"),
-    "sql server" = DBI::dbConnect(
-      odbc::odbc(),
-      Driver = "ODBC Driver 18 for SQL Server",
-      Server = Sys.getenv("CDM5_SQL_SERVER_SERVER"),
-      Database = Sys.getenv("CDM5_SQL_SERVER_CDM_DATABASE"),
-      UID = Sys.getenv("CDM5_SQL_SERVER_USER"),
-      PWD = Sys.getenv("CDM5_SQL_SERVER_PASSWORD"),
-      TrustServerCertificate = "yes",
-      Port = 1433
-    ),
-    "redshift" = DBI::dbConnect(
-      RPostgres::Redshift(),
-      dbname = Sys.getenv("CDM5_REDSHIFT_DBNAME"),
-      port = Sys.getenv("CDM5_REDSHIFT_PORT"),
-      host = Sys.getenv("CDM5_REDSHIFT_HOST"),
-      user = Sys.getenv("CDM5_REDSHIFT_USER"),
-      password = Sys.getenv("CDM5_REDSHIFT_PASSWORD")
-    )
-  )
-}
+
 copyCdm <- function(cdm) {
-  to <- CDMConnector::dbSource(con = connection(), writeSchema = schema())
-  omopgenerics::insertCdmTo(cdm = cdm, to = to)
+  pref <- "oi_"
+  if (dbToTest == "duckdb-CDMConnector") {
+    to <- CDMConnector::dbSource(
+      con = duckdb::dbConnect(drv = duckdb::duckdb(dbdir = ":memory:")),
+      writeSchema = c(schema = "main", prefix = pref)
+    )
+  } else if (dbToTest == "sql server-CDMConnector") {
+    to <- CDMConnector::dbSource(
+      con = DBI::dbConnect(
+        odbc::odbc(),
+        Driver = "ODBC Driver 18 for SQL Server",
+        Server = Sys.getenv("CDM5_SQL_SERVER_SERVER"),
+        Database = Sys.getenv("CDM5_SQL_SERVER_CDM_DATABASE"),
+        UID = Sys.getenv("CDM5_SQL_SERVER_USER"),
+        PWD = Sys.getenv("CDM5_SQL_SERVER_PASSWORD"),
+        TrustServerCertificate = "yes",
+        Port = 1433
+      ),
+      writeSchema = c(
+        schema = Sys.getenv("CDM5_SQL_SERVER_OHDSI_SCHEMA"),
+        prefix = pref
+      )
+    )
+  } else if (dbToTest == "redshift-CDMConnector") {
+    to <- CDMConnector::dbSource(
+      con = DBI::dbConnect(
+        RPostgres::Redshift(),
+        dbname = Sys.getenv("CDM5_REDSHIFT_DBNAME"),
+        port = Sys.getenv("CDM5_REDSHIFT_PORT"),
+        host = Sys.getenv("CDM5_REDSHIFT_HOST"),
+        user = Sys.getenv("CDM5_REDSHIFT_USER"),
+        password = Sys.getenv("CDM5_REDSHIFT_PASSWORD")
+      ),
+      writeSchema = c(
+        schema = Sys.getenv("CDM5_REDSHIFT_SCRATCH_SCHEMA"),
+        prefix = pref
+      )
+    )
+  } else if (dbToTest == "postgres-CDMConnector") {
+    # TODO
+  } else if (dbToTest != "local-omopgenerics") {
+    cli::cli_abort(c(x = "Not supported dbToTest: {.pkg {dbToTest}}"))
+  }
+
+  if (dbToTest != "local-omopgenerics") {
+    cdm <- omopgenerics::insertCdmTo(cdm = cdm, to = to)
+  }
+
+  return(cdm)
 }
 checkResultType <- function(result, result_type) {
   expect_true(
