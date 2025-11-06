@@ -23,7 +23,8 @@
     <li><a class="dropdown-item" href="../articles/summarise_clinical_tables_records.html">Summarise clinical tables records</a></li>
     <li><a class="dropdown-item" href="../articles/summarise_concept_id_counts.html">Summarise concept id counts</a></li>
     <li><a class="dropdown-item" href="../articles/summarise_observation_period.html">Summarise observation period</a></li>
-    <li><a class="dropdown-item" href="../articles/characterisation.html">Characterisation of OMOP CDM</a></li>
+    <li><a class="dropdown-item" href="../articles/summarise_trend.html">Summarise temporal trends in OMOP tables</a></li>
+    <li><a class="dropdown-item" href="../articles/summarise_person.html">Summarise the person table</a></li>
     <li><a class="dropdown-item" href="../articles/missing_data.html">Summarise missing data</a></li>
     <li><a class="dropdown-item" href="../articles/database_characteristics.html">Summarise database characteristics</a></li>
   </ul></li>
@@ -134,11 +135,11 @@ strata.</p>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r.duckdb.org/" class="external-link">duckdb</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://darwin-eu.github.io/CDMConnector/reference/requireEunomia.html" class="external-link">requireEunomia</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> `EUNOMIA_DATA_FOLDER` set to: <span style="color: #0000BB;">/tmp/Rtmpm58pt7</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> `EUNOMIA_DATA_FOLDER` set to: <span style="color: #0000BB;">/tmp/RtmpBGQMpW</span>.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Download completed!</span>
 <span class="r-in"><span><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu"><a href="https://r.duckdb.org/reference/duckdb.html" class="external-link">duckdb</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="https://darwin-eu.github.io/CDMConnector/reference/eunomiaDir.html" class="external-link">eunomiaDir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Creating CDM database /tmp/Rtmpm58pt7/GiBleed_5.3.zip</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Creating CDM database /tmp/RtmpBGQMpW/GiBleed_5.3.zip</span>
 <span class="r-in"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://darwin-eu.github.io/CDMConnector/reference/cdmFromCon.html" class="external-link">cdmFromCon</a></span><span class="op">(</span>con <span class="op">=</span> <span class="va">con</span>, cdmSchema <span class="op">=</span> <span class="st">"main"</span>, writeSchema <span class="op">=</span> <span class="st">"main"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">summariseConceptIdCounts</span><span class="op">(</span></span></span>

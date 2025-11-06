@@ -38,7 +38,8 @@
     <li><a class="dropdown-item" href="../articles/summarise_clinical_tables_records.html">Summarise clinical tables records</a></li>
     <li><a class="dropdown-item" href="../articles/summarise_concept_id_counts.html">Summarise concept id counts</a></li>
     <li><a class="dropdown-item" href="../articles/summarise_observation_period.html">Summarise observation period</a></li>
-    <li><a class="dropdown-item" href="../articles/characterisation.html">Characterisation of OMOP CDM</a></li>
+    <li><a class="dropdown-item" href="../articles/summarise_trend.html">Summarise temporal trends in OMOP tables</a></li>
+    <li><a class="dropdown-item" href="../articles/summarise_person.html">Summarise the person table</a></li>
     <li><a class="dropdown-item" href="../articles/missing_data.html">Summarise missing data</a></li>
     <li><a class="dropdown-item" href="../articles/database_characteristics.html">Summarise database characteristics</a></li>
   </ul>
@@ -145,8 +146,8 @@ tables.</p>
 <span><span class="co">#&gt; Rows: 216</span></span>
 <span><span class="co">#&gt; Columns: 7</span></span>
 <span><span class="co">#&gt; $ group_level      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "drug_exposure"<span style="color: #949494;">, </span>"drug_exposure"<span style="color: #949494;">, </span>"drug_exposure"<span style="color: #949494;">, </span>"d…</span></span>
-<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "pneumococcal polysaccharide vaccine, 23 valent"<span style="color: #949494;">, </span>"Al…</span></span>
-<span><span class="co">#&gt; $ variable_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "40213201"<span style="color: #949494;">, </span>"1557272"<span style="color: #949494;">, </span>"40213160"<span style="color: #949494;">, </span>"1149380"<span style="color: #949494;">, </span>"402132…</span></span>
+<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "celecoxib 200 MG Oral Capsule [Celebrex]"<span style="color: #949494;">, </span>"Ampicill…</span></span>
+<span><span class="co">#&gt; $ variable_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "1118088"<span style="color: #949494;">, </span>"19129655"<span style="color: #949494;">, </span>"40213216"<span style="color: #949494;">, </span>"701322"<span style="color: #949494;">, </span>"4021323…</span></span>
 <span><span class="co">#&gt; $ estimate_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"c…</span></span>
 <span><span class="co">#&gt; $ estimate_value   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "100"<span style="color: #949494;">, </span>"100"<span style="color: #949494;">, </span>"100"<span style="color: #949494;">, </span>"100"<span style="color: #949494;">, </span>"100"<span style="color: #949494;">, </span>"100"<span style="color: #949494;">, </span>"100"<span style="color: #949494;">, </span>"100…</span></span>
 <span><span class="co">#&gt; $ additional_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "source_concept_id &amp;&amp;&amp; source_concept_name"<span style="color: #949494;">, </span>"source_…</span></span>
@@ -234,7 +235,7 @@ its <code>subject_id</code>s.</p>
 <span><span class="co">#&gt; Rows: 84</span></span>
 <span><span class="co">#&gt; Columns: 3</span></span>
 <span><span class="co">#&gt; $ group_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "condition_occurrence"<span style="color: #949494;">, </span>"condition_occurrence"<span style="color: #949494;">, </span>"conditi…</span></span>
-<span><span class="co">#&gt; $ variable_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Escherichia coli urinary tract infection"<span style="color: #949494;">, </span>"Childhood a…</span></span>
+<span><span class="co">#&gt; $ variable_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Fracture of vertebral column without spinal cord injury…</span></span>
 <span><span class="co">#&gt; $ estimate_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"coun…</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="display-the-results">Display the results<a class="anchor" aria-label="anchor" href="#display-the-results"></a>
@@ -771,52 +772,52 @@ from other output formats, including <a href="https://davidgohel.github.io/flext
 <tr class="gt_row_group_first">
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">1</span></td>
 <td headers="drug_exposure  [header_name]Cdm name
-[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: pneumococcal polysaccharide vaccine, 23 valent (40213201) <br> Source: No matching concept (0) <br> 100</span></td>
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: celecoxib 200 MG Oral Capsule [Celebrex] (1118088) <br> Source: No matching concept (0) <br> 100</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">2</span></td>
 <td headers="drug_exposure  [header_name]Cdm name
-[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Alendronate (1557272) <br> Source: No matching concept (0) <br> 100</span></td>
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Ampicillin 100 MG/ML Injectable Solution (19129655) <br> Source: No matching concept (0) <br> 100</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">3</span></td>
 <td headers="drug_exposure  [header_name]Cdm name
-[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: poliovirus vaccine, inactivated (40213160) <br> Source: No matching concept (0) <br> 100</span></td>
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: rotavirus, live, monovalent vaccine (40213216) <br> Source: No matching concept (0) <br> 100</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">4</span></td>
 <td headers="drug_exposure  [header_name]Cdm name
-[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: fluticasone (1149380) <br> Source: No matching concept (0) <br> 100</span></td>
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Memantine (701322) <br> Source: No matching concept (0) <br> 100</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">5</span></td>
 <td headers="drug_exposure  [header_name]Cdm name
-[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: diphtheria, tetanus toxoids and acellular pertussis vaccine (40213281) <br> Source: No matching concept (0) <br> 100</span></td>
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: tetanus toxoid, reduced diphtheria toxoid, and acellular pertussis vaccine, adsorbed (40213230) <br> Source: No matching concept (0) <br> 100</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">6</span></td>
 <td headers="drug_exposure  [header_name]Cdm name
-[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Diclofenac (1124300) <br> Source: No matching concept (0) <br> 100</span></td>
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: varicella virus vaccine (40213251) <br> Source: No matching concept (0) <br> 100</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">7</span></td>
 <td headers="drug_exposure  [header_name]Cdm name
-[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: hepatitis A vaccine, pediatric/adolescent dosage, 2 dose schedule (40213299) <br> Source: No matching concept (0) <br> 100</span></td>
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: zoster vaccine, live (40213260) <br> Source: No matching concept (0) <br> 100</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">8</span></td>
 <td headers="drug_exposure  [header_name]Cdm name
-[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: fexofenadine (1153428) <br> Source: No matching concept (0) <br> 100</span></td>
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Terfenadine (1150836) <br> Source: No matching concept (0) <br> 100</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">9</span></td>
 <td headers="drug_exposure  [header_name]Cdm name
-[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Haemophilus influenzae type b vaccine, PRP-OMP conjugate (40213314) <br> Source: No matching concept (0) <br> 100</span></td>
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Loratadine (1107830) <br> Source: No matching concept (0) <br> 100</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">10</span></td>
 <td headers="drug_exposure  [header_name]Cdm name
-[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Propofol (753626) <br> Source: No matching concept (0) <br> 100</span></td>
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: human papilloma virus vaccine, quadrivalent (40213320) <br> Source: No matching concept (0) <br> 100</span></td>
 </tr>
 </tbody>
 </table>
@@ -1298,27 +1299,27 @@ this using the <code>top</code> argument:</p>
 <tr class="gt_row_group_first">
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">1</span></td>
 <td headers="drug_exposure  [header_name]Cdm name
-[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: pneumococcal polysaccharide vaccine, 23 valent (40213201) <br> Source: No matching concept (0) <br> 100</span></td>
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: celecoxib 200 MG Oral Capsule [Celebrex] (1118088) <br> Source: No matching concept (0) <br> 100</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">2</span></td>
 <td headers="drug_exposure  [header_name]Cdm name
-[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Alendronate (1557272) <br> Source: No matching concept (0) <br> 100</span></td>
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Ampicillin 100 MG/ML Injectable Solution (19129655) <br> Source: No matching concept (0) <br> 100</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">3</span></td>
 <td headers="drug_exposure  [header_name]Cdm name
-[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: poliovirus vaccine, inactivated (40213160) <br> Source: No matching concept (0) <br> 100</span></td>
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: rotavirus, live, monovalent vaccine (40213216) <br> Source: No matching concept (0) <br> 100</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">4</span></td>
 <td headers="drug_exposure  [header_name]Cdm name
-[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: fluticasone (1149380) <br> Source: No matching concept (0) <br> 100</span></td>
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Memantine (701322) <br> Source: No matching concept (0) <br> 100</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">5</span></td>
 <td headers="drug_exposure  [header_name]Cdm name
-[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: diphtheria, tetanus toxoids and acellular pertussis vaccine (40213281) <br> Source: No matching concept (0) <br> 100</span></td>
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: tetanus toxoid, reduced diphtheria toxoid, and acellular pertussis vaccine, adsorbed (40213230) <br> Source: No matching concept (0) <br> 100</span></td>
 </tr>
 </tbody>
 </table>
@@ -1816,37 +1817,37 @@ argument:</p>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">3</span></td>
 <td headers="drug_exposure  [header_name]Cdm name
-[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: 1 ML medroxyprogesterone acetate 150 MG/ML Injection (40224805) <br> Source: No matching concept (0) <br> 71</span></td>
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: 120 ACTUAT Fluticasone propionate 0.044 MG/ACTUAT Metered Dose Inhaler (40169216) <br> Source: No matching concept (0) <br> 71</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">4</span></td>
 <td headers="drug_exposure  [header_name]Cdm name
-[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: 120 ACTUAT Fluticasone propionate 0.044 MG/ACTUAT Metered Dose Inhaler (40169216) <br> Source: No matching concept (0) <br> 71</span></td>
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: 1 ML medroxyprogesterone acetate 150 MG/ML Injection (40224805) <br> Source: No matching concept (0) <br> 71</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">5</span></td>
 <td headers="drug_exposure  [header_name]Cdm name
-[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Midazolam (708298) <br> Source: No matching concept (0) <br> 70</span></td>
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Sodium Chloride (967823) <br> Source: No matching concept (0) <br> 70</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">6</span></td>
 <td headers="drug_exposure  [header_name]Cdm name
-[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Piperacillin (1746114) <br> Source: No matching concept (0) <br> 70</span></td>
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Tacrine (836654) <br> Source: No matching concept (0) <br> 70</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">7</span></td>
 <td headers="drug_exposure  [header_name]Cdm name
-[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Sodium Chloride (967823) <br> Source: No matching concept (0) <br> 70</span></td>
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: norgestimate (1515774) <br> Source: No matching concept (0) <br> 70</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">8</span></td>
 <td headers="drug_exposure  [header_name]Cdm name
-[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Tacrine (836654) <br> Source: No matching concept (0) <br> 70</span></td>
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Midazolam (708298) <br> Source: No matching concept (0) <br> 70</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">9</span></td>
 <td headers="drug_exposure  [header_name]Cdm name
-[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: norgestimate (1515774) <br> Source: No matching concept (0) <br> 70</span></td>
+[header_level]mockOmopSketch" class="gt_row gt_left" style="text-align: right;"><span class="gt_from_md">Standard: Piperacillin (1746114) <br> Source: No matching concept (0) <br> 70</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;"><span class="gt_from_md">10</span></td>
