@@ -17,6 +17,8 @@
 #' @param sex Boolean variable. Whether to stratify by sex (TRUE) or not
 #' (FALSE).
 #' @inheritParams dateRange-startDate
+#' @param nameObservationPeriod character string giving a descriptive name for the observation period.
+#' This name will be stored in the result settings. If `NULL` (default), the name is automatically set to `"Default"`.
 #' @param observationPeriod deprecated.
 #'
 #' @return A summarised_result object with the summarised data.
@@ -49,6 +51,7 @@ summariseObservationPeriod <- function(cdm,
                                        ageGroup = NULL,
                                        sex = FALSE,
                                        dateRange = NULL,
+                                       nameObservationPeriod = NULL,
                                        observationPeriod = lifecycle::deprecated()) {
   # input checks
   if (lifecycle::is_present(observationPeriod)) {
@@ -78,12 +81,16 @@ summariseObservationPeriod <- function(cdm,
     dplyr::pull("estimate_name")
   omopgenerics::assertChoice(estimates, opts, unique = TRUE)
   omopgenerics::assertLogical(byOrdinal)
+  omopgenerics::assertCharacter(nameObservationPeriod, null = TRUE)
 
   tablePrefix <- omopgenerics::tmpPrefix()
 
   strata <- c(list(character()), omopgenerics::combineStrata(strataCols(sex = sex, ageGroup = ageGroup)))
-
-  set <- createSettings(result_type = "summarise_observation_period", study_period = dateRange)
+  if (is.null(nameObservationPeriod)){
+    nameObservationPeriod = "Default"
+  }
+  set <- createSettings(result_type = "summarise_observation_period", study_period = dateRange) |>
+    dplyr::mutate(name_observation_period = .env$nameObservationPeriod)
 
   if (omopgenerics::isTableEmpty(observationPeriod)) {
     return(omopgenerics::emptySummarisedResult(settings = set))
