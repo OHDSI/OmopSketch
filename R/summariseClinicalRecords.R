@@ -117,7 +117,6 @@ summariseClinicalRecords <- function(cdm,
   )
 
   result <- purrr::map(omopTableName, \(table) {
-
     # check that table is not empty
     omopTable <- dplyr::ungroup(cdm[[table]])
     if (omopgenerics::isTableEmpty(omopTable)) {
@@ -269,6 +268,17 @@ summariseClinicalRecords <- function(cdm,
             .data$type_name, paste0("Unknown type concept: ", .data$type_concept)
           )) |>
           dplyr::rename(variable_level = "type_name")
+        if (table == "drug_exposure") {
+          cli::cli_inform(c("i" = "Summarising concept class in {.pkg {table}}."))
+          strataClass <- lapply(strata, function(x) c(x, "concept_class_id"))
+          res$conceptClass <- x |>
+            summariseCountsInternal(strata = strataClass, counts = "records") |>
+            dplyr::mutate(
+              estimate_name = "count",
+              variable_name = "Concept class",
+              variable_level = .data$concept_class_id
+            )
+        }
       }
 
 
@@ -401,7 +411,7 @@ variablesToSummarise <- function(quality, conceptSummary) {
   c(c(
     "standard_concept",
     "source_vocabulary", "domain_id",
-    "type_concept"
+    "type_concept", "concept_class_id"
   )[conceptSummary], c("in_observation", "start_before_birth", "end_before_start")[quality])
 }
 
@@ -534,15 +544,20 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
         cdm$concept |>
           dplyr::select(
             standard = "concept_id",
-           "domain_id", "standard_concept"
+            "standard_concept",
+            "domain_id",
+            "concept_class_id"[tableName == "drug_exposure"]
           ),
         by = c("standard")
       ) |>
-    dplyr::left_join(cdm$concept |>
-                       dplyr::select(
-                         source = "concept_id",
-                         source_vocabulary = "vocabulary_id" ),
-                     by = "source") |>
+      dplyr::left_join(
+        cdm$concept |>
+          dplyr::select(
+            source = "concept_id",
+            source_vocabulary = "vocabulary_id"
+          ),
+        by = "source"
+      ) |>
       dplyr::mutate(standard = dplyr::case_when(
         .data$standard == 0 ~ "No matching concept",
         .data$standard_concept == "S" ~ "Standard",

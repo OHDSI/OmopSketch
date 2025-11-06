@@ -8,7 +8,7 @@ test_that("summariseClinicalRecords() works", {
   expect_error(summariseClinicalRecords(cdm, "observation_period"))
   expect_no_error(vo <- summariseClinicalRecords(cdm, "visit_occurrence"))
   expect_no_error(c <- summariseClinicalRecords(cdm, "condition_occurrence"))
-  expect_no_error(summariseClinicalRecords(cdm, "drug_exposure"))
+  expect_no_error(d <- summariseClinicalRecords(cdm, "drug_exposure"))
   expect_no_error(summariseClinicalRecords(cdm, "procedure_occurrence"))
   expect_warning(summariseClinicalRecords(cdm, "device_exposure"))
   expect_no_error(m <- summariseClinicalRecords(cdm, "measurement"))
@@ -75,6 +75,9 @@ test_that("summariseClinicalRecords() works", {
     missingData = FALSE
   ) |>
     dplyr::tally() |> dplyr::pull() == 3)
+
+  expect_false("Concept class" %in% vo$variable_name)
+  expect_true("Concept class" %in% d$variable_name)
 
   CDMConnector::cdmDisconnect(cdm = cdm)
 })
