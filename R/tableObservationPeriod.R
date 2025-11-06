@@ -36,18 +36,23 @@ tableObservationPeriod <- function(result,
     return(emptyTable(type))
   }
 
-
-
-
-  header <- c("cdm_name", intersect("name_observation_period", omopgenerics::settingsColumns(result)))
-
-
   byOrdinal <- result |>
     dplyr::summarise(n = dplyr::n_distinct(.data$group_level)) |>
     dplyr::pull("n") > 1
 
-
   hide <- c("result_id", "estimate_type", "strata_name", "observation_period_ordinal"[!byOrdinal])
+
+  set <- omopgenerics::settings(result)
+  if ("name_observation_period" %in% names(set)) {
+    if (identical(unique(set$name_observation_period), "Default")) {
+      header <- "cdm_name"
+      hide <- c(hide, "name_observation_period")
+    } else {
+      header <- c("cdm_name", "name_observation_period")
+    }
+  } else {
+    header <- "cdm_name"
+  }
 
   custom_order <- c("Number records", "Number subjects", "Subjects not in person table", "Records per person", "Duration in days", "Days to next observation period", "Type concept id", "Start date before birth date", "End date before start date", "Column name")
 
