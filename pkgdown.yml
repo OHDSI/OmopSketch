@@ -9,7 +9,7 @@ articles:
   summarise_observation_period: summarise_observation_period.html
   summarise_person: summarise_person.html
   summarise_trend: summarise_trend.html
-last_built: 2025-11-06T15:55Z
+last_built: 2025-11-06T16:16Z
 urls:
   reference: https://OHDSI.github.io/OmopSketch/reference
   article: https://OHDSI.github.io/OmopSketch/articles
