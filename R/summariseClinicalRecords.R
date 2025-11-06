@@ -556,7 +556,8 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
         cdm$concept |>
           dplyr::select(
             standard = "concept_id",
-            "domain_id", 
+            "standard_concept",
+            "domain_id",
             "concept_class_id"[tableName == "drug_exposure"]
           ),
         by = c("standard")
