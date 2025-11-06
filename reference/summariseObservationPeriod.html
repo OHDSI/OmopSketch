@@ -64,6 +64,7 @@ summarised_result object.</p>
 <span>  ageGroup <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  sex <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  dateRange <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  nameObservationPeriod <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  observationPeriod <span class="op">=</span> <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">deprecated</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -110,6 +111,11 @@ summarised_result object.</p>
 <dd><p>A vector of two dates defining the desired study period.
 Only the <code>start_date</code> column of the OMOP table is checked to ensure it falls within this range.
 If <code>dateRange</code> is <code>NULL</code>, no restriction is applied.</p></dd>
+
+
+<dt id="arg-nameobservationperiod">nameObservationPeriod<a class="anchor" aria-label="anchor" href="#arg-nameobservationperiod"></a></dt>
+<dd><p>character string giving a descriptive name for the observation period.
+This name will be stored in the result settings. If <code>NULL</code> (default), the name is automatically set to <code>"Default"</code>.</p></dd>
 
 
 <dt id="arg-observationperiod">observationPeriod<a class="anchor" aria-label="anchor" href="#arg-observationperiod"></a></dt>
