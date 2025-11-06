@@ -69,8 +69,33 @@ plotTrend <- function(result,
   # warn
   warnFacetColour(result, list(facet = asCharacterFacet(facet), colour = colour, "additional_level"))
 
+  # --- Add automatic title with interval ---
+  vars <- c(facet, colour)
+  vars <- vars[vars != "" & vars != "type"]
+
+  if (length(vars) > 0) {
+    clean_vars <- stringr::str_to_sentence(gsub("[-_]", " ", vars))
+    by_part <- paste("by", paste(clean_vars, collapse = " and "))
+  } else by_part <- ""
+
+
+
   # plot
   if (length(unique(result$additional_level)) > 1) {
+    interval_type <- omopgenerics::settings(result)$interval |> unique()
+
+      if (grepl("year", interval_type)) {
+        interval_label <- "Yearly"
+      } else if (grepl("month", interval_type)) {
+        interval_label <- "Monthly"
+      } else if (grepl("quarter", interval_type)) {
+        interval_label <- "Quarterly"
+      } else {
+        interval_label <- NA_character_
+      }
+
+    title_text <- paste(interval_label, "trend of", variableName, by_part)
+
     p <- result |>
       dplyr::filter(.data$additional_level != "overall") |>
       dplyr::filter(.data$estimate_name == estimate) |>
@@ -105,7 +130,9 @@ plotTrend <- function(result,
         axis.text.x = ggplot2::element_text(angle = 90, hjust = 1, size = 8),
         plot.margin = ggplot2::margin(t = 5, r = 5, b = 30, l = 5)
       )
+
   } else {
+    title_text <- paste(variableName, by_part)
     p <- result |>
       dplyr::filter(.data$estimate_name == estimate) |>
       visOmopResults::barPlot(
@@ -117,7 +144,10 @@ plotTrend <- function(result,
         style = style
       )
   }
-  p + ggplot2::theme(legend.position = "top")
+  p + ggplot2::labs(title = stringr::str_squish(title_text)) +
+    ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5, face = "bold"),
+                   legend.position = "top")
+
 }
 fromOutputToVariableName <- function(output) {
   if (output == "record") {
