@@ -24,7 +24,7 @@ knitr::opts_chunk$set(
 
 In this vignette, we explore how the *OmopSketch* function `databaseCharacteristics()` and `shinyCharacteristics()` can serve as a valuable tool for characterising databases containing electronic health records mapped to the OMOP Common Data Model.
 
-## Create a mock cdm
+## Create a mock CDM
 
 We begin by loading the necessary packages and creating a mock CDM using the `mockOmopSketch()` function:
 
@@ -39,17 +39,31 @@ cdm
 
 # Summarise database characteristics
 
-The `databaseCharacteristics()` function provides a comprehensive summary of the CDM, returning a [summarised result](https://darwin-eu-dev.github.io/omopgenerics/articles/summarised_result.html) that includes:
+## Summarise Database Characteristics
 
--   A general database snapshot, using `summariseOmopSnapshot()`
+The `databaseCharacteristics()` function provides a comprehensive overview of the Common Data Model (CDM). It returns a [summarised result](https://darwin-eu-dev.github.io/omopgenerics/articles/summarised_result.html) combining several characterisation components:
 
--   A characterisation of the population in observation, built using the [CohortConstructor](https://ohdsi.github.io/CohortConstructor/) and [CohortCharacteristics](https://darwin-eu.github.io/CohortCharacteristics/) packages
+- **General database snapshot:**  
+  Generated using `summariseOmopSnapshot()`, this provides high-level metadata about the CDM, including size of person table, time span covered, source type, vocabulary version, etc.
 
--   A summary of the observation period table using `summariseObservationPeriod()` and `summariseInObservation()`
+- **Population characterisation:**  
+  Describes the demographics of population under observation, built using the [CohortConstructor](https://ohdsi.github.io/CohortConstructor/) and [CohortCharacteristics](https://darwin-eu.github.io/CohortCharacteristics/) packages.
 
--   A data quality assessment of the clinical tables using `summariseMissingData()`
+- **Person table characterisation:**  
+  Produced using `summarisePerson()`, this component summarises the content and missingness of the `person` table.
+  
+- **Observation period characterisation:**  
+  Produced using `summariseObservationPeriod()`, this component summarises the content and missingness of the observation period table.  
+  Temporal trends — including changes in the number of records and subjects, median age, sex distribution, and total person-days — are then derived using `summariseTrend()`.
 
--   A characterisation of the clinical tables with `summariseClinicalRecords()` and `summariseRecordCount()`
+- **Clinical tables characterisation:**  
+  Produced using `summariseClinicalRecords()`, this component summarises the content and missingness across all clinical tables.  
+  Temporal trends in the number of records and subjects, median age, and sex distribution are also computed using `summariseTrend()`.
+
+- **Concept Counts:** 
+Optionally, concept-level summaries can be included by computing concept counts with `summariseConceptIdCounts()`.
+
+Together, these outputs provide a holistic view of the CDM’s structure, data completeness, and temporal behaviour — supporting both data quality assessment and study feasibility evaluation.
 
 ```{r, eval = FALSE}
 result <- databaseCharacteristics(cdm)
@@ -57,7 +71,7 @@ result <- databaseCharacteristics(cdm)
 
 ## Selecting tables to characterise
 
-By default, the following OMOP tables are included in the characterisation: *person*, *observation_period*, *visit_occurrence*, *condition_occurrence*, *drug_exposure*, *procedure_occurrence*, *device_exposure*, *measurement*, *observation*, *death*.
+By default, the following OMOP tables are included in the characterisation:  *visit_occurrence*,  *visit_detail*, *condition_occurrence*, *drug_exposure*, *procedure_occurrence*, *device_exposure*, *measurement*, *observation*, *death*.
 
 You can customise which tables to include in the analysis by specifying them with the `omopTableName` argument.
 
@@ -98,6 +112,29 @@ result <- databaseCharacteristics(cdm,
 )
 ```
 
+## Sample the CDM
+
+You can use the `sample` argument to limit the characterisation to a subset of the CDM.  
+This can be useful for quickly exploring large datasets or focusing on a specific cohort already included in the CDM.
+
+The `sample` argument accepts either:
+
+- An **integer**, to randomly sample a specified number of people from the person table in the CDM.
+- A **string**, corresponding to the name of a cohort within the CDM to use for characterisation.
+
+
+```{r, eval=FALSE}
+result <- databaseCharacteristics(cdm,
+  sample = 1000L
+)
+
+result <- databaseCharacteristics(cdm,
+  sample = "my_cohort"
+)
+
+
+```
+
 ## Including Concept Counts
 
 To include concept counts in the characterisation, set `conceptIdCounts = TRUE`:
@@ -107,6 +144,18 @@ result <- databaseCharacteristics(cdm,
   conceptIdCounts = TRUE
 )
 ```
+
+## Other arguments
+
+It is possible to pass arguments from any of the underlying functions to `databaseCharacteristics()` in order to customise the output.
+For example, to stratify trends and concept counts by records observed in or out of observation, you can pass the argument `inObservation = TRUE`:
+
+```{r, eval = FALSE}
+result <- databaseCharacteristics(cdm,
+  conceptIdCounts = TRUE, inObservation = TRUE
+)
+```
+
 
 # Visualise the characterisation results
 
@@ -126,12 +175,15 @@ You can customise the title, logo, and theme of the Shiny app by setting the app
 
 -   `theme`: A custom Bootstrap theme (e.g., using bslib::bs_theme())
 
+- `background`: A custom background panel for the Shiny app
+
 ```{r, eval=FALSE}
 shinyCharacteristics(
   result = result, directory = "path/to/my/shiny",
   title = "Characterisation of my data",
   logo = "path/to/my/logo.svg",
-  theme = "bslib::bs_theme(bootswatch = 'flatly')"
+  theme = "bslib::bs_theme(bootswatch = 'flatly')", 
+  background = "path/to/my/background.md"
 )
 ```
 

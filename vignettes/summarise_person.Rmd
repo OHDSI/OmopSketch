@@ -1,0 +1,81 @@
+---
+title: "Summarise the person table"
+output: 
+  html_document:
+    pandoc_args: [
+      "--number-offset=1,0"
+      ]
+    number_sections: yes
+    toc: yes
+vignette: >
+  %\VignetteIndexEntry{summarise_person}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Introduction
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+In this vignette we will explore the *OmopSketch* functions designed to provide a concise overview of the OMOP **person** table. Specifically there are two small utilities that make this easy:
+
+- `summarisePerson()`: computes a set of summary statistics and data-quality checks for the person table (total subjects, missing observation-period checks, sex/race/ethnicity distributions, birth-date components, and simple summaries for id-columns such as location_id, provider_id, and care_site_id).
+-   `tablePerson()`: helps visualising the results in a formatted table.
+
+## Create a mock cdm
+
+Let’s load the required packages and create a mock CDM using `mockOmopSketch()` so we can run the functions on a small example.
+
+```{r, warning=FALSE}
+library(dplyr)
+library(OmopSketch)
+
+# Connect to mock database
+cdm <- mockOmopSketch()
+```
+
+# Summarise the person table
+Run summarisePerson() to compute basic summaries for the person table. The function will return a [summarised_result](https://darwin-eu.github.io/omopgenerics/articles/summarised_result.html).
+
+```{r}
+result <- summarisePerson(cdm = cdm)
+
+result |> glimpse()
+```
+## What the function reports
+
+`summarisePerson()` builds a set of common summaries:
+
+- Number subjects: total number of rows in person.
+
+- Number subjects not in observation: number (and percentage) of persons that do not appear in *observation_period* (useful to detect missing observation periods). A warning is emitted if any are found.
+
+- Sex: counts and percentages for the sex categories (Female, Male, Missing).
+
+- A separate Sex source table shows the raw gender_source_value distribution.
+
+- Race / Race source: distribution of race_concept_id and race_source_value
+
+- Ethnicity / Ethnicity source: distribution of ethnicity_concept_id  and ethnicity_source_value.
+
+- Year / Month / Day of birth: numeric summaries (missingness, quantiles, min/max) of birth date components.
+
+- Location, Provider, Care site:  number of missing, zeros, distinct values.
+
+# Tidy the summarised object
+
+`tablePerson()` will help you to tidy the previous results and create a formatted table of type [gt](https://gt.rstudio.com/), [reactable](https://glin.github.io/reactable/) or [datatable](https://rstudio.github.io/DT/). By default it creates a [gt](https://gt.rstudio.com/) table.
+
+```{r, warning=FALSE}
+tablePerson(result = result, type = "gt")
+```
+
+Finally, we can disconnect from the cdm.
+
+```{r, warning=FALSE}
+CDMConnector::cdmDisconnect(cdm = cdm)
+```

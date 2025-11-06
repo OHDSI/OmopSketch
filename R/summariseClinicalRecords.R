@@ -545,12 +545,16 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
       dplyr::left_join(
         cdm$concept |>
           dplyr::select(
-            standard = "concept_id", "domain_id", "standard_concept",
-            source = "concept_id",
-            source_vocabulary = "vocabulary_id"
+            standard = "concept_id",
+           "domain_id", "standard_concept"
           ),
-        by = c("standard", "source")
+        by = c("standard")
       ) |>
+    dplyr::left_join(cdm$concept |>
+                       dplyr::select(
+                         source = "concept_id",
+                         source_vocabulary = "vocabulary_id" ),
+                     by = "source") |>
       dplyr::mutate(standard = dplyr::case_when(
         .data$standard == 0 ~ "No matching concept",
         .data$standard_concept == "S" ~ "Standard",
