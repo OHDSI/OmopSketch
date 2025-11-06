@@ -255,10 +255,11 @@ the table, such as:</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising standard concepts in <span style="color: #0000BB;">drug_exposure</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising source vocabularies in <span style="color: #0000BB;">drug_exposure</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising concept types in <span style="color: #0000BB;">drug_exposure</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising concept class in <span style="color: #0000BB;">drug_exposure</span>.</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">variable_name</span>, <span class="va">variable_level</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span><span class="op">)</span> </span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 11 × 4</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 29 × 4</span></span></span>
 <span><span class="co">#&gt;    variable_name     variable_level          estimate_name estimate_value</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Number subjects   <span style="color: #BB0000;">NA</span>                      count         100           </span></span>
@@ -268,10 +269,10 @@ the table, such as:</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Standard concept  S                       count         21600         </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Source vocabulary No matching concept     count         21600         </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Type concept id   Unknown type concept: 0 count         21600         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Domain            Drug                    percentage    100.00        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Standard concept  S                       percentage    100.00        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Source vocabulary No matching concept     percentage    100.00        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> Type concept id   Unknown type concept: 0 percentage    100.00</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Concept class     CVX                     count         1600          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Concept class     Ingredient              count         9100          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Concept class     Branded Pack            count         1100          </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 19 more rows</span></span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="missingness">Missingness<a class="anchor" aria-label="anchor" href="#missingness"></a>
@@ -406,6 +407,7 @@ setting the <code>dateRange</code> argument.</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising standard concepts in <span style="color: #0000BB;">drug_exposure</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising source vocabularies in <span style="color: #0000BB;">drug_exposure</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising concept types in <span style="color: #0000BB;">drug_exposure</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising concept class in <span style="color: #0000BB;">drug_exposure</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising missing data in <span style="color: #0000BB;">drug_exposure</span>.</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span></span>
