@@ -22,15 +22,15 @@ knitr::opts_chunk$set(
 )
 ```
 
-In this vignette, we will explore the *OmopSketch* functions designed to provide an overview of the clinical tables within a CDM object (e.g. *visit_occurrence*, *condition_occurrence*, *drug_exposure*, *procedure_occurrence*, *device_exposure*, *measurement*, *observation*, and *death*). Specifically, there are four key functions that facilitate this:
+In this vignette, we will explore the *OmopSketch* functions designed to provide an overview of the clinical tables within a CDM object (e.g. *visit_occurrence*, *condition_occurrence*, *drug_exposure*, *procedure_occurrence*, *device_exposure*, *measurement*, *observation*, and *death*). Specifically, there are two key functions that facilitate this:
 
--   `summariseClinicalRecords()` and `tableClinicalRecords()`: Use them to create a summary statistics with key basic information of the clinical table (e.g., number of records, number of concepts mapped, etc.)
+-   `summariseClinicalRecords()`: creates a summary statistics with key basic information about the clinical table (e.g., number of records, records per person, etc.), some quality checks (e.g, missingness, correct filling of date columns, etc.) and a summary of the concepts used in the table (domains, source vocabularies, etc.)
 
--   `summariseRecordCount()`, `plotRecordCount()` and `tableRecordCount()`: Use them to summarise the number of records within specific time intervals.
+-   `tableClinicalRecords()`: helps visualising the results in a formatted table.
 
 ## Create a mock cdm
 
-Let's see an example of its functionalities. To start with, we will load essential packages and create a mock cdm using the mockOmopSketch() database.
+Let's see an example of its functionalities. To start with, we will load essential packages and create a mock cdm using the `mockOmopSketch()` function
 
 ```{r, warning=FALSE}
 library(dplyr)
@@ -45,18 +45,18 @@ cdm <- mockOmopSketch()
 Let's now use `summariseClinicalTables()`from the OmopSketch package to help us have an overview of one of the clinical tables of the cdm (i.e., **condition_occurrence**).
 
 ```{r, warning=FALSE}
-summarisedResult <- summariseClinicalRecords(cdm, "condition_occurrence")
+summarisedResult <- summariseClinicalRecords(cdm, omopTableName = "condition_occurrence")
 
 summarisedResult |> print()
 ```
 
-Notice that the output is in the summarised result format.
-
+Notice that the output is in the [summarised result](https://darwin-eu.github.io/omopgenerics/articles/summarised_result.html) format.
+## Records per person
 We can use the arguments to specify which statistics we want to perform. For example, use the argument `recordsPerPerson` to indicate which estimates you are interested regarding the number of records per person.
 
 ```{r, warning=FALSE}
 summarisedResult <- summariseClinicalRecords(cdm,
-  "condition_occurrence",
+  omopTableName = "condition_occurrence",
   recordsPerPerson = c("mean", "sd", "q05", "q95")
 )
 
@@ -65,26 +65,72 @@ summarisedResult |>
   select(variable_name, estimate_name, estimate_value)
 ```
 
-You can further specify if you want to include the number of records in observation (`inObservation = TRUE`), the number of concepts mapped (`standardConcept = TRUE`), which types of source vocabulary does the table contain (`sourceVocabulary = TRUE`), which types of domain does the vocabulary have (`domainId = TRUE`) or the concept's type (`typeConcept = TRUE`).
+## Quality
+
+When the argument `quality = TRUE` is set, the results will include a quality assessment of the data.  
+This assessment provides information such as:
+
+- The proportion of records that fall outside the subjects’ observation periods.  
+- Issues with date columns (e.g., start dates occurring after end dates, or dates preceding a subject’s birth date).  
+- The presence of `person_id` values that do not exist in the `person` table.
 
 ```{r, warning=FALSE}
 summarisedResult <- summariseClinicalRecords(cdm,
-  "condition_occurrence",
-  recordsPerPerson = c("mean", "sd", "q05", "q95"),
-  conceptSummary = TRUE,
+  omopTableName = "condition_occurrence",
+  recordsPerPerson = c(), 
+  conceptSummary = FALSE,
+  missing = FALSE,
   quality = TRUE
 )
 
 summarisedResult |>
-  select(variable_name, estimate_name, estimate_value) |>
-  glimpse()
+  select(variable_name, estimate_name, estimate_value) 
 ```
+## Concept Summary
 
-Additionally, you can also stratify the previous results by sex and age groups:
+When the argument `conceptSummary = TRUE` is set, the results will also include information about the concepts contained in the table, such as:
+
+- The domain to which each concept belongs.  
+- Whether each concept is a standard concept.  
+- The type and source vocabulary associated with each concept.
+
 
 ```{r, warning=FALSE}
 summarisedResult <- summariseClinicalRecords(cdm,
-  "condition_occurrence",
+  omopTableName = "drug_exposure",
+  recordsPerPerson = c(), 
+  conceptSummary = TRUE,
+  missing = FALSE,
+  quality = FALSE
+)
+
+summarisedResult |>
+  select(variable_name, variable_level, estimate_name, estimate_value) 
+```
+
+## Missingness
+
+When the argument `missing = TRUE` is set, the results will include a summary of missing data in the table, including the number of `0`s in the concept columns.  
+This output is analogous to the results produced by the OmopSketch function `summariseMissingData()`.
+
+```{r, warning=FALSE}
+summarisedResult <- summariseClinicalRecords(cdm,
+  omopTableName = "condition_occurrence",
+  recordsPerPerson = c(), 
+  conceptSummary = FALSE,
+  missing = TRUE,
+  quality = FALSE
+)
+
+summarisedResult |>
+  select(variable_name, variable_level, estimate_name, estimate_value) 
+```
+## Strata
+It is also possible to stratify the results by sex and age groups:
+
+```{r, warning=FALSE}
+summarisedResult <- summariseClinicalRecords(cdm,
+  omopTableName = "condition_occurrence",
   recordsPerPerson = c("mean", "sd", "q05", "q95"),
   quality = TRUE,
   conceptSummary = TRUE,
@@ -93,17 +139,16 @@ summarisedResult <- summariseClinicalRecords(cdm,
 )
 
 summarisedResult |>
-  select(variable_name, strata_level, estimate_name, estimate_value) |>
-  glimpse()
+  select(variable_name, strata_level, estimate_name, estimate_value) 
 ```
 
-Notice that, by default, the "overall" group will be also included, as well as crossed strata (that means, sex == "Female" and ageGroup == "\>35").
+Notice that, by default, the "overall" group will also be included, as well as crossed strata (that means, `sex == "Female"` and `ageGroup == "\>35"`).
 
 Also, see that the analysis can be conducted for multiple OMOP tables at the same time:
 
 ```{r, warning=FALSE}
 summarisedResult <- summariseClinicalRecords(cdm,
-  c("visit_occurrence", "drug_exposure"),
+  omopTableName = c("visit_occurrence", "drug_exposure"),
   recordsPerPerson = c("mean", "sd"),
   quality = FALSE,
   conceptSummary = FALSE,
@@ -111,16 +156,17 @@ summarisedResult <- summariseClinicalRecords(cdm,
 )
 
 summarisedResult |>
-  select(group_level, variable_name, estimate_name, estimate_value) |>
-  glimpse()
+  select(group_level, variable_name, estimate_name, estimate_value)
 ```
 
-We can also filter the clinical table to a specific time window by setting the dateRange argument.
+## Date Range
+We can also filter the clinical table to a specific time window by setting the `dateRange` argument.
 
 ```{r}
-summarisedResult <- summariseClinicalRecords(cdm, "drug_exposure",
-  dateRange = as.Date(c("1990-01-01", "2010-01-01"))
-)
+
+summarisedResult <- summariseClinicalRecords(cdm, 
+                                             omopTableName ="drug_exposure",
+                                             dateRange = as.Date(c("1990-01-01", "2010-01-01"))) 
 
 summarisedResult |>
   omopgenerics::settings() |>
@@ -128,95 +174,25 @@ summarisedResult |>
 ```
 
 
-## Tidy the summarised object
+# Tidy the summarised object
 
-`tableClinicalRecords()` will help you to tidy the previous results and create a gt table.
+`tableClinicalRecords()` will help you to tidy the previous results and create a formatted table of type [gt](https://gt.rstudio.com/), [reactable](https://glin.github.io/reactable/) or [datatable](https://rstudio.github.io/DT/). By default it creates a [gt](https://gt.rstudio.com/) table.
 
 ```{r, warning=FALSE}
 summarisedResult <- summariseClinicalRecords(cdm,
-  "condition_occurrence",
+  omopTableName = "condition_occurrence",
   recordsPerPerson = c("mean", "sd", "q05", "q95"),
-  quality = T,
-  conceptSummary = T,
+  quality = TRUE, 
+  conceptSummary = TRUE,
   sex = TRUE
 )
 
 summarisedResult |>
-  tableClinicalRecords()
-```
-
-# Summarise record counts
-
-OmopSketch can also help you to summarise the trend of the records of an OMOP table. See the example below, where we use `summariseRecordCount()` to count the number of records within each year, and then, we use `plotRecordCount()` to create a ggplot with the trend.
-We can also use `tableRecordCount()` to display results in a table of type [gt](https://gt.rstudio.com/), [reactable](https://glin.github.io/reactable/) or [datatable](https://rstudio.github.io/DT/). By default it creates a [gt](https://gt.rstudio.com/) table.
-
-```{r, warning=FALSE}
-summarisedResult <- summariseRecordCount(cdm, "drug_exposure", interval = "years")
-
-summarisedResult |> tableRecordCount(type = "gt")
-```
-
-Note that you can adjust the time interval period using the `interval` argument, which can be set to either "years", "months" or "quarters". See the example below, where it shows the number of records every 18 months:
-
-```{r, warning=FALSE}
-summariseRecordCount(cdm, "drug_exposure", interval = "quarters") |>
-  plotRecordCount()
-```
-
-We can further stratify our counts by sex (setting argument `sex = TRUE`) or by age (providing an age group). Notice that in both cases, the function will automatically create a group called *overall* with all the sex groups and all the age groups.
-
-```{r, warning=FALSE}
-summariseRecordCount(cdm, "drug_exposure",
-  interval = "months",
-  sex = TRUE,
-  ageGroup = list(
-    "<30" = c(0, 29),
-    ">=30" = c(30, Inf)
-  )
-) |>
-  plotRecordCount()
-```
-
-By default, `plotRecordCount()` does not apply faceting or colour to any variables. This can result confusing when stratifying by different variables, as seen in the previous picture. We can use [VisOmopResults](https://darwin-eu.github.io/visOmopResults/) package to help us know by which columns we can colour or face by:
-
-```{r, warning=FALSE}
-summariseRecordCount(cdm, "drug_exposure",
-  interval = "months",
-  sex = TRUE,
-  ageGroup = list(
-    "0-29" = c(0, 29),
-    "30-Inf" = c(30, Inf)
-  )
-) |>
-  visOmopResults::tidyColumns()
-```
-
-Then, we can simply specify this by using the `facet` and `colour` arguments from `plotRecordCount()`
-
-```{r, warning=FALSE}
-summariseRecordCount(cdm, "drug_exposure",
-  interval = "months",
-  sex = TRUE,
-  ageGroup = list(
-    "0-29" = c(0, 29),
-    "30-Inf" = c(30, Inf)
-  )
-) |>
-  plotRecordCount(facet = omop_table ~ age_group, colour = "sex")
-```
-We can also filter the clinical table to a specific time window by setting the dateRange argument.
-
-```{r}
-summariseRecordCount(cdm, "drug_exposure",
-  interval = "years",
-  sex = TRUE,
-  dateRange = as.Date(c("1990-01-01", "2010-01-01"))
-) |>
-  tableRecordCount(type = "gt")
+  tableClinicalRecords(type = "gt")
 ```
 
 
-Finally, disconnect from the cdm
+Finally, we can disconnect from the cdm.
 
 ```{r, warning=FALSE}
 CDMConnector::cdmDisconnect(cdm = cdm)
