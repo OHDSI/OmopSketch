@@ -67,6 +67,8 @@ summariseMissingData <- function(cdm,
   dateRange <- validateStudyPeriod(cdm, dateRange)
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, multipleAgeGroup = FALSE, null = TRUE, ageGroupName = "age_group")
 
+  cdm <- sampleCdm(cdm = cdm, tables = omopTableName, sample = sample)
+
   if ("person" %in% omopTableName) {
     if (!is.null(ageGroup)) cli::cli_warn("ageGroup stratification is not applied for person table")
     if (interval != "overall") cli::cli_warn("time interval stratification is not applied for person table")
@@ -74,7 +76,7 @@ summariseMissingData <- function(cdm,
 
     omopTableName <- omopTableName[omopTableName != "person"]
     strata <- list(c(character(),"sex"[sex]))
-    result_person <- summariseMissingDataFromTable(omopTable = cdm[["person"]], table = "person", cdm = cdm, col = col, dateRange = NULL, sample = sample, sex = sex, ageGroup = NULL, interval = "overall", strata = strata)
+    result_person <- summariseMissingDataFromTable(omopTable = cdm[["person"]], table = "person", cdm = cdm, col = col, dateRange = NULL, sex = sex, ageGroup = NULL, interval = "overall", strata = strata)
   } else {
     result_person <- tibble::tibble()
   }
@@ -85,7 +87,7 @@ summariseMissingData <- function(cdm,
       omopgenerics::combineStrata(c(strataCols(sex = sex, ageGroup = ageGroup, interval = interval)))
     )
     result <- purrr::map(omopTableName, function(table) {
-      summariseMissingDataFromTable(omopTable = cdm[[table]], table = table, cdm = cdm, col = col, dateRange = dateRange, sample = sample, sex = sex, ageGroup = ageGroup, interval = interval, strata = strata)
+      summariseMissingDataFromTable(omopTable = cdm[[table]], table = table, cdm = cdm, col = col, dateRange = dateRange, sex = sex, ageGroup = ageGroup, interval = interval, strata = strata)
     }) |>
       purrr::compact()
   } else {
@@ -154,7 +156,7 @@ columnsToSummarise <- function(col, cols, table, version) {
 }
 
 
-summariseMissingDataFromTable <- function(omopTable, table, cdm, col, dateRange, sample, sex, ageGroup, interval, strata) {
+summariseMissingDataFromTable <- function(omopTable, table, cdm, col, dateRange, sex, ageGroup, interval, strata) {
   prefix <- omopgenerics::tmpPrefix()
 
   # check if table is empty
@@ -169,9 +171,6 @@ summariseMissingDataFromTable <- function(omopTable, table, cdm, col, dateRange,
 
   # restrict study period
   omopTable <- omopTable |>
-    sampleOmopTable(
-      sample = sample
-      ) |>
     restrictStudyPeriod(dateRange = dateRange)
   if (is.null(omopTable)) {
     return(NULL)

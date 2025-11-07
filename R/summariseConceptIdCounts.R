@@ -74,7 +74,7 @@ summariseConceptIdCounts <- function(cdm,
 
   # settings for the created results
   set <- createSettings(result_type = "summarise_concept_id_counts", study_period = dateRange)
-
+  cdm <- sampleCdm(cdm = cdm, tables = omopTableName, sample = sample)
   # get strata
   strata <- omopgenerics::combineStrata(strataCols(sex = sex, ageGroup = ageGroup, interval = interval, inObservation = inObservation))
   concepts <- c("concept_id", "concept_name", "source_concept_id", "source_concept_name")
@@ -104,7 +104,6 @@ summariseConceptIdCounts <- function(cdm,
 
     # restrict study period
     omopTable <- omopTable |>
-      sampleOmopTable(sample = sample) |>
       restrictStudyPeriod(dateRange = dateRange)
 
     if (is.null(omopTable)) {

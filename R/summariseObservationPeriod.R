@@ -236,7 +236,7 @@ summariseObservationPeriod <- function(cdm,
 
 
   if (missingData) {
-    result$missingData <- summariseMissingDataFromTable(omopTable = observationPeriodStrata, table = "observation_period", cdm = cdm, strata = strata, col = NULL, sex = FALSE, ageGroup = NULL, dateRange = NULL, sample = NULL, interval = "overall") |>
+    result$missingData <- summariseMissingDataFromTable(omopTable = observationPeriodStrata, table = "observation_period", cdm = cdm, strata = strata, col = NULL, sex = FALSE, ageGroup = NULL, dateRange = NULL, interval = "overall") |>
       dplyr::mutate(
         variable_name = "Column name",
         variable_level = .data$column_name
