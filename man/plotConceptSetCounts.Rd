@@ -27,8 +27,9 @@ Plot the concept counts of a summariseConceptSetCounts output.
 \donttest{
 library(dplyr)
 library(OmopSketch)
+library(omock)
 
-cdm <- mockOmopSketch()
+cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
 result <- summariseConceptSetCounts(
   cdm = cdm,
@@ -42,6 +43,5 @@ result |>
   filter(variable_name == "Number subjects") |>
   plotConceptSetCounts(facet = "codelist_name", colour = "standard_concept_name")
 
-PatientProfiles::mockDisconnect(cdm)
 }
 }

@@ -28,14 +28,17 @@ In this vignette we will explore the *OmopSketch* functions designed to provide 
 
 ## Create a mock cdm
 
-Let’s load the required packages and create a mock CDM using `mockOmopSketch()` so we can run the functions on a small example.
+Let’s load the required packages and create a mock CDM using the R package [omock](https://ohdsi.github.io/omock/) so we can run the functions on a small example.
 
 ```{r, warning=FALSE}
 library(dplyr)
 library(OmopSketch)
+library(omock)
+library(duckdb)
 
 # Connect to mock database
-cdm <- mockOmopSketch()
+cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb") 
+cdm
 ```
 
 # Summarise the person table
@@ -77,5 +80,5 @@ tablePerson(result = result, type = "gt")
 Finally, we can disconnect from the cdm.
 
 ```{r, warning=FALSE}
-CDMConnector::cdmDisconnect(cdm = cdm)
+cdmDisconnect(cdm = cdm)
 ```

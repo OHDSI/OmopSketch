@@ -8,8 +8,9 @@
 #' @examples
 #' \donttest{
 #' library(OmopSketch)
+#' library(omock)
 #'
-#' cdm <- mockOmopSketch()
+#' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 #'
 #' summarisedResult <- summariseClinicalRecords(
 #'   cdm = cdm,
@@ -26,7 +27,7 @@
 #'   suppress(minCellCount = 5) |>
 #'   tableClinicalRecords()
 #'
-#' PatientProfiles::mockDisconnect(cdm)
+#' cdmDisconnect(cdm)
 #' }
 tableClinicalRecords <- function(result,
                                  type = "gt",

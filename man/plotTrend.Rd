@@ -42,8 +42,9 @@ Create a ggplot2 plot from the output of summariseTrend().
 \donttest{
 library(dplyr)
 library(OmopSketch)
+library(omock)
 
-cdm <- mockOmopSketch()
+cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
 result <- summariseTrend(cdm,
   episode = "observation_period",
@@ -56,6 +57,6 @@ result <- summariseTrend(cdm,
 plotTrend(result, output = "record", colour = "sex", facet = "age_group")
 
 
-PatientProfiles::mockDisconnect(cdm)
+cdmDisconnect(cdm)
 }
 }

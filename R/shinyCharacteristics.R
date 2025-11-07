@@ -21,8 +21,9 @@
 #' @examples
 #' \dontrun{
 #' library(OmopSketch)
+#' library(omock)
 #'
-#' cdm <- mockOmopSketch()
+#' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 #' res <- databaseCharacteristics(cdm = cdm)
 #' shinyCharacteristics(result = res, directory = here::here())
 #' }
@@ -175,7 +176,7 @@ shinyCharacteristics <- function(result,
 
     variable_names <- result |>
       omopgenerics::filterSettings(.data$result_type == "summarise_trend") |>
-      omopgenerics::filterSettings(type == "episode") |>
+      omopgenerics::filterSettings(.data$type == "episode") |>
       dplyr::distinct(.data$variable_name) |>
       dplyr::pull()
 
@@ -200,7 +201,7 @@ shinyCharacteristics <- function(result,
 
     variable_names <- result |>
       omopgenerics::filterSettings(.data$result_type == "summarise_trend") |>
-      omopgenerics::filterSettings(type == "event") |>
+      omopgenerics::filterSettings(.data$type == "event") |>
       dplyr::distinct(.data$variable_name) |>
       dplyr::pull()
 

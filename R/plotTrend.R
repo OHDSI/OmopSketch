@@ -17,8 +17,9 @@
 #' \donttest{
 #' library(dplyr)
 #' library(OmopSketch)
+#' library(omock)
 #'
-#' cdm <- mockOmopSketch()
+#' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 #'
 #' result <- summariseTrend(cdm,
 #'   episode = "observation_period",
@@ -31,7 +32,7 @@
 #' plotTrend(result, output = "record", colour = "sex", facet = "age_group")
 #'
 #'
-#' PatientProfiles::mockDisconnect(cdm)
+#' cdmDisconnect(cdm)
 #' }
 plotTrend <- function(result,
                       output = NULL,

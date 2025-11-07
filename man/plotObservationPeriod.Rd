@@ -39,9 +39,10 @@ Create a plot from the output of summariseObservationPeriod().
 }
 \examples{
 \donttest{
+library(omock)
 library(OmopSketch)
 
-cdm <- mockOmopSketch(numberIndividuals = 100)
+cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
 result <- summariseObservationPeriod(observationPeriod = cdm$observation_period)
 
@@ -51,6 +52,5 @@ plotObservationPeriod(
   plotType = "boxplot"
 )
 
-PatientProfiles::mockDisconnect(cdm)
 }
 }

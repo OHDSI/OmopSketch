@@ -57,15 +57,16 @@ Summarise Database Characteristics for OMOP CDM
 \examples{
 \donttest{
 library(OmopSketch)
+library(omock)
 
-cdm <- mockOmopSketch(numberIndividuals = 100)
+cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
 result <- databaseCharacteristics(
   cdm = cdm,
+  sample = 100,
   omopTableName = c("drug_exposure", "condition_occurrence"),
   sex = TRUE, ageGroup = list(c(0, 50), c(51, 100)), interval = "years", conceptIdCounts = FALSE
 )
 
-PatientProfiles::mockDisconnect(cdm)
 }
 }

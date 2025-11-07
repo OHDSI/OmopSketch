@@ -13,8 +13,9 @@
 #' @examples
 #' \donttest{
 #' library(OmopSketch)
+#' library(omock)
 #'
-#' cdm <- mockOmopSketch(numberIndividuals = 100)
+#' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 #'
 #' result <- summarisePerson(cdm = cdm)
 #'

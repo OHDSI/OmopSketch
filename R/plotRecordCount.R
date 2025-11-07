@@ -9,9 +9,10 @@
 #' @export
 #' @examples
 #' \donttest{
+#' library(omock)
 #' library(OmopSketch)
 #'
-#' cdm <- mockOmopSketch()
+#' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 #'
 #' summarisedResult <- summariseRecordCount(
 #'   cdm = cdm,
@@ -22,7 +23,6 @@
 #'
 #' plotRecordCount(result = summarisedResult, colour = "age_group", facet = sex ~ .)
 #'
-#' CDMConnector::cdmDisconnect(cdm = cdm)
 #' }
 plotRecordCount <- function(result,
                             facet = NULL,

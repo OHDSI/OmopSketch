@@ -68,11 +68,6 @@ reference:
       - tableTrend
       - plotTrend
 
-  - subtitle: Mock Database
-    desc: Create a mock database to test the OmopSketch package
-    contents:
-      - mockOmopSketch
-
   - subtitle: Characterisation
     desc: Characterise the database
     contents:
@@ -96,3 +91,4 @@ reference:
       - summariseInObservation
       - plotInObservation
       - tableInObservation
+      - mockOmopSketch

@@ -26,13 +26,14 @@ Create a visual table from a summarise_omop_snapshot result.
 \examples{
 \donttest{
 library(OmopSketch)
+library(omock)
 
-cdm <- mockOmopSketch(numberIndividuals = 10)
+cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
 result <- summariseOmopSnapshot(cdm = cdm)
 
 tableOmopSnapshot(result = result)
 
-PatientProfiles::mockDisconnect(cdm)
+cdmDisconnect(cdm)
 }
 }

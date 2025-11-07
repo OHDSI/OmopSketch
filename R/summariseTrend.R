@@ -32,8 +32,9 @@
 #' @examples
 #' \donttest{
 #' library(OmopSketch)
+#' library(omock)
 #'
-#' cdm <- mockOmopSketch()
+#' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 #'
 #' summarisedResult <- summariseTrend(
 #'   cdm = cdm,
@@ -48,7 +49,7 @@
 #' summarisedResult |>
 #'   dplyr::glimpse()
 #'
-#' CDMConnector::cdmDisconnect(cdm = cdm)
+#' cdmDisconnect(cdm = cdm)
 #' }
 summariseTrend <- function(cdm,
                            event = NULL,

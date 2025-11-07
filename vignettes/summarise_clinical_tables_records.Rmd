@@ -30,14 +30,18 @@ In this vignette, we will explore the *OmopSketch* functions designed to provide
 
 ## Create a mock cdm
 
-Let's see an example of its functionalities. To start with, we will load essential packages and create a mock cdm using the `mockOmopSketch()` function
+Let's see an example of its functionalities. To start with, we will load essential packages and create a mock cdm using the R package [omock](https://ohdsi.github.io/omock/)
 
 ```{r, warning=FALSE}
 library(dplyr)
 library(OmopSketch)
+library(omock)
+library(duckdb)
 
 # Connect to mock database
-cdm <- mockOmopSketch()
+cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
+
+cdm
 ```
 
 # Summarise clinical tables
@@ -195,5 +199,5 @@ summarisedResult |>
 Finally, we can disconnect from the cdm.
 
 ```{r, warning=FALSE}
-CDMConnector::cdmDisconnect(cdm = cdm)
+cdmDisconnect(cdm = cdm)
 ```

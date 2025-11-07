@@ -9,15 +9,16 @@
 #' \donttest{
 #' library(OmopSketch)
 #' library(dplyr, warn.conflicts = FALSE)
+#' library(omock)
 #'
-#' cdm <- mockOmopSketch(numberIndividuals = 100)
+#' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 #'
 #' result <- summarisePerson(cdm = cdm)
 #'
 #' result |>
 #'   glimpse()
 #'
-#' PatientProfiles::mockDisconnect(cdm)
+#' cdmDisconnect(cdm)
 #' }
 #'
 summarisePerson <- function(cdm) {
@@ -187,8 +188,9 @@ summariseNumeric2 <- function(x, variable, den) {
 #' @examples
 #' \donttest{
 #' library(OmopSketch)
+#' library(omock)
 #'
-#' cdm <- mockOmopSketch(numberIndividuals = 100)
+#' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 #'
 #' result <- summarisePerson(cdm = cdm)
 #'

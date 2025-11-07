@@ -26,8 +26,9 @@ Create a visual table from a summariseClinicalRecord() output.
 \examples{
 \donttest{
 library(OmopSketch)
+library(omock)
 
-cdm <- mockOmopSketch()
+cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
 summarisedResult <- summariseClinicalRecords(
   cdm = cdm,
@@ -44,6 +45,6 @@ summarisedResult |>
   suppress(minCellCount = 5) |>
   tableClinicalRecords()
 
-PatientProfiles::mockDisconnect(cdm)
+cdmDisconnect(cdm)
 }
 }

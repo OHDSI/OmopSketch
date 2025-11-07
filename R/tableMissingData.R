@@ -7,7 +7,8 @@
 #' @examples
 #' \donttest{
 #' library(OmopSketch)
-#' cdm <- mockOmopSketch(numberIndividuals = 100)
+#' library(omock)
+#' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 #'
 #' result <- summariseMissingData(
 #'   cdm = cdm,
@@ -16,7 +17,7 @@
 #'
 #' tableMissingData(result = result)
 #'
-#' CDMConnector::cdmDisconnect(cdm = cdm)
+#' cdmDisconnect(cdm = cdm)
 #' }
 tableMissingData <- function(result,
                              type = "gt",

@@ -29,20 +29,16 @@ In this vignette, we explore how *OmopSketch* functions can serve as a valuable 
 
 ## Create a mock cdm
 
-To illustrate the package’s functionality, we begin by loading the required packages and connecting to a test CDM using the Eunomia dataset.
+To illustrate the package’s functionality, we begin by loading the required packages and connecting to a test CDM using the Eunomia GiBleed dataset.
 
 ```{r, warning=FALSE}
 library(dplyr)
-library(DBI)
+library(omock)
 library(duckdb)
 library(OmopSketch)
 
 
-# Connect to Eunomia database
-con <- dbConnect(drv = duckdb(dbdir = eunomiaDir()))
-cdm <- cdmFromCon(
-  con = con, cdmSchema = "main", writeSchema = "main", cdmName = "Eunomia"
-)
+cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
 cdm
 ```
@@ -161,5 +157,5 @@ result_missingData |> tableMissingData(type = "flextable")
 Finally, disconnect from the cdm
 
 ```{r, warning=FALSE}
-CDMConnector::cdmDisconnect(cdm = cdm)
+cdmDisconnect(cdm = cdm)
 ```

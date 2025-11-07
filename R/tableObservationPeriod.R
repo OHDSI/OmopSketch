@@ -7,14 +7,15 @@
 #' @examples
 #' \donttest{
 #' library(OmopSketch)
+#' library(omock)
 #'
-#' cdm <- mockOmopSketch(numberIndividuals = 100)
+#' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 #'
 #' result <- summariseObservationPeriod(observationPeriod = cdm$observation_period)
 #'
 #' tableObservationPeriod(result = result)
 #'
-#' CDMConnector::cdmDisconnect(cdm = cdm)
+#' cdmDisconnect(cdm = cdm)
 #' }
 tableObservationPeriod <- function(result,
                                    type = "gt",

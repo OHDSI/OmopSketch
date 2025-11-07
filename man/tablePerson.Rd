@@ -30,8 +30,9 @@ Visualise the output of \code{summarisePerson()}
 \examples{
 \donttest{
 library(OmopSketch)
+library(omock)
 
-cdm <- mockOmopSketch(numberIndividuals = 100)
+cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
 result <- summarisePerson(cdm = cdm)
 
@@ -40,8 +41,9 @@ tablePerson(result = result)
 
 \donttest{
 library(OmopSketch)
+library(omock)
 
-cdm <- mockOmopSketch(numberIndividuals = 100)
+cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
 result <- summarisePerson(cdm = cdm)
 

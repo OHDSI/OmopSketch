@@ -2,7 +2,8 @@
 % Please edit documentation in R/mockOmopSketch.R
 \name{mockOmopSketch}
 \alias{mockOmopSketch}
-\title{Creates a mock database to test OmopSketch package.}
+\title{Creates a mock database to test OmopSketch package.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 \usage{
 mockOmopSketch(
   numberIndividuals = 100,
@@ -26,22 +27,13 @@ A mock cdm_reference object.
 }
 \description{
 Creates a mock database to test OmopSketch package.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 }
 \examples{
 \donttest{
 library(OmopSketch)
 
 cdm <- mockOmopSketch(numberIndividuals = 100)
-cdm
-
-# to insert into a duck db connection
-library(duckdb)
-library(CDMConnector)
-
-con <- dbConnect(drv = duckdb())
-to <- dbSource(con = con, writeSchema = "main")
-cdm <- insertCdmTo(cdm = cdm, to = to)
-
 cdm
 }
 

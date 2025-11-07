@@ -37,8 +37,9 @@
 #' @examples
 #' \donttest{
 #' library(OmopSketch)
+#' library(omock)
 #'
-#' cdm <- mockOmopSketch()
+#' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 #'
 #' summarisedResult <- summariseClinicalRecords(
 #'   cdm = cdm,
@@ -51,7 +52,7 @@
 #'
 #' summarisedResult
 #'
-#' CDMConnector::cdmDisconnect(cdm = cdm)
+#' cdmDisconnect(cdm = cdm)
 #' }
 summariseClinicalRecords <- function(cdm,
                                      omopTableName,

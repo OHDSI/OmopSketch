@@ -19,15 +19,16 @@ Summarise the person table
 \donttest{
 library(OmopSketch)
 library(dplyr, warn.conflicts = FALSE)
+library(omock)
 
-cdm <- mockOmopSketch(numberIndividuals = 100)
+cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
 result <- summarisePerson(cdm = cdm)
 
 result |>
   glimpse()
 
-PatientProfiles::mockDisconnect(cdm)
+cdmDisconnect(cdm)
 }
 
 }

@@ -14,9 +14,10 @@
 #' @export
 #' @examples
 #' \donttest{
+#' library(omock)
 #' library(OmopSketch)
 #'
-#' cdm <- mockOmopSketch(numberIndividuals = 100)
+#' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 #'
 #' result <- summariseObservationPeriod(observationPeriod = cdm$observation_period)
 #'
@@ -26,7 +27,6 @@
 #'   plotType = "boxplot"
 #' )
 #'
-#' PatientProfiles::mockDisconnect(cdm)
 #' }
 plotObservationPeriod <- function(result,
                                   variableName = "Number subjects",
