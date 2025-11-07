@@ -24,7 +24,7 @@ mockOmopSketch <- function(numberIndividuals = 100,
   lifecycle::deprecate_soft(
     when = "1.0.0",
     what = "OmopSketch::mockOmopSketch()",
-    with = "omock::mockCdmFromDataset(source = \"duckdb\")"
+    with = "omock::mockCdmFromDataset()"
   )
 
 
