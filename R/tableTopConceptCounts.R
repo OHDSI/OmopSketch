@@ -6,7 +6,7 @@
 #' @param countBy Either 'person' or 'record'. If NULL whatever is in the data
 #' is used.
 #' @param type Character. The output table format. Defaults to `"gt"`. Use `visOmopResults::tableType()` to see all supported formats.
-#' @inheritParams style
+#' @inheritParams style-table
 #'
 #' @return A formatted table object displaying the top concepts from the summarised data.
 
@@ -29,7 +29,7 @@ tableTopConceptCounts <- function(result,
                                   top = 10,
                                   countBy = NULL,
                                   type = "gt",
-                                  style = "default") {
+                                  style = NULL) {
   # initial checks
   rlang::check_installed("visOmopResults")
   omopgenerics::validateResultArgument(result)

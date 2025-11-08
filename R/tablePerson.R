@@ -22,8 +22,8 @@
 #' }
 #'
 tablePerson <- function(result,
-                        style = "default",
-                        type = "gt") {
+                        type = "gt",
+                        style = NULL) {
   # check input
   result <- omopgenerics::validateResultArgument(result = result)
 

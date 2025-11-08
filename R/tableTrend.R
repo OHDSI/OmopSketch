@@ -1,7 +1,7 @@
 #' Create a visual table from a summariseTrend() result.
 #' @param result A summarised_result object.
 #' @param type Type of formatting output table between `gt`, `datatable` and `reactable`. Default is `"gt"`.
-#' @inheritParams style
+#' @inheritParams style-table
 #' @return A formatted table object with the summarised data.
 #' @export
 #' @examples
@@ -26,7 +26,7 @@
 #' }
 tableTrend <- function(result,
                        type = "gt",
-                       style = "default") {
+                       style = NULL) {
   # initial checks
   rlang::check_installed("visOmopResults")
   omopgenerics::validateResultArgument(result)

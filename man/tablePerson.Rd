@@ -4,18 +4,18 @@
 \alias{tablePerson}
 \title{Visualise the results of \code{summarisePerson()} into a table}
 \usage{
-tablePerson(result, style = "default", type = "gt")
+tablePerson(result, type = "gt", style = NULL)
 
-tablePerson(result, style = "default", type = "gt")
+tablePerson(result, type = "gt", style = NULL)
 }
 \arguments{
 \item{result}{A summarised_result object.}
 
-\item{style}{A character string or custom R code to define the visual
-formatting of the table.}
-
 \item{type}{The desired format of the output table. See
 \code{visOmopResults::tableType()} for allowed options.}
+
+\item{style}{A character string or custom R code to define the visual
+formatting of the table.}
 }
 \value{
 A table visualisation.

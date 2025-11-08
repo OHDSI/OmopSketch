@@ -33,7 +33,7 @@ plotObservationPeriod <- function(result,
                                   plotType = "barplot",
                                   facet = NULL,
                                   colour = NULL,
-                                  style = "default") {
+                                  style = NULL) {
   rlang::check_installed("ggplot2")
   rlang::check_installed("visOmopResults")
   # initial checks
