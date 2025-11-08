@@ -144,7 +144,7 @@ result <- databaseCharacteristics(
 #> → Summarising trends: records, subjects, person-days, age and sex
 #> → The number of person-days is not computed for event tables
 #> ☺ Database characterisation finished. Code ran in 1 min and 4 sec
-#> ℹ 1 table created: "og_011_1762634296".
+#> ℹ 1 table created: "og_011_1762635280".
 
 PatientProfiles::mockDisconnect(cdm)
 #> Warning: `mockDisconnect()` was deprecated in PatientProfiles 1.4.3.

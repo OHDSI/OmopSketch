@@ -90,11 +90,11 @@ library(CDMConnector)
 library(duckdb)
 
 requireEunomia()
-#> ℹ `EUNOMIA_DATA_FOLDER` set to: /tmp/RtmpkD6PQk.
+#> ℹ `EUNOMIA_DATA_FOLDER` set to: /tmp/Rtmpt3C1Ob.
 #> 
 #> Download completed!
 con <- dbConnect(duckdb(), eunomiaDir())
-#> Creating CDM database /tmp/RtmpkD6PQk/GiBleed_5.3.zip
+#> Creating CDM database /tmp/Rtmpt3C1Ob/GiBleed_5.3.zip
 cdm <- cdmFromCon(con = con, cdmSchema = "main", writeSchema = "main")
 
 summariseConceptIdCounts(

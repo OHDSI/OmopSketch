@@ -49,7 +49,6 @@ result <- summariseMissingData(
   omopTableName = c("condition_occurrence", "visit_occurrence")
 )
 #> The person table has ≤ 1e+05 subjects; skipping sampling of the CDM.
-#> The person table has ≤ 1e+05 subjects; skipping sampling of the CDM.
 
 tableMissingData(result = result)
 

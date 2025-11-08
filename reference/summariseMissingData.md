@@ -90,7 +90,6 @@ result <- summariseMissingData(
   sample = 10000
 )
 #> The person table has ≤ 10000 subjects; skipping sampling of the CDM.
-#> The person table has ≤ 10000 subjects; skipping sampling of the CDM.
 
 PatientProfiles::mockDisconnect(cdm)
 # }

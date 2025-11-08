@@ -197,9 +197,9 @@ summarisedResult |>
 #>  5 Standard concept  S                       count         21600         
 #>  6 Source vocabulary No matching concept     count         21600         
 #>  7 Type concept id   Unknown type concept: 0 count         21600         
-#>  8 Concept class     Branded Drug            count         700           
-#>  9 Concept class     Quant Branded Drug      count         100           
-#> 10 Concept class     Branded Drug Comp       count         400           
+#>  8 Concept class     CVX                     count         1600          
+#>  9 Concept class     Ingredient              count         9100          
+#> 10 Concept class     Branded Pack            count         1100          
 #> # ℹ 19 more rows
 ```
 
