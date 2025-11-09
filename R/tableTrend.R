@@ -25,7 +25,7 @@
 #' CDMConnector::cdmDisconnect(cdm = cdm)
 #' }
 tableTrend <- function(result,
-                       type = "gt",
+                       type = NULL,
                        style = NULL) {
   # initial checks
   rlang::check_installed("visOmopResults")

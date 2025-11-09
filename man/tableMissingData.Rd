@@ -4,12 +4,15 @@
 \alias{tableMissingData}
 \title{Create a visual table from a summariseMissingData() result.}
 \usage{
-tableMissingData(result, type = "gt", style = NULL)
+tableMissingData(result, type = NULL, style = NULL)
 }
 \arguments{
 \item{result}{A summarised_result object.}
 
-\item{type}{Type of formatting output table. See \code{visOmopResults::tableType()} for allowed options. Default is \code{"gt"}.}
+\item{type}{Character string specifying the desired output table format. See
+\code{tableType()} for supported table types. If \code{type = NULL}, global options
+(set via \code{setGlobalTableOptions()}) will be used if available; otherwise, a
+default 'gt' table is created.}
 
 \item{style}{Defines the visual formatting of the table. This argument can be
 provided in one of the following ways:

@@ -162,3 +162,13 @@ sampleOmopTable <- function(omopTable, sample) {
   return(cdm[[tableName]])
 }
 
+validateType <- function(type, call = parent.frame()) {
+  if (is.null(type)) {
+    type <- getOption(x = "visOmopResults.tableType", default = "gt")
+  }
+
+  # assert choice
+  omopgenerics::assertChoice(type, choices = tableType(), length = 1, call = call)
+
+  return(type)
+}

@@ -6,7 +6,9 @@
 #'   - `"source"`: Show only source codes.
 #'   - `"missing standard"`: Show only source codes that are missing a mapped standard concept.
 #' @param type Type of formatting output table, either "reactable" or "datatable".
+#'
 #' @return A reactable or datatable object with the summarised data.
+#'
 #' @export
 #' @examples
 #' \donttest{

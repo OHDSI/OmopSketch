@@ -20,7 +20,12 @@ NULL
 #' @keywords internal
 NULL
 
-#' Helper for consistent documentation of `style`.
+#' Helper for consistent documentation of table arguments.
+#'
+#' @param type Character string specifying the desired output table format. See
+#' `tableType()` for supported table types. If `type = NULL`, global options
+#' (set via `setGlobalTableOptions()`) will be used if available; otherwise, a
+#' default 'gt' table is created.
 #'
 #' @param style Defines the visual formatting of the table. This argument can be
 #' provided in one of the following ways:

@@ -9,7 +9,7 @@ tableTopConceptCounts(
   result,
   top = 10,
   countBy = NULL,
-  type = "gt",
+  type = NULL,
   style = NULL
 )
 }
@@ -21,7 +21,10 @@ tableTopConceptCounts(
 \item{countBy}{Either 'person' or 'record'. If NULL whatever is in the data
 is used.}
 
-\item{type}{Character. The output table format. Defaults to \code{"gt"}. Use \code{visOmopResults::tableType()} to see all supported formats.}
+\item{type}{Character string specifying the desired output table format. See
+\code{tableType()} for supported table types. If \code{type = NULL}, global options
+(set via \code{setGlobalTableOptions()}) will be used if available; otherwise, a
+default 'gt' table is created.}
 
 \item{style}{Defines the visual formatting of the table. This argument can be
 provided in one of the following ways:

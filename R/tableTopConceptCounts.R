@@ -5,7 +5,6 @@
 #' @param top Integer. The number of top concepts to display. Defaults to `10`.
 #' @param countBy Either 'person' or 'record'. If NULL whatever is in the data
 #' is used.
-#' @param type Character. The output table format. Defaults to `"gt"`. Use `visOmopResults::tableType()` to see all supported formats.
 #' @inheritParams style-table
 #'
 #' @return A formatted table object displaying the top concepts from the summarised data.
@@ -28,13 +27,13 @@
 tableTopConceptCounts <- function(result,
                                   top = 10,
                                   countBy = NULL,
-                                  type = "gt",
+                                  type = NULL,
                                   style = NULL) {
   # initial checks
   rlang::check_installed("visOmopResults")
   omopgenerics::validateResultArgument(result)
   omopgenerics::assertNumeric(top, integerish = TRUE, min = 1, length = 1)
-  omopgenerics::assertChoice(type, visOmopResults::tableType())
+  type <- validateType(type)
 
   strata_cols <- omopgenerics::strataColumns(result)
   additional_cols <- omopgenerics::additionalColumns(result)

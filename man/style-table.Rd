@@ -2,8 +2,13 @@
 % Please edit documentation in R/documentationHelper.R
 \name{style-table}
 \alias{style-table}
-\title{Helper for consistent documentation of \code{style}.}
+\title{Helper for consistent documentation of table arguments.}
 \arguments{
+\item{type}{Character string specifying the desired output table format. See
+\code{tableType()} for supported table types. If \code{type = NULL}, global options
+(set via \code{setGlobalTableOptions()}) will be used if available; otherwise, a
+default 'gt' table is created.}
+
 \item{style}{Defines the visual formatting of the table. This argument can be
 provided in one of the following ways:
 \enumerate{
@@ -22,6 +27,6 @@ otherwise, the default style is applied. For more details, see the Styles
 vignette on the package website.}
 }
 \description{
-Helper for consistent documentation of \code{style}.
+Helper for consistent documentation of table arguments.
 }
 \keyword{internal}
