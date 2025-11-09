@@ -15,7 +15,7 @@ tableTrend(result, type = NULL, style = NULL)
 provided in one of the following ways:
 \enumerate{
 \item \strong{Pre-defined style}: Use the name of a built-in style (e.g., "darwin").
-See \code{tableStyle()} for available options.
+See \code{visOmopResults::tableStyle()} for available options.
 \item \strong{YAML file path}: Provide the path to an existing \code{.yml} file defining
 a new style.
 \item \strong{List of custome R code}: Supply a block of custom R code or a named
@@ -24,9 +24,8 @@ the selected table type.
 }
 
 If \code{style = NULL}, the function will use global options (see
-\code{setGlobalTableOptions()}) or an existing \verb{⁠_brand.yml}⁠ file (if found);
-otherwise, the default style is applied. For more details, see the Styles
-vignette on the package website.}
+\code{visOmopResults::setGlobalTableOptions()}) or an existing \verb{⁠_brand.yml}⁠ file
+(if found); otherwise, the default style is applied.}
 }
 \value{
 A formatted table object with the summarised data.

@@ -5,11 +5,12 @@
 \title{Helper for consistent documentation of \code{style}.}
 \arguments{
 \item{style}{Visual theme to apply. Character, or \code{NULL}. If a character,
-this may be either the name of a built-in style (see \code{plotStyle()}), or a
-path to a \code{.yml} file that defines a custom style. If \code{NULL}, the function
-will use the explicit default style, unless a global style option is set (see
-\code{setGlobalPlotOptions()}), or a \verb{⁠_brand.yml}⁠ file is present (in that order).
-Refer to the package vignette on styles to learn more.}
+this may be either the name of a built-in style (see
+\code{visOmopResults::plotStyle()}), or a path to a \code{.yml} file that defines a
+custom style. If \code{NULL}, the function will use the explicit default style,
+unless a global style option is set (see
+\code{visOmopResults::setGlobalPlotOptions()}), or a \verb{⁠_brand.yml}⁠ file is
+present (in that order).}
 }
 \description{
 Helper for consistent documentation of \code{style}.

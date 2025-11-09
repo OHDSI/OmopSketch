@@ -23,14 +23,14 @@ NULL
 #' Helper for consistent documentation of table arguments.
 #'
 #' @param type Character string specifying the desired output table format. See
-#' `tableType()` for supported table types. If `type = NULL`, global options
-#' (set via `setGlobalTableOptions()`) will be used if available; otherwise, a
-#' default 'gt' table is created.
+#' `visOmopResults::tableType()` for supported table types. If `type = NULL`,
+#' global options (set via `visOmopResults::setGlobalTableOptions()`) will be
+#' used if available; otherwise, a default 'gt' table is created.
 #'
 #' @param style Defines the visual formatting of the table. This argument can be
 #' provided in one of the following ways:
 #' 1. **Pre-defined style**: Use the name of a built-in style (e.g., "darwin").
-#' See `tableStyle()` for available options.
+#' See `visOmopResults::tableStyle()` for available options.
 #' 2. **YAML file path**: Provide the path to an existing `.yml` file defining
 #' a new style.
 #' 3. **List of custome R code**: Supply a block of custom R code or a named
@@ -38,9 +38,8 @@ NULL
 #' the selected table type.
 #'
 #' If `style = NULL`, the function will use global options (see
-#' `setGlobalTableOptions()`) or an existing `⁠_brand.yml`⁠ file (if found);
-#' otherwise, the default style is applied. For more details, see the Styles
-#' vignette on the package website.
+#' `visOmopResults::setGlobalTableOptions()`) or an existing `⁠_brand.yml`⁠ file
+#' (if found); otherwise, the default style is applied.
 #'
 #' @name style-table
 #' @keywords internal
@@ -50,11 +49,12 @@ NULL
 #' Helper for consistent documentation of `style`.
 #'
 #' @param style Visual theme to apply. Character, or `NULL`. If a character,
-#' this may be either the name of a built-in style (see `plotStyle()`), or a
-#' path to a `.yml` file that defines a custom style. If `NULL`, the function
-#' will use the explicit default style, unless a global style option is set (see
-#' `setGlobalPlotOptions()`), or a `⁠_brand.yml`⁠ file is present (in that order).
-#' Refer to the package vignette on styles to learn more.
+#' this may be either the name of a built-in style (see
+#' `visOmopResults::plotStyle()`), or a path to a `.yml` file that defines a
+#' custom style. If `NULL`, the function will use the explicit default style,
+#' unless a global style option is set (see
+#' `visOmopResults::setGlobalPlotOptions()`), or a `⁠_brand.yml`⁠ file is
+#' present (in that order).
 #'
 #' @name style-plot
 #' @keywords internal

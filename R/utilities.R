@@ -168,7 +168,8 @@ validateType <- function(type, call = parent.frame()) {
   }
 
   # assert choice
-  omopgenerics::assertChoice(type, choices = tableType(), length = 1, call = call)
+  choices <- visOmopResults::tableType()
+  omopgenerics::assertChoice(type, choices = choices, length = 1, call = call)
 
   return(type)
 }

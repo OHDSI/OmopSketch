@@ -10,15 +10,15 @@ tableClinicalRecords(result, type = NULL, style = NULL)
 \item{result}{Output from summariseClinicalRecords().}
 
 \item{type}{Character string specifying the desired output table format. See
-\code{tableType()} for supported table types. If \code{type = NULL}, global options
-(set via \code{setGlobalTableOptions()}) will be used if available; otherwise, a
-default 'gt' table is created.}
+\code{visOmopResults::tableType()} for supported table types. If \code{type = NULL},
+global options (set via \code{visOmopResults::setGlobalTableOptions()}) will be
+used if available; otherwise, a default 'gt' table is created.}
 
 \item{style}{Defines the visual formatting of the table. This argument can be
 provided in one of the following ways:
 \enumerate{
 \item \strong{Pre-defined style}: Use the name of a built-in style (e.g., "darwin").
-See \code{tableStyle()} for available options.
+See \code{visOmopResults::tableStyle()} for available options.
 \item \strong{YAML file path}: Provide the path to an existing \code{.yml} file defining
 a new style.
 \item \strong{List of custome R code}: Supply a block of custom R code or a named
@@ -27,9 +27,8 @@ the selected table type.
 }
 
 If \code{style = NULL}, the function will use global options (see
-\code{setGlobalTableOptions()}) or an existing \verb{⁠_brand.yml}⁠ file (if found);
-otherwise, the default style is applied. For more details, see the Styles
-vignette on the package website.}
+\code{visOmopResults::setGlobalTableOptions()}) or an existing \verb{⁠_brand.yml}⁠ file
+(if found); otherwise, the default style is applied.}
 }
 \value{
 A formatted table object with the summarised data.
