@@ -57,8 +57,9 @@ Summarise missing data in omop tables
 \examples{
 \donttest{
 library(OmopSketch)
+library(omock)
 
-cdm <- mockOmopSketch(numberIndividuals = 100)
+cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
 result <- summariseMissingData(
   cdm = cdm,
@@ -66,6 +67,6 @@ result <- summariseMissingData(
   sample = 10000
 )
 
-PatientProfiles::mockDisconnect(cdm)
+cdmDisconnect(cdm)
 }
 }

@@ -27,15 +27,18 @@ This function allows you to visualise how key measures (such as number of record
 
 ## Create a mock cdm
 
-Let's start by loading essential packages and creating a mock CDM using `mockOmopSketch()`
+Let's start by loading essential packages and creating a mock CDM using the R package [omock](https://ohdsi.github.io/omock/)
 
 ```{r, warning=FALSE}
 library(duckdb)
+library(omock)
+library(omopgenerics)
 library(OmopSketch)
 library(dplyr)
 
 
-cdm <- mockOmopSketch()
+
+cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
 cdm
 ```
@@ -68,7 +71,7 @@ You can check whether a table was treated as an event or an episode table in the
 
 ```{r}
 summarisedResult |>
-  omopgenerics::addSettings(settingsColumn = "type") |>
+  addSettings(settingsColumn = "type") |>
   glimpse()
 ```
 
@@ -302,5 +305,5 @@ plotTrend(
 
 Finally, disconnect from the mock CDM.
 ```{r}
-CDMConnector::cdmDisconnect(cdm = cdm)
+cdmDisconnect(cdm = cdm)
 ```

@@ -11,8 +11,9 @@
 #' \donttest{
 #' library(dplyr)
 #' library(OmopSketch)
+#' library(omock)
 #'
-#' cdm <- mockOmopSketch()
+#' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 #'
 #' result <- summariseInObservation(
 #'   observationPeriod = cdm$observation_period,
@@ -25,7 +26,6 @@
 #'   filter(variable_name == "Person-days") |>
 #'   plotInObservation(facet = "sex", colour = "age_group")
 #'
-#' PatientProfiles::mockDisconnect(cdm)
 #' }
 plotInObservation <- function(result,
                               facet = NULL,

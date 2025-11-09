@@ -16,8 +16,9 @@
 #' @examples
 #' \donttest{
 #' library(OmopSketch)
+#' library(omock)
 #'
-#' cdm <- mockOmopSketch()
+#' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 #'
 #' cs <- list(sinusitis = c(4283893, 257012, 40481087, 4294548))
 #'
@@ -25,7 +26,7 @@
 #'
 #' results
 #'
-#' PatientProfiles::mockDisconnect(cdm)
+#' cdmDisconnect(cdm)
 #' }
 summariseConceptSetCounts <- function(cdm,
                                       conceptSet,

@@ -23,8 +23,9 @@ Create a visual table from a summariseInObservation() result.
 \donttest{
 library(OmopSketch)
 library(dplyr, warn.conflicts = FALSE)
+library(omock)
 
-cdm <- mockOmopSketch()
+cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
 result <- summariseInObservation(
   observationPeriod = cdm$observation_period,
@@ -37,6 +38,6 @@ result <- summariseInObservation(
 result |>
   tableInObservation()
 
-PatientProfiles::mockDisconnect(cdm)
+cdmDisconnect(cdm)
 }
 }

@@ -32,6 +32,8 @@ tableConceptIdCounts <- function(result,
   strata_cols <- omopgenerics::strataColumns(result)
   additional_cols <- omopgenerics::additionalColumns(result)
   additional_cols <- additional_cols[!grepl("source_concept", additional_cols)]
+
+
   # subset to result_type of interest
   result <- result |>
     omopgenerics::filterSettings(
@@ -145,10 +147,11 @@ tableConceptIdCounts <- function(result,
 
   rename_vec <- rename_vec[rename_vec %in% names(formatted_result)]
 
-  formatted_result %>%
-    {
-      if (length(c(strata_cols, additional_cols)) == 0) . else dplyr::arrange(., !!!rlang::syms(c(strata_cols, additional_cols)))
-    } |>
+  if (length(c(strata_cols, additional_cols)) > 0) {
+    formatted_result <- formatted_result %>%
+      dplyr::arrange(dplyr::across(dplyr::all_of(c(strata_cols, additional_cols))))
+  }
+  formatted_result |>
     dplyr::rename(!!!rename_vec) |>
     visOmopResults::formatHeader(
       header = c("Database name", "estimate_name"),

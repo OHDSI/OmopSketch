@@ -300,64 +300,6 @@ test_that("check summariseObservationPeriod works", {
   CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
-test_that("check it works with mockOmopSketch", {
-  skip_on_cran()
-  cdm <- mockOmopSketch(numberIndividuals = 5)
-
-  sop <- summariseObservationPeriod(cdm$observation_period)
-
-  # counts
-  expect_identical(sop$estimate_value[sop$variable_name == "Number records"], "5")
-  x <- dplyr::tibble(
-    strata_level = c("overall", "1st"),
-    variable_name = "Number subjects",
-    estimate_value = c("5", "5")
-  )
-  expect_identical(nrow(x), sop |> dplyr::inner_join(x, by = colnames(x)) |> nrow())
-
-  # records per person
-  expect_identical(
-    sop |>
-      dplyr::filter(
-        variable_name == "Records per person", estimate_name != "sd", !grepl("density", estimate_name)
-      ) |>
-      dplyr::pull("estimate_value"),
-    c(rep("1", 8))
-  )
-
-  # duration
-  expect_identical(
-    sop |>
-      dplyr::filter(variable_name == "Duration in days", estimate_name %in% c("min", "q25", "median", "q75", "max")) |>
-      dplyr::pull("estimate_value") |>
-      unique() |>
-      sort(),
-    as.character(
-      cdm$observation_period |>
-        dplyr::mutate(duration = observation_period_end_date - observation_period_start_date + 1) |>
-        dplyr::pull(duration) |>
-        as.character() |>
-        sort()
-    )
-  )
-
-  # days to next observation period
-  expect_identical(
-    sop |>
-      dplyr::filter(variable_name == "Days to next observation period") |> nrow(), 0L
-  )
-
-  # Check result type
-  omopgenerics::validateResultArgument(sop)
-
-  # table works
-  expect_no_error(tableObservationPeriod(sop))
-
-  # plot works
-  expect_no_error(plotObservationPeriod(sop))
-
-  CDMConnector::cdmDisconnect(cdm = cdm)
-})
 
 test_that("check summariseObservationPeriod strata works", {
   skip_on_cran()

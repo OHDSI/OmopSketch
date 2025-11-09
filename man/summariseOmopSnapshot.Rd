@@ -21,8 +21,9 @@ cdm_reference object.
 \examples{
 \donttest{
 library(OmopSketch)
+library(omock)
 
-cdm <- mockOmopSketch(numberIndividuals = 10)
+cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
 summariseOmopSnapshot(cdm = cdm)
 }

@@ -16,16 +16,17 @@
 #' @examples
 #' \donttest{
 #' library(OmopSketch)
+#' library(omock)
 #'
-#' cdm <- mockOmopSketch(numberIndividuals = 100)
+#' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 #'
 #' result <- databaseCharacteristics(
 #'   cdm = cdm,
+#'   sample = 100,
 #'   omopTableName = c("drug_exposure", "condition_occurrence"),
 #'   sex = TRUE, ageGroup = list(c(0, 50), c(51, 100)), interval = "years", conceptIdCounts = FALSE
 #' )
 #'
-#' PatientProfiles::mockDisconnect(cdm)
 #' }
 databaseCharacteristics <- function(cdm,
                                     omopTableName = c("visit_occurrence", "visit_detail",
@@ -83,7 +84,7 @@ databaseCharacteristics <- function(cdm,
   dateRangeCohort <- dateRange %||% c(NA, NA)
 
 
-  if (!is.null(ageGroup)) {
+  if (!is.null(ageGroup) & omopgenerics::sourceType(cdm) != "local") {
     cdm <- omopgenerics::bind(
       CohortConstructor::demographicsCohort(cdm, "population_1", sex = sexCohort),
       CohortConstructor::demographicsCohort(cdm, "population_2", sex = sexCohort, ageRange = ageGroup$age_group),

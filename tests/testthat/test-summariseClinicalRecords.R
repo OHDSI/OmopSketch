@@ -235,19 +235,6 @@ test_that("tableClinicalRecords() works", {
   CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
-test_that("summariseClinicalRecords() works with mock data", {
-  skip_on_cran()
-  # Load mock database ----
-  cdm <- mockOmopSketch()
-
-  # Check all tables work ----
-  expect_no_error(vo <- summariseClinicalRecords(cdm, "visit_occurrence"))
-  expect_no_error(summariseClinicalRecords(cdm, "drug_exposure"))
-  expect_no_error(summariseClinicalRecords(cdm, "procedure_occurrence"))
-  expect_no_error(summariseClinicalRecords(cdm, "death"))
-
-  CDMConnector::cdmDisconnect(cdm = cdm)
-})
 
 test_that("no tables created", {
   skip_on_cran()
@@ -279,7 +266,7 @@ test_that("no tables created", {
 test_that("record outside observaton period", {
   skip_on_cran()
 
-  cdm <- mockOmopSketch()
+  cdm <- cdmEunomia()
 
   drug_exposure <- dplyr::tibble(
     drug_exposure_id = c(1, 2, 3),

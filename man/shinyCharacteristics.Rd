@@ -43,8 +43,9 @@ Generate an interactive Shiny application that visualises the results obtained f
 \examples{
 \dontrun{
 library(OmopSketch)
+library(omock)
 
-cdm <- mockOmopSketch()
+cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 res <- databaseCharacteristics(cdm = cdm)
 shinyCharacteristics(result = res, directory = here::here())
 }

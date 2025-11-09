@@ -30,14 +30,16 @@ In this vignette, we will explore the *OmopSketch* functions designed to provide
 
 ## Create a mock cdm
 
-Let's see an example of its functionalities. To start with, we will load essential packages and create a mock cdm using the mockOmopSketch() database.
+Let's see an example of its functionalities. To start with, we will load essential packages and create a mock cdm using the R package [omock](https://ohdsi.github.io/omock/).
 
 ```{r, warning=FALSE}
 library(dplyr)
+library(duckdb)
 library(OmopSketch)
+library(omock)
 
 # Connect to mock database
-cdm <- mockOmopSketch()
+cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 ```
 
 # Summarise observation periods
@@ -118,7 +120,6 @@ summarisedResult <- summariseObservationPeriod(
 )
 
 summarisedResult |>
-  
   select(group_level, variable_name, variable_level, estimate_name, estimate_value)
 ```
 
@@ -195,5 +196,5 @@ plotObservationPeriod(summarisedResult,
 Finally, we can disconnect from the cdm.
 
 ```{r, warning=FALSE}
-CDMConnector::cdmDisconnect(cdm = cdm)
+cdmDisconnect(cdm = cdm)
 ```

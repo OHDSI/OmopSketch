@@ -27,8 +27,9 @@ Create a visual table from a summariseTrend() result.
 \donttest{
 library(OmopSketch)
 library(dplyr, warn.conflicts = FALSE)
+library(omock)
 
-cdm <- mockOmopSketch()
+cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
 summarisedResult <- summariseTrend(
   cdm = cdm,
@@ -41,6 +42,6 @@ summarisedResult <- summariseTrend(
 
 tableTrend(result = summarisedResult)
 
-CDMConnector::cdmDisconnect(cdm = cdm)
+cdmDisconnect(cdm = cdm)
 }
 }

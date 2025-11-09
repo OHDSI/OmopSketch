@@ -8,8 +8,9 @@
 #' \donttest{
 #' library(OmopSketch)
 #' library(dplyr, warn.conflicts = FALSE)
+#' library(omock)
 #'
-#' cdm <- mockOmopSketch()
+#' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 #'
 #' result <- summariseInObservation(
 #'   observationPeriod = cdm$observation_period,
@@ -22,7 +23,7 @@
 #' result |>
 #'   tableInObservation()
 #'
-#' PatientProfiles::mockDisconnect(cdm)
+#' cdmDisconnect(cdm)
 #' }
 tableInObservation <- function(result,
                                type = "gt") {

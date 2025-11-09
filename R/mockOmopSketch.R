@@ -1,5 +1,5 @@
 #' Creates a mock database to test OmopSketch package.
-#'
+#' `r lifecycle::badge('deprecated')`
 #' @param numberIndividuals Number of individuals to create in the cdm
 #' reference object.
 #' @param con deprecated.
@@ -14,22 +14,20 @@
 #'
 #' cdm <- mockOmopSketch(numberIndividuals = 100)
 #' cdm
-#'
-#' # to insert into a duck db connection
-#' library(duckdb)
-#' library(CDMConnector)
-#'
-#' con <- dbConnect(drv = duckdb())
-#' to <- dbSource(con = con, writeSchema = "main")
-#' cdm <- insertCdmTo(cdm = cdm, to = to)
-#'
-#' cdm
 #' }
 #'
 mockOmopSketch <- function(numberIndividuals = 100,
                            con = lifecycle::deprecated(),
                            writeSchema = lifecycle::deprecated(),
                            seed = lifecycle::deprecated()) {
+
+  lifecycle::deprecate_soft(
+    when = "1.0.0",
+    what = "OmopSketch::mockOmopSketch()",
+    with = "omock::mockCdmFromDataset()"
+  )
+
+
   # input check
   omopgenerics::assertNumeric(numberIndividuals, min = 1, length = 1)
   if (lifecycle::is_present(seed)) {

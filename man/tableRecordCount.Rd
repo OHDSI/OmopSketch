@@ -22,9 +22,9 @@ Create a visual table from a summariseRecordCount() result.
 \examples{
 \donttest{
 library(OmopSketch)
-library(dplyr, warn.conflicts = FALSE)
+library(omock)
 
-cdm <- mockOmopSketch()
+cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
 summarisedResult <- summariseRecordCount(
   cdm = cdm,
@@ -36,6 +36,6 @@ summarisedResult <- summariseRecordCount(
 
 tableRecordCount(result = summarisedResult)
 
-CDMConnector::cdmDisconnect(cdm = cdm)
+cdmDisconnect(cdm = cdm)
 }
 }

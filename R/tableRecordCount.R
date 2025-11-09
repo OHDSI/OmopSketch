@@ -7,9 +7,9 @@
 #' @examples
 #' \donttest{
 #' library(OmopSketch)
-#' library(dplyr, warn.conflicts = FALSE)
+#' library(omock)
 #'
-#' cdm <- mockOmopSketch()
+#' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 #'
 #' summarisedResult <- summariseRecordCount(
 #'   cdm = cdm,
@@ -21,7 +21,7 @@
 #'
 #' tableRecordCount(result = summarisedResult)
 #'
-#' CDMConnector::cdmDisconnect(cdm = cdm)
+#' cdmDisconnect(cdm = cdm)
 #' }
 tableRecordCount <- function(result,
                              type = "gt") {

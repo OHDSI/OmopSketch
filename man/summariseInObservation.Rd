@@ -47,8 +47,9 @@ time.
 \donttest{
 library(dplyr, warn.conflicts = FALSE)
 library(OmopSketch)
+library(omock)
 
-cdm <- mockOmopSketch()
+cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
 result <- summariseInObservation(
   observationPeriod = cdm$observation_period,
@@ -61,6 +62,6 @@ result <- summariseInObservation(
 result |>
   glimpse()
 
-PatientProfiles::mockDisconnect(cdm)
+cdmDisconnect(cdm)
 }
 }

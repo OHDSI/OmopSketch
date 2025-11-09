@@ -27,8 +27,9 @@ Create a ggplot2 plot from the output of summariseInObservation().
 \donttest{
 library(dplyr)
 library(OmopSketch)
+library(omock)
 
-cdm <- mockOmopSketch()
+cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
 result <- summariseInObservation(
   observationPeriod = cdm$observation_period,
@@ -41,6 +42,5 @@ result |>
   filter(variable_name == "Person-days") |>
   plotInObservation(facet = "sex", colour = "age_group")
 
-PatientProfiles::mockDisconnect(cdm)
 }
 }

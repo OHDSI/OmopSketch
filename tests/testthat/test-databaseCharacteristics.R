@@ -1,6 +1,6 @@
 test_that("databaseCharacteristics works", {
   skip_on_cran()
-  cdm <- mockOmopSketch()
+  cdm <- cdmEunomia()
 
   expect_no_error(databaseCharacteristics(cdm) |> suppressWarnings())
   expect_no_error(databaseCharacteristics(cdm, sex = TRUE) |> suppressWarnings())
@@ -19,7 +19,7 @@ test_that("databaseCharacteristics works", {
 
 test_that("shinyCharacteristics works", {
   skip_on_cran()
-  cdm <- mockOmopSketch()
+  cdm <- cdmEunomia()
   dir <- tempdir()
   expect_no_error(result <- databaseCharacteristics(cdm, sex = TRUE, conceptIdCounts = TRUE) |> suppressWarnings())
   expect_false("OmopSketchShiny" %in% list.files(dir))
@@ -39,7 +39,7 @@ test_that("shinyCharacteristics works", {
 
 test_that("sample works", {
 
- cdm <- mockOmopSketch()
+ cdm <- cdmEunomia()
  expect_no_error(x <- databaseCharacteristics(cdm = cdm, sample = 20L, conceptIdCounts = TRUE))
  expect_equal(x |> omopgenerics::filterSettings(grepl("snapshot",result_type)) |> dplyr::filter(.data$estimate_name == "person_count") |> dplyr::pull(.data$estimate_value), "20")
  expect_equal(x |> omopgenerics::filterSettings(grepl("characteristics",result_type)) |> dplyr::filter(.data$variable_name ==  "Number subjects") |> dplyr::pull(.data$estimate_value), "20")

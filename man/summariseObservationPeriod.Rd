@@ -62,14 +62,15 @@ summarised_result object.
 \donttest{
 library(OmopSketch)
 library(dplyr, warn.conflicts = FALSE)
+library(omock)
 
-cdm <- mockOmopSketch(numberIndividuals = 100)
+cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
 result <- summariseObservationPeriod(cdm = cdm)
 
 result |>
   glimpse()
 
-PatientProfiles::mockDisconnect(cdm)
+cdmDisconnect(cdm)
 }
 }
