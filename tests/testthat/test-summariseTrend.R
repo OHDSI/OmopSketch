@@ -15,7 +15,7 @@ test_that("summariseTrend - episode works", {
     dplyr::filter(additional_level == "1909-01-01 to 1909-12-31", estimate_name == "count") |>
     dplyr::pull("estimate_value") |>
     as.numeric()
-  y <- cdm$observation_period %>%
+  y <- cdm$observation_period |>
     getYear(date = "observation_period_start_date", name = "start_year") |>
     getYear(date = "observation_period_end_date", name = "end_year") |>
     dplyr::filter(start_year <= 1909, end_year >= 1909) |>
@@ -33,7 +33,7 @@ test_that("summariseTrend - episode works", {
     dplyr::filter(additional_level == c("1936-01-01 to 1936-12-31"), estimate_name == "count") |>
     dplyr::pull("estimate_value") |>
     as.numeric()
-  y <- cdm$drug_exposure %>%
+  y <- cdm$drug_exposure |>
     getYear(date = "drug_exposure_start_date", name = "start") |>
     getYear(date = "drug_exposure_end_date", name = "end") |>
     dplyr::filter((.data$start < 1936 & .data$end >= 1936) |
@@ -47,7 +47,7 @@ test_that("summariseTrend - episode works", {
     dplyr::filter(additional_level == c("1936-01-01 to 1936-12-31"), estimate_name == "count") |>
     dplyr::pull("estimate_value") |>
     as.numeric()
-  y <- cdm$observation_period %>%
+  y <- cdm$observation_period |>
     getYear(date = "observation_period_start_date", name = "start") |>
     getYear(date = "observation_period_end_date", name = "end") |>
     dplyr::filter((.data$start < 1936 & .data$end >= 1936) |
@@ -61,7 +61,7 @@ test_that("summariseTrend - episode works", {
     dplyr::filter(additional_level == c("1996-01-01 to 1996-12-31"), estimate_name == "count") |>
     dplyr::pull("estimate_value") |>
     as.numeric()
-  y <- cdm$observation_period %>%
+  y <- cdm$observation_period |>
     getYear(date = "observation_period_start_date", name = "start") |>
     getYear(date = "observation_period_end_date", name = "end") |>
     dplyr::filter((.data$start < 1996 & .data$end >= 1996) |
@@ -76,7 +76,7 @@ test_that("summariseTrend - episode works", {
     dplyr::filter(additional_level == c("1998-01-01 to 1998-12-31"), estimate_name == "count") |>
     dplyr::pull("estimate_value") |>
     as.numeric()
-  y <- cdm$condition_occurrence %>%
+  y <- cdm$condition_occurrence |>
     getYear(date = "condition_start_date", name = "start") |>
     getYear(date = "condition_end_date", name = "end") |>
     dplyr::filter((.data$start < 1998 & .data$end >= 1998) |
@@ -91,7 +91,7 @@ test_that("summariseTrend - episode works", {
     dplyr::filter(additional_level == "1942-03-01 to 1942-03-31", estimate_name == "count") |>
     dplyr::pull("estimate_value") |>
     as.numeric()
-  y <- cdm$observation_period %>%
+  y <- cdm$observation_period |>
     dplyr::filter(
       (observation_period_start_date < as.Date("1942-03-01") & observation_period_end_date >= as.Date("1942-03-01")) |
         (observation_period_start_date >= as.Date("1942-03-01") & observation_period_start_date <= as.Date("1942-03-31"))
@@ -105,7 +105,7 @@ test_that("summariseTrend - episode works", {
     dplyr::filter(additional_level == "1942-03-01 to 1942-03-31", estimate_name == "count") |>
     dplyr::pull("estimate_value") |>
     as.numeric()
-  y <- cdm$observation_period %>%
+  y <- cdm$observation_period |>
     dplyr::filter(
       (observation_period_start_date < as.Date("1942-03-01") & observation_period_end_date >= as.Date("1942-03-01")) |
         (observation_period_start_date >= as.Date("1942-03-01") & observation_period_start_date <= as.Date("1942-03-31"))
@@ -271,7 +271,7 @@ test_that("check sex argument works", {
     dplyr::filter(strata_level == "Male", additional_level == "1918-01-01 to 1918-12-31", estimate_name == "percentage") |>
     dplyr::pull(estimate_value)
   y <- cdm$observation_period |>
-    dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") %>%
+    dplyr::inner_join(cdm[["person"]] |> dplyr::select("person_id"), by = "person_id") |>
     PatientProfiles::addSexQuery() |>
     dplyr::filter(sex == "Male") |>
     dplyr::filter(observation_period_start_date >= as.Date("1918-01-01") & observation_period_start_date <= as.Date("1918-12-31")) |>
@@ -300,7 +300,7 @@ test_that("check ageGroup argument works", {
     dplyr::filter(observation_period_start_date < as.Date("1928-01-01") & observation_period_end_date >= as.Date("1928-01-01") |
       (observation_period_start_date >= as.Date("1928-01-01") & observation_period_start_date <= as.Date("1928-12-31"))) |>
     dplyr::mutate("start" = as.Date("1928-01-01"), "end" = as.Date("1928-12-31")) |>
-    PatientProfiles::addAgeQuery(indexDate = "start", ageName = "age_start") %>%
+    PatientProfiles::addAgeQuery(indexDate = "start", ageName = "age_start") |>
     dplyr::mutate(age_end = age_start + 10) |>
     dplyr::filter((age_end <= 20 & age_end >= 0) | (age_start >= 0 & age_start <= 20)) |>
     dplyr::tally() |>
@@ -315,7 +315,7 @@ test_that("check ageGroup argument works", {
   y <- cdm$observation_period |>
     dplyr::filter(observation_period_start_date >= as.Date("1928-01-01") & observation_period_start_date <= as.Date("1928-12-31")) |>
     dplyr::mutate("start" = as.Date("1928-01-01"), "end" = as.Date("1928-12-31")) |>
-    PatientProfiles::addAgeQuery(indexDate = "start", ageName = "age_start") %>%
+    PatientProfiles::addAgeQuery(indexDate = "start", ageName = "age_start") |>
     dplyr::mutate(age_end = age_start + 10) |>
     dplyr::filter((age_end <= 20 & age_end >= 0) | (age_start >= 0 & age_start <= 20)) |>
     dplyr::tally() |>
@@ -333,7 +333,7 @@ test_that("check ageGroup argument works", {
     dplyr::filter(observation_period_start_date < as.Date("1928-01-01") & observation_period_end_date >= as.Date("1928-01-01") |
       (observation_period_start_date >= as.Date("1928-01-01") & observation_period_start_date <= as.Date("1928-12-31"))) |>
     dplyr::mutate("start" = as.Date("1928-01-01"), "end" = as.Date("1928-12-31")) |>
-    PatientProfiles::addAgeQuery(indexDate = "start", ageName = "age_start") %>%
+    PatientProfiles::addAgeQuery(indexDate = "start", ageName = "age_start") |>
     dplyr::mutate(age_end = age_start + 10) |>
     dplyr::filter((age_end <= 20 & age_end >= 0) | (age_start >= 0 & age_start <= 20)) |>
     dplyr::summarise(dplyr::n_distinct(person_id)) |>
@@ -349,7 +349,7 @@ test_that("check ageGroup argument works", {
   y <- cdm$observation_period |>
     dplyr::filter(observation_period_start_date >= as.Date("1928-01-01") & observation_period_start_date <= as.Date("1928-12-31")) |>
     dplyr::mutate("start" = as.Date("1928-01-01"), "end" = as.Date("1928-12-31")) |>
-    PatientProfiles::addAgeQuery(indexDate = "start", ageName = "age_start") %>%
+    PatientProfiles::addAgeQuery(indexDate = "start", ageName = "age_start") |>
     dplyr::mutate(age_end = age_start + 10) |>
     dplyr::filter((age_end <= 20 & age_end >= 0) | (age_start >= 0 & age_start <= 20)) |>
     dplyr::summarise(dplyr::n_distinct(person_id)) |>
@@ -374,11 +374,11 @@ test_that("check person-days output works", {
   y <- cdm$observation_period |>
     dplyr::filter(observation_period_start_date < as.Date("1970-01-01") & observation_period_end_date >= as.Date("1970-01-01") |
       (observation_period_start_date >= as.Date("1970-01-01") & observation_period_start_date <= as.Date("1970-12-31"))) |>
-    dplyr::mutate("start_date" = as.Date("1970-01-01"), "end_date" = as.Date("1970-12-31")) %>%
+    dplyr::mutate("start_date" = as.Date("1970-01-01"), "end_date" = as.Date("1970-12-31")) |>
     dplyr::mutate(
       "start_date" = pmax(start_date, observation_period_start_date, na.rm = TRUE),
       "end_date" = pmin(end_date, observation_period_end_date, na.rm = TRUE)
-    ) %>%
+    ) |>
     datediffDays(start = "start_date", end = "end_date", name = "days", offset = 1) |>
     dplyr::summarise(n = sum(days, na.rm = TRUE)) |>
     dplyr::pull("n") |>
@@ -396,11 +396,11 @@ test_that("check person-days output works", {
   y <- cdm$observation_period |>
     dplyr::filter(observation_period_start_date < as.Date("1964-01-01") & observation_period_end_date >= as.Date("1964-01-01") |
       (observation_period_start_date >= as.Date("1964-01-01") & observation_period_start_date <= as.Date("1964-12-31"))) |>
-    dplyr::mutate("start_date" = as.Date("1964-01-01"), "end_date" = as.Date("1964-12-31")) %>%
+    dplyr::mutate("start_date" = as.Date("1964-01-01"), "end_date" = as.Date("1964-12-31")) |>
     dplyr::mutate(
       "start_date" = pmax(start_date, observation_period_start_date, na.rm = TRUE),
       "end_date" = pmin(end_date, observation_period_end_date, na.rm = TRUE)
-    ) %>%
+    ) |>
     datediffDays(start = "start_date", end = "end_date", name = "days", offset = 1) |>
     dplyr::summarise(n = sum(days, na.rm = TRUE)) |>
     dplyr::pull("n") |>
@@ -710,7 +710,7 @@ test_that("overall time interval work", {
     dplyr::tally() |>
     dplyr::pull(.data$n)
 
-  person <- cdm$observation_period %>%
+  person <- cdm$observation_period |>
     dplyr::distinct(.data$person_id) |>
     dplyr::tally() |>
     dplyr::pull(.data$n)

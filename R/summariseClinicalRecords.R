@@ -122,13 +122,13 @@ summariseClinicalRecords <- function(cdm,
     omopTable <- dplyr::ungroup(cdm[[table]])
     if (omopgenerics::isTableEmpty(omopTable)) {
       cli::cli_warn("{table} is empty.")
-      return(tibble::tibble())
+      return(dplyr::tibble())
     }
 
     # restrict study period
     omopTable <- restrictStudyPeriod(omopTable, dateRange)
     if (is.null(omopTable)) {
-      return(tibble::tibble())
+      return(dplyr::tibble())
     }
     cli::cli_inform(c("i" = "Adding variables of interest to {.pkg {table}}."))
     start_date_name <- omopgenerics::omopColumns(table, field = "start_date")

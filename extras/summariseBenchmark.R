@@ -223,7 +223,7 @@ for (nm in cdms) {
     for (fun in c("summariseCompute", "summariseCollect", "summariseOneByOne", "summariseOneByOneId", "summariseOneByOneOnlyId")) {
       t0 <- Sys.time()
       results[[paste0("mock_", nm, "_", fun)]] <- "{fun}(x = res, strata = strata)" |>
-        glue::glue() |>
+        stringr::str_glue() |>
         rlang::parse_expr() |>
         rlang::eval_tidy()
       result <- addTask(result, nm, paste(fun, "mock"), t0)
@@ -249,7 +249,7 @@ for (nm in cdms) {
   for (fun in c("summariseCompute", "summariseCollect", "summariseOneByOne", "summariseOneByOneId", "summariseOneByOneOnlyId")) {
     t0 <- Sys.time()
     results[[paste0("cond_", nm, "_", fun)]] <- "{fun}(x = res, strata = strata)" |>
-      glue::glue() |>
+      stringr::str_glue() |>
       rlang::parse_expr() |>
       rlang::eval_tidy()
     result <- addTask(result, nm, paste(fun, "condition_occurrence"), t0)
@@ -274,7 +274,7 @@ for (nm in cdms) {
     for (fun in c("summariseCompute", "summariseCollect", "summariseOneByOne", "summariseOneByOneId", "summariseOneByOneOnlyId")) {
       t0 <- Sys.time()
       results[[paste0("condcomp_", nm, "_", fun)]] <- "{fun}(x = res, strata = strata)" |>
-        glue::glue() |>
+        stringr::str_glue() |>
         rlang::parse_expr() |>
         rlang::eval_tidy()
       result <- addTask(result, nm, paste(fun, "condition_occurrence computed"), t0)

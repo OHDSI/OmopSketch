@@ -30,7 +30,7 @@ summariseCountsInternal <- function(x, strata, counts) {
 }
 summariseMissingInternal <- function(x, strata, columns, cdm, table) {
   q_na <- "sum(as.integer(is.na(.data${columns})), na.rm = TRUE)" |>
-    glue::glue() |>
+    stringr::str_glue() |>
     rlang::set_names(columns) |>
     rlang::parse_exprs()
 
@@ -38,7 +38,7 @@ summariseMissingInternal <- function(x, strata, columns, cdm, table) {
     dplyr::filter(.data$cdm_table_name == table & .data$cdm_field_name %in% columns[grepl("_id$", columns)] & .data$cdm_datatype == "integer") |>
     dplyr::pull(.data$cdm_field_name)
   q_zero <- "sum(as.integer(.data${columns_zero}==0), na.rm = TRUE)" |>
-    glue::glue() |>
+    stringr::str_glue() |>
     rlang::set_names(columns_zero) |>
     rlang::parse_exprs()
 
@@ -124,7 +124,7 @@ summariseMissingInternal <- function(x, strata, columns, cdm, table) {
           "estimate_value"
         )))
     } else {
-      zero <- tibble::tibble()
+      zero <- dplyr::tibble()
     }
     dplyr::bind_rows(na, zero)
   }) |>
@@ -189,7 +189,7 @@ addSexAgeGroup <- function(x, sex, ageGroup, indexDate) {
 
   if (age) {
     qAge <- ageGroupQuery(ageGroup)
-    x <- x %>%
+    x <- x |>
       datediffYear(start = "birth_date", end = indexDate, name = "xyz_age") |>
       dplyr::mutate(!!!qAge) |>
       dplyr::select(!c("birth_date", "xyz_age"))

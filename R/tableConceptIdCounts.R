@@ -148,7 +148,7 @@ tableConceptIdCounts <- function(result,
   rename_vec <- rename_vec[rename_vec %in% names(formatted_result)]
 
   if (length(c(strata_cols, additional_cols)) > 0) {
-    formatted_result <- formatted_result %>%
+    formatted_result <- formatted_result |>
       dplyr::arrange(dplyr::across(dplyr::all_of(c(strata_cols, additional_cols))))
   }
   formatted_result |>

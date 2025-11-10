@@ -143,7 +143,7 @@ sampleCdm <- function(cdm, tables, sample, call = parent.frame()){
     return(cdm)
   }
   cdm <- omopgenerics::insertTable(cdm = cdm, name = "person_sample",
-                                   table = tibble::tibble("person_id" = sort(unique(ids))))
+                                   table = dplyr::tibble("person_id" = sort(unique(ids))))
 
   for (table in tables) {
     cdm[[table]] <- cdm[[table]] |>
