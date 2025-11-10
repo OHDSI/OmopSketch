@@ -1,4 +1,4 @@
-#' Summarise the person table
+#' Summarise person table
 #'
 #' @param cdm A cdm_reference object.
 #'

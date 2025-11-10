@@ -39,9 +39,9 @@ cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 cdm
 ```
 
-# Summarise database characteristics
+# Database characteristics
 
-## Summarise Database Characteristics
+## Summarise Characteristics
 
 The `databaseCharacteristics()` function provides a comprehensive overview of the Common Data Model (CDM). It returns a [summarised result](https://darwin-eu-dev.github.io/omopgenerics/articles/summarised_result.html) combining several characterisation components:
 

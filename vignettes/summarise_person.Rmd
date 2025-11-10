@@ -41,7 +41,7 @@ cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 cdm
 ```
 
-# Summarise the person table
+# Summarise person table
 Run summarisePerson() to compute basic summaries for the person table. The function will return a [summarised_result](https://darwin-eu.github.io/omopgenerics/articles/summarised_result.html).
 
 ```{r}

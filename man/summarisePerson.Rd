@@ -2,7 +2,7 @@
 % Please edit documentation in R/summarisePerson.R
 \name{summarisePerson}
 \alias{summarisePerson}
-\title{Summarise the person table}
+\title{Summarise person table}
 \usage{
 summarisePerson(cdm)
 }
@@ -13,7 +13,7 @@ summarisePerson(cdm)
 A summarised_result object with the summary of the person table.
 }
 \description{
-Summarise the person table
+Summarise person table
 }
 \examples{
 \donttest{

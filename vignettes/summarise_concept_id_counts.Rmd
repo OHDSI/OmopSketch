@@ -41,7 +41,7 @@ cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 cdm
 ```
 
-# Summarise concept id counts
+# Summarise concept level counts
 
 We now use the `summariseConceptIdCounts()` function from the OmopSketch package to retrieve counts for each concept id and name, as well as for each source concept id and name, across the clinical tables.
 
