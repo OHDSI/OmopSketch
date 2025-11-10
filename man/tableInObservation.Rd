@@ -29,7 +29,7 @@ cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
 result <- summariseInObservation(
   observationPeriod = cdm$observation_period,
-  interval = "months",
+  interval = "years",
   output = c("person-days", "record"),
   ageGroup = list("<=60" = c(0, 60), ">60" = c(61, Inf)),
   sex = TRUE
