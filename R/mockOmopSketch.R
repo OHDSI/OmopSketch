@@ -20,16 +20,13 @@ mockOmopSketch <- function(numberIndividuals = 100,
                            con = lifecycle::deprecated(),
                            writeSchema = lifecycle::deprecated(),
                            seed = lifecycle::deprecated()) {
+  rlang::check_installed("CDMConnector")
 
   lifecycle::deprecate_soft(
     when = "1.0.0",
     what = "OmopSketch::mockOmopSketch()",
     with = "omock::mockCdmFromDataset()"
   )
-
-
-  # input check
-  omopgenerics::assertNumeric(numberIndividuals, min = 1, length = 1)
   if (lifecycle::is_present(seed)) {
     lifecycle::deprecate_soft(
       when = "1.0.0",
@@ -52,6 +49,9 @@ mockOmopSketch <- function(numberIndividuals = 100,
       with = "omopgenerics::insertCdmTo()"
     )
   }
+
+  # input check
+  omopgenerics::assertNumeric(numberIndividuals, min = 1, length = 1)
 
   cdm <- omock::mockCdmReference(cdmName = "mockOmopSketch", vocabularySet = "GiBleed") |>
     omock::mockPerson(nPerson = numberIndividuals) |>
@@ -94,7 +94,7 @@ checkColumns <- function(cdm_local) {
       dplyr::filter(!(.data$cdm_field_name %in% colnames(cdm_local[[table]])))
 
     if (nrow(missing_cols) > 0) {
-      missing_tbl <- tibble::tibble(
+      missing_tbl <- dplyr::tibble(
         !!!rlang::set_names(
           lapply(missing_cols$cdm_datatype, function(datatype) {
             eval(parse(text = datatype))

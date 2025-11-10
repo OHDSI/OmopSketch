@@ -212,7 +212,7 @@ warnUnsupported <- function(domains) {
     dplyr::filter(!.data$domain_id %in% .env$domainsTibble$domain_id)
   if (nrow(unsupported) > 0) {
     c("Not supported domain: {.pkg [unsupported$domain_id]} [unsupported$n] concepts.") |>
-      glue::glue(.open = "[", .close = "]") |>
+      stringr::str_glue(.open = "[", .close = "]") |>
       rlang::set_names("x") |>
       cli::cli_warn()
   }

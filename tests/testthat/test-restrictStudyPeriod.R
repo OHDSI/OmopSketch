@@ -35,7 +35,7 @@ test_that("restrictStudyPeriod works", {
     x <- restrictStudyPeriod(cdm$observation_period, dateRange = dateRange)
   )
 
-  y <- tibble::tibble(
+  y <- dplyr::tibble(
     observation_period_id = c(1, 2, 9) |> as.integer(),
     person_id = c(1, 1, 5) |> as.integer(),
     observation_period_start_date = as.Date(c(

@@ -113,7 +113,7 @@ summariseObservationPeriod <- function(cdm,
   obs <- observationPeriodStrata |>
     dplyr::group_by(.data$person_id, dplyr::across(dplyr::any_of(c("sex", "age_group")))) |>
     dplyr::arrange(.data$observation_period_start_date) |>
-    dplyr::mutate("next_start" = dplyr::lead(.data$observation_period_start_date)) %>%
+    dplyr::mutate("next_start" = dplyr::lead(.data$observation_period_start_date)) |>
     datediffDays(start = "observation_period_start_date", end = "observation_period_end_date", name = "duration", offset = 1) |>
     datediffDays(start = "observation_period_end_date", end = "next_start", name = "next_obs") |>
     dplyr::mutate("id" = as.integer(dplyr::row_number())) |>

@@ -79,7 +79,7 @@ summariseMissingData <- function(cdm,
     strata <- list(c(character(),"sex"[sex]))
     result_person <- summariseMissingDataFromTable(omopTable = cdm[["person"]], table = "person", cdm = cdm, col = col, dateRange = NULL, sex = sex, ageGroup = NULL, interval = "overall", strata = strata)
   } else {
-    result_person <- tibble::tibble()
+    result_person <- dplyr::tibble()
   }
 
   if (!rlang::is_empty(omopTableName)) {
@@ -92,7 +92,7 @@ summariseMissingData <- function(cdm,
     }) |>
       purrr::compact()
   } else {
-    result <- tibble::tibble()
+    result <- dplyr::tibble()
   }
 
   result <- purrr::compact(list(result, result_person))

@@ -125,7 +125,7 @@ summariseEventTrend <- function(cdm, omopTableName, output, interval, sex, ageGr
     output <- output[output != "person-days"]
   }
   if (rlang::is_empty(output)) {
-    return(tibble::tibble())
+    return(dplyr::tibble())
   }
   result <- purrr::map(omopTableName, \(table) {
     strata <- c(list(character()), omopgenerics::combineStrata(strataCols(
@@ -141,7 +141,7 @@ summariseEventTrend <- function(cdm, omopTableName, output, interval, sex, ageGr
       restrictStudyPeriod(dateRange = dateRange)
 
     if (is.null(omopTable)) {
-      return(tibble::tibble())
+      return(dplyr::tibble())
     }
 
     denominator <- getDenominator(omopTable = omopTable, output = output)
@@ -195,7 +195,7 @@ summariseEpisodeTrend <- function(cdm, omopTableName, output, interval, sex, age
       trimStudyPeriod(dateRange = dateRange)
 
     if (is.null(omopTable)) {
-      return(tibble::tibble())
+      return(dplyr::tibble())
     }
 
 
@@ -308,7 +308,7 @@ summariseEpisodeTrend <- function(cdm, omopTableName, output, interval, sex, age
     }
 
     if (rlang::is_empty(res)) {
-      return(tibble::tibble())
+      return(dplyr::tibble())
     }
 
     res <- res |>
@@ -368,14 +368,14 @@ summariseTrendInternal <- function(x, output, strata) {
   }
 
   if ("person-days" %in% output) {
-    res$personDays <- x %>%
+    res$personDays <- x |>
       datediffDays(start = "start_date", end = "end_date", name = "person_days", offset = 1) |>
       summariseSumInternal(strata = strata, variable = "person_days") |>
       dplyr::mutate(variable_name = "Person-days")
   }
 
   if (rlang::is_empty(res)) {
-    return(tibble::tibble())
+    return(dplyr::tibble())
   }
 
   res <- res |>
@@ -391,7 +391,7 @@ getIntervalTibbleForObservation <- function(omopTable, start_date_name, end_date
   startDate <- getOmopTableStartDate(omopTable, start_date_name)
   endDate <- getOmopTableEndDate(omopTable, end_date_name)
 
-  tibble::tibble(
+  dplyr::tibble(
     "group" = seq.Date(startDate, endDate, .env$interval)
   ) |>
     dplyr::rowwise() |>
@@ -442,13 +442,13 @@ getOmopTableEndDate <- function(omopTable, date) {
 getDenominator <- function(omopTable, output) {
   cdm <- omopgenerics::cdmReference(omopTable)
 
-  denominator <- tibble::tibble(
+  denominator <- dplyr::tibble(
     "denominator" = c(numeric()),
     "variable_name" = c(character())
   )
   if ("record" %in% output) {
     denominator <- denominator |>
-      dplyr::bind_rows(tibble::tibble(
+      dplyr::bind_rows(dplyr::tibble(
         "denominator" = c(omopTable |>
                             dplyr::ungroup() |>
                             dplyr::summarise("n" = dplyr::n()) |>
@@ -459,7 +459,7 @@ getDenominator <- function(omopTable, output) {
   }
   if ("person" %in% output) {
     denominator <- denominator |>
-      dplyr::bind_rows(tibble::tibble(
+      dplyr::bind_rows(dplyr::tibble(
         "denominator" = c(cdm[["person"]] |>
                             dplyr::ungroup() |>
                             dplyr::select("person_id") |>
@@ -481,7 +481,7 @@ getDenominator <- function(omopTable, output) {
       as.numeric()
 
     denominator <- denominator |>
-      dplyr::bind_rows(tibble::tibble(
+      dplyr::bind_rows(dplyr::tibble(
         "denominator" = y,
         "variable_name" = "Person-days"
       ))
@@ -489,7 +489,7 @@ getDenominator <- function(omopTable, output) {
 
   if ("sex" %in% output) {
     denominator <- denominator |>
-      dplyr::bind_rows(tibble::tibble(
+      dplyr::bind_rows(dplyr::tibble(
         "denominator" = c(omopTable |>
                             dplyr::ungroup() |>
                             dplyr::inner_join(cdm[["person"]] |>
