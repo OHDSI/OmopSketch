@@ -63,6 +63,7 @@ overlapping time intervals between start and end dates.
 \donttest{
 library(OmopSketch)
 library(omock)
+library(dplyr)
 
 cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
@@ -77,7 +78,7 @@ summarisedResult <- summariseTrend(
 )
 
 summarisedResult |>
-  dplyr::glimpse()
+  glimpse()
 
 cdmDisconnect(cdm = cdm)
 }

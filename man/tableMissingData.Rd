@@ -27,6 +27,7 @@ Create a visual table from a summariseMissingData() result.
 \donttest{
 library(OmopSketch)
 library(omock)
+
 cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
 result <- summariseMissingData(

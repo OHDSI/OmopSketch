@@ -34,7 +34,6 @@ Let’s load the required packages and create a mock CDM using the R package [om
 library(dplyr)
 library(OmopSketch)
 library(omock)
-library(duckdb)
 
 # Connect to mock database
 cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb") 
@@ -47,7 +46,8 @@ Run summarisePerson() to compute basic summaries for the person table. The funct
 ```{r}
 result <- summarisePerson(cdm = cdm)
 
-result |> glimpse()
+result |> 
+  glimpse()
 ```
 ## What the function reports
 

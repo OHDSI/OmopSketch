@@ -36,7 +36,6 @@ Let's see an example of its functionalities. To start with, we will load essenti
 library(dplyr)
 library(OmopSketch)
 library(omock)
-library(duckdb)
 
 # Connect to mock database
 cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
@@ -49,9 +48,12 @@ cdm
 Let's now use `summariseClinicalTables()`from the OmopSketch package to help us have an overview of one of the clinical tables of the cdm (i.e., **condition_occurrence**).
 
 ```{r, warning=FALSE}
-summarisedResult <- summariseClinicalRecords(cdm, omopTableName = "condition_occurrence")
+summarisedResult <- summariseClinicalRecords(
+  cdm = cdm, 
+  omopTableName = "condition_occurrence"
+)
 
-summarisedResult |> print()
+summarisedResult
 ```
 
 Notice that the output is in the [summarised result](https://darwin-eu.github.io/omopgenerics/articles/summarised_result.html) format.
@@ -59,7 +61,8 @@ Notice that the output is in the [summarised result](https://darwin-eu.github.io
 We can use the arguments to specify which statistics we want to perform. For example, use the argument `recordsPerPerson` to indicate which estimates you are interested regarding the number of records per person.
 
 ```{r, warning=FALSE}
-summarisedResult <- summariseClinicalRecords(cdm,
+summarisedResult <- summariseClinicalRecords(
+  cdm = cdm,
   omopTableName = "condition_occurrence",
   recordsPerPerson = c("mean", "sd", "q05", "q95")
 )
@@ -79,9 +82,10 @@ This assessment provides information such as:
 - The presence of `person_id` values that do not exist in the `person` table.
 
 ```{r, warning=FALSE}
-summarisedResult <- summariseClinicalRecords(cdm,
+summarisedResult <- summariseClinicalRecords(
+  cdm = cdm,
   omopTableName = "condition_occurrence",
-  recordsPerPerson = c(), 
+  recordsPerPerson = NULL, 
   conceptSummary = FALSE,
   missing = FALSE,
   quality = TRUE
@@ -100,9 +104,10 @@ When the argument `conceptSummary = TRUE` is set, the results will also include 
 
 
 ```{r, warning=FALSE}
-summarisedResult <- summariseClinicalRecords(cdm,
+summarisedResult <- summariseClinicalRecords(
+  cdm = cdm,
   omopTableName = "drug_exposure",
-  recordsPerPerson = c(), 
+  recordsPerPerson = NULL, 
   conceptSummary = TRUE,
   missing = FALSE,
   quality = FALSE
@@ -118,9 +123,10 @@ When the argument `missing = TRUE` is set, the results will include a summary of
 This output is analogous to the results produced by the OmopSketch function `summariseMissingData()`.
 
 ```{r, warning=FALSE}
-summarisedResult <- summariseClinicalRecords(cdm,
+summarisedResult <- summariseClinicalRecords(
+  cdm = cdm,
   omopTableName = "condition_occurrence",
-  recordsPerPerson = c(), 
+  recordsPerPerson = NULL, 
   conceptSummary = FALSE,
   missing = TRUE,
   quality = FALSE
@@ -133,7 +139,8 @@ summarisedResult |>
 It is also possible to stratify the results by sex and age groups:
 
 ```{r, warning=FALSE}
-summarisedResult <- summariseClinicalRecords(cdm,
+summarisedResult <- summariseClinicalRecords(
+  cdm = cdm,
   omopTableName = "condition_occurrence",
   recordsPerPerson = c("mean", "sd", "q05", "q95"),
   quality = TRUE,
@@ -151,7 +158,8 @@ Notice that, by default, the "overall" group will also be included, as well as c
 Also, see that the analysis can be conducted for multiple OMOP tables at the same time:
 
 ```{r, warning=FALSE}
-summarisedResult <- summariseClinicalRecords(cdm,
+summarisedResult <- summariseClinicalRecords(
+  cdm = cdm,
   omopTableName = c("visit_occurrence", "drug_exposure"),
   recordsPerPerson = c("mean", "sd"),
   quality = FALSE,
@@ -168,12 +176,14 @@ We can also filter the clinical table to a specific time window by setting the `
 
 ```{r}
 
-summarisedResult <- summariseClinicalRecords(cdm, 
-                                             omopTableName ="drug_exposure",
-                                             dateRange = as.Date(c("1990-01-01", "2010-01-01"))) 
+summarisedResult <- summariseClinicalRecords(
+  cdm = cdm, 
+  omopTableName ="drug_exposure",
+  dateRange = as.Date(c("1990-01-01", "2010-01-01"))
+) 
 
 summarisedResult |>
-  omopgenerics::settings() |>
+  settings() |>
   glimpse()
 ```
 
