@@ -20,9 +20,6 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-
-library(CDMConnector)
-requireEunomia()
 ```
 
 In this vignette, we explore how *OmopSketch* functions can serve as a valuable tool for summarising missingness in databases containing electronic health records mapped to the OMOP Common Data Model.
@@ -34,9 +31,7 @@ To illustrate the package’s functionality, we begin by loading the required pa
 ```{r, warning=FALSE}
 library(dplyr)
 library(omock)
-library(duckdb)
 library(OmopSketch)
-
 
 cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
@@ -50,7 +45,8 @@ A common first step in data quality assessment is to identify missing values. In
 You can use the `summariseMissingData()` function to summarise missingness across the clinical tables in the CDM:
 
 ```{r, warning=FALSE}
-result_missingData <- summariseMissingData(cdm,
+result_missingData <- summariseMissingData(
+  cdm = cdm,
   omopTableName = "observation_period"
 )
 
@@ -137,7 +133,8 @@ result_missingData <- summariseMissingData(
 You can present these results using the function `tableMissingData()`.
 
 ```{r, warning = FALSE}
-result_missingData <- summariseMissingData(cdm,
+result_missingData <- summariseMissingData(
+  cdm = cdm,
   omopTableName = c("condition_occurrence", "drug_exposure", "procedure_occurrence"),
   sex = TRUE,
   ageGroup = list(c(0, 17), c(18, 64), c(65, 150)),
@@ -151,7 +148,8 @@ result_missingData |> tableMissingData()
 This table can either be of type [gt](https://gt.rstudio.com/) (default) or [flextable](https://davidgohel.github.io/flextable/).
 
 ```{r, warning = FALSE}
-result_missingData |> tableMissingData(type = "flextable")
+result_missingData |> 
+  tableMissingData(type = "flextable")
 ```
 
 Finally, disconnect from the cdm

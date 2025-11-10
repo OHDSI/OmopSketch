@@ -34,7 +34,6 @@ Let's see an example of its functionalities. To start with, we will load essenti
 
 ```{r, warning=FALSE}
 library(dplyr)
-library(duckdb)
 library(OmopSketch)
 library(omock)
 
@@ -114,7 +113,7 @@ This assessment provides information such as:
 ```{r, warning=FALSE}
 summarisedResult <- summariseObservationPeriod(
   cdm = cdm,
-  estimates = c("mean"), 
+  estimates = "mean", 
   missingData = FALSE, 
   quality = TRUE
 )
@@ -174,6 +173,7 @@ Additionally, if results were stratified by sex or age group, we can further use
 
 ```{r, warning=FALSE}
 summarisedResult <- summariseObservationPeriod(cdm = cdm, sex = TRUE)
+
 plotObservationPeriod(
   result = summarisedResult,
   variableName = "Duration in days",
@@ -186,7 +186,9 @@ summarisedResult <- summariseObservationPeriod(
   sex = TRUE,
   ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf))
 )
-plotObservationPeriod(summarisedResult,
+
+plotObservationPeriod(
+  result = summarisedResult,
   colour = "sex",
   facet = "age_group"
 )

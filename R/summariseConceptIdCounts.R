@@ -23,12 +23,9 @@
 #' @examples
 #' \donttest{
 #' library(OmopSketch)
-#' library(CDMConnector)
-#' library(duckdb)
+#' library(omock)
 #'
-#' requireEunomia()
-#' con <- dbConnect(duckdb(), eunomiaDir())
-#' cdm <- cdmFromCon(con = con, cdmSchema = "main", writeSchema = "main")
+#' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 #'
 #' summariseConceptIdCounts(
 #'   cdm = cdm,

@@ -8,6 +8,7 @@
 #' \donttest{
 #' library(OmopSketch)
 #' library(omock)
+#'
 #' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 #'
 #' result <- summariseMissingData(

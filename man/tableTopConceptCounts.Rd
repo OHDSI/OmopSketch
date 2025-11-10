@@ -39,12 +39,9 @@ This function takes a \code{summarised_result} object and generates a formatted 
 \examples{
 \donttest{
 library(OmopSketch)
-library(CDMConnector)
-library(duckdb)
+library(omock)
 
-requireEunomia()
-con <- dbConnect(drv = duckdb(dbdir = eunomiaDir()))
-cdm <- cdmFromCon(con = con, cdmSchema = "main", writeSchema = "main")
+cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
 result <- summariseConceptIdCounts(cdm = cdm, omopTableName = "condition_occurrence")
 
