@@ -68,6 +68,7 @@ Summarise Database Characteristics for OMOP CDM
 library(OmopSketch)
 library(omock)
 library(dplyr)
+library(here)
 
 cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
