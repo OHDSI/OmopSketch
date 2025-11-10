@@ -2,6 +2,8 @@ url: https://OHDSI.github.io/OmopSketch/
 template:
   bootstrap: 5
 
+llm-docs: false
+
 navbar:
   structure:
     left:
