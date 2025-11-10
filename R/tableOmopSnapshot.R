@@ -65,7 +65,10 @@ tableOmopSnapshot <- function(result,
 }
 
 warnEmpty <- function(resultType) {
-  cli::cli_warn("`result` does not contain any `{resultType}` data.")
+  message <- "`result` does not contain any `{resultType}` data." |>
+    sringr::str_glue()
+  cli::cli_warn(message = message)
+  return(message)
 }
 emptyTable <- function(type) {
   pkg <- type

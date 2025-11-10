@@ -9,7 +9,7 @@
 #' @param plotType The plot type, it can be: "barplot", "boxplot" or
 #' "densityplot".
 #' @inheritParams consistent-doc
-#' @inheritParams style-plot
+#' @inheritParams plot-doc
 #'
 #' @return A plot visualisation.
 #' @export

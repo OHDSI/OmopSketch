@@ -8,7 +8,7 @@
 #'  - the only available output if there is just one in the results, or
 #'  - `"record"` if multiple outputs are present.
 #' @inheritParams consistent-doc
-#' @inheritParams style-plot
+#' @inheritParams plot-doc
 #'
 #' @return A plot visualisation.
 #' @export

@@ -37,7 +37,7 @@ NULL
 NULL
 
 
-#' Helper for consistent documentation of `style`.
+#' Helper for consistent documentation for plots.
 #'
 #' @param style Visual theme to apply. Character, or `NULL`. If a character,
 #' this may be either the name of a built-in style (see
@@ -46,8 +46,13 @@ NULL
 #' unless a global style option is set (see
 #' `visOmopResults::setGlobalPlotOptions()`), or a `⁠_brand.yml`⁠ file is
 #' present (in that order).
+#' @param type Character string indicating the output plot format. See
+#' `visOmopResults::plotType()` for the list of supported plot types. If
+#' `type = NULL`, the function will use the global setting defined via
+#' `visOmopResults::setGlobalPlotOptions()` (if available); otherwise, a
+#' standard `ggplot2` plot is produced by default.
 #'
-#' @name style-plot
+#' @name plot-doc
 #' @keywords internal
 NULL
 

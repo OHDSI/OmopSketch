@@ -30,8 +30,8 @@ summarisePerson <- function(cdm) {
 
   # summary subjects
   number_subjects <- as.numeric(omopgenerics::numberSubjects(cdm$person))
-  number_subjects_no_op <- cdm$observation_period |>
-    dplyr::anti_join(cdm$person, by = "person_id") |>
+  number_subjects_no_op <- cdm$person |>
+    dplyr::anti_join(cdm$observation_period, by = "person_id") |>
     omopgenerics::numberSubjects() |>
     as.numeric()
   result[["Number subjects"]] <- dplyr::tibble(
