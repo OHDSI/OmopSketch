@@ -6,6 +6,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Summarise database characteristics • OmopSketch</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="icon" sizes="any" href="../favicon.ico">
+<link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
@@ -85,7 +90,7 @@ the OMOP Common Data Model.</p>
 <h3 id="create-a-mock-cdm">Create a mock CDM<a class="anchor" aria-label="anchor" href="#create-a-mock-cdm"></a>
 </h3>
 <p>We begin by loading the necessary packages and creating a mock CDM
-using the <code><a href="../reference/mockOmopSketch.html">mockOmopSketch()</a></code> function:</p>
+using the R package <a href="https://ohdsi.github.io/omock/" class="external-link">omock</a>:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -97,27 +102,36 @@ using the <code><a href="../reference/mockOmopSketch.html">mockOmopSketch()</a><
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://OHDSI.github.io/OmopSketch/">OmopSketch</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r.duckdb.org/" class="external-link">duckdb</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Loading required package: DBI</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ohdsi.github.io/omock/" class="external-link">omock</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mockOmopSketch.html">mockOmopSketch</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ohdsi.github.io/omock/reference/mockCdmFromDataset.html" class="external-link">mockCdmFromDataset</a></span><span class="op">(</span>datasetName <span class="op">=</span> <span class="st">"GiBleed"</span>, source <span class="op">=</span> <span class="st">"duckdb"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Reading <span style="color: #0000BB;">GiBleed</span> tables.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Adding <span style="color: #0000BB;">drug_strength</span> table.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Creating local <span style="color: #0000BB;">&lt;cdm_reference&gt;</span> object.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Inserting <span style="color: #0000BB;">&lt;cdm_reference&gt;</span> into <span style="color: #0000BB;">duckdb</span>.</span></span>
 <span></span>
 <span><span class="va">cdm</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;"># OMOP CDM reference (duckdb) of mockOmopSketch</span> <span style="color: #00BBBB;">─────────────────────────────</span></span></span>
-<span><span class="co">#&gt; • <span style="font-weight: bold;">omop tables:</span> cdm_source, concept, concept_ancestor, concept_relationship,</span></span>
-<span><span class="co">#&gt; concept_synonym, condition_occurrence, death, device_exposure, drug_exposure,</span></span>
-<span><span class="co">#&gt; drug_strength, measurement, observation, observation_period, person,</span></span>
-<span><span class="co">#&gt; procedure_occurrence, visit_occurrence, vocabulary</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;"># OMOP CDM reference (duckdb) of GiBleed</span> <span style="color: #00BBBB;">────────────────────────────────────</span></span></span>
+<span><span class="co">#&gt; • <span style="font-weight: bold;">omop tables:</span> care_site, cdm_source, concept, concept_ancestor, concept_class,</span></span>
+<span><span class="co">#&gt; concept_relationship, concept_synonym, condition_era, condition_occurrence,</span></span>
+<span><span class="co">#&gt; cost, death, device_exposure, domain, dose_era, drug_era, drug_exposure,</span></span>
+<span><span class="co">#&gt; drug_strength, fact_relationship, location, measurement, metadata, note,</span></span>
+<span><span class="co">#&gt; note_nlp, observation, observation_period, payer_plan_period, person,</span></span>
+<span><span class="co">#&gt; procedure_occurrence, provider, relationship, source_to_concept_map, specimen,</span></span>
+<span><span class="co">#&gt; visit_detail, visit_occurrence, vocabulary</span></span>
 <span><span class="co">#&gt; • <span style="font-weight: bold;">cohort tables:</span> -</span></span>
 <span><span class="co">#&gt; • <span style="font-weight: bold;">achilles tables:</span> -</span></span>
 <span><span class="co">#&gt; • <span style="font-weight: bold;">other tables:</span> -</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
-<h2 id="summarise-database-characteristics">Summarise database characteristics<a class="anchor" aria-label="anchor" href="#summarise-database-characteristics"></a>
+<h2 id="database-characteristics">Database characteristics<a class="anchor" aria-label="anchor" href="#database-characteristics"></a>
 </h2>
 <div class="section level3">
-<h3 id="summarise-database-characteristics-1">Summarise Database Characteristics<a class="anchor" aria-label="anchor" href="#summarise-database-characteristics-1"></a>
+<h3 id="summarise-characteristics">Summarise Characteristics<a class="anchor" aria-label="anchor" href="#summarise-characteristics"></a>
 </h3>
 <p>The <code><a href="../reference/databaseCharacteristics.html">databaseCharacteristics()</a></code> function provides a
 comprehensive overview of the Common Data Model (CDM). It returns a <a href="https://darwin-eu-dev.github.io/omopgenerics/articles/summarised_result.html" class="external-link">summarised
@@ -290,6 +304,9 @@ app</p></li>
 <code><a href="../reference/shinyCharacteristics.html">shinyCharacteristics()</a></code> can be explored <a href="https://dpa-pde-oxford.shinyapps.io/OmopSketchCharacterisation/" class="external-link">here</a>,
 where the characterisation of several synthetic datasets is
 available.</p>
+<p>Finally, we can disconnect from the cdm.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://darwin-eu.github.io/omopgenerics/reference/cdmDisconnect.html" class="external-link">cdmDisconnect</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
