@@ -103,6 +103,7 @@ summarisedResult |>
 
 
 ## Quality
+
 When the argument `quality = TRUE` is set, the results will include a quality assessment of the observation period table.  
 This assessment provides information such as:
 
@@ -137,10 +138,9 @@ summarisedResult <- summariseObservationPeriod(
 
 Notice that, by default, the "overall" group will be also included, as well as crossed strata (that means, `sex == "Female"` and `ageGroup == "\>35"`).
 
-
 ## Tidy the summarised object
 
-`tableObservationPeriod()` will help you to create a table (see supported types with: visOmopResults::tableType()). By default it creates a [gt](https://gt.rstudio.com/) table.
+`tableObservationPeriod()` will help you to create a table (see supported types with: `visOmopResults::tableType()`). By default it creates a [gt](https://gt.rstudio.com/) table.
 
 ```{r, warning=FALSE}
 summarisedResult <- summariseObservationPeriod(
@@ -194,9 +194,10 @@ plotObservationPeriod(
 )
 ```
 
+# Disconnect from CDM
 
-Finally, we can disconnect from the cdm.
+Finally, disconnect from the mock CDM.
 
-```{r, warning=FALSE}
+```{r}
 cdmDisconnect(cdm = cdm)
 ```

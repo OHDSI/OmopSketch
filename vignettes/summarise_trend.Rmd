@@ -55,6 +55,7 @@ summarisedResult <- summariseTrend(
 summarisedResult |>
   glimpse()
 ```
+
 Notice that the output is in the [summarised result](https://darwin-eu.github.io/omopgenerics/articles/summarised_result.html) format.
 
 ## What are Event and Episode tables?
@@ -87,6 +88,7 @@ Options include:
 - "age": Median age at start date of each interval
 
 - "sex": Number of females
+
 ### Records and subjects per year
 
 For each time interval the results will include the number of records and number of individuals observed during that period.
@@ -100,11 +102,9 @@ summarisedResult <- summariseTrend(
   interval = "years"
 )
 
-
 summarisedResult |>
   select(group_level, variable_name, additional_level, estimate_name, estimate_value)
 ```
-
 
 ### Person-days
 
@@ -133,6 +133,7 @@ summarisedResult <- summariseTrend(
 )
 summarisedResult
 ```
+
 ### Age
 
 When "age" is included in the output argument, the function reports the median age of individuals for each time interval.
@@ -149,6 +150,7 @@ summarisedResult <- summariseTrend(
 summarisedResult |>
   select(variable_name, additional_level, estimate_name, estimate_value)
 ```
+
 ### Sex output
 
 When "sex" is included in the output argument, the function counts the number of females in each time interval.
@@ -253,7 +255,9 @@ result <- summariseTrend(
 )
 tableTrend(result = result)
 ```
+
 # Visualise trends with plotTrend
+
 `plotTrend()` builds a ggplot2 visualisation from a summarised result. 
 ```{r}
 result <- summariseTrend(
@@ -271,6 +275,7 @@ plotTrend(
   facet = "age_group"
 )
 ```
+
 When the result includes several outputs (for example, records, persons, or person-days), the function defaults to plotting the number of records.
 You can override this by setting the output argument to the measure you want to visualise.
 
@@ -307,6 +312,7 @@ plotTrend(
 # Disconnect from CDM
 
 Finally, disconnect from the mock CDM.
+
 ```{r}
 cdmDisconnect(cdm = cdm)
 ```
