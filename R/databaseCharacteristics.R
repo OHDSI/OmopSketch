@@ -84,7 +84,7 @@ databaseCharacteristics <- function(cdm,
   dateRangeCohort <- dateRange %||% c(NA, NA)
 
 
-  if (!is.null(ageGroup) & omopgenerics::sourceType(cdm) != "local") {
+  if (!is.null(ageGroup) & omopgenerics::sourceType(cdm) != "local") { #to remove when https://github.com/OHDSI/CohortConstructor/issues/675 is fixed
     cdm <- omopgenerics::bind(
       CohortConstructor::demographicsCohort(cdm, "population_1", sex = sexCohort),
       CohortConstructor::demographicsCohort(cdm, "population_2", sex = sexCohort, ageRange = ageGroup$age_group),
