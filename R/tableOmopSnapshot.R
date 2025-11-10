@@ -66,7 +66,7 @@ tableOmopSnapshot <- function(result,
 
 warnEmpty <- function(resultType) {
   message <- "`result` does not contain any `{resultType}` data." |>
-    sringr::str_glue()
+    stringr::str_glue()
   cli::cli_warn(message = message)
   return(message)
 }
