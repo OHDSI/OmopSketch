@@ -1,7 +1,8 @@
 
 #' Create a visual table from a summarise_omop_snapshot result
 #'
-#' @param result  Output from summariseOmopSnapshot().
+#' @param result A summarised_result object (output of `summariseOmopSnapshot()`
+#' ).
 #' @inheritParams style-table
 #'
 #' @return A formatted table visualisation.

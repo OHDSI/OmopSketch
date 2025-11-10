@@ -1,7 +1,8 @@
 
 #' Create a visual table from a summariseMissingData() result
 #'
-#' @param result A summarised_result object.
+#' @param result A summarised_result object (output of
+#' `summariseMissingData()`).
 #' @inheritParams style-table
 #'
 #' @return A formatted table visualisation.

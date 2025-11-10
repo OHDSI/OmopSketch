@@ -7,7 +7,8 @@
 tableConceptIdCounts(result, display = "overall", type = "reactable")
 }
 \arguments{
-\item{result}{A summarised_result object.}
+\item{result}{A summarised_result object (output of
+\code{summariseConceptIdCounts()}).}
 
 \item{display}{A character string indicating which subset of the data to
 display. Options are:

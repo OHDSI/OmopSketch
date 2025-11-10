@@ -1,7 +1,8 @@
 
 #' Create a visual table from a summariseConceptIdCounts() result
 #'
-#' @param result A summarised_result object.
+#' @param result A summarised_result object (output of
+#' `summariseConceptIdCounts()`).
 #' @param display A character string indicating which subset of the data to
 #' display. Options are:
 #'   - `"overall"`: Show all source and standard concepts.

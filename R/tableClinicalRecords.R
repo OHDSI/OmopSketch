@@ -1,7 +1,8 @@
 
 #' Create a visual table from a summariseClinicalRecord() output
 #'
-#' @param result Output from summariseClinicalRecords().
+#' @param result A summarised_result object (output of
+#' `summariseClinicalRecords()`).
 #' @inheritParams style-table
 #'
 #' @return A formatted table visualisation.

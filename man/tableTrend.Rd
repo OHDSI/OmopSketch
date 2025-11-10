@@ -7,9 +7,10 @@
 tableTrend(result, type = NULL, style = NULL)
 }
 \arguments{
-\item{result}{A summarised_result object.}
+\item{result}{A summarised_result object (output of \code{summariseTrend()}).}
 
-\item{type}{Type of formatting output table between \code{gt}, \code{datatable} and \code{reactable}. Default is \code{"gt"}.}
+\item{type}{Type of formatting output table between \code{gt}, \code{datatable} and
+\code{reactable}. Default is \code{"gt"}.}
 
 \item{style}{Defines the visual formatting of the table. This argument can be
 provided in one of the following ways:
@@ -41,7 +42,7 @@ library(omock)
 
 cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
-summarisedResult <- summariseTrend(
+result <- summariseTrend(
   cdm = cdm,
   episode = "observation_period",
   event = c("drug_exposure", "condition_occurrence"),
@@ -50,7 +51,7 @@ summarisedResult <- summariseTrend(
   sex = TRUE
 )
 
-tableTrend(result = summarisedResult)
+tableTrend(result = result)
 
 cdmDisconnect(cdm = cdm)
 }

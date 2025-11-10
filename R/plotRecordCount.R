@@ -2,7 +2,8 @@
 #'
 #' `r lifecycle::badge('deprecated')`
 #'
-#' @param result Output from summariseRecordCount().
+#' @param result A summarised_result object (output of
+#' `summariseRecordCount()`).
 #' @inheritParams consistent-doc
 #'
 #' @return A plot visualisation.

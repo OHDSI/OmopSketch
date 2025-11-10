@@ -5,8 +5,8 @@
 #' This function takes a `summarised_result` object and generates a formatted
 #' table highlighting the most frequent concepts.
 #'
-#' @param result A `summarised_result` object, typically returned by
-#' `summariseConceptIdCounts()`.
+#' @param result A summarised_result object (output of
+#' `summariseConceptIdCounts()`).
 #' @param top Integer. The number of top concepts to display. Defaults to `10`.
 #' @param countBy Either 'person' or 'record'. If NULL whatever is in the data
 #' is used.

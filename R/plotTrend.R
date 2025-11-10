@@ -1,7 +1,7 @@
 
 #' Create a ggplot2 plot from the output of summariseTrend()
 #'
-#' @param result A summarised_result object (output of summariseTrend).
+#' @param result A summarised_result object (output of `summariseTrend()`).
 #' @param output The output to plot.  Accepted values are: `"record"`, `"person"`,
 #'  `"person-days"`, `"age"`, and `"sex"`.
 #'  If not specified, the function will default to:

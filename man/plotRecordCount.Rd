@@ -7,7 +7,8 @@
 plotRecordCount(result, facet = NULL, colour = NULL)
 }
 \arguments{
-\item{result}{Output from summariseRecordCount().}
+\item{result}{A summarised_result object (output of
+\code{summariseRecordCount()}).}
 
 \item{facet}{Columns to face by. Formula format can be provided. See possible
 columns to face by with: \code{visOmopResults::tidyColumns()}.}

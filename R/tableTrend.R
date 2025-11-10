@@ -1,8 +1,9 @@
 
 #' Create a visual table from a summariseTrend() result
 #'
-#' @param result A summarised_result object.
-#' @param type Type of formatting output table between `gt`, `datatable` and `reactable`. Default is `"gt"`.
+#' @param result A summarised_result object (output of `summariseTrend()`).
+#' @param type Type of formatting output table between `gt`, `datatable` and
+#' `reactable`. Default is `"gt"`.
 #' @inheritParams style-table
 #'
 #' @return A formatted table visualisation.
@@ -16,7 +17,7 @@
 #'
 #' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 #'
-#' summarisedResult <- summariseTrend(
+#' result <- summariseTrend(
 #'   cdm = cdm,
 #'   episode = "observation_period",
 #'   event = c("drug_exposure", "condition_occurrence"),
@@ -25,7 +26,7 @@
 #'   sex = TRUE
 #' )
 #'
-#' tableTrend(result = summarisedResult)
+#' tableTrend(result = result)
 #'
 #' cdmDisconnect(cdm = cdm)
 #' }

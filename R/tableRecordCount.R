@@ -3,7 +3,8 @@
 #'
 #' `r lifecycle::badge('deprecated')`
 #'
-#' @param result A summarised_result object.
+#' @param result A summarised_result object (output of `summariseRecordCount()`
+#' ).
 #' @param  type Type of formatting output table. See
 #' `visOmopResults::tableType()` for allowed options. Default is `"gt"`.
 #'

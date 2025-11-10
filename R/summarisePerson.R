@@ -178,7 +178,7 @@ summariseNumeric2 <- function(x, variable, den) {
 
 #' Visualise the results of `summarisePerson()` into a table
 #'
-#' @param result A summarised_result object created by `summarisePerson()`.
+#' @param result A summarised_result object (output of `summarisePerson()`).
 #' @inheritParams style-table
 #'
 #' @return A formatted table visualisation.

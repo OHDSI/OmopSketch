@@ -2,10 +2,8 @@
 #' Generate an interactive Shiny application that visualises the results
 #' obtained from the `databaseCharacteristics()` function
 #'
-#' @param result A summarised_result object containing the results from the
-#' `databaseCharacteristics()` function. This object should include summaries of
-#' various OMOP CDM tables, such as population characteristics, clinical
-#' records, missing data, and more.
+#' @param result A summarised_result object (output of
+#' `databaseCharacteristics()`).
 #' @param directory A character string specifying the directory where the
 #' application will be saved.
 #' @param title Title of the shiny. Default is "Characterisation".

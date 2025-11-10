@@ -15,10 +15,8 @@ shinyCharacteristics(
 )
 }
 \arguments{
-\item{result}{A summarised_result object containing the results from the
-\code{databaseCharacteristics()} function. This object should include summaries of
-various OMOP CDM tables, such as population characteristics, clinical
-records, missing data, and more.}
+\item{result}{A summarised_result object (output of
+\code{databaseCharacteristics()}).}
 
 \item{directory}{A character string specifying the directory where the
 application will be saved.}

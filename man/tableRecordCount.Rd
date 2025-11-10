@@ -7,7 +7,8 @@
 tableRecordCount(result, type = "gt")
 }
 \arguments{
-\item{result}{A summarised_result object.}
+\item{result}{A summarised_result object (output of \code{summariseRecordCount()}
+).}
 
 \item{type}{Type of formatting output table. See
 \code{visOmopResults::tableType()} for allowed options. Default is \code{"gt"}.}

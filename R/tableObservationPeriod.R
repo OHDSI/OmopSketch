@@ -1,7 +1,8 @@
 
 #' Create a visual table from a summariseObservationPeriod() result
 #'
-#' @param result A summarised_result object.
+#' @param result A summarised_result object (output of
+#' `summariseObservationPeriod()`).
 #' @inheritParams style-table
 #'
 #' @return A formatted table visualisation.

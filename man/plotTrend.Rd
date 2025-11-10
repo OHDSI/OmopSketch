@@ -7,7 +7,7 @@
 plotTrend(result, output = NULL, facet = "type", colour = NULL, style = NULL)
 }
 \arguments{
-\item{result}{A summarised_result object (output of summariseTrend).}
+\item{result}{A summarised_result object (output of \code{summariseTrend()}).}
 
 \item{output}{The output to plot.  Accepted values are: \code{"record"}, \code{"person"},
 \code{"person-days"}, \code{"age"}, and \code{"sex"}.

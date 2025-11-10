@@ -14,8 +14,8 @@ tableTopConceptCounts(
 )
 }
 \arguments{
-\item{result}{A \code{summarised_result} object, typically returned by
-\code{summariseConceptIdCounts()}.}
+\item{result}{A summarised_result object (output of
+\code{summariseConceptIdCounts()}).}
 
 \item{top}{Integer. The number of top concepts to display. Defaults to \code{10}.}
 
