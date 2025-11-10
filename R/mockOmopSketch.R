@@ -12,17 +12,6 @@
 #' @return A mock cdm_reference object.
 #' @export
 #'
-#' @examples
-#' \donttest{
-#' library(OmopSketch)
-#'
-#' cdm <- mockOmopSketch(numberIndividuals = 100)
-#'
-#' cdm
-#'
-#' cdmDisconnect(cdm = cdm)
-#' }
-#'
 mockOmopSketch <- function(numberIndividuals = 100,
                            con = lifecycle::deprecated(),
                            writeSchema = lifecycle::deprecated(),

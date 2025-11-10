@@ -2,6 +2,9 @@
 #' Visualise the output of `summarisePerson()`
 #'
 #' @param result A summarised_result object (output of `summarisePerson()`).
+#' @param variableName The variable to plot, a choice between
+#' `unique(result$variable_name)`. If `NULL` it will only work if only one
+#' variable is present in the result object.
 #' @inheritParams plot-doc
 #'
 #' @return A plot visualisation.

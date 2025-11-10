@@ -9,6 +9,10 @@ plotPerson(result, variableName = NULL, style = NULL, type = NULL)
 \arguments{
 \item{result}{A summarised_result object (output of \code{summarisePerson()}).}
 
+\item{variableName}{The variable to plot, a choice between
+\code{unique(result$variable_name)}. If \code{NULL} it will only work if only one
+variable is present in the result object.}
+
 \item{style}{Visual theme to apply. Character, or \code{NULL}. If a character,
 this may be either the name of a built-in style (see
 \code{visOmopResults::plotStyle()}), or a path to a \code{.yml} file that defines a

@@ -21,7 +21,14 @@ test_that("shinyCharacteristics works", {
   skip_on_cran()
   cdm <- cdmEunomia()
   dir <- tempdir()
-  expect_no_error(result <- databaseCharacteristics(cdm, sex = TRUE, conceptIdCounts = TRUE) |> suppressWarnings())
+  expect_no_error(
+    result <- databaseCharacteristics(
+      cdm = cdm,
+      sex = TRUE,
+      conceptIdCounts = TRUE
+    ) |>
+      suppressWarnings()
+  )
   expect_false("OmopSketchShiny" %in% list.files(dir))
   expect_no_error(shinyCharacteristics(
     result = omopgenerics::emptySummarisedResult(),
