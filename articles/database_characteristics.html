@@ -39,14 +39,16 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Package functionalities</h6></li>
-    <li><a class="dropdown-item" href="../articles/summarise_clinical_tables_records.html">Summarise clinical tables records</a></li>
-    <li><a class="dropdown-item" href="../articles/summarise_concept_id_counts.html">Summarise concept id counts</a></li>
-    <li><a class="dropdown-item" href="../articles/summarise_observation_period.html">Summarise observation period</a></li>
-    <li><a class="dropdown-item" href="../articles/summarise_trend.html">Summarise temporal trends in OMOP tables</a></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Characterise tables</h6></li>
     <li><a class="dropdown-item" href="../articles/summarise_person.html">Summarise the person table</a></li>
+    <li><a class="dropdown-item" href="../articles/summarise_observation_period.html">Summarise observation period</a></li>
+    <li><a class="dropdown-item" href="../articles/summarise_clinical_tables_records.html">Summarise clinical tables records</a></li>
+    <li><a class="dropdown-item" href="../articles/summarise_trend.html">Summarise temporal trends in OMOP tables</a></li>
     <li><a class="dropdown-item" href="../articles/missing_data.html">Summarise missing data</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Characterise database</h6></li>
     <li><a class="dropdown-item" href="../articles/database_characteristics.html">Summarise database characteristics</a></li>
+    <li><a class="dropdown-item" href="../articles/summarise_concept_id_counts.html">Summarise concept id counts</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -102,8 +104,6 @@ using the R package <a href="https://ohdsi.github.io/omock/" class="external-lin
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://OHDSI.github.io/OmopSketch/">OmopSketch</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r.duckdb.org/" class="external-link">duckdb</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Loading required package: DBI</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ohdsi.github.io/omock/" class="external-link">omock</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ohdsi.github.io/omock/reference/mockCdmFromDataset.html" class="external-link">mockCdmFromDataset</a></span><span class="op">(</span>datasetName <span class="op">=</span> <span class="st">"GiBleed"</span>, source <span class="op">=</span> <span class="st">"duckdb"</span><span class="op">)</span></span>
@@ -170,7 +170,7 @@ summaries can be included by computing concept counts with
 structure, data completeness, and temporal behaviour — supporting both
 data quality assessment and study feasibility evaluation.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/databaseCharacteristics.html">databaseCharacteristics</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/databaseCharacteristics.html">databaseCharacteristics</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="selecting-tables-to-characterise">Selecting tables to characterise<a class="anchor" aria-label="anchor" href="#selecting-tables-to-characterise"></a>
@@ -183,7 +183,10 @@ characterisation: <em>visit_occurrence</em>, <em>visit_detail</em>,
 <p>You can customise which tables to include in the analysis by
 specifying them with the <code>omopTableName</code> argument.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/databaseCharacteristics.html">databaseCharacteristics</a></span><span class="op">(</span><span class="va">cdm</span>, omopTableName <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"drug_exposure"</span>, <span class="st">"condition_occurrence"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/databaseCharacteristics.html">databaseCharacteristics</a></span><span class="op">(</span></span>
+<span>  cdm <span class="op">=</span> <span class="va">cdm</span>, </span>
+<span>  omopTableName <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"drug_exposure"</span>, <span class="st">"condition_occurrence"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="stratifying-by-sex">Stratifying by Sex<a class="anchor" aria-label="anchor" href="#stratifying-by-sex"></a>
@@ -191,7 +194,8 @@ specifying them with the <code>omopTableName</code> argument.</p>
 <p>To stratify the characterisation results by sex, set the
 <code>sex</code> argument to <code>TRUE</code>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/databaseCharacteristics.html">databaseCharacteristics</a></span><span class="op">(</span><span class="va">cdm</span>,</span>
+<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/databaseCharacteristics.html">databaseCharacteristics</a></span><span class="op">(</span></span>
+<span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
 <span>  omopTableName <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"drug_exposure"</span>, <span class="st">"condition_occurrence"</span><span class="op">)</span>,</span>
 <span>  sex <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -202,7 +206,8 @@ specifying them with the <code>omopTableName</code> argument.</p>
 <p>You can choose to characterise the data stratifying by age group by
 creating a list defining the age groups you want to use.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/databaseCharacteristics.html">databaseCharacteristics</a></span><span class="op">(</span><span class="va">cdm</span>,</span>
+<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/databaseCharacteristics.html">databaseCharacteristics</a></span><span class="op">(</span></span>
+<span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
 <span>  omopTableName <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"drug_exposure"</span>, <span class="st">"condition_occurrence"</span><span class="op">)</span>,</span>
 <span>  ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">50</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">51</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -215,7 +220,8 @@ specific period. Combine it with the <code>interval</code> argument to
 stratify results by time. Valid values for interval include “overall”
 (default), “years”, “quarters”, and “months”:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/databaseCharacteristics.html">databaseCharacteristics</a></span><span class="op">(</span><span class="va">cdm</span>,</span>
+<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/databaseCharacteristics.html">databaseCharacteristics</a></span><span class="op">(</span></span>
+<span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
 <span>  interval <span class="op">=</span> <span class="st">"years"</span>,</span>
 <span>  dateRange <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2010-01-01"</span>, <span class="st">"2018-12-31"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -235,11 +241,13 @@ of people from the person table in the CDM.</li>
 within the CDM to use for characterisation.</li>
 </ul>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/databaseCharacteristics.html">databaseCharacteristics</a></span><span class="op">(</span><span class="va">cdm</span>,</span>
+<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/databaseCharacteristics.html">databaseCharacteristics</a></span><span class="op">(</span></span>
+<span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
 <span>  sample <span class="op">=</span> <span class="fl">1000L</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/databaseCharacteristics.html">databaseCharacteristics</a></span><span class="op">(</span><span class="va">cdm</span>,</span>
+<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/databaseCharacteristics.html">databaseCharacteristics</a></span><span class="op">(</span></span>
+<span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
 <span>  sample <span class="op">=</span> <span class="st">"my_cohort"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -249,7 +257,8 @@ within the CDM to use for characterisation.</li>
 <p>To include concept counts in the characterisation, set
 <code>conceptIdCounts = TRUE</code>:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/databaseCharacteristics.html">databaseCharacteristics</a></span><span class="op">(</span><span class="va">cdm</span>,</span>
+<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/databaseCharacteristics.html">databaseCharacteristics</a></span><span class="op">(</span></span>
+<span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
 <span>  conceptIdCounts <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -262,8 +271,10 @@ output. For example, to stratify trends and concept counts by records
 observed in or out of observation, you can pass the argument
 <code>inObservation = TRUE</code>:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/databaseCharacteristics.html">databaseCharacteristics</a></span><span class="op">(</span><span class="va">cdm</span>,</span>
-<span>  conceptIdCounts <span class="op">=</span> <span class="cn">TRUE</span>, inObservation <span class="op">=</span> <span class="cn">TRUE</span></span>
+<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/databaseCharacteristics.html">databaseCharacteristics</a></span><span class="op">(</span></span>
+<span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
+<span>  conceptIdCounts <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>  inObservation <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
@@ -287,17 +298,18 @@ setting the appropriate arguments:</p>
 app</p></li>
 <li><p><code>logo</code>: Path to a custom logo (must be in SVG
 format)</p></li>
-<li><p><code>theme</code>: A custom Bootstrap theme (e.g., using
-bslib::bs_theme())</p></li>
+<li><p><code>theme</code>: One of the available <code>OmopViewer</code>
+themes.</p></li>
 <li><p><code>background</code>: A custom background panel for the Shiny
 app</p></li>
 </ul>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/shinyCharacteristics.html">shinyCharacteristics</a></span><span class="op">(</span></span>
-<span>  result <span class="op">=</span> <span class="va">result</span>, directory <span class="op">=</span> <span class="st">"path/to/my/shiny"</span>,</span>
+<span>  result <span class="op">=</span> <span class="va">result</span>, </span>
+<span>  directory <span class="op">=</span> <span class="st">"path/to/my/shiny"</span>,</span>
 <span>  title <span class="op">=</span> <span class="st">"Characterisation of my data"</span>,</span>
 <span>  logo <span class="op">=</span> <span class="st">"path/to/my/logo.svg"</span>,</span>
-<span>  theme <span class="op">=</span> <span class="st">"bslib::bs_theme(bootswatch = 'flatly')"</span>, </span>
+<span>  theme <span class="op">=</span> <span class="st">"scarlet"</span>, </span>
 <span>  background <span class="op">=</span> <span class="st">"path/to/my/background.md"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>An example of the Shiny application generated by

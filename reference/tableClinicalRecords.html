@@ -19,14 +19,16 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Package functionalities</h6></li>
-    <li><a class="dropdown-item" href="../articles/summarise_clinical_tables_records.html">Summarise clinical tables records</a></li>
-    <li><a class="dropdown-item" href="../articles/summarise_concept_id_counts.html">Summarise concept id counts</a></li>
-    <li><a class="dropdown-item" href="../articles/summarise_observation_period.html">Summarise observation period</a></li>
-    <li><a class="dropdown-item" href="../articles/summarise_trend.html">Summarise temporal trends in OMOP tables</a></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Characterise tables</h6></li>
     <li><a class="dropdown-item" href="../articles/summarise_person.html">Summarise the person table</a></li>
+    <li><a class="dropdown-item" href="../articles/summarise_observation_period.html">Summarise observation period</a></li>
+    <li><a class="dropdown-item" href="../articles/summarise_clinical_tables_records.html">Summarise clinical tables records</a></li>
+    <li><a class="dropdown-item" href="../articles/summarise_trend.html">Summarise temporal trends in OMOP tables</a></li>
     <li><a class="dropdown-item" href="../articles/missing_data.html">Summarise missing data</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Characterise database</h6></li>
     <li><a class="dropdown-item" href="../articles/database_characteristics.html">Summarise database characteristics</a></li>
+    <li><a class="dropdown-item" href="../articles/summarise_concept_id_counts.html">Summarise concept id counts</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://dpa-pde-oxford.shinyapps.io/OmopSketchCharacterisation/">Characterisation synthetic datasets</a></li>
@@ -51,7 +53,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">tableClinicalRecords</span><span class="op">(</span><span class="va">result</span>, type <span class="op">=</span> <span class="st">"gt"</span>, style <span class="op">=</span> <span class="st">"default"</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">tableClinicalRecords</span><span class="op">(</span><span class="va">result</span>, type <span class="op">=</span> <span class="cn">NULL</span>, style <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -63,15 +65,24 @@
 
 
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
-<dd><p>Type of formatting output table. See <code><a href="https://darwin-eu.github.io/visOmopResults/reference/tableType.html" class="external-link">visOmopResults::tableType()</a></code> for allowed options.</p></dd>
+<dd><p>Character string specifying the desired output table format. See
+<code><a href="https://darwin-eu.github.io/visOmopResults/reference/tableType.html" class="external-link">visOmopResults::tableType()</a></code> for supported table types. If <code>type = NULL</code>,
+global options (set via <code><a href="https://darwin-eu.github.io/visOmopResults/reference/setGlobalTableOptions.html" class="external-link">visOmopResults::setGlobalTableOptions()</a></code>) will be
+used if available; otherwise, a default 'gt' table is created.</p></dd>
 
 
 <dt id="arg-style">style<a class="anchor" aria-label="anchor" href="#arg-style"></a></dt>
-<dd><p>Named list that specifies how to style the different parts of the gt or flextable table generated.
-Accepted style entries are: title, subtitle, header, header_name, header_level, column_name, group_label, and body.
-Alternatively, use "default" to get visOmopResults style, or NULL for gt/flextable style.
-Keep in mind that styling code is different for gt and flextable. Additionally, "datatable" and "reactable" have their own style functions.
-To see style options for each table type use <code><a href="https://darwin-eu.github.io/visOmopResults/reference/tableStyle.html" class="external-link">visOmopResults::tableStyle()</a></code></p></dd>
+<dd><p>Defines the visual formatting of the table. This argument can be
+provided in one of the following ways:</p><ol><li><p><strong>Pre-defined style</strong>: Use the name of a built-in style (e.g., "darwin").
+See <code><a href="https://darwin-eu.github.io/visOmopResults/reference/tableStyle.html" class="external-link">visOmopResults::tableStyle()</a></code> for available options.</p></li>
+<li><p><strong>YAML file path</strong>: Provide the path to an existing <code>.yml</code> file defining
+a new style.</p></li>
+<li><p><strong>List of custome R code</strong>: Supply a block of custom R code or a named
+list describing styles for each table section. This code must be specific to
+the selected table type.</p></li>
+</ol><p>If <code>style = NULL</code>, the function will use global options (see
+<code><a href="https://darwin-eu.github.io/visOmopResults/reference/setGlobalTableOptions.html" class="external-link">visOmopResults::setGlobalTableOptions()</a></code>) or an existing <code>⁠_brand.yml</code>⁠ file
+(if found); otherwise, the default style is applied.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -143,7 +154,7 @@ To see style options for each table type use <code><a href="https://darwin-eu.gi
 <span class="r-in"><span><span class="va">summarisedResult</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://darwin-eu.github.io/omopgenerics/reference/suppress.html" class="external-link">suppress</a></span><span class="op">(</span>minCellCount <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">tableClinicalRecords</span><span class="op">(</span><span class="op">)</span></span></span>
-<div class="gt-table"><div id="vvnarzfblp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div class="gt-table"><div id="rlphsyhftf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 
   <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false" style="-webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; display: table; border-collapse: collapse; line-height: normal; margin-left: auto; margin-right: auto; color: #333333; font-size: 16px; font-weight: normal; font-style: normal; background-color: #FFFFFF; width: auto; border-top-style: solid; border-top-width: 3px; border-top-color: #D9D9D9; border-right-style: solid; border-right-width: 3px; border-right-color: #D9D9D9; border-bottom-style: solid; border-bottom-width: 3px; border-bottom-color: #D9D9D9; border-left-style: solid; border-left-width: 3px; border-left-color: #D9D9D9;" bgcolor="#FFFFFF"><!--/html_preserve--><caption class="gt_caption" style="padding-top: 4px; padding-bottom: 4px;"><span class="gt_from_md">Summary of condition_occurrence, drug_exposure tables</span></caption><!--html_preserve-->
   <thead style="border-style: none;"><tr class="gt_col_headings gt_spanner_row" style="border-style: none; border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; border-bottom-style: hidden;"><th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="2" colspan="1" style="border-style: none; color: #333333; text-transform: inherit; vertical-align: bottom; padding-top: 5px; padding-bottom: 6px; padding-left: 5px; padding-right: 5px; overflow-x: hidden; background-color: #E1E1E1; font-family: Arial; font-size: 10; text-align: center; font-weight: bold; border-left-width: 1px; border-left-style: solid; border-left-color: #c8c8c8; border-right-width: 1px; border-right-style: solid; border-right-color: #c8c8c8; border-top-width: 1px; border-top-style: solid; border-top-color: #c8c8c8; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #c8c8c8;" scope="col" id="Variable-name" bgcolor="#E1E1E1" align="center" valign="bottom">Variable name</th>

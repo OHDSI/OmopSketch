@@ -19,14 +19,16 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Package functionalities</h6></li>
-    <li><a class="dropdown-item" href="../articles/summarise_clinical_tables_records.html">Summarise clinical tables records</a></li>
-    <li><a class="dropdown-item" href="../articles/summarise_concept_id_counts.html">Summarise concept id counts</a></li>
-    <li><a class="dropdown-item" href="../articles/summarise_observation_period.html">Summarise observation period</a></li>
-    <li><a class="dropdown-item" href="../articles/summarise_trend.html">Summarise temporal trends in OMOP tables</a></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Characterise tables</h6></li>
     <li><a class="dropdown-item" href="../articles/summarise_person.html">Summarise the person table</a></li>
+    <li><a class="dropdown-item" href="../articles/summarise_observation_period.html">Summarise observation period</a></li>
+    <li><a class="dropdown-item" href="../articles/summarise_clinical_tables_records.html">Summarise clinical tables records</a></li>
+    <li><a class="dropdown-item" href="../articles/summarise_trend.html">Summarise temporal trends in OMOP tables</a></li>
     <li><a class="dropdown-item" href="../articles/missing_data.html">Summarise missing data</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Characterise database</h6></li>
     <li><a class="dropdown-item" href="../articles/database_characteristics.html">Summarise database characteristics</a></li>
+    <li><a class="dropdown-item" href="../articles/summarise_concept_id_counts.html">Summarise concept id counts</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://dpa-pde-oxford.shinyapps.io/OmopSketchCharacterisation/">Characterisation synthetic datasets</a></li>
@@ -51,13 +53,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plotTrend</span><span class="op">(</span></span>
-<span>  <span class="va">result</span>,</span>
-<span>  output <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  facet <span class="op">=</span> <span class="st">"type"</span>,</span>
-<span>  colour <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  style <span class="op">=</span> <span class="st">"default"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plotTrend</span><span class="op">(</span><span class="va">result</span>, output <span class="op">=</span> <span class="cn">NULL</span>, facet <span class="op">=</span> <span class="st">"type"</span>, colour <span class="op">=</span> <span class="cn">NULL</span>, style <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -87,8 +83,13 @@ columns to face by with: <code><a href="https://darwin-eu.github.io/omopgenerics
 
 
 <dt id="arg-style">style<a class="anchor" aria-label="anchor" href="#arg-style"></a></dt>
-<dd><p>Which style to apply to the plot, options are: "default", "darwin"
-and NULL (default ggplot style). Customised styles can be achieved by modifying the returned ggplot object.</p></dd>
+<dd><p>Visual theme to apply. Character, or <code>NULL</code>. If a character,
+this may be either the name of a built-in style (see
+<code><a href="https://darwin-eu.github.io/visOmopResults/reference/plotStyle.html" class="external-link">visOmopResults::plotStyle()</a></code>), or a path to a <code>.yml</code> file that defines a
+custom style. If <code>NULL</code>, the function will use the explicit default style,
+unless a global style option is set (see
+<code><a href="https://darwin-eu.github.io/visOmopResults/reference/setGlobalPlotOptions.html" class="external-link">visOmopResults::setGlobalPlotOptions()</a></code>), or a <code>⁠_brand.yml</code>⁠ file is
+present (in that order).</p></dd>
 
 </dl></div>
     <div class="section level2">
