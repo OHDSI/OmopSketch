@@ -19,16 +19,18 @@ navbar:
       href: https://dpa-pde-oxford.shinyapps.io/OmopSketchCharacterisation/
 
 articles:
-  - title: Package functionalities
-    navbar: Package functionalities
+  - title: Characterise tables
+    navbar: Characterise tables
     contents:
-      - summarise_clinical_tables_records
-      - summarise_concept_id_counts
-      - summarise_observation_period
-      - summarise_trend
       - summarise_person
+      - summarise_observation_period
+      - summarise_clinical_tables_records
+      - summarise_trend
       - missing_data
+  - title: Characterise database
+    navbar: Characterise database
       - database_characteristics
+      - summarise_concept_id_counts
 
 reference:
   - subtitle: Snapshots
