@@ -29,6 +29,7 @@ articles:
       - missing_data
   - title: Characterise database
     navbar: Characterise database
+    contents:
       - database_characteristics
       - summarise_concept_id_counts
 
