@@ -179,8 +179,7 @@ summariseNumeric2 <- function(x, variable, den) {
 #' Visualise the results of `summarisePerson()` into a table
 #'
 #' @param result A summarised_result object created by `summarisePerson()`.
-#' @param type One of the supported visualisation formats (see
-#' `visOmopResults::tableType()`).
+#' @inheritParams style-table
 #'
 #' @return A table visualisation.
 #' @export
@@ -198,12 +197,13 @@ summariseNumeric2 <- function(x, variable, den) {
 #' }
 #'
 tablePerson <- function(result,
-                        type = "gt") {
+                        type = NULL,
+                        style = NULL) {
   rlang::check_installed("visOmopResults")
 
   # input check
   result <- omopgenerics::validateResultArgument(result = result)
-  omopgenerics::assertChoice(type, choices = visOmopResults::tableType())
+  type <- validateType(type)
 
   # visualise results
   visOmopResults::visOmopTable(

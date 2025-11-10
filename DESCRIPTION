@@ -61,7 +61,7 @@ Suggests:
     omock (>= 0.4.0),
     covr,
     ggplot2,
-    visOmopResults (>= 1.3.0),
+    visOmopResults (>= 1.4.0),
     devtools,
     usethis
 Remotes: OHDSI/OmopViewer

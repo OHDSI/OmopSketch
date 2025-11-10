@@ -38,7 +38,7 @@ plotTrend <- function(result,
                       output = NULL,
                       facet = "type",
                       colour = NULL,
-                      style = "default") {
+                      style = NULL) {
   rlang::check_installed("ggplot2")
   rlang::check_installed("visOmopResults")
   # initial checks

@@ -1,9 +1,10 @@
 #' Create a visual table from a summariseClinicalRecord() output.
 #'
 #' @param result Output from summariseClinicalRecords().
-#' @param type Type of formatting output table. See `visOmopResults::tableType()` for allowed options.
-#' @inheritParams style
+#' @inheritParams style-table
+#'
 #' @return A formatted table object with the summarised data.
+#'
 #' @export
 #' @examples
 #' \donttest{
@@ -30,12 +31,12 @@
 #' cdmDisconnect(cdm)
 #' }
 tableClinicalRecords <- function(result,
-                                 type = "gt",
-                                 style = "default") {
+                                 type = NULL,
+                                 style = NULL) {
   # initial checks
   rlang::check_installed("visOmopResults")
   omopgenerics::validateResultArgument(result)
-  omopgenerics::assertChoice(type, visOmopResults::tableType())
+  type <- validateType(type)
 
   # subset to result_type of interest
   result <- result |>

@@ -20,25 +20,41 @@ NULL
 #' @keywords internal
 NULL
 
-#' Helper for consistent documentation of `style`.
+#' Helper for consistent documentation of table arguments.
 #'
-#' @param style Named list that specifies how to style the different parts of the gt or flextable table generated.
-#' Accepted style entries are: title, subtitle, header, header_name, header_level, column_name, group_label, and body.
-#' Alternatively, use "default" to get visOmopResults style, or NULL for gt/flextable style.
-#' Keep in mind that styling code is different for gt and flextable. Additionally, "datatable" and "reactable" have their own style functions.
-#' To see style options for each table type use `visOmopResults::tableStyle()`
+#' @param type Character string specifying the desired output table format. See
+#' `visOmopResults::tableType()` for supported table types. If `type = NULL`,
+#' global options (set via `visOmopResults::setGlobalTableOptions()`) will be
+#' used if available; otherwise, a default 'gt' table is created.
 #'
+#' @param style Defines the visual formatting of the table. This argument can be
+#' provided in one of the following ways:
+#' 1. **Pre-defined style**: Use the name of a built-in style (e.g., "darwin").
+#' See `visOmopResults::tableStyle()` for available options.
+#' 2. **YAML file path**: Provide the path to an existing `.yml` file defining
+#' a new style.
+#' 3. **List of custome R code**: Supply a block of custom R code or a named
+#' list describing styles for each table section. This code must be specific to
+#' the selected table type.
 #'
-#' @name style
+#' If `style = NULL`, the function will use global options (see
+#' `visOmopResults::setGlobalTableOptions()`) or an existing `⁠_brand.yml`⁠ file
+#' (if found); otherwise, the default style is applied.
+#'
+#' @name style-table
 #' @keywords internal
 NULL
 
 
 #' Helper for consistent documentation of `style`.
 #'
-#' @param style Which style to apply to the plot, options are: "default", "darwin"
-#'  and NULL (default ggplot style). Customised styles can be achieved by modifying the returned ggplot object.
-#'
+#' @param style Visual theme to apply. Character, or `NULL`. If a character,
+#' this may be either the name of a built-in style (see
+#' `visOmopResults::plotStyle()`), or a path to a `.yml` file that defines a
+#' custom style. If `NULL`, the function will use the explicit default style,
+#' unless a global style option is set (see
+#' `visOmopResults::setGlobalPlotOptions()`), or a `⁠_brand.yml`⁠ file is
+#' present (in that order).
 #'
 #' @name style-plot
 #' @keywords internal
