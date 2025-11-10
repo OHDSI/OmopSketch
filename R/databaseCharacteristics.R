@@ -8,8 +8,7 @@
 #' @param ... additional arguments passed to the OmopSketch functions that are
 #' used internally.
 #'
-#' @return A `summarised_result` object containing the results of the
-#' characterisation.
+#' @return A `summarised_result` object with the results.
 #' @export
 #'
 #' @examples

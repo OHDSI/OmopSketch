@@ -48,7 +48,7 @@ indicate whether each record occurs within an observation period.}
 If \code{dateRange} is \code{NULL}, no restriction is applied.}
 }
 \value{
-A summarised_result object.
+A \code{summarised_result} object with the results.
 }
 \description{
 This function summarises temporal trends from OMOP CDM tables, considering

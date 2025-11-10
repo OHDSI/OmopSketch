@@ -7,7 +7,7 @@
 #' `summariseConceptSetCounts()`).
 #' @inheritParams consistent-doc
 #'
-#' @return A ggplot2 object showing the concept counts.
+#' @return A plot visualisation.
 #' @export
 #'
 #' @examples

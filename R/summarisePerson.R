@@ -3,7 +3,7 @@
 #'
 #' @inheritParams consistent-doc
 #'
-#' @return A summarised_result object with the summary of the person table.
+#' @return A `summarised_result` object with the results.
 #' @export
 #'
 #' @examples
@@ -181,7 +181,7 @@ summariseNumeric2 <- function(x, variable, den) {
 #' @param result A summarised_result object created by `summarisePerson()`.
 #' @inheritParams style-table
 #'
-#' @return A table visualisation.
+#' @return A formatted table visualisation.
 #' @export
 #'
 #' @examples

@@ -59,8 +59,7 @@ If \code{dateRange} is \code{NULL}, no restriction is applied.}
 \item{year}{deprecated.}
 }
 \value{
-A summarised_result object with results overall and, if specified, by
-strata.
+A \code{summarised_result} object with the results.
 }
 \description{
 Only concepts recorded during observation period are counted.

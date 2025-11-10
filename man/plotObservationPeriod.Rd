@@ -39,7 +39,7 @@ unless a global style option is set (see
 present (in that order).}
 }
 \value{
-A ggplot2 object.
+A plot visualisation.
 }
 \description{
 Create a plot from the output of summariseObservationPeriod()

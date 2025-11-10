@@ -12,7 +12,7 @@
 #' @param type Type of formatting output table, either "reactable" or
 #' "datatable".
 #'
-#' @return A reactable or datatable object with the summarised data.
+#' @return A formatted table visualisation.
 #' @export
 #'
 #' @examples

@@ -11,7 +11,7 @@ summarisePerson(cdm)
 to a database or \emph{omock} to create a reference to synthetic data.}
 }
 \value{
-A summarised_result object with the summary of the person table.
+A \code{summarised_result} object with the results.
 }
 \description{
 Summarise person table

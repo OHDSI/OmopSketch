@@ -4,7 +4,7 @@
 #' @param result A summarised_result object.
 #' @inheritParams style-table
 #'
-#' @return A visualisation of the data summarising the person table.
+#' @return A formatted table visualisation.
 #' @export
 #'
 #' @examples

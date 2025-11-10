@@ -17,11 +17,13 @@
 #' observation period (e.g., 1st, 2nd, etc.) (TRUE) or simply analyze overall
 #' data (FALSE)
 #' @inheritParams dateRange-startDate
-#' @param nameObservationPeriod character string giving a descriptive name for the observation period.
-#' This name will be stored in the result settings. If `NULL` (default), the name is automatically set to `"Default"`.
+#' @param nameObservationPeriod character string giving a descriptive name for
+#' the observation period.
+#' This name will be stored in the result settings. If `NULL` (default), the
+#' name is automatically set to `"Default"`.
 #' @param observationPeriod deprecated.
 #'
-#' @return A summarised_result object with the summarised data.
+#' @return A `summarised_result` object with the results.
 #' @export
 #'
 #' @examples

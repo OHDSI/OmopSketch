@@ -41,8 +41,7 @@ Only the \code{start_date} column of the OMOP table is checked to ensure it fall
 If \code{dateRange} is \code{NULL}, no restriction is applied.}
 }
 \value{
-A summarised_result object with results overall and, if specified, by
-strata.
+A \code{summarised_result} object with the results.
 }
 \description{
 Only concepts recorded during observation period are counted.

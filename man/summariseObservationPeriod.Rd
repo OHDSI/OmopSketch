@@ -53,13 +53,15 @@ represents a specific age range. You can give them specific names, e.g.
 Only the \code{start_date} column of the OMOP table is checked to ensure it falls within this range.
 If \code{dateRange} is \code{NULL}, no restriction is applied.}
 
-\item{nameObservationPeriod}{character string giving a descriptive name for the observation period.
-This name will be stored in the result settings. If \code{NULL} (default), the name is automatically set to \code{"Default"}.}
+\item{nameObservationPeriod}{character string giving a descriptive name for
+the observation period.
+This name will be stored in the result settings. If \code{NULL} (default), the
+name is automatically set to \code{"Default"}.}
 
 \item{observationPeriod}{deprecated.}
 }
 \value{
-A summarised_result object with the summarised data.
+A \code{summarised_result} object with the results.
 }
 \description{
 Summarise the observation period table getting some overall statistics in a

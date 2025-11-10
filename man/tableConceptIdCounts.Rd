@@ -23,7 +23,7 @@ mapped standard concept.
 "datatable".}
 }
 \value{
-A reactable or datatable object with the summarised data.
+A formatted table visualisation.
 }
 \description{
 Create a visual table from a summariseConceptIdCounts() result

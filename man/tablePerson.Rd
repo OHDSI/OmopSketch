@@ -33,9 +33,9 @@ If \code{style = NULL}, the function will use global options (see
 (if found); otherwise, the default style is applied.}
 }
 \value{
-A table visualisation.
+A formatted table visualisation.
 
-A visualisation of the data summarising the person table.
+A formatted table visualisation.
 }
 \description{
 Visualise the results of \code{summarisePerson()} into a table

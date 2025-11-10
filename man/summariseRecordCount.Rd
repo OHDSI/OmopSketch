@@ -48,7 +48,7 @@ Only the \code{start_date} column of the OMOP table is checked to ensure it fall
 If \code{dateRange} is \code{NULL}, no restriction is applied.}
 }
 \value{
-A summarised_result object.
+A \code{summarised_result} object with the results.
 }
 \description{
 Only records that fall within the observation period are considered.

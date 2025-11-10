@@ -7,7 +7,7 @@
 #' @param  type Type of formatting output table. See
 #' `visOmopResults::tableType()` for allowed options. Default is `"gt"`.
 #'
-#' @return A formatted table object with the summarised data.
+#' @return A formatted table visualisation.
 #' @export
 #'
 #' @examples

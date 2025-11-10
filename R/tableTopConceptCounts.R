@@ -12,8 +12,7 @@
 #' is used.
 #' @inheritParams style-table
 #'
-#' @return A formatted table object displaying the top concepts from the
-#' summarised data.
+#' @return A formatted table visualisation.
 #' @export
 #'
 #' @examples

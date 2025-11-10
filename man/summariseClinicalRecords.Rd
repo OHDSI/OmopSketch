@@ -74,7 +74,7 @@ If \code{dateRange} is \code{NULL}, no restriction is applied.}
 \item{typeConcept}{Deprecated. Use \code{conceptSummary = TRUE} instead.}
 }
 \value{
-A summarised_result object.
+A \code{summarised_result} object with the results.
 }
 \description{
 You will obtain information related to the number of records, number of

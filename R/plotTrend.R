@@ -10,7 +10,7 @@
 #' @inheritParams consistent-doc
 #' @inheritParams style-plot
 #'
-#' @return A ggplot showing the table counts.
+#' @return A plot visualisation.
 #' @export
 #'
 #' @examples

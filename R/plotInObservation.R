@@ -7,7 +7,7 @@
 #' `summariseInObservation()`).
 #' @inheritParams consistent-doc
 #'
-#' @return A ggplot showing the table counts.
+#' @return A plot visualisation.
 #' @export
 #'
 #' @examples

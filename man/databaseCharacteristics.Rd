@@ -58,8 +58,7 @@ If \code{dateRange} is \code{NULL}, no restriction is applied.}
 used internally.}
 }
 \value{
-A \code{summarised_result} object containing the results of the
-characterisation.
+A \code{summarised_result} object with the results.
 }
 \description{
 Summarise Database Characteristics for OMOP CDM

@@ -10,8 +10,7 @@
 #' @inheritParams dateRange-startDate
 #' @param year deprecated.
 #'
-#' @return A summarised_result object with results overall and, if specified, by
-#' strata.
+#' @return A `summarised_result` object with the results.
 #' @export
 #'
 #' @examples

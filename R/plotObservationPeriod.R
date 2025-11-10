@@ -11,7 +11,7 @@
 #' @inheritParams consistent-doc
 #' @inheritParams style-plot
 #'
-#' @return A ggplot2 object.
+#' @return A plot visualisation.
 #' @export
 #'
 #' @examples

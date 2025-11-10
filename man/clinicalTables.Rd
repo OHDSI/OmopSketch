@@ -7,11 +7,11 @@
 clinicalTables()
 }
 \value{
-A character vector with table names
+A character vector with table names.
 }
 \description{
-This function provides a list of allowed inputs for the \code{omopTableName} argument in
-\code{summariseClinicalRecords}
+This function provides a list of allowed inputs for the \code{omopTableName}
+argument in \code{summariseClinicalRecords()}.
 }
 \examples{
 library(OmopSketch)

@@ -8,7 +8,7 @@
 #' @inheritParams consistent-doc
 #' @inheritParams dateRange-startDate
 #'
-#' @return A summarised_result object.
+#' @return A `summarised_result` object with the results.
 #' @export
 #'
 #' @examples

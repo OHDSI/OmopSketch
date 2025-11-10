@@ -5,7 +5,7 @@
 #' @param type Type of formatting output table between `gt`, `datatable` and `reactable`. Default is `"gt"`.
 #' @inheritParams style-table
 #'
-#' @return A formatted table object with the summarised data.
+#' @return A formatted table visualisation.
 #' @export
 #'
 #' @examples

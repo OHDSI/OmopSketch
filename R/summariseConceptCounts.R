@@ -11,8 +11,7 @@
 #' @param concept TRUE or FALSE. If TRUE code use will be summarised by concept.
 #' @inheritParams dateRange-startDate
 #'
-#' @return A summarised_result object with results overall and, if specified, by
-#' strata.
+#' @return A `summarised_result` object with the results.
 #' @export
 #'
 summariseConceptCounts <- function(cdm,

@@ -44,8 +44,7 @@ If \code{style = NULL}, the function will use global options (see
 (if found); otherwise, the default style is applied.}
 }
 \value{
-A formatted table object displaying the top concepts from the
-summarised data.
+A formatted table visualisation.
 }
 \description{
 This function takes a \code{summarised_result} object and generates a formatted

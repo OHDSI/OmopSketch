@@ -30,7 +30,7 @@
 #' @param dateRange A vector of two dates defining the desired study period.
 #' If `dateRange` is `NULL`, no restriction is applied.
 #'
-#' @return A summarised_result object.
+#' @return A `summarised_result` object with the results.
 #' @export
 #'
 #' @examples

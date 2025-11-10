@@ -28,7 +28,7 @@
 #' @param domainId Deprecated. Use `conceptSummary = TRUE` instead.
 #' @param typeConcept Deprecated. Use `conceptSummary = TRUE` instead.
 #'
-#' @return A summarised_result object.
+#' @return A `summarised_result` object with the results.
 #' @export
 #'
 #' @examples

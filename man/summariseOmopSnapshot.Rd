@@ -12,8 +12,7 @@ summariseOmopSnapshot(cdm)
 to a database or \emph{omock} to create a reference to synthetic data.}
 }
 \value{
-A summarised_result object that contains the OMOP CDM snapshot
-information.
+A \code{summarised_result} object with the results.
 }
 \description{
 Summarise a cdm_reference object creating a snapshot with the metadata of the

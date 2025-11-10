@@ -13,7 +13,7 @@ tableInObservation(result, type = "gt")
 \code{visOmopResults::tableType()} for allowed options. Default is \code{"gt"}.}
 }
 \value{
-A formatted table object with the summarised data.
+A formatted table visualisation.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}

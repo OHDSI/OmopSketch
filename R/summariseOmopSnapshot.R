@@ -4,8 +4,7 @@
 #'
 #' @inheritParams consistent-doc
 #'
-#' @return A summarised_result object that contains the OMOP CDM snapshot
-#' information.
+#' @return A `summarised_result` object with the results.
 #' @export
 #'
 #' @examples

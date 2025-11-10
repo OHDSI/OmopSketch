@@ -32,7 +32,7 @@ unless a global style option is set (see
 present (in that order).}
 }
 \value{
-A ggplot showing the table counts.
+A plot visualisation.
 }
 \description{
 Create a ggplot2 plot from the output of summariseTrend()
