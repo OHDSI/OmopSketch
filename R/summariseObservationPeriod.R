@@ -1,28 +1,27 @@
+
 #' Summarise the observation period table getting some overall statistics in a
-#' summarised_result object.
+#' summarised_result object
 #'
-#' @param cdm A cdm_reference object.
+#' @inheritParams consistent-doc
 #' @param estimates Estimates to summarise the variables of interest (
 #' `Records per person`, `Duration in days` and
 #' `Days to next observation period`).
-#' @param missingData Logical. If `TRUE`, includes a summary of missing data for relevant fields.
-#' @param quality Logical. If `TRUE`, performs basic data quality checks, including:
-#' \itemize{
-#'   \item Number of subjects not included in person table
-#'   \item Number of records with end date before start date
-#'   \item Number of records with start date before the person's birth date
-#' }
-#' @param byOrdinal Boolean variable. Whether to stratify by the ordinal observation period (e.g., 1st, 2nd, etc.) (TRUE) or simply analyze overall data (FALSE)
-#' @param ageGroup A list of age groups to stratify results by.
-#' @param sex Boolean variable. Whether to stratify by sex (TRUE) or not
-#' (FALSE).
+#' @param missingData Logical. If `TRUE`, includes a summary of missing data for
+#' relevant fields.
+#' @param quality Logical. If `TRUE`, performs basic data quality checks,
+#' including:
+#' - Number of subjects not included in person table.
+#' - Number of records with end date before start date.
+#' - Number of records with start date before the person's birth date.
+#' @param byOrdinal Boolean variable. Whether to stratify by the ordinal
+#' observation period (e.g., 1st, 2nd, etc.) (TRUE) or simply analyze overall
+#' data (FALSE)
 #' @inheritParams dateRange-startDate
 #' @param nameObservationPeriod character string giving a descriptive name for the observation period.
 #' This name will be stored in the result settings. If `NULL` (default), the name is automatically set to `"Default"`.
 #' @param observationPeriod deprecated.
 #'
 #' @return A summarised_result object with the summarised data.
-#'
 #' @export
 #'
 #' @examples
@@ -35,11 +34,11 @@
 #'
 #' result <- summariseObservationPeriod(cdm = cdm)
 #'
-#' result |>
-#'   glimpse()
+#' tableObservationPeriod(result = result)
 #'
-#' cdmDisconnect(cdm)
+#' cdmDisconnect(cdm = cdm)
 #' }
+#'
 summariseObservationPeriod <- function(cdm,
                                        estimates = c(
                                          "mean", "sd", "min", "q05", "q25",

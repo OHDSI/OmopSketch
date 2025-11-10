@@ -1,18 +1,16 @@
-#' Summarise record counts of an omop_table using a specific time interval. Only
-#' records that fall within the observation period are considered.
+
+#' Summarise record counts of an omop_table using a specific time interval
+#'
+#' Only records that fall within the observation period are considered.
 #'
 #'`r lifecycle::badge('deprecated')`
 #'
-#' @param cdm A cdm_reference object.
-#' @param omopTableName A character vector of omop tables from the cdm.
-#' @inheritParams interval
-#' @param ageGroup A list of age groups to stratify results by.
-#' @param sex Whether to stratify by sex (TRUE) or not (FALSE).
+#' @inheritParams consistent-doc
 #' @inheritParams dateRange-startDate
-#' @param sample An integer to sample the tables to only that number of records.
-#' If NULL no sample is done.
+#'
 #' @return A summarised_result object.
 #' @export
+#'
 #' @examples
 #' \donttest{
 #' library(OmopSketch)
@@ -21,7 +19,7 @@
 #'
 #' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 #'
-#' summarisedResult <- summariseRecordCount(
+#' result <- summariseRecordCount(
 #'   cdm = cdm,
 #'   omopTableName = c("condition_occurrence", "drug_exposure"),
 #'   interval = "years",
@@ -29,11 +27,11 @@
 #'   sex = TRUE
 #' )
 #'
-#' summarisedResult |>
-#'   glimpse()
+#' tableRecordCount(result = result)
 #'
 #' cdmDisconnect(cdm = cdm)
 #' }
+#'
 summariseRecordCount <- function(cdm,
                                  omopTableName,
                                  interval = "overall",

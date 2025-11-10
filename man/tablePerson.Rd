@@ -63,6 +63,8 @@ cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 result <- summarisePerson(cdm = cdm)
 
 tablePerson(result = result)
+
+cdmDisconnect(cdm = cdm)
 }
 
 }

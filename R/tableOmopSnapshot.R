@@ -1,10 +1,12 @@
-#' Create a visual table from a summarise_omop_snapshot result.
+
+#' Create a visual table from a summarise_omop_snapshot result
+#'
 #' @param result  Output from summariseOmopSnapshot().
 #' @inheritParams style-table
 #'
 #' @return A formatted table object with the summarised data.
-#'
 #' @export
+#'
 #' @examples
 #' \donttest{
 #' library(OmopSketch)
@@ -16,8 +18,9 @@
 #'
 #' tableOmopSnapshot(result = result)
 #'
-#'cdmDisconnect(cdm)
+#' cdmDisconnect(cdm = cdm)
 #' }
+#'
 tableOmopSnapshot <- function(result,
                               type = NULL,
                               style = NULL) {

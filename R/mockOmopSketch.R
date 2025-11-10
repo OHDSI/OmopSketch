@@ -1,5 +1,8 @@
-#' Creates a mock database to test OmopSketch package.
+
+#' Creates a mock database to test OmopSketch package
+#'
 #' `r lifecycle::badge('deprecated')`
+#'
 #' @param numberIndividuals Number of individuals to create in the cdm
 #' reference object.
 #' @param con deprecated.
@@ -8,12 +11,16 @@
 #'
 #' @return A mock cdm_reference object.
 #' @export
+#'
 #' @examples
 #' \donttest{
 #' library(OmopSketch)
 #'
 #' cdm <- mockOmopSketch(numberIndividuals = 100)
+#'
 #' cdm
+#'
+#' cdmDisconnect(cdm = cdm)
 #' }
 #'
 mockOmopSketch <- function(numberIndividuals = 100,

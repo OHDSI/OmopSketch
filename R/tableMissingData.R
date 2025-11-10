@@ -1,8 +1,12 @@
-#' Create a visual table from a summariseMissingData() result.
+
+#' Create a visual table from a summariseMissingData() result
+#'
 #' @param result A summarised_result object.
 #' @inheritParams style-table
+#'
 #' @return A formatted table object with the summarised data.
 #' @export
+#'
 #' @examples
 #' \donttest{
 #' library(OmopSketch)
@@ -19,6 +23,7 @@
 #'
 #' cdmDisconnect(cdm = cdm)
 #' }
+#'
 tableMissingData <- function(result,
                              type = NULL,
                              style = NULL) {

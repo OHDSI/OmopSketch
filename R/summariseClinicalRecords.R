@@ -1,39 +1,36 @@
-#' Summarise an omop table from a cdm object. You will obtain
-#' information related to the number of records, number of subjects, whether the
-#' records are in observation, number of present domains, number of present
-#' concepts, missing data and inconsistencies in start date and end date
+#' Summarise an omop table from a cdm object
 #'
-#' @param cdm A cdm_reference object.
-#' @param omopTableName A character vector of the names of the tables to
-#' summarise in the cdm object. Run `OmopSketch::clinicalTables()` to check the
-#' available options.
+#' You will obtain information related to the number of records, number of
+#' subjects, whether the records are in observation, number of present domains,
+#' number of present concepts, missing data and inconsistencies in start date
+#' and end date.
+#'
+#' @inheritParams consistent-doc
 #' @param recordsPerPerson Generates summary statistics for the number of
 #' records per person. Set to NULL if no summary statistics are required.
-#' @param missingData Logical. If `TRUE`, includes a summary of missing data for relevant fields.
-#' @param quality Logical. If `TRUE`, performs basic data quality checks, including:
-#' \itemize{
-#'   \item Percentage of records within the observation period
-#'   \item Number of records with end date before start date
-#'   \item Number of records with start date before the person's birth date
-#' }
-#' @param conceptSummary Logical. If `TRUE`, includes summaries of concept-level information, including:
-#' \itemize{
-#'   \item Domain ID of standard concepts
-#'   \item Type concept ID
-#'   \item Standard vs non-standard concepts
-#'   \item Source vocabulary usage
-#' }
-#' @param ageGroup A list of age groups to stratify results by.
-#' @param sex Boolean variable. Whether to stratify by sex (TRUE) or not
-#' (FALSE).
+#' @param missingData Logical. If `TRUE`, includes a summary of missing data for
+#' relevant fields.
+#' @param quality Logical. If `TRUE`, performs basic data quality checks,
+#' including:
+#' - Percentage of records within the observation period.
+#' - Number of records with end date before start date.
+#' - Number of records with start date before the person's birth date.
+#' @param conceptSummary Logical. If `TRUE`, includes summaries of concept-level
+#' information, including:
+#' - Domain ID of standard concepts.
+#' - Type concept ID.
+#' - Standard vs non-standard concepts.
+#' - Source vocabulary usage.
 #' @inheritParams dateRange-startDate
 #' @param inObservation Deprecated. Use `quality = TRUE` instead.
 #' @param standardConcept Deprecated. Use `conceptSummary = TRUE` instead.
 #' @param sourceVocabulary Deprecated. Use `conceptSummary = TRUE` instead.
 #' @param domainId Deprecated. Use `conceptSummary = TRUE` instead.
 #' @param typeConcept Deprecated. Use `conceptSummary = TRUE` instead.
+#'
 #' @return A summarised_result object.
 #' @export
+#'
 #' @examples
 #' \donttest{
 #' library(OmopSketch)
@@ -41,7 +38,7 @@
 #'
 #' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 #'
-#' summarisedResult <- summariseClinicalRecords(
+#' result <- summariseClinicalRecords(
 #'   cdm = cdm,
 #'   omopTableName = "condition_occurrence",
 #'   recordsPerPerson = c("mean", "sd"),
@@ -50,10 +47,11 @@
 #'   missingData = TRUE
 #' )
 #'
-#' summarisedResult
+#' tableClinicalRecords(result = result)
 #'
 #' cdmDisconnect(cdm = cdm)
 #' }
+#'
 summariseClinicalRecords <- function(cdm,
                                      omopTableName,
                                      recordsPerPerson = c("mean", "sd", "median", "q25", "q75", "min", "max"),

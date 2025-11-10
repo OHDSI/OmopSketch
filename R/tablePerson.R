@@ -17,6 +17,8 @@
 #' result <- summarisePerson(cdm = cdm)
 #'
 #' tablePerson(result = result)
+#'
+#' cdmDisconnect(cdm = cdm)
 #' }
 #'
 tablePerson <- function(result,

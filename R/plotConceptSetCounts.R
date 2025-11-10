@@ -1,12 +1,15 @@
-#' Plot the concept counts of a summariseConceptSetCounts output.
+
+#' Plot the concept counts of a summariseConceptSetCounts output
+#'
 #' `r lifecycle::badge('deprecated')`
-#' @param result A summarised_result object (output of summariseConceptSetCounts).
-#' @param facet Columns to face by. Formula format can be provided. See possible
-#' columns to face by with: `visOmopResults::tidyColumns()`.
-#' @param colour Columns to colour by. See possible columns to colour by with:
-#' `visOmopResults::tidyColumns()`.
+#'
+#' @param result A summarised_result object (output of
+#' `summariseConceptSetCounts()`).
+#' @inheritParams consistent-doc
+#'
 #' @return A ggplot2 object showing the concept counts.
 #' @export
+#'
 #' @examples
 #' \donttest{
 #' library(dplyr)
@@ -25,9 +28,14 @@
 #'
 #' result |>
 #'   filter(variable_name == "Number subjects") |>
-#'   plotConceptSetCounts(facet = "codelist_name", colour = "standard_concept_name")
+#'   plotConceptSetCounts(
+#'     facet = "codelist_name",
+#'     colour = "standard_concept_name"
+#'   )
 #'
+#' cdmDisconnect(cdm = cdm)
 #' }
+#'
 plotConceptSetCounts <- function(result,
                                  facet = NULL,
                                  colour = NULL) {

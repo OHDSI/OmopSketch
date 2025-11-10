@@ -1,18 +1,18 @@
-#' Create a ggplot2 plot from the output of summariseTrend().
+
+#' Create a ggplot2 plot from the output of summariseTrend()
 #'
 #' @param result A summarised_result object (output of summariseTrend).
 #' @param output The output to plot.  Accepted values are: `"record"`, `"person"`,
 #'  `"person-days"`, `"age"`, and `"sex"`.
 #'  If not specified, the function will default to:
-#'   - the only available output if there is just one in the results, or
-#'   - `"record"` if multiple outputs are present.
-#' @param facet Columns to face by. Formula format can be provided. See possible
-#' columns to face by with: `visOmopResults::tidyColumns()`.
-#' @param colour Columns to colour by. See possible columns to colour by with:
-#' `visOmopResults::tidyColumns()`.
+#'  - the only available output if there is just one in the results, or
+#'  - `"record"` if multiple outputs are present.
+#' @inheritParams consistent-doc
 #' @inheritParams style-plot
-#' @return A ggplot showing the table counts
+#'
+#' @return A ggplot showing the table counts.
 #' @export
+#'
 #' @examples
 #' \donttest{
 #' library(dplyr)
@@ -29,11 +29,16 @@
 #'   sex = TRUE
 #' )
 #'
-#' plotTrend(result, output = "record", colour = "sex", facet = "age_group")
+#' plotTrend(
+#'   result = result,
+#'   output = "record",
+#'   colour = "sex",
+#'   facet = "age_group"
+#' )
 #'
-#'
-#' cdmDisconnect(cdm)
+#' cdmDisconnect(cdm = cdm)
 #' }
+#'
 plotTrend <- function(result,
                       output = NULL,
                       facet = "type",

@@ -2,7 +2,7 @@
 % Please edit documentation in R/tableClinicalRecords.R
 \name{tableClinicalRecords}
 \alias{tableClinicalRecords}
-\title{Create a visual table from a summariseClinicalRecord() output.}
+\title{Create a visual table from a summariseClinicalRecord() output}
 \usage{
 tableClinicalRecords(result, type = NULL, style = NULL)
 }
@@ -34,7 +34,7 @@ If \code{style = NULL}, the function will use global options (see
 A formatted table object with the summarised data.
 }
 \description{
-Create a visual table from a summariseClinicalRecord() output.
+Create a visual table from a summariseClinicalRecord() output
 }
 \examples{
 \donttest{
@@ -58,6 +58,7 @@ summarisedResult |>
   suppress(minCellCount = 5) |>
   tableClinicalRecords()
 
-cdmDisconnect(cdm)
+cdmDisconnect(cdm = cdm)
 }
+
 }

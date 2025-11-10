@@ -1,6 +1,7 @@
+
 #' Summarise person table
 #'
-#' @param cdm A cdm_reference object.
+#' @inheritParams consistent-doc
 #'
 #' @return A summarised_result object with the summary of the person table.
 #' @export
@@ -15,10 +16,9 @@
 #'
 #' result <- summarisePerson(cdm = cdm)
 #'
-#' result |>
-#'   glimpse()
+#' tablePerson(result = result)
 #'
-#' cdmDisconnect(cdm)
+#' cdmDisconnect(cdm = cdm)
 #' }
 #'
 summarisePerson <- function(cdm) {

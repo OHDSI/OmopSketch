@@ -1,4 +1,6 @@
-#' Create a visual table from a summariseObservationPeriod() result.
+
+#' Create a visual table from a summariseObservationPeriod() result
+#'
 #' @param result A summarised_result object.
 #' @inheritParams style-table
 #'
@@ -12,12 +14,13 @@
 #'
 #' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 #'
-#' result <- summariseObservationPeriod(observationPeriod = cdm$observation_period)
+#' result <- summariseObservationPeriod(cdm = cdm)
 #'
 #' tableObservationPeriod(result = result)
 #'
 #' cdmDisconnect(cdm = cdm)
 #' }
+#'
 tableObservationPeriod <- function(result,
                                    type = NULL,
                                    style = NULL) {

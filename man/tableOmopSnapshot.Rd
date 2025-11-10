@@ -2,7 +2,7 @@
 % Please edit documentation in R/tableOmopSnapshot.R
 \name{tableOmopSnapshot}
 \alias{tableOmopSnapshot}
-\title{Create a visual table from a summarise_omop_snapshot result.}
+\title{Create a visual table from a summarise_omop_snapshot result}
 \usage{
 tableOmopSnapshot(result, type = NULL, style = NULL)
 }
@@ -34,7 +34,7 @@ If \code{style = NULL}, the function will use global options (see
 A formatted table object with the summarised data.
 }
 \description{
-Create a visual table from a summarise_omop_snapshot result.
+Create a visual table from a summarise_omop_snapshot result
 }
 \examples{
 \donttest{
@@ -47,6 +47,7 @@ result <- summariseOmopSnapshot(cdm = cdm)
 
 tableOmopSnapshot(result = result)
 
-cdmDisconnect(cdm)
+cdmDisconnect(cdm = cdm)
 }
+
 }

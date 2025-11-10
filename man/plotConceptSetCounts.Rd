@@ -2,13 +2,13 @@
 % Please edit documentation in R/plotConceptSetCounts.R
 \name{plotConceptSetCounts}
 \alias{plotConceptSetCounts}
-\title{Plot the concept counts of a summariseConceptSetCounts output.
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
+\title{Plot the concept counts of a summariseConceptSetCounts output}
 \usage{
 plotConceptSetCounts(result, facet = NULL, colour = NULL)
 }
 \arguments{
-\item{result}{A summarised_result object (output of summariseConceptSetCounts).}
+\item{result}{A summarised_result object (output of
+\code{summariseConceptSetCounts()}).}
 
 \item{facet}{Columns to face by. Formula format can be provided. See possible
 columns to face by with: \code{visOmopResults::tidyColumns()}.}
@@ -20,7 +20,6 @@ columns to face by with: \code{visOmopResults::tidyColumns()}.}
 A ggplot2 object showing the concept counts.
 }
 \description{
-Plot the concept counts of a summariseConceptSetCounts output.
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 }
 \examples{
@@ -41,7 +40,12 @@ result <- summariseConceptSetCounts(
 
 result |>
   filter(variable_name == "Number subjects") |>
-  plotConceptSetCounts(facet = "codelist_name", colour = "standard_concept_name")
+  plotConceptSetCounts(
+    facet = "codelist_name",
+    colour = "standard_concept_name"
+  )
 
+cdmDisconnect(cdm = cdm)
 }
+
 }

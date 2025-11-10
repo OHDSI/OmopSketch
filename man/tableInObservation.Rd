@@ -2,21 +2,20 @@
 % Please edit documentation in R/tableInObservation.R
 \name{tableInObservation}
 \alias{tableInObservation}
-\title{Create a visual table from a summariseInObservation() result.
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
+\title{Create a visual table from a summariseInObservation() result}
 \usage{
 tableInObservation(result, type = "gt")
 }
 \arguments{
 \item{result}{A summarised_result object.}
 
-\item{type}{Type of formatting output table. See \code{visOmopResults::tableType()} for allowed options. Default is \code{"gt"}}
+\item{type}{Type of formatting output table. See
+\code{visOmopResults::tableType()} for allowed options. Default is \code{"gt"}.}
 }
 \value{
 A formatted table object with the summarised data.
 }
 \description{
-Create a visual table from a summariseInObservation() result.
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 }
 \examples{
@@ -38,6 +37,7 @@ result <- summariseInObservation(
 result |>
   tableInObservation()
 
-cdmDisconnect(cdm)
+cdmDisconnect(cdm = cdm)
 }
+
 }

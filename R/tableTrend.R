@@ -1,9 +1,13 @@
-#' Create a visual table from a summariseTrend() result.
+
+#' Create a visual table from a summariseTrend() result
+#'
 #' @param result A summarised_result object.
 #' @param type Type of formatting output table between `gt`, `datatable` and `reactable`. Default is `"gt"`.
 #' @inheritParams style-table
+#'
 #' @return A formatted table object with the summarised data.
 #' @export
+#'
 #' @examples
 #' \donttest{
 #' library(OmopSketch)
@@ -25,6 +29,7 @@
 #'
 #' cdmDisconnect(cdm = cdm)
 #' }
+#'
 tableTrend <- function(result,
                        type = NULL,
                        style = NULL) {

@@ -7,7 +7,8 @@
 summarisePerson(cdm)
 }
 \arguments{
-\item{cdm}{A cdm_reference object.}
+\item{cdm}{A \code{cdm_reference} object. Use \emph{CDMConnector} to create a reference
+to a database or \emph{omock} to create a reference to synthetic data.}
 }
 \value{
 A summarised_result object with the summary of the person table.
@@ -25,10 +26,9 @@ cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
 result <- summarisePerson(cdm = cdm)
 
-result |>
-  glimpse()
+tablePerson(result = result)
 
-cdmDisconnect(cdm)
+cdmDisconnect(cdm = cdm)
 }
 
 }

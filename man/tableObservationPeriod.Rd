@@ -2,7 +2,7 @@
 % Please edit documentation in R/tableObservationPeriod.R
 \name{tableObservationPeriod}
 \alias{tableObservationPeriod}
-\title{Create a visual table from a summariseObservationPeriod() result.}
+\title{Create a visual table from a summariseObservationPeriod() result}
 \usage{
 tableObservationPeriod(result, type = NULL, style = NULL)
 }
@@ -34,7 +34,7 @@ If \code{style = NULL}, the function will use global options (see
 A formatted table object with the summarised data.
 }
 \description{
-Create a visual table from a summariseObservationPeriod() result.
+Create a visual table from a summariseObservationPeriod() result
 }
 \examples{
 \donttest{
@@ -43,10 +43,11 @@ library(omock)
 
 cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
-result <- summariseObservationPeriod(observationPeriod = cdm$observation_period)
+result <- summariseObservationPeriod(cdm = cdm)
 
 tableObservationPeriod(result = result)
 
 cdmDisconnect(cdm = cdm)
 }
+
 }

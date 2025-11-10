@@ -2,7 +2,7 @@
 % Please edit documentation in R/tableMissingData.R
 \name{tableMissingData}
 \alias{tableMissingData}
-\title{Create a visual table from a summariseMissingData() result.}
+\title{Create a visual table from a summariseMissingData() result}
 \usage{
 tableMissingData(result, type = NULL, style = NULL)
 }
@@ -34,7 +34,7 @@ If \code{style = NULL}, the function will use global options (see
 A formatted table object with the summarised data.
 }
 \description{
-Create a visual table from a summariseMissingData() result.
+Create a visual table from a summariseMissingData() result
 }
 \examples{
 \donttest{
@@ -52,4 +52,5 @@ tableMissingData(result = result)
 
 cdmDisconnect(cdm = cdm)
 }
+
 }

@@ -1,12 +1,15 @@
-#' Create a ggplot2 plot from the output of summariseInObservation().
+
+#' Create a ggplot2 plot from the output of summariseInObservation()
+#'
 #' `r lifecycle::badge('deprecated')`
-#' @param result A summarised_result object (output of summariseInObservation).
-#' @param facet Columns to face by. Formula format can be provided. See possible
-#' columns to face by with: `visOmopResults::tidyColumns()`.
-#' @param colour Columns to colour by. See possible columns to colour by with:
-#' `visOmopResults::tidyColumns()`.
-#' @return A ggplot showing the table counts
+#'
+#' @param result A summarised_result object (output of
+#' `summariseInObservation()`).
+#' @inheritParams consistent-doc
+#'
+#' @return A ggplot showing the table counts.
 #' @export
+#'
 #' @examples
 #' \donttest{
 #' library(dplyr)
@@ -26,7 +29,9 @@
 #'   filter(variable_name == "Person-days") |>
 #'   plotInObservation(facet = "sex", colour = "age_group")
 #'
+#' cdmDisconnect(cdm = cdm)
 #' }
+#'
 plotInObservation <- function(result,
                               facet = NULL,
                               colour = NULL) {
