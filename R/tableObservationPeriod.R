@@ -8,19 +8,7 @@
 #' @return A formatted table visualisation.
 #' @export
 #'
-#' @examples
-#' \donttest{
-#' library(OmopSketch)
-#' library(omock)
-#'
-#' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
-#'
-#' result <- summariseObservationPeriod(cdm = cdm)
-#'
-#' tableObservationPeriod(result = result)
-#'
-#' cdmDisconnect(cdm = cdm)
-#' }
+#' @inherit summariseObservationPeriod examples
 #'
 tableObservationPeriod <- function(result,
                                    type = NULL,

@@ -46,12 +46,15 @@ Create a plot from the output of summariseObservationPeriod()
 }
 \examples{
 \donttest{
-library(omock)
 library(OmopSketch)
+library(dplyr, warn.conflicts = FALSE)
+library(omock)
 
 cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
 result <- summariseObservationPeriod(cdm = cdm)
+
+tableObservationPeriod(result = result)
 
 plotObservationPeriod(
   result = result,

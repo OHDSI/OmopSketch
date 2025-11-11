@@ -79,6 +79,12 @@ result <- summariseObservationPeriod(cdm = cdm)
 
 tableObservationPeriod(result = result)
 
+plotObservationPeriod(
+  result = result,
+  variableName = "Duration in days",
+  plotType = "boxplot"
+)
+
 cdmDisconnect(cdm = cdm)
 }
 

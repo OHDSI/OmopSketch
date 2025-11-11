@@ -14,23 +14,7 @@
 #' @return A plot visualisation.
 #' @export
 #'
-#' @examples
-#' \donttest{
-#' library(omock)
-#' library(OmopSketch)
-#'
-#' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
-#'
-#' result <- summariseObservationPeriod(cdm = cdm)
-#'
-#' plotObservationPeriod(
-#'   result = result,
-#'   variableName = "Duration in days",
-#'   plotType = "boxplot"
-#' )
-#'
-#' cdmDisconnect(cdm = cdm)
-#' }
+#' @inherit summariseObservationPeriod examples
 #'
 plotObservationPeriod <- function(result,
                                   variableName = "Number subjects",

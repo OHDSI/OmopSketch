@@ -40,6 +40,7 @@ Create a visual table from a summariseObservationPeriod() result
 \examples{
 \donttest{
 library(OmopSketch)
+library(dplyr, warn.conflicts = FALSE)
 library(omock)
 
 cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
@@ -47,6 +48,12 @@ cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 result <- summariseObservationPeriod(cdm = cdm)
 
 tableObservationPeriod(result = result)
+
+plotObservationPeriod(
+  result = result,
+  variableName = "Duration in days",
+  plotType = "boxplot"
+)
 
 cdmDisconnect(cdm = cdm)
 }
