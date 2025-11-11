@@ -490,8 +490,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising concept types in <span style="color: #0000BB;">condition_occurrence</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising missing data in <span style="color: #0000BB;">condition_occurrence</span>.</span></span>
 <span></span>
-<span><span class="va">summarisedResult</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/tableClinicalRecords.html">tableClinicalRecords</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"gt"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/tableClinicalRecords.html">tableClinicalRecords</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">summarisedResult</span>, type <span class="op">=</span> <span class="st">"gt"</span><span class="op">)</span></span></code></pre></div>
 <div id="pvjfhcepyv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#pvjfhcepyv table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -1789,7 +1788,11 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
 </tbody>
 </table>
 </div>
-<p>Finally, we can disconnect from the cdm.</p>
+</div>
+<div class="section level2">
+<h2 id="disconnect-from-cdm">Disconnect from CDM<a class="anchor" aria-label="anchor" href="#disconnect-from-cdm"></a>
+</h2>
+<p>Finally, disconnect from the mock CDM.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://darwin-eu.github.io/omopgenerics/reference/cdmDisconnect.html" class="external-link">cdmDisconnect</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span><span class="op">)</span></span></code></pre></div>
 </div>

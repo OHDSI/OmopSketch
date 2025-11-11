@@ -210,9 +210,11 @@ argument. Options include:</p>
 <li><p>“person-days”: Number of person-days (episode tables
 only)</p></li>
 <li><p>“age”: Median age at start date of each interval</p></li>
-<li><p>“sex”: Number of females ### Records and subjects per
-year</p></li>
+<li><p>“sex”: Number of females</p></li>
 </ul>
+<div class="section level4">
+<h4 id="records-and-subjects-per-year">Records and subjects per year<a class="anchor" aria-label="anchor" href="#records-and-subjects-per-year"></a>
+</h4>
 <p>For each time interval the results will include the number of records
 and number of individuals observed during that period. In addition to
 absolute counts, the function also reports the percentage of records and
@@ -225,7 +227,6 @@ entire table.</p>
 <span>  output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"record"</span>, <span class="st">"person"</span><span class="op">)</span>,</span>
 <span>  interval <span class="op">=</span> <span class="st">"years"</span></span>
 <span><span class="op">)</span></span>
-<span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span>, <span class="va">additional_level</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span><span class="op">)</span></span>
@@ -243,6 +244,7 @@ entire table.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> condition_occurr… Number of re… 1910-01-01 to 1… count         16            </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> condition_occurr… Number of su… 1910-01-01 to 1… count         13            </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 442 more rows</span></span></span></code></pre></div>
+</div>
 <div class="section level4">
 <h4 id="person-days">Person-days<a class="anchor" aria-label="anchor" href="#person-days"></a>
 </h4>
@@ -2575,10 +2577,10 @@ summarised result.</p>
 <span>  colour <span class="op">=</span> <span class="st">"sex"</span>,</span>
 <span>  facet <span class="op">=</span> <span class="st">"age_group"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="summarise_trend_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" width="700">
-When the result includes several outputs (for example, records, persons,
-or person-days), the function defaults to plotting the number of
-records. You can override this by setting the output argument to the
+<p><img src="summarise_trend_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" width="700"></p>
+<p>When the result includes several outputs (for example, records,
+persons, or person-days), the function defaults to plotting the number
+of records. You can override this by setting the output argument to the
 measure you want to visualise.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseTrend.html">summariseTrend</a></span><span class="op">(</span><span class="va">cdm</span>,</span>

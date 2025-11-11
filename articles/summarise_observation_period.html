@@ -302,8 +302,8 @@ as well as crossed strata (that means, <code>sex == "Female"</code> and
 <h3 id="tidy-the-summarised-object">Tidy the summarised object<a class="anchor" aria-label="anchor" href="#tidy-the-summarised-object"></a>
 </h3>
 <p><code><a href="../reference/tableObservationPeriod.html">tableObservationPeriod()</a></code> will help you to create a table
-(see supported types with: visOmopResults::tableType()). By default it
-creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.</p>
+(see supported types with: <code><a href="https://darwin-eu.github.io/visOmopResults/reference/tableType.html" class="external-link">visOmopResults::tableType()</a></code>). By
+default it creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">summarisedResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseObservationPeriod.html">summariseObservationPeriod</a></span><span class="op">(</span></span>
 <span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
@@ -1349,10 +1349,14 @@ package.</p>
 <span>  facet <span class="op">=</span> <span class="st">"age_group"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="summarise_observation_period_files/figure-html/unnamed-chunk-11-2.png" class="r-plt" width="700"></p>
-<p>Finally, we can disconnect from the cdm.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="disconnect-from-cdm">Disconnect from CDM<a class="anchor" aria-label="anchor" href="#disconnect-from-cdm"></a>
+</h2>
+<p>Finally, disconnect from the mock CDM.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://darwin-eu.github.io/omopgenerics/reference/cdmDisconnect.html" class="external-link">cdmDisconnect</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span><span class="op">)</span></span></code></pre></div>
-</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
