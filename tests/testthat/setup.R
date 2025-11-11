@@ -8,7 +8,7 @@ tabs <- c(
   "note", "condition_occurrence", "drug_exposure", "procedure_occurrence",
   "device_exposure", "measurement", "observation", "death"
 )
-personIds <- cdm$person |>
+personIds <- cdmLocal$person |>
   dplyr::distinct(.data$person_id) |>
   dplyr::pull()
 for (tab in tabs) {
