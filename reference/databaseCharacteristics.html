@@ -73,32 +73,36 @@
 
 
 <dl><dt id="arg-cdm">cdm<a class="anchor" aria-label="anchor" href="#arg-cdm"></a></dt>
-<dd><p>A <code>cdm_reference</code> object representing the Common Data Model (CDM) reference.</p></dd>
+<dd><p>A <code>cdm_reference</code> object. Use <em>CDMConnector</em> to create a reference
+to a database or <em>omock</em> to create a reference to synthetic data.</p></dd>
 
 
 <dt id="arg-omoptablename">omopTableName<a class="anchor" aria-label="anchor" href="#arg-omoptablename"></a></dt>
 <dd><p>A character vector of the names of the tables to
-summarise in the cdm object. Run <code><a href="clinicalTables.html">OmopSketch::clinicalTables()</a></code> to check the
+summarise in the cdm object. Run <code><a href="clinicalTables.html">clinicalTables()</a></code> to check the
 available options.</p></dd>
 
 
 <dt id="arg-sample">sample<a class="anchor" aria-label="anchor" href="#arg-sample"></a></dt>
-<dd><p>Either an integer or a character string.
-If an integer (n &gt; 0), the function will first sample <code>n</code> distinct
+<dd><p>Either an integer or a character string.</p><ul><li><p>If an integer (n &gt; 0), the function will first sample <code>n</code> distinct
 <code>person_id</code>s from the <code>person</code> table and then subset the input tables to
-those subjects.
-If a character string, it must be the name of a cohort in the <code>cdm</code>; in
+those subjects.</p></li>
+<li><p>If a character string, it must be the name of a cohort in the <code>cdm</code>; in
 this case, the input tables are subset to subjects (<code>subject_id</code>) belonging
-to that cohort.
-Use <code>NULL</code> to disable subsetting (default value).</p></dd>
+to that cohort.</p></li>
+<li><p>Use <code>NULL</code> to disable subsetting (default value).</p></li>
+</ul></dd>
 
 
 <dt id="arg-sex">sex<a class="anchor" aria-label="anchor" href="#arg-sex"></a></dt>
-<dd><p>Logical; whether to stratify results by sex (<code>TRUE</code>) or not (<code>FALSE</code>).</p></dd>
+<dd><p>Logical; whether to stratify results by sex (<code>TRUE</code>) or not
+(<code>FALSE</code>).</p></dd>
 
 
 <dt id="arg-agegroup">ageGroup<a class="anchor" aria-label="anchor" href="#arg-agegroup"></a></dt>
-<dd><p>A list of age groups to stratify the results by. Each element represents a specific age range.</p></dd>
+<dd><p>A list of age groups to stratify the results by. Each element
+represents a specific age range. You can give them specific names, e.g.
+<code>ageGroup = list(children = c(0, 17), adult = c(18, Inf))</code>.</p></dd>
 
 
 <dt id="arg-daterange">dateRange<a class="anchor" aria-label="anchor" href="#arg-daterange"></a></dt>
@@ -108,20 +112,23 @@ If <code>dateRange</code> is <code>NULL</code>, no restriction is applied.</p></
 
 
 <dt id="arg-interval">interval<a class="anchor" aria-label="anchor" href="#arg-interval"></a></dt>
-<dd><p>Time interval to stratify by. It can either be "years", "quarters", "months" or "overall".</p></dd>
+<dd><p>Time interval to stratify by. It can either be "years",
+"quarters", "months" or "overall".</p></dd>
 
 
 <dt id="arg-conceptidcounts">conceptIdCounts<a class="anchor" aria-label="anchor" href="#arg-conceptidcounts"></a></dt>
-<dd><p>Logical; whether to summarise concept ID counts (<code>TRUE</code>) or not (<code>FALSE</code>).</p></dd>
+<dd><p>Logical; whether to summarise concept ID counts
+(<code>TRUE</code>) or not (<code>FALSE</code>).</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>additional arguments passed to the OmopSketch functions that are used internally.</p></dd>
+<dd><p>additional arguments passed to the OmopSketch functions that are
+used internally.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A <code>summarised_result</code> object containing the results of the characterisation.</p>
+    <p>A <code>summarised_result</code> object with the results.</p>
     </div>
 
     <div class="section level2">
@@ -129,6 +136,17 @@ If <code>dateRange</code> is <code>NULL</code>, no restriction is applied.</p></
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://OHDSI.github.io/OmopSketch/">OmopSketch</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ohdsi.github.io/omock/" class="external-link">omock</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘dplyr’</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:stats’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     filter, lag</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:base’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     intersect, setdiff, setequal, union</span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://here.r-lib.org/" class="external-link">here</a></span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> here() starts at /home/runner/work/OmopSketch/OmopSketch</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ohdsi.github.io/omock/reference/mockCdmFromDataset.html" class="external-link">mockCdmFromDataset</a></span><span class="op">(</span>datasetName <span class="op">=</span> <span class="st">"GiBleed"</span>, source <span class="op">=</span> <span class="st">"duckdb"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Reading <span style="color: #0000BB;">GiBleed</span> tables.</span>
@@ -140,7 +158,10 @@ If <code>dateRange</code> is <code>NULL</code>, no restriction is applied.</p></
 <span class="r-in"><span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span></span>
 <span class="r-in"><span>  sample <span class="op">=</span> <span class="fl">100</span>,</span></span>
 <span class="r-in"><span>  omopTableName <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"drug_exposure"</span>, <span class="st">"condition_occurrence"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  sex <span class="op">=</span> <span class="cn">TRUE</span>, ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">50</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">51</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span>, interval <span class="op">=</span> <span class="st">"years"</span>, conceptIdCounts <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span>  sex <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">50</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">51</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  interval <span class="op">=</span> <span class="st">"years"</span>,</span></span>
+<span class="r-in"><span>  conceptIdCounts <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The characterisation will focus on the following OMOP tables: drug_exposure and</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> condition_occurrence</span>
@@ -192,10 +213,34 @@ If <code>dateRange</code> is <code>NULL</code>, no restriction is applied.</p></
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → Summarising observation period</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → Summarising trends: records, subjects, person-days, age and sex</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → The number of person-days is not computed for event tables</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ☺ Database characterisation finished. Code ran in 1 min and 5 sec</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ☺ Database characterisation finished. Code ran in 1 min and 3 sec</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> 1 table created: <span style="color: #0000BB;">"person_sample"</span>.</span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">result</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Rows: 74,447</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Columns: 13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ result_id        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>2<span style="color: #949494;">, </span>2<span style="color: #949494;">,</span>…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ cdm_name         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "GiBleed"<span style="color: #949494;">, </span>"GiBleed"<span style="color: #949494;">, </span>"GiBleed"<span style="color: #949494;">, </span>"GiBleed"<span style="color: #949494;">, </span>"GiBleed"…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ group_name       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ group_level      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ strata_name      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ strata_level     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "general"<span style="color: #949494;">, </span>"general"<span style="color: #949494;">, </span>"general"<span style="color: #949494;">, </span>"cdm"<span style="color: #949494;">, </span>"cdm"<span style="color: #949494;">, </span>"cdm"<span style="color: #949494;">,</span>…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ variable_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">N</span>…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ estimate_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "snapshot_date"<span style="color: #949494;">, </span>"person_count"<span style="color: #949494;">, </span>"vocabulary_version"…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ estimate_type    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "date"<span style="color: #949494;">, </span>"integer"<span style="color: #949494;">, </span>"character"<span style="color: #949494;">, </span>"character"<span style="color: #949494;">, </span>"charact…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ estimate_value   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "2025-11-11"<span style="color: #949494;">, </span>"100"<span style="color: #949494;">, </span>"v5.0 18-JAN-19"<span style="color: #949494;">, </span>"Synthea synth…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ additional_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"…</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="shinyCharacteristics.html">shinyCharacteristics</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">result</span>, directory <span class="op">=</span> <span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Creating shiny from provided results.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span><span style="color: #BBBB00;">!</span> 2 packages are not installed: <span style="color: #0000BB;">plotly</span> and <span style="color: #0000BB;">shinycssloaders</span>.</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://darwin-eu.github.io/omopgenerics/reference/cdmDisconnect.html" class="external-link">cdmDisconnect</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

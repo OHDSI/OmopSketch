@@ -60,55 +60,18 @@
           <code><a href="summariseOmopSnapshot.html">summariseOmopSnapshot()</a></code>
 
         </dt>
-        <dd>Summarise a cdm_reference object creating a snapshot with the metadata of the cdm_reference object.</dd>
+        <dd>Summarise a cdm_reference object creating a snapshot with the metadata of the cdm_reference object</dd>
 
         <dt>
 
           <code><a href="tableOmopSnapshot.html">tableOmopSnapshot()</a></code>
 
         </dt>
-        <dd>Create a visual table from a summarise_omop_snapshot result.</dd>
+        <dd>Create a visual table from a summarise_omop_snapshot result</dd>
       </dl></div><div class="section level2">
 
-      <h3 id="clinical-tables">Clinical Tables<a class="anchor" aria-label="anchor" href="#clinical-tables"></a></h3>
-      <div class="section-desc"><p>Summarise and plot tables in the OMOP Common Data Model</p></div>
-
-      <dl></dl></div><div class="section level2">
-
-
-
-
-      <dl><dt>
-
-          <code><a href="summariseClinicalRecords.html">summariseClinicalRecords()</a></code>
-
-        </dt>
-        <dd>Summarise an omop table from a cdm object. You will obtain information related to the number of records, number of subjects, whether the records are in observation, number of present domains, number of present concepts, missing data and inconsistencies in start date and end date</dd>
-
-        <dt>
-
-          <code><a href="tableClinicalRecords.html">tableClinicalRecords()</a></code>
-
-        </dt>
-        <dd>Create a visual table from a summariseClinicalRecord() output.</dd>
-
-        <dt>
-
-          <code><a href="summariseMissingData.html">summariseMissingData()</a></code>
-
-        </dt>
-        <dd>Summarise missing data in omop tables</dd>
-
-        <dt>
-
-          <code><a href="tableMissingData.html">tableMissingData()</a></code>
-
-        </dt>
-        <dd>Create a visual table from a summariseMissingData() result.</dd>
-      </dl></div><div class="section level2">
-
-      <h3 id="observation-periods">Observation Periods<a class="anchor" aria-label="anchor" href="#observation-periods"></a></h3>
-      <div class="section-desc"><p>Summarise and plot the observation period table in the OMOP Common Data Model</p></div>
+      <h3 id="person-and-observation-periods">Person and Observation Periods<a class="anchor" aria-label="anchor" href="#person-and-observation-periods"></a></h3>
+      <div class="section-desc"><p>Summarise and plot the person and observation period table</p></div>
 
       <dl></dl></div><div class="section level2">
 
@@ -131,24 +94,68 @@
 
         <dt>
 
+          <code><a href="plotPerson.html">plotPerson()</a></code>
+
+        </dt>
+        <dd>Visualise the output of <code><a href="../reference/summarisePerson.html">summarisePerson()</a></code></dd>
+
+        <dt>
+
           <code><a href="summariseObservationPeriod.html">summariseObservationPeriod()</a></code>
 
         </dt>
-        <dd>Summarise the observation period table getting some overall statistics in a summarised_result object.</dd>
+        <dd>Summarise the observation period table getting some overall statistics in a summarised_result object</dd>
 
         <dt>
 
           <code><a href="plotObservationPeriod.html">plotObservationPeriod()</a></code>
 
         </dt>
-        <dd>Create a plot from the output of summariseObservationPeriod().</dd>
+        <dd>Create a plot from the output of summariseObservationPeriod()</dd>
 
         <dt>
 
           <code><a href="tableObservationPeriod.html">tableObservationPeriod()</a></code>
 
         </dt>
-        <dd>Create a visual table from a summariseObservationPeriod() result.</dd>
+        <dd>Create a visual table from a summariseObservationPeriod() result</dd>
+      </dl></div><div class="section level2">
+
+      <h3 id="clinical-tables">Clinical Tables<a class="anchor" aria-label="anchor" href="#clinical-tables"></a></h3>
+      <div class="section-desc"><p>Summarise and plot tables in the OMOP Common Data Model</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="summariseClinicalRecords.html">summariseClinicalRecords()</a></code>
+
+        </dt>
+        <dd>Summarise an omop table from a cdm object</dd>
+
+        <dt>
+
+          <code><a href="tableClinicalRecords.html">tableClinicalRecords()</a></code>
+
+        </dt>
+        <dd>Create a visual table from a summariseClinicalRecord() output</dd>
+
+        <dt>
+
+          <code><a href="summariseMissingData.html">summariseMissingData()</a></code>
+
+        </dt>
+        <dd>Summarise missing data in omop tables</dd>
+
+        <dt>
+
+          <code><a href="tableMissingData.html">tableMissingData()</a></code>
+
+        </dt>
+        <dd>Create a visual table from a summariseMissingData() result</dd>
       </dl></div><div class="section level2">
 
       <h3 id="counts">Counts<a class="anchor" aria-label="anchor" href="#counts"></a></h3>
@@ -164,21 +171,21 @@
           <code><a href="summariseConceptIdCounts.html">summariseConceptIdCounts()</a></code>
 
         </dt>
-        <dd>Summarise concept use in patient-level data. Only concepts recorded during observation period are counted.</dd>
+        <dd>Summarise concept use in patient-level data</dd>
 
         <dt>
 
           <code><a href="tableConceptIdCounts.html">tableConceptIdCounts()</a></code>
 
         </dt>
-        <dd>Create a visual table from a summariseConceptIdCounts() result.</dd>
+        <dd>Create a visual table from a summariseConceptIdCounts() result</dd>
 
         <dt>
 
           <code><a href="tableTopConceptCounts.html">tableTopConceptCounts()</a></code>
 
         </dt>
-        <dd>Create a visual table of the most common concepts from <code><a href="../reference/summariseConceptIdCounts.html">summariseConceptIdCounts()</a></code> output. This function takes a <code>summarised_result</code> object and generates a formatted table highlighting the most frequent concepts.</dd>
+        <dd>Create a visual table of the most common concepts from <code><a href="../reference/summariseConceptIdCounts.html">summariseConceptIdCounts()</a></code> output</dd>
       </dl></div><div class="section level2">
 
       <h3 id="temporal-trends">Temporal Trends<a class="anchor" aria-label="anchor" href="#temporal-trends"></a></h3>
@@ -201,14 +208,14 @@
           <code><a href="tableTrend.html">tableTrend()</a></code>
 
         </dt>
-        <dd>Create a visual table from a summariseTrend() result.</dd>
+        <dd>Create a visual table from a summariseTrend() result</dd>
 
         <dt>
 
           <code><a href="plotTrend.html">plotTrend()</a></code>
 
         </dt>
-        <dd>Create a ggplot2 plot from the output of summariseTrend().</dd>
+        <dd>Create a ggplot2 plot from the output of summariseTrend()</dd>
       </dl></div><div class="section level2">
 
       <h3 id="characterisation">Characterisation<a class="anchor" aria-label="anchor" href="#characterisation"></a></h3>
@@ -231,7 +238,7 @@
           <code><a href="shinyCharacteristics.html">shinyCharacteristics()</a></code>
 
         </dt>
-        <dd>Generate an interactive Shiny application that visualises the results obtained from the <code><a href="../reference/databaseCharacteristics.html">databaseCharacteristics()</a></code> function.</dd>
+        <dd>Generate an interactive Shiny application that visualises the results obtained from the <code><a href="../reference/databaseCharacteristics.html">databaseCharacteristics()</a></code> function</dd>
       </dl></div><div class="section level2">
 
       <h3 id="helper-functions">Helper functions<a class="anchor" aria-label="anchor" href="#helper-functions"></a></h3>
@@ -261,72 +268,72 @@
       <dl><dt>
 
           <code><a href="summariseConceptCounts.html">summariseConceptCounts()</a></code>
-          <span class="badge lifecycle lifecycle-deprecated">deprecated</span>
+
         </dt>
-        <dd>Summarise concept counts in patient-level data. Only concepts recorded during observation period are counted.</dd>
+        <dd>Summarise concept counts in patient-level data</dd>
 
         <dt>
 
           <code><a href="summariseConceptSetCounts.html">summariseConceptSetCounts()</a></code>
 
         </dt>
-        <dd>Summarise concept counts in patient-level data. Only concepts recorded during observation period are counted.</dd>
+        <dd>Summarise concept counts in patient-level data</dd>
 
         <dt>
 
           <code><a href="plotConceptSetCounts.html">plotConceptSetCounts()</a></code>
           <span class="badge lifecycle lifecycle-deprecated">deprecated</span>
         </dt>
-        <dd>Plot the concept counts of a summariseConceptSetCounts output. <a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a></dd>
+        <dd>Plot the concept counts of a summariseConceptSetCounts output</dd>
 
         <dt>
 
           <code><a href="summariseRecordCount.html">summariseRecordCount()</a></code>
-          <span class="badge lifecycle lifecycle-deprecated">deprecated</span>
+
         </dt>
-        <dd>Summarise record counts of an omop_table using a specific time interval. Only records that fall within the observation period are considered.</dd>
+        <dd>Summarise record counts of an omop_table using a specific time interval</dd>
 
         <dt>
 
           <code><a href="plotRecordCount.html">plotRecordCount()</a></code>
           <span class="badge lifecycle lifecycle-deprecated">deprecated</span>
         </dt>
-        <dd>Create a ggplot of the records' count trend. <a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a></dd>
+        <dd>Create a ggplot of the records' count trend</dd>
 
         <dt>
 
           <code><a href="tableRecordCount.html">tableRecordCount()</a></code>
           <span class="badge lifecycle lifecycle-deprecated">deprecated</span>
         </dt>
-        <dd>Create a visual table from a summariseRecordCount() result. <a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a></dd>
+        <dd>Create a visual table from a summariseRecordCount() result</dd>
 
         <dt>
 
           <code><a href="summariseInObservation.html">summariseInObservation()</a></code>
           <span class="badge lifecycle lifecycle-deprecated">deprecated</span>
         </dt>
-        <dd>Summarise the number of people in observation during a specific interval of time. <a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a></dd>
+        <dd>Summarise the number of people in observation during a specific interval of time</dd>
 
         <dt>
 
           <code><a href="plotInObservation.html">plotInObservation()</a></code>
           <span class="badge lifecycle lifecycle-deprecated">deprecated</span>
         </dt>
-        <dd>Create a ggplot2 plot from the output of summariseInObservation(). <a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a></dd>
+        <dd>Create a ggplot2 plot from the output of summariseInObservation()</dd>
 
         <dt>
 
           <code><a href="tableInObservation.html">tableInObservation()</a></code>
           <span class="badge lifecycle lifecycle-deprecated">deprecated</span>
         </dt>
-        <dd>Create a visual table from a summariseInObservation() result. <a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a></dd>
+        <dd>Create a visual table from a summariseInObservation() result</dd>
 
         <dt>
 
           <code><a href="mockOmopSketch.html">mockOmopSketch()</a></code>
           <span class="badge lifecycle lifecycle-deprecated">deprecated</span>
         </dt>
-        <dd>Creates a mock database to test OmopSketch package. <a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a></dd>
+        <dd>Creates a mock database to test OmopSketch package</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
