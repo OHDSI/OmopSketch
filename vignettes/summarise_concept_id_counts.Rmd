@@ -180,8 +180,10 @@ result <- summariseConceptIdCounts(
 tableTopConceptCounts(result = result, countBy = "person")
 ```
 
-Finally, we can disconnect from the cdm.
+# Disconnect from CDM
 
-```{r, warning=FALSE}
+Finally, disconnect from the mock CDM.
+
+```{r}
 cdmDisconnect(cdm = cdm)
 ```

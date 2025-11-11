@@ -77,8 +77,10 @@ result |>
 tablePerson(result = result, type = "gt")
 ```
 
-Finally, we can disconnect from the cdm.
+# Disconnect from CDM
 
-```{r, warning=FALSE}
+Finally, disconnect from the mock CDM.
+
+```{r}
 cdmDisconnect(cdm = cdm)
 ```

@@ -102,7 +102,6 @@ When the argument `conceptSummary = TRUE` is set, the results will also include 
 - Whether each concept is a standard concept.  
 - The type and source vocabulary associated with each concept.
 
-
 ```{r, warning=FALSE}
 summarisedResult <- summariseClinicalRecords(
   cdm = cdm,
@@ -135,7 +134,9 @@ summarisedResult <- summariseClinicalRecords(
 summarisedResult |>
   select(variable_name, variable_level, estimate_name, estimate_value) 
 ```
+
 ## Strata
+
 It is also possible to stratify the results by sex and age groups:
 
 ```{r, warning=FALSE}
@@ -172,6 +173,7 @@ summarisedResult |>
 ```
 
 ## Date Range
+
 We can also filter the clinical table to a specific time window by setting the `dateRange` argument.
 
 ```{r}
@@ -201,13 +203,13 @@ summarisedResult <- summariseClinicalRecords(cdm,
   sex = TRUE
 )
 
-summarisedResult |>
-  tableClinicalRecords(type = "gt")
+tableClinicalRecords(result = summarisedResult, type = "gt")
 ```
 
+# Disconnect from CDM
 
-Finally, we can disconnect from the cdm.
+Finally, disconnect from the mock CDM.
 
-```{r, warning=FALSE}
+```{r}
 cdmDisconnect(cdm = cdm)
 ```
