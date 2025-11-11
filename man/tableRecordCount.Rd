@@ -2,21 +2,21 @@
 % Please edit documentation in R/tableRecordCount.R
 \name{tableRecordCount}
 \alias{tableRecordCount}
-\title{Create a visual table from a summariseRecordCount() result.
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
+\title{Create a visual table from a summariseRecordCount() result}
 \usage{
 tableRecordCount(result, type = "gt")
 }
 \arguments{
-\item{result}{A summarised_result object.}
+\item{result}{A summarised_result object (output of \code{summariseRecordCount()}
+).}
 
-\item{type}{Type of formatting output table. See \code{visOmopResults::tableType()} for allowed options. Default is \code{"gt"}.}
+\item{type}{Type of formatting output table. See
+\code{visOmopResults::tableType()} for allowed options. Default is \code{"gt"}.}
 }
 \value{
-A formatted table object with the summarised data.
+A formatted table visualisation.
 }
 \description{
-Create a visual table from a summariseRecordCount() result.
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 }
 \examples{
@@ -38,4 +38,5 @@ tableRecordCount(result = summarisedResult)
 
 cdmDisconnect(cdm = cdm)
 }
+
 }

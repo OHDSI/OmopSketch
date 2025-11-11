@@ -1,15 +1,20 @@
-#' Create a visual table of the most common concepts from `summariseConceptIdCounts()` output.
-#' This function takes a `summarised_result` object and generates a formatted table highlighting the most frequent concepts.
+
+#' Create a visual table of the most common concepts from
+#' `summariseConceptIdCounts()` output
 #'
-#' @param result A `summarised_result` object, typically returned by `summariseConceptIdCounts()`.
+#' This function takes a `summarised_result` object and generates a formatted
+#' table highlighting the most frequent concepts.
+#'
+#' @param result A summarised_result object (output of
+#' `summariseConceptIdCounts()`).
 #' @param top Integer. The number of top concepts to display. Defaults to `10`.
 #' @param countBy Either 'person' or 'record'. If NULL whatever is in the data
 #' is used.
 #' @inheritParams style-table
 #'
-#' @return A formatted table object displaying the top concepts from the summarised data.
-
+#' @return A formatted table visualisation.
 #' @export
+#'
 #' @examples
 #' \donttest{
 #' library(OmopSketch)
@@ -20,7 +25,10 @@
 #' result <- summariseConceptIdCounts(cdm = cdm, omopTableName = "condition_occurrence")
 #'
 #' tableTopConceptCounts(result = result, top = 5)
+#'
+#' cdmDisconnect(cdm = cdm)
 #' }
+#'
 tableTopConceptCounts <- function(result,
                                   top = 10,
                                   countBy = NULL,

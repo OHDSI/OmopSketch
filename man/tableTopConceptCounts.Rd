@@ -2,8 +2,8 @@
 % Please edit documentation in R/tableTopConceptCounts.R
 \name{tableTopConceptCounts}
 \alias{tableTopConceptCounts}
-\title{Create a visual table of the most common concepts from \code{summariseConceptIdCounts()} output.
-This function takes a \code{summarised_result} object and generates a formatted table highlighting the most frequent concepts.}
+\title{Create a visual table of the most common concepts from
+\code{summariseConceptIdCounts()} output}
 \usage{
 tableTopConceptCounts(
   result,
@@ -14,7 +14,8 @@ tableTopConceptCounts(
 )
 }
 \arguments{
-\item{result}{A \code{summarised_result} object, typically returned by \code{summariseConceptIdCounts()}.}
+\item{result}{A summarised_result object (output of
+\code{summariseConceptIdCounts()}).}
 
 \item{top}{Integer. The number of top concepts to display. Defaults to \code{10}.}
 
@@ -43,11 +44,11 @@ If \code{style = NULL}, the function will use global options (see
 (if found); otherwise, the default style is applied.}
 }
 \value{
-A formatted table object displaying the top concepts from the summarised data.
+A formatted table visualisation.
 }
 \description{
-Create a visual table of the most common concepts from \code{summariseConceptIdCounts()} output.
-This function takes a \code{summarised_result} object and generates a formatted table highlighting the most frequent concepts.
+This function takes a \code{summarised_result} object and generates a formatted
+table highlighting the most frequent concepts.
 }
 \examples{
 \donttest{
@@ -59,5 +60,8 @@ cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 result <- summariseConceptIdCounts(cdm = cdm, omopTableName = "condition_occurrence")
 
 tableTopConceptCounts(result = result, top = 5)
+
+cdmDisconnect(cdm = cdm)
 }
+
 }

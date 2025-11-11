@@ -2,8 +2,7 @@
 % Please edit documentation in R/mockOmopSketch.R
 \name{mockOmopSketch}
 \alias{mockOmopSketch}
-\title{Creates a mock database to test OmopSketch package.
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
+\title{Creates a mock database to test OmopSketch package}
 \usage{
 mockOmopSketch(
   numberIndividuals = 100,
@@ -26,15 +25,5 @@ reference object.}
 A mock cdm_reference object.
 }
 \description{
-Creates a mock database to test OmopSketch package.
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
-}
-\examples{
-\donttest{
-library(OmopSketch)
-
-cdm <- mockOmopSketch(numberIndividuals = 100)
-cdm
-}
-
 }

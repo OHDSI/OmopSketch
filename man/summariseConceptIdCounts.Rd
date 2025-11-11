@@ -2,60 +2,67 @@
 % Please edit documentation in R/summariseConceptIdCounts.R
 \name{summariseConceptIdCounts}
 \alias{summariseConceptIdCounts}
-\title{Summarise concept use in patient-level data. Only concepts recorded during observation period are counted.}
+\title{Summarise concept use in patient-level data}
 \usage{
 summariseConceptIdCounts(
   cdm,
   omopTableName,
   countBy = "record",
-  year = lifecycle::deprecated(),
   interval = "overall",
   sex = FALSE,
   ageGroup = NULL,
   inObservation = FALSE,
   sample = NULL,
-  dateRange = NULL
+  dateRange = NULL,
+  year = lifecycle::deprecated()
 )
 }
 \arguments{
-\item{cdm}{A cdm object}
+\item{cdm}{A \code{cdm_reference} object. Use \emph{CDMConnector} to create a reference
+to a database or \emph{omock} to create a reference to synthetic data.}
 
 \item{omopTableName}{A character vector of the names of the tables to
-summarise in the cdm object.}
+summarise in the cdm object. Run \code{clinicalTables()} to check the
+available options.}
 
 \item{countBy}{Either "record" for record-level counts or "person" for
-person-level counts}
+person-level counts.}
 
-\item{year}{deprecated}
+\item{interval}{Time interval to stratify by. It can either be "years",
+"quarters", "months" or "overall".}
 
-\item{interval}{Time interval to stratify by. It can either be "years", "quarters", "months" or "overall".}
+\item{sex}{Logical; whether to stratify results by sex (\code{TRUE}) or not
+(\code{FALSE}).}
 
-\item{sex}{TRUE or FALSE. If TRUE code use will be summarised by sex.}
+\item{ageGroup}{A list of age groups to stratify the results by. Each element
+represents a specific age range. You can give them specific names, e.g.
+\code{ageGroup = list(children = c(0, 17), adult = c(18, Inf))}.}
 
-\item{ageGroup}{A list of ageGroup vectors of length two. Code use will be
-thus summarised by age groups.}
-
-\item{inObservation}{Logical. If \code{TRUE}, the results are stratified to indicate whether each record occurs within an observation period.}
+\item{inObservation}{Logical. If \code{TRUE}, the results are stratified to
+indicate whether each record occurs within an observation period.}
 
 \item{sample}{Either an integer or a character string.
-If an integer (n > 0), the function will first sample \code{n} distinct
+\itemize{
+\item If an integer (n > 0), the function will first sample \code{n} distinct
 \code{person_id}s from the \code{person} table and then subset the input tables to
 those subjects.
-If a character string, it must be the name of a cohort in the \code{cdm}; in
+\item If a character string, it must be the name of a cohort in the \code{cdm}; in
 this case, the input tables are subset to subjects (\code{subject_id}) belonging
 to that cohort.
-Use \code{NULL} to disable subsetting (default value).}
+\item Use \code{NULL} to disable subsetting (default value).
+}}
 
 \item{dateRange}{A vector of two dates defining the desired study period.
 Only the \code{start_date} column of the OMOP table is checked to ensure it falls within this range.
 If \code{dateRange} is \code{NULL}, no restriction is applied.}
+
+\item{year}{deprecated.}
 }
 \value{
-A summarised_result object with results overall and, if specified, by
-strata.
+A \code{summarised_result} object with the results.
 }
 \description{
-Summarise concept use in patient-level data. Only concepts recorded during observation period are counted.
+Only concepts recorded during observation period are counted.
 }
 \examples{
 \donttest{
@@ -64,12 +71,16 @@ library(omock)
 
 cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
-summariseConceptIdCounts(
+result <- summariseConceptIdCounts(
   cdm = cdm,
   omopTableName = "condition_occurrence",
   countBy = c("record", "person"),
   sex = TRUE
 )
+
+tableConceptIdCounts(result = result)
+
+cdmDisconnect(cdm = cdm)
 }
 
 }

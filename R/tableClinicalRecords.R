@@ -1,11 +1,13 @@
-#' Create a visual table from a summariseClinicalRecord() output.
+
+#' Create a visual table from a summariseClinicalRecord() output
 #'
-#' @param result Output from summariseClinicalRecords().
+#' @param result A summarised_result object (output of
+#' `summariseClinicalRecords()`).
 #' @inheritParams style-table
 #'
-#' @return A formatted table object with the summarised data.
-#'
+#' @return A formatted table visualisation.
 #' @export
+#'
 #' @examples
 #' \donttest{
 #' library(OmopSketch)
@@ -28,8 +30,9 @@
 #'   suppress(minCellCount = 5) |>
 #'   tableClinicalRecords()
 #'
-#' cdmDisconnect(cdm)
+#' cdmDisconnect(cdm = cdm)
 #' }
+#'
 tableClinicalRecords <- function(result,
                                  type = NULL,
                                  style = NULL) {

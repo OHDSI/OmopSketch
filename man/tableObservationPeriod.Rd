@@ -2,12 +2,13 @@
 % Please edit documentation in R/tableObservationPeriod.R
 \name{tableObservationPeriod}
 \alias{tableObservationPeriod}
-\title{Create a visual table from a summariseObservationPeriod() result.}
+\title{Create a visual table from a summariseObservationPeriod() result}
 \usage{
 tableObservationPeriod(result, type = NULL, style = NULL)
 }
 \arguments{
-\item{result}{A summarised_result object.}
+\item{result}{A summarised_result object (output of
+\code{summariseObservationPeriod()}).}
 
 \item{type}{Character string specifying the desired output table format. See
 \code{visOmopResults::tableType()} for supported table types. If \code{type = NULL},
@@ -31,22 +32,30 @@ If \code{style = NULL}, the function will use global options (see
 (if found); otherwise, the default style is applied.}
 }
 \value{
-A formatted table object with the summarised data.
+A formatted table visualisation.
 }
 \description{
-Create a visual table from a summariseObservationPeriod() result.
+Create a visual table from a summariseObservationPeriod() result
 }
 \examples{
 \donttest{
 library(OmopSketch)
+library(dplyr, warn.conflicts = FALSE)
 library(omock)
 
 cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
-result <- summariseObservationPeriod(observationPeriod = cdm$observation_period)
+result <- summariseObservationPeriod(cdm = cdm)
 
 tableObservationPeriod(result = result)
 
+plotObservationPeriod(
+  result = result,
+  variableName = "Duration in days",
+  plotType = "boxplot"
+)
+
 cdmDisconnect(cdm = cdm)
 }
+
 }

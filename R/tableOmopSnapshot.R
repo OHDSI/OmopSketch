@@ -1,10 +1,13 @@
-#' Create a visual table from a summarise_omop_snapshot result.
-#' @param result  Output from summariseOmopSnapshot().
+
+#' Create a visual table from a summarise_omop_snapshot result
+#'
+#' @param result A summarised_result object (output of `summariseOmopSnapshot()`
+#' ).
 #' @inheritParams style-table
 #'
-#' @return A formatted table object with the summarised data.
-#'
+#' @return A formatted table visualisation.
 #' @export
+#'
 #' @examples
 #' \donttest{
 #' library(OmopSketch)
@@ -16,8 +19,9 @@
 #'
 #' tableOmopSnapshot(result = result)
 #'
-#'cdmDisconnect(cdm)
+#' cdmDisconnect(cdm = cdm)
 #' }
+#'
 tableOmopSnapshot <- function(result,
                               type = NULL,
                               style = NULL) {
@@ -61,7 +65,10 @@ tableOmopSnapshot <- function(result,
 }
 
 warnEmpty <- function(resultType) {
-  cli::cli_warn("`result` does not contain any `{resultType}` data.")
+  message <- "`result` does not contain any `{resultType}` data." |>
+    stringr::str_glue()
+  cli::cli_warn(message = message)
+  return(message)
 }
 emptyTable <- function(type) {
   pkg <- type

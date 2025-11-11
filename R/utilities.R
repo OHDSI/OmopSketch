@@ -101,10 +101,10 @@ createSettings <- function(result_type, result_id = 1L, study_period = NULL) {
 #' Tables in the cdm_reference that contain clinical information
 #'
 #' @description
-#' This function provides a list of allowed inputs for the `omopTableName` argument in
-#' `summariseClinicalRecords`
-#' @return A character vector with table names
+#' This function provides a list of allowed inputs for the `omopTableName`
+#' argument in `summariseClinicalRecords()`.
 #'
+#' @return A character vector with table names.
 #' @export
 #'
 #' @examples

@@ -2,12 +2,13 @@
 % Please edit documentation in R/tableMissingData.R
 \name{tableMissingData}
 \alias{tableMissingData}
-\title{Create a visual table from a summariseMissingData() result.}
+\title{Create a visual table from a summariseMissingData() result}
 \usage{
 tableMissingData(result, type = NULL, style = NULL)
 }
 \arguments{
-\item{result}{A summarised_result object.}
+\item{result}{A summarised_result object (output of
+\code{summariseMissingData()}).}
 
 \item{type}{Character string specifying the desired output table format. See
 \code{visOmopResults::tableType()} for supported table types. If \code{type = NULL},
@@ -31,10 +32,10 @@ If \code{style = NULL}, the function will use global options (see
 (if found); otherwise, the default style is applied.}
 }
 \value{
-A formatted table object with the summarised data.
+A formatted table visualisation.
 }
 \description{
-Create a visual table from a summariseMissingData() result.
+Create a visual table from a summariseMissingData() result
 }
 \examples{
 \donttest{
@@ -52,4 +53,5 @@ tableMissingData(result = result)
 
 cdmDisconnect(cdm = cdm)
 }
+
 }

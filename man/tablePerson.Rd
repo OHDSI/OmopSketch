@@ -9,7 +9,7 @@ tablePerson(result, type = NULL, style = NULL)
 tablePerson(result, type = NULL, style = NULL)
 }
 \arguments{
-\item{result}{A summarised_result object.}
+\item{result}{A summarised_result object (output of \code{summarisePerson()}).}
 
 \item{type}{Character string specifying the desired output table format. See
 \code{visOmopResults::tableType()} for supported table types. If \code{type = NULL},
@@ -33,9 +33,9 @@ If \code{style = NULL}, the function will use global options (see
 (if found); otherwise, the default style is applied.}
 }
 \value{
-A table visualisation.
+A formatted table visualisation.
 
-A visualisation of the data summarising the person table.
+A formatted table visualisation.
 }
 \description{
 Visualise the results of \code{summarisePerson()} into a table
@@ -63,6 +63,8 @@ cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 result <- summarisePerson(cdm = cdm)
 
 tablePerson(result = result)
+
+cdmDisconnect(cdm = cdm)
 }
 
 }

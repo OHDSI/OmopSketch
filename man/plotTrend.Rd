@@ -2,12 +2,12 @@
 % Please edit documentation in R/plotTrend.R
 \name{plotTrend}
 \alias{plotTrend}
-\title{Create a ggplot2 plot from the output of summariseTrend().}
+\title{Create a ggplot2 plot from the output of summariseTrend()}
 \usage{
 plotTrend(result, output = NULL, facet = "type", colour = NULL, style = NULL)
 }
 \arguments{
-\item{result}{A summarised_result object (output of summariseTrend).}
+\item{result}{A summarised_result object (output of \code{summariseTrend()}).}
 
 \item{output}{The output to plot.  Accepted values are: \code{"record"}, \code{"person"},
 \code{"person-days"}, \code{"age"}, and \code{"sex"}.
@@ -32,10 +32,10 @@ unless a global style option is set (see
 present (in that order).}
 }
 \value{
-A ggplot showing the table counts
+A plot visualisation.
 }
 \description{
-Create a ggplot2 plot from the output of summariseTrend().
+Create a ggplot2 plot from the output of summariseTrend()
 }
 \examples{
 \donttest{
@@ -53,9 +53,14 @@ result <- summariseTrend(cdm,
   sex = TRUE
 )
 
-plotTrend(result, output = "record", colour = "sex", facet = "age_group")
+plotTrend(
+  result = result,
+  output = "record",
+  colour = "sex",
+  facet = "age_group"
+)
 
-
-cdmDisconnect(cdm)
+cdmDisconnect(cdm = cdm)
 }
+
 }

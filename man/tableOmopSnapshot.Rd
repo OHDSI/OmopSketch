@@ -2,12 +2,13 @@
 % Please edit documentation in R/tableOmopSnapshot.R
 \name{tableOmopSnapshot}
 \alias{tableOmopSnapshot}
-\title{Create a visual table from a summarise_omop_snapshot result.}
+\title{Create a visual table from a summarise_omop_snapshot result}
 \usage{
 tableOmopSnapshot(result, type = NULL, style = NULL)
 }
 \arguments{
-\item{result}{Output from summariseOmopSnapshot().}
+\item{result}{A summarised_result object (output of \code{summariseOmopSnapshot()}
+).}
 
 \item{type}{Character string specifying the desired output table format. See
 \code{visOmopResults::tableType()} for supported table types. If \code{type = NULL},
@@ -31,10 +32,10 @@ If \code{style = NULL}, the function will use global options (see
 (if found); otherwise, the default style is applied.}
 }
 \value{
-A formatted table object with the summarised data.
+A formatted table visualisation.
 }
 \description{
-Create a visual table from a summarise_omop_snapshot result.
+Create a visual table from a summarise_omop_snapshot result
 }
 \examples{
 \donttest{
@@ -47,6 +48,7 @@ result <- summariseOmopSnapshot(cdm = cdm)
 
 tableOmopSnapshot(result = result)
 
-cdmDisconnect(cdm)
+cdmDisconnect(cdm = cdm)
 }
+
 }

@@ -2,8 +2,7 @@
 % Please edit documentation in R/summariseRecordCount.R
 \name{summariseRecordCount}
 \alias{summariseRecordCount}
-\title{Summarise record counts of an omop_table using a specific time interval. Only
-records that fall within the observation period are considered.}
+\title{Summarise record counts of an omop_table using a specific time interval}
 \usage{
 summariseRecordCount(
   cdm,
@@ -16,27 +15,45 @@ summariseRecordCount(
 )
 }
 \arguments{
-\item{cdm}{A cdm_reference object.}
+\item{cdm}{A \code{cdm_reference} object. Use \emph{CDMConnector} to create a reference
+to a database or \emph{omock} to create a reference to synthetic data.}
 
-\item{omopTableName}{A character vector of omop tables from the cdm.}
+\item{omopTableName}{A character vector of the names of the tables to
+summarise in the cdm object. Run \code{clinicalTables()} to check the
+available options.}
 
-\item{interval}{Time interval to stratify by. It can either be "years", "quarters", "months" or "overall".}
+\item{interval}{Time interval to stratify by. It can either be "years",
+"quarters", "months" or "overall".}
 
-\item{ageGroup}{A list of age groups to stratify results by.}
+\item{ageGroup}{A list of age groups to stratify the results by. Each element
+represents a specific age range. You can give them specific names, e.g.
+\code{ageGroup = list(children = c(0, 17), adult = c(18, Inf))}.}
 
-\item{sex}{Whether to stratify by sex (TRUE) or not (FALSE).}
+\item{sex}{Logical; whether to stratify results by sex (\code{TRUE}) or not
+(\code{FALSE}).}
 
-\item{sample}{An integer to sample the tables to only that number of records.
-If NULL no sample is done.}
+\item{sample}{Either an integer or a character string.
+\itemize{
+\item If an integer (n > 0), the function will first sample \code{n} distinct
+\code{person_id}s from the \code{person} table and then subset the input tables to
+those subjects.
+\item If a character string, it must be the name of a cohort in the \code{cdm}; in
+this case, the input tables are subset to subjects (\code{subject_id}) belonging
+to that cohort.
+\item Use \code{NULL} to disable subsetting (default value).
+}}
 
 \item{dateRange}{A vector of two dates defining the desired study period.
 Only the \code{start_date} column of the OMOP table is checked to ensure it falls within this range.
 If \code{dateRange} is \code{NULL}, no restriction is applied.}
 }
 \value{
-A summarised_result object.
+A \code{summarised_result} object with the results.
 }
 \description{
+Only records that fall within the observation period are considered.
+}
+\details{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 }
 \examples{
@@ -47,7 +64,7 @@ library(omock)
 
 cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
-summarisedResult <- summariseRecordCount(
+result <- summariseRecordCount(
   cdm = cdm,
   omopTableName = c("condition_occurrence", "drug_exposure"),
   interval = "years",
@@ -55,9 +72,9 @@ summarisedResult <- summariseRecordCount(
   sex = TRUE
 )
 
-summarisedResult |>
-  glimpse()
+tableRecordCount(result = result)
 
 cdmDisconnect(cdm = cdm)
 }
+
 }

@@ -1,23 +1,15 @@
-#' Create a visual table from a summariseObservationPeriod() result.
-#' @param result A summarised_result object.
+
+#' Create a visual table from a summariseObservationPeriod() result
+#'
+#' @param result A summarised_result object (output of
+#' `summariseObservationPeriod()`).
 #' @inheritParams style-table
 #'
-#' @return A formatted table object with the summarised data.
+#' @return A formatted table visualisation.
 #' @export
 #'
-#' @examples
-#' \donttest{
-#' library(OmopSketch)
-#' library(omock)
+#' @inherit summariseObservationPeriod examples
 #'
-#' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
-#'
-#' result <- summariseObservationPeriod(observationPeriod = cdm$observation_period)
-#'
-#' tableObservationPeriod(result = result)
-#'
-#' cdmDisconnect(cdm = cdm)
-#' }
 tableObservationPeriod <- function(result,
                                    type = NULL,
                                    style = NULL) {

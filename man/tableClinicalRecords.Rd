@@ -2,12 +2,13 @@
 % Please edit documentation in R/tableClinicalRecords.R
 \name{tableClinicalRecords}
 \alias{tableClinicalRecords}
-\title{Create a visual table from a summariseClinicalRecord() output.}
+\title{Create a visual table from a summariseClinicalRecord() output}
 \usage{
 tableClinicalRecords(result, type = NULL, style = NULL)
 }
 \arguments{
-\item{result}{Output from summariseClinicalRecords().}
+\item{result}{A summarised_result object (output of
+\code{summariseClinicalRecords()}).}
 
 \item{type}{Character string specifying the desired output table format. See
 \code{visOmopResults::tableType()} for supported table types. If \code{type = NULL},
@@ -31,10 +32,10 @@ If \code{style = NULL}, the function will use global options (see
 (if found); otherwise, the default style is applied.}
 }
 \value{
-A formatted table object with the summarised data.
+A formatted table visualisation.
 }
 \description{
-Create a visual table from a summariseClinicalRecord() output.
+Create a visual table from a summariseClinicalRecord() output
 }
 \examples{
 \donttest{
@@ -58,6 +59,7 @@ summarisedResult |>
   suppress(minCellCount = 5) |>
   tableClinicalRecords()
 
-cdmDisconnect(cdm)
+cdmDisconnect(cdm = cdm)
 }
+
 }

@@ -1,8 +1,9 @@
+
 #' Summarise person table
 #'
-#' @param cdm A cdm_reference object.
+#' @inheritParams consistent-doc
 #'
-#' @return A summarised_result object with the summary of the person table.
+#' @return A `summarised_result` object with the results.
 #' @export
 #'
 #' @examples
@@ -15,10 +16,9 @@
 #'
 #' result <- summarisePerson(cdm = cdm)
 #'
-#' result |>
-#'   glimpse()
+#' tablePerson(result = result)
 #'
-#' cdmDisconnect(cdm)
+#' cdmDisconnect(cdm = cdm)
 #' }
 #'
 summarisePerson <- function(cdm) {
@@ -30,8 +30,8 @@ summarisePerson <- function(cdm) {
 
   # summary subjects
   number_subjects <- as.numeric(omopgenerics::numberSubjects(cdm$person))
-  number_subjects_no_op <- cdm$observation_period |>
-    dplyr::anti_join(cdm$person, by = "person_id") |>
+  number_subjects_no_op <- cdm$person |>
+    dplyr::anti_join(cdm$observation_period, by = "person_id") |>
     omopgenerics::numberSubjects() |>
     as.numeric()
   result[["Number subjects"]] <- dplyr::tibble(
@@ -178,10 +178,10 @@ summariseNumeric2 <- function(x, variable, den) {
 
 #' Visualise the results of `summarisePerson()` into a table
 #'
-#' @param result A summarised_result object created by `summarisePerson()`.
+#' @param result A summarised_result object (output of `summarisePerson()`).
 #' @inheritParams style-table
 #'
-#' @return A table visualisation.
+#' @return A formatted table visualisation.
 #' @export
 #'
 #' @examples

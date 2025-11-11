@@ -2,7 +2,7 @@
 % Please edit documentation in R/summariseConceptCounts.R
 \name{summariseConceptCounts}
 \alias{summariseConceptCounts}
-\title{Summarise concept counts in patient-level data. Only concepts recorded during observation period are counted.}
+\title{Summarise concept counts in patient-level data}
 \usage{
 summariseConceptCounts(
   cdm,
@@ -16,7 +16,8 @@ summariseConceptCounts(
 )
 }
 \arguments{
-\item{cdm}{A cdm object}
+\item{cdm}{A \code{cdm_reference} object. Use \emph{CDMConnector} to create a reference
+to a database or \emph{omock} to create a reference to synthetic data.}
 
 \item{conceptId}{List of concept IDs to summarise.}
 
@@ -25,21 +26,26 @@ person-level counts}
 
 \item{concept}{TRUE or FALSE. If TRUE code use will be summarised by concept.}
 
-\item{interval}{Time interval to stratify by. It can either be "years", "quarters", "months" or "overall".}
+\item{interval}{Time interval to stratify by. It can either be "years",
+"quarters", "months" or "overall".}
 
-\item{sex}{TRUE or FALSE. If TRUE code use will be summarised by sex.}
+\item{sex}{Logical; whether to stratify results by sex (\code{TRUE}) or not
+(\code{FALSE}).}
 
-\item{ageGroup}{A list of ageGroup vectors of length two. Code use will be
-thus summarised by age groups.}
+\item{ageGroup}{A list of age groups to stratify the results by. Each element
+represents a specific age range. You can give them specific names, e.g.
+\code{ageGroup = list(children = c(0, 17), adult = c(18, Inf))}.}
 
 \item{dateRange}{A vector of two dates defining the desired study period.
 Only the \code{start_date} column of the OMOP table is checked to ensure it falls within this range.
 If \code{dateRange} is \code{NULL}, no restriction is applied.}
 }
 \value{
-A summarised_result object with results overall and, if specified, by
-strata.
+A \code{summarised_result} object with the results.
 }
 \description{
+Only concepts recorded during observation period are counted.
+}
+\details{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 }

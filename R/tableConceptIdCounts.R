@@ -1,15 +1,21 @@
-#' Create a visual table from a summariseConceptIdCounts() result.
-#' @param result A summarised_result object.
-#' @param display A character string indicating which subset of the data to display. Options are:
+
+#' Create a visual table from a summariseConceptIdCounts() result
+#'
+#' @param result A summarised_result object (output of
+#' `summariseConceptIdCounts()`).
+#' @param display A character string indicating which subset of the data to
+#' display. Options are:
 #'   - `"overall"`: Show all source and standard concepts.
 #'   - `"standard"`: Show only standard concepts.
 #'   - `"source"`: Show only source codes.
-#'   - `"missing standard"`: Show only source codes that are missing a mapped standard concept.
-#' @param type Type of formatting output table, either "reactable" or "datatable".
+#'   - `"missing standard"`: Show only source codes that are missing a
+#'   mapped standard concept.
+#' @param type Type of formatting output table, either "reactable" or
+#' "datatable".
 #'
-#' @return A reactable or datatable object with the summarised data.
-#'
+#' @return A formatted table visualisation.
 #' @export
+#'
 #' @examples
 #' \donttest{
 #' library(OmopSketch)
@@ -19,7 +25,10 @@
 #'
 #' result <- summariseConceptIdCounts(cdm = cdm, omopTableName = "condition_occurrence")
 #' tableConceptIdCounts(result = result, display = "standard")
+#'
+#' cdmDisconnect(cdm = cdm)
 #' }
+#'
 tableConceptIdCounts <- function(result,
                                  display = "overall",
                                  type = "reactable") {

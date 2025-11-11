@@ -1,22 +1,22 @@
+
 #' Summarise Database Characteristics for OMOP CDM
 #'
-#' @param cdm A `cdm_reference` object representing the Common Data Model (CDM) reference.
-#' @param omopTableName A character vector of the names of the tables to
-#' summarise in the cdm object. Run `OmopSketch::clinicalTables()` to check the
-#' available options.
-#' @inheritParams sample
-#' @inheritParams interval
-#' @param ageGroup A list of age groups to stratify the results by. Each element represents a specific age range.
-#' @param sex Logical; whether to stratify results by sex (`TRUE`) or not (`FALSE`).
+#' @inheritParams consistent-doc
 #' @inheritParams dateRange-startDate
-#' @param conceptIdCounts Logical; whether to summarise concept ID counts (`TRUE`) or not (`FALSE`).
-#' @param ... additional arguments passed to the OmopSketch functions that are used internally.
-#' @return A `summarised_result` object containing the results of the characterisation.
+#' @param conceptIdCounts Logical; whether to summarise concept ID counts
+#' (`TRUE`) or not (`FALSE`).
+#' @param ... additional arguments passed to the OmopSketch functions that are
+#' used internally.
+#'
+#' @return A `summarised_result` object with the results.
 #' @export
+#'
 #' @examples
 #' \donttest{
 #' library(OmopSketch)
 #' library(omock)
+#' library(dplyr)
+#' library(here)
 #'
 #' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 #'
@@ -24,10 +24,20 @@
 #'   cdm = cdm,
 #'   sample = 100,
 #'   omopTableName = c("drug_exposure", "condition_occurrence"),
-#'   sex = TRUE, ageGroup = list(c(0, 50), c(51, 100)), interval = "years", conceptIdCounts = FALSE
+#'   sex = TRUE,
+#'   ageGroup = list(c(0, 50), c(51, 100)),
+#'   interval = "years",
+#'   conceptIdCounts = FALSE
 #' )
 #'
+#' result |>
+#'   glimpse()
+#'
+#' shinyCharacteristics(result = result, directory = here())
+#'
+#' cdmDisconnect(cdm = cdm)
 #' }
+#'
 databaseCharacteristics <- function(cdm,
                                     omopTableName = c("visit_occurrence", "visit_detail",
                                       "condition_occurrence", "drug_exposure", "procedure_occurrence",

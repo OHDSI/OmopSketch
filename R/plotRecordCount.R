@@ -1,12 +1,14 @@
-#' Create a ggplot of the records' count trend.
+#' Create a ggplot of the records' count trend
+#'
 #' `r lifecycle::badge('deprecated')`
-#' @param result Output from summariseRecordCount().
-#' @param facet Columns to face by. Formula format can be provided. See possible
-#' columns to face by with: `visOmopResults::tidyColumns()`.
-#' @param colour Columns to colour by. See possible columns to colour by with:
-#' `visOmopResults::tidyColumns()`.
-#' @return A ggplot showing the table counts
+#'
+#' @param result A summarised_result object (output of
+#' `summariseRecordCount()`).
+#' @inheritParams consistent-doc
+#'
+#' @return A plot visualisation.
 #' @export
+#'
 #' @examples
 #' \donttest{
 #' library(omock)
@@ -21,9 +23,15 @@
 #'   sex = TRUE
 #' )
 #'
-#' plotRecordCount(result = summarisedResult, colour = "age_group", facet = sex ~ .)
+#' plotRecordCount(
+#'   result = summarisedResult,
+#'   colour = "age_group",
+#'   facet = sex ~ .
+#' )
 #'
+#' cdmDisconnect(cdm = cdm)
 #' }
+#'
 plotRecordCount <- function(result,
                             facet = NULL,
                             colour = NULL) {

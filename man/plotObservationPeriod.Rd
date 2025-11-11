@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotObservationPeriod.R
 \name{plotObservationPeriod}
 \alias{plotObservationPeriod}
-\title{Create a plot from the output of summariseObservationPeriod().}
+\title{Create a plot from the output of summariseObservationPeriod()}
 \usage{
 plotObservationPeriod(
   result,
@@ -14,16 +14,18 @@ plotObservationPeriod(
 )
 }
 \arguments{
-\item{result}{A summarised_result object.}
+\item{result}{A summarised_result object (output of
+\code{summariseObservationPeriod()}).}
 
 \item{variableName}{The variable to plot it can be: "Number subjects",
-"Records per person", "Duration in days" or "Days to next observation period".}
+"Records per person", "Duration in days" or
+"Days to next observation period".}
 
 \item{plotType}{The plot type, it can be: "barplot", "boxplot" or
 "densityplot".}
 
-\item{facet}{Columns to colour by. See possible columns to colour by with:
-\code{visOmopResults::tidyColumns()}.}
+\item{facet}{Columns to face by. Formula format can be provided. See possible
+columns to face by with: \code{visOmopResults::tidyColumns()}.}
 
 \item{colour}{Columns to colour by. See possible columns to colour by with:
 \code{visOmopResults::tidyColumns()}.}
@@ -37,19 +39,22 @@ unless a global style option is set (see
 present (in that order).}
 }
 \value{
-A ggplot2 object.
+A plot visualisation.
 }
 \description{
-Create a plot from the output of summariseObservationPeriod().
+Create a plot from the output of summariseObservationPeriod()
 }
 \examples{
 \donttest{
-library(omock)
 library(OmopSketch)
+library(dplyr, warn.conflicts = FALSE)
+library(omock)
 
 cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
-result <- summariseObservationPeriod(observationPeriod = cdm$observation_period)
+result <- summariseObservationPeriod(cdm = cdm)
+
+tableObservationPeriod(result = result)
 
 plotObservationPeriod(
   result = result,
@@ -57,5 +62,7 @@ plotObservationPeriod(
   plotType = "boxplot"
 )
 
+cdmDisconnect(cdm = cdm)
 }
+
 }

@@ -1,33 +1,19 @@
-#' Summarise concept counts in patient-level data. Only concepts recorded during observation period are counted.
+#' Summarise concept counts in patient-level data
 #'
-#' @param cdm A cdm object
+#' Only concepts recorded during observation period are counted.
+#'
+#' `r lifecycle::badge('deprecated')`
+#'
+#' @inheritParams consistent-doc
 #' @param conceptSet List of concept IDs to summarise.
 #' @param countBy Either "record" for record-level counts or "person" for
 #' person-level counts
 #' @param concept TRUE or FALSE. If TRUE code use will be summarised by concept.
-#' @inheritParams interval
-#' @param sex TRUE or FALSE. If TRUE code use will be summarised by sex.
-#' @param ageGroup A list of ageGroup vectors of length two. Code use will be
-#' thus summarised by age groups.
 #' @inheritParams dateRange-startDate
-#' @return A summarised_result object with results overall and, if specified, by
-#' strata.
+#'
+#' @return A `summarised_result` object with the results.
 #' @export
-#' @examples
-#' \donttest{
-#' library(OmopSketch)
-#' library(omock)
 #'
-#' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
-#'
-#' cs <- list(sinusitis = c(4283893, 257012, 40481087, 4294548))
-#'
-#' results <- summariseConceptSetCounts(cdm, conceptSet = cs)
-#'
-#' results
-#'
-#' cdmDisconnect(cdm)
-#' }
 summariseConceptSetCounts <- function(cdm,
                                       conceptSet,
                                       countBy = c("record", "person"),
