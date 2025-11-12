@@ -23,10 +23,11 @@
 #' }
 #'
 tablePerson <- function(result,
-                        style = "default",
+                        style = NULL,
                         type = "gt") {
   # check input
   result <- omopgenerics::validateResultArgument(result = result)
+  style <- validateStyle(style = style, obj = "table")
 
   visOmopResults::visOmopTable(
     result = result,

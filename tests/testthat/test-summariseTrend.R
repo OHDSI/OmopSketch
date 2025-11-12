@@ -6,8 +6,8 @@ test_that("summariseTrend - episode works", {
   # Check all tables work ----
   expect_true(inherits(summariseTrend(cdm), "summarised_result"))
   expect_equal(summariseTrend(cdm), omopgenerics::emptySummarisedResult(), ignore_attr = TRUE)
-  expect_no_error(summariseTrend(cdm, episode = "drug_exposure", event = "condition_occurrence", interval = "months"))
-  expect_true(inherits(summariseTrend(cdm, episode = "drug_exposure", event = "condition_occurrence", interval = "months"), "summarised_result"))
+  expect_no_error(x <- summariseTrend(cdm, episode = "drug_exposure", event = "condition_occurrence", interval = "months"))
+  expect_true(inherits(x, "summarised_result"))
 
 
   # Check inputs ----

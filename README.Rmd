@@ -36,6 +36,7 @@ remotes::install_github("OHDSI/OmopSketch")
 
 Let's start by creating a cdm object using the Eunomia GiBleed mock dataset:
 
+
 ```{r, message=TRUE, warning=FALSE}
 library(duckdb)
 library(dplyr, warn.conflicts = FALSE)
@@ -51,7 +52,7 @@ We first create a snapshot of our database. This will allow us to track when the
 
 ```{r}
 summariseOmopSnapshot(cdm) |>
-  tableOmopSnapshot(type = "flextable")
+  tableOmopSnapshot(type = "flextable", style = NULL)
 ```
 
 ### Characterise the clinical tables
@@ -94,7 +95,7 @@ OmopSketch also provides functions to explore the concepts in the dataset.
 
 ```{r}
 summariseConceptIdCounts(cdm, omopTableName = "drug_exposure") |>
-  tableTopConceptCounts()
+  tableTopConceptCounts(type = "flextable")
 ```
 
 ### Characterise the cdm

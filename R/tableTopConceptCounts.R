@@ -29,13 +29,13 @@ tableTopConceptCounts <- function(result,
                                   top = 10,
                                   countBy = NULL,
                                   type = "gt",
-                                  style = "default") {
+                                  style = NULL) {
   # initial checks
   rlang::check_installed("visOmopResults")
   omopgenerics::validateResultArgument(result)
   omopgenerics::assertNumeric(top, integerish = TRUE, min = 1, length = 1)
   omopgenerics::assertChoice(type, visOmopResults::tableType())
-
+  style <- validateStyle(style = style, obj = "table")
   strata_cols <- omopgenerics::strataColumns(result)
   additional_cols <- omopgenerics::additionalColumns(result)
   additional_cols <- additional_cols[!grepl("source_concept", additional_cols)]

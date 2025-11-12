@@ -4,7 +4,7 @@
 \alias{tableObservationPeriod}
 \title{Create a visual table from a summariseObservationPeriod() result.}
 \usage{
-tableObservationPeriod(result, type = "gt", style = "default")
+tableObservationPeriod(result, type = "gt", style = NULL)
 }
 \arguments{
 \item{result}{A summarised_result object.}

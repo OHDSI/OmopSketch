@@ -4,9 +4,9 @@
 \alias{tablePerson}
 \title{Visualise the results of \code{summarisePerson()} into a table}
 \usage{
-tablePerson(result, style = "default", type = "gt")
+tablePerson(result, style = NULL, type = "gt")
 
-tablePerson(result, style = "default", type = "gt")
+tablePerson(result, style = NULL, type = "gt")
 }
 \arguments{
 \item{result}{A summarised_result object.}

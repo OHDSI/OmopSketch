@@ -10,7 +10,7 @@ plotObservationPeriod(
   plotType = "barplot",
   facet = NULL,
   colour = NULL,
-  style = "default"
+  style = NULL
 )
 }
 \arguments{

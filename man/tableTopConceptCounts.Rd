@@ -10,7 +10,7 @@ tableTopConceptCounts(
   top = 10,
   countBy = NULL,
   type = "gt",
-  style = "default"
+  style = NULL
 )
 }
 \arguments{

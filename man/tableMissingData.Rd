@@ -4,7 +4,7 @@
 \alias{tableMissingData}
 \title{Create a visual table from a summariseMissingData() result.}
 \usage{
-tableMissingData(result, type = "gt", style = "default")
+tableMissingData(result, type = "gt", style = NULL)
 }
 \arguments{
 \item{result}{A summarised_result object.}

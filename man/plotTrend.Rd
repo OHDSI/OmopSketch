@@ -4,13 +4,7 @@
 \alias{plotTrend}
 \title{Create a ggplot2 plot from the output of summariseTrend().}
 \usage{
-plotTrend(
-  result,
-  output = NULL,
-  facet = "type",
-  colour = NULL,
-  style = "default"
-)
+plotTrend(result, output = NULL, facet = "type", colour = NULL, style = NULL)
 }
 \arguments{
 \item{result}{A summarised_result object (output of summariseTrend).}

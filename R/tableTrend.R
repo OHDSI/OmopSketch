@@ -27,11 +27,12 @@
 #' }
 tableTrend <- function(result,
                        type = "gt",
-                       style = "default") {
+                       style = NULL) {
   # initial checks
   rlang::check_installed("visOmopResults")
   omopgenerics::validateResultArgument(result)
   omopgenerics::assertChoice(type, c("gt", "reactable", "datatable"))
+  style <- validateStyle(style = style, obj = "table")
   strata_cols <- omopgenerics::strataColumns(result)
   additional_cols <- omopgenerics::additionalColumns(result)
 

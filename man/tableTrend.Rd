@@ -4,7 +4,7 @@
 \alias{tableTrend}
 \title{Create a visual table from a summariseTrend() result.}
 \usage{
-tableTrend(result, type = "gt", style = "default")
+tableTrend(result, type = "gt", style = NULL)
 }
 \arguments{
 \item{result}{A summarised_result object.}

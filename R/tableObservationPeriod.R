@@ -19,11 +19,13 @@
 #' }
 tableObservationPeriod <- function(result,
                                    type = "gt",
-                                   style = "default") {
+                                   style = NULL) {
   # initial checks
   rlang::check_installed("visOmopResults")
   omopgenerics::validateResultArgument(result)
   omopgenerics::assertChoice(type, visOmopResults::tableType())
+  style <- validateStyle(style = style, obj = "table")
+
 
   # subset to result_type of interest
   result <- result |>

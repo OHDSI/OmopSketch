@@ -4,7 +4,7 @@
 \alias{tableClinicalRecords}
 \title{Create a visual table from a summariseClinicalRecord() output.}
 \usage{
-tableClinicalRecords(result, type = "gt", style = "default")
+tableClinicalRecords(result, type = "gt", style = NULL)
 }
 \arguments{
 \item{result}{Output from summariseClinicalRecords().}

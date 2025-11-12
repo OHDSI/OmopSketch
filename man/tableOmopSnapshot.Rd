@@ -4,7 +4,7 @@
 \alias{tableOmopSnapshot}
 \title{Create a visual table from a summarise_omop_snapshot result.}
 \usage{
-tableOmopSnapshot(result, type = "gt", style = "default")
+tableOmopSnapshot(result, type = "gt", style = NULL)
 }
 \arguments{
 \item{result}{Output from summariseOmopSnapshot().}

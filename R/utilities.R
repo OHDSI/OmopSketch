@@ -162,3 +162,20 @@ sampleOmopTable <- function(omopTable, sample) {
   return(cdm[[tableName]])
 }
 
+
+
+validateStyle <- function(style, obj) {
+  # check if style is NULL
+  if (is.null(style)) {
+    key <- paste0("visOmopResults.", obj, "Style")
+    style <- getOption(x = key, default = "")
+    if (style == "") {
+      if (file.exists("_brand.yml")) {
+        style <- "_brand.yml"
+      } else {
+        style <- here::here("inst", "scarlet.yml")
+      }
+    }
+  }
+  return(style)
+}
