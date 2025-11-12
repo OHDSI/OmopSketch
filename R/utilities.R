@@ -180,8 +180,8 @@ validateStyle <- function(style, obj) {
   return(style)
 }
 
-CohortCharacteristics:::emptyPlot
-function (title = "No result to plot", subtitle = "")
+
+emptyPlot <- function (title = "No result to plot", subtitle = "")
 {
   ggplot2::ggplot() + ggplot2::theme_void() + ggplot2::labs(title = title,
                                                             subtitle = subtitle)
