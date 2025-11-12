@@ -58,9 +58,7 @@ plotTrend <- function(result,
     if (length(available_output) == 1) {
       output <- available_output
     } else if (length(available_output) > 1) {
-      cli::cli_alert_warning("Trying to plot multiple output at the same time. Please select one using the `output` argument or filter results")
-
-      return(invisible(NULL))  # stop further plotting
+      return(emptyPlot("Trying to plot multiple output at the same time. Please select one using the `output` argument or filter results"))
     } else {
       output <- "record"
     }
@@ -75,7 +73,7 @@ plotTrend <- function(result,
     omopgenerics::addSettings(settingsColumn = "type")
 
   if (nrow(result) == 0) {
-    cli::cli_abort(c("!" = "No results found with for output {output}"))
+    return(emptyPlot(c("!" = "No results found with for output {output}")))
   }
 
   estimate <- unique(result$estimate_name)
