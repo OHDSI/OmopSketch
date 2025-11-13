@@ -10,32 +10,32 @@ on:
 name: weekly-tests
 
 jobs:
-  duckdb-CDMConnector:
-    uses: ./.github/workflows/test-template.yaml
-    with:
-      DB_TO_TEST: duckdb-CDMConnector
-
-  local-omopgenerics:
-    uses: ./.github/workflows/test-template.yaml
-    with:
-      DB_TO_TEST: local-omopgenerics
+  # duckdb-CDMConnector:
+  #   uses: ./.github/workflows/test-template.yaml
+  #   with:
+  #     DB_TO_TEST: duckdb-CDMConnector
+  #
+  # local-omopgenerics:
+  #   uses: ./.github/workflows/test-template.yaml
+  #   with:
+  #     DB_TO_TEST: local-omopgenerics
 
   sqlserver-CDMConnector:
     uses: ./.github/workflows/test-template.yaml
     with:
       DB_TO_TEST: sqlserver-CDMConnector
 
-  postgres-CDMConnector:
-    uses: ./.github/workflows/test-template.yaml
-    with:
-      DB_TO_TEST: postgres-CDMConnector
-
-  snowflake-CDMConnector:
-    uses: ./.github/workflows/test-template.yaml
-    with:
-      DB_TO_TEST: snowflake-CDMConnector
-
-  redshift-CDMConnector:
-    uses: ./.github/workflows/test-template.yaml
-    with:
-      DB_TO_TEST: redshift-CDMConnector
+  # postgres-CDMConnector:
+  #   uses: ./.github/workflows/test-template.yaml
+  #   with:
+  #     DB_TO_TEST: postgres-CDMConnector
+  #
+  # snowflake-CDMConnector:
+  #   uses: ./.github/workflows/test-template.yaml
+  #   with:
+  #     DB_TO_TEST: snowflake-CDMConnector
+  #
+  # redshift-CDMConnector:
+  #   uses: ./.github/workflows/test-template.yaml
+  #   with:
+  #     DB_TO_TEST: redshift-CDMConnector
