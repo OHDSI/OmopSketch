@@ -37,21 +37,20 @@ copyCdm <- function(cdm) {
       writeSchema = c(schema = "main", prefix = pref)
     )
   } else if (dbToTest == "sqlserver-CDMConnector") {
-    schema <- strsplit(Sys.getenv("CDM5_SQL_SERVER_SCRATCH_SCHEMA"), "\\.")[[1]]
     to <- CDMConnector::dbSource(
       con = DBI::dbConnect(
         odbc::odbc(),
         Driver = "ODBC Driver 18 for SQL Server",
         Server = Sys.getenv("CDM5_SQL_SERVER_SERVER"),
-        Database = Sys.getenv("CDM5_SQL_SERVER_CDM_DATABASE"),
+        Database = "CDMV5",
         UID = Sys.getenv("CDM5_SQL_SERVER_USER"),
         PWD = Sys.getenv("CDM5_SQL_SERVER_PASSWORD"),
         TrustServerCertificate = "yes",
         Port = 1433
       ),
       writeSchema = c(
-        catalog = schema[1],
-        schema = schema[2],
+        catalog = "tempdb",
+        schema = "dbo",
         prefix = pref
       )
     )
