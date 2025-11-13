@@ -54,8 +54,9 @@ tableClinicalRecords <- function(result,
     warnEmpty("summarise_clinical_records")
     return(emptyTable(type))
   }
-
-  header <- c("cdm_name")
+  setting_cols <- omopgenerics::settingsColumns(result)
+  setting_cols <- setting_cols[!setting_cols %in% c("study_period_end", "study_period_start")]
+  header <- c("cdm_name", setting_cols)
   custom_order <- c("Number records", "Number subjects", "Subjects not in person table", "Records per person", "In observation", "Domain", "Source vocabulary", "Standard concept", "Type concept id","Concept class", "Start date before birth date", "End date before start date", "Column name")
   tables <- result$group_level |> unique()
   result |>
@@ -76,6 +77,7 @@ tableClinicalRecords <- function(result,
       ),
       header = header,
       rename = c("Database name" = "cdm_name"),
+      settingsColumn = setting_cols,
       groupColumn = c("omop_table", omopgenerics::strataColumns(result)),
       .options = list(caption = paste0("Summary of ", paste(tables, collapse = ", "), ifelse(length(tables) > 1, " tables", " table"))
 )

@@ -41,8 +41,6 @@ tableTrend <- function(result,
 
   type <- validateType(type)
 
-  strata_cols <- omopgenerics::strataColumns(result)
-  additional_cols <- omopgenerics::additionalColumns(result)
 
   # subset to result_type of interest
   result <- result |>
@@ -50,14 +48,18 @@ tableTrend <- function(result,
       .data$result_type == "summarise_trend"
     ) |>
     dplyr::arrange(.data$variable_name, .data$additional_level)
-  additionals <- omopgenerics::additionalColumns(result)
-  strata <- omopgenerics::strataColumns(result)
 
   # check if it is empty
   if (nrow(result) == 0) {
     warnEmpty("summarise_trend")
     return(emptyTable(type))
   }
+
+  additionals <- omopgenerics::additionalColumns(result)
+  strata <- omopgenerics::strataColumns(result)
+  setting_cols <- omopgenerics::settingsColumns(result)
+  setting_cols <- setting_cols[!setting_cols %in% c("study_period_end", "study_period_start", "interval")]
+
   formatEstimates <- c(
     "N (%)" = "<count> (<percentage>%)",
     "Median" = "<median>"
@@ -71,14 +73,14 @@ tableTrend <- function(result,
   tables <- result$group_level |> unique()
   result |>
     visOmopResults::visOmopTable(
-      header = c("cdm_name"),
+      header = c("cdm_name", setting_cols[setting_cols!= "type"]),
       estimateName = formatEstimates,
-      settingsColumn = "type",
       groupColumn = c("type", "omop_table"),
       rename = rename_vec,
       type = type,
       style = style,
       hide = "variable_level",
+      settingsColumn = setting_cols,
       columnOrder = c("variable_name", additionals, strata, "estimate_name"),
       .options = list(merge = "all_columns",
                       caption = paste0("Summary of ",

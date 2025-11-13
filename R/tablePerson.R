@@ -28,6 +28,19 @@ tablePerson <- function(result,
   result <- omopgenerics::validateResultArgument(result = result)
   style <- validateStyle(style = style, obj = "table")
 
+  result <- result |>
+    omopgenerics::filterSettings(
+      .data$result_type == "summarise_person"
+    )
+
+  # check if it is empty
+  if (nrow(result) == 0) {
+    warnEmpty("summarise_person")
+    return(emptyTable(type))
+  }
+
+  setting_cols <- omopgenerics::settingsColumns(result)
+  setting_cols <- setting_cols[!setting_cols %in% c("study_period_end", "study_period_start")]
 
   visOmopResults::visOmopTable(
     result = result,
@@ -41,9 +54,11 @@ tablePerson <- function(result,
       "Zero count (%)" = "<count_0> (<percentage_0>%)",
       "Distinct values" = "<distinct_values>"
     ),
-    header = "cdm_name",
+    header = c("cdm_name", setting_cols),
     style = style,
     type = type,
+    settingsColumn = setting_cols,
+
     .options = list(caption = "Summary of person table")
 
   )

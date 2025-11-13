@@ -42,11 +42,6 @@ tableTopConceptCounts <- function(result,
   style <- validateStyle(style = style, obj = "table")
   type <- validateType(type)
 
-
-  strata_cols <- omopgenerics::strataColumns(result)
-  additional_cols <- omopgenerics::additionalColumns(result)
-  additional_cols <- additional_cols[!grepl("source_concept", additional_cols)]
-  # subset to result_type of interest
   result <- result |>
     omopgenerics::filterSettings(
       .data$result_type == "summarise_concept_id_counts"
@@ -56,6 +51,12 @@ tableTopConceptCounts <- function(result,
     return(emptyTable(type))
   }
 
+  strata_cols <- omopgenerics::strataColumns(result)
+  additional_cols <- omopgenerics::additionalColumns(result)
+  additional_cols <- additional_cols[!grepl("source_concept", additional_cols)]
+  # subset to result_type of interest
+  setting_cols <- omopgenerics::settingsColumns(result)
+  setting_cols <- setting_cols[!setting_cols %in% c("study_period_end", "study_period_start")]
   # check countBy
   result <- result |>
     dplyr::mutate(estimate_name = dplyr::case_when(
@@ -71,6 +72,7 @@ tableTopConceptCounts <- function(result,
 
   # tidy version
   result <- result |>
+    omopgenerics::addSettings(settingsColumn = setting_cols) |>
     omopgenerics::splitAll() |>
     omopgenerics::pivotEstimates() |>
     dplyr::select(!c("result_id", opts[opts != countBy])) |>
@@ -110,7 +112,7 @@ tableTopConceptCounts <- function(result,
     dplyr::select(!dplyr::all_of(colsGroup))
 
   # create visual table with visOmopResults
-  header <- c("cdm_name", additional_cols)
+  header <- c("cdm_name", setting_cols, additional_cols)
   group <- c("omop_table", strata_cols)
   tab <- result |>
     visOmopResults::visTable(

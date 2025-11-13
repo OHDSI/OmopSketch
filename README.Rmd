@@ -41,6 +41,10 @@ remotes::install_github("OHDSI/OmopSketch")
 ## Example
 
 Let's start by creating a cdm object using the Eunomia GiBleed mock dataset:
+```{r, echo=FALSE}
+visOmopResults::setGlobalPlotOptions(style = list.files(system.file("brand", package = "OmopSketch"), full.names = TRUE, pattern = "^readme\\.yml$"))
+visOmopResults::setGlobalTableOptions(style = list.files(system.file("brand", package = "OmopSketch"), full.names = TRUE, pattern = "^readme\\.yml$"))
+```
 
 
 ```{r, message=TRUE, warning=FALSE}
