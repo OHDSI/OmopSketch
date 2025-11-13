@@ -90,7 +90,7 @@ copyCdm <- function(cdm) {
         PWD = Sys.getenv("CDM_SNOWFLAKE_PASSWORD"),
         DATABASE = "ATLAS",
         WAREHOUSE = stringr::str_extract(Sys.getenv("CDM_SNOWFLAKE_CONNECTION_STRING"), "(?i)(?<=\\bwarehouse=)[^&?#]+"),
-        Driver = "SnowflakeDSIIDriver"
+        Driver = "/usr/lib/snowflake/odbc/lib/libSnowflake.so"
       ),
       writeSchema = c(catalog = "ATLAS", schema = "RESULTS", prefix = pref)
     )
