@@ -55,12 +55,13 @@ copyCdm <- function(cdm) {
       )
     )
   } else if (dbToTest == "redshift-CDMConnector") {
+    server <- stringr::str_split_1(Sys.getenv("CDM5_REDSHIFT_SERVER"), "/")
     to <- CDMConnector::dbSource(
       con = DBI::dbConnect(
         RPostgres::Redshift(),
-        dbname = Sys.getenv("CDM5_REDSHIFT_DBNAME"),
-        port = Sys.getenv("CDM5_REDSHIFT_PORT"),
-        host = Sys.getenv("CDM5_REDSHIFT_HOST"),
+        dbname = server[2],
+        port = 5439,
+        host = server[1],
         user = Sys.getenv("CDM5_REDSHIFT_USER"),
         password = Sys.getenv("CDM5_REDSHIFT_PASSWORD")
       ),

@@ -13,6 +13,24 @@ on:
         required: false
       CDM5_SQL_SERVER_USER:
         required: false
+      CDM5_REDSHIFT_SERVER:
+        required: false
+      CDM5_REDSHIFT_PASSWORD:
+        required: false
+      CDM5_REDSHIFT_USER:
+        required: false
+      CDM5_POSTGRESQL_SERVER:
+        required: false
+      CDM5_POSTGRESQL_PASSWORD:
+        required: false
+      CDM5_POSTGRESQL_USER:
+        required: false
+      CDM_SNOWFLAKE_CONNECTION_STRING:
+        required: false
+      CDM_SNOWFLAKE_PASSWORD:
+        required: false
+      CDM_SNOWFLAKE_USER:
+        required: false
 
 jobs:
   run-tests:
@@ -26,11 +44,8 @@ jobs:
       CDM5_POSTGRESQL_PASSWORD: ${{ secrets.CDM5_POSTGRESQL_PASSWORD }}
       CDM5_POSTGRESQL_SERVER: ${{ secrets.CDM5_POSTGRESQL_SERVER }}
       CDM5_POSTGRESQL_USER: ${{ secrets.CDM5_POSTGRESQL_USER }}
-      CDM5_REDSHIFT_DBNAME: ${{ secrets.CDM5_REDSHIFT_DBNAME }}
-      CDM5_REDSHIFT_HOST: ${{ secrets.CDM5_REDSHIFT_HOST }}
+      CDM5_REDSHIFT_SERVER: ${{ secrets.CDM5_REDSHIFT_SERVER }}
       CDM5_REDSHIFT_PASSWORD: ${{ secrets.CDM5_REDSHIFT_PASSWORD }}
-      CDM5_REDSHIFT_PORT: ${{ secrets.CDM5_REDSHIFT_PORT }}
-      CDM5_REDSHIFT_SCRATCH_SCHEMA: ${{ secrets.CDM5_REDSHIFT_SCRATCH_SCHEMA }}
       CDM5_REDSHIFT_USER: ${{ secrets.CDM5_REDSHIFT_USER }}
       CDM5_SQL_SERVER_PASSWORD: ${{ secrets.CDM5_SQL_SERVER_PASSWORD }}
       CDM5_SQL_SERVER_SERVER: ${{ secrets.CDM5_SQL_SERVER_SERVER }}
@@ -95,25 +110,8 @@ jobs:
           dir.create(td)
           Sys.setenv(OMOP_DATA_FOLDER = td)
           omock::downloadMockDataset(datasetName = "GiBleed")
-          if (nzchar(Sys.getenv("CDM5_SQL_SERVER_SERVER"))) {
-            message("secret is set.")
-          } else {
-            warning("Secret is NOT set or empty!")
-          }
-          if (nzchar(Sys.getenv("CDM5_SQL_SERVER_USER"))) {
-            message("secret is set.")
-          } else {
-            warning("Secret is NOT set or empty!")
-          }
-          if (nzchar(Sys.getenv("CDM5_SQL_SERVER_PASSWORD"))) {
-            message("secret is set.")
-          } else {
-            warning("Secret is NOT set or empty!")
-          }
-          source(here::here("tests", "testthat", "setup.R"))
-          cdmEunomia()
-          #x <- devtools::test()
-          #error <- sum(as.numeric(dplyr::as_tibble(x)$error))
-          #failed <- sum(as.numeric(dplyr::as_tibble(x)$failed))
-          #if (error + failed > 0) cli::cli_abort(c(x = "Tests failed"))
+          x <- devtools::test()
+          error <- sum(as.numeric(dplyr::as_tibble(x)$error))
+          failed <- sum(as.numeric(dplyr::as_tibble(x)$failed))
+          if (error + failed > 0) cli::cli_abort(c(x = "Tests failed"))
         shell: Rscript {0}
