@@ -15,6 +15,8 @@ test_that("databaseCharacteristics works", {
       nrow(),
     0
   )
+
+  dropCreatedTables(cdm = cdm)
 })
 
 test_that("shinyCharacteristics works", {
@@ -42,6 +44,7 @@ test_that("shinyCharacteristics works", {
   expect_true("OmopSketchShiny" %in% list.files(dir))
 
   unlink(file.path(dir, "OmopSketchShiny"), recursive = TRUE)
+  dropCreatedTables(cdm = cdm)
 })
 
 test_that("sample works", {
@@ -62,6 +65,5 @@ test_that("sample works", {
  expect_true(all(x |> omopgenerics::filterSettings(grepl("clinical",result_type)) |> dplyr::filter(.data$variable_name ==  "Number subjects" & .data$estimate_name == "count") |> dplyr::pull(.data$estimate_value) |> as.numeric() <= n_subjects ))
  expect_true(all(x |> omopgenerics::filterSettings(grepl("observation_period",result_type)) |> dplyr::filter(.data$variable_name ==  "Number subjects") |> dplyr::pull(.data$estimate_value) |> as.numeric() <= n_subjects))
 
-
- })
-
+ dropCreatedTables(cdm = cdm)
+})

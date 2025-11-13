@@ -9,7 +9,6 @@ test_that("summariseTrend - episode works", {
   expect_no_error(summariseTrend(cdm, episode = "drug_exposure", event = "condition_occurrence", interval = "months"))
   expect_true(inherits(summariseTrend(cdm, episode = "drug_exposure", event = "condition_occurrence", interval = "months"), "summarised_result"))
 
-
   # Check inputs ----
   x <- summariseTrend(cdm, episode = "observation_period", interval = "years") |>
     dplyr::filter(additional_level == "1909-01-01 to 1909-12-31", estimate_name == "count") |>
@@ -114,8 +113,10 @@ test_that("summariseTrend - episode works", {
     dplyr::pull("n") |>
     as.numeric()
   expect_equal(x, y)
-  CDMConnector::cdmDisconnect(cdm = cdm)
+
+  dropCreatedTables(cdm = cdm)
 })
+
 test_that("summariseTrend - event works", {
   skip_on_cran()
   # Load mock database ----
@@ -207,7 +208,7 @@ test_that("summariseTrend - event works", {
   result <- summariseTrend(cdm, event = "observation_period", interval = "months")
   checkResultType(result, "summarise_trend")
 
-  CDMConnector::cdmDisconnect(cdm = cdm)
+  dropCreatedTables(cdm = cdm)
 })
 
 test_that("check sex argument works", {
@@ -281,8 +282,7 @@ test_that("check sex argument works", {
 
   expect_equal(x, sprintf("%.2f", y))
 
-
-  CDMConnector::cdmDisconnect(cdm = cdm)
+  dropCreatedTables(cdm = cdm)
 })
 
 test_that("check ageGroup argument works", {
@@ -356,8 +356,7 @@ test_that("check ageGroup argument works", {
     dplyr::pull()
   expect_equal(x, y)
 
-
-  CDMConnector::cdmDisconnect(cdm = cdm)
+  dropCreatedTables(cdm = cdm)
 })
 
 test_that("check person-days output works", {
@@ -366,7 +365,6 @@ test_that("check person-days output works", {
   cdm <- cdmEunomia()
 
   # check value
-
   x <- summariseTrend(cdm, episode = "observation_period", interval = "years", output = c("record", "person-days"), ageGroup = NULL, sex = FALSE) |>
     dplyr::filter(variable_name == "Person-days", additional_level == "1970-01-01 to 1970-12-31", estimate_type == "integer") |>
     dplyr::pull("estimate_value") |>
@@ -407,7 +405,6 @@ test_that("check person-days output works", {
     as.numeric() / den * 100
   expect_equal(x, sprintf("%.2f", y))
 
-
   # Check sex stratified
   x <- summariseTrend(cdm, episode = "observation_period", interval = "years", output = "person-days", sex = TRUE) |>
     dplyr::filter(variable_name == "Person-days", additional_level == "1964-01-01 to 1964-12-31", estimate_type == "integer") |>
@@ -439,13 +436,17 @@ test_that("check person-days output works", {
   expect_message(x <- summariseTrend(cdm, event = "observation_period", output = "person-days"))
   expect_equal(x, omopgenerics::emptySummarisedResult(), ignore_attr = TRUE)
   expect_equal(summariseTrend(cdm, event = "observation_period", output = c("record", "person-days")), summariseTrend(cdm, event = "observation_period", output = c("record")))
-  CDMConnector::cdmDisconnect(cdm = cdm)
+
+  dropCreatedTables(cdm = cdm)
 })
 
 test_that("dateRange argument works", {
   skip_on_cran()
   # Load mock database ----
   cdm <- cdmEunomia()
+
+  # tables created
+  startNames <- omopgenerics::listSourceTables(cdm)
 
   expect_no_error(summariseTrend(cdm, episode = "observation_period", dateRange = as.Date(c("1940-01-01", "2018-01-01"))))
   expect_message(x <- summariseTrend(cdm, episode = "observation_period", dateRange = as.Date(c("1940-01-01", "2024-01-01"))))
@@ -486,24 +487,10 @@ test_that("dateRange argument works", {
   expect_equal(z, omopgenerics::emptySummarisedResult(), ignore_attr = TRUE)
   expect_equal(summariseTrend(cdm, event = "drug_exposure", dateRange = as.Date(c("2012-01-01", NA))), y, ignore_attr = TRUE)
 
-  CDMConnector::cdmDisconnect(cdm = cdm)
-
-  cdm <- cdmEunomia()
-
   expect_no_error(summariseTrend(cdm, "observation_period",
     interval = "years",
     dateRange = as.Date(c("1950-01-01", NA))
   ))
-
-  CDMConnector::cdmDisconnect(cdm = cdm)
-})
-
-test_that("no tables created", {
-  skip_on_cran()
-  # Load mock database ----
-  cdm <- cdmEunomia()
-
-  startNames <- omopgenerics::listSourceTables(cdm)
 
   results <- summariseTrend(cdm,
     episode = "observation_period",
@@ -519,17 +506,18 @@ test_that("no tables created", {
     dateRange = as.Date(c("2012-01-01", "2018-01-01"))
   )
 
-
   endNames <- omopgenerics::listSourceTables(cdm)
 
   expect_true(length(setdiff(endNames, startNames)) == 0)
 
-  CDMConnector::cdmDisconnect(cdm = cdm)
+  dropCreatedTables(cdm = cdm)
 })
+
 test_that("age and sex output work", {
   skip_on_cran()
   # Load mock database ----
   cdm <- cdmEunomia()
+
   expect_no_error(x <- summariseTrend(cdm, episode = "observation_period", output = "age"))
   expect_equal(cdm$observation_period |>
     PatientProfiles::addAgeQuery(indexDate = "observation_period_start_date") |>
@@ -567,7 +555,6 @@ test_that("age and sex output work", {
     stats::median()
 
   expect_equal(y, z)
-
 
   expect_no_error(x <- summariseTrend(cdm, episode = "observation_period", output = "sex"))
   y <- cdm$observation_period |>
@@ -644,7 +631,6 @@ test_that("age and sex output work", {
 
   expect_equal(y, z)
 
-
   expect_no_error(x <- summariseTrend(cdm, event = "drug_exposure", output = "sex"))
   n_tot <- cdm$drug_exposure |>
     dplyr::inner_join(cdm[["person"]] |>
@@ -689,8 +675,7 @@ test_that("age and sex output work", {
 
   expect_equal(sprintf("%.2f", 100 * z$n_females / n_tot), y)
 
-
-  CDMConnector::cdmDisconnect(cdm = cdm)
+  dropCreatedTables(cdm = cdm)
 })
 
 test_that("overall time interval work", {
@@ -737,9 +722,8 @@ test_that("overall time interval work", {
   expect_equal(y |> dplyr::filter(variable_name == "Number of females") |> dplyr::pull(.data$estimate_value), as.character(sex))
   expect_equal(y |> dplyr::filter(variable_name == "Age") |> dplyr::pull(.data$estimate_value), as.character(age))
 
-  CDMConnector::cdmDisconnect(cdm = cdm)
+  dropCreatedTables(cdm = cdm)
 })
-
 
 test_that("tableTrend() works", {
   skip_on_cran()
@@ -761,7 +745,7 @@ test_that("tableTrend() works", {
   expect_no_error(tableTrend(summariseTrend(cdm, event = "condition_occurrence", output = "age")))
   expect_no_error(tableTrend(summariseTrend(cdm, episode = "drug_exposure", event = "condition_occurrence", interval = "years", output = c("age", "record"), sex = TRUE)))
 
-  CDMConnector::cdmDisconnect(cdm = cdm)
+  dropCreatedTables(cdm = cdm)
 })
 
 test_that("plotTrend() works", {
@@ -780,7 +764,7 @@ test_that("plotTrend() works", {
 
   expect_warning(plotTrend(summariseTrend(cdm, episode = "condition_occurrence", event = "drug_exposure"), colour = NULL, facet = NULL))
 
-  CDMConnector::cdmDisconnect(cdm = cdm)
+  dropCreatedTables(cdm = cdm)
 })
 
 test_that("argument inObservation works", {
@@ -791,7 +775,6 @@ test_that("argument inObservation works", {
   expect_equal(summariseTrend(cdm, event = "observation_period", inObservation = TRUE), summariseTrend(cdm, event = "observation_period", inObservation = FALSE))
   expect_equal(summariseTrend(cdm, episode = "observation_period", inObservation = TRUE), summariseTrend(cdm, episode = "observation_period", inObservation = FALSE))
   expect_equal(summariseTrend(cdm, episode = "observation_period", inObservation = TRUE, interval = "years"), summariseTrend(cdm, episode = "observation_period", inObservation = FALSE, interval = "years"))
-
 
   expect_no_error(result <- summariseTrend(cdm, event = "condition_occurrence", episode = "drug_exposure", inObservation = TRUE, sex = TRUE, output = c("record", "person", "age", "sex", "person-days")))
 
@@ -825,12 +808,9 @@ test_that("argument inObservation works", {
       .data$drug_exposure_end_date >= .data$obs_start & .data$drug_exposure_end_date <= .data$obs_end) |>
     dplyr::select(!c("obs_start", "obs_end"))
 
-
   expect_no_error(resultInObs <- summariseTrend(cdm, event = "condition_occurrence", episode = "drug_exposure", inObservation = FALSE, sex = TRUE, output = c("record", "person", "age", "sex", "person-days")))
 
   expect_equal(result |> dplyr::filter(.data$estimate_name != "percentage") |> dplyr::arrange(dplyr::across(dplyr::everything())), resultInObs |> dplyr::filter(.data$estimate_name != "percentage") |> dplyr::arrange(dplyr::across(dplyr::everything())), ignore_attr = TRUE)
 
-
-  CDMConnector::cdmDisconnect(cdm = cdm)
+  dropCreatedTables(cdm = cdm)
 })
-

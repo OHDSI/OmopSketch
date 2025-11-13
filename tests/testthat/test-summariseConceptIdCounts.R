@@ -76,6 +76,8 @@ test_that("summariseConceptIdCount works", {
     as.data.frame(p) |> dplyr::arrange(variable_level),
     check.attributes = FALSE
   ))
+
+  dropCreatedTables(cdm = cdm)
 })
 
 test_that("dateRange argument works", {
@@ -97,9 +99,9 @@ test_that("dateRange argument works", {
   expect_equal(y, omopgenerics::emptySummarisedResult(), ignore_attr = TRUE)
   expect_equal(settings(y)$result_type, settings(x)$result_type)
   expect_equal(colnames(settings(y)), colnames(settings(x)))
-  CDMConnector::cdmDisconnect(cdm = cdm)
-})
 
+  dropCreatedTables(cdm = cdm)
+})
 
 test_that("tableConceptIdCounts() works", {
   skip_on_cran()
@@ -127,7 +129,7 @@ test_that("tableConceptIdCounts() works", {
   expect_warning(tableConceptIdCounts(summariseConceptIdCounts(cdm, "condition_occurrence"), display = "missing source", type = "reactable"))
   expect_warning(tableConceptIdCounts(summariseConceptIdCounts(cdm, "condition_occurrence"), display = "missing standard", type = "reactable"))
 
-  CDMConnector::cdmDisconnect(cdm = cdm)
+  dropCreatedTables(cdm = cdm)
 })
 
 test_that("interval argument works", {
@@ -220,7 +222,6 @@ test_that("interval argument works", {
 
   expect_equal(y_year |> dplyr::group_by(variable_level) |> dplyr::summarise(count_records = sum(count_records), .groups = "drop") |> sortTibble(), o |> sortTibble())
 
-
   q_year <- q |>
     omopgenerics::splitAdditional() |>
     dplyr::filter(time_interval != "overall") |>
@@ -239,7 +240,8 @@ test_that("interval argument works", {
     dplyr::arrange(year)
 
   expect_equal(q_year |> sortTibble(), y_year |> sortTibble())
-  CDMConnector::cdmDisconnect(cdm = cdm)
+
+  dropCreatedTables(cdm = cdm)
 })
 
 test_that("tableTopConceptCounts works", {
@@ -264,8 +266,7 @@ test_that("tableTopConceptCounts works", {
   expect_no_error(result <- summariseConceptIdCounts(cdm, "drug_exposure", countBy = c("record", "person")))
   expect_no_error(tableTopConceptCounts(result, countBy = "record"))
 
-
-  CDMConnector::cdmDisconnect(cdm)
+  dropCreatedTables(cdm = cdm)
 })
 
 test_that("inObservation argument works", {
@@ -291,7 +292,8 @@ test_that("inObservation argument works", {
     dplyr::select(!c("strata_name", "strata_level")) |> dplyr::arrange(.data$variable_level), ignore_attr = TRUE)
 
   expect_no_error(summariseConceptIdCounts(cdm, "drug_exposure", inObservation = TRUE, sex = TRUE, ageGroup = list(c(0, 70))))
-  CDMConnector::cdmDisconnect(cdm)
+
+  dropCreatedTables(cdm = cdm)
 })
 
 
@@ -300,14 +302,14 @@ test_that("sample argument works", {
   skip_on_cran()
   # Load mock database ----
   cdm <- cdmEunomia()
+
   n_person <- cdm$person |> dplyr::tally() |> dplyr::pull("n")
   expect_no_error(summariseConceptIdCounts(cdm, "drug_exposure", sample =  n_person - 1))
   expect_message(summariseConceptIdCounts(cdm, "drug_exposure", sample = n_person))
   expect_message(summariseConceptIdCounts(cdm, "drug_exposure", sample = n_person+1))
   expect_message(summariseConceptIdCounts(cdm, "drug_exposure", sample = "pajfn"))
-  cdm[["pharyngitis"]] <- CohortConstructor::conceptCohort(cdm, conceptSet = list("pharyngitis" = 4112343), name = "pharyngitis")
+  cdm[["pharyngitis"]] <- CohortConstructor::conceptCohort(cdm, conceptSet = list("pharyngitis" = 4112343L), name = "pharyngitis")
   expect_no_error(x <- summariseConceptIdCounts(cdm, "drug_exposure", sample = "pharyngitis"))
-
 
   expect_no_error(x <- summariseConceptIdCounts(cdm, "condition_occurrence", sample =  n_person - 1, countBy = "person"))
   expect_true(all(x |> omopgenerics::tidy() |> dplyr::pull("count_subjects") <= n_person - 1))
@@ -315,6 +317,5 @@ test_that("sample argument works", {
   expect_no_error(x <- summariseConceptIdCounts(cdm, "condition_occurrence", sample = "pharyngitis", countBy = "record"))
   expect_equal(x |> omopgenerics::tidy() |> dplyr::filter(.data$variable_level == "4112343") |> dplyr::pull("count_records"),  omopgenerics::numberRecords(cdm$pharyngitis))
 
-
-  CDMConnector::cdmDisconnect(cdm)
+  dropCreatedTables(cdm = cdm)
 })

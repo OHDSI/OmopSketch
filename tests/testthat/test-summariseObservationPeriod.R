@@ -30,9 +30,8 @@ test_that("check summariseObservationPeriod works", {
       )
     ),
     cdmName = "mock data"
-  )
-
-  cdm <- copyCdm(cdm)
+  ) |>
+    copyCdm()
 
   # simple run
   expect_no_error(resAll <- summariseObservationPeriod(cdm$observation_period))
@@ -169,7 +168,6 @@ test_that("check summariseObservationPeriod works", {
   expect_no_error(resEmpty <- summariseObservationPeriod(cdm$observation_period))
   expect_true(nrow(resEmpty) == 0)
 
-
   # table works
   expect_no_error(tableObservationPeriod(resAll))
   expect_no_error(tableObservationPeriod(resAll, type = "datatable"))
@@ -297,7 +295,7 @@ test_that("check summariseObservationPeriod works", {
       )
   )
 
-  CDMConnector::cdmDisconnect(cdm = cdm)
+  dropCreatedTables(cdm = cdm)
 })
 
 
@@ -334,9 +332,8 @@ test_that("check summariseObservationPeriod strata works", {
       )
     ),
     cdmName = "mock data"
-  )
-
-  cdm <- copyCdm(cdm)
+  ) |>
+    copyCdm()
 
   # simple run
   expect_no_error(summariseObservationPeriod(cdm$observation_period,
@@ -456,7 +453,7 @@ test_that("check summariseObservationPeriod strata works", {
       )
   )
 
-  CDMConnector::cdmDisconnect(cdm = cdm)
+  dropCreatedTables(cdm = cdm)
 })
 
 
@@ -464,7 +461,6 @@ test_that("dateRnge argument works", {
   skip_on_cran()
   # Load mock database ----
   cdm <- cdmEunomia()
-
 
   expect_no_error(summariseObservationPeriod(cdm$observation_period, dateRange = as.Date(c("1940-01-01", "2018-01-01"))))
   expect_message(x <- summariseObservationPeriod(cdm$observation_period, dateRange = as.Date(c("1940-01-01", "2024-01-01")), estimates = "min"))
@@ -496,7 +492,7 @@ test_that("dateRnge argument works", {
     dplyr::pull(n)
   expect_equal(x, y)
 
-  CDMConnector::cdmDisconnect(cdm = cdm)
+  dropCreatedTables(cdm = cdm)
 })
 
 
@@ -517,13 +513,11 @@ test_that("no tables created", {
     dateRange = as.Date(c("2012-01-01", "2018-01-01"))
   )
 
-
   endNames <- omopgenerics::listSourceTables(cdm)
 
   expect_true(length(setdiff(endNames, startNames)) == 0)
 
-
-  CDMConnector::cdmDisconnect(cdm = cdm)
+  dropCreatedTables(cdm = cdm)
 })
 
 test_that("missingData works", {
@@ -537,7 +531,6 @@ test_that("missingData works", {
     dplyr::filter(.data$group_level != "all")
   expect_true(!(any(c("na_count", "na_percentage", "zero_count", "zero_percentage") %in% unique(x$estimate_name))))
 
-
   expect_no_error(x <- summariseObservationPeriod(cdm, quality = F))
 
   y <- summariseMissingData(cdm, "observation_period")
@@ -549,8 +542,7 @@ test_that("missingData works", {
 
   expect_equal(x |> dplyr::filter(variable_name == "Column name") |> dplyr::arrange(.data$variable_level, .data$strata_name, .data$strata_level) |> dplyr::select(!c("group_name", "group_level")), y |> dplyr::arrange(.data$variable_level, .data$strata_name, .data$strata_level) |> dplyr::select(!c("group_name", "group_level")), ignore_attr = TRUE)
 
-
-  CDMConnector::cdmDisconnect(cdm = cdm)
+  dropCreatedTables(cdm = cdm)
 })
 test_that("quality works", {
   skip_on_cran()
@@ -568,7 +560,6 @@ test_that("quality works", {
     dplyr::filter(.data$strata_level != "overall")
   expect_false("Subjects not in person table" %in% unique(x$variable_name))
 
-
   person_id <- cdm$observation_period |>
     head(1) |>
     dplyr::pull(.data$person_id)
@@ -578,9 +569,6 @@ test_that("quality works", {
   expect_equal(y |> dplyr::filter(.data$variable_name == "Subjects not in person table" & .data$estimate_name == "count") |> dplyr::pull(.data$estimate_value), "1")
   expect_equal(y |> dplyr::filter(.data$variable_name == "Subjects not in person table" & .data$estimate_name == "percentage") |> dplyr::pull(.data$estimate_value), sprintf("%.2f", 100 * 1 / n_subjects))
 
-  CDMConnector::cdmDisconnect(cdm = cdm)
-
-  cdm <- cdmEunomia()
   ids <- cdm$observation_period |>
     dplyr::distinct(observation_period_id) |>
     dplyr::pull()
@@ -617,7 +605,6 @@ test_that("quality works", {
   expect_no_error(x <- summariseObservationPeriod(cdm, missingData = F, sex = TRUE))
   x <- x |> omopgenerics::splitStrata()
 
-
   expect_equal(
     y |>
       PatientProfiles::addSexQuery() |>
@@ -640,6 +627,5 @@ test_that("quality works", {
       as.numeric()
   )
 
-
-  CDMConnector::cdmDisconnect(cdm = cdm)
+  dropCreatedTables(cdm = cdm)
 })

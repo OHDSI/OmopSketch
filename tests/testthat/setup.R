@@ -36,7 +36,7 @@ copyCdm <- function(cdm) {
       con = duckdb::dbConnect(drv = duckdb::duckdb(dbdir = ":memory:")),
       writeSchema = c(schema = "main", prefix = pref)
     )
-  } else if (dbToTest == "sql server-CDMConnector") {
+  } else if (dbToTest == "sqlserver-CDMConnector") {
     to <- CDMConnector::dbSource(
       con = DBI::dbConnect(
         odbc::odbc(),
@@ -69,7 +69,29 @@ copyCdm <- function(cdm) {
       )
     )
   } else if (dbToTest == "postgres-CDMConnector") {
-    # TODO
+    to <- CDMConnector::dbSource(
+      con = RPostgres::dbConnect(
+        RPostgres::Postgres(),
+        dbname = stringr::str_split_1(Sys.getenv("CDM5_POSTGRESQL_SERVER"), "/")[2],
+        host = stringr::str_split_1(Sys.getenv("CDM5_POSTGRESQL_SERVER"), "/")[1],
+        user = Sys.getenv("CDM5_POSTGRESQL_USER"),
+        password = Sys.getenv("CDM5_POSTGRESQL_PASSWORD")
+      ),
+      writeSchema = c(schema = "public", prefix = pref)
+    )
+  } else if (dbToTest == "snowflake-CDMConnector") {
+    to <- CDMConnector::dbSource(
+      con = odbc::dbConnect(
+        odbc::odbc(),
+        SERVER = stringr::str_extract(Sys.getenv("CDM_SNOWFLAKE_CONNECTION_STRING"), "(?<=//)[^?]+(?=\\?)"),
+        UID = Sys.getenv("CDM_SNOWFLAKE_USER"),
+        PWD = Sys.getenv("CDM_SNOWFLAKE_PASSWORD"),
+        DATABASE = "ATLAS",
+        WAREHOUSE = stringr::str_extract(Sys.getenv("CDM_SNOWFLAKE_CONNECTION_STRING"), "(?i)(?<=\\bwarehouse=)[^&?#]+"),
+        Driver = "SnowflakeDSIIDriver"
+      ),
+      writeSchema = c(catalog = "ATLAS", schema = "RESULTS", prefix = pref)
+    )
   } else if (dbToTest != "local-omopgenerics") {
     cli::cli_abort(c(x = "Not supported dbToTest: {.pkg {dbToTest}}"))
   }
@@ -89,5 +111,10 @@ checkResultType <- function(result, result_type) {
 }
 sortTibble <- function(x) {
   x |>
+    dplyr::collect() |>
     dplyr::arrange(dplyr::across(dplyr::everything()))
+}
+dropCreatedTables <- function(cdm) {
+  omopgenerics::dropSourceTable(cdm = cdm, name = dplyr::everything())
+  omopgenerics::cdmDisconnect(cdm = cdm)
 }
