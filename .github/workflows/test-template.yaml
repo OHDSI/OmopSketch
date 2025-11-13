@@ -110,6 +110,7 @@ jobs:
           dir.create(td)
           Sys.setenv(OMOP_DATA_FOLDER = td)
           omock::downloadMockDataset(datasetName = "GiBleed")
+          print(odbc::odbcListDrivers())
           x <- devtools::test()
           error <- sum(as.numeric(dplyr::as_tibble(x)$error))
           failed <- sum(as.numeric(dplyr::as_tibble(x)$failed))

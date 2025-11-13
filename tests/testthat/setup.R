@@ -66,7 +66,7 @@ copyCdm <- function(cdm) {
         password = Sys.getenv("CDM5_REDSHIFT_PASSWORD")
       ),
       writeSchema = c(
-        schema = Sys.getenv("CDM5_REDSHIFT_SCRATCH_SCHEMA"),
+        schema = "public",
         prefix = pref
       )
     )
