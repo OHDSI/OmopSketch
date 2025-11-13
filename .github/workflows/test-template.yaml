@@ -36,6 +36,21 @@ jobs:
           extra-packages: any::devtools
           needs: check
 
+      - name: Install Microsoft ODBC Driver 18 (msodbcsql18)
+        run: |
+          curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+          curl https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/prod.list | sudo tee /etc/apt/sources.list.d/mssql-release.list
+          sudo apt-get update -y
+          sudo ACCEPT_EULA=Y apt-get install -y msodbcsql18 unixodbc-dev
+
+      - name: Install Snowflake ODBC driver
+        run: |
+          wget -q https://sfc-repo.snowflakecomputing.com/odbc/linux/latest/snowflake-odbc-latest.x86_64.deb -O /tmp/snowflake-odbc-latest.deb
+          sudo dpkg -i /tmp/snowflake-odbc-latest.deb || true
+          sudo apt-get install -f -y
+          echo "ODBC drivers installed (odbcinst -q -d):"
+          odbcinst -q -d
+
       - name: Run tests with source
         run: |
           td <- file.path(tempdir(), "mockDatasets")
