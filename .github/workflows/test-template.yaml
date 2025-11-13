@@ -13,6 +13,23 @@ jobs:
 
     env:
       DB_TO_TEST: ${{ inputs.DB_TO_TEST }}
+      CDM_SNOWFLAKE_CONNECTION_STRING: ${{ secrets.CDM_SNOWFLAKE_CONNECTION_STRING }}
+      CDM_SNOWFLAKE_PASSWORD: ${{ secrets.CDM_SNOWFLAKE_PASSWORD }}
+      CDM_SNOWFLAKE_USER: ${{ secrets.CDM_SNOWFLAKE_USER }}
+      CDM5_POSTGRESQL_PASSWORD: ${{ secrets.CDM5_POSTGRESQL_PASSWORD }}
+      CDM5_POSTGRESQL_SERVER: ${{ secrets.CDM5_POSTGRESQL_SERVER }}
+      CDM5_POSTGRESQL_USER: ${{ secrets.CDM5_POSTGRESQL_USER }}
+      CDM5_REDSHIFT_DBNAME: ${{ secrets.CDM5_REDSHIFT_DBNAME }}
+      CDM5_REDSHIFT_HOST: ${{ secrets.CDM5_REDSHIFT_HOST }}
+      CDM5_REDSHIFT_PASSWORD: ${{ secrets.CDM5_REDSHIFT_PASSWORD }}
+      CDM5_REDSHIFT_PORT: ${{ secrets.CDM5_REDSHIFT_PORT }}
+      CDM5_REDSHIFT_SCRATCH_SCHEMA: ${{ secrets.CDM5_REDSHIFT_SCRATCH_SCHEMA }}
+      CDM5_REDSHIFT_USER: ${{ secrets.CDM5_REDSHIFT_USER }}
+      CDM5_SQL_SERVER_CDM_DATABASE: ${{ secrets.CDM5_SQL_SERVER_CDM_DATABASE }}
+      CDM5_SQL_SERVER_PASSWORD: ${{ secrets.CDM5_SQL_SERVER_PASSWORD }}
+      CDM5_SQL_SERVER_SCRATCH_SCHEMA: ${{ secrets.CDM5_SQL_SERVER_SCRATCH_SCHEMA }}
+      CDM5_SQL_SERVER_SERVER: ${{ secrets.CDM5_SQL_SERVER_SERVER }}
+      CDM5_SQL_SERVER_USER: ${{ secrets.CDM5_SQL_SERVER_USER }}
 
     strategy:
       fail-fast: true
@@ -30,13 +47,32 @@ jobs:
           sudo apt-get update -y
           sudo ACCEPT_EULA=Y apt-get install -y msodbcsql18 unixodbc-dev
 
-      - name: Install Snowflake ODBC driver
+      - name: Install Snowflake ODBC (Ubuntu)
         run: |
-          wget -q https://sfc-repo.snowflakecomputing.com/odbc/linux/latest/snowflake-odbc-latest.x86_64.deb -O /tmp/snowflake-odbc-latest.deb
-          sudo dpkg -i /tmp/snowflake-odbc-latest.deb || true
-          sudo apt-get install -f -y
-          echo "ODBC drivers installed (odbcinst -q -d):"
-          odbcinst -q -d
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y unixodbc unixodbc-dev ca-certificates curl
+
+          # Pin a specific driver version to avoid "latest" 404s
+          VER=3.11.0
+          curl -fSLo snowflake-odbc.deb \
+            "https://sfc-repo.snowflakecomputing.com/odbc/linux/${VER}/snowflake-odbc-${VER}.x86_64.deb" \
+          && sudo dpkg -i snowflake-odbc.deb || sudo apt-get -f install -y
+
+          # If the .deb path ever breaks, fall back to TGZ + setup script
+          if ! odbcinst -q -d | grep -qi 'Snowflake'; then
+            curl -fSLo snowflake-odbc.tgz \
+              "https://sfc-repo.snowflakecomputing.com/odbc/linux/latest/snowflake_linux_x8664_odbc-${VER}.tgz"
+            tar xzf snowflake-odbc.tgz
+            sudo ./snowflake_odbc/unixodbc_setup.sh   # registers driver with unixODBC
+          fi
+
+          echo "::group::Drivers"
+          odbcinst -q -d || true
+          echo "::endgroup::"
+
+          # Show where the library lives (usually this path after .deb install)
+          find /usr/lib -name 'libSnowflake.so' -print || true
 
       - uses: r-lib/actions/setup-pandoc@v2
 
