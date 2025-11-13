@@ -125,12 +125,3 @@ dropCreatedTables <- function(cdm) {
   omopgenerics::dropSourceTable(cdm = cdm, name = dplyr::everything())
   omopgenerics::cdmDisconnect(cdm = cdm)
 }
-
-schema <- strsplit(Sys.getenv("CDM5_SQL_SERVER_SCRATCH_SCHEMA"), "\\.")[[1]]
-print(schema)
-print(Sys.getenv("CDM5_SQL_SERVER_SERVER"))
-print(Sys.getenv("CDM5_SQL_SERVER_CDM_DATABASE"))
-print(Sys.getenv("CDM5_SQL_SERVER_USER"))
-print(Sys.getenv("CDM5_SQL_SERVER_PASSWORD"))
-
-cdmEunomia()

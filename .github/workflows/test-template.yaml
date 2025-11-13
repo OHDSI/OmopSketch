@@ -88,8 +88,14 @@ jobs:
         run: |
           td <- file.path(tempdir(), "mockDatasets")
           dir.create(td)
-          Sys.setenv(MOCK_DATASETS_FOLDER = td)
+          Sys.setenv(OMOP_DATA_FOLDER = td)
           omock::downloadMockDataset(datasetName = "GiBleed")
+          schema <- strsplit(Sys.getenv("CDM5_SQL_SERVER_SCRATCH_SCHEMA"), "\\.")[[1]]
+          print(schema)
+          print(Sys.getenv("CDM5_SQL_SERVER_SERVER"))
+          print(Sys.getenv("CDM5_SQL_SERVER_CDM_DATABASE"))
+          print(Sys.getenv("CDM5_SQL_SERVER_USER"))
+          print(Sys.getenv("CDM5_SQL_SERVER_PASSWORD"))
           x <- devtools::test()
           error <- sum(as.numeric(dplyr::as_tibble(x)$error))
           failed <- sum(as.numeric(dplyr::as_tibble(x)$failed))
