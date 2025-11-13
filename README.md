@@ -15,19 +15,20 @@ coverage](https://codecov.io/gh/OHDSI/OmopSketch/branch/main/graph/badge.svg)](h
 
 <!-- badges: end -->
 
-The goal of OmopSketch is to characterise and visualise an OMOP CDM
-instance to asses if it meets the necessary criteria to answer a
-specific clinical question and conduct a certain study.
+The goal of OmopSketch is to characterise and visualise an Observational
+Medical Outcomes Partnership (OMOP) Common Data Model (CDM) instance to
+asses if it meets the necessary criteria to answer a specific clinical
+question and conduct a certain study.
 
 ## Installation
 
-OmopSketch is available from CRAN:
+**OmopSketch** is available from CRAN:
 
 ``` r
 install.packages("OmopSketch")
 ```
 
-You can install the development version of OmopSketch from
+Or you can install the development version of OmopSketch from
 [GitHub](https://github.com/) with:
 
 ``` r
@@ -35,15 +36,27 @@ You can install the development version of OmopSketch from
 remotes::install_github("OHDSI/OmopSketch")
 ```
 
-## Example
+## Working with OMOP
 
-Let’s start by creating a cdm object using the Eunomia GiBleed mock
-dataset:
+To be able to use this package you will need data mapped to the OMOP
+CDM.
+
+The first step to any analysis you will create what we call the
+`cdm_reference` object, which is a reference to the OMOP CDM tables. If
+you want to learn more about OMOP or the `cdm_reference` object you can
+take a look to:
+
+- [Tidy R programming with the OMOP Common Data
+  Model](https://ohdsi.github.io/Tidy-R-programming-with-OMOP/)
+- [The book of OHDSI](https://ohdsi.github.io/TheBookOfOhdsi/)
+
+In general, you will create a cdm_reference object using the
+[CDMConnector](https://darwin-eu.github.io/CDMConnector/) package, in
+our case we will use the Eunomia *GiBleed* mock dataset available
+through [omock](https://ohdsi.github.io/omock/):
 
 ``` r
-library(OmopSketch)
 library(omock)
-library(dplyr, warn.conflicts = FALSE)
 
 cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 #> ℹ Reading GiBleed tables.
@@ -65,6 +78,25 @@ cdm
 #> • other tables: -
 ```
 
+## Sketching your cdm
+
+``` r
+library(OmopSketch)
+library(dplyr)
+#> 
+#> Attaching package: 'dplyr'
+#> The following objects are masked from 'package:stats':
+#> 
+#>     filter, lag
+#> The following objects are masked from 'package:base':
+#> 
+#>     intersect, setdiff, setequal, union
+```
+
+Once we have the `cdm_reference` object we can start characterising it,
+there are several functionalities available on *OmopSketch* the main
+ones:
+
 ### Snapshot
 
 We first create a snapshot of our database. This will allow us to track
@@ -72,22 +104,62 @@ when the analysis has been conducted and capture details about the CDM
 version or the data release.
 
 ``` r
-summariseOmopSnapshot(cdm) |>
-  tableOmopSnapshot(type = "flextable", style = NULL)
+snapshot <- summariseOmopSnapshot(cdm = cdm)
+
+tableOmopSnapshot(result = snapshot, type = "flextable")
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
+
+### Characterise the person table
+
+Once we have collected the snapshot information, we can characterise the
+person table with `summarisePersonTable()`:
+
+``` r
+result <- summarisePerson(cdm = cdm)
+#> Warning: ! There are 2649 individuals with no observation period defined.
+
+tablePerson(result = result, type = "flextable")
+```
+
+<img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
+
+### Characterise the observation period
+
+We can then explore the observation period details. You can visualise
+and explore the characteristics of the observation period per each
+individual in the database using `summariseObservationPeriod()`.
+
+``` r
+result <- summariseObservationPeriod(cdm = cdm)
+#> Warning: ! There are 2649 individuals not included in the person table.
+
+tableObservationPeriod(result = result, type = "flextable")
+```
+
+<img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" />
+
+Or if visualisation is preferred, you can easily build a histogram to
+explore how many participants have more than one observation period.
+
+``` r
+plotObservationPeriod(result = result, colour = "observation_period_ordinal")
+```
+
+<img src="man/figures/README-unnamed-chunk-9-1.png" width="100%" />
 
 ### Characterise the clinical tables
 
-Once we have collected the snapshot information, we can start
-characterising the clinical tables of the CDM. By using
-`summariseClinicalRecords()` and `tableClinicalRecords()`, we can easily
-visualise the main characteristics of specific clinical tables.
+Now, we can start characterising the clinical tables of the CDM. By
+using `summariseClinicalRecords()` and `tableClinicalRecords()`, we can
+easily visualise the main characteristics of specific clinical tables.
 
 ``` r
-summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
-  tableClinicalRecords(type = "flextable")
+result <- summariseClinicalRecords(
+  cdm = cdm, 
+  omopTableName = c("condition_occurrence", "drug_exposure")
+)
 #> ℹ Adding variables of interest to condition_occurrence.
 #> ℹ Summarising records per person in condition_occurrence.
 #> ℹ Summarising subjects not in person table in condition_occurrence.
@@ -111,46 +183,29 @@ summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
 #> ℹ Summarising concept types in drug_exposure.
 #> ℹ Summarising concept class in drug_exposure.
 #> ℹ Summarising missing data in drug_exposure.
+
+tableClinicalRecords(result = result, type = "flextable")
 ```
 
-<img src="man/figures/README-unnamed-chunk-7-1.png" width="70%" style="display: block; margin: auto;" />
-
-### Characterise the observation period
-
-After visualising the main characteristics of our clinical tables, we
-can explore the observation period details. You can visualise and
-explore the characteristics of the observation period per each
-individual in the database using `summariseObservationPeriod()`.
-
-``` r
-summariseObservationPeriod(cdm) |>
-  tableObservationPeriod(type = "flextable")
-#> Warning: ! There are 2649 individuals not included in the person table.
-```
-
-<img src="man/figures/README-unnamed-chunk-8-1.png" width="70%" style="display: block; margin: auto;" />
-
-Or if visualisation is preferred, you can easily build a histogram to
-explore how many participants have more than one observation period.
-
-``` r
-summariseObservationPeriod(cdm) |>
-  plotObservationPeriod(colour = "observation_period_ordinal")
-#> Warning: ! There are 2649 individuals not included in the person table.
-```
-
-<img src="man/figures/README-unnamed-chunk-9-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-10-1.png" width="100%" />
 
 ### Explore trends over time
 
-We can also explore trends over time using `summariseTrend()`.
+After visualising the main characteristics of our clinical tables, we
+can also explore trends over time using `summariseTrend()`.
 
 ``` r
-summariseTrend(cdm, event = c("condition_occurrence", "drug_exposure"), output = "record",  interval = "years") |>
-  plotTrend(facet = "omop_table", colour = "cdm_name")
+result <- summariseTrend(
+  cdm = cdm, 
+  event = c("condition_occurrence", "drug_exposure"), 
+  output = "record",  
+  interval = "years"
+)
+
+plotTrend(result = result, facet = "omop_table", colour = "cdm_name")
 ```
 
-<img src="man/figures/README-unnamed-chunk-10-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-11-1.png" width="100%" />
 
 ### Characterise the concepts
 
@@ -158,11 +213,15 @@ OmopSketch also provides functions to explore the concepts in the
 dataset.
 
 ``` r
-summariseConceptIdCounts(cdm, omopTableName = "drug_exposure") |>
-  tableTopConceptCounts(type = "flextable")
+result <- summariseConceptIdCounts(
+  cdm = cdm, 
+  omopTableName = "drug_exposure"
+)
+
+tableTopConceptCounts(result = result, type = "flextable")
 ```
 
-<img src="man/figures/README-unnamed-chunk-11-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-12-1.png" width="100%" />
 
 ### Characterise the cdm
 

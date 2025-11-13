@@ -22,82 +22,118 @@ knitr::opts_chunk$set(
 
 <!-- badges: end -->
 
-The goal of OmopSketch is to characterise and visualise an OMOP CDM instance to asses if it meets the necessary criteria to answer a specific clinical question and conduct a certain study.
+The goal of OmopSketch is to characterise and visualise an Observational Medical Outcomes Partnership (OMOP) Common Data Model (CDM) instance to asses if it meets the necessary criteria to answer a specific clinical question and conduct a certain study.
 
 ## Installation
 
-OmopSketch is available from CRAN:
+**OmopSketch** is available from CRAN:
 
 ```{r, eval=FALSE}
 install.packages("OmopSketch")
 ```
 
-You can install the development version of OmopSketch from [GitHub](https://github.com/) with:
+Or you can install the development version of OmopSketch from [GitHub](https://github.com/) with:
 
 ```{r, eval=FALSE}
 # install.packages("remotes")
 remotes::install_github("OHDSI/OmopSketch")
 ```
 
-## Example
+## Working with OMOP
 
-Let's start by creating a cdm object using the Eunomia GiBleed mock dataset:
+
 ```{r, echo=FALSE}
 visOmopResults::setGlobalPlotOptions(style = list.files(system.file("brand", package = "OmopSketch"), full.names = TRUE, pattern = "^readme\\.yml$"))
 visOmopResults::setGlobalTableOptions(style = list.files(system.file("brand", package = "OmopSketch"), full.names = TRUE, pattern = "^readme\\.yml$"))
 ```
 
 
-```{r, message=TRUE, warning=FALSE}
-library(OmopSketch)
+The first step to any analysis you will create what we call the `cdm_reference` object, which is a reference to the OMOP CDM tables. If you want to learn more about OMOP or the `cdm_reference` object you can take a look to:
+
+- [Tidy R programming with the OMOP Common Data Model](https://ohdsi.github.io/Tidy-R-programming-with-OMOP/)
+- [The book of OHDSI](https://ohdsi.github.io/TheBookOfOhdsi/)
+
+In general, you will create a cdm_reference object using the [CDMConnector](https://darwin-eu.github.io/CDMConnector/) package, in our case we will use the Eunomia *GiBleed* mock dataset available through [omock](https://ohdsi.github.io/omock/):
+
+```{r}
 library(omock)
-library(dplyr, warn.conflicts = FALSE)
 
 cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 cdm
 ```
+
+## Sketching your cdm
+
+```{r}
+library(OmopSketch)
+library(dplyr)
+```
+
+Once we have the `cdm_reference` object we can start characterising it, there are several functionalities available on *OmopSketch* the main ones:
 
 ### Snapshot
 
 We first create a snapshot of our database. This will allow us to track when the analysis has been conducted and capture details about the CDM version or the data release.
 
 ```{r}
-summariseOmopSnapshot(cdm) |>
-  tableOmopSnapshot(type = "flextable", style = NULL)
+snapshot <- summariseOmopSnapshot(cdm = cdm)
+
+tableOmopSnapshot(result = snapshot, type = "flextable")
+
 ```
 
-### Characterise the clinical tables
+### Characterise the person table
 
-Once we have collected the snapshot information, we can start characterising the clinical tables of the CDM. By using `summariseClinicalRecords()` and `tableClinicalRecords()`, we can easily visualise the main characteristics of specific clinical tables.
+Once we have collected the snapshot information, we can characterise the person table with `summarisePersonTable()`:
 
 ```{r}
-summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
-  tableClinicalRecords(type = "flextable")
+result <- summarisePerson(cdm = cdm)
+
+tablePerson(result = result, type = "flextable")
 ```
 
 ### Characterise the observation period
 
-After visualising the main characteristics of our clinical tables, we can explore the observation period details. You can visualise and explore the characteristics of the observation period per each individual in the database using `summariseObservationPeriod()`.
+We can then explore the observation period details. You can visualise and explore the characteristics of the observation period per each individual in the database using `summariseObservationPeriod()`.
 
 ```{r}
-summariseObservationPeriod(cdm) |>
-  tableObservationPeriod(type = "flextable")
+result <- summariseObservationPeriod(cdm = cdm)
+
+tableObservationPeriod(result = result, type = "flextable")
 ```
 
 Or if visualisation is preferred, you can easily build a histogram to explore how many participants have more than one observation period.
 
 ```{r}
-summariseObservationPeriod(cdm) |>
-  plotObservationPeriod(colour = "observation_period_ordinal")
+plotObservationPeriod(result = result, colour = "observation_period_ordinal")
+```
+
+### Characterise the clinical tables
+
+Now, we can start characterising the clinical tables of the CDM. By using `summariseClinicalRecords()` and `tableClinicalRecords()`, we can easily visualise the main characteristics of specific clinical tables.
+
+```{r}
+result <- summariseClinicalRecords(
+  cdm = cdm, 
+  omopTableName = c("condition_occurrence", "drug_exposure")
+)
+
+tableClinicalRecords(result = result, type = "flextable")
 ```
 
 ### Explore trends over time
 
-We can also explore trends over time using `summariseTrend()`.
+After visualising the main characteristics of our clinical tables, we can also explore trends over time using `summariseTrend()`.
 
 ```{r}
-summariseTrend(cdm, event = c("condition_occurrence", "drug_exposure"), output = "record",  interval = "years") |>
-  plotTrend(facet = "omop_table", colour = "cdm_name")
+result <- summariseTrend(
+  cdm = cdm, 
+  event = c("condition_occurrence", "drug_exposure"), 
+  output = "record",  
+  interval = "years"
+)
+
+plotTrend(result = result, facet = "omop_table", colour = "cdm_name")
 ```
 
 ### Characterise the concepts
@@ -105,8 +141,14 @@ summariseTrend(cdm, event = c("condition_occurrence", "drug_exposure"), output =
 OmopSketch also provides functions to explore the concepts in the dataset.
 
 ```{r}
-summariseConceptIdCounts(cdm, omopTableName = "drug_exposure") |>
-  tableTopConceptCounts(type = "flextable")
+
+result <- summariseConceptIdCounts(
+  cdm = cdm, 
+  omopTableName = "drug_exposure"
+)
+
+tableTopConceptCounts(result = result, type = "flextable")
+
 ```
 
 ### Characterise the cdm
