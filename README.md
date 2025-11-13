@@ -76,7 +76,7 @@ summariseOmopSnapshot(cdm) |>
   tableOmopSnapshot(type = "flextable", style = NULL)
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-6-1.png" width="70%" style="display: block; margin: auto;" />
 
 ### Characterise the clinical tables
 
@@ -113,7 +113,7 @@ summariseClinicalRecords(cdm, c("condition_occurrence", "drug_exposure")) |>
 #> ℹ Summarising missing data in drug_exposure.
 ```
 
-<img src="man/figures/README-unnamed-chunk-7-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-7-1.png" width="70%" style="display: block; margin: auto;" />
 
 ### Characterise the observation period
 
@@ -128,7 +128,7 @@ summariseObservationPeriod(cdm) |>
 #> Warning: ! There are 2649 individuals not included in the person table.
 ```
 
-<img src="man/figures/README-unnamed-chunk-8-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-8-1.png" width="70%" style="display: block; margin: auto;" />
 
 Or if visualisation is preferred, you can easily build a histogram to
 explore how many participants have more than one observation period.
@@ -139,7 +139,7 @@ summariseObservationPeriod(cdm) |>
 #> Warning: ! There are 2649 individuals not included in the person table.
 ```
 
-<img src="man/figures/README-unnamed-chunk-9-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-9-1.png" width="70%" style="display: block; margin: auto;" />
 
 ### Explore trends over time
 
@@ -150,7 +150,7 @@ summariseTrend(cdm, event = c("condition_occurrence", "drug_exposure"), output =
   plotTrend(facet = "omop_table", colour = "cdm_name")
 ```
 
-<img src="man/figures/README-unnamed-chunk-10-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-10-1.png" width="70%" style="display: block; margin: auto;" />
 
 ### Characterise the concepts
 
@@ -162,7 +162,7 @@ summariseConceptIdCounts(cdm, omopTableName = "drug_exposure") |>
   tableTopConceptCounts(type = "flextable")
 ```
 
-<img src="man/figures/README-unnamed-chunk-11-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-11-1.png" width="70%" style="display: block; margin: auto;" />
 
 ### Characterise the cdm
 
