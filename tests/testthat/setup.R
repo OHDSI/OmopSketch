@@ -1,5 +1,5 @@
 
-dbToTest <- Sys.getenv("DB_TO_TEST", "duckdb-CDMConnector")
+dbToTest <- Sys.getenv("DB_TO_TEST", "sqlserver-CDMConnector")
 
 # prepare eunomia and save it in temp directory
 cdmLocal <- omock::mockCdmFromDataset(datasetName = "GiBleed")
@@ -49,7 +49,7 @@ copyCdm <- function(cdm) {
         Port = 1433
       ),
       writeSchema = c(
-        schema = Sys.getenv("CDM5_SQL_SERVER_OHDSI_SCHEMA"),
+        schema = Sys.getenv("CDM5_SQL_SERVER_SCRATCH_SCHEMA"),
         prefix = pref
       )
     )
