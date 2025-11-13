@@ -6,6 +6,13 @@ on:
       DB_TO_TEST:
         required: true
         type: string
+    secrets:
+      CDM5_SQL_SERVER_PASSWORD:
+        required: false
+      CDM5_SQL_SERVER_SERVER:
+        required: false
+      CDM5_SQL_SERVER_USER:
+        required: false
 
 jobs:
   run-tests:
