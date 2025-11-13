@@ -125,3 +125,5 @@ dropCreatedTables <- function(cdm) {
   omopgenerics::dropSourceTable(cdm = cdm, name = dplyr::everything())
   omopgenerics::cdmDisconnect(cdm = cdm)
 }
+
+cdmEunomia()
