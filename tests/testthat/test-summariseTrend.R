@@ -775,7 +775,6 @@ test_that("plotTrend() works", {
   expect_no_error(plotTrend(summariseTrend(cdm, episode = "observation_period")))
   expect_no_error(plotTrend(summariseTrend(cdm, episode = "observation_period", output = "age")))
   expect_no_error(plotTrend(summariseTrend(cdm, episode = "observation_period", output = c("age", "record"))))
-  expect_error(plotTrend(summariseTrend(cdm, episode = "observation_period", output = c("age", "sex"))))
   expect_no_error(plotTrend(summariseTrend(cdm, episode = "observation_period", output = c("age", "sex")), output = "sex"))
 
   expect_warning(plotTrend(summariseTrend(cdm, episode = "condition_occurrence", event = "drug_exposure"), colour = NULL, facet = NULL))

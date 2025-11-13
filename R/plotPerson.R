@@ -30,7 +30,7 @@ plotPerson <- function(result,
                        style = NULL,
                        type = NULL) {
   # check input
-  style <- validateStyle(style = style)
+  style <- validateStyle(style = style, obj = "plot")
   result <- validateResult(
     result = result,
     resultType = "summarise_person",
