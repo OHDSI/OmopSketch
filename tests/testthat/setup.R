@@ -111,8 +111,13 @@ checkResultType <- function(result, result_type) {
 }
 sortTibble <- function(x) {
   x |>
-    dplyr::collect() |>
     dplyr::arrange(dplyr::across(dplyr::everything()))
+}
+collectTable <- function(x) {
+  x |>
+    dplyr::collect() |>
+    dplyr::as_tibble() |>
+    sortTibble()
 }
 dropCreatedTables <- function(cdm) {
   omopgenerics::dropSourceTable(cdm = cdm, name = dplyr::everything())

@@ -35,7 +35,7 @@ test_that("restrictStudyPeriod works", {
 
   expect_no_error(
     x <- restrictStudyPeriod(cdm$observation_period, dateRange = dateRange) |>
-      sortTibble()
+      collectTable()
   )
 
   y <- dplyr::tibble(
@@ -55,7 +55,7 @@ test_that("restrictStudyPeriod works", {
 
   dateRange <- as.Date(c("1999-01-01", "2025-12-31"))
   expect_no_error(x <- restrictStudyPeriod(cdm$observation_period, dateRange = dateRange))
-  expect_equal(sortTibble(x), sortTibble(cdm$observation_period))
+  expect_equal(collectTable(x), collectTable(cdm$observation_period))
 
   dateRange <- as.Date(c("2000-01-01", "2000-12-31"))
   expect_warning(x <- restrictStudyPeriod(cdm$observation_period, dateRange = dateRange))
