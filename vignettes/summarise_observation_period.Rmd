@@ -34,7 +34,6 @@ Let's see an example of its functionalities. To start with, we will load essenti
 
 ```{r, warning=FALSE}
 library(dplyr)
-library(duckdb)
 library(OmopSketch)
 library(omock)
 
@@ -104,6 +103,7 @@ summarisedResult |>
 
 
 ## Quality
+
 When the argument `quality = TRUE` is set, the results will include a quality assessment of the observation period table.  
 This assessment provides information such as:
 
@@ -114,7 +114,7 @@ This assessment provides information such as:
 ```{r, warning=FALSE}
 summarisedResult <- summariseObservationPeriod(
   cdm = cdm,
-  estimates = c("mean"), 
+  estimates = "mean", 
   missingData = FALSE, 
   quality = TRUE
 )
@@ -138,10 +138,9 @@ summarisedResult <- summariseObservationPeriod(
 
 Notice that, by default, the "overall" group will be also included, as well as crossed strata (that means, `sex == "Female"` and `ageGroup == "\>35"`).
 
-
 ## Tidy the summarised object
 
-`tableObservationPeriod()` will help you to create a table (see supported types with: visOmopResults::tableType()). By default it creates a [gt](https://gt.rstudio.com/) table.
+`tableObservationPeriod()` will help you to create a table (see supported types with: `visOmopResults::tableType()`). By default it creates a [gt](https://gt.rstudio.com/) table.
 
 ```{r, warning=FALSE}
 summarisedResult <- summariseObservationPeriod(
@@ -174,6 +173,7 @@ Additionally, if results were stratified by sex or age group, we can further use
 
 ```{r, warning=FALSE}
 summarisedResult <- summariseObservationPeriod(cdm = cdm, sex = TRUE)
+
 plotObservationPeriod(
   result = summarisedResult,
   variableName = "Duration in days",
@@ -186,15 +186,18 @@ summarisedResult <- summariseObservationPeriod(
   sex = TRUE,
   ageGroup = list("<35" = c(0, 34), ">=35" = c(35, Inf))
 )
-plotObservationPeriod(summarisedResult,
+
+plotObservationPeriod(
+  result = summarisedResult,
   colour = "sex",
   facet = "age_group"
 )
 ```
 
+# Disconnect from CDM
 
-Finally, we can disconnect from the cdm.
+Finally, disconnect from the mock CDM.
 
-```{r, warning=FALSE}
+```{r}
 cdmDisconnect(cdm = cdm)
 ```

@@ -3,7 +3,7 @@
 \name{summariseObservationPeriod}
 \alias{summariseObservationPeriod}
 \title{Summarise the observation period table getting some overall statistics in a
-summarised_result object.}
+summarised_result object}
 \usage{
 summariseObservationPeriod(
   cdm,
@@ -20,43 +20,52 @@ summariseObservationPeriod(
 )
 }
 \arguments{
-\item{cdm}{A cdm_reference object.}
+\item{cdm}{A \code{cdm_reference} object. Use \emph{CDMConnector} to create a reference
+to a database or \emph{omock} to create a reference to synthetic data.}
 
 \item{estimates}{Estimates to summarise the variables of interest (
 \verb{Records per person}, \verb{Duration in days} and
 \verb{Days to next observation period}).}
 
-\item{missingData}{Logical. If \code{TRUE}, includes a summary of missing data for relevant fields.}
+\item{missingData}{Logical. If \code{TRUE}, includes a summary of missing data for
+relevant fields.}
 
-\item{quality}{Logical. If \code{TRUE}, performs basic data quality checks, including:
+\item{quality}{Logical. If \code{TRUE}, performs basic data quality checks,
+including:
 \itemize{
-\item Number of subjects not included in person table
-\item Number of records with end date before start date
-\item Number of records with start date before the person's birth date
+\item Number of subjects not included in person table.
+\item Number of records with end date before start date.
+\item Number of records with start date before the person's birth date.
 }}
 
-\item{byOrdinal}{Boolean variable. Whether to stratify by the ordinal observation period (e.g., 1st, 2nd, etc.) (TRUE) or simply analyze overall data (FALSE)}
+\item{byOrdinal}{Boolean variable. Whether to stratify by the ordinal
+observation period (e.g., 1st, 2nd, etc.) (TRUE) or simply analyze overall
+data (FALSE)}
 
-\item{ageGroup}{A list of age groups to stratify results by.}
+\item{ageGroup}{A list of age groups to stratify the results by. Each element
+represents a specific age range. You can give them specific names, e.g.
+\code{ageGroup = list(children = c(0, 17), adult = c(18, Inf))}.}
 
-\item{sex}{Boolean variable. Whether to stratify by sex (TRUE) or not
-(FALSE).}
+\item{sex}{Logical; whether to stratify results by sex (\code{TRUE}) or not
+(\code{FALSE}).}
 
 \item{dateRange}{A vector of two dates defining the desired study period.
 Only the \code{start_date} column of the OMOP table is checked to ensure it falls within this range.
 If \code{dateRange} is \code{NULL}, no restriction is applied.}
 
-\item{nameObservationPeriod}{character string giving a descriptive name for the observation period.
-This name will be stored in the result settings. If \code{NULL} (default), the name is automatically set to \code{"Default"}.}
+\item{nameObservationPeriod}{character string giving a descriptive name for
+the observation period.
+This name will be stored in the result settings. If \code{NULL} (default), the
+name is automatically set to \code{"Default"}.}
 
 \item{observationPeriod}{deprecated.}
 }
 \value{
-A summarised_result object with the summarised data.
+A \code{summarised_result} object with the results.
 }
 \description{
 Summarise the observation period table getting some overall statistics in a
-summarised_result object.
+summarised_result object
 }
 \examples{
 \donttest{
@@ -68,9 +77,15 @@ cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
 result <- summariseObservationPeriod(cdm = cdm)
 
-result |>
-  glimpse()
+tableObservationPeriod(result = result)
 
-cdmDisconnect(cdm)
+plotObservationPeriod(
+  result = result,
+  variableName = "Duration in days",
+  plotType = "boxplot"
+)
+
+cdmDisconnect(cdm = cdm)
 }
+
 }

@@ -1,11 +1,10 @@
+
 #' Summarise a cdm_reference object creating a snapshot with the metadata of the
-#' cdm_reference object.
+#' cdm_reference object
 #'
-#' @param cdm A cdm_reference object.
+#' @inheritParams consistent-doc
 #'
-#' @return A summarised_result object that contains the OMOP CDM snapshot
-#' information.
-#'
+#' @return A `summarised_result` object with the results.
 #' @export
 #'
 #' @examples
@@ -15,7 +14,11 @@
 #'
 #' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 #'
-#' summariseOmopSnapshot(cdm = cdm)
+#' result <- summariseOmopSnapshot(cdm = cdm)
+#'
+#' tableOmopSnapshot(result = result)
+#'
+#' cdmDisconnect(cdm = cdm)
 #' }
 #'
 summariseOmopSnapshot <- function(cdm) {

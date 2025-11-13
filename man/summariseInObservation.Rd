@@ -3,8 +3,7 @@
 \name{summariseInObservation}
 \alias{summariseInObservation}
 \title{Summarise the number of people in observation during a specific interval of
-time.
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
+time}
 \usage{
 summariseInObservation(
   observationPeriod,
@@ -19,49 +18,29 @@ summariseInObservation(
 \item{observationPeriod}{An observation_period omop table. It must be part of
 a cdm_reference object.}
 
-\item{interval}{Time interval to stratify by. It can either be "years", "quarters", "months" or "overall".}
+\item{interval}{Time interval to stratify by. It can either be "years",
+"quarters", "months" or "overall".}
 
 \item{output}{Output format. It can be either the number of records
 ("record") that are in observation in the specific interval of time, the
 number of person-days ("person-days"), the number of subjects ("person"),
-the number of females ("sex") or the median age of population in observation ("age").}
+the number of females ("sex") or the median age of population in observation
+("age").}
 
-\item{ageGroup}{A list of age groups to stratify results by.}
+\item{ageGroup}{A list of age groups to stratify the results by. Each element
+represents a specific age range. You can give them specific names, e.g.
+\code{ageGroup = list(children = c(0, 17), adult = c(18, Inf))}.}
 
-\item{sex}{Boolean variable. Whether to stratify by sex (TRUE) or not
-(FALSE). For output = "sex" this stratification is not applied.}
+\item{sex}{Logical; whether to stratify results by sex (\code{TRUE}) or not
+(\code{FALSE}).}
 
 \item{dateRange}{A vector of two dates defining the desired study period.
 Only the \code{start_date} column of the OMOP table is checked to ensure it falls within this range.
 If \code{dateRange} is \code{NULL}, no restriction is applied.}
 }
 \value{
-A summarised_result object.
+A \code{summarised_result} object with the results.
 }
 \description{
-Summarise the number of people in observation during a specific interval of
-time.
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
-}
-\examples{
-\donttest{
-library(dplyr, warn.conflicts = FALSE)
-library(OmopSketch)
-library(omock)
-
-cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
-
-result <- summariseInObservation(
-  observationPeriod = cdm$observation_period,
-  interval = "months",
-  output = c("person-days", "record"),
-  ageGroup = list("<=60" = c(0, 60), ">60" = c(61, Inf)),
-  sex = TRUE
-)
-
-result |>
-  glimpse()
-
-cdmDisconnect(cdm)
-}
 }

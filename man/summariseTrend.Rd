@@ -17,36 +17,45 @@ summariseTrend(
 )
 }
 \arguments{
-\item{cdm}{A \code{cdm_reference} object.}
+\item{cdm}{A \code{cdm_reference} object. Use \emph{CDMConnector} to create a reference
+to a database or \emph{omock} to create a reference to synthetic data.}
 
-\item{event}{A character vector of OMOP table names to treat as event tables (uses only start date).}
+\item{event}{A character vector of OMOP table names to treat as event tables
+(uses only start date).}
 
-\item{episode}{A character vector of OMOP table names to treat as episode tables (uses start and end date).}
+\item{episode}{A character vector of OMOP table names to treat as episode
+tables (uses start and end date).}
 
 \item{output}{A character vector indicating what to summarise.
-Options include \code{"record"} (default), \code{"person"}, \code{"person-days"}, \code{"age"}, \code{"sex"}.
+Options include \code{"record"} (default), \code{"person"}, \code{"person-days"}, \code{"age"},
+\code{"sex"}.
 If included, the number of person-days is computed only for episode tables.}
 
-\item{interval}{Time granularity for trends. One of \code{"overall"} (default), \code{"years"},
-\code{"quarters"}, or \code{"months"}.}
+\item{interval}{Time interval to stratify by. It can either be "years",
+"quarters", "months" or "overall".}
 
-\item{ageGroup}{A list of age groups to stratify results by.}
+\item{ageGroup}{A list of age groups to stratify the results by. Each element
+represents a specific age range. You can give them specific names, e.g.
+\code{ageGroup = list(children = c(0, 17), adult = c(18, Inf))}.}
 
-\item{sex}{Logical. If \code{TRUE}, stratify results by sex.}
+\item{sex}{Logical; whether to stratify results by sex (\code{TRUE}) or not
+(\code{FALSE}).}
 
-\item{inObservation}{Logical. If \code{TRUE}, the results are stratified to indicate whether each record occurs within an observation period.}
+\item{inObservation}{Logical. If \code{TRUE}, the results are stratified to
+indicate whether each record occurs within an observation period.}
 
 \item{dateRange}{A vector of two dates defining the desired study period.
 If \code{dateRange} is \code{NULL}, no restriction is applied.}
 }
 \value{
-A summarised_result object.
+A \code{summarised_result} object with the results.
 }
 \description{
 This function summarises temporal trends from OMOP CDM tables, considering
 only data within the observation period.
 It supports both event and episode tables and can report trends such as
-number of records, number of subjects, person-days, median age, and number of females.
+number of records, number of subjects, person-days, median age, and number of
+females.
 }
 \details{
 \itemize{
@@ -55,18 +64,19 @@ Records are included if their \strong{start date} falls within the study period.
 Each record contributes to the time interval containing the start date.
 \item \strong{Episode tables}:
 Records are included if their \strong{start or end date} overlaps with the study
-period. Records are \strong{trimmed} to the date range, and contribute to \strong{all}
-overlapping time intervals between start and end dates.
+period. Records are \strong{trimmed} to the date range, and contribute to
+\strong{all} overlapping time intervals between start and end dates.
 }
 }
 \examples{
 \donttest{
 library(OmopSketch)
 library(omock)
+library(dplyr)
 
 cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
-summarisedResult <- summariseTrend(
+result <- summariseTrend(
   cdm = cdm,
   event = c("condition_occurrence", "drug_exposure"),
   episode = "observation_period",
@@ -76,9 +86,9 @@ summarisedResult <- summariseTrend(
   dateRange = as.Date(c("1950-01-01", "2010-12-31"))
 )
 
-summarisedResult |>
-  dplyr::glimpse()
+plotTrend(result = result, facet = sex ~ omop_table, colour = c("age_group"))
 
 cdmDisconnect(cdm = cdm)
 }
+
 }

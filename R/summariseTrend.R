@@ -1,9 +1,11 @@
+
 #' Summarise temporal trends in OMOP tables
 #'
 #' This function summarises temporal trends from OMOP CDM tables, considering
 #' only data within the observation period.
 #' It supports both event and episode tables and can report trends such as
-#' number of records, number of subjects, person-days, median age, and number of females.
+#' number of records, number of subjects, person-days, median age, and number of
+#' females.
 #'
 #' - **Event tables**:
 #'   Records are included if their **start date** falls within the study period.
@@ -11,32 +13,35 @@
 #'
 #' - **Episode tables**:
 #'   Records are included if their **start or end date** overlaps with the study
-#'   period. Records are **trimmed** to the date range, and contribute to **all**
-#'   overlapping time intervals between start and end dates.
+#'   period. Records are **trimmed** to the date range, and contribute to
+#'   **all** overlapping time intervals between start and end dates.
 #'
-#' @param cdm A `cdm_reference` object.
-#' @param event A character vector of OMOP table names to treat as event tables (uses only start date).
-#' @param episode A character vector of OMOP table names to treat as episode tables (uses start and end date).
+#' @inheritParams consistent-doc
+#' @param event A character vector of OMOP table names to treat as event tables
+#' (uses only start date).
+#' @param episode A character vector of OMOP table names to treat as episode
+#' tables (uses start and end date).
 #' @param output A character vector indicating what to summarise.
-#' Options include `"record"` (default), `"person"`, `"person-days"`, `"age"`, `"sex"`.
+#' Options include `"record"` (default), `"person"`, `"person-days"`, `"age"`,
+#' `"sex"`.
 #' If included, the number of person-days is computed only for episode tables.
-#' @param interval Time granularity for trends. One of `"overall"` (default), `"years"`,
-#' `"quarters"`, or `"months"`.
-#' @param ageGroup A list of age groups to stratify results by.
-#' @param sex Logical. If `TRUE`, stratify results by sex.
-#' @param inObservation Logical. If `TRUE`, the results are stratified to indicate whether each record occurs within an observation period.
+#' @param inObservation Logical. If `TRUE`, the results are stratified to
+#' indicate whether each record occurs within an observation period.
 #' @param dateRange A vector of two dates defining the desired study period.
 #' If `dateRange` is `NULL`, no restriction is applied.
-#' @return A summarised_result object.
+#'
+#' @return A `summarised_result` object with the results.
 #' @export
+#'
 #' @examples
 #' \donttest{
 #' library(OmopSketch)
 #' library(omock)
+#' library(dplyr)
 #'
 #' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 #'
-#' summarisedResult <- summariseTrend(
+#' result <- summariseTrend(
 #'   cdm = cdm,
 #'   event = c("condition_occurrence", "drug_exposure"),
 #'   episode = "observation_period",
@@ -46,11 +51,11 @@
 #'   dateRange = as.Date(c("1950-01-01", "2010-12-31"))
 #' )
 #'
-#' summarisedResult |>
-#'   dplyr::glimpse()
+#' plotTrend(result = result, facet = sex ~ omop_table, colour = c("age_group"))
 #'
 #' cdmDisconnect(cdm = cdm)
 #' }
+#'
 summariseTrend <- function(cdm,
                            event = NULL,
                            episode = NULL,
@@ -125,7 +130,7 @@ summariseEventTrend <- function(cdm, omopTableName, output, interval, sex, ageGr
     output <- output[output != "person-days"]
   }
   if (rlang::is_empty(output)) {
-    return(tibble::tibble())
+    return(dplyr::tibble())
   }
   result <- purrr::map(omopTableName, \(table) {
     strata <- c(list(character()), omopgenerics::combineStrata(strataCols(
@@ -141,7 +146,7 @@ summariseEventTrend <- function(cdm, omopTableName, output, interval, sex, ageGr
       restrictStudyPeriod(dateRange = dateRange)
 
     if (is.null(omopTable)) {
-      return(tibble::tibble())
+      return(dplyr::tibble())
     }
 
     denominator <- getDenominator(omopTable = omopTable, output = output)
@@ -183,7 +188,6 @@ summariseEventTrend <- function(cdm, omopTableName, output, interval, sex, ageGr
   return(result)
 }
 
-
 summariseEpisodeTrend <- function(cdm, omopTableName, output, interval, sex, ageGroup, dateRange, inObservation) {
 
   result <- purrr::map(omopTableName, \(table) {
@@ -195,7 +199,7 @@ summariseEpisodeTrend <- function(cdm, omopTableName, output, interval, sex, age
       trimStudyPeriod(dateRange = dateRange)
 
     if (is.null(omopTable)) {
-      return(tibble::tibble())
+      return(dplyr::tibble())
     }
 
 
@@ -308,7 +312,7 @@ summariseEpisodeTrend <- function(cdm, omopTableName, output, interval, sex, age
     }
 
     if (rlang::is_empty(res)) {
-      return(tibble::tibble())
+      return(dplyr::tibble())
     }
 
     res <- res |>
@@ -329,7 +333,6 @@ summariseEpisodeTrend <- function(cdm, omopTableName, output, interval, sex, age
 
   return(result)
 }
-
 
 summariseTrendInternal <- function(x, output, strata) {
   res <- list()
@@ -368,14 +371,14 @@ summariseTrendInternal <- function(x, output, strata) {
   }
 
   if ("person-days" %in% output) {
-    res$personDays <- x %>%
+    res$personDays <- x |>
       datediffDays(start = "start_date", end = "end_date", name = "person_days", offset = 1) |>
       summariseSumInternal(strata = strata, variable = "person_days") |>
       dplyr::mutate(variable_name = "Person-days")
   }
 
   if (rlang::is_empty(res)) {
-    return(tibble::tibble())
+    return(dplyr::tibble())
   }
 
   res <- res |>
@@ -391,7 +394,7 @@ getIntervalTibbleForObservation <- function(omopTable, start_date_name, end_date
   startDate <- getOmopTableStartDate(omopTable, start_date_name)
   endDate <- getOmopTableEndDate(omopTable, end_date_name)
 
-  tibble::tibble(
+  dplyr::tibble(
     "group" = seq.Date(startDate, endDate, .env$interval)
   ) |>
     dplyr::rowwise() |>
@@ -442,13 +445,13 @@ getOmopTableEndDate <- function(omopTable, date) {
 getDenominator <- function(omopTable, output) {
   cdm <- omopgenerics::cdmReference(omopTable)
 
-  denominator <- tibble::tibble(
+  denominator <- dplyr::tibble(
     "denominator" = c(numeric()),
     "variable_name" = c(character())
   )
   if ("record" %in% output) {
     denominator <- denominator |>
-      dplyr::bind_rows(tibble::tibble(
+      dplyr::bind_rows(dplyr::tibble(
         "denominator" = c(omopTable |>
                             dplyr::ungroup() |>
                             dplyr::summarise("n" = dplyr::n()) |>
@@ -459,7 +462,7 @@ getDenominator <- function(omopTable, output) {
   }
   if ("person" %in% output) {
     denominator <- denominator |>
-      dplyr::bind_rows(tibble::tibble(
+      dplyr::bind_rows(dplyr::tibble(
         "denominator" = c(cdm[["person"]] |>
                             dplyr::ungroup() |>
                             dplyr::select("person_id") |>
@@ -481,7 +484,7 @@ getDenominator <- function(omopTable, output) {
       as.numeric()
 
     denominator <- denominator |>
-      dplyr::bind_rows(tibble::tibble(
+      dplyr::bind_rows(dplyr::tibble(
         "denominator" = y,
         "variable_name" = "Person-days"
       ))
@@ -489,7 +492,7 @@ getDenominator <- function(omopTable, output) {
 
   if ("sex" %in% output) {
     denominator <- denominator |>
-      dplyr::bind_rows(tibble::tibble(
+      dplyr::bind_rows(dplyr::tibble(
         "denominator" = c(omopTable |>
                             dplyr::ungroup() |>
                             dplyr::inner_join(cdm[["person"]] |>

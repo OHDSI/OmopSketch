@@ -1,13 +1,10 @@
 
 #' Visualise the output of `summarisePerson()`
 #'
-#' @param result A summarised_result object.
-#' @param style A character string or custom R code to define the visual
-#' formatting of the table.
-#' @param type The desired format of the output table. See
-#' `visOmopResults::tableType()` for allowed options.
+#' @param result A summarised_result object (output of `summarisePerson()`).
+#' @inheritParams style-table
 #'
-#' @return A visualisation of the data summarising the person table.
+#' @return A formatted table visualisation.
 #' @export
 #'
 #' @examples
@@ -20,14 +17,17 @@
 #' result <- summarisePerson(cdm = cdm)
 #'
 #' tablePerson(result = result)
+#'
+#' cdmDisconnect(cdm = cdm)
 #' }
 #'
 tablePerson <- function(result,
-                        style = NULL,
-                        type = "gt") {
+                        type = NULL,
+                        style = NULL) {
   # check input
   result <- omopgenerics::validateResultArgument(result = result)
   style <- validateStyle(style = style, obj = "table")
+
 
   visOmopResults::visOmopTable(
     result = result,

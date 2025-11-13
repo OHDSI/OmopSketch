@@ -1,53 +1,47 @@
-#' Summarise concept use in patient-level data. Only concepts recorded during observation period are counted.
+#' Summarise concept use in patient-level data
 #'
-#' @param cdm A cdm object
-#' @param omopTableName A character vector of the names of the tables to
-#' summarise in the cdm object.
+#' Only concepts recorded during observation period are counted.
+#'
+#' @inheritParams consistent-doc
 #' @param countBy Either "record" for record-level counts or "person" for
-#' person-level counts
-#' @param year deprecated
-#' @inheritParams interval
-#' @param sex TRUE or FALSE. If TRUE code use will be summarised by sex.
-#' @param ageGroup A list of ageGroup vectors of length two. Code use will be
-#' thus summarised by age groups.
-#' @param inObservation Logical. If `TRUE`, the results are stratified to indicate whether each record occurs within an observation period.
-
-#' @inheritParams sample
+#' person-level counts.
+#' @param inObservation Logical. If `TRUE`, the results are stratified to
+#' indicate whether each record occurs within an observation period.
 #' @inheritParams dateRange-startDate
+#' @param year deprecated.
 #'
-#' @return A summarised_result object with results overall and, if specified, by
-#' strata.
-#'
+#' @return A `summarised_result` object with the results.
 #' @export
 #'
 #' @examples
 #' \donttest{
 #' library(OmopSketch)
-#' library(CDMConnector)
-#' library(duckdb)
+#' library(omock)
 #'
-#' requireEunomia()
-#' con <- dbConnect(duckdb(), eunomiaDir())
-#' cdm <- cdmFromCon(con = con, cdmSchema = "main", writeSchema = "main")
+#' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 #'
-#' summariseConceptIdCounts(
+#' result <- summariseConceptIdCounts(
 #'   cdm = cdm,
 #'   omopTableName = "condition_occurrence",
 #'   countBy = c("record", "person"),
 #'   sex = TRUE
 #' )
+#'
+#' tableConceptIdCounts(result = result)
+#'
+#' cdmDisconnect(cdm = cdm)
 #' }
 #'
 summariseConceptIdCounts <- function(cdm,
                                      omopTableName,
                                      countBy = "record",
-                                     year = lifecycle::deprecated(),
                                      interval = "overall",
                                      sex = FALSE,
                                      ageGroup = NULL,
                                      inObservation = FALSE,
                                      sample = NULL,
-                                     dateRange = NULL) {
+                                     dateRange = NULL,
+                                     year = lifecycle::deprecated()) {
   if (lifecycle::is_present(year)) {
     lifecycle::deprecate_warn("0.2.3", "summariseConceptIdCounts(year)", "summariseConceptIdCounts(interval = 'years')")
 

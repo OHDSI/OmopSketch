@@ -1,41 +1,48 @@
-#' Create a visual table of the most common concepts from `summariseConceptIdCounts()` output.
-#' This function takes a `summarised_result` object and generates a formatted table highlighting the most frequent concepts.
+
+#' Create a visual table of the most common concepts from
+#' `summariseConceptIdCounts()` output
 #'
-#' @param result A `summarised_result` object, typically returned by `summariseConceptIdCounts()`.
+#' This function takes a `summarised_result` object and generates a formatted
+#' table highlighting the most frequent concepts.
+#'
+#' @param result A summarised_result object (output of
+#' `summariseConceptIdCounts()`).
 #' @param top Integer. The number of top concepts to display. Defaults to `10`.
 #' @param countBy Either 'person' or 'record'. If NULL whatever is in the data
 #' is used.
-#' @param type Character. The output table format. Defaults to `"gt"`. Use `visOmopResults::tableType()` to see all supported formats.
-#' @inheritParams style
+#' @inheritParams style-table
 #'
-#' @return A formatted table object displaying the top concepts from the summarised data.
-
+#' @return A formatted table visualisation.
 #' @export
+#'
 #' @examples
 #' \donttest{
 #' library(OmopSketch)
-#' library(CDMConnector)
-#' library(duckdb)
+#' library(omock)
 #'
-#' requireEunomia()
-#' con <- dbConnect(drv = duckdb(dbdir = eunomiaDir()))
-#' cdm <- cdmFromCon(con = con, cdmSchema = "main", writeSchema = "main")
+#' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 #'
 #' result <- summariseConceptIdCounts(cdm = cdm, omopTableName = "condition_occurrence")
 #'
 #' tableTopConceptCounts(result = result, top = 5)
+#'
+#' cdmDisconnect(cdm = cdm)
 #' }
+#'
 tableTopConceptCounts <- function(result,
                                   top = 10,
                                   countBy = NULL,
-                                  type = "gt",
+                                  type = NULL,
                                   style = NULL) {
   # initial checks
   rlang::check_installed("visOmopResults")
   omopgenerics::validateResultArgument(result)
   omopgenerics::assertNumeric(top, integerish = TRUE, min = 1, length = 1)
-  omopgenerics::assertChoice(type, visOmopResults::tableType())
+
   style <- validateStyle(style = style, obj = "table")
+  type <- validateType(type)
+
+
   strata_cols <- omopgenerics::strataColumns(result)
   additional_cols <- omopgenerics::additionalColumns(result)
   additional_cols <- additional_cols[!grepl("source_concept", additional_cols)]

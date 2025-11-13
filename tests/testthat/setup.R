@@ -1,38 +1,34 @@
 
 dbToTest <- Sys.getenv("DB_TO_TEST", "duckdb-CDMConnector")
-cdmEunomia <- function() {
 
-  cdmLocal <- omock::mockCdmFromDataset(datasetName = "GiBleed")
-  # correct eunomia problems
-  tabs <- c(
-    "observation_period", "visit_occurrence", "visit_detail", "specimen",
-    "note", "condition_occurrence", "drug_exposure", "procedure_occurrence",
-    "device_exposure", "measurement", "observation", "death"
-  )
-  for (tab in tabs) {
-    start <- omopgenerics::omopColumns(table = tab, field = "start_date")
-    id <- omopgenerics::omopColumns(table = tab, field = "unique_id")
+# prepare eunomia and save it in temp directory
+cdmLocal <- omock::mockCdmFromDataset(datasetName = "GiBleed")
+tabs <- c(
+  "observation_period", "visit_occurrence", "visit_detail", "specimen",
+  "note", "condition_occurrence", "drug_exposure", "procedure_occurrence",
+  "device_exposure", "measurement", "observation", "death"
+)
+personIds <- cdmLocal$person |>
+  dplyr::distinct(.data$person_id) |>
+  dplyr::pull()
+for (tab in tabs) {
+  start <- omopgenerics::omopColumns(table = tab, field = "start_date")
+  id <- omopgenerics::omopColumns(table = tab, field = "unique_id")
+  cdmLocal[[tab]] <- cdmLocal[[tab]] |>
+    dplyr::filter(.data$person_id %in% .env$personIds)
+  if (nrow(cdmLocal[[tab]]) > 0) {
     cdmLocal[[tab]] <- cdmLocal[[tab]] |>
-      dplyr::inner_join(
-        cdmLocal$person |>
-          dplyr::select("person_id"),
-        by = "person_id"
-      )
-    if (nrow(cdmLocal[[tab]]) > 0) {
-      cdmLocal[[tab]] <- cdmLocal[[tab]] |>
-        dplyr::group_by(dplyr::across(dplyr::all_of(id))) |>
-        dplyr::filter(.data[[start]] == min(.data[[start]], na.rm = TRUE)) |>
-        dplyr::ungroup()
-    }
+      dplyr::group_by(dplyr::across(dplyr::all_of(id))) |>
+      dplyr::filter(.data[[start]] == min(.data[[start]], na.rm = TRUE)) |>
+      dplyr::ungroup()
   }
-
-  # insert cdm
-  cdm <- cdmLocal |>
-    copyCdm()
-
-  return(cdm)
 }
+pathEunomia <- file.path(tempdir(), "OmopSketchEunomia.RDS")
+saveRDS(object = cdmLocal, file = pathEunomia)
 
+cdmEunomia <- function() {
+  copyCdm(cdm = readRDS(file = pathEunomia))
+}
 copyCdm <- function(cdm) {
   pref <- "oi_"
   if (dbToTest == "duckdb-CDMConnector") {

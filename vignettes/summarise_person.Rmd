@@ -34,20 +34,20 @@ Let’s load the required packages and create a mock CDM using the R package [om
 library(dplyr)
 library(OmopSketch)
 library(omock)
-library(duckdb)
 
 # Connect to mock database
 cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb") 
 cdm
 ```
 
-# Summarise the person table
+# Summarise person table
 Run summarisePerson() to compute basic summaries for the person table. The function will return a [summarised_result](https://darwin-eu.github.io/omopgenerics/articles/summarised_result.html).
 
 ```{r}
 result <- summarisePerson(cdm = cdm)
 
-result |> glimpse()
+result |> 
+  glimpse()
 ```
 ## What the function reports
 
@@ -77,8 +77,10 @@ result |> glimpse()
 tablePerson(result = result, type = "gt")
 ```
 
-Finally, we can disconnect from the cdm.
+# Disconnect from CDM
 
-```{r, warning=FALSE}
+Finally, disconnect from the mock CDM.
+
+```{r}
 cdmDisconnect(cdm = cdm)
 ```

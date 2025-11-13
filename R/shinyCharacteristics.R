@@ -1,41 +1,49 @@
-#' Generate an interactive Shiny application that visualises the results obtained from the `databaseCharacteristics()` function.
-#' @param result A summarised_result object containing the results from the `databaseCharacteristics()` function.
-#' This object should include summaries of various OMOP CDM tables, such as population characteristics, clinical records, missing data, and more
-#' @param directory A character string specifying the directory where the application
-#'                  will be saved.
-#' @param title Title of the shiny. Default is "Characterisation"
+
+#' Generate an interactive Shiny application that visualises the results
+#' obtained from the `databaseCharacteristics()` function
+#'
+#' @param result A summarised_result object (output of
+#' `databaseCharacteristics()`).
+#' @param directory A character string specifying the directory where the
+#' application will be saved.
+#' @param title Title of the shiny. Default is "Characterisation".
 #' @param background Background panel for the Shiny app.
-#' If set to `TRUE` (default), a standard background panel with a general description will be included.
-#' If set to `FALSE`, no background panel will be displayed.
-#' Alternatively, you can provide a file path (e.g., `"path/to/file.md"`) to include custom background content from a Markdown file.
-#' @param logo Name of a logo or path to a logo. If NULL no logo is included. Only svg format allowed for the moment.
+#' - If set to `TRUE` (default), a standard background panel with a general
+#' description will be included.
+#' - If set to `FALSE`, no background panel will be displayed.
+#' - If it is a path (e.g., `"path/to/file.md"`) tha file will be used as
+#' background panel of your shiny App.
+#' @param logo Name of a logo or path to a logo. If NULL no logo is included.
+#' Only svg format allowed for the moment.
+#' @param theme A character string specifying the theme for the Shiny
+#' application. It can be any of the OmopViewer supported themes.
 #'
-#' @param theme A character string specifying the theme for the Shiny application.
-#'              Default is `"bslib::bs_theme(bootswatch = 'flatly')"` to use the Flatly theme
-#'              from the Bootswatch collection. You can customise this to use other themes.
-#'
-#'
-#' @return This function invisibly returns NULL and generates a static Shiny app in the
-#'         specified directory.
+#' @return This function invisibly returns NULL and generates a static Shiny app
+#' in the specified directory.
+#' @export
 #'
 #' @examples
 #' \dontrun{
 #' library(OmopSketch)
 #' library(omock)
+#' library(here)
 #'
 #' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
+#'
 #' res <- databaseCharacteristics(cdm = cdm)
-#' shinyCharacteristics(result = res, directory = here::here())
+#'
+#' shinyCharacteristics(result = res, directory = here())
+#'
+#' cdmDisconnect(cdm = cdm)
 #' }
 #'
-#' @export
 shinyCharacteristics <- function(result,
                                  directory,
                                  background = TRUE,
                                  title = "Database characterisation",
                                  logo = "ohdsi",
-                                 theme = NULL) {
-  rlang::check_installed(pkg = "OmopViewer", version = "0.4.0")
+                                 theme = "scarlet") {
+  rlang::check_installed(pkg = "OmopViewer", version = "0.4.0") # change to 0.5.0 when released
 
   result <- omopgenerics::validateResultArgument(result)
   omopgenerics::assertCharacter(directory, length = 1)

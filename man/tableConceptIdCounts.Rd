@@ -2,40 +2,44 @@
 % Please edit documentation in R/tableConceptIdCounts.R
 \name{tableConceptIdCounts}
 \alias{tableConceptIdCounts}
-\title{Create a visual table from a summariseConceptIdCounts() result.}
+\title{Create a visual table from a summariseConceptIdCounts() result}
 \usage{
 tableConceptIdCounts(result, display = "overall", type = "reactable")
 }
 \arguments{
-\item{result}{A summarised_result object.}
+\item{result}{A summarised_result object (output of
+\code{summariseConceptIdCounts()}).}
 
-\item{display}{A character string indicating which subset of the data to display. Options are:
+\item{display}{A character string indicating which subset of the data to
+display. Options are:
 \itemize{
 \item \code{"overall"}: Show all source and standard concepts.
 \item \code{"standard"}: Show only standard concepts.
 \item \code{"source"}: Show only source codes.
-\item \code{"missing standard"}: Show only source codes that are missing a mapped standard concept.
+\item \code{"missing standard"}: Show only source codes that are missing a
+mapped standard concept.
 }}
 
-\item{type}{Type of formatting output table, either "reactable" or "datatable".}
+\item{type}{Type of formatting output table, either "reactable" or
+"datatable".}
 }
 \value{
-A reactable or datatable object with the summarised data.
+A formatted table visualisation.
 }
 \description{
-Create a visual table from a summariseConceptIdCounts() result.
+Create a visual table from a summariseConceptIdCounts() result
 }
 \examples{
 \donttest{
 library(OmopSketch)
-library(CDMConnector)
-library(duckdb)
+library(omock)
 
-requireEunomia()
-con <- dbConnect(duckdb(), eunomiaDir())
-cdm <- cdmFromCon(con = con, cdmSchema = "main", writeSchema = "main")
+cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
 result <- summariseConceptIdCounts(cdm = cdm, omopTableName = "condition_occurrence")
 tableConceptIdCounts(result = result, display = "standard")
+
+cdmDisconnect(cdm = cdm)
 }
+
 }

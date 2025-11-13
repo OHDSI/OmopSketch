@@ -1,26 +1,34 @@
-#' Create a visual table from a summariseConceptIdCounts() result.
-#' @param result A summarised_result object.
-#' @param display A character string indicating which subset of the data to display. Options are:
+
+#' Create a visual table from a summariseConceptIdCounts() result
+#'
+#' @param result A summarised_result object (output of
+#' `summariseConceptIdCounts()`).
+#' @param display A character string indicating which subset of the data to
+#' display. Options are:
 #'   - `"overall"`: Show all source and standard concepts.
 #'   - `"standard"`: Show only standard concepts.
 #'   - `"source"`: Show only source codes.
-#'   - `"missing standard"`: Show only source codes that are missing a mapped standard concept.
-#' @param type Type of formatting output table, either "reactable" or "datatable".
-#' @return A reactable or datatable object with the summarised data.
+#'   - `"missing standard"`: Show only source codes that are missing a
+#'   mapped standard concept.
+#' @param type Type of formatting output table, either "reactable" or
+#' "datatable".
+#'
+#' @return A formatted table visualisation.
 #' @export
+#'
 #' @examples
 #' \donttest{
 #' library(OmopSketch)
-#' library(CDMConnector)
-#' library(duckdb)
+#' library(omock)
 #'
-#' requireEunomia()
-#' con <- dbConnect(duckdb(), eunomiaDir())
-#' cdm <- cdmFromCon(con = con, cdmSchema = "main", writeSchema = "main")
+#' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 #'
 #' result <- summariseConceptIdCounts(cdm = cdm, omopTableName = "condition_occurrence")
 #' tableConceptIdCounts(result = result, display = "standard")
+#'
+#' cdmDisconnect(cdm = cdm)
 #' }
+#'
 tableConceptIdCounts <- function(result,
                                  display = "overall",
                                  type = "reactable") {
@@ -148,7 +156,7 @@ tableConceptIdCounts <- function(result,
   rename_vec <- rename_vec[rename_vec %in% names(formatted_result)]
 
   if (length(c(strata_cols, additional_cols)) > 0) {
-    formatted_result <- formatted_result %>%
+    formatted_result <- formatted_result |>
       dplyr::arrange(dplyr::across(dplyr::all_of(c(strata_cols, additional_cols))))
   }
   formatted_result |>

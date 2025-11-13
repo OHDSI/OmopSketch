@@ -31,7 +31,6 @@ We begin by loading the necessary packages and creating a mock CDM using the R p
 ```{r, warning=FALSE}
 library(dplyr)
 library(OmopSketch)
-library(duckdb)
 library(omock)
 
 cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
@@ -39,9 +38,9 @@ cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 cdm
 ```
 
-# Summarise database characteristics
+# Database characteristics
 
-## Summarise Database Characteristics
+## Summarise Characteristics
 
 The `databaseCharacteristics()` function provides a comprehensive overview of the Common Data Model (CDM). It returns a [summarised result](https://darwin-eu-dev.github.io/omopgenerics/articles/summarised_result.html) combining several characterisation components:
 
@@ -68,7 +67,7 @@ Optionally, concept-level summaries can be included by computing concept counts 
 Together, these outputs provide a holistic view of the CDM’s structure, data completeness, and temporal behaviour — supporting both data quality assessment and study feasibility evaluation.
 
 ```{r, eval = FALSE}
-result <- databaseCharacteristics(cdm)
+result <- databaseCharacteristics(cdm = cdm)
 ```
 
 ## Selecting tables to characterise
@@ -78,7 +77,10 @@ By default, the following OMOP tables are included in the characterisation:  *vi
 You can customise which tables to include in the analysis by specifying them with the `omopTableName` argument.
 
 ```{r, eval=FALSE}
-result <- databaseCharacteristics(cdm, omopTableName = c("drug_exposure", "condition_occurrence"))
+result <- databaseCharacteristics(
+  cdm = cdm, 
+  omopTableName = c("drug_exposure", "condition_occurrence")
+)
 ```
 
 ## Stratifying by Sex
@@ -86,7 +88,8 @@ result <- databaseCharacteristics(cdm, omopTableName = c("drug_exposure", "condi
 To stratify the characterisation results by sex, set the `sex` argument to `TRUE`:
 
 ```{r, eval=FALSE}
-result <- databaseCharacteristics(cdm,
+result <- databaseCharacteristics(
+  cdm = cdm,
   omopTableName = c("drug_exposure", "condition_occurrence"),
   sex = TRUE
 )
@@ -97,7 +100,8 @@ result <- databaseCharacteristics(cdm,
 You can choose to characterise the data stratifying by age group by creating a list defining the age groups you want to use.
 
 ```{r, eval=FALSE}
-result <- databaseCharacteristics(cdm,
+result <- databaseCharacteristics(
+  cdm = cdm,
   omopTableName = c("drug_exposure", "condition_occurrence"),
   ageGroup = list(c(0, 50), c(51, 100))
 )
@@ -108,7 +112,8 @@ result <- databaseCharacteristics(cdm,
 Use the `dateRange` argument to limit the analysis to a specific period. Combine it with the `interval` argument to stratify results by time. Valid values for interval include "overall" (default), "years", "quarters", and "months":
 
 ```{r, eval=FALSE}
-result <- databaseCharacteristics(cdm,
+result <- databaseCharacteristics(
+  cdm = cdm,
   interval = "years",
   dateRange = as.Date(c("2010-01-01", "2018-12-31"))
 )
@@ -126,15 +131,15 @@ The `sample` argument accepts either:
 
 
 ```{r, eval=FALSE}
-result <- databaseCharacteristics(cdm,
+result <- databaseCharacteristics(
+  cdm = cdm,
   sample = 1000L
 )
 
-result <- databaseCharacteristics(cdm,
+result <- databaseCharacteristics(
+  cdm = cdm,
   sample = "my_cohort"
 )
-
-
 ```
 
 ## Including Concept Counts
@@ -142,7 +147,8 @@ result <- databaseCharacteristics(cdm,
 To include concept counts in the characterisation, set `conceptIdCounts = TRUE`:
 
 ```{r, eval=FALSE}
-result <- databaseCharacteristics(cdm,
+result <- databaseCharacteristics(
+  cdm = cdm,
   conceptIdCounts = TRUE
 )
 ```
@@ -153,8 +159,10 @@ It is possible to pass arguments from any of the underlying functions to `databa
 For example, to stratify trends and concept counts by records observed in or out of observation, you can pass the argument `inObservation = TRUE`:
 
 ```{r, eval = FALSE}
-result <- databaseCharacteristics(cdm,
-  conceptIdCounts = TRUE, inObservation = TRUE
+result <- databaseCharacteristics(
+  cdm = cdm,
+  conceptIdCounts = TRUE, 
+  inObservation = TRUE
 )
 ```
 
@@ -171,29 +179,31 @@ shinyCharacteristics(result = result, directory = "path/to/your/shiny")
 
 You can customise the title, logo, and theme of the Shiny app by setting the appropriate arguments:
 
--   `title`: The title displayed at the top of the app
+- `title`: The title displayed at the top of the app
 
--   `logo`: Path to a custom logo (must be in SVG format)
+- `logo`: Path to a custom logo (must be in SVG format)
 
--   `theme`: A custom Bootstrap theme (e.g., using bslib::bs_theme())
+- `theme`: One of the available `OmopViewer` themes.
 
 - `background`: A custom background panel for the Shiny app
 
 ```{r, eval=FALSE}
 shinyCharacteristics(
-  result = result, directory = "path/to/my/shiny",
+  result = result, 
+  directory = "path/to/my/shiny",
   title = "Characterisation of my data",
   logo = "path/to/my/logo.svg",
-  theme = "bslib::bs_theme(bootswatch = 'flatly')", 
+  theme = "scarlet", 
   background = "path/to/my/background.md"
 )
 ```
 
 An example of the Shiny application generated by `shinyCharacteristics()` can be explored [here](https://dpa-pde-oxford.shinyapps.io/OmopSketchCharacterisation/), where the characterisation of several synthetic datasets is available.
 
-Finally, we can disconnect from the cdm.
+# Disconnect from CDM
 
-```{r, warning=FALSE}
+Finally, disconnect from the mock CDM.
+
+```{r}
 cdmDisconnect(cdm = cdm)
 ```
-

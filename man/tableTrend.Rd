@@ -2,26 +2,37 @@
 % Please edit documentation in R/tableTrend.R
 \name{tableTrend}
 \alias{tableTrend}
-\title{Create a visual table from a summariseTrend() result.}
+\title{Create a visual table from a summariseTrend() result}
 \usage{
-tableTrend(result, type = "gt", style = NULL)
+tableTrend(result, type = NULL, style = NULL)
 }
 \arguments{
-\item{result}{A summarised_result object.}
+\item{result}{A summarised_result object (output of \code{summariseTrend()}).}
 
-\item{type}{Type of formatting output table between \code{gt}, \code{datatable} and \code{reactable}. Default is \code{"gt"}.}
+\item{type}{Type of formatting output table between \code{gt}, \code{datatable} and
+\code{reactable}. Default is \code{"gt"}.}
 
-\item{style}{Named list that specifies how to style the different parts of the gt or flextable table generated.
-Accepted style entries are: title, subtitle, header, header_name, header_level, column_name, group_label, and body.
-Alternatively, use "default" to get visOmopResults style, or NULL for gt/flextable style.
-Keep in mind that styling code is different for gt and flextable. Additionally, "datatable" and "reactable" have their own style functions.
-To see style options for each table type use \code{visOmopResults::tableStyle()}}
+\item{style}{Defines the visual formatting of the table. This argument can be
+provided in one of the following ways:
+\enumerate{
+\item \strong{Pre-defined style}: Use the name of a built-in style (e.g., "darwin").
+See \code{visOmopResults::tableStyle()} for available options.
+\item \strong{YAML file path}: Provide the path to an existing \code{.yml} file defining
+a new style.
+\item \strong{List of custome R code}: Supply a block of custom R code or a named
+list describing styles for each table section. This code must be specific to
+the selected table type.
+}
+
+If \code{style = NULL}, the function will use global options (see
+\code{visOmopResults::setGlobalTableOptions()}) or an existing \verb{⁠_brand.yml}⁠ file
+(if found); otherwise, the default style is applied.}
 }
 \value{
-A formatted table object with the summarised data.
+A formatted table visualisation.
 }
 \description{
-Create a visual table from a summariseTrend() result.
+Create a visual table from a summariseTrend() result
 }
 \examples{
 \donttest{
@@ -31,7 +42,7 @@ library(omock)
 
 cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
-summarisedResult <- summariseTrend(
+result <- summariseTrend(
   cdm = cdm,
   episode = "observation_period",
   event = c("drug_exposure", "condition_occurrence"),
@@ -40,8 +51,9 @@ summarisedResult <- summariseTrend(
   sex = TRUE
 )
 
-tableTrend(result = summarisedResult)
+tableTrend(result = result)
 
 cdmDisconnect(cdm = cdm)
 }
+
 }

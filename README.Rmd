@@ -25,9 +25,15 @@ The goal of OmopSketch is to characterise and visualise an OMOP CDM instance to 
 
 ## Installation
 
+OmopSketch is available from CRAN:
+
+```{r, eval=FALSE}
+install.packages("OmopSketch")
+```
+
 You can install the development version of OmopSketch from [GitHub](https://github.com/) with:
 
-``` r
+```{r, eval=FALSE}
 # install.packages("remotes")
 remotes::install_github("OHDSI/OmopSketch")
 ```
@@ -38,11 +44,11 @@ Let's start by creating a cdm object using the Eunomia GiBleed mock dataset:
 
 
 ```{r, message=TRUE, warning=FALSE}
-library(duckdb)
-library(dplyr, warn.conflicts = FALSE)
 library(OmopSketch)
+library(omock)
+library(dplyr, warn.conflicts = FALSE)
 
-cdm <- omock::mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
+cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 cdm
 ```
 

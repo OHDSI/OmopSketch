@@ -1,31 +1,24 @@
-#' Create a visual table from a summariseObservationPeriod() result.
-#' @param result A summarised_result object.
-#' @param  type Type of formatting output table. See `visOmopResults::tableType()` for allowed options. Default is `"gt"`.
-#' @inheritParams style
-#' @return A formatted table object with the summarised data.
+
+#' Create a visual table from a summariseObservationPeriod() result
+#'
+#' @param result A summarised_result object (output of
+#' `summariseObservationPeriod()`).
+#' @inheritParams style-table
+#'
+#' @return A formatted table visualisation.
 #' @export
-#' @examples
-#' \donttest{
-#' library(OmopSketch)
-#' library(omock)
 #'
-#' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
+#' @inherit summariseObservationPeriod examples
 #'
-#' result <- summariseObservationPeriod(observationPeriod = cdm$observation_period)
-#'
-#' tableObservationPeriod(result = result)
-#'
-#' cdmDisconnect(cdm = cdm)
-#' }
 tableObservationPeriod <- function(result,
-                                   type = "gt",
+                                   type = NULL,
                                    style = NULL) {
   # initial checks
   rlang::check_installed("visOmopResults")
   omopgenerics::validateResultArgument(result)
-  omopgenerics::assertChoice(type, visOmopResults::tableType())
-  style <- validateStyle(style = style, obj = "table")
 
+  style <- validateStyle(style = style, obj = "table")
+  type <- validateType(type)
 
   # subset to result_type of interest
   result <- result |>

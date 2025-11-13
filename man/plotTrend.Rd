@@ -2,12 +2,12 @@
 % Please edit documentation in R/plotTrend.R
 \name{plotTrend}
 \alias{plotTrend}
-\title{Create a ggplot2 plot from the output of summariseTrend().}
+\title{Create a ggplot2 plot from the output of summariseTrend()}
 \usage{
 plotTrend(result, output = NULL, facet = "type", colour = NULL, style = NULL)
 }
 \arguments{
-\item{result}{A summarised_result object (output of summariseTrend).}
+\item{result}{A summarised_result object (output of \code{summariseTrend()}).}
 
 \item{output}{The output to plot.  Accepted values are: \code{"record"}, \code{"person"},
 \code{"person-days"}, \code{"age"}, and \code{"sex"}.
@@ -23,14 +23,19 @@ columns to face by with: \code{visOmopResults::tidyColumns()}.}
 \item{colour}{Columns to colour by. See possible columns to colour by with:
 \code{visOmopResults::tidyColumns()}.}
 
-\item{style}{Which style to apply to the plot, options are: "default", "darwin"
-and NULL (default ggplot style). Customised styles can be achieved by modifying the returned ggplot object.}
+\item{style}{Visual theme to apply. Character, or \code{NULL}. If a character,
+this may be either the name of a built-in style (see
+\code{visOmopResults::plotStyle()}), or a path to a \code{.yml} file that defines a
+custom style. If \code{NULL}, the function will use the explicit default style,
+unless a global style option is set (see
+\code{visOmopResults::setGlobalPlotOptions()}), or a \verb{⁠_brand.yml}⁠ file is
+present (in that order).}
 }
 \value{
-A ggplot showing the table counts
+A plot visualisation.
 }
 \description{
-Create a ggplot2 plot from the output of summariseTrend().
+Create a ggplot2 plot from the output of summariseTrend()
 }
 \examples{
 \donttest{
@@ -48,9 +53,14 @@ result <- summariseTrend(cdm,
   sex = TRUE
 )
 
-plotTrend(result, output = "record", colour = "sex", facet = "age_group")
+plotTrend(
+  result = result,
+  output = "record",
+  colour = "sex",
+  facet = "age_group"
+)
 
-
-cdmDisconnect(cdm)
+cdmDisconnect(cdm = cdm)
 }
+
 }

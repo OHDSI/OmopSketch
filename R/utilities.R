@@ -101,10 +101,10 @@ createSettings <- function(result_type, result_id = 1L, study_period = NULL) {
 #' Tables in the cdm_reference that contain clinical information
 #'
 #' @description
-#' This function provides a list of allowed inputs for the `omopTableName` argument in
-#' `summariseClinicalRecords`
-#' @return A character vector with table names
+#' This function provides a list of allowed inputs for the `omopTableName`
+#' argument in `summariseClinicalRecords()`.
 #'
+#' @return A character vector with table names.
 #' @export
 #'
 #' @examples
@@ -143,7 +143,7 @@ sampleCdm <- function(cdm, tables, sample, call = parent.frame()){
     return(cdm)
   }
   cdm <- omopgenerics::insertTable(cdm = cdm, name = "person_sample",
-                                   table = tibble::tibble("person_id" = sort(unique(ids))))
+                                   table = dplyr::tibble("person_id" = sort(unique(ids))))
 
   for (table in tables) {
     cdm[[table]] <- cdm[[table]] |>
@@ -164,6 +164,7 @@ sampleOmopTable <- function(omopTable, sample) {
 
 
 
+
 validateStyle <- function(style, obj) {
   # check if style is NULL
   if (is.null(style)) {
@@ -181,8 +182,19 @@ validateStyle <- function(style, obj) {
 }
 
 
-emptyPlot <- function (title = "No result to plot", subtitle = "")
-{
+emptyPlot <- function (title = "No result to plot", subtitle = "") {
   ggplot2::ggplot() + ggplot2::theme_void() + ggplot2::labs(title = title,
                                                             subtitle = subtitle)
+}
+
+validateType <- function(type, call = parent.frame()) {
+  if (is.null(type)) {
+    type <- getOption(x = "visOmopResults.tableType", default = "gt")
+  }
+
+  # assert choice
+  choices <- visOmopResults::tableType()
+  omopgenerics::assertChoice(type, choices = choices, length = 1, call = call)
+
+  return(type)
 }

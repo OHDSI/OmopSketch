@@ -1,9 +1,13 @@
-#' Create a visual table from a summarise_omop_snapshot result.
-#' @param result  Output from summariseOmopSnapshot().
-#' @param  type Type of formatting output table. See `visOmopResults::tableType()` for allowed options. Default is `"gt"`.
-#' @inheritParams style
-#' @return A formatted table object with the summarised data.
+
+#' Create a visual table from a summarise_omop_snapshot result
+#'
+#' @param result A summarised_result object (output of `summariseOmopSnapshot()`
+#' ).
+#' @inheritParams style-table
+#'
+#' @return A formatted table visualisation.
 #' @export
+#'
 #' @examples
 #' \donttest{
 #' library(OmopSketch)
@@ -15,16 +19,18 @@
 #'
 #' tableOmopSnapshot(result = result)
 #'
-#'cdmDisconnect(cdm)
+#' cdmDisconnect(cdm = cdm)
 #' }
+#'
 tableOmopSnapshot <- function(result,
-                              type = "gt",
+                              type = NULL,
                               style = NULL) {
   # initial checks
   rlang::check_installed("visOmopResults")
   omopgenerics::validateResultArgument(result)
-  omopgenerics::assertChoice(type, visOmopResults::tableType())
   style <- validateStyle(style = style, obj = "table")
+  type <- validateType(type)
+
 
   # subset to result_type of interest
   result <- result |>
@@ -61,7 +67,10 @@ tableOmopSnapshot <- function(result,
 }
 
 warnEmpty <- function(resultType) {
-  cli::cli_warn("`result` does not contain any `{resultType}` data.")
+  message <- "`result` does not contain any `{resultType}` data." |>
+    stringr::str_glue()
+  cli::cli_warn(message = message)
+  return(message)
 }
 emptyTable <- function(type) {
   pkg <- type

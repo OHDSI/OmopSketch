@@ -30,13 +30,10 @@ This function allows you to visualise how key measures (such as number of record
 Let's start by loading essential packages and creating a mock CDM using the R package [omock](https://ohdsi.github.io/omock/)
 
 ```{r, warning=FALSE}
-library(duckdb)
 library(omock)
-library(omopgenerics)
 library(OmopSketch)
 library(dplyr)
-
-
+library(visOmopResults)
 
 cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 
@@ -55,8 +52,10 @@ summarisedResult <- summariseTrend(
   interval = "years",
 )
 
-summarisedResult |> glimpse()
+summarisedResult |>
+  glimpse()
 ```
+
 Notice that the output is in the [summarised result](https://darwin-eu.github.io/omopgenerics/articles/summarised_result.html) format.
 
 ## What are Event and Episode tables?
@@ -89,6 +88,7 @@ Options include:
 - "age": Median age at start date of each interval
 
 - "sex": Number of females
+
 ### Records and subjects per year
 
 For each time interval the results will include the number of records and number of individuals observed during that period.
@@ -102,11 +102,9 @@ summarisedResult <- summariseTrend(
   interval = "years"
 )
 
-
 summarisedResult |>
   select(group_level, variable_name, additional_level, estimate_name, estimate_value)
 ```
-
 
 ### Person-days
 
@@ -133,8 +131,9 @@ summarisedResult <- summariseTrend(
   output = "person-days",
   interval = "years"
 )
-summarisedResult |> print()
+summarisedResult
 ```
+
 ### Age
 
 When "age" is included in the output argument, the function reports the median age of individuals for each time interval.
@@ -151,6 +150,7 @@ summarisedResult <- summariseTrend(
 summarisedResult |>
   select(variable_name, additional_level, estimate_name, estimate_value)
 ```
+
 ### Sex output
 
 When "sex" is included in the output argument, the function counts the number of females in each time interval.
@@ -237,7 +237,7 @@ summarisedResult <- summariseTrend(
 )
 
 summarisedResult |>
-  omopgenerics::settings() |>
+  settings() |>
   glimpse()
 ```
 
@@ -255,19 +255,27 @@ result <- summariseTrend(
 )
 tableTrend(result = result)
 ```
+
 # Visualise trends with plotTrend
+
 `plotTrend()` builds a ggplot2 visualisation from a summarised result. 
 ```{r}
-result <- summariseTrend(cdm,
-  event = "measurement", interval = "quarters", sex = TRUE, ageGroup = list(c(0, 17), c(18, Inf)),
+result <- summariseTrend(
+  cdm = cdm,
+  event = "measurement", 
+  interval = "quarters",
+  sex = TRUE, 
+  ageGroup = list(c(0, 17), c(18, Inf)),
   dateRange = as.Date(c("2010-01-01", "2019-12-31"))
 )
+
 plotTrend(
-  result,
+  result = result,
   colour = "sex",
   facet = "age_group"
 )
 ```
+
 When the result includes several outputs (for example, records, persons, or person-days), the function defaults to plotting the number of records.
 You can override this by setting the output argument to the measure you want to visualise.
 
@@ -279,7 +287,7 @@ result <- summariseTrend(cdm,
   dateRange = as.Date(c("2010-01-01", "2019-12-31"))
 )
 plotTrend(
-  result,
+  result = result,
   output = "sex"
 )
 ```
@@ -295,7 +303,7 @@ result <- summariseTrend(cdm,
   dateRange = as.Date(c("2010-01-01", "2019-12-31"))
 )
 plotTrend(
-  result,
+  result = result,
   facet = omop_table ~ sex,
   colour = "in_observation"
 )
@@ -304,6 +312,7 @@ plotTrend(
 # Disconnect from CDM
 
 Finally, disconnect from the mock CDM.
+
 ```{r}
 cdmDisconnect(cdm = cdm)
 ```

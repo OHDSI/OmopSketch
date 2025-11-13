@@ -1,33 +1,21 @@
-#' Create a plot from the output of summariseObservationPeriod().
+
+#' Create a plot from the output of summariseObservationPeriod()
 #'
-#' @param result A summarised_result object.
+#' @param result A summarised_result object (output of
+#' `summariseObservationPeriod()`).
 #' @param variableName The variable to plot it can be: "Number subjects",
-#' "Records per person", "Duration in days" or "Days to next observation period".
+#' "Records per person", "Duration in days" or
+#' "Days to next observation period".
 #' @param plotType The plot type, it can be: "barplot", "boxplot" or
 #' "densityplot".
-#' @param facet Columns to colour by. See possible columns to colour by with:
-#' `visOmopResults::tidyColumns()`.
-#' @param colour Columns to colour by. See possible columns to colour by with:
-#' `visOmopResults::tidyColumns()`.
-#' @inheritParams style-plot
-#' @return A ggplot2 object.
+#' @inheritParams consistent-doc
+#' @inheritParams plot-doc
+#'
+#' @return A plot visualisation.
 #' @export
-#' @examples
-#' \donttest{
-#' library(omock)
-#' library(OmopSketch)
 #'
-#' cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
+#' @inherit summariseObservationPeriod examples
 #'
-#' result <- summariseObservationPeriod(observationPeriod = cdm$observation_period)
-#'
-#' plotObservationPeriod(
-#'   result = result,
-#'   variableName = "Duration in days",
-#'   plotType = "boxplot"
-#' )
-#'
-#' }
 plotObservationPeriod <- function(result,
                                   variableName = "Number subjects",
                                   plotType = "barplot",
