@@ -174,7 +174,7 @@ validateStyle <- function(style, obj) {
       if (file.exists("_brand.yml")) {
         style <- "_brand.yml"
       } else {
-        style <- here::here("inst", "scarlet.yml")
+        style <- list.files(system.file("brand", package = "OmopSketch"), full.names = TRUE)
       }
     }
   }
