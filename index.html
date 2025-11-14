@@ -145,7 +145,7 @@
 <code class="sourceCode R"><span><span class="va">snapshot</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/summariseOmopSnapshot.html">summariseOmopSnapshot</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/tableOmopSnapshot.html">tableOmopSnapshot</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">snapshot</span>, type <span class="op">=</span> <span class="st">"flextable"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-6-1.png" width="100%"></p>
+<p><img src="reference/figures/README-unnamed-chunk-7-1.png" width="70%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="characterise-the-person-table">Characterise the person table<a class="anchor" aria-label="anchor" href="#characterise-the-person-table"></a>
@@ -153,10 +153,9 @@
 <p>Once we have collected the snapshot information, we can characterise the person table with <code>summarisePersonTable()</code>:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/summarisePerson.html">summarisePerson</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: ! There are 2649 individuals with no observation period defined.</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/tablePerson.html">tablePerson</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">result</span>, type <span class="op">=</span> <span class="st">"flextable"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-7-1.png" width="100%"></p>
+<p><img src="reference/figures/README-unnamed-chunk-8-1.png" width="70%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="characterise-the-observation-period">Characterise the observation period<a class="anchor" aria-label="anchor" href="#characterise-the-observation-period"></a>
@@ -167,11 +166,11 @@
 <span><span class="co">#&gt; Warning: ! There are 2649 individuals not included in the person table.</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/tableObservationPeriod.html">tableObservationPeriod</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">result</span>, type <span class="op">=</span> <span class="st">"flextable"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-8-1.png" width="100%"></p>
+<p><img src="reference/figures/README-unnamed-chunk-9-1.png" width="70%" style="display: block; margin: auto;"></p>
 <p>Or if visualisation is preferred, you can easily build a histogram to explore how many participants have more than one observation period.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/plotObservationPeriod.html">plotObservationPeriod</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">result</span>, colour <span class="op">=</span> <span class="st">"observation_period_ordinal"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-9-1.png" width="100%"></p>
+<p><img src="reference/figures/README-unnamed-chunk-10-1.png" width="70%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="characterise-the-clinical-tables">Characterise the clinical tables<a class="anchor" aria-label="anchor" href="#characterise-the-clinical-tables"></a>
@@ -207,7 +206,7 @@
 <span><span class="co">#&gt; ℹ Summarising missing data in drug_exposure.</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/tableClinicalRecords.html">tableClinicalRecords</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">result</span>, type <span class="op">=</span> <span class="st">"flextable"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-10-1.png" width="100%"></p>
+<p><img src="reference/figures/README-unnamed-chunk-11-1.png" width="70%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="explore-trends-over-time">Explore trends over time<a class="anchor" aria-label="anchor" href="#explore-trends-over-time"></a>
@@ -222,20 +221,21 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/plotTrend.html">plotTrend</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">result</span>, facet <span class="op">=</span> <span class="st">"omop_table"</span>, colour <span class="op">=</span> <span class="st">"cdm_name"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-11-1.png" width="100%"></p>
+<p><img src="reference/figures/README-unnamed-chunk-12-1.png" width="70%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="characterise-the-concepts">Characterise the concepts<a class="anchor" aria-label="anchor" href="#characterise-the-concepts"></a>
 </h3>
 <p>OmopSketch also provides functions to explore the concepts in the dataset.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/summariseConceptIdCounts.html">summariseConceptIdCounts</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span></span>
+<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/summariseConceptIdCounts.html">summariseConceptIdCounts</a></span><span class="op">(</span></span>
 <span>  cdm <span class="op">=</span> <span class="va">cdm</span>, </span>
 <span>  omopTableName <span class="op">=</span> <span class="st">"drug_exposure"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/tableTopConceptCounts.html">tableTopConceptCounts</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">result</span>, type <span class="op">=</span> <span class="st">"flextable"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-12-1.png" width="100%"></p>
+<p><img src="reference/figures/README-unnamed-chunk-13-1.png" width="70%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="characterise-the-cdm">Characterise the cdm<a class="anchor" aria-label="anchor" href="#characterise-the-cdm"></a>
