@@ -15,7 +15,6 @@ summariseObservationPeriod(
   ageGroup = NULL,
   sex = FALSE,
   dateRange = NULL,
-  nameObservationPeriod = NULL,
   observationPeriod = lifecycle::deprecated()
 )
 }
@@ -52,11 +51,6 @@ represents a specific age range. You can give them specific names, e.g.
 \item{dateRange}{A vector of two dates defining the desired study period.
 Only the \code{start_date} column of the OMOP table is checked to ensure it falls within this range.
 If \code{dateRange} is \code{NULL}, no restriction is applied.}
-
-\item{nameObservationPeriod}{character string giving a descriptive name for
-the observation period.
-This name will be stored in the result settings. If \code{NULL} (default), the
-name is automatically set to \code{"Default"}.}
 
 \item{observationPeriod}{deprecated.}
 }

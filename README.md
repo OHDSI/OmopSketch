@@ -109,7 +109,7 @@ snapshot <- summariseOmopSnapshot(cdm = cdm)
 tableOmopSnapshot(result = snapshot, type = "flextable")
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-7-1.png" width="70%" style="display: block; margin: auto;" />
 
 ### Characterise the person table
 
@@ -118,12 +118,11 @@ person table with `summarisePersonTable()`:
 
 ``` r
 result <- summarisePerson(cdm = cdm)
-#> Warning: ! There are 2649 individuals with no observation period defined.
 
 tablePerson(result = result, type = "flextable")
 ```
 
-<img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-8-1.png" width="70%" style="display: block; margin: auto;" />
 
 ### Characterise the observation period
 
@@ -138,7 +137,7 @@ result <- summariseObservationPeriod(cdm = cdm)
 tableObservationPeriod(result = result, type = "flextable")
 ```
 
-<img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-9-1.png" width="70%" style="display: block; margin: auto;" />
 
 Or if visualisation is preferred, you can easily build a histogram to
 explore how many participants have more than one observation period.
@@ -147,7 +146,7 @@ explore how many participants have more than one observation period.
 plotObservationPeriod(result = result, colour = "observation_period_ordinal")
 ```
 
-<img src="man/figures/README-unnamed-chunk-9-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-10-1.png" width="70%" style="display: block; margin: auto;" />
 
 ### Characterise the clinical tables
 
@@ -187,7 +186,7 @@ result <- summariseClinicalRecords(
 tableClinicalRecords(result = result, type = "flextable")
 ```
 
-<img src="man/figures/README-unnamed-chunk-10-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-11-1.png" width="70%" style="display: block; margin: auto;" />
 
 ### Explore trends over time
 
@@ -205,7 +204,7 @@ result <- summariseTrend(
 plotTrend(result = result, facet = "omop_table", colour = "cdm_name")
 ```
 
-<img src="man/figures/README-unnamed-chunk-11-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-12-1.png" width="70%" style="display: block; margin: auto;" />
 
 ### Characterise the concepts
 
@@ -213,6 +212,7 @@ OmopSketch also provides functions to explore the concepts in the
 dataset.
 
 ``` r
+
 result <- summariseConceptIdCounts(
   cdm = cdm, 
   omopTableName = "drug_exposure"
@@ -221,7 +221,7 @@ result <- summariseConceptIdCounts(
 tableTopConceptCounts(result = result, type = "flextable")
 ```
 
-<img src="man/figures/README-unnamed-chunk-12-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-13-1.png" width="70%" style="display: block; margin: auto;" />
 
 ### Characterise the cdm
 

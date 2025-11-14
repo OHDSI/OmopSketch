@@ -9,7 +9,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "100%"
+  out.width = "70%",
+  fig.align = "center"
 )
 ```
 
@@ -40,6 +41,11 @@ remotes::install_github("OHDSI/OmopSketch")
 
 ## Working with OMOP
 
+
+```{r, echo=FALSE}
+visOmopResults::setGlobalPlotOptions(style = list.files(system.file("brand", package = "OmopSketch"), full.names = TRUE, pattern = "^readme\\.yml$"))
+visOmopResults::setGlobalTableOptions(style = list.files(system.file("brand", package = "OmopSketch"), full.names = TRUE, pattern = "^readme\\.yml$"))
+```
 To be able to use this package you will need data mapped to the OMOP CDM.
 
 The first step to any analysis you will create what we call the `cdm_reference` object, which is a reference to the OMOP CDM tables. If you want to learn more about OMOP or the `cdm_reference` object you can take a look to:
@@ -73,6 +79,7 @@ We first create a snapshot of our database. This will allow us to track when the
 snapshot <- summariseOmopSnapshot(cdm = cdm)
 
 tableOmopSnapshot(result = snapshot, type = "flextable")
+
 ```
 
 ### Characterise the person table
@@ -134,12 +141,14 @@ plotTrend(result = result, facet = "omop_table", colour = "cdm_name")
 OmopSketch also provides functions to explore the concepts in the dataset.
 
 ```{r}
+
 result <- summariseConceptIdCounts(
   cdm = cdm, 
   omopTableName = "drug_exposure"
 )
 
 tableTopConceptCounts(result = result, type = "flextable")
+
 ```
 
 ### Characterise the cdm

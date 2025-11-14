@@ -30,14 +30,14 @@ plotPerson <- function(result,
                        style = NULL,
                        type = NULL) {
   # check input
-  style <- validateStyle(style = style)
+  style <- validateStyle(style = style, obj = "plot")
   result <- validateResult(
     result = result,
     resultType = "summarise_person",
     variableName = variableName %||% TRUE
   )
   if (is.character(result)) {
-    return(visOmopResults::emptyPlot(subtitle = result, type = type, style = style))
+    return(visOmopResults::emptyPlot(subtitle = "`result` does not contain any `summarise_person` data.", type = type, style = style))
   }
 
   # variable name

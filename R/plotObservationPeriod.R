@@ -26,6 +26,8 @@ plotObservationPeriod <- function(result,
   rlang::check_installed("visOmopResults")
   # initial checks
   omopgenerics::validateResultArgument(result)
+  style <- validateStyle(style = style, obj = "plot")
+
 
   # subset to result_type of interest
   result <- result |>
@@ -36,7 +38,7 @@ plotObservationPeriod <- function(result,
   # check if it is empty
   if (nrow(result) == 0) {
     warnEmpty("summarise_observation_period")
-    return(emptyPlot())
+    return(visOmopResults::emptyPlot(subtitle = "`result` does not contain any `summarise_observation_period` data", style = style))
   }
 
   variableNames <- unique(availablePlotObservationPeriod()$variable_name)
