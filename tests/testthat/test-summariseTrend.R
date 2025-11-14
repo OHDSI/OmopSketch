@@ -6,8 +6,8 @@ test_that("summariseTrend - episode works", {
   # Check all tables work ----
   expect_true(inherits(summariseTrend(cdm), "summarised_result"))
   expect_equal(summariseTrend(cdm), omopgenerics::emptySummarisedResult(), ignore_attr = TRUE)
-  expect_no_error(summariseTrend(cdm, episode = "drug_exposure", event = "condition_occurrence", interval = "months"))
-  expect_true(inherits(summariseTrend(cdm, episode = "drug_exposure", event = "condition_occurrence", interval = "months"), "summarised_result"))
+  expect_no_error(res <- summariseTrend(cdm, episode = "drug_exposure", event = "condition_occurrence", interval = "months"))
+  expect_true(inherits(res, "summarised_result"))
 
   # Check inputs ----
   x <- summariseTrend(cdm, episode = "observation_period", interval = "years") |>
@@ -87,20 +87,6 @@ test_that("summariseTrend - episode works", {
   expect_equal(x, y)
 
   x <- summariseTrend(cdm, episode = "observation_period", interval = "months") |>
-    dplyr::filter(additional_level == "1942-03-01 to 1942-03-31", estimate_name == "count") |>
-    dplyr::pull("estimate_value") |>
-    as.numeric()
-  y <- cdm$observation_period |>
-    dplyr::filter(
-      (observation_period_start_date < as.Date("1942-03-01") & observation_period_end_date >= as.Date("1942-03-01")) |
-        (observation_period_start_date >= as.Date("1942-03-01") & observation_period_start_date <= as.Date("1942-03-31"))
-    ) |>
-    dplyr::tally() |>
-    dplyr::pull("n") |>
-    as.numeric()
-  expect_equal(x, y)
-
-  x <- summariseTrend(cdm, episode = "observation_period", interval = "months", ) |>
     dplyr::filter(additional_level == "1942-03-01 to 1942-03-31", estimate_name == "count") |>
     dplyr::pull("estimate_value") |>
     as.numeric()

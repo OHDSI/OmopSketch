@@ -275,7 +275,7 @@ test_that("inObservation argument works", {
 
   expect_no_error(result <- summariseConceptIdCounts(cdm, "drug_exposure", inObservation = TRUE))
   x <- result |>
-    omopgenerics::filterStrata(.data$in_observation == TRUE) |>
+    omopgenerics::filterStrata(.data$in_observation == "TRUE") |>
     dplyr::select(!c("strata_name", "strata_level"))
 
   cdm$drug_exposure <- cdm$drug_exposure |>
@@ -288,15 +288,19 @@ test_that("inObservation argument works", {
     dplyr::filter(.data$drug_exposure_start_date >= .data$obs_start & .data$drug_exposure_start_date <= .data$obs_end)
 
   expect_no_error(resultInObs <- summariseConceptIdCounts(cdm, "drug_exposure"))
-  expect_equal(x |> dplyr::arrange(.data$variable_level), resultInObs |>
-    dplyr::select(!c("strata_name", "strata_level")) |> dplyr::arrange(.data$variable_level), ignore_attr = TRUE)
+  expect_equal(
+    x |>
+      dplyr::arrange(.data$variable_level),
+    resultInObs |>
+      dplyr::select(!c("strata_name", "strata_level")) |>
+      dplyr::arrange(.data$variable_level),
+    ignore_attr = TRUE
+  )
 
   expect_no_error(summariseConceptIdCounts(cdm, "drug_exposure", inObservation = TRUE, sex = TRUE, ageGroup = list(c(0, 70))))
 
   dropCreatedTables(cdm = cdm)
 })
-
-
 
 test_that("sample argument works", {
   skip_on_cran()

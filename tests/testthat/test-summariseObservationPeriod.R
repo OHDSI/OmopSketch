@@ -298,7 +298,6 @@ test_that("check summariseObservationPeriod works", {
   dropCreatedTables(cdm = cdm)
 })
 
-
 test_that("check summariseObservationPeriod strata works", {
   skip_on_cran()
   # helper function
@@ -456,7 +455,6 @@ test_that("check summariseObservationPeriod strata works", {
   dropCreatedTables(cdm = cdm)
 })
 
-
 test_that("dateRnge argument works", {
   skip_on_cran()
   # Load mock database ----
@@ -494,7 +492,6 @@ test_that("dateRnge argument works", {
 
   dropCreatedTables(cdm = cdm)
 })
-
 
 test_that("no tables created", {
   skip_on_cran()
@@ -544,6 +541,7 @@ test_that("missingData works", {
 
   dropCreatedTables(cdm = cdm)
 })
+
 test_that("quality works", {
   skip_on_cran()
   # Load mock database ----
@@ -593,12 +591,12 @@ test_that("quality works", {
     dplyr::filter(.data$observation_period_start_date < as.Date(.data$birth_datetime))
 
   expect_equal(
-    y |> dplyr::tally() |> dplyr::pull(n),
+    y |> dplyr::tally() |> dplyr::pull("n") |> as.numeric(),
     x |> dplyr::filter(variable_name == "End date before start date", estimate_name == "count") |> dplyr::pull(estimate_value) |> as.numeric()
   )
 
   expect_equal(
-    z |> dplyr::tally() |> dplyr::pull(n),
+    z |> dplyr::tally() |> dplyr::pull("n") |> as.numeric(),
     x |> dplyr::filter(variable_name == "Start date before birth date", estimate_name == "count") |> dplyr::pull(estimate_value) |> as.numeric()
   )
 
@@ -609,7 +607,9 @@ test_that("quality works", {
     y |>
       PatientProfiles::addSexQuery() |>
       dplyr::filter(sex == "Female") |>
-      dplyr::tally() |> dplyr::pull(n),
+      dplyr::tally() |>
+      dplyr::pull("n") |>
+      as.numeric(),
     x |>
       dplyr::filter(sex == "Female" & variable_name == "End date before start date" & estimate_name == "count") |>
       dplyr::pull(estimate_value) |>
@@ -620,7 +620,9 @@ test_that("quality works", {
     z |>
       PatientProfiles::addSexQuery() |>
       dplyr::filter(sex == "Female") |>
-      dplyr::tally() |> dplyr::pull(n),
+      dplyr::tally() |>
+      dplyr::pull("n") |>
+      as.numeric(),
     x |>
       dplyr::filter(sex == "Female" & variable_name == "Start date before birth date" & estimate_name == "count") |>
       dplyr::pull(estimate_value) |>

@@ -346,12 +346,12 @@ test_that("argument quality works", {
     dplyr::filter(.data$drug_exposure_start_date < as.Date(.data$birth_datetime))
 
   expect_equal(
-    y |> dplyr::tally() |> dplyr::pull(n),
-    x |> dplyr::filter(variable_name == "End date before start date", estimate_name == "count") |> dplyr::pull(estimate_value) |> as.numeric()
+    y |> dplyr::tally() |> dplyr::pull("n") |> as.numeric(),
+    x |> dplyr::filter(variable_name == "End date before start date", estimate_name == "count") |> dplyr::pull("estimate_value") |> as.numeric()
   )
 
   expect_equal(
-    z |> dplyr::tally() |> dplyr::pull(n),
+    z |> dplyr::tally() |> dplyr::pull(n) |> as.numeric(),
     x |> dplyr::filter(variable_name == "Start date before birth date", estimate_name == "count") |> dplyr::pull(estimate_value) |> as.numeric()
   )
 
@@ -362,7 +362,9 @@ test_that("argument quality works", {
     y |>
       PatientProfiles::addSexQuery() |>
       dplyr::filter(sex == "Female") |>
-      dplyr::tally() |> dplyr::pull(n),
+      dplyr::tally() |>
+      dplyr::pull("n") |>
+      as.numeric(),
     x |>
       dplyr::filter(sex == "Female" & variable_name == "End date before start date" & estimate_name == "count") |>
       dplyr::pull(estimate_value) |>
@@ -373,7 +375,9 @@ test_that("argument quality works", {
     z |>
       PatientProfiles::addSexQuery() |>
       dplyr::filter(sex == "Female") |>
-      dplyr::tally() |> dplyr::pull(n),
+      dplyr::tally() |>
+      dplyr::pull("n") |>
+      as.numeric(),
     x |>
       dplyr::filter(sex == "Female" & variable_name == "Start date before birth date" & estimate_name == "count") |>
       dplyr::pull(estimate_value) |>
@@ -399,7 +403,7 @@ test_that("argument quality works", {
 
 
   expect_no_error(x <- summariseClinicalRecords(cdm, "condition_occurrence", recordsPerPerson = NULL, quality = T, conceptSummary = F, missingData = F))
-  expect_equal(y |> dplyr::tally() |> dplyr::pull(n), x |> dplyr::filter(estimate_name == "count", variable_name == "End date before start date") |> dplyr::pull(estimate_value) |> as.numeric())
+  expect_equal(y |> dplyr::tally() |> dplyr::pull("n") |> as.numeric(), x |> dplyr::filter(estimate_name == "count", variable_name == "End date before start date") |> dplyr::pull(estimate_value) |> as.numeric())
   expect_equal(0L, x |> dplyr::filter(estimate_name == "count", variable_name == "Start date before birth date") |> dplyr::pull(estimate_value) |> as.numeric())
 
   ids <- cdm$visit_occurrence |>
@@ -420,7 +424,7 @@ test_that("argument quality works", {
     dplyr::filter(.data$visit_start_date < as.Date(.data$birth_datetime))
 
   expect_no_error(x <- summariseClinicalRecords(cdm, "visit_occurrence", recordsPerPerson = NULL, quality = T, conceptSummary = F, missingData = F))
-  expect_equal(z |> dplyr::tally() |> dplyr::pull(n), x |> dplyr::filter(variable_name == "Start date before birth date" & estimate_name == "count") |> dplyr::pull(estimate_value) |> as.numeric())
+  expect_equal(z |> dplyr::tally() |> dplyr::pull(n) |> as.numeric(), x |> dplyr::filter(variable_name == "Start date before birth date" & estimate_name == "count") |> dplyr::pull(estimate_value) |> as.numeric())
 
   expect_equal(0L, x |> dplyr::filter(estimate_name == "count", variable_name == "End date before start date") |> dplyr::pull(estimate_value) |> as.numeric())
 

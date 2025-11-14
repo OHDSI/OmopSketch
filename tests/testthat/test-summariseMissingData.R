@@ -307,12 +307,12 @@ test_that("sample argument works", {
   # Load mock database ----
   cdm <- cdmEunomia()
 
-  n_person <- cdm$person |> dplyr::tally() |> dplyr::pull("n")
+  n_person <- cdm$person |> dplyr::tally() |> dplyr::pull("n") |> as.numeric()
   expect_no_error(summariseMissingData(cdm, "drug_exposure", sample =  n_person - 1))
   expect_message( summariseMissingData(cdm, "drug_exposure", sample = n_person))
   expect_message(summariseMissingData(cdm, "drug_exposure", sample = n_person+1))
   expect_message(summariseMissingData(cdm, "drug_exposure", sample = "pajfn"))
-  cdm[["adult_males"]] <- CohortConstructor::demographicsCohort(cdm, name = "adult_males", sex = "Male", ageRange = list(c(18,100)))
+  cdm[["adult_males"]] <- CohortConstructor::demographicsCohort(cdm, name = "adult_males", sex = "Male")
   expect_no_error(x <- summariseMissingData(cdm, "drug_exposure", sample = "adult_males"))
 
   expect_no_error(x <- summariseMissingData(cdm, "person", sample =  n_person - 1, col = "gender_source_concept_id"))
