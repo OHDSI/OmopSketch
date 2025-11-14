@@ -111,8 +111,10 @@ jobs:
           Sys.setenv(OMOP_DATA_FOLDER = td)
           omock::downloadMockDataset(datasetName = "GiBleed")
           print(odbc::odbcListDrivers())
+          source(here::here("extras", "cleanDbms.R"))
           x <- devtools::test()
           error <- sum(as.numeric(dplyr::as_tibble(x)$error))
           failed <- sum(as.numeric(dplyr::as_tibble(x)$failed))
+          source(here::here("extras", "cleanDbms.R"))
           if (error + failed > 0) cli::cli_abort(c(x = "Tests failed"))
         shell: Rscript {0}

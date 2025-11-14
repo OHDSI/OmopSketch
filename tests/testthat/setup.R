@@ -98,7 +98,10 @@ connection <- function() {
   }
   con
 }
-schema <- function(pref = "os_") {
+schema <- function(pref = NULL) {
+  if (is.null(pref)) {
+    pref <- paste0("os_", paste0(sample(letters, 3), collapse = ""), "_")
+  }
   if (dbToTest == "duckdb-CDMConnector") {
     sch <- c(schema = "main", prefix = pref)
   } else if (dbToTest == "sqlserver-CDMConnector") {
