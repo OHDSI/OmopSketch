@@ -487,7 +487,8 @@ test_that("dateRnge argument works", {
   y <- cdm$observation_period |>
     dplyr::filter(.data$observation_period_end_date >= as.Date("2015-01-01") & .data$observation_period_start_date <= as.Date("2018-01-01")) |>
     dplyr::tally() |>
-    dplyr::pull(n)
+    dplyr::pull("n") |>
+    as.numeric()
   expect_equal(x, y)
 
   dropCreatedTables(cdm = cdm)

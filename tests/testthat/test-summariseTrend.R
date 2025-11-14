@@ -330,7 +330,7 @@ test_that("check ageGroup argument works", {
 
   x <- x |>
     dplyr::filter(additional_level == "1928-01-01 to 1928-12-31", estimate_name == "count", strata_level == "0 to 20") |>
-    dplyr::pull(estimate_value) |>
+    dplyr::pull("estimate_value") |>
     as.numeric()
   y <- cdm$observation_period |>
     dplyr::filter(observation_period_start_date >= as.Date("1928-01-01") & observation_period_start_date <= as.Date("1928-12-31")) |>
@@ -339,7 +339,8 @@ test_that("check ageGroup argument works", {
     dplyr::mutate(age_end = age_start + 10) |>
     dplyr::filter((age_end <= 20 & age_end >= 0) | (age_start >= 0 & age_start <= 20)) |>
     dplyr::summarise(dplyr::n_distinct(person_id)) |>
-    dplyr::pull()
+    dplyr::pull() |>
+    as.numeric()
   expect_equal(x, y)
 
   dropCreatedTables(cdm = cdm)
@@ -356,6 +357,7 @@ test_that("check person-days output works", {
     dplyr::pull("estimate_value") |>
     as.numeric()
   y <- cdm$observation_period |>
+    dplyr::collect() |>
     dplyr::filter(observation_period_start_date < as.Date("1970-01-01") & observation_period_end_date >= as.Date("1970-01-01") |
       (observation_period_start_date >= as.Date("1970-01-01") & observation_period_start_date <= as.Date("1970-12-31"))) |>
     dplyr::mutate("start_date" = as.Date("1970-01-01"), "end_date" = as.Date("1970-12-31")) |>
@@ -373,11 +375,13 @@ test_that("check person-days output works", {
   den <- cdm$observation_period |>
     datediffDays(start = "observation_period_start_date", end = "observation_period_end_date", name = "days", offset = 1) |>
     dplyr::summarise(n = sum(days, na.rm = TRUE)) |>
-    dplyr::pull("n")
+    dplyr::pull("n") |>
+    as.numeric()
   x <- summariseTrend(cdm, episode = "observation_period", interval = "years", output = c("record", "person-days")) |>
     dplyr::filter(variable_name == "Person-days", additional_level == "1964-01-01 to 1964-12-31", estimate_type == "percentage") |>
     dplyr::pull("estimate_value")
   y <- cdm$observation_period |>
+    dplyr::collect() |>
     dplyr::filter(observation_period_start_date < as.Date("1964-01-01") & observation_period_end_date >= as.Date("1964-01-01") |
       (observation_period_start_date >= as.Date("1964-01-01") & observation_period_start_date <= as.Date("1964-12-31"))) |>
     dplyr::mutate("start_date" = as.Date("1964-01-01"), "end_date" = as.Date("1964-12-31")) |>
@@ -532,9 +536,11 @@ test_that("age and sex output work", {
     dplyr::filter(observation_period_start_date < as.Date("2019-01-01") & observation_period_end_date >= as.Date("2019-01-01") |
       (observation_period_start_date >= as.Date("2019-01-01") & observation_period_start_date <= as.Date("2019-12-31"))) |>
     dplyr::mutate("start_date" = as.Date("2019-01-01")) |>
-    dplyr::mutate(
-      "index_date" = pmax(start_date, observation_period_start_date, na.rm = TRUE)
-    ) |>
+    dplyr::mutate("index_date" = dplyr::if_else(
+      .data$start_date <= .data$observation_period_start_date,
+      .data$observation_period_start_date,
+      .data$start_date
+    )) |>
     PatientProfiles::addDemographicsQuery(indexDate = "index_date", age = TRUE, ageGroup = list(c(0, 50)), sex = TRUE, priorObservation = FALSE, futureObservation = TRUE) |>
     dplyr::filter(.data$sex == "Female" & .data$age_group == "0 to 50") |>
     dplyr::pull("age") |>
@@ -545,10 +551,10 @@ test_that("age and sex output work", {
   expect_no_error(x <- summariseTrend(cdm, episode = "observation_period", output = "sex"))
   y <- cdm$observation_period |>
     PatientProfiles::addSexQuery() |>
+    dplyr::collect() |>
     dplyr::mutate("n_tot" = dplyr::n_distinct(.data$person_id)) |>
     dplyr::filter(.data$sex == "Female") |>
-    dplyr::summarise("n_females" = dplyr::n_distinct(.data$person_id), n_tot = dplyr::first(.data$n_tot)) |>
-    dplyr::collect()
+    dplyr::summarise("n_females" = dplyr::n_distinct(.data$person_id), n_tot = dplyr::first(.data$n_tot))
   expect_equal(sprintf("%.2f", 100 * y$n_females / y$n_tot), x |> dplyr::filter(estimate_type == "percentage") |> dplyr::pull(estimate_value))
   expect_equal(x, summariseTrend(cdm, episode = "observation_period", sex = TRUE, output = "sex"))
 
@@ -563,19 +569,24 @@ test_that("age and sex output work", {
       cdm$person |>
         dplyr::filter(.data$gender_concept_id %in% c(8507, 8532)),
       by = "person_id"
-    ) |>
-    dplyr::mutate("n_tot" = dplyr::n_distinct(.data$person_id)) |>
+    )
+  ntot <- z |>
+    dplyr::summarise(n_tot = dplyr::n_distinct(.data$person_id)) |>
+    dplyr::pull()
+  z <- z |>
+    dplyr::mutate("n_tot" = .env$ntot) |>
     dplyr::mutate("start_date" = as.Date("2019-01-01")) |>
     dplyr::filter(observation_period_start_date < as.Date("2019-01-01") & observation_period_end_date >= as.Date("2019-01-01") |
       (observation_period_start_date >= as.Date("2019-01-01") & observation_period_start_date <= as.Date("2019-12-31"))) |>
-    dplyr::mutate(
-      "index_date" = pmax(start_date, observation_period_start_date, na.rm = TRUE)
-    ) |>
+    dplyr::mutate("index_date" = dplyr::if_else(
+      .data$start_date <= .data$observation_period_start_date,
+      .data$observation_period_start_date,
+      .data$start_date
+    )) |>
     PatientProfiles::addDemographicsQuery(indexDate = "index_date", age = TRUE, ageGroup = list(c(0, 50)), sex = TRUE, priorObservation = FALSE, futureObservation = TRUE) |>
     dplyr::filter(.data$age_group == "0 to 50" & .data$sex == "Female") |>
-    dplyr::summarise("n_females" = dplyr::n_distinct(.data$person_id), n_tot = dplyr::first(.data$n_tot)) |>
-    dplyr::collect()
-
+    dplyr::collect() |>
+    dplyr::summarise("n_females" = dplyr::n_distinct(.data$person_id), n_tot = dplyr::first(.data$n_tot))
   expect_equal(sprintf("%.2f", 100 * z$n_females / z$n_tot), y)
 
   ### event
@@ -606,11 +617,7 @@ test_that("age and sex output work", {
     as.numeric()
   z <- cdm$drug_exposure |>
     dplyr::filter(drug_exposure_start_date >= as.Date("1985-01-01") & drug_exposure_start_date <= as.Date("1985-12-31")) |>
-    dplyr::mutate("start_date" = as.Date("1985-01-01")) |>
-    dplyr::mutate(
-      "index_date" = pmax(start_date, drug_exposure_start_date, na.rm = TRUE)
-    ) |>
-    PatientProfiles::addDemographicsQuery(indexDate = "index_date", age = TRUE, ageGroup = list(c(0, 50)), sex = TRUE, priorObservation = FALSE, futureObservation = TRUE) |>
+    PatientProfiles::addDemographicsQuery(indexDate = "drug_exposure_start_date", age = TRUE, ageGroup = list(c(0, 50)), sex = TRUE, priorObservation = FALSE, futureObservation = TRUE) |>
     dplyr::filter(.data$sex == "Female" & .data$age_group == "0 to 50") |>
     dplyr::pull("age") |>
     stats::median()
@@ -649,12 +656,8 @@ test_that("age and sex output work", {
         dplyr::filter(.data$gender_concept_id %in% c(8507, 8532)),
       by = "person_id"
     ) |>
-    dplyr::mutate("start_date" = as.Date("2019-01-01")) |>
     dplyr::filter(condition_start_date >= as.Date("2019-01-01") & condition_start_date <= as.Date("2019-12-31")) |>
-    dplyr::mutate(
-      "index_date" = pmax(start_date, condition_start_date, na.rm = TRUE)
-    ) |>
-    PatientProfiles::addDemographicsQuery(indexDate = "index_date", age = TRUE, ageGroup = list(c(0, 50)), sex = TRUE, priorObservation = FALSE, futureObservation = FALSE) |>
+    PatientProfiles::addDemographicsQuery(indexDate = "condition_start_date", age = TRUE, ageGroup = list(c(0, 50)), sex = TRUE, priorObservation = FALSE, futureObservation = FALSE) |>
     dplyr::filter(.data$age_group == "0 to 50" & .data$sex == "Female") |>
     dplyr::summarise("n_females" = dplyr::n_distinct(.data$person_id)) |>
     dplyr::collect()
@@ -695,8 +698,9 @@ test_that("overall time interval work", {
 
   age <- cdm$observation_period |>
     PatientProfiles::addAgeQuery(indexDate = "observation_period_start_date") |>
+    dplyr::collect() |>
     dplyr::summarise(median = stats::median(.data$age, na.rm = TRUE), na.rm = TRUE) |>
-    dplyr::pull(.data$median)
+    dplyr::pull("median")
 
   expect_equal(x |> dplyr::filter(variable_name == "Number of records") |> dplyr::pull(.data$estimate_value), as.character(records))
   expect_equal(x |> dplyr::filter(variable_name == "Number of subjects") |> dplyr::pull(.data$estimate_value), as.character(person))

@@ -56,8 +56,8 @@ test_that("sample works", {
  expect_true(all(x |> omopgenerics::filterSettings(grepl("clinical",result_type)) |> dplyr::filter(.data$variable_name ==  "Number subjects" & .data$estimate_name == "count") |> dplyr::pull(.data$estimate_value) |> as.numeric() <= 20 ))
  expect_true(all(x |> omopgenerics::filterSettings(grepl("observation_period",result_type)) |> dplyr::filter(.data$variable_name ==  "Number subjects") |> dplyr::pull(.data$estimate_value) |> as.numeric() <= 20))
 
- cdm[["adult_males"]] <- CohortConstructor::demographicsCohort(cdm, name = "adult_males", sex = "Male", ageRange = list(c(18,100)))
- n_subjects <-  cdm[["adult_males"]] |> dplyr::summarise(n_subjects  = dplyr::n_distinct(.data$subject_id)) |> dplyr::pull(.data$n_subjects)
+ cdm[["adult_males"]] <- CohortConstructor::demographicsCohort(cdm = cdm, name = "adult_males", sex = "Male")
+ n_subjects <-  cdm[["adult_males"]] |> dplyr::summarise(n_subjects  = dplyr::n_distinct(.data$subject_id)) |> dplyr::pull(.data$n_subjects) |> as.numeric()
  expect_no_error(x <- databaseCharacteristics(cdm = cdm, sample = "adult_males", conceptIdCounts = TRUE))
  expect_equal(x |> omopgenerics::filterSettings(grepl("snapshot",result_type)) |> dplyr::filter(.data$estimate_name == "person_count") |> dplyr::pull(.data$estimate_value), as.character(n_subjects))
 

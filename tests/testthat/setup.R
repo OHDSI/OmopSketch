@@ -37,8 +37,8 @@ cdmEunomia <- function() {
     ls <- CDMConnector::listTables(con = con, schema = cdmSchema)
     if (!"person" %in% ls) {
       to <- CDMConnector::dbSource(con = con, writeSchema = cdmSchema)
+      cdm$concept_synonym <- NULL
       if (dbToTest == "redshift-CDMConnector") {
-        cdm$concept_synonym <- NULL
         insertInChunks(cdm = cdm, size = 40000, to = to)
       } else {
         omopgenerics::insertCdmTo(cdm = cdm, to = to)
@@ -127,9 +127,12 @@ copyCdm <- function(cdm) {
     cli::cli_abort(c(x = "Not supported dbToTest: {.pkg {dbToTest}}"))
   }
 
+  if (dbToTest %in% c("redshift-CDMConnector", "snowflake-CDMConnector")) {
+    cdm$concept_synonym <- NULL
+  }
+
   if (dbToTest != "local-omopgenerics") {
     if (dbToTest == "redshift-CDMConnector") {
-      cdm$concept_synonym <- NULL
       cdm <- insertInChunks(cdm = cdm, size = 40000, to = to)
     } else {
       cdm <- omopgenerics::insertCdmTo(cdm = cdm, to = to)
@@ -180,10 +183,6 @@ insertInChunks <- function(cdm, size, to) {
   }
 
   # insert
-  for (nm in names(cdm)) {
-    cat(paste0(nm, "\n"))
-    omopgenerics::insertTable(cdm = to, name = nm, table = cdm[[nm]])
-  }
   cdm <- omopgenerics::insertCdmTo(cdm = cdm, to = to)
 
   # join if needed
