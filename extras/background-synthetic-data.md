@@ -1,4 +1,4 @@
-## OmopSketch Database Characterisation"
+## OmopSketch Database Characterisation
 -----
 ### Shiny App Overview
 
