@@ -38,7 +38,7 @@ plotObservationPeriod <- function(result,
   # check if it is empty
   if (nrow(result) == 0) {
     warnEmpty("summarise_observation_period")
-    return(emptyPlot())
+    return(visOmopResults::emptyPlot(subtitle = "`result` does not contain any `summarise_observation_period` data", style = style))
   }
 
   variableNames <- unique(availablePlotObservationPeriod()$variable_name)

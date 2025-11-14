@@ -37,7 +37,7 @@ plotPerson <- function(result,
     variableName = variableName %||% TRUE
   )
   if (is.character(result)) {
-    return(visOmopResults::emptyPlot(subtitle = result, type = type, style = style))
+    return(visOmopResults::emptyPlot(subtitle = "`result` does not contain any `summarise_person` data.", type = type, style = style))
   }
 
   # variable name

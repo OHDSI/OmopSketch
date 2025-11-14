@@ -63,7 +63,9 @@ plotTrend <- function(result,
     if (length(available_output) == 1) {
       output <- available_output
     } else if (length(available_output) > 1) {
-      return(emptyPlot("Trying to plot multiple outputs at the same time. \n Please select one using the `output` argument or filter results."))
+      return(visOmopResults::emptyPlot(subtitle = "Trying to plot multiple outputs at the same time.
+                                       \n Please select one using the `output` argument or filter results.",
+                                       style = style))
     } else {
       output <- "record"
     }
@@ -78,7 +80,7 @@ plotTrend <- function(result,
     omopgenerics::addSettings(settingsColumn = "type")
 
   if (nrow(result) == 0) {
-    return(emptyPlot(c("!" = "No results found with for output {output}")))
+    return(visOmopResults::emptyPlot(subtitle = "No results found with for output {output}", style = style))
   }
 
   estimate <- unique(result$estimate_name)
