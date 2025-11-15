@@ -300,8 +300,12 @@ test_that("record outside observaton period", {
 
   cdm <- omock::mockCdmFromTables(tables = list(
     drug_exposure = drug_exposure, observation_period = observation_period
-  )) |>
-    copyCdm()
+  ))
+  cdm$concept <- cdm$concept |>
+    dplyr::mutate(valid_start_date = as.Date(NA), valid_end_date = as.Date(NA))
+  cdm$drug_strength <- cdm$drug_strength |>
+    dplyr::mutate(valid_start_date = as.Date(NA), valid_end_date = as.Date(NA))
+  cdm <- copyCdm(cdm = cdm)
 
   age_groups <- list()
   for (i in seq(0, 100, by = 2)) {
