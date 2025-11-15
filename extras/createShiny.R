@@ -59,5 +59,6 @@ results <- purrr::map(databases, \(dbName) {
 shinyCharacteristics(
   result = results,
   directory = here::here("extras"),
-  background = here::here("extras/background-synthetic-data.md")
+  background = here::here("extras", "background-synthetic-data.md"),
+  logo = here::here("man", "figures", "logo.png")
 )
