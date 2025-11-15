@@ -41,14 +41,15 @@ jobs:
       CDM5_POSTGRESQL_SERVER: ${{ secrets.CDM5_POSTGRESQL_SERVER }}
       CDM5_POSTGRESQL_USER: ${{ secrets.CDM5_POSTGRESQL_USER }}
 
-  snowflake-CDMConnector:
-    uses: ./.github/workflows/test-template.yaml
-    with:
-      DB_TO_TEST: snowflake-CDMConnector
-    secrets:
-      CDM_SNOWFLAKE_CONNECTION_STRING: ${{ secrets.CDM_SNOWFLAKE_CONNECTION_STRING }}
-      CDM_SNOWFLAKE_PASSWORD: ${{ secrets.CDM_SNOWFLAKE_PASSWORD }}
-      CDM_SNOWFLAKE_USER: ${{ secrets.CDM_SNOWFLAKE_USER }}
+  # TODO snowflake connection is not working on GitHub actions
+  # snowflake-CDMConnector:
+  #   uses: ./.github/workflows/test-template.yaml
+  #   with:
+  #     DB_TO_TEST: snowflake-CDMConnector
+  #   secrets:
+  #     CDM_SNOWFLAKE_CONNECTION_STRING: ${{ secrets.CDM_SNOWFLAKE_CONNECTION_STRING }}
+  #     CDM_SNOWFLAKE_PASSWORD: ${{ secrets.CDM_SNOWFLAKE_PASSWORD }}
+  #     CDM_SNOWFLAKE_USER: ${{ secrets.CDM_SNOWFLAKE_USER }}
 
   redshift-CDMConnector:
     uses: ./.github/workflows/test-template.yaml
