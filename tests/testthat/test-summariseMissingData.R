@@ -3,7 +3,6 @@ test_that("summariseMissingData() works", {
   # Load mock database ----
   cdm <- cdmEunomia()
 
-
   # Check all tables work ----
   expect_true(inherits(summariseMissingData(cdm, "drug_exposure"), "summarised_result"))
   expect_no_error(y <- summariseMissingData(cdm, "observation_period"))
@@ -49,11 +48,13 @@ test_that("summariseMissingData() works", {
     dplyr::pull() == 3)
 
   cdm$procedure_occurrence <- cdm$procedure_occurrence |>
-    dplyr::mutate(procedure_concept_id = NA_integer_) |>
+    dplyr::mutate(procedure_concept_id = as.integer(NA)) |>
     dplyr::compute(name = "procedure_occurrence", temporary = FALSE)
 
   expect_warning(summariseMissingData(cdm, "procedure_occurrence", col = "procedure_concept_id", ageGroup = list(c(0, 50))))
   expect_warning(summariseMissingData(cdm, "procedure_occurrence", col = "procedure_concept_id", ageGroup = list(c(0, 50)), sample = 100))
+
+  dropCreatedTables(cdm = cdm)
 })
 
 test_that("dateRange argument works", {
@@ -77,7 +78,8 @@ test_that("dateRange argument works", {
   expect_equal(summariseMissingData(cdm, "drug_exposure", dateRange = as.Date(c("2012-01-01", NA))), y, ignore_attr = TRUE)
   checkResultType(z, "summarise_missing_data")
   expect_equal(colnames(settings(z)), colnames(settings(x)))
-  CDMConnector::cdmDisconnect(cdm = cdm)
+
+  dropCreatedTables(cdm = cdm)
 })
 
 test_that("tableMissingData() works", {
@@ -96,7 +98,7 @@ test_that("tableMissingData() works", {
   expect_warning(t <- summariseMissingData(cdm, "death"))
   expect_warning(inherits(tableMissingData(t), "gt_tbl"))
 
-  CDMConnector::cdmDisconnect(cdm = cdm)
+  dropCreatedTables(cdm = cdm)
 })
 
 test_that("col not present in table", {
@@ -129,13 +131,12 @@ test_that("col not present in table", {
       )
     ),
     cdmName = "mock data"
-  )
-
-  cdm <- copyCdm(cdm)
+  ) |>
+    copyCdm()
 
   expect_no_error(expect_message(summariseMissingData(cdm, "person", col = NULL)))
 
-  CDMConnector::cdmDisconnect(cdm = cdm)
+  dropCreatedTables(cdm = cdm)
 })
 
 test_that("no tables created", {
@@ -163,8 +164,7 @@ test_that("no tables created", {
 
   expect_true(length(setdiff(endNames, startNames)) == 0)
 
-
-  CDMConnector::cdmDisconnect(cdm = cdm)
+  dropCreatedTables(cdm = cdm)
 })
 
 test_that("interval argument works", {
@@ -192,7 +192,6 @@ test_that("interval argument works", {
     cdm = cdm,
     interval = "months"
   ))
-
 
   m_quarters <- m |>
     omopgenerics::splitAdditional() |>
@@ -258,7 +257,6 @@ test_that("interval argument works", {
 
   expect_equal(y_year |> dplyr::group_by(variable_level) |> dplyr::summarise(na_count = sum(na_count), .groups = "drop") |> sortTibble(), o |> sortTibble())
 
-
   q_year <- q |>
     omopgenerics::splitAdditional() |>
     dplyr::filter(time_interval != "overall") |>
@@ -280,9 +278,9 @@ test_that("interval argument works", {
 
   expect_no_error(x <- summariseMissingData(cdm, "drug_exposure", sex = TRUE, interval = "years"))
   expect_true(x |> dplyr::distinct(.data$additional_level) |> dplyr::tally() > 1)
-  CDMConnector::cdmDisconnect(cdm = cdm)
-})
 
+  dropCreatedTables(cdm = cdm)
+})
 
 test_that("zero count argument works", {
   skip_on_cran()
@@ -294,7 +292,6 @@ test_that("zero count argument works", {
     dplyr::filter(variable_level == "person_id" & estimate_name == "zero_count") |>
     dplyr::pull(.data$estimate_value) |> as.integer(), 1L)
 
-
   columns <- cdm$drug_exposure |> colnames()
   columns_zero <- columns[grepl("_id$", columns)]
   expect_equal(summariseMissingData(cdm, "drug_exposure") |>
@@ -302,22 +299,21 @@ test_that("zero count argument works", {
     dplyr::distinct(variable_level) |>
     dplyr::pull() |> sort(), columns_zero |> sort())
 
-
-  CDMConnector::cdmDisconnect(cdm = cdm)
+  dropCreatedTables(cdm = cdm)
 })
 
 test_that("sample argument works", {
   skip_on_cran()
   # Load mock database ----
   cdm <- cdmEunomia()
-  n_person <- cdm$person |> dplyr::tally() |> dplyr::pull("n")
+
+  n_person <- cdm$person |> dplyr::tally() |> dplyr::pull("n") |> as.numeric()
   expect_no_error(summariseMissingData(cdm, "drug_exposure", sample =  n_person - 1))
   expect_message( summariseMissingData(cdm, "drug_exposure", sample = n_person))
   expect_message(summariseMissingData(cdm, "drug_exposure", sample = n_person+1))
   expect_message(summariseMissingData(cdm, "drug_exposure", sample = "pajfn"))
-  cdm[["adult_males"]] <- CohortConstructor::demographicsCohort(cdm, name = "adult_males", sex = "Male", ageRange = list(c(18,100)))
+  cdm[["adult_males"]] <- CohortConstructor::demographicsCohort(cdm, name = "adult_males", sex = "Male")
   expect_no_error(x <- summariseMissingData(cdm, "drug_exposure", sample = "adult_males"))
-
 
   expect_no_error(x <- summariseMissingData(cdm, "person", sample =  n_person - 1, col = "gender_source_concept_id"))
   expect_equal(x |> omopgenerics::tidy() |> dplyr::filter(.data$variable_level == "gender_source_concept_id") |> dplyr::pull("zero_count"),  n_person - 1)
@@ -325,6 +321,5 @@ test_that("sample argument works", {
   expect_no_error(x <- summariseMissingData(cdm, "person", sample = "adult_males", col = "gender_source_concept_id"))
   expect_equal(x |> omopgenerics::tidy() |> dplyr::filter(.data$variable_level == "gender_source_concept_id") |> dplyr::pull("zero_count"),  omopgenerics::numberSubjects(cdm$adult_males))
 
-
-  CDMConnector::cdmDisconnect(cdm = cdm)
+  dropCreatedTables(cdm = cdm)
 })

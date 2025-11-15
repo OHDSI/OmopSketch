@@ -6,6 +6,31 @@ on:
       DB_TO_TEST:
         required: true
         type: string
+    secrets:
+      CDM5_SQL_SERVER_PASSWORD:
+        required: false
+      CDM5_SQL_SERVER_SERVER:
+        required: false
+      CDM5_SQL_SERVER_USER:
+        required: false
+      CDM5_REDSHIFT_SERVER:
+        required: false
+      CDM5_REDSHIFT_PASSWORD:
+        required: false
+      CDM5_REDSHIFT_USER:
+        required: false
+      CDM5_POSTGRESQL_SERVER:
+        required: false
+      CDM5_POSTGRESQL_PASSWORD:
+        required: false
+      CDM5_POSTGRESQL_USER:
+        required: false
+      CDM_SNOWFLAKE_CONNECTION_STRING:
+        required: false
+      CDM_SNOWFLAKE_PASSWORD:
+        required: false
+      CDM_SNOWFLAKE_USER:
+        required: false
 
 jobs:
   run-tests:
@@ -13,6 +38,18 @@ jobs:
 
     env:
       DB_TO_TEST: ${{ inputs.DB_TO_TEST }}
+      CDM_SNOWFLAKE_CONNECTION_STRING: ${{ secrets.CDM_SNOWFLAKE_CONNECTION_STRING }}
+      CDM_SNOWFLAKE_PASSWORD: ${{ secrets.CDM_SNOWFLAKE_PASSWORD }}
+      CDM_SNOWFLAKE_USER: ${{ secrets.CDM_SNOWFLAKE_USER }}
+      CDM5_POSTGRESQL_PASSWORD: ${{ secrets.CDM5_POSTGRESQL_PASSWORD }}
+      CDM5_POSTGRESQL_SERVER: ${{ secrets.CDM5_POSTGRESQL_SERVER }}
+      CDM5_POSTGRESQL_USER: ${{ secrets.CDM5_POSTGRESQL_USER }}
+      CDM5_REDSHIFT_SERVER: ${{ secrets.CDM5_REDSHIFT_SERVER }}
+      CDM5_REDSHIFT_PASSWORD: ${{ secrets.CDM5_REDSHIFT_PASSWORD }}
+      CDM5_REDSHIFT_USER: ${{ secrets.CDM5_REDSHIFT_USER }}
+      CDM5_SQL_SERVER_PASSWORD: ${{ secrets.CDM5_SQL_SERVER_PASSWORD }}
+      CDM5_SQL_SERVER_SERVER: ${{ secrets.CDM5_SQL_SERVER_SERVER }}
+      CDM5_SQL_SERVER_USER: ${{ secrets.CDM5_SQL_SERVER_USER }}
 
     strategy:
       fail-fast: true
@@ -22,6 +59,37 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
+      - uses: Yarden-zamir/install-mssql-odbc@main
+        with:
+          ODBC_VERSION: 18
+
+      - name: Install Snowflake ODBC (Ubuntu)
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y unixodbc unixodbc-dev ca-certificates curl
+
+          # Pin a specific driver version to avoid "latest" 404s
+          VER=3.11.0
+          curl -fSLo snowflake-odbc.deb \
+            "https://sfc-repo.snowflakecomputing.com/odbc/linux/${VER}/snowflake-odbc-${VER}.x86_64.deb" \
+          && sudo dpkg -i snowflake-odbc.deb || sudo apt-get -f install -y
+
+          # If the .deb path ever breaks, fall back to TGZ + setup script
+          if ! odbcinst -q -d | grep -qi 'Snowflake'; then
+            curl -fSLo snowflake-odbc.tgz \
+              "https://sfc-repo.snowflakecomputing.com/odbc/linux/latest/snowflake_linux_x8664_odbc-${VER}.tgz"
+            tar xzf snowflake-odbc.tgz
+            sudo ./snowflake_odbc/unixodbc_setup.sh   # registers driver with unixODBC
+          fi
+
+          echo "::group::Drivers"
+          odbcinst -q -d || true
+          echo "::endgroup::"
+
+          # Show where the library lives (usually this path after .deb install)
+          find /usr/lib -name 'libSnowflake.so' -print || true
 
       - uses: r-lib/actions/setup-pandoc@v2
 
@@ -40,10 +108,13 @@ jobs:
         run: |
           td <- file.path(tempdir(), "mockDatasets")
           dir.create(td)
-          Sys.setenv(MOCK_DATASETS_FOLDER = td)
+          Sys.setenv(OMOP_DATA_FOLDER = td)
           omock::downloadMockDataset(datasetName = "GiBleed")
+          print(odbc::odbcListDrivers())
+          source(here::here("extras", "cleanDbms.R"))
           x <- devtools::test()
           error <- sum(as.numeric(dplyr::as_tibble(x)$error))
           failed <- sum(as.numeric(dplyr::as_tibble(x)$failed))
+          source(here::here("extras", "cleanDbms.R"))
           if (error + failed > 0) cli::cli_abort(c(x = "Tests failed"))
         shell: Rscript {0}

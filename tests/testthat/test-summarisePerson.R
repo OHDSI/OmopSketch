@@ -15,4 +15,6 @@ test_that("multiplication works", {
         plotPerson()
     )
   }
+
+  dropCreatedTables(cdm = cdm)
 })

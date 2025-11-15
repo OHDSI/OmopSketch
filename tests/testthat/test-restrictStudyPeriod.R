@@ -28,11 +28,14 @@ test_that("restrictStudyPeriod works", {
       )
     ),
     cdmName = "mock data"
-  )
+  ) |>
+    copyCdm()
+
   dateRange <- as.Date(c("1999-01-01", "2004-12-31"))
 
   expect_no_error(
-    x <- restrictStudyPeriod(cdm$observation_period, dateRange = dateRange)
+    x <- restrictStudyPeriod(cdm$observation_period, dateRange = dateRange) |>
+      collectTable()
   )
 
   y <- dplyr::tibble(
@@ -52,12 +55,18 @@ test_that("restrictStudyPeriod works", {
 
   dateRange <- as.Date(c("1999-01-01", "2025-12-31"))
   expect_no_error(x <- restrictStudyPeriod(cdm$observation_period, dateRange = dateRange))
-  expect_equal(x, cdm$observation_period, ignore_attr = TRUE)
+  expect_equal(collectTable(x), collectTable(cdm$observation_period))
 
   dateRange <- as.Date(c("2000-01-01", "2000-12-31"))
   expect_warning(x <- restrictStudyPeriod(cdm$observation_period, dateRange = dateRange))
   expect_true(is.null(x))
 
   dateRange <- as.Date(c("1999-01-01", "2000-12-31"))
-  expect_equal(restrictStudyPeriod(cdm$observation_period, dateRange = dateRange)$person_id, 1)
+  expect_equal(
+    restrictStudyPeriod(cdm$observation_period, dateRange = dateRange) |>
+      dplyr::pull("person_id"),
+    1
+  )
+
+  dropCreatedTables(cdm = cdm)
 })
