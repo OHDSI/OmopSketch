@@ -28,7 +28,9 @@ tableOmopSnapshot <- function(result,
   # initial checks
   rlang::check_installed("visOmopResults")
   omopgenerics::validateResultArgument(result)
+  style <- validateStyle(style = style, obj = "table")
   type <- validateType(type)
+
 
   # subset to result_type of interest
   result <- result |>
@@ -42,7 +44,10 @@ tableOmopSnapshot <- function(result,
     return(emptyTable(type))
   }
 
-  header <- c("cdm_name")
+  setting_cols <- omopgenerics::settingsColumns(result)
+  setting_cols <- setting_cols[!setting_cols %in% c("study_period_end", "study_period_start")]
+
+  header <- c("cdm_name", setting_cols)
   cdms <- result$cdm_name |> unique()
   result <- result |>
     formatColumn(c("variable_name", "estimate_name")) |>
@@ -58,6 +63,7 @@ tableOmopSnapshot <- function(result,
         "Variable" = "variable_name"
       ),
       groupColumn = "variable_name",
+      settingsColumn = setting_cols,
       .options = list(caption = paste0("Snapshot of the cdm ", paste(cdms, collapse = ", ")))
     )
 
@@ -92,10 +98,4 @@ formatColumn <- function(result, col) {
       dplyr::mutate(!!x := gsub("_", " ", stringr::str_to_sentence(.data[[x]])))
   }
   return(result)
-}
-emptyPlot <- function(type = "ggplot2", title = NULL, subtitle = NULL) {
-  if (type == "ggplot2") {
-    ggplot2::ggplot() +
-      ggplot2::labs(title = title, subtitle = subtitle)
-  }
 }

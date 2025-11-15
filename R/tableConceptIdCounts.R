@@ -40,6 +40,8 @@ tableConceptIdCounts <- function(result,
   strata_cols <- omopgenerics::strataColumns(result)
   additional_cols <- omopgenerics::additionalColumns(result)
   additional_cols <- additional_cols[!grepl("source_concept", additional_cols)]
+  setting_cols <- omopgenerics::settingsColumns(result)
+  setting_cols <- setting_cols[!setting_cols %in% c("study_period_end", "study_period_start")]
 
 
   # subset to result_type of interest
@@ -50,7 +52,8 @@ tableConceptIdCounts <- function(result,
     omopgenerics::splitStrata() |>
     omopgenerics::splitAdditional() |>
     dplyr::arrange(dplyr::across(dplyr::all_of(additional_cols)), .data$variable_name, dplyr::across(dplyr::all_of(strata_cols))) |>
-    dplyr::rename("standard_concept_id" = "variable_level", "standard_concept_name" = "variable_name")
+    dplyr::rename("standard_concept_id" = "variable_level", "standard_concept_name" = "variable_name") |>
+    omopgenerics::addSettings()
 
   if (nrow(result) == 0) {
     warnEmpty("summarise_concept_id_counts")
@@ -127,6 +130,7 @@ tableConceptIdCounts <- function(result,
     dplyr::select(
       dplyr::any_of(c(
         "cdm_name",
+        setting_cols,
         "group_level",
         additional_cols,
         "standard_concept_name",
@@ -165,5 +169,5 @@ tableConceptIdCounts <- function(result,
       header = c("Database name", "estimate_name"),
       includeHeaderName = FALSE
     ) |>
-    visOmopResults::formatTable(type = type, groupColumn = list(" " = c("OMOP table")))
+    visOmopResults::formatTable(type = type, groupColumn = list(" " = c(setting_cols, "OMOP table")))
 }

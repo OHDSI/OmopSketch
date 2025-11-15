@@ -6,8 +6,8 @@ test_that("summariseTrend - episode works", {
   # Check all tables work ----
   expect_true(inherits(summariseTrend(cdm), "summarised_result"))
   expect_equal(summariseTrend(cdm), omopgenerics::emptySummarisedResult(), ignore_attr = TRUE)
-  expect_no_error(res <- summariseTrend(cdm, episode = "drug_exposure", event = "condition_occurrence", interval = "months"))
-  expect_true(inherits(res, "summarised_result"))
+  expect_no_error(x <- summariseTrend(cdm, episode = "drug_exposure", event = "condition_occurrence", interval = "months"))
+  expect_true(inherits(x, "summarised_result"))
 
   # Check inputs ----
   x <- summariseTrend(cdm, episode = "observation_period", interval = "years") |>
@@ -749,7 +749,6 @@ test_that("plotTrend() works", {
   expect_no_error(plotTrend(summariseTrend(cdm, episode = "observation_period")))
   expect_no_error(plotTrend(summariseTrend(cdm, episode = "observation_period", output = "age")))
   expect_no_error(plotTrend(summariseTrend(cdm, episode = "observation_period", output = c("age", "record"))))
-  expect_error(plotTrend(summariseTrend(cdm, episode = "observation_period", output = c("age", "sex"))))
   expect_no_error(plotTrend(summariseTrend(cdm, episode = "observation_period", output = c("age", "sex")), output = "sex"))
 
   expect_warning(plotTrend(summariseTrend(cdm, episode = "condition_occurrence", event = "drug_exposure"), colour = NULL, facet = NULL))

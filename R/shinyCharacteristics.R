@@ -114,28 +114,11 @@ shinyCharacteristics <- function(result,
   # default panelDetails
   panelDetails <- OmopViewer::panelDetailsFromResult(result = result)
 
-  if ("summarise_omop_snapshot" %in% resultTypes) {
-    # customise summarise_omop_snapshot
-    panelDetails$summarise_omop_snapshot$icon <- "camera"
-    panelDetails$summarise_omop_snapshot$content$tidy <- NULL
-  }
-  if ("summarise_person" %in% resultTypes) {
-    # customise summarise_omop_snapshot
-    panelDetails$summarise_person$icon <- "person"
-    panelDetails$summarise_person$title <- "Person table"
-    panelDetails$summarise_person$content$tidy <- NULL
-    panelDetails$summarise_person$content$table$reactive <- "<filtered_data> |> OmopSketch::tablePerson()"
-    panelDetails$summarise_person$content$table$filters <- NULL
 
-  }
+
   if ("summarise_observation_period" %in% resultTypes) {
     # customise summarise_observation_period
     panelDetails$summarise_observation_period$icon <- NULL
-    panelDetails$summarise_observation_period$title <- "Observation Period Summary"
-    panelDetails$summarise_observation_period$content$tidy <- NULL
-    panelDetails$summarise_observation_period$content$plot$filters$variable$choices <- c("Number subjects", "Records per person", "Duration in days", "Days to next observation period")
-    panelDetails$summarise_observation_period$content$plot$filters$variable$selected <- "Number subjects"
-    panelDetails$summarise_observation_period$content$plot$filters$variable$label <- "Variable"
     panelDetails$summarise_observation_period$content$table$reactive <- "<filtered_data> |>
     dplyr::filter(!(grepl('na',.data$estimate_name) | grepl('zero',.data$estimate_name))) |>
     OmopSketch::tableObservationPeriod()"
@@ -150,7 +133,6 @@ shinyCharacteristics <- function(result,
     # customise summarise_clinical_records
     panelDetails$summarise_clinical_records$icon <- NULL
     panelDetails$summarise_clinical_records$title <- "Clinical Tables Summary"
-    panelDetails$summarise_clinical_records$content$tidy <- NULL
     panelDetails$summarise_clinical_records$content$table$reactive <- "<filtered_data> |>
     dplyr::filter(!(grepl('na',.data$estimate_name) | grepl('zero',.data$estimate_name))) |>
     OmopSketch::tableClinicalRecords()"
@@ -163,15 +145,9 @@ shinyCharacteristics <- function(result,
   }
 
   if ("summarise_characteristics" %in% resultTypes) {
-    # customise summarise_characteristics
-    variable_names <- result |>
-      omopgenerics::filterSettings(.data$result_type == "summarise_characteristics") |>
-      dplyr::distinct(.data$variable_name) |>
-      dplyr::pull()
-    panelDetails$summarise_characteristics$content$tidy <- NULL
+
     panelDetails$summarise_characteristics$title <- "Population Characteristics"
 
-    panelDetails$summarise_characteristics$content$plot$filters$plot_type$selected <- "barplot"
   }
 
   if ("summarise_trend" %in% resultTypes) {
@@ -179,53 +155,25 @@ shinyCharacteristics <- function(result,
     panelDetails$summarise_trend_episode$icon <- NULL
     panelDetails$summarise_trend_episode$title <- "Observation Period Trends"
     panelDetails$summarise_trend_episode$data$type <- "episode"
-    panelDetails$summarise_trend_episode$content$tidy <- NULL
-
-
-    variable_names <- result |>
-      omopgenerics::filterSettings(.data$result_type == "summarise_trend") |>
-      omopgenerics::filterSettings(.data$type == "episode") |>
-      dplyr::distinct(.data$variable_name) |>
-      dplyr::pull()
 
     panelDetails$summarise_trend_episode$content$plot$reactive <- "<filtered_data> |>
-    dplyr::filter(.data$variable_name == input$variable) |>
     OmopSketch::plotTrend(
       facet = input$facet,
       colour = input$colour
     )"
-    panelDetails$summarise_trend_episode$content$plot$filters$variable <- list(
-      button_type = "pickerInput",
-      label = "Variable",
-      choices = variable_names,
-      selected = "Number of records",
-      multiple = FALSE
-    )
+
     panelDetails$summarise_trend_event <- panelDetails$summarise_trend
     panelDetails$summarise_trend_event$icon <- NULL
     panelDetails$summarise_trend_event$title <- "Clinical Tables Trends"
     panelDetails$summarise_trend_event$data$type <- "event"
-    panelDetails$summarise_trend_event$content$tidy <- NULL
 
-    variable_names <- result |>
-      omopgenerics::filterSettings(.data$result_type == "summarise_trend") |>
-      omopgenerics::filterSettings(.data$type == "event") |>
-      dplyr::distinct(.data$variable_name) |>
-      dplyr::pull()
 
     panelDetails$summarise_trend_event$content$plot$reactive <- "<filtered_data> |>
-    dplyr::filter(.data$variable_name == input$variable) |>
     OmopSketch::plotTrend(
       facet = input$facet,
       colour = input$colour
     )"
-    panelDetails$summarise_trend_event$content$plot$filters$variable <- list(
-      button_type = "pickerInput",
-      label = "Variable",
-      choices = variable_names,
-      selected = "Number of records",
-      multiple = FALSE
-    )
+
     panelDetails$summarise_trend <- NULL
 
   }

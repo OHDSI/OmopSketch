@@ -162,6 +162,26 @@ sampleOmopTable <- function(omopTable, sample) {
   return(cdm[[tableName]])
 }
 
+
+
+
+validateStyle <- function(style, obj) {
+  # check if style is NULL
+  if (is.null(style)) {
+    key <- paste0("visOmopResults.", obj, "Style")
+    style <- getOption(x = key, default = "")
+    if (style == "") {
+      if (file.exists("_brand.yml")) {
+        style <- "_brand.yml"
+      } else {
+        style <- list.files(system.file("brand", package = "OmopSketch"), full.names = TRUE, pattern = "^scarlet\\.yml$")
+      }
+    }
+  }
+  return(style)
+}
+
+
 validateType <- function(type, call = parent.frame()) {
   if (is.null(type)) {
     type <- getOption(x = "visOmopResults.tableType", default = "gt")

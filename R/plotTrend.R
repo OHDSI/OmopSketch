@@ -49,25 +49,38 @@ plotTrend <- function(result,
   # initial checks
   omopgenerics::validateResultArgument(result)
   validateFacet(facet, result) # To remove when there's a version in omopgenerics
+
+   result <- result |>
+    omopgenerics::filterSettings(
+      .data$result_type == "summarise_trend"
+    )
+  if (nrow(result) == 0) {
+    cli::cli_abort(c("!" = "No records found with result_type == summarise_trend"))
+  }
+
   available_output <- fromVariableNameToOutput(unique(result$variable_name))
   if (is.null(output)) {
     if (length(available_output) == 1) {
       output <- available_output
+    } else if (length(available_output) > 1) {
+      return(visOmopResults::emptyPlot(subtitle = "Trying to plot multiple outputs at the same time.
+                                       \n Please select one using the `output` argument or filter results.",
+                                       style = style))
     } else {
       output <- "record"
     }
   }
   omopgenerics::assertChoice(output, choices = available_output, length = 1L)
+  style <- validateStyle(style = style, obj = "plot")
+
   # subset to results of interest
   variableName <- fromOutputToVariableName(output = output)
   result <- result |>
-    omopgenerics::filterSettings(
-      .data$result_type == "summarise_trend"
-    ) |>
     dplyr::filter(.data$variable_name == variableName) |>
     omopgenerics::addSettings(settingsColumn = "type")
+
   if (nrow(result) == 0) {
-    cli::cli_abort(c("!" = "No records found with result_type == summarise_trend"))
+    return(visOmopResults::emptyPlot(subtitle = "No results found with for output {output}", style = style))
   }
 
   estimate <- unique(result$estimate_name)
