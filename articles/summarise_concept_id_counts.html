@@ -157,12 +157,12 @@ tables.</p>
 <span><span class="co">#&gt; Rows: 113</span></span>
 <span><span class="co">#&gt; Columns: 7</span></span>
 <span><span class="co">#&gt; $ group_level      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "drug_exposure"<span style="color: #949494;">, </span>"drug_exposure"<span style="color: #949494;">, </span>"drug_exposure"<span style="color: #949494;">, </span>"d…</span></span>
-<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "zoster vaccine, live"<span style="color: #949494;">, </span>"Acetaminophen 160 MG Oral Ta…</span></span>
-<span><span class="co">#&gt; $ variable_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "40213260"<span style="color: #949494;">, </span>"1127078"<span style="color: #949494;">, </span>"40213306"<span style="color: #949494;">, </span>"19133905"<span style="color: #949494;">, </span>"19128…</span></span>
+<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "poliovirus vaccine, inactivated"<span style="color: #949494;">, </span>"Acetaminophen 21.…</span></span>
+<span><span class="co">#&gt; $ variable_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "40213160"<span style="color: #949494;">, </span>"40229134"<span style="color: #949494;">, </span>"40173590"<span style="color: #949494;">, </span>"40220960"<span style="color: #949494;">, </span>"1115…</span></span>
 <span><span class="co">#&gt; $ estimate_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"c…</span></span>
-<span><span class="co">#&gt; $ estimate_value   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "2125"<span style="color: #949494;">, </span>"2158"<span style="color: #949494;">, </span>"1916"<span style="color: #949494;">, </span>"1087"<span style="color: #949494;">, </span>"1056"<span style="color: #949494;">, </span>"306"<span style="color: #949494;">, </span>"850"<span style="color: #949494;">,</span>…</span></span>
+<span><span class="co">#&gt; $ estimate_value   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "7977"<span style="color: #949494;">, </span>"1993"<span style="color: #949494;">, </span>"129"<span style="color: #949494;">, </span>"217"<span style="color: #949494;">, </span>"1159"<span style="color: #949494;">, </span>"105"<span style="color: #949494;">, </span>"363"<span style="color: #949494;">, </span>"…</span></span>
 <span><span class="co">#&gt; $ additional_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "source_concept_id &amp;&amp;&amp; source_concept_name"<span style="color: #949494;">, </span>"source_…</span></span>
-<span><span class="co">#&gt; $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "40213260 &amp;&amp;&amp; zoster vaccine, live"<span style="color: #949494;">, </span>"1127078 &amp;&amp;&amp; Ace…</span></span></code></pre></div>
+<span><span class="co">#&gt; $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "40213160 &amp;&amp;&amp; poliovirus vaccine, inactivated"<span style="color: #949494;">, </span>"4022…</span></span></code></pre></div>
 <p>By default, the function returns the number of records
 (<code>estimate_name == "count_records"</code>) for each concept_id. To
 include counts by person, you can set the <code>countBy</code> argument
@@ -178,16 +178,16 @@ obtain both record and person counts.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 226 × 3</span></span></span>
 <span><span class="co">#&gt;    variable_name                                    estimate_name estimate_value</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> zoster vaccine, live                             count_records 2125          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> zoster vaccine, live                             count_subjec… 1140          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Acetaminophen 160 MG Oral Tablet                 count_records 2158          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Acetaminophen 160 MG Oral Tablet                 count_subjec… 1428          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> hepatitis B vaccine, adult dosage                count_records 1916          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> hepatitis B vaccine, adult dosage                count_subjec… 1560          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Penicillin V Potassium 500 MG Oral Tablet        count_records 1087          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Penicillin V Potassium 500 MG Oral Tablet        count_subjec… 856           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> {7 (Inert Ingredients 1 MG Oral Tablet) / 21 (M… count_records 1056          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> {7 (Inert Ingredients 1 MG Oral Tablet) / 21 (M… count_subjec… 605           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> poliovirus vaccine, inactivated                  count_records 7977          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> poliovirus vaccine, inactivated                  count_subjec… 2140          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Acetaminophen 21.7 MG/ML / Dextromethorphan Hyd… count_records 1993          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Acetaminophen 21.7 MG/ML / Dextromethorphan Hyd… count_subjec… 1393          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Alendronic acid 10 MG Oral Tablet                count_records 129           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Alendronic acid 10 MG Oral Tablet                count_subjec… 129           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> alteplase 100 MG Injection                       count_records 217           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> alteplase 100 MG Injection                       count_subjec… 199           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Naproxen sodium 220 MG Oral Tablet               count_records 1159          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Naproxen sodium 220 MG Oral Tablet               count_subjec… 947           </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 216 more rows</span></span></span></code></pre></div>
 <p>Further stratification can be applied using the
 <code>interval</code>, <code>sex</code>, and <code>ageGroup</code>
@@ -208,9 +208,9 @@ stratification), “years”, “quarters”, or “months”.</p>
 <span><span class="co">#&gt; Columns: 5</span></span>
 <span><span class="co">#&gt; $ group_level      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "condition_occurrence"<span style="color: #949494;">, </span>"condition_occurrence"<span style="color: #949494;">, </span>"cond…</span></span>
 <span><span class="co">#&gt; $ strata_level     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"…</span></span>
-<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Viral sinusitis"<span style="color: #949494;">, </span>"Tear of meniscus of knee"<span style="color: #949494;">, </span>"Injur…</span></span>
+<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Streptococcal sore throat"<span style="color: #949494;">, </span>"Osteoarthritis"<span style="color: #949494;">, </span>"Lacer…</span></span>
 <span><span class="co">#&gt; $ estimate_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_subjects"<span style="color: #949494;">, </span>"count_subjects"<span style="color: #949494;">, </span>"count_subjects"<span style="color: #949494;">,</span>…</span></span>
-<span><span class="co">#&gt; $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "40481087 &amp;&amp;&amp; Viral sinusitis"<span style="color: #949494;">, </span>"4035415 &amp;&amp;&amp; Tear of …</span></span></code></pre></div>
+<span><span class="co">#&gt; $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "28060 &amp;&amp;&amp; Streptococcal sore throat"<span style="color: #949494;">, </span>"80180 &amp;&amp;&amp; Ost…</span></span></code></pre></div>
 <p>We can also filter the clinical table to a specific time window by
 setting the dateRange argument.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -247,10 +247,10 @@ its <code>subject_id</code>s.</p>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span>, <span class="va">estimate_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rows: 64</span></span>
+<span><span class="co">#&gt; Rows: 70</span></span>
 <span><span class="co">#&gt; Columns: 3</span></span>
 <span><span class="co">#&gt; $ group_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "condition_occurrence"<span style="color: #949494;">, </span>"condition_occurrence"<span style="color: #949494;">, </span>"conditi…</span></span>
-<span><span class="co">#&gt; $ variable_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Acute bronchitis"<span style="color: #949494;">, </span>"Facial laceration"<span style="color: #949494;">, </span>"Anemia"<span style="color: #949494;">, </span>"Frac…</span></span>
+<span><span class="co">#&gt; $ variable_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Viral sinusitis"<span style="color: #949494;">, </span>"Escherichia coli urinary tract infec…</span></span>
 <span><span class="co">#&gt; $ estimate_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"coun…</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="display-the-results">Display the results<a class="anchor" aria-label="anchor" href="#display-the-results"></a>
