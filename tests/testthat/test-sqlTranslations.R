@@ -1,10 +1,14 @@
-test_that("datediffYear works", {
+test_that("test sql translations in each dialect", {
+  cdm <- cdmEunomia()
+
+  # datediffYear
   x <- dplyr::tibble(
     date_x = as.Date(c("2015-05-09", "2024-12-01", "2015-05-30")),
     date_y = as.Date(c("2010-05-09", "2000-12-02", "2005-05-29")),
     id = 1:3L
   )
-  y <- x |>
+  cdm <- omopgenerics::insertTable(cdm = cdm, name = "x", table = x)
+  y <- cdm$x |>
     datediffYear(start = "date_x", end = "date_y", name = "diff") |>
     datediffYear(start = "date_y", end = "date_x", name = "diff2") |>
     dplyr::collect() |>
@@ -13,30 +17,14 @@ test_that("datediffYear works", {
   expect_identical(y$diff, c(-5L, -23L, -10L))
   expect_identical(y$diff2, c(5L, 23L, 10L))
 
-  con <- duckdb::dbConnect(drv = duckdb::duckdb())
-  DBI::dbWriteTable(conn = con, name = "x", value = x)
-  x <- dplyr::tbl(src = con, "x")
-
-  y <- x |>
-    datediffYear(start = "date_x", end = "date_y", name = "diff") |>
-    datediffYear(start = "date_y", end = "date_x", name = "diff2") |>
-    dplyr::collect() |>
-    dplyr::arrange(.data$id)
-  expect_true(all(c("diff", "diff2") %in% colnames(y)))
-  # TODO check wrong result due to (CDMConnector?)
-  # expect_identical(y$diff, c(-5L, -24L, -10L))
-  # expect_identical(y$diff2, c(5L, 24L, 10L))
-
-  DBI::dbDisconnect(conn = con)
-})
-
-test_that("getYear works", {
+  # getYear
   x <- dplyr::tibble(
     date_x = as.Date(c("2015-05-09", "2024-12-01", "2015-05-30")),
     date_y = as.Date(c("2010-05-09", "2000-12-02", "2005-05-29")),
     id = 1:3L
   )
-  y <- x |>
+  cdm <- omopgenerics::insertTable(cdm = cdm, name = "x", table = x)
+  y <- cdm$x |>
     getYear(date = "date_x", name = "y1") |>
     getYear(date = "date_y", name = "y2") |>
     dplyr::collect() |>
@@ -45,29 +33,14 @@ test_that("getYear works", {
   expect_identical(y$y1, c(2015L, 2024L, 2015L))
   expect_identical(y$y2, c(2010L, 2000L, 2005L))
 
-  con <- duckdb::dbConnect(drv = duckdb::duckdb())
-  DBI::dbWriteTable(conn = con, name = "x", value = x)
-  x <- dplyr::tbl(src = con, "x")
-
-  y <- x |>
-    getYear(date = "date_x", name = "y1") |>
-    getYear(date = "date_y", name = "y2") |>
-    dplyr::collect() |>
-    dplyr::arrange(.data$id)
-  expect_true(all(c("y1", "y2") %in% colnames(y)))
-  expect_identical(y$y1, c(2015L, 2024L, 2015L))
-  expect_identical(y$y2, c(2010L, 2000L, 2005L))
-
-  DBI::dbDisconnect(conn = con)
-})
-
-test_that("datediffDays works", {
+  # datediffDays
   x <- dplyr::tibble(
     date_x = as.Date(c("2015-05-09", "2024-12-01", "2015-05-30")),
     date_y = as.Date(c("2010-05-09", "2000-12-02", "2005-05-29")),
     id = 1:3L
   )
-  y <- x |>
+  cdm <- omopgenerics::insertTable(cdm = cdm, name = "x", table = x)
+  y <- cdm$x |>
     datediffDays(start = "date_x", end = "date_y", name = "diff") |>
     datediffDays(start = "date_y", end = "date_x", name = "diff2") |>
     dplyr::collect() |>
@@ -76,28 +49,14 @@ test_that("datediffDays works", {
   expect_identical(y$diff, c(-1826L, -8765L, -3653L))
   expect_identical(y$diff2, c(1826L, 8765L, 3653L))
 
-  con <- duckdb::dbConnect(drv = duckdb::duckdb())
-  DBI::dbWriteTable(conn = con, name = "x", value = x)
-  x <- dplyr::tbl(src = con, "x")
-
-  y <- x |>
-    datediffDays(start = "date_x", end = "date_y", name = "diff") |>
-    datediffDays(start = "date_y", end = "date_x", name = "diff2") |>
-    dplyr::collect() |>
-    dplyr::arrange(.data$id)
-  expect_true(all(c("diff", "diff2") %in% colnames(y)))
-  expect_identical(y$diff, c(-1826L, -8765L, -3653L))
-  expect_identical(y$diff2, c(1826L, 8765L, 3653L))
-
-  DBI::dbDisconnect(conn = con)
-
-  # offset = 123
+  # datediffDays offset = 123
   x <- dplyr::tibble(
     date_x = as.Date(c("2015-05-09", "2024-12-01", "2015-05-30")),
     date_y = as.Date(c("2010-05-09", "2000-12-02", "2005-05-29")),
     id = 1:3L
   )
-  y <- x |>
+  cdm <- omopgenerics::insertTable(cdm = cdm, name = "x", table = x)
+  y <- cdm$x |>
     datediffDays(start = "date_x", end = "date_y", name = "diff", offset = 123) |>
     datediffDays(start = "date_y", end = "date_x", name = "diff2", offset = 123) |>
     dplyr::collect() |>
@@ -106,28 +65,14 @@ test_that("datediffDays works", {
   expect_identical(y$diff, c(-1826L, -8765L, -3653L) + 123L)
   expect_identical(y$diff2, c(1826L, 8765L, 3653L) + 123L)
 
-  con <- duckdb::dbConnect(drv = duckdb::duckdb())
-  DBI::dbWriteTable(conn = con, name = "x", value = x)
-  x <- dplyr::tbl(src = con, "x")
-
-  y <- x |>
-    datediffDays(start = "date_x", end = "date_y", name = "diff", offset = 123) |>
-    datediffDays(start = "date_y", end = "date_x", name = "diff2", offset = 123) |>
-    dplyr::collect() |>
-    dplyr::arrange(.data$id)
-  expect_true(all(c("diff", "diff2") %in% colnames(y)))
-  expect_identical(y$diff, c(-1826L, -8765L, -3653L) + 123L)
-  expect_identical(y$diff2, c(1826L, 8765L, 3653L) + 123L)
-
-  DBI::dbDisconnect(conn = con)
-
-  # offset = -123
+  # datediffDays offset = -123
   x <- dplyr::tibble(
     date_x = as.Date(c("2015-05-09", "2024-12-01", "2015-05-30")),
     date_y = as.Date(c("2010-05-09", "2000-12-02", "2005-05-29")),
     id = 1:3L
   )
-  y <- x |>
+  cdm <- omopgenerics::insertTable(cdm = cdm, name = "x", table = x)
+  y <- cdm$x |>
     datediffDays(start = "date_x", end = "date_y", name = "diff", offset = -123) |>
     datediffDays(start = "date_y", end = "date_x", name = "diff2", offset = -123) |>
     dplyr::collect() |>
@@ -136,18 +81,5 @@ test_that("datediffDays works", {
   expect_identical(y$diff, c(-1826L, -8765L, -3653L) - 123L)
   expect_identical(y$diff2, c(1826L, 8765L, 3653L) - 123L)
 
-  con <- duckdb::dbConnect(drv = duckdb::duckdb())
-  DBI::dbWriteTable(conn = con, name = "x", value = x)
-  x <- dplyr::tbl(src = con, "x")
-
-  y <- x |>
-    datediffDays(start = "date_x", end = "date_y", name = "diff", offset = -123) |>
-    datediffDays(start = "date_y", end = "date_x", name = "diff2", offset = -123) |>
-    dplyr::collect() |>
-    dplyr::arrange(.data$id)
-  expect_true(all(c("diff", "diff2") %in% colnames(y)))
-  expect_identical(y$diff, c(-1826L, -8765L, -3653L) - 123L)
-  expect_identical(y$diff2, c(1826L, 8765L, 3653L) - 123L)
-
-  DBI::dbDisconnect(conn = con)
+  dropCreatedTables(cdm = cdm)
 })

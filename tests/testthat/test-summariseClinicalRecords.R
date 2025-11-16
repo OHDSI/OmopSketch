@@ -79,7 +79,7 @@ test_that("summariseClinicalRecords() works", {
   expect_false("Concept class" %in% vo$variable_name)
   expect_true("Concept class" %in% d$variable_name)
 
-  CDMConnector::cdmDisconnect(cdm = cdm)
+  dropCreatedTables(cdm = cdm)
 })
 
 test_that("summariseClinicalRecords() sex and ageGroup argument work", {
@@ -190,13 +190,15 @@ test_that("summariseClinicalRecords() sex and ageGroup argument work", {
 
   expect_equal(x$n[[1]], x$n[[2]])
 
-  CDMConnector::cdmDisconnect(cdm = cdm)
+  dropCreatedTables(cdm = cdm)
 })
 
 test_that("dateRange argument works", {
   skip_on_cran()
+
   # Load mock database ----
   cdm <- cdmEunomia()
+
   expect_no_error(summariseClinicalRecords(cdm, "condition_occurrence", dateRange = as.Date(c("2012-01-01", "2018-01-01"))))
   expect_message(x <- summariseClinicalRecords(cdm, "drug_exposure", dateRange = as.Date(c("2012-01-01", "2025-01-01"))))
   observationRange <- cdm$observation_period |>
@@ -213,8 +215,9 @@ test_that("dateRange argument works", {
   expect_equal(summariseClinicalRecords(cdm, "drug_exposure", dateRange = as.Date(c("2012-01-01", NA))) |> dplyr::arrange(.data$variable_name, .data$variable_level, .data$estimate_name), y |> dplyr::arrange(.data$variable_name, .data$variable_level, .data$estimate_name), ignore_attr = TRUE)
   checkResultType(z, "summarise_clinical_records")
   expect_equal(colnames(settings(z)), colnames(settings(x)))
-})
 
+  dropCreatedTables(cdm = cdm)
+})
 
 test_that("tableClinicalRecords() works", {
   skip_on_cran()
@@ -232,9 +235,9 @@ test_that("tableClinicalRecords() works", {
   expect_warning(t <- summariseClinicalRecords(cdm, "death"))
   expect_warning(inherits(tableClinicalRecords(t), "gt_tbl"))
   expect_no_error(x <- tableClinicalRecords(summariseClinicalRecords(cdm, "condition_occurrence"), type = "datatable"))
-  CDMConnector::cdmDisconnect(cdm = cdm)
-})
 
+  dropCreatedTables(cdm = cdm)
+})
 
 test_that("no tables created", {
   skip_on_cran()
@@ -259,23 +262,20 @@ test_that("no tables created", {
 
   expect_true(length(setdiff(endNames, startNames)) == 0)
 
-
-  CDMConnector::cdmDisconnect(cdm = cdm)
+  dropCreatedTables(cdm = cdm)
 })
 
 test_that("record outside observaton period", {
   skip_on_cran()
 
-  cdm <- cdmEunomia()
-
   drug_exposure <- dplyr::tibble(
     drug_exposure_id = c(1, 2, 3),
     person_id = c(1, 2, 5) |> as.integer(),
     drug_exposure_start_date = as.Date(c(
-      "2020-03-10", "2020-08-11", "2021-03-25"
+      "2000-03-10", "2000-08-11", "2001-03-25"
     )),
     drug_exposure_end_date = as.Date(c(
-      "2020-03-11", "2020-08-12", "2021-03-30"
+      "2000-03-11", "2000-08-12", "2001-03-30"
     )),
     drug_concept_id = 0L,
     drug_type_concept_id = 1L,
@@ -286,20 +286,26 @@ test_that("record outside observaton period", {
     observation_period_id = as.integer(1:9),
     person_id = c(1, 1, 1, 2, 2, 3, 3, 4, 5) |> as.integer(),
     observation_period_start_date = as.Date(c(
-      "2020-03-01", "2020-03-25", "2020-04-25", "2020-08-10",
-      "2020-03-10", "2020-03-01", "2020-04-10", "2020-03-10",
-      "2020-03-10"
+      "2000-03-01", "2000-03-25", "2000-04-25", "2000-08-10",
+      "2000-03-10", "2000-03-01", "2000-04-10", "2000-03-10",
+      "2000-03-10"
     )),
     observation_period_end_date = as.Date(c(
-      "2020-03-20", "2020-03-30", "2020-08-15", "2020-12-31",
-      "2020-03-27", "2020-03-09", "2020-05-08", "2020-12-10",
-      "2020-03-10"
+      "2000-03-20", "2000-03-30", "2000-08-15", "2000-12-31",
+      "2000-03-27", "2000-03-09", "2000-05-08", "2000-12-10",
+      "2000-03-10"
     )),
     period_type_concept_id = 0L
   )
 
-  cdm <- omopgenerics::insertTable(cdm, name = "drug_exposure", table = drug_exposure)
-  cdm <- omopgenerics::insertTable(cdm, name = "observation_period", table = observation_period)
+  cdm <- omock::mockCdmFromTables(tables = list(
+    drug_exposure = drug_exposure, observation_period = observation_period
+  ))
+  cdm$concept <- cdm$concept |>
+    dplyr::mutate(valid_start_date = as.Date(NA), valid_end_date = as.Date(NA))
+  cdm$drug_strength <- cdm$drug_strength |>
+    dplyr::mutate(valid_start_date = as.Date(NA), valid_end_date = as.Date(NA))
+  cdm <- copyCdm(cdm = cdm)
 
   age_groups <- list()
   for (i in seq(0, 100, by = 2)) {
@@ -314,8 +320,9 @@ test_that("record outside observaton period", {
     dplyr::pull(summ)
   expect_true(sum(percentages > 100) == 0)
 
-  CDMConnector::cdmDisconnect(cdm = cdm)
+  dropCreatedTables(cdm = cdm)
 })
+
 test_that("argument quality works", {
   skip_on_cran()
   cdm <- cdmEunomia()
@@ -335,7 +342,6 @@ test_that("argument quality works", {
       )
     ))
 
-
   expect_no_error(x <- summariseClinicalRecords(cdm, "drug_exposure", recordsPerPerson = NULL, quality = T, conceptSummary = F, missingData = F))
   y <- cdm$drug_exposure |>
     dplyr::filter(.data$drug_exposure_end_date < .data$drug_exposure_start_date)
@@ -344,24 +350,25 @@ test_that("argument quality works", {
     dplyr::filter(.data$drug_exposure_start_date < as.Date(.data$birth_datetime))
 
   expect_equal(
-    y |> dplyr::tally() |> dplyr::pull(n),
-    x |> dplyr::filter(variable_name == "End date before start date", estimate_name == "count") |> dplyr::pull(estimate_value) |> as.numeric()
+    y |> dplyr::tally() |> dplyr::pull("n") |> as.numeric(),
+    x |> dplyr::filter(variable_name == "End date before start date", estimate_name == "count") |> dplyr::pull("estimate_value") |> as.numeric()
   )
 
   expect_equal(
-    z |> dplyr::tally() |> dplyr::pull(n),
+    z |> dplyr::tally() |> dplyr::pull(n) |> as.numeric(),
     x |> dplyr::filter(variable_name == "Start date before birth date", estimate_name == "count") |> dplyr::pull(estimate_value) |> as.numeric()
   )
 
   expect_no_error(x <- summariseClinicalRecords(cdm, "drug_exposure", recordsPerPerson = NULL, quality = T, conceptSummary = F, missingData = F, sex = TRUE))
   x <- x |> omopgenerics::splitStrata()
 
-
   expect_equal(
     y |>
       PatientProfiles::addSexQuery() |>
       dplyr::filter(sex == "Female") |>
-      dplyr::tally() |> dplyr::pull(n),
+      dplyr::tally() |>
+      dplyr::pull("n") |>
+      as.numeric(),
     x |>
       dplyr::filter(sex == "Female" & variable_name == "End date before start date" & estimate_name == "count") |>
       dplyr::pull(estimate_value) |>
@@ -372,7 +379,9 @@ test_that("argument quality works", {
     z |>
       PatientProfiles::addSexQuery() |>
       dplyr::filter(sex == "Female") |>
-      dplyr::tally() |> dplyr::pull(n),
+      dplyr::tally() |>
+      dplyr::pull("n") |>
+      as.numeric(),
     x |>
       dplyr::filter(sex == "Female" & variable_name == "Start date before birth date" & estimate_name == "count") |>
       dplyr::pull(estimate_value) |>
@@ -380,7 +389,6 @@ test_that("argument quality works", {
   )
 
   expect_no_error(x <- summariseClinicalRecords(cdm, "drug_exposure", recordsPerPerson = NULL, quality = T, conceptSummary = F, missingData = F, dateRange = as.Date(c("1910-01-01", NA))))
-
 
   ids <- cdm$condition_occurrence |>
     dplyr::distinct(condition_occurrence_id) |>
@@ -399,9 +407,8 @@ test_that("argument quality works", {
 
 
   expect_no_error(x <- summariseClinicalRecords(cdm, "condition_occurrence", recordsPerPerson = NULL, quality = T, conceptSummary = F, missingData = F))
-  expect_equal(y |> dplyr::tally() |> dplyr::pull(n), x |> dplyr::filter(estimate_name == "count", variable_name == "End date before start date") |> dplyr::pull(estimate_value) |> as.numeric())
+  expect_equal(y |> dplyr::tally() |> dplyr::pull("n") |> as.numeric(), x |> dplyr::filter(estimate_name == "count", variable_name == "End date before start date") |> dplyr::pull(estimate_value) |> as.numeric())
   expect_equal(0L, x |> dplyr::filter(estimate_name == "count", variable_name == "Start date before birth date") |> dplyr::pull(estimate_value) |> as.numeric())
-
 
   ids <- cdm$visit_occurrence |>
     dplyr::distinct(visit_occurrence_id) |>
@@ -421,22 +428,20 @@ test_that("argument quality works", {
     dplyr::filter(.data$visit_start_date < as.Date(.data$birth_datetime))
 
   expect_no_error(x <- summariseClinicalRecords(cdm, "visit_occurrence", recordsPerPerson = NULL, quality = T, conceptSummary = F, missingData = F))
-  expect_equal(z |> dplyr::tally() |> dplyr::pull(n), x |> dplyr::filter(variable_name == "Start date before birth date" & estimate_name == "count") |> dplyr::pull(estimate_value) |> as.numeric())
+  expect_equal(z |> dplyr::tally() |> dplyr::pull(n) |> as.numeric(), x |> dplyr::filter(variable_name == "Start date before birth date" & estimate_name == "count") |> dplyr::pull(estimate_value) |> as.numeric())
 
   expect_equal(0L, x |> dplyr::filter(estimate_name == "count", variable_name == "End date before start date") |> dplyr::pull(estimate_value) |> as.numeric())
-
 
   expect_no_error(summariseClinicalRecords(cdm, "procedure_occurrence", recordsPerPerson = NULL, conceptSummary = F, missingData = F))
   expect_no_error(summariseClinicalRecords(cdm, "measurement", recordsPerPerson = NULL, conceptSummary = F, missingData = F))
   expect_warning(summariseClinicalRecords(cdm, "death", recordsPerPerson = NULL, conceptSummary = F, missingData = F))
 
-
-  omopgenerics::cdmDisconnect(cdm)
+  dropCreatedTables(cdm = cdm)
 })
+
 test_that("argument missingData works", {
   skip_on_cran()
   cdm <- cdmEunomia()
-
 
   expect_no_error(x <- summariseClinicalRecords(cdm, "drug_exposure", recordsPerPerson = NULL, quality = F, conceptSummary = F))
 
@@ -454,7 +459,6 @@ test_that("argument missingData works", {
 
   expect_equal(x |> dplyr::filter(variable_name == "Column name") |> dplyr::arrange(.data$variable_level), y |> dplyr::arrange(.data$variable_level), ignore_attr = TRUE)
 
-
   person_to_remove <- cdm$procedure_occurrence |>
     head(1) |>
     dplyr::pull(.data$person_id)
@@ -470,5 +474,5 @@ test_that("argument missingData works", {
     1
   )
 
-  omopgenerics::cdmDisconnect(cdm)
+  dropCreatedTables(cdm = cdm)
 })

@@ -142,7 +142,7 @@ addStratifications <- function(x, indexDate, sex, ageGroup, interval, intervalNa
     } else if (interval == "months") {
       q <- 'paste0(as.character(clock::get_year(.data[[indexDate]])), "_", as.character(clock::get_month(.data[[indexDate]])))'
     } else if (interval == "quarters") {
-      q <- 'paste0(as.character(clock::get_year(.data[[indexDate]])), "_Q", as.character(as.integer(((clock::get_month(.data[[indexDate]]) - 1) %/% 3) + 1)))'
+      q <- 'paste0(as.character(clock::get_year(.data[[indexDate]])), "_Q", as.character(as.integer(floor((clock::get_month(.data[[indexDate]]) - 1) / 3) + 1)))'
     }
     q <- q |>
       rlang::set_names(intervalName) |>
@@ -303,22 +303,24 @@ addInObservation <- function(x, inObservation, cdm, episode, name) {
   if (episode) {
     x <- x |>
       dplyr::left_join(cdm[["observation_period"]] |> dplyr::select("person_id", "observation_period_start_date", "observation_period_end_date"), by = "person_id") |>
-      dplyr::mutate("in_observation" = dplyr::if_else(!is.na(.data$observation_period_start_date) &
-        .data$start_date >= .data$observation_period_start_date &
-        .data$start_date <= .data$observation_period_end_date &
-        (
-          is.na(.data$end_date) |
-            (.data$end_date >= .data$observation_period_start_date &
-              .data$end_date <= .data$observation_period_end_date)
-        ),
-      TRUE, FALSE
+      dplyr::mutate("in_observation" = dplyr::if_else(
+        !is.na(.data$observation_period_start_date) &
+          .data$start_date >= .data$observation_period_start_date &
+          .data$start_date <= .data$observation_period_end_date &
+          (
+            is.na(.data$end_date) |
+              (.data$end_date >= .data$observation_period_start_date &
+                 .data$end_date <= .data$observation_period_end_date)
+          ),
+        "TRUE",
+        "FALSE"
       )) |>
       dplyr::select(-"observation_period_start_date", -"observation_period_end_date") |>
       dplyr::compute(name = name)
   } else {
     x <- x |>
       dplyr::left_join(cdm[["observation_period"]] |> dplyr::select("person_id", "observation_period_start_date", "observation_period_end_date"), by = "person_id") |>
-      dplyr::mutate("in_observation" = dplyr::if_else(!is.na(.data$observation_period_start_date) & .data$start_date >= .data$observation_period_start_date & .data$start_date <= .data$observation_period_end_date, TRUE, FALSE)) |>
+      dplyr::mutate("in_observation" = dplyr::if_else(!is.na(.data$observation_period_start_date) & .data$start_date >= .data$observation_period_start_date & .data$start_date <= .data$observation_period_end_date, "TRUE", "FALSE")) |>
       dplyr::select(-"observation_period_start_date", -"observation_period_end_date") |>
       dplyr::compute(name = name)
   }
