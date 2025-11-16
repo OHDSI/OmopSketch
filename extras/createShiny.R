@@ -1,6 +1,10 @@
 
 library(OmopSketch)
 
+# TRUE only for GitHub actions
+deleteMockData <- as.logical(Sys.getenv("GITHUB_ACTIONS", "FALSE"))
+print(deleteMockData)
+
 # set timeout to 10 minutes
 options(timeout = 600)
 
@@ -16,8 +20,10 @@ results <- purrr::map(databases, \(dbName) {
 
   # download dataset
   res <- tryCatch(expr = {
-    omock::downloadMockDataset(datasetName = dbName, overwrite = FALSE) |>
-      suppressMessages()
+    if (!omock::isMockDatasetDownloaded(datasetName = dbName)) {
+      omock::downloadMockDataset(datasetName = dbName, overwrite = FALSE) |>
+        suppressMessages()
+    }
     cli::cli_inform(c(v = "{.strong {dbName}} downloaded."))
 
     # create cdm reference
@@ -46,7 +52,9 @@ results <- purrr::map(databases, \(dbName) {
     omopgenerics::cdmDisconnect(cdm = cdm)
     duckdb::duckdb_shutdown(drv = drv)
     unlink(duckFile)
-    unlink(file.path(omock::mockDatasetsFolder(), paste0(dbName, ".zip")))
+    if (deleteMockData) {
+      unlink(file.path(omock::mockDatasetsFolder(), paste0(dbName, ".zip")))
+    }
 
     x
   }, error = function(e) {
@@ -59,5 +67,6 @@ results <- purrr::map(databases, \(dbName) {
 shinyCharacteristics(
   result = results,
   directory = here::here("extras"),
-  background = here::here("extras/background-synthetic-data.md")
+  background = here::here("extras", "background-synthetic-data.md"),
+  logo = here::here("man", "figures", "logo.png")
 )
