@@ -1,5 +1,7 @@
-## OmopSketch Database Characterisation
------
+---
+header: OmopSketch Database Characterisation
+---
+
 ### Shiny App Overview
 
 This Shiny App presents the results of a database characterisation performed using the [**OmopSketch**](https://cran.r-project.org/package=OmopSketch) R package. It provides summaries and visualisations to support exploration of OMOP CDM-compliant datasets.
@@ -20,10 +22,12 @@ The Shiny application is created using the following code:
 
 ```
 library(OmopSketch)
+
 shinyCharacteristics(
   result = results,
-  directory = here::here(), 
-  background = ""
+  directory = getwd(), 
+  background = "https://raw.githubusercontent.com/OHDSI/OmopSketch/refs/heads/main/extras/background-synthetic-data.md",
+  logo = "https://github.com/OHDSI/OmopSketch/blob/main/man/figures/logo.png?raw=true"
 )
 ```
 
