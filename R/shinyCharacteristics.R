@@ -43,7 +43,7 @@ shinyCharacteristics <- function(result,
                                  title = "Database characterisation",
                                  logo = "ohdsi",
                                  theme = "scarlet") {
-  rlang::check_installed(pkg = "OmopViewer", version = "0.4.0") # change to 0.5.0 when released
+  rlang::check_installed(pkg = "OmopViewer", version = "0.5.0") # change to 0.5.0 when released
 
   result <- omopgenerics::validateResultArgument(result)
   omopgenerics::assertCharacter(directory, length = 1)
