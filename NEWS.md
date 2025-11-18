@@ -1,4 +1,4 @@
-# OmopSketch 0.5.1.900
+# OmopSketch 1.0.0
 
 - Characterise all mock datasets by @catalamarti #430
 - background in shiny by @cecicampanile #431
@@ -24,6 +24,16 @@
 - tableConceptIdCounts update by @cecicampanile #476
 - captions in tables by @cecicampanile #477
 - summarisePerson in databaseCharacteristics and shinyCharacteristics by @cecicampanile #478
+- Reduce imports by @catalamarti #503
+- Remove :: from vignettes, readme and examples by @catalamarti #502
+- Use default of style and type = NULL by @catalamarti #498
+- Tidy vignettes by @catalamarti i#508
+- Tidy documentation by @catalamarti #510
+- refine readme by @catalamarti #505
+- scarlet brand in shiny by @cecicampanile #513
+- Test multiple dbms by @catalamarti #514
+- add logo to shiny by @catalamarti #516
+- reduce size of tables before collecting in summariseTrend by @cecicampanile #518
   
 # OmopSketch 0.5.1
 
