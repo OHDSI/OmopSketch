@@ -34,9 +34,8 @@ columns to face by with: \code{visOmopResults::tidyColumns()}.}
 this may be either the name of a built-in style (see
 \code{visOmopResults::plotStyle()}), or a path to a .yml file that defines a
 custom style. If \code{NULL}, the function will use the explicit default style,
-unless a global style option is set (see
-\code{visOmopResults::setGlobalPlotOptions()}), or a ⁠_brand.ym`⁠ file is
-present (in that order).}
+unless a global style option is set (see \code{visOmopResults::setGlobalPlotOptions()})
+or a _brand.yml file is present (in that order).}
 }
 \value{
 A plot visualisation.

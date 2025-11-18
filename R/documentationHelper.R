@@ -28,8 +28,8 @@ NULL
 #' list describing styles for each table section. This code must be specific to
 #' the selected table type.
 #'
-#' If `style = NULL`, the function will use global options (see
-#' `visOmopResults::setGlobalTableOptions()`) or an existing ⁠_brand.yml⁠ file
+#' If `style = NULL`, the function will use global options
+#' (see`visOmopResults::setGlobalTableOptions()`) or a _brand.yml file
 #' (if found); otherwise, the default style is applied.
 #'
 #' @name style-table
@@ -43,9 +43,8 @@ NULL
 #' this may be either the name of a built-in style (see
 #' `visOmopResults::plotStyle()`), or a path to a .yml file that defines a
 #' custom style. If `NULL`, the function will use the explicit default style,
-#' unless a global style option is set (see
-#' `visOmopResults::setGlobalPlotOptions()`), or a ⁠_brand.ym`⁠ file is
-#' present (in that order).
+#' unless a global style option is set (see `visOmopResults::setGlobalPlotOptions()`)
+#' or a _brand.yml file is present (in that order).
 #' @param type Character string indicating the output plot format. See
 #' `visOmopResults::plotType()` for the list of supported plot types. If
 #' `type = NULL`, the function will use the global setting defined via

@@ -39,8 +39,8 @@ list describing styles for each table section. This code must be specific to
 the selected table type.
 }
 
-If \code{style = NULL}, the function will use global options (see
-\code{visOmopResults::setGlobalTableOptions()}) or an existing ⁠_brand.yml⁠ file
+If \code{style = NULL}, the function will use global options
+(see\code{visOmopResults::setGlobalTableOptions()}) or a _brand.yml file
 (if found); otherwise, the default style is applied.}
 }
 \value{
