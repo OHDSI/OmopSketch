@@ -17,7 +17,7 @@ provided in one of the following ways:
 \enumerate{
 \item \strong{Pre-defined style}: Use the name of a built-in style (e.g., "darwin").
 See \code{visOmopResults::tableStyle()} for available options.
-\item \strong{YAML file path}: Provide the path to an existing \code{.yml} file defining
+\item \strong{YAML file path}: Provide the path to an existing .yml file defining
 a new style.
 \item \strong{List of custome R code}: Supply a block of custom R code or a named
 list describing styles for each table section. This code must be specific to
@@ -25,7 +25,7 @@ the selected table type.
 }
 
 If \code{style = NULL}, the function will use global options (see
-\code{visOmopResults::setGlobalTableOptions()}) or an existing \verb{⁠_brand.yml}⁠ file
+\code{visOmopResults::setGlobalTableOptions()}) or an existing ⁠_brand.yml⁠ file
 (if found); otherwise, the default style is applied.}
 }
 \value{

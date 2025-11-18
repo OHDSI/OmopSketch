@@ -6,10 +6,10 @@
 \arguments{
 \item{style}{Visual theme to apply. Character, or \code{NULL}. If a character,
 this may be either the name of a built-in style (see
-\code{visOmopResults::plotStyle()}), or a path to a \code{.yml} file that defines a
+\code{visOmopResults::plotStyle()}), or a path to a .yml file that defines a
 custom style. If \code{NULL}, the function will use the explicit default style,
 unless a global style option is set (see
-\code{visOmopResults::setGlobalPlotOptions()}), or a \verb{⁠_brand.yml}⁠ file is
+\code{visOmopResults::setGlobalPlotOptions()}), or a ⁠_brand.ym`⁠ file is
 present (in that order).}
 
 \item{type}{Character string indicating the output plot format. See
