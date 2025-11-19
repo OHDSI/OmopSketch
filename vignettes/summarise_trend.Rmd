@@ -243,7 +243,7 @@ summarisedResult |>
 
 # Tidy the summarised object with tableTrend
 
-`tableTrend()` helps you convert a summarised result into a nicely formatted table for reporting or inspection (for example [gt]() (default), [flextable]() [reactable](), or [DT::datatable]()). It formats time intervals, strata and estimate columns so the results are easy to read and export.
+`tableTrend()` helps you convert a summarised result into a nicely formatted table for reporting or inspection (for example [gt](https://gt.rstudio.com/) (default), [flextable](https://www.rdocumentation.org/packages/flextable), [reactable](https://glin.github.io/reactable/), or [DT::datatable](https://rstudio.github.io/DT/)). It formats time intervals, strata and estimate columns so the results are easy to read and export.
 
 ```{r}
 result <- summariseTrend(

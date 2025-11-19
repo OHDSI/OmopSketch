@@ -54,9 +54,11 @@ plotTrend <- function(result,
     omopgenerics::filterSettings(
       .data$result_type == "summarise_trend"
     )
-  if (nrow(result) == 0) {
-    cli::cli_abort(c("!" = "No records found with result_type == summarise_trend"))
-  }
+   # check if it is empty
+   if (nrow(result) == 0) {
+     warnEmpty("summarise_trend")
+     return(visOmopResults::emptyPlot(subtitle = "`result` does not contain any `summarise_trend` data", style = style))
+   }
 
   available_output <- fromVariableNameToOutput(unique(result$variable_name))
   if (is.null(output)) {
