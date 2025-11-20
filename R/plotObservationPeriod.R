@@ -153,29 +153,3 @@ availablePlotObservationPeriod <- function() {
     "Days to next observation period", "boxplot", "cdm_name+observation_period_ordinal",
   )
 }
-needEstimates <- function(plotType) {
-  dplyr::tribble(
-    ~plot_type, ~estimate_name,
-    "barplot", "count",
-    "densityplot", "density_x",
-    "densityplot", "density_y",
-    "boxplot", "median",
-    "boxplot", "q25",
-    "boxplot", "q75",
-    "boxplot", "min",
-    "boxplot", "max"
-  ) |>
-    dplyr::filter(.data$plot_type == .env$plotType) |>
-    dplyr::pull("estimate_name")
-}
-uniteVariable <- function(res, cols, colname, def) {
-  if (length(cols) > 0) {
-    res <- res |>
-      tidyr::unite(
-        col = !!colname, dplyr::all_of(cols), sep = " - ", remove = FALSE
-      )
-  } else {
-    res <- res |> dplyr::mutate(!!colname := !!def)
-  }
-  return(res)
-}
