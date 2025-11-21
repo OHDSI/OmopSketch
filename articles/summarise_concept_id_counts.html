@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">OmopSketch</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0.900</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,7 +87,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Summarise concept id counts</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/OHDSI/OmopSketch/blob/v1.0.0/vignettes/summarise_concept_id_counts.Rmd" class="external-link"><code>vignettes/summarise_concept_id_counts.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/OHDSI/OmopSketch/blob/main/vignettes/summarise_concept_id_counts.Rmd" class="external-link"><code>vignettes/summarise_concept_id_counts.Rmd</code></a></small>
       <div class="d-none name"><code>summarise_concept_id_counts.Rmd</code></div>
     </div>
 
@@ -157,12 +157,12 @@ tables.</p>
 <span><span class="co">#&gt; Rows: 113</span></span>
 <span><span class="co">#&gt; Columns: 7</span></span>
 <span><span class="co">#&gt; $ group_level      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "drug_exposure"<span style="color: #949494;">, </span>"drug_exposure"<span style="color: #949494;">, </span>"drug_exposure"<span style="color: #949494;">, </span>"d…</span></span>
-<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "poliovirus vaccine, inactivated"<span style="color: #949494;">, </span>"Acetaminophen 21.…</span></span>
-<span><span class="co">#&gt; $ variable_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "40213160"<span style="color: #949494;">, </span>"40229134"<span style="color: #949494;">, </span>"40173590"<span style="color: #949494;">, </span>"40220960"<span style="color: #949494;">, </span>"1115…</span></span>
+<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "pneumococcal conjugate vaccine, 13 valent"<span style="color: #949494;">, </span>"Amoxici…</span></span>
+<span><span class="co">#&gt; $ variable_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "40213198"<span style="color: #949494;">, </span>"1713671"<span style="color: #949494;">, </span>"1551192"<span style="color: #949494;">, </span>"19133873"<span style="color: #949494;">, </span>"191280…</span></span>
 <span><span class="co">#&gt; $ estimate_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"c…</span></span>
-<span><span class="co">#&gt; $ estimate_value   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "7977"<span style="color: #949494;">, </span>"1993"<span style="color: #949494;">, </span>"129"<span style="color: #949494;">, </span>"217"<span style="color: #949494;">, </span>"1159"<span style="color: #949494;">, </span>"105"<span style="color: #949494;">, </span>"363"<span style="color: #949494;">, </span>"…</span></span>
+<span><span class="co">#&gt; $ estimate_value   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "453"<span style="color: #949494;">, </span>"3851"<span style="color: #949494;">, </span>"161"<span style="color: #949494;">, </span>"1719"<span style="color: #949494;">, </span>"449"<span style="color: #949494;">, </span>"101"<span style="color: #949494;">, </span>"1767"<span style="color: #949494;">, </span>"…</span></span>
 <span><span class="co">#&gt; $ additional_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "source_concept_id &amp;&amp;&amp; source_concept_name"<span style="color: #949494;">, </span>"source_…</span></span>
-<span><span class="co">#&gt; $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "40213160 &amp;&amp;&amp; poliovirus vaccine, inactivated"<span style="color: #949494;">, </span>"4022…</span></span></code></pre></div>
+<span><span class="co">#&gt; $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "40213198 &amp;&amp;&amp; pneumococcal conjugate vaccine, 13 vale…</span></span></code></pre></div>
 <p>By default, the function returns the number of records
 (<code>estimate_name == "count_records"</code>) for each concept_id. To
 include counts by person, you can set the <code>countBy</code> argument
@@ -178,16 +178,16 @@ obtain both record and person counts.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 226 × 3</span></span></span>
 <span><span class="co">#&gt;    variable_name                                    estimate_name estimate_value</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> poliovirus vaccine, inactivated                  count_records 7977          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> poliovirus vaccine, inactivated                  count_subjec… 2140          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Acetaminophen 21.7 MG/ML / Dextromethorphan Hyd… count_records 1993          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Acetaminophen 21.7 MG/ML / Dextromethorphan Hyd… count_subjec… 1393          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Alendronic acid 10 MG Oral Tablet                count_records 129           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Alendronic acid 10 MG Oral Tablet                count_subjec… 129           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> alteplase 100 MG Injection                       count_records 217           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> alteplase 100 MG Injection                       count_subjec… 199           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Naproxen sodium 220 MG Oral Tablet               count_records 1159          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Naproxen sodium 220 MG Oral Tablet               count_subjec… 947           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> pneumococcal conjugate vaccine, 13 valent        count_records 453           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> pneumococcal conjugate vaccine, 13 valent        count_subjec… 453           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Amoxicillin 250 MG / Clavulanate 125 MG Oral Ta… count_records 3851          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Amoxicillin 250 MG / Clavulanate 125 MG Oral Ta… count_subjec… 2021          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Prednisone 5 MG Oral Tablet                      count_records 161           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Prednisone 5 MG Oral Tablet                      count_subjec… 116           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Penicillin V Potassium 250 MG Oral Tablet        count_records 1719          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Penicillin V Potassium 250 MG Oral Tablet        count_subjec… 1272          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> {7 (Ethinyl Estradiol 0.035 MG / norgestimate 0… count_records 449           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> {7 (Ethinyl Estradiol 0.035 MG / norgestimate 0… count_subjec… 253           </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 216 more rows</span></span></span></code></pre></div>
 <p>Further stratification can be applied using the
 <code>interval</code>, <code>sex</code>, and <code>ageGroup</code>
@@ -208,9 +208,9 @@ stratification), “years”, “quarters”, or “months”.</p>
 <span><span class="co">#&gt; Columns: 5</span></span>
 <span><span class="co">#&gt; $ group_level      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "condition_occurrence"<span style="color: #949494;">, </span>"condition_occurrence"<span style="color: #949494;">, </span>"cond…</span></span>
 <span><span class="co">#&gt; $ strata_level     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"…</span></span>
-<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Acute viral pharyngitis"<span style="color: #949494;">, </span>"Gastrointestinal hemorrha…</span></span>
+<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Viral sinusitis"<span style="color: #949494;">, </span>"Laceration of foot"<span style="color: #949494;">, </span>"Peptic ulce…</span></span>
 <span><span class="co">#&gt; $ estimate_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_subjects"<span style="color: #949494;">, </span>"count_subjects"<span style="color: #949494;">, </span>"count_subjects"<span style="color: #949494;">,</span>…</span></span>
-<span><span class="co">#&gt; $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "4112343 &amp;&amp;&amp; Acute viral pharyngitis"<span style="color: #949494;">, </span>"35208414 &amp;&amp;&amp; …</span></span></code></pre></div>
+<span><span class="co">#&gt; $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "40481087 &amp;&amp;&amp; Viral sinusitis"<span style="color: #949494;">, </span>"4109685 &amp;&amp;&amp; Lacerati…</span></span></code></pre></div>
 <p>We can also filter the clinical table to a specific time window by
 setting the dateRange argument.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -227,7 +227,7 @@ setting the dateRange argument.</p>
 <span><span class="co">#&gt; $ result_id          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1</span></span>
 <span><span class="co">#&gt; $ result_type        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "summarise_concept_id_counts"</span></span>
 <span><span class="co">#&gt; $ package_name       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "OmopSketch"</span></span>
-<span><span class="co">#&gt; $ package_version    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "1.0.0"</span></span>
+<span><span class="co">#&gt; $ package_version    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "1.0.0.900"</span></span>
 <span><span class="co">#&gt; $ group              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "omop_table"</span></span>
 <span><span class="co">#&gt; $ strata             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> ""</span></span>
 <span><span class="co">#&gt; $ additional         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "source_concept_id &amp;&amp;&amp; source_concept_name"</span></span>
@@ -247,10 +247,10 @@ its <code>subject_id</code>s.</p>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span>, <span class="va">estimate_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rows: 61</span></span>
+<span><span class="co">#&gt; Rows: 58</span></span>
 <span><span class="co">#&gt; Columns: 3</span></span>
 <span><span class="co">#&gt; $ group_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "condition_occurrence"<span style="color: #949494;">, </span>"condition_occurrence"<span style="color: #949494;">, </span>"conditi…</span></span>
-<span><span class="co">#&gt; $ variable_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Acute viral pharyngitis"<span style="color: #949494;">, </span>"Whiplash injury to neck"<span style="color: #949494;">, </span>"F…</span></span>
+<span><span class="co">#&gt; $ variable_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Acute bronchitis"<span style="color: #949494;">, </span>"Esophagitis"<span style="color: #949494;">, </span>"Injury of tendon of …</span></span>
 <span><span class="co">#&gt; $ estimate_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"coun…</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="display-the-results">Display the results<a class="anchor" aria-label="anchor" href="#display-the-results"></a>
