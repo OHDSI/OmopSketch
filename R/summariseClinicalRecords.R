@@ -413,49 +413,6 @@ variablesToSummarise <- function(quality, conceptSummary) {
   )[conceptSummary], c("in_observation", "start_before_birth", "end_before_start")[quality])
 }
 
-denominator <- function(cdm, sex, ageGroup, name) {
-  ageGroup <- ageGroup$age_group
-  # denominator
-  demographics <- CohortConstructor::demographicsCohort(
-    cdm = cdm, name = name, ageRange = ageGroup
-  ) |>
-    suppressMessages()
-  set <- omopgenerics::settings(demographics)
-  if (sex) {
-    demographics <- PatientProfiles::addSexQuery(demographics)
-  }
-  if (is.null(ageGroup)) {
-    set <- set |>
-      dplyr::select("cohort_definition_id")
-  } else {
-    set <- set |>
-      dplyr::left_join(
-        dplyr::tibble(
-          age_group = names(ageGroup),
-          age_range = purrr::map_chr(ageGroup, \(x) paste0(x[1], "_", x[2]))
-        ),
-        by = "age_range"
-      ) |>
-      dplyr::mutate(age_group = dplyr::coalesce(.data$age_group, .data$age_range)) |>
-      dplyr::select("cohort_definition_id", "age_group")
-  }
-  nm <- omopgenerics::uniqueTableName()
-  cdm <- omopgenerics::insertTable(cdm = cdm, name = nm, table = set)
-
-  demographics <- demographics |>
-    dplyr::select(dplyr::any_of(c(
-      "cohort_definition_id",
-      "person_id" = "subject_id", "sex"
-    ))) |>
-    dplyr::inner_join(cdm[[nm]], by = "cohort_definition_id") |>
-    dplyr::select(!"cohort_definition_id") |>
-    dplyr::distinct() |>
-    dplyr::compute(name = name, temporary = FALSE)
-
-  omopgenerics::dropSourceTable(cdm = cdm, name = nm)
-
-  return(demographics)
-}
 addVariables <- function(x, tableName, quality, conceptSummary) {
   newNames <- c(
     # here to support death table

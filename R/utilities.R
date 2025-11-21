@@ -152,19 +152,6 @@ sampleCdm <- function(cdm, tables, sample, call = parent.frame()){
   return(cdm)
 }
 
-sampleOmopTable <- function(omopTable, sample) {
-  if (is.null(sample)){
-    return(omopTable)
-  }
-  cdm <- omopgenerics::cdmReference(omopTable)
-  tableName <- omopgenerics::tableName(omopTable)
-  cdm <- sampleCdm(cdm = cdm, tables = tableName, sample = sample)
-  return(cdm[[tableName]])
-}
-
-
-
-
 validateStyle <- function(style, obj) {
   # check if style is NULL
   if (is.null(style)) {
