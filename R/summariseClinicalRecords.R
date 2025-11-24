@@ -221,53 +221,59 @@ summariseClinicalRecords <- function(cdm,
           )
       }
       if (conceptSummary) {
-        cli::cli_inform(c("i" = "Summarising domains in {.pkg {table}}."))
-        strataDomain <- lapply(strata, function(x) c(x, "domain_id"))
-        res$domain <- x |>
-          summariseCountsInternal(strata = strataDomain, counts = "records") |>
-          dplyr::mutate(
-            estimate_name = "count",
-            variable_name = "Domain",
-            variable_level = .data$domain_id
-          )
+        if ("domain_id" %in% colnames(x)) {
+          cli::cli_inform(c("i" = "Summarising domains in {.pkg {table}}."))
+          strataDomain <- lapply(strata, function(x) c(x, "domain_id"))
+          res$domain <- x |>
+            summariseCountsInternal(strata = strataDomain, counts = "records") |>
+            dplyr::mutate(
+              estimate_name = "count",
+              variable_name = "Domain",
+              variable_level = .data$domain_id
+            )
+        }
+        if ("standard_concept" %in% colnames(x)) {
+          cli::cli_inform(c("i" = "Summarising standard concepts in {.pkg {table}}."))
+          strataStandard <- lapply(strata, function(x) c(x, "standard_concept"))
+          res$standardConcept <- x |>
+            summariseCountsInternal(strata = strataStandard, counts = "records") |>
+            dplyr::mutate(
+              estimate_name = "count",
+              variable_name = "Standard concept",
+              variable_level = .data$standard_concept
+            )
+        }
 
-        cli::cli_inform(c("i" = "Summarising standard concepts in {.pkg {table}}."))
-        strataStandard <- lapply(strata, function(x) c(x, "standard_concept"))
-        res$standardConcept <- x |>
-          summariseCountsInternal(strata = strataStandard, counts = "records") |>
-          dplyr::mutate(
-            estimate_name = "count",
-            variable_name = "Standard concept",
-            variable_level = .data$standard_concept
-          )
+        if ("source_vocabulary" %in% colnames(x)) {
+          cli::cli_inform(c("i" = "Summarising source vocabularies in {.pkg {table}}."))
+          strataSource <- lapply(strata, function(x) c(x, "source_vocabulary"))
 
-        cli::cli_inform(c("i" = "Summarising source vocabularies in {.pkg {table}}."))
-        strataSource <- lapply(strata, function(x) c(x, "source_vocabulary"))
-
-        # Summarise and annotate
-        res$sourceVocab <- x |>
-          summariseCountsInternal(strata = strataSource, counts = "records") |>
-          dplyr::mutate(
-            estimate_name = "count",
-            variable_name = "Source vocabulary",
-            variable_level = .data$source_vocabulary
-          )
-
-        cli::cli_inform(c("i" = "Summarising concept types in {.pkg {table}}."))
-        strataType <- lapply(strata, function(x) c(x, "type_concept"))
-        res$typeConcept <- x |>
-          summariseCountsInternal(strata = strataType, counts = "records") |>
-          dplyr::mutate(
-            estimate_name = "count",
-            variable_name = "Type concept id",
-            type_concept = as.integer(.data$type_concept)
-          ) |>
-          dplyr::left_join(conceptTypes, by = "type_concept") |>
-          dplyr::mutate(type_name = dplyr::coalesce(
-            .data$type_name, paste0("Unknown type concept: ", .data$type_concept)
-          )) |>
-          dplyr::rename(variable_level = "type_name")
-        if (table == "drug_exposure") {
+          # Summarise and annotate
+          res$sourceVocab <- x |>
+            summariseCountsInternal(strata = strataSource, counts = "records") |>
+            dplyr::mutate(
+              estimate_name = "count",
+              variable_name = "Source vocabulary",
+              variable_level = .data$source_vocabulary
+            )
+        }
+        if ("type_concept" %in% colnames(x)) {
+          cli::cli_inform(c("i" = "Summarising concept types in {.pkg {table}}."))
+          strataType <- lapply(strata, function(x) c(x, "type_concept"))
+          res$typeConcept <- x |>
+            summariseCountsInternal(strata = strataType, counts = "records") |>
+            dplyr::mutate(
+              estimate_name = "count",
+              variable_name = "Type concept id",
+              type_concept = as.integer(.data$type_concept)
+            ) |>
+            dplyr::left_join(conceptTypes, by = "type_concept") |>
+            dplyr::mutate(type_name = dplyr::coalesce(
+              .data$type_name, paste0("Unknown type concept: ", .data$type_concept)
+            )) |>
+            dplyr::rename(variable_level = "type_name")
+        }
+        if ("concept_class_id" %in% colnames(x)) {
           cli::cli_inform(c("i" = "Summarising concept class in {.pkg {table}}."))
           strataClass <- lapply(strata, function(x) c(x, "concept_class_id"))
           res$conceptClass <- x |>
@@ -358,8 +364,8 @@ summariseRecordsPerPerson <- function(x, strata, estimates) {
   nm <- omopgenerics::uniqueTableName(prefix = prefix)
 
   res <- x |>
-        dplyr::group_by(dplyr::across(dplyr::all_of(c("person_id", strataCols)))) |>
-        dplyr::summarise(n = as.integer(dplyr::n()), .groups = "drop") |>
+    dplyr::group_by(dplyr::across(dplyr::all_of(c("person_id", strataCols)))) |>
+    dplyr::summarise(n = as.integer(dplyr::n()), .groups = "drop") |>
     dplyr::mutate(n = dplyr::coalesce(.data$n, 0L)) |>
     dplyr::compute(name = nm, temporary = FALSE)
 
@@ -494,33 +500,39 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
   }
 
   if (conceptSummary) {
-    x <- x |>
-      dplyr::left_join(
-        cdm$concept |>
-          dplyr::select(
-            standard = "concept_id",
-            "standard_concept",
-            "domain_id",
-            "concept_class_id"[tableName == "drug_exposure"]
-          ),
-        by = c("standard")
-      ) |>
-      dplyr::left_join(
-        cdm$concept |>
-          dplyr::select(
-            source = "concept_id",
-            source_vocabulary = "vocabulary_id"
-          ),
-        by = "source"
-      ) |>
-      dplyr::mutate(standard = dplyr::case_when(
-        .data$standard == 0 ~ "No matching concept",
-        .data$standard_concept == "S" ~ "Standard",
-        .data$standard_concept == "C" ~ "Classification",
-        .default = "Source"
-      ), source_vocabulary = dplyr::coalesce(
-        .data$source_vocabulary, "No matching concept"
-      ))
+    if ("standard" %in% colnames(x)) {
+      x <- x |>
+        dplyr::left_join(
+          cdm$concept |>
+            dplyr::select(
+              standard = "concept_id",
+              "standard_concept",
+              "domain_id",
+              "concept_class_id"[tableName == "drug_exposure"]
+            ),
+          by = c("standard")
+        ) |>
+        dplyr::mutate(standard = dplyr::case_when(
+          .data$standard == 0 ~ "No matching concept",
+          .data$standard_concept == "S" ~ "Standard",
+          .data$standard_concept == "C" ~ "Classification",
+          .default = "Source"
+        ))
+    }
+    if ("source" %in% colnames(x)) {
+      x <- x |>
+        dplyr::left_join(
+          cdm$concept |>
+            dplyr::select(
+              source = "concept_id",
+              source_vocabulary = "vocabulary_id"
+            ),
+          by = "source"
+        ) |>
+        dplyr::mutate(source_vocabulary = dplyr::coalesce(
+          .data$source_vocabulary, "No matching concept"
+        ))
+    }
   }
   variables <- c("id", "person_id", "start_date", "sex", "age_group", variablesToSummarise(quality = quality, conceptSummary = conceptSummary))
 
