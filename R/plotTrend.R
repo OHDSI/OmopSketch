@@ -43,29 +43,28 @@ plotTrend <- function(result,
                       output = NULL,
                       facet = "type",
                       colour = NULL,
-                      style = NULL) {
+                      style = NULL,
+                      type = NULL) {
   rlang::check_installed("ggplot2")
   rlang::check_installed("visOmopResults")
   # initial checks
   omopgenerics::validateResultArgument(result)
-  validateFacet(facet, result) # To remove when there's a version in omopgenerics
-
-   result <- result |>
+  result <- result |>
     omopgenerics::filterSettings(
       .data$result_type == "summarise_trend"
     )
    # check if it is empty
    if (nrow(result) == 0) {
      warnEmpty("summarise_trend")
-     return(visOmopResults::emptyPlot(subtitle = "`result` does not contain any `summarise_trend` data", style = style))
+     return(visOmopResults::emptyPlot(title = "`result` does not contain any `summarise_trend` data", style = style, type = type))
    }
-
+  validateFacet(facet, result) # To remove when there's a version in omopgenerics
   available_output <- fromVariableNameToOutput(unique(result$variable_name))
   if (is.null(output)) {
     if (length(available_output) == 1) {
       output <- available_output
     } else if (length(available_output) > 1) {
-      return(visOmopResults::emptyPlot(subtitle = "Trying to plot multiple outputs at the same time.
+      return(visOmopResults::emptyPlot(title = "Trying to plot multiple outputs at the same time.
                                        \n Please select one using the `output` argument or filter results.",
                                        style = style))
     } else {
@@ -131,6 +130,7 @@ plotTrend <- function(result,
         facet = facet,
         colour = colour,
         style = style,
+        type = "ggplot",
         group = c("cdm_name", "omop_table", omopgenerics::strataColumns(result))
       ) +
       ggplot2::labs(
@@ -162,12 +162,18 @@ plotTrend <- function(result,
         y = estimate,
         facet = facet,
         colour = colour,
-        style = style
+        style = style,
+        type = "ggplot"
       )
   }
-  p + ggplot2::labs(title = stringr::str_squish(title_text)) +
+  p <- p + ggplot2::labs(title = stringr::str_squish(title_text)) +
     ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5, face = "bold"),
                    legend.position = "top")
+  if (!is.null(type) && type == "plotly") {
+    rlang::check_installed("plotly")
+    p <- plotly::ggplotly(p)
+  }
+  return(p)
 
 }
 fromOutputToVariableName <- function(output) {

@@ -21,7 +21,8 @@ plotObservationPeriod <- function(result,
                                   plotType = "barplot",
                                   facet = NULL,
                                   colour = NULL,
-                                  style = NULL) {
+                                  style = NULL,
+                                  type = NULL) {
   rlang::check_installed("ggplot2")
   rlang::check_installed("visOmopResults")
   # initial checks
@@ -38,7 +39,7 @@ plotObservationPeriod <- function(result,
   # check if it is empty
   if (nrow(result) == 0) {
     warnEmpty("summarise_observation_period")
-    return(visOmopResults::emptyPlot(subtitle = "`result` does not contain any `summarise_observation_period` data", style = style))
+    return(visOmopResults::emptyPlot(title = "`result` does not contain any `summarise_observation_period` data", style = style, type = type))
   }
 
   variableNames <- unique(availablePlotObservationPeriod()$variable_name)
@@ -93,8 +94,9 @@ plotObservationPeriod <- function(result,
       facet = facet,
       colour = colour,
       style = style,
-      width = 0.8
-    ) +
+      width = 0.8,
+      type = "ggplot"
+    )  +
       ggplot2::ylab(stringr::str_to_sentence(unique(result$variable_name)))
   } else if (plotType == "boxplot") {
     p <- visOmopResults::boxPlot(
@@ -102,7 +104,8 @@ plotObservationPeriod <- function(result,
       x = "observation_period_ordinal",
       facet = facet,
       colour = colour,
-      style = style
+      style = style,
+      type = "ggplot"
     )
   } else if (plotType == "densityplot") {
     p <- visOmopResults::scatterPlot(
@@ -115,7 +118,8 @@ plotObservationPeriod <- function(result,
       facet = facet,
       colour = colour,
       group = optFacetColour,
-      style = style
+      style = style,
+      type = "ggplot"
     ) +
       ggplot2::xlab(stringr::str_to_sentence(unique(result$variable_name))) +
       ggplot2::ylab("Density")
@@ -138,6 +142,12 @@ plotObservationPeriod <- function(result,
     ggplot2::theme(legend.position = "top") +
     ggplot2::labs(title = main_title) +
     ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5, face = "bold"))
+
+
+  if (!is.null(type) && type == "plotly") {
+    rlang::check_installed("plotly")
+    p <- plotly::ggplotly(p)
+  }
   return(p)
 }
 

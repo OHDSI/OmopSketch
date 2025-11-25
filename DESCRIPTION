@@ -63,7 +63,8 @@ Suggests:
     ggplot2,
     visOmopResults (>= 1.4.0),
     devtools,
-    usethis
+    usethis, 
+    plotly
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Imports: 

@@ -177,7 +177,10 @@ test_that("check summariseObservationPeriod works", {
   # plot works
   expect_no_error(plotObservationPeriod(resAll))
   expect_no_error(plotObservationPeriod(resOne))
-  # expect_warning(plotObservationPeriod(resEmpty)) THIS TEST NEEDS DISCUSSION
+  expect_warning(plotObservationPeriod(resEmpty))
+
+  expect_no_error(p <-plotObservationPeriod(resAll, type = "plotly"))
+  expect_true(inherits(p, "plotly"))
 
   # check all plots combinations
   expect_no_error(
