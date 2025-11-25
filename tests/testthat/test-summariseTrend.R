@@ -746,6 +746,9 @@ test_that("plotTrend() works", {
   # Check that works ----
   expect_no_error(x <- plotTrend(summariseTrend(cdm, event = "condition_occurrence")))
   expect_true(inherits(x, "ggplot"))
+  expect_no_error(x <- plotTrend(summariseTrend(cdm, event = "condition_occurrence"), type = "plotly"))
+  expect_true(inherits(x, "plotly"))
+  expect_warning(plotTrend(omopgenerics::emptySummarisedResult()))
   expect_no_error(plotTrend(summariseTrend(cdm, episode = "observation_period")))
   expect_no_error(plotTrend(summariseTrend(cdm, episode = "observation_period", output = "age")))
   expect_no_error(plotTrend(summariseTrend(cdm, episode = "observation_period", output = c("age", "record"))))
