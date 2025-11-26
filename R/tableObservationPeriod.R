@@ -29,7 +29,7 @@ tableObservationPeriod <- function(result,
   # check if it is empty
   if (nrow(result) == 0) {
     warnEmpty("summarise_observation_period")
-    return(emptyTable(type))
+    return(visOmopResults::emptyTable(type = type, style = style))
   }
 
   byOrdinal <- result |>
@@ -39,9 +39,14 @@ tableObservationPeriod <- function(result,
   setting_cols <- omopgenerics::settingsColumns(result)
   setting_cols <- setting_cols[!setting_cols %in% c("study_period_end", "study_period_start")]
   hide <- c("result_id", "estimate_type", "strata_name", "observation_period_ordinal"[!byOrdinal])
+  header <- c("cdm_name")
+  groupColumn <- omopgenerics::strataColumns(result)
 
-
-  header <- c("cdm_name", setting_cols)
+  if (type != "reactable") {
+    header <- c(header, setting_cols)
+  } else {
+    groupColumn <- c(groupColumn, setting_cols)
+  }
 
 
   custom_order <- c("Number records", "Number subjects", "Subjects not in person table", "Records per person", "Duration in days", "Days to next observation period", "Type concept id", "Start date before birth date", "End date before start date", "Column name")
@@ -66,7 +71,7 @@ tableObservationPeriod <- function(result,
         "N zeros (%)" = "<zero_count> (<zero_percentage>%)"
       ),
       header = header,
-      groupColumn = omopgenerics::strataColumns(result),
+      groupColumn = groupColumn,
       hide = hide,
       type = type,
       style = style,

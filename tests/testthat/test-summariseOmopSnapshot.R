@@ -15,6 +15,7 @@ test_that("summarise omop snapshot works", {
 
   # Check result type
   checkResultType(x, "summarise_omop_snapshot")
+  expect_warning(tableOmopSnapshot(omopgenerics::emptySummarisedResult()))
 
   dropCreatedTables(cdm = cdm)
 })

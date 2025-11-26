@@ -48,7 +48,7 @@ tableTopConceptCounts <- function(result,
     )
   if (nrow(result) == 0) {
     warnEmpty("summarise_concept_id_counts")
-    return(emptyTable(type))
+    return(visOmopResults::emptyTable(type = type, style = style))
   }
 
   strata_cols <- omopgenerics::strataColumns(result)
@@ -57,6 +57,8 @@ tableTopConceptCounts <- function(result,
   # subset to result_type of interest
   setting_cols <- omopgenerics::settingsColumns(result)
   setting_cols <- setting_cols[!setting_cols %in% c("study_period_end", "study_period_start")]
+
+
   # check countBy
   result <- result |>
     dplyr::mutate(estimate_name = dplyr::case_when(
@@ -112,8 +114,14 @@ tableTopConceptCounts <- function(result,
     dplyr::select(!dplyr::all_of(colsGroup))
 
   # create visual table with visOmopResults
-  header <- c("cdm_name", setting_cols, additional_cols)
+  header <- c("cdm_name", additional_cols)
   group <- c("omop_table", strata_cols)
+  if (type != "reactable") {
+    header <- c(header, setting_cols)
+  } else {
+    group <- c(group, setting_cols)
+  }
+
   tab <- result |>
     visOmopResults::visTable(
       header = header,
@@ -121,7 +129,7 @@ tableTopConceptCounts <- function(result,
       hide = c("estimate_name", "estimate_type"),
       group = group,
       .options = list(merge = "all_columns",
-                      caption = paste0("Top ", as.character(top), " concepts in ", paste(tables, collapse = ", "), ifelse(length(tables) > 1, " tables", " table"))
+                      caption = paste0("Top ", as.character(top), " concepts in ", paste(tables, collapse = ", "), ifelse(length(tables) > 1, " tables", " table"), " ranked by ", countBy, " count")
                       ),
       type = type,
       style = style

@@ -57,7 +57,7 @@ tableConceptIdCounts <- function(result,
 
   if (nrow(result) == 0) {
     warnEmpty("summarise_concept_id_counts")
-    return(emptyTable(type))
+    return(visOmopResults::emptyTable(type = type))
   }
 
   if (display == "overall") {

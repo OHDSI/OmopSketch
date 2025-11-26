@@ -128,6 +128,12 @@ test_that("tableConceptIdCounts() works", {
   expect_no_error(tableConceptIdCounts(summariseConceptIdCounts(cdm, "condition_occurrence"), display = "source", type = "reactable"))
   expect_warning(tableConceptIdCounts(summariseConceptIdCounts(cdm, "condition_occurrence"), display = "missing source", type = "reactable"))
   expect_warning(tableConceptIdCounts(summariseConceptIdCounts(cdm, "condition_occurrence"), display = "missing standard", type = "reactable"))
+  cdm$drug_exposure <- cdm$drug_exposure |>
+    dplyr::mutate(drug_source_concept_id = dplyr::if_else(.data$drug_exposure_id %%2 == 0, 0L, .data$drug_source_concept_id ))
+  res <- summariseConceptIdCounts(cdm, "drug_exposure", countBy = c("record", "person"))
+  expect_no_error(tableConceptIdCounts(res, display = "source"))
+  expect_no_error(tableConceptIdCounts(res, display = "standard"))
+  expect_warning(tableConceptIdCounts(omopgenerics::emptySummarisedResult()))
 
   dropCreatedTables(cdm = cdm)
 })
@@ -265,6 +271,12 @@ test_that("tableTopConceptCounts works", {
 
   expect_no_error(result <- summariseConceptIdCounts(cdm, "drug_exposure", countBy = c("record", "person")))
   expect_no_error(tableTopConceptCounts(result, countBy = "record"))
+  set <- omopgenerics::settings(result) |>
+    dplyr::mutate(test = "test")
+  result <- omopgenerics::newSummarisedResult(result, settings = set)
+  expect_no_error(tableTopConceptCounts(result, countBy = "record"))
+  expect_no_error(tableTopConceptCounts(result, countBy = "record", type = "reactable"))
+  expect_warning(tableTopConceptCounts(omopgenerics::emptySummarisedResult()))
 
   dropCreatedTables(cdm = cdm)
 })
