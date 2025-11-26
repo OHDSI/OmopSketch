@@ -46,8 +46,17 @@ tableOmopSnapshot <- function(result,
 
   setting_cols <- omopgenerics::settingsColumns(result)
   setting_cols <- setting_cols[!setting_cols %in% c("study_period_end", "study_period_start")]
+  header <- "cdm_name"
+  group <- "variable_name"
+  if (type != "reactable") {
+    header <- c(header, setting_cols)
+  } else {
+    group <- c(group, setting_cols)
+  }
 
-  header <- c("cdm_name", setting_cols)
+
+
+
   cdms <- result$cdm_name |> unique()
   result <- result |>
     formatColumn(c("variable_name", "estimate_name")) |>
@@ -62,7 +71,7 @@ tableOmopSnapshot <- function(result,
         "Estimate" = "estimate_name",
         "Variable" = "variable_name"
       ),
-      groupColumn = "variable_name",
+      groupColumn = group,
       settingsColumn = setting_cols,
       .options = list(caption = paste0("Snapshot of the cdm ", paste(cdms, collapse = ", ")))
     )
