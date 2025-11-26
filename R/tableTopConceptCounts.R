@@ -48,7 +48,7 @@ tableTopConceptCounts <- function(result,
     )
   if (nrow(result) == 0) {
     warnEmpty("summarise_concept_id_counts")
-    return(emptyTable(type))
+    return(visOmopResults::emptyTable(type = type, style = style))
   }
 
   strata_cols <- omopgenerics::strataColumns(result)
@@ -129,7 +129,7 @@ tableTopConceptCounts <- function(result,
       hide = c("estimate_name", "estimate_type"),
       group = group,
       .options = list(merge = "all_columns",
-                      caption = paste0("Top ", as.character(top), " concepts in ", paste(tables, collapse = ", "), ifelse(length(tables) > 1, " tables", " table"))
+                      caption = paste0("Top ", as.character(top), " concepts in ", paste(tables, collapse = ", "), ifelse(length(tables) > 1, " tables", " table"), " ranked by ", countBy, " count")
                       ),
       type = type,
       style = style

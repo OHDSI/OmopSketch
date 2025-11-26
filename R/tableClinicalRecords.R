@@ -52,7 +52,7 @@ tableClinicalRecords <- function(result,
   # check if it is empty
   if (nrow(result) == 0) {
     warnEmpty("summarise_clinical_records")
-    return(emptyTable(type))
+    return(visOmopResults::emptyTable(type = type, style = style))
   }
   setting_cols <- omopgenerics::settingsColumns(result)
   setting_cols <- setting_cols[!setting_cols %in% c("study_period_end", "study_period_start")]

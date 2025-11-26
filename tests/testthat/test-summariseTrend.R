@@ -723,6 +723,12 @@ test_that("tableTrend() works", {
   # Check that works ----
   expect_no_error(x <- tableTrend(summariseTrend(cdm, event = "condition_occurrence")))
   expect_true(inherits(x, "gt_tbl"))
+  x <- summariseTrend(cdm, event = "condition_occurrence")
+  set <- omopgenerics::settings(x) |>
+    dplyr:::mutate(test = "test")
+  x <- omopgenerics::newSummarisedResult(x, settings = set)
+  expect_no_error(tableTrend(x, type = "reactable"))
+
   expect_no_error(y <- tableTrend(summariseTrend(cdm, episode = "observation_period", event = c(
     "observation_period",
     "measurement"
@@ -734,7 +740,7 @@ test_that("tableTrend() works", {
   expect_no_error(x <- tableTrend(summariseTrend(cdm, event = "condition_occurrence"), type = "reactable"))
   expect_no_error(tableTrend(summariseTrend(cdm, event = "condition_occurrence", output = "age")))
   expect_no_error(tableTrend(summariseTrend(cdm, episode = "drug_exposure", event = "condition_occurrence", interval = "years", output = c("age", "record"), sex = TRUE)))
-
+  expect_warning(tableTrend(omopgenerics::emptySummarisedResult()))
   dropCreatedTables(cdm = cdm)
 })
 

@@ -37,7 +37,7 @@ tablePerson <- function(result,
   # check if it is empty
   if (nrow(result) == 0) {
     warnEmpty("summarise_person")
-    return(emptyTable(type))
+    return(visOmopResults::emptyTable(type = type, style = style))
   }
 
   setting_cols <- omopgenerics::settingsColumns(result)

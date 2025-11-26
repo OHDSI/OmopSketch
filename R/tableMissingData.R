@@ -56,7 +56,7 @@ tableMissingData <- function(result,
   # check if it is empty
   if (nrow(result) == 0) {
     warnEmpty("summarise_missing_data")
-    return(emptyTable(type))
+    return(visOmopResults::emptyTable(type = type, style = style))
   }
   header <- c("cdm_name")
   groupColumn <- c("omop_table", omopgenerics::strataColumns(result))

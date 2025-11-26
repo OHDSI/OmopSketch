@@ -235,7 +235,7 @@ test_that("tableClinicalRecords() works", {
   expect_warning(t <- summariseClinicalRecords(cdm, "death"))
   expect_warning(inherits(tableClinicalRecords(t), "gt_tbl"))
   expect_no_error(x <- tableClinicalRecords(summariseClinicalRecords(cdm, "condition_occurrence"), type = "datatable"))
-
+  expect_warning(tableClinicalRecords(omopgenerics::emptySummarisedResult()))
   dropCreatedTables(cdm = cdm)
 })
 

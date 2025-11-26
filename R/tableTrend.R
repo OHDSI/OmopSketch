@@ -52,7 +52,7 @@ tableTrend <- function(result,
   # check if it is empty
   if (nrow(result) == 0) {
     warnEmpty("summarise_trend")
-    return(emptyTable(type))
+    return(visOmopResults::emptyTable(type = type, style = style))
   }
 
   additionals <- omopgenerics::additionalColumns(result)
