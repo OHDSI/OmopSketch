@@ -747,9 +747,9 @@ test_that("plotTrend() works", {
   expect_no_error(x <- plotTrend(summariseTrend(cdm, event = "condition_occurrence")))
   expect_true(inherits(x, "ggplot"))
   expect_no_error(plotTrend(summariseTrend(cdm, episode = "observation_period")))
-  expect_no_error(plotTrend(summariseTrend(cdm, episode = "observation_period", output = "age")))
-  expect_no_error(plotTrend(summariseTrend(cdm, episode = "observation_period", output = c("age", "record"))))
-  expect_no_error(plotTrend(summariseTrend(cdm, episode = "observation_period", output = c("age", "sex")), output = "sex"))
+  expect_no_error(plotTrend(summariseTrend(cdm, episode = "observation_period", output = "age", interval = "years")))
+  expect_no_error(plotTrend(summariseTrend(cdm, episode = "observation_period", output = c("age", "record"), interval = "months")))
+  expect_no_error(plotTrend(summariseTrend(cdm, episode = "observation_period", output = c("person", "person-days"), interval = "quarters"), output = "person-days"))
 
   expect_warning(plotTrend(summariseTrend(cdm, episode = "condition_occurrence", event = "drug_exposure"), colour = NULL, facet = NULL))
 
