@@ -71,7 +71,7 @@ plotTrend <- function(result,
       output <- "record"
     }
   }
-  omopgenerics::assertChoice(output, choices = available_output, length = 1L)
+  omopgenerics::assertChoice(output, choices = c("person-days", "record", "person", "age", "sex"), length = 1L)
   style <- validateStyle(style = style, obj = "plot")
 
   # subset to results of interest
