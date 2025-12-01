@@ -144,7 +144,7 @@ tableConceptIdCounts <- function(result,
     )
 
   rename_vec <- c(
-    "Database name" = "cdm_name",
+    "Database" = "cdm_name",
     "OMOP table" = "group_level",
     "Standard concept name" = "standard_concept_name",
     "Standard concept id" = "standard_concept_id",
@@ -166,8 +166,8 @@ tableConceptIdCounts <- function(result,
   formatted_result |>
     dplyr::rename(!!!rename_vec) |>
     visOmopResults::formatHeader(
-      header = c("Database name", "estimate_name"),
+      header = c("estimate_name"),
       includeHeaderName = FALSE
     ) |>
-    visOmopResults::formatTable(type = type, groupColumn = list(" " = c(setting_cols, "OMOP table")))
+    visOmopResults::formatTable(type = type, groupColumn = list(" " = c(setting_cols, "Database","OMOP table")))
 }
