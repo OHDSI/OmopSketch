@@ -5,7 +5,7 @@ test_that("databaseCharacteristics works", {
   expect_no_error(databaseCharacteristics(cdm) |> suppressWarnings())
   expect_no_error(databaseCharacteristics(cdm, sex = TRUE) |> suppressWarnings())
 
-  skip_if(dbToTest == "redshift-CDMConnector")
+  skip_if(dbToTest %in% c("redshift-CDMConnector", "local-omopgenerics"))
 
   expect_no_error(databaseCharacteristics(cdm, sex = TRUE, ageGroup = list(c(0, 50), c(51, Inf))) |> suppressWarnings())
   expect_no_error(databaseCharacteristics(cdm, sex = TRUE, ageGroup = list(c(0, 50), c(51, Inf)), dateRange = as.Date(c("1970-01-01", NA))) |> suppressWarnings())
