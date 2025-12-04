@@ -73,6 +73,7 @@ plotTrend <- function(result,
   }
   omopgenerics::assertChoice(output, choices = c("person-days", "record", "person", "age", "sex"), length = 1L)
   style <- validateStyle(style = style, obj = "plot")
+  omopgenerics::assertChoice(type, choices = visOmopResults::plotType(), length = 1, null = TRUE)
 
   # subset to results of interest
   variableName <- fromOutputToVariableName(output = output)
@@ -169,7 +170,7 @@ plotTrend <- function(result,
   p <- p + ggplot2::labs(title = stringr::str_squish(title_text)) +
     ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5, face = "bold"),
                    legend.position = "top")
-  if (!is.null(type) && type == "plotly") {
+  if (identical(type,"plotly")) {
     rlang::check_installed("plotly")
     p <- plotly::ggplotly(p)
   }

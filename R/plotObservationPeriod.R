@@ -28,7 +28,7 @@ plotObservationPeriod <- function(result,
   # initial checks
   omopgenerics::validateResultArgument(result)
   style <- validateStyle(style = style, obj = "plot")
-
+  omopgenerics::assertChoice(type, choices = visOmopResults::plotType(), length = 1, null = TRUE)
 
   # subset to result_type of interest
   result <- result |>
@@ -144,7 +144,7 @@ plotObservationPeriod <- function(result,
     ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5, face = "bold"))
 
 
-  if (!is.null(type) && type == "plotly") {
+  if(identical(type, "plotly")) {
     rlang::check_installed("plotly")
     p <- plotly::ggplotly(p)
   }
