@@ -41,13 +41,21 @@ tableOmopSnapshot <- function(result,
   # check if it is empty
   if (nrow(result) == 0) {
     warnEmpty("summarise_omop_snapshot")
-    return(emptyTable(type))
-  }
+    return(visOmopResults::emptyTable(type = type, style = style)) }
 
   setting_cols <- omopgenerics::settingsColumns(result)
   setting_cols <- setting_cols[!setting_cols %in% c("study_period_end", "study_period_start")]
+  header <- "cdm_name"
+  group <- "variable_name"
+  if (type != "reactable") {
+    header <- c(header, setting_cols)
+  } else {
+    group <- c(group, setting_cols)
+  }
 
-  header <- c("cdm_name", setting_cols)
+
+
+
   cdms <- result$cdm_name |> unique()
   result <- result |>
     formatColumn(c("variable_name", "estimate_name")) |>
@@ -62,7 +70,7 @@ tableOmopSnapshot <- function(result,
         "Estimate" = "estimate_name",
         "Variable" = "variable_name"
       ),
-      groupColumn = "variable_name",
+      groupColumn = group,
       settingsColumn = setting_cols,
       .options = list(caption = paste0("Snapshot of the cdm ", paste(cdms, collapse = ", ")))
     )
@@ -75,20 +83,6 @@ warnEmpty <- function(resultType) {
     stringr::str_glue()
   cli::cli_warn(message = message)
   return(message)
-}
-emptyTable <- function(type) {
-  pkg <- type
-  pkg[pkg == "tibble"] <- "dplyr"
-  pkg[pkg == "datatable"] <- "DT"
-  rlang::check_installed(pkg = pkg)
-  x <- dplyr::tibble(`Table has no data` = character())
-  switch(type,
-    "tibble" = x,
-    "gt" = gt::gt(x),
-    "flextable" = flextable::flextable(x),
-    "DT" = DT::datatable(x),
-    "reactable" = reactable::reactable(x)
-  )
 }
 
 formatColumn <- function(result, col) {

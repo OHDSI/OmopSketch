@@ -97,7 +97,7 @@ test_that("tableMissingData() works", {
   expect_true(inherits(y, "gt_tbl"))
   expect_warning(t <- summariseMissingData(cdm, "death"))
   expect_warning(inherits(tableMissingData(t), "gt_tbl"))
-
+  expect_warning(tableMissingData(omopgenerics::emptySummarisedResult()))
   dropCreatedTables(cdm = cdm)
 })
 

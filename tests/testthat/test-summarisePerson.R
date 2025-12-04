@@ -15,6 +15,6 @@ test_that("multiplication works", {
         plotPerson()
     )
   }
-
+  expect_warning(tablePerson(omopgenerics::emptySummarisedResult()))
   dropCreatedTables(cdm = cdm)
 })
