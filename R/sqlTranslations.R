@@ -20,7 +20,7 @@ datediffYear <- function(x, start, end, name) {
 }
 datediffDays <- function(x, start, end, name, offset = 0) {
 
-  q <- "as.integer(clock::date_count_between(start = .data[[start]], end = .data[[end]], precision = 'day'))"
+  q <- "as.numeric(clock::date_count_between(start = .data[[start]], end = .data[[end]], precision = 'day'))"
   if (offset > 0) {
     q <- paste0(q, " + ", offset, "L")
   } else if (offset < 0) {
