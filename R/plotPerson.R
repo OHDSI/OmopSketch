@@ -31,6 +31,8 @@ plotPerson <- function(result,
                        type = NULL) {
   # check input
   style <- validateStyle(style = style, obj = "plot")
+  omopgenerics::assertChoice(type, choices = visOmopResults::plotType(), length = 1, null = TRUE)
+
   result <- validateResult(
     result = result,
     resultType = "summarise_person",

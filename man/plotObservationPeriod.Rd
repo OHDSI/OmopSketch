@@ -10,7 +10,8 @@ plotObservationPeriod(
   plotType = "barplot",
   facet = NULL,
   colour = NULL,
-  style = NULL
+  style = NULL,
+  type = NULL
 )
 }
 \arguments{
@@ -36,6 +37,12 @@ this may be either the name of a built-in style (see
 custom style. If \code{NULL}, the function will use the explicit default style,
 unless a global style option is set (see \code{visOmopResults::setGlobalPlotOptions()})
 or a _brand.yml file is present (in that order).}
+
+\item{type}{Character string indicating the output plot format. See
+\code{visOmopResults::plotType()} for the list of supported plot types. If
+\code{type = NULL}, the function will use the global setting defined via
+\code{visOmopResults::setGlobalPlotOptions()} (if available); otherwise, a
+standard \code{ggplot2} plot is produced by default.}
 }
 \value{
 A plot visualisation.
