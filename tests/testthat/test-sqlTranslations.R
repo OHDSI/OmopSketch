@@ -46,8 +46,8 @@ test_that("test sql translations in each dialect", {
     dplyr::collect() |>
     dplyr::arrange(.data$id)
   expect_true(all(c("diff", "diff2") %in% colnames(y)))
-  expect_identical(y$diff, c(-1826L, -8765L, -3653L))
-  expect_identical(y$diff2, c(1826L, 8765L, 3653L))
+  expect_identical(y$diff, c(-1826, -8765, -3653))
+  expect_identical(y$diff2, c(1826, 8765, 3653))
 
   # datediffDays offset = 123
   x <- dplyr::tibble(
@@ -62,8 +62,8 @@ test_that("test sql translations in each dialect", {
     dplyr::collect() |>
     dplyr::arrange(.data$id)
   expect_true(all(c("diff", "diff2") %in% colnames(y)))
-  expect_identical(y$diff, c(-1826L, -8765L, -3653L) + 123L)
-  expect_identical(y$diff2, c(1826L, 8765L, 3653L) + 123L)
+  expect_identical(y$diff, c(-1826, -8765, -3653) + 123)
+  expect_identical(y$diff2, c(1826, 8765, 3653) + 123)
 
   # datediffDays offset = -123
   x <- dplyr::tibble(
@@ -78,8 +78,8 @@ test_that("test sql translations in each dialect", {
     dplyr::collect() |>
     dplyr::arrange(.data$id)
   expect_true(all(c("diff", "diff2") %in% colnames(y)))
-  expect_identical(y$diff, c(-1826L, -8765L, -3653L) - 123L)
-  expect_identical(y$diff2, c(1826L, 8765L, 3653L) - 123L)
+  expect_identical(y$diff, c(-1826, -8765, -3653) - 123)
+  expect_identical(y$diff2, c(1826, 8765, 3653) - 123)
 
   dropCreatedTables(cdm = cdm)
 })

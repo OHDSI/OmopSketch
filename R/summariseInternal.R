@@ -29,7 +29,7 @@ summariseCountsInternal <- function(x, strata, counts) {
     dplyr::bind_rows()
 }
 summariseMissingInternal <- function(x, strata, columns, cdm, table) {
-  q_na <- "sum(if_else(is.na(.data${columns}), 1, 0), na.rm = TRUE)" |>
+  q_na <- "sum(dplyr::if_else(is.na(.data${columns}), 1, 0), na.rm = TRUE)" |>
     stringr::str_glue() |>
     rlang::set_names(columns) |>
     rlang::parse_exprs()
@@ -37,7 +37,7 @@ summariseMissingInternal <- function(x, strata, columns, cdm, table) {
   columns_zero <- omopgenerics::omopTableFields(cdmVersion = omopgenerics::cdmVersion(cdm)) |>
     dplyr::filter(.data$cdm_table_name == table & .data$cdm_field_name %in% columns[grepl("_id$", columns)] & .data$cdm_datatype == "integer") |>
     dplyr::pull(.data$cdm_field_name)
-  q_zero <- "sum(if_else(.data${columns_zero} == 0, 1, 0), na.rm = TRUE)" |>
+  q_zero <- "sum(dplyr::if_else(.data${columns_zero} == 0, 1, 0), na.rm = TRUE)" |>
     stringr::str_glue() |>
     rlang::set_names(columns_zero) |>
     rlang::parse_exprs()
