@@ -13,7 +13,7 @@ summariseCountsInternal <- function(x, strata, counts) {
       dplyr::summarise(!!!q, .groups = "drop") |>
       dplyr::collect() |>
       dplyr::mutate(dplyr::across(
-        dplyr::all_of(names(q)), \(x) sprintf("%.0f", x)
+        dplyr::all_of(names(q)), \(x) sprintf("%.0f", as.double(x))
       )) |>
       tidyr::pivot_longer(
         cols = dplyr::all_of(names(q)),
