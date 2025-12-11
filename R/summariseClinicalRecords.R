@@ -500,10 +500,11 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
   }
 
   if (conceptSummary) {
+    conceptTable <- getConceptTable(cdm)
     if ("standard" %in% colnames(x)) {
       x <- x |>
         dplyr::left_join(
-          cdm$concept |>
+          conceptTable |>
             dplyr::select(
               standard = "concept_id",
               "standard_concept",
@@ -522,7 +523,7 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
     if ("source" %in% colnames(x)) {
       x <- x |>
         dplyr::left_join(
-          cdm$concept |>
+          conceptTable |>
             dplyr::select(
               source = "concept_id",
               source_vocabulary = "vocabulary_id"

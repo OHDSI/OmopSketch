@@ -170,6 +170,7 @@ validateStyle <- function(style, obj) {
 
 
 validateType <- function(type, call = parent.frame()) {
+
   if (is.null(type)) {
     type <- getOption(x = "visOmopResults.tableType", default = "gt")
   }
@@ -179,4 +180,59 @@ validateType <- function(type, call = parent.frame()) {
   omopgenerics::assertChoice(type, choices = choices, length = 1, call = call)
 
   return(type)
+}
+
+#' Get a Synapse-compatible concept table reference
+#'
+#' Azure Synapse cannot create temp tables with VARCHAR(MAX) columns in
+#' columnstore indexes. This helper casts the problematic columns to
+#' VARCHAR(255) for compatibility.
+#'
+#' @param cdm A CDM reference object
+#' @return A dplyr lazy table reference with casted columns
+#' @noRd
+getConceptTable <- function(cdm) {
+  con <- omopgenerics::cdmCon(cdm)
+  isSynapse <- isSynapseConnection(con)
+
+  if (isSynapse) {
+    # Cast VARCHAR(MAX) columns to VARCHAR(255) for Synapse compatibility
+    cdm[["concept"]] |>
+      dplyr::mutate(
+        concept_name = dplyr::sql("CAST(concept_name AS VARCHAR(255))"),
+        domain_id = dplyr::sql("CAST(domain_id AS VARCHAR(255))"),
+        vocabulary_id = dplyr::sql("CAST(vocabulary_id AS VARCHAR(255))"),
+        concept_class_id = dplyr::sql("CAST(concept_class_id AS VARCHAR(255))"),
+        standard_concept = dplyr::sql("CAST(standard_concept AS VARCHAR(20))"),
+        concept_code = dplyr::sql("CAST(concept_code AS VARCHAR(255))")
+      )
+  } else {
+    cdm[["concept"]]
+  }
+}
+
+#' Check if connection is to Azure Synapse
+#'
+#' @param con A DBI connection object
+#' @return Logical indicating if this is a Synapse connection
+#' @noRd
+isSynapseConnection <- function(con) {
+  if (is.null(con)) return(FALSE)
+
+  # Check connection class and server name for Synapse indicators
+  conClass <- class(con)
+  isMssql <- any(grepl("SQL Server|Microsoft|odbc", conClass, ignore.case = TRUE))
+
+  if (!isMssql) return(FALSE)
+
+  # Try to detect Synapse from connection info
+  tryCatch({
+    info <- DBI::dbGetInfo(con)
+    serverName <- info$servername %||% info$dbms.name %||% ""
+    grepl("synapse|azuresynapse", serverName, ignore.case = TRUE)
+  }, error = function(e) {
+    # If we can't determine, assume Synapse if it's MSSQL (safer default)
+    # User can set option to override
+    getOption("OmopSketch.assumeSynapse", default = TRUE) && isMssql
+  })
 }
