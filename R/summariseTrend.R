@@ -251,18 +251,14 @@ summariseEpisodeTrend <- function(cdm, omopTableName, output, interval, sex, age
           dplyr::cross_join(
             omopTable |>
               dplyr::mutate(
-                start_date = as.Date(paste0(
-                  as.character(as.integer(clock::get_year(.data[[start_date_name]]))), "-",
-                  as.character(as.integer(clock::get_month(.data[[start_date_name]]))), "-01"
+                # Use DATEFROMPARTS for SQL Server/Synapse compatibility (avoids text/VARCHAR(MAX) issues)
+                start_date = dplyr::sql(paste0(
+                  "DATEFROMPARTS(DATEPART(YEAR, \"", start_date_name, "\"), DATEPART(MONTH, \"", start_date_name, "\"), 1)"
                 )),
-                end_date = dplyr::if_else(
-                  is.na(.data[[end_date_name]]),
-                  as.Date(NA),
-                  as.Date(paste0(
-                    as.character(as.integer(clock::get_year(.data[[end_date_name]]))), "-",
-                    as.character(as.integer(clock::get_month(.data[[end_date_name]]))), "-01"
-                  ))
-                )
+                end_date = dplyr::sql(paste0(
+                  "CASE WHEN \"", end_date_name, "\" IS NULL THEN NULL ",
+                  "ELSE DATEFROMPARTS(DATEPART(YEAR, \"", end_date_name, "\"), DATEPART(MONTH, \"", end_date_name, "\"), 1) END"
+                ))
               )
           ) |>
           dplyr::filter(

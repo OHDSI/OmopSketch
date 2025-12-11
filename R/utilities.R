@@ -192,7 +192,7 @@ validateType <- function(type, call = parent.frame()) {
 #' @return A dplyr lazy table reference with casted columns
 #' @noRd
 getConceptTable <- function(cdm) {
-  con <- omopgenerics::cdmCon(cdm)
+  con <- CDMConnector::cdmCon(cdm)
   isSynapse <- isSynapseConnection(con)
 
   if (isSynapse) {
@@ -211,28 +211,23 @@ getConceptTable <- function(cdm) {
   }
 }
 
-#' Check if connection is to Azure Synapse
+#' Check if connection is to Azure Synapse or SQL Server
 #'
 #' @param con A DBI connection object
-#' @return Logical indicating if this is a Synapse connection
+#' @return Logical indicating if this is a Synapse/SQL Server connection that needs VARCHAR casting
 #' @noRd
 isSynapseConnection <- function(con) {
   if (is.null(con)) return(FALSE)
 
-  # Check connection class and server name for Synapse indicators
+  # Check connection class for SQL Server/ODBC indicators
   conClass <- class(con)
   isMssql <- any(grepl("SQL Server|Microsoft|odbc", conClass, ignore.case = TRUE))
 
-  if (!isMssql) return(FALSE)
+  # For any MSSQL connection, use the safe casting approach by default
+  # This avoids VARCHAR(MAX) issues in columnstore indexes
+  if (isMssql) {
+    return(getOption("OmopSketch.useSynapseCompatibility", default = TRUE))
+  }
 
-  # Try to detect Synapse from connection info
-  tryCatch({
-    info <- DBI::dbGetInfo(con)
-    serverName <- info$servername %||% info$dbms.name %||% ""
-    grepl("synapse|azuresynapse", serverName, ignore.case = TRUE)
-  }, error = function(e) {
-    # If we can't determine, assume Synapse if it's MSSQL (safer default)
-    # User can set option to override
-    getOption("OmopSketch.assumeSynapse", default = TRUE) && isMssql
-  })
+  return(FALSE)
 }
