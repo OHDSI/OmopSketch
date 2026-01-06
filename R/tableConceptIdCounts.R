@@ -169,5 +169,5 @@ tableConceptIdCounts <- function(result,
       header = c("estimate_name"),
       includeHeaderName = FALSE
     ) |>
-    visOmopResults::formatTable(type = type, groupColumn = list(" " = c(setting_cols, "Database","OMOP table")))
+    visOmopResults::formatTable(type = type)
 }
