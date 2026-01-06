@@ -232,15 +232,15 @@ summariseClinicalRecords <- function(cdm,
               variable_level = .data$domain_id
             )
         }
-        if ("standard_concept" %in% colnames(x)) {
+        if ("standard" %in% colnames(x)) {
           cli::cli_inform(c("i" = "Summarising standard concepts in {.pkg {table}}."))
-          strataStandard <- lapply(strata, function(x) c(x, "standard_concept"))
+          strataStandard <- lapply(strata, function(x) c(x, "standard"))
           res$standardConcept <- x |>
             summariseCountsInternal(strata = strataStandard, counts = "records") |>
             dplyr::mutate(
               estimate_name = "count",
               variable_name = "Standard concept",
-              variable_level = .data$standard_concept
+              variable_level = .data$standard
             )
         }
 
@@ -413,7 +413,7 @@ summariseRecordsPerPerson <- function(x, strata, estimates) {
 }
 variablesToSummarise <- function(quality, conceptSummary) {
   c(c(
-    "standard_concept",
+    "standard",
     "source_vocabulary", "domain_id",
     "type_concept", "concept_class_id"
   )[conceptSummary], c("in_observation", "start_before_birth", "end_before_start")[quality])
