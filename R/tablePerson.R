@@ -1,4 +1,3 @@
-
 #' Visualise the output of `summarisePerson()`
 #'
 #' @param result A summarised_result object (output of `summarisePerson()`).
@@ -50,26 +49,27 @@ tablePerson <- function(result,
   } else {
     group <- c(group, setting_cols)
   }
+  custom_order <- c("Number subjects", "Number subjects not in observation", "Sex", "Sex source", "Race", "Race source", "Ethnicity", "Ethnicity source", "Year of birth", "Month of birth", "Day of birth", "Location", "Provider", "Care site")
 
-  visOmopResults::visOmopTable(
-    result = result,
-    estimateName = c(
-      "N (%)" = "<count> (<percentage>%)",
-      "N" = "<count>",
-      "Missing (%)" = "<count_missing> (<percentage_missing>%)",
-      "Median [Q25 - Q75]" = "<median> [<q25> - <q75>]",
-      "90% Range [Q05 to Q95]" = "<q05> to <q95>",
-      "Range [min to max]" = "<min> to <max>",
-      "Zero count (%)" = "<count_0> (<percentage_0>%)",
-      "Distinct values" = "<distinct_values>"
-    ),
-    header = header,
-    style = style,
-    type = type,
-    groupColumn = group,
-    settingsColumn = setting_cols,
-
-    .options = list(caption = "Summary of person table")
-
-  )
+  result |>
+    dplyr::mutate(variable_name = factor(.data$variable_name, levels = custom_order)) |>
+    dplyr::arrange(.data$variable_name, .data$variable_level, .data$estimate_name) |>
+    visOmopResults::visOmopTable(
+      estimateName = c(
+        "N (%)" = "<count> (<percentage>%)",
+        "N" = "<count>",
+        "Missing (%)" = "<count_missing> (<percentage_missing>%)",
+        "Median [Q25 - Q75]" = "<median> [<q25> - <q75>]",
+        "90% Range [Q05 to Q95]" = "<q05> to <q95>",
+        "Range [min to max]" = "<min> to <max>",
+        "Zero count (%)" = "<count_0> (<percentage_0>%)",
+        "Distinct values" = "<distinct_values>"
+      ),
+      header = header,
+      style = style,
+      type = type,
+      groupColumn = group,
+      settingsColumn = setting_cols,
+      .options = list(caption = "Summary of person table")
+    )
 }
