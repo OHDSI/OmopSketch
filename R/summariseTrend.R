@@ -247,18 +247,25 @@ summariseEpisodeTrend <- function(cdm, omopTableName, output, interval, sex, age
         cdm <- omopgenerics::insertTable(cdm = cdm, name = nm, table = timeInterval[rows[[i]],])
 
         # do the cross_join and filter
+        # Use clock functions which translate appropriately for each database
         xi <- cdm[[nm]] |>
           dplyr::cross_join(
             omopTable |>
               dplyr::mutate(
-                # Use DATEFROMPARTS for SQL Server/Synapse compatibility (avoids text/VARCHAR(MAX) issues)
-                start_date = dplyr::sql(paste0(
-                  "DATEFROMPARTS(DATEPART(YEAR, \"", start_date_name, "\"), DATEPART(MONTH, \"", start_date_name, "\"), 1)"
-                )),
-                end_date = dplyr::sql(paste0(
-                  "CASE WHEN \"", end_date_name, "\" IS NULL THEN NULL ",
-                  "ELSE DATEFROMPARTS(DATEPART(YEAR, \"", end_date_name, "\"), DATEPART(MONTH, \"", end_date_name, "\"), 1) END"
-                ))
+                start_date = clock::date_build(
+                  clock::get_year(.data[[start_date_name]]),
+                  clock::get_month(.data[[start_date_name]]),
+                  1L
+                ),
+                end_date = dplyr::if_else(
+                  is.na(.data[[end_date_name]]),
+                  as.Date(NA),
+                  clock::date_build(
+                    clock::get_year(.data[[end_date_name]]),
+                    clock::get_month(.data[[end_date_name]]),
+                    1L
+                  )
+                )
               )
           ) |>
           dplyr::filter(

@@ -463,17 +463,30 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
       dplyr::mutate(
         end_before_start = dplyr::if_else(.data$end_date < .data$start_date, 1L, 0L)
       )
-    # Use DATEFROMPARTS for SQL Server/Synapse compatibility (avoids text/VARCHAR(MAX) issues)
-    birth_sql <- dplyr::sql("DATEFROMPARTS(\"year_of_birth\", COALESCE(\"month_of_birth\", 1), COALESCE(\"day_of_birth\", 1))")
-
+    # Use clock::date_build() which translates appropriately for each database
+    # (DATEFROMPARTS on SQL Server, make_date on others)
     person_tbl <- if (!("birth_datetime" %in% colnames(cdm$person))) {
       cdm$person |>
-        dplyr::mutate(birthdate = !!birth_sql) |>
+        dplyr::mutate(
+          birthdate = clock::date_build(
+            .data$year_of_birth,
+            dplyr::coalesce(.data$month_of_birth, 1L),
+            dplyr::coalesce(.data$day_of_birth, 1L)
+          )
+        ) |>
         dplyr::select("person_id", "birthdate")
     } else {
       cdm$person |>
         dplyr::mutate(
-          birthdate = dplyr::sql("CASE WHEN \"birth_datetime\" IS NOT NULL THEN CAST(\"birth_datetime\" AS DATE) ELSE DATEFROMPARTS(\"year_of_birth\", COALESCE(\"month_of_birth\", 1), COALESCE(\"day_of_birth\", 1)) END")
+          birthdate = dplyr::if_else(
+            !is.na(.data$birth_datetime),
+            as.Date(.data$birth_datetime),
+            clock::date_build(
+              .data$year_of_birth,
+              dplyr::coalesce(.data$month_of_birth, 1L),
+              dplyr::coalesce(.data$day_of_birth, 1L)
+            )
+          )
         ) |>
         dplyr::select("person_id", "birthdate")
     }
