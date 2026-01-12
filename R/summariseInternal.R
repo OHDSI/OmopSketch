@@ -170,31 +170,18 @@ addSexAgeGroup <- function(x, sex, ageGroup, indexDate) {
   person <- omopgenerics::cdmReference(x)$person
 
   # Build person table with sex and/or birth_date as needed
-  # Use clock::date_build() which translates appropriately for each database
+  # Use database-specific date construction
+ cdm <- omopgenerics::cdmReference(x)
   if (sex && age) {
-    person <- person |>
-      dplyr::mutate(
-        sex = .data$gender_concept_id,
-        birth_date = clock::date_build(
-          .data$year_of_birth,
-          dplyr::coalesce(.data$month_of_birth, 1L),
-          dplyr::coalesce(.data$day_of_birth, 1L)
-        )
-      ) |>
+    person <- addBirthDate(person, cdm) |>
+      dplyr::mutate(sex = .data$gender_concept_id) |>
       dplyr::select("person_id", "sex", "birth_date")
   } else if (sex) {
     person <- person |>
       dplyr::mutate(sex = .data$gender_concept_id) |>
       dplyr::select("person_id", "sex")
   } else if (age) {
-    person <- person |>
-      dplyr::mutate(
-        birth_date = clock::date_build(
-          .data$year_of_birth,
-          dplyr::coalesce(.data$month_of_birth, 1L),
-          dplyr::coalesce(.data$day_of_birth, 1L)
-        )
-      ) |>
+    person <- addBirthDate(person, cdm) |>
       dplyr::select("person_id", "birth_date")
   } else {
     person <- person |>

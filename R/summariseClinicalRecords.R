@@ -463,33 +463,9 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
       dplyr::mutate(
         end_before_start = dplyr::if_else(.data$end_date < .data$start_date, 1L, 0L)
       )
-    # Use clock::date_build() which translates appropriately for each database
-    # (DATEFROMPARTS on SQL Server, make_date on others)
-    person_tbl <- if (!("birth_datetime" %in% colnames(cdm$person))) {
-      cdm$person |>
-        dplyr::mutate(
-          birthdate = clock::date_build(
-            .data$year_of_birth,
-            dplyr::coalesce(.data$month_of_birth, 1L),
-            dplyr::coalesce(.data$day_of_birth, 1L)
-          )
-        ) |>
-        dplyr::select("person_id", "birthdate")
-    } else {
-      cdm$person |>
-        dplyr::mutate(
-          birthdate = dplyr::if_else(
-            !is.na(.data$birth_datetime),
-            as.Date(.data$birth_datetime),
-            clock::date_build(
-              .data$year_of_birth,
-              dplyr::coalesce(.data$month_of_birth, 1L),
-              dplyr::coalesce(.data$day_of_birth, 1L)
-            )
-          )
-        ) |>
-        dplyr::select("person_id", "birthdate")
-    }
+    # Use database-specific date construction
+    person_tbl <- addBirthDateWithDatetime(cdm$person, cdm) |>
+      dplyr::select("person_id", "birthdate")
 
 
     x <- x |>

@@ -231,3 +231,93 @@ isSynapseConnection <- function(con) {
 
   return(FALSE)
 }
+
+#' Add birth_date column to a person table
+#'
+#' Creates birth_date from year_of_birth, month_of_birth, day_of_birth in a
+#' cross-database compatible way.
+#'
+#' @param person A dplyr lazy table reference to the person table
+#' @param cdm The CDM reference (used to detect connection type)
+#' @return The person table with birth_date column added
+#' @noRd
+addBirthDate <- function(person, cdm) {
+  con <- CDMConnector::cdmCon(cdm)
+  isMssql <- isSynapseConnection(con)
+
+ if (isMssql) {
+    # SQL Server/Synapse: use DATEFROMPARTS
+    person |>
+      dplyr::mutate(
+        birth_date = dplyr::sql("DATEFROMPARTS(\"year_of_birth\", COALESCE(\"month_of_birth\", 1), COALESCE(\"day_of_birth\", 1))")
+      )
+  } else {
+    # Other databases (DuckDB, PostgreSQL, etc.): use make_date
+    person |>
+      dplyr::mutate(
+        birth_date = dplyr::sql("make_date(\"year_of_birth\", COALESCE(\"month_of_birth\", 1), COALESCE(\"day_of_birth\", 1))")
+      )
+  }
+}
+
+#' Add birthdate column to person table (with birth_datetime fallback)
+#'
+#' Creates birthdate from birth_datetime (if available) or year_of_birth,
+#' month_of_birth, day_of_birth in a cross-database compatible way.
+#'
+#' @param person A dplyr lazy table reference to the person table
+#' @param cdm The CDM reference (used to detect connection type)
+#' @return The person table with birthdate column added
+#' @noRd
+addBirthDateWithDatetime <- function(person, cdm) {
+  con <- CDMConnector::cdmCon(cdm)
+  isMssql <- isSynapseConnection(con)
+
+  if (!("birth_datetime" %in% colnames(person))) {
+    return(addBirthDate(person, cdm) |>
+             dplyr::rename(birthdate = "birth_date"))
+  }
+
+  if (isMssql) {
+    # SQL Server/Synapse: use DATEFROMPARTS
+    person |>
+      dplyr::mutate(
+        birthdate = dplyr::sql("CASE WHEN \"birth_datetime\" IS NOT NULL THEN CAST(\"birth_datetime\" AS DATE) ELSE DATEFROMPARTS(\"year_of_birth\", COALESCE(\"month_of_birth\", 1), COALESCE(\"day_of_birth\", 1)) END")
+      )
+  } else {
+    # Other databases: use make_date
+    person |>
+      dplyr::mutate(
+        birthdate = dplyr::sql("CASE WHEN \"birth_datetime\" IS NOT NULL THEN CAST(\"birth_datetime\" AS DATE) ELSE make_date(\"year_of_birth\", COALESCE(\"month_of_birth\", 1), COALESCE(\"day_of_birth\", 1)) END")
+      )
+  }
+}
+
+#' Truncate dates to first of month (database-specific)
+#'
+#' @param tbl A dplyr lazy table
+#' @param cdm The CDM reference
+#' @param start_col Name of the start date column
+#' @param end_col Name of the end date column
+#' @return Table with start_date and end_date truncated to first of month
+#' @noRd
+truncateDatesToMonth <- function(tbl, cdm, start_col, end_col) {
+  con <- CDMConnector::cdmCon(cdm)
+  isMssql <- isSynapseConnection(con)
+
+  if (isMssql) {
+    # SQL Server: use DATEFROMPARTS and DATEPART
+    start_sql <- paste0("DATEFROMPARTS(DATEPART(YEAR, \"", start_col, "\"), DATEPART(MONTH, \"", start_col, "\"), 1)")
+    end_sql <- paste0("CASE WHEN \"", end_col, "\" IS NULL THEN NULL ELSE DATEFROMPARTS(DATEPART(YEAR, \"", end_col, "\"), DATEPART(MONTH, \"", end_col, "\"), 1) END")
+  } else {
+    # Other databases: use make_date and extract
+    start_sql <- paste0("make_date(EXTRACT(YEAR FROM \"", start_col, "\")::INTEGER, EXTRACT(MONTH FROM \"", start_col, "\")::INTEGER, 1)")
+    end_sql <- paste0("CASE WHEN \"", end_col, "\" IS NULL THEN NULL ELSE make_date(EXTRACT(YEAR FROM \"", end_col, "\")::INTEGER, EXTRACT(MONTH FROM \"", end_col, "\")::INTEGER, 1) END")
+  }
+
+  tbl |>
+    dplyr::mutate(
+      start_date = dplyr::sql(start_sql),
+      end_date = dplyr::sql(end_sql)
+    )
+}

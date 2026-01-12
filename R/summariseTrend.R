@@ -247,26 +247,10 @@ summariseEpisodeTrend <- function(cdm, omopTableName, output, interval, sex, age
         cdm <- omopgenerics::insertTable(cdm = cdm, name = nm, table = timeInterval[rows[[i]],])
 
         # do the cross_join and filter
-        # Use clock functions which translate appropriately for each database
+        # Use database-specific date truncation
         xi <- cdm[[nm]] |>
           dplyr::cross_join(
-            omopTable |>
-              dplyr::mutate(
-                start_date = clock::date_build(
-                  clock::get_year(.data[[start_date_name]]),
-                  clock::get_month(.data[[start_date_name]]),
-                  1L
-                ),
-                end_date = dplyr::if_else(
-                  is.na(.data[[end_date_name]]),
-                  as.Date(NA),
-                  clock::date_build(
-                    clock::get_year(.data[[end_date_name]]),
-                    clock::get_month(.data[[end_date_name]]),
-                    1L
-                  )
-                )
-              )
+            truncateDatesToMonth(omopTable, cdm, start_date_name, end_date_name)
           ) |>
           dplyr::filter(
             (.data$start_date < .data$interval_start_date &
