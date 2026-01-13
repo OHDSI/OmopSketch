@@ -4,10 +4,24 @@
 \alias{tableTrend}
 \title{Create a visual table from a summariseTrend() result}
 \usage{
-tableTrend(result, type = NULL, style = NULL)
+tableTrend(
+  result,
+  header = "cdm_name",
+  hide = "variable_level",
+  group = c("type", "omop_table"),
+  type = NULL,
+  style = NULL
+)
 }
 \arguments{
 \item{result}{A summarised_result object (output of \code{summariseTrend()}).}
+
+\item{header}{A vector specifying the elements to include in the header.
+The order of elements matters, with the first being the topmost header.}
+
+\item{hide}{Columns to drop from the output table.}
+
+\item{group}{Character vector of column names used to group the results.}
 
 \item{type}{Type of formatting output table between \code{gt}, \code{datatable} and
 \code{reactable}. Default is \code{"gt"}.}

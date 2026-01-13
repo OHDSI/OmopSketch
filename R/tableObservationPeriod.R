@@ -11,6 +11,9 @@
 #' @inherit summariseObservationPeriod examples
 #'
 tableObservationPeriod <- function(result,
+                                   header = "cdm_name",
+                                   hide = omopgenerics::settingsColumns(result),
+                                   group = omopgenerics::strataColumns(result),
                                    type = NULL,
                                    style = NULL) {
   # initial checks
@@ -37,10 +40,9 @@ tableObservationPeriod <- function(result,
     dplyr::pull("n") > 1
 
   setting_cols <- omopgenerics::settingsColumns(result)
-  setting_cols <- setting_cols[!setting_cols %in% c("study_period_end", "study_period_start")]
-  hide <- c("result_id", "estimate_type", "strata_name", "observation_period_ordinal"[!byOrdinal])
-  header <- c("cdm_name")
-  groupColumn <- omopgenerics::strataColumns(result)
+
+  hide <- c(hide, "observation_period_ordinal"[!byOrdinal])
+
 
   if (type != "reactable") {
     header <- c(header, setting_cols)
@@ -71,7 +73,7 @@ tableObservationPeriod <- function(result,
         "N zeros (%)" = "<zero_count> (<zero_percentage>%)"
       ),
       header = header,
-      groupColumn = groupColumn,
+      groupColumn = group,
       hide = hide,
       type = type,
       style = style,

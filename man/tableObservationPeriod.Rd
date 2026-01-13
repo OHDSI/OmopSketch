@@ -4,11 +4,25 @@
 \alias{tableObservationPeriod}
 \title{Create a visual table from a summariseObservationPeriod() result}
 \usage{
-tableObservationPeriod(result, type = NULL, style = NULL)
+tableObservationPeriod(
+  result,
+  header = "cdm_name",
+  hide = omopgenerics::settingsColumns(result),
+  group = omopgenerics::strataColumns(result),
+  type = NULL,
+  style = NULL
+)
 }
 \arguments{
 \item{result}{A summarised_result object (output of
 \code{summariseObservationPeriod()}).}
+
+\item{header}{A vector specifying the elements to include in the header.
+The order of elements matters, with the first being the topmost header.}
+
+\item{hide}{Columns to drop from the output table.}
+
+\item{group}{Character vector of column names used to group the results.}
 
 \item{type}{Character string specifying the desired output table format. See
 \code{visOmopResults::tableType()} for supported table types. If \code{type = NULL},

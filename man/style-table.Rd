@@ -24,6 +24,13 @@ the selected table type.
 If \code{style = NULL}, the function will use global options
 (see\code{visOmopResults::setGlobalTableOptions()}) or a _brand.yml file
 (if found); otherwise, the default style is applied.}
+
+\item{header}{A vector specifying the elements to include in the header.
+The order of elements matters, with the first being the topmost header.}
+
+\item{hide}{Columns to drop from the output table.}
+
+\item{group}{Character vector of column names used to group the results.}
 }
 \description{
 Helper for consistent documentation of table arguments.
