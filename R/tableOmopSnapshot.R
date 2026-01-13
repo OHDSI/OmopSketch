@@ -47,6 +47,7 @@ tableOmopSnapshot <- function(result,
     return(visOmopResults::emptyTable(type = type, style = style)) }
 
   cdms <- result$cdm_name |> unique()
+  setting_cols <- omopgenerics::settingsColumns(result)
   result <- result |>
     formatColumn(c("variable_name", "estimate_name")) |>
     visOmopResults::visOmopTable(
