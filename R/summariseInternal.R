@@ -13,7 +13,7 @@ summariseCountsInternal <- function(x, strata, counts) {
       dplyr::summarise(!!!q, .groups = "drop") |>
       dplyr::collect() |>
       dplyr::mutate(dplyr::across(
-        dplyr::all_of(names(q)), \(x) sprintf("%.0f", as.double(x))
+        dplyr::all_of(names(q)), \(x) as.character(round(x, digits = 0))
       )) |>
       tidyr::pivot_longer(
         cols = dplyr::all_of(names(q)),
@@ -58,7 +58,7 @@ summariseMissingInternal <- function(x, strata, columns, cdm, table) {
         .names = "percentage_{.col}"
       )) |>
       dplyr::mutate(dplyr::across(
-        dplyr::all_of(names(q_na)), \(x) sprintf("%i", as.integer(x))
+        dplyr::all_of(names(q_na)), \(x) as.character(round(x, digits = 0))
       )) |>
       dplyr::rename_with(\(x) paste0("count_", x), .cols = dplyr::all_of(names(q_na))) |>
       dplyr::select(!"total_counts") |>
@@ -98,7 +98,7 @@ summariseMissingInternal <- function(x, strata, columns, cdm, table) {
           .names = "percentage_{.col}"
         )) |>
         dplyr::mutate(dplyr::across(
-          dplyr::all_of(names(q_zero)), \(x) sprintf("%i", as.integer(x))
+          dplyr::all_of(names(q_zero)), \(x) as.character(round(x, digits = 0))
         )) |>
         dplyr::rename_with(\(x) paste0("count_", x), .cols = dplyr::all_of(names(q_zero))) |>
         dplyr::select(!"total_counts") |>
@@ -266,7 +266,7 @@ summariseSumInternal <- function(x, strata, variable) {
       dplyr::group_by(dplyr::across(dplyr::all_of(stratak))) |>
       dplyr::summarise(estimate_value = sum(.data[[variable]], na.rm = TRUE), .groups = "drop") |>
       dplyr::collect() |>
-      dplyr::mutate(estimate_value = sprintf("%i", as.integer(.data$estimate_value))) |>
+      dplyr::mutate(estimate_value = as.character(round(.data$estimate_value, digits = 0))) |>
       dplyr::mutate(estimate_type = "integer", estimate_name = "count") |>
       dplyr::select(dplyr::all_of(c(
         stratak, "estimate_name", "estimate_type",
