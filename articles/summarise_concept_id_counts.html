@@ -157,12 +157,12 @@ tables.</p>
 <span><span class="co">#&gt; Rows: 113</span></span>
 <span><span class="co">#&gt; Columns: 7</span></span>
 <span><span class="co">#&gt; $ group_level      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "drug_exposure"<span style="color: #949494;">, </span>"drug_exposure"<span style="color: #949494;">, </span>"drug_exposure"<span style="color: #949494;">, </span>"d…</span></span>
-<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "zoster vaccine, live"<span style="color: #949494;">, </span>"Acetaminophen 160 MG Oral Ta…</span></span>
-<span><span class="co">#&gt; $ variable_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "40213260"<span style="color: #949494;">, </span>"1127078"<span style="color: #949494;">, </span>"40213306"<span style="color: #949494;">, </span>"19133905"<span style="color: #949494;">, </span>"19128…</span></span>
+<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "pneumococcal conjugate vaccine, 13 valent"<span style="color: #949494;">, </span>"Amoxici…</span></span>
+<span><span class="co">#&gt; $ variable_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "40213198"<span style="color: #949494;">, </span>"1713671"<span style="color: #949494;">, </span>"1551192"<span style="color: #949494;">, </span>"19133873"<span style="color: #949494;">, </span>"191280…</span></span>
 <span><span class="co">#&gt; $ estimate_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"c…</span></span>
-<span><span class="co">#&gt; $ estimate_value   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "2125"<span style="color: #949494;">, </span>"2158"<span style="color: #949494;">, </span>"1916"<span style="color: #949494;">, </span>"1087"<span style="color: #949494;">, </span>"1056"<span style="color: #949494;">, </span>"306"<span style="color: #949494;">, </span>"850"<span style="color: #949494;">,</span>…</span></span>
+<span><span class="co">#&gt; $ estimate_value   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "453"<span style="color: #949494;">, </span>"3851"<span style="color: #949494;">, </span>"161"<span style="color: #949494;">, </span>"1719"<span style="color: #949494;">, </span>"449"<span style="color: #949494;">, </span>"101"<span style="color: #949494;">, </span>"1767"<span style="color: #949494;">, </span>"…</span></span>
 <span><span class="co">#&gt; $ additional_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "source_concept_id &amp;&amp;&amp; source_concept_name"<span style="color: #949494;">, </span>"source_…</span></span>
-<span><span class="co">#&gt; $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "40213260 &amp;&amp;&amp; zoster vaccine, live"<span style="color: #949494;">, </span>"1127078 &amp;&amp;&amp; Ace…</span></span></code></pre></div>
+<span><span class="co">#&gt; $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "40213198 &amp;&amp;&amp; pneumococcal conjugate vaccine, 13 vale…</span></span></code></pre></div>
 <p>By default, the function returns the number of records
 (<code>estimate_name == "count_records"</code>) for each concept_id. To
 include counts by person, you can set the <code>countBy</code> argument
@@ -247,10 +247,10 @@ its <code>subject_id</code>s.</p>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span>, <span class="va">estimate_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rows: 65</span></span>
+<span><span class="co">#&gt; Rows: 63</span></span>
 <span><span class="co">#&gt; Columns: 3</span></span>
 <span><span class="co">#&gt; $ group_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "condition_occurrence"<span style="color: #949494;">, </span>"condition_occurrence"<span style="color: #949494;">, </span>"conditi…</span></span>
-<span><span class="co">#&gt; $ variable_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Acute viral pharyngitis"<span style="color: #949494;">, </span>"Whiplash injury to neck"<span style="color: #949494;">, </span>"I…</span></span>
+<span><span class="co">#&gt; $ variable_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Streptococcal sore throat"<span style="color: #949494;">, </span>"Sprain of ankle"<span style="color: #949494;">, </span>"Fractur…</span></span>
 <span><span class="co">#&gt; $ estimate_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"coun…</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="display-the-results">Display the results<a class="anchor" aria-label="anchor" href="#display-the-results"></a>
