@@ -47,7 +47,7 @@ summariseOmopSnapshot <- function(cdm) {
 
   # general
   snapshotDate <- format(Sys.Date(), "%Y-%m-%d")
-  personCount <- sprintf("%i", omopgenerics::numberRecords(cdm$person))
+  personCount <- printInteger(omopgenerics::numberRecords(cdm$person))
   result$general <- dplyr::tibble(
     estimate_name = c("snapshot_date", "person_count", "vocabulary_version"),
     estimate_type = c("date", "integer", "character"),
@@ -69,7 +69,7 @@ summariseOmopSnapshot <- function(cdm) {
     dplyr::mutate(estimate_type = "character")
 
   # observation period count
-  opCount <- sprintf("%i", omopgenerics::numberRecords(cdm$person))
+  opCount <- printInteger(omopgenerics::numberRecords(cdm$person))
   if (opCount > 0) {
     x <- cdm$observation_period |>
       dplyr::ungroup() |>
