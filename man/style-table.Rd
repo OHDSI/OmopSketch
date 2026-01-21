@@ -30,7 +30,8 @@ The order of elements matters, with the first being the topmost header.}
 
 \item{hide}{Columns to drop from the output table.}
 
-\item{group}{Character vector of column names used to group the results.}
+\item{groupColumn}{Columns to use as group labels, to see options use
+visOmopResults::tableColumns(result).}
 }
 \description{
 Helper for consistent documentation of table arguments.

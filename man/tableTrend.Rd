@@ -8,7 +8,7 @@ tableTrend(
   result,
   header = "cdm_name",
   hide = "variable_level",
-  group = c("type", "omop_table"),
+  groupColumn = c("type", "omop_table"),
   type = NULL,
   style = NULL
 )
@@ -21,7 +21,8 @@ The order of elements matters, with the first being the topmost header.}
 
 \item{hide}{Columns to drop from the output table.}
 
-\item{group}{Character vector of column names used to group the results.}
+\item{groupColumn}{Columns to use as group labels, to see options use
+visOmopResults::tableColumns(result).}
 
 \item{type}{Type of formatting output table between \code{gt}, \code{datatable} and
 \code{reactable}. Default is \code{"gt"}.}

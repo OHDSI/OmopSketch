@@ -36,7 +36,7 @@
 tableClinicalRecords <- function(result,
                                  header = "cdm_name",
                                  hide = omopgenerics::settingsColumns(result),
-                                 group = c("omop_table", omopgenerics::strataColumns(result)) ,
+                                 groupColumn = c("omop_table", omopgenerics::strataColumns(result)) ,
                                  type = NULL,
                                  style = NULL) {
   # initial checks
@@ -81,7 +81,7 @@ tableClinicalRecords <- function(result,
       header = header,
       rename = c("Database name" = "cdm_name"),
       settingsColumn = setting_cols,
-      groupColumn = group,
+      groupColumn = groupColumn,
       hide = hide,
       .options = list(caption = paste0("Summary of ", paste(tables, collapse = ", "), ifelse(length(tables) > 1, " tables", " table"))
 )

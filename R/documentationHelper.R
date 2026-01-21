@@ -37,8 +37,8 @@ NULL
 #'
 #' @param hide Columns to drop from the output table.
 #'
-#' @param group Character vector of column names used to group the results.
-#'
+#' @param groupColumn Columns to use as group labels, to see options use
+#' visOmopResults::tableColumns(result).
 #'
 #' @name style-table
 #' @keywords internal

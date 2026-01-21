@@ -8,7 +8,7 @@ tableOmopSnapshot(
   result,
   header = "cdm_name",
   hide = "variable_level",
-  group = "variable_name",
+  groupColumn = "variable_name",
   type = NULL,
   style = NULL
 )
@@ -22,7 +22,8 @@ The order of elements matters, with the first being the topmost header.}
 
 \item{hide}{Columns to drop from the output table.}
 
-\item{group}{Character vector of column names used to group the results.}
+\item{groupColumn}{Columns to use as group labels, to see options use
+visOmopResults::tableColumns(result).}
 
 \item{type}{Character string specifying the desired output table format. See
 \code{visOmopResults::tableType()} for supported table types. If \code{type = NULL},

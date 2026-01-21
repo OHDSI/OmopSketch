@@ -34,7 +34,7 @@
 tableTrend <- function(result,
                        header = "cdm_name",
                        hide = "variable_level",
-                       group = c("type", "omop_table"),
+                       groupColumn = c("type", "omop_table"),
                        type = NULL,
                        style = NULL) {
   # initial checks
@@ -77,7 +77,7 @@ tableTrend <- function(result,
     visOmopResults::visOmopTable(
       header = header,
       estimateName = formatEstimates,
-      groupColumn = group,
+      groupColumn = groupColumn,
       rename = rename_vec,
       type = type,
       style = style,

@@ -23,7 +23,7 @@
 tablePerson <- function(result,
                         header = "cdm_name",
                         hide = omopgenerics::settingsColumns(result),
-                        group = character(),
+                        groupColumn = character(),
                         type = NULL,
                         style = NULL) {
   # check input
@@ -64,7 +64,7 @@ tablePerson <- function(result,
       hide = hide,
       style = style,
       type = type,
-      groupColumn = group,
+      groupColumn = groupColumn,
       settingsColumn = setting_cols,
       .options = list(caption = "Summary of person table")
     )

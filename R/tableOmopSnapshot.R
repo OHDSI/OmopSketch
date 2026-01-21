@@ -25,7 +25,7 @@
 tableOmopSnapshot <- function(result,
                               header = "cdm_name",
                               hide = "variable_level",
-                              group = "variable_name",
+                              groupColumn = "variable_name",
                               type = NULL,
                               style = NULL) {
   # initial checks
@@ -61,7 +61,7 @@ tableOmopSnapshot <- function(result,
         "Estimate" = "estimate_name",
         "Variable" = "variable_name"
       ),
-      groupColumn = group,
+      groupColumn = groupColumn,
       settingsColumn = setting_cols,
       .options = list(caption = paste0("Snapshot of the cdm ", paste(cdms, collapse = ", ")))
     )

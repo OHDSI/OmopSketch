@@ -13,7 +13,7 @@
 tableObservationPeriod <- function(result,
                                    header = "cdm_name",
                                    hide = omopgenerics::settingsColumns(result),
-                                   group = omopgenerics::strataColumns(result),
+                                   groupColumn = omopgenerics::strataColumns(result),
                                    type = NULL,
                                    style = NULL) {
   # initial checks
@@ -44,13 +44,6 @@ tableObservationPeriod <- function(result,
   hide <- c(hide, "observation_period_ordinal"[!byOrdinal])
 
 
-  if (type != "reactable") {
-    header <- c(header, setting_cols)
-  } else {
-    groupColumn <- c(groupColumn, setting_cols)
-  }
-
-
   custom_order <- c("Number records", "Number subjects", "Subjects not in person table", "Records per person", "Duration in days", "Days to next observation period", "Type concept id", "Start date before birth date", "End date before start date", "Column name")
 
   result |>
@@ -73,7 +66,7 @@ tableObservationPeriod <- function(result,
         "N zeros (%)" = "<zero_count> (<zero_percentage>%)"
       ),
       header = header,
-      groupColumn = group,
+      groupColumn = groupColumn,
       hide = hide,
       type = type,
       style = style,

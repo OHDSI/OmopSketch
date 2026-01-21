@@ -28,7 +28,7 @@
 tableMissingData <- function(result,
                              header = "cdm_name",
                              hide =  c("variable_name", omopgenerics::settingsColumns(result)),
-                             group = c("omop_table", omopgenerics::strataColumns(result)),
+                             groupColumn = c("omop_table", omopgenerics::strataColumns(result)),
                              type = NULL,
                              style = NULL) {
   # initial checks
@@ -76,7 +76,7 @@ tableMissingData <- function(result,
       ),
       header = header,
       rename = c("Database name" = "cdm_name", "Column name" = "variable_level"),
-      groupColumn = group,
+      groupColumn = groupColumn,
       hide = hide,
       settingsColumn = setting_cols,
       .options = list(caption = paste0("Summary of missingness in ", paste(tables, collapse = ", "), ifelse(length(tables) > 1, " tables", " table")))
