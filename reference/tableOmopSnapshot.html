@@ -53,7 +53,14 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">tableOmopSnapshot</span><span class="op">(</span><span class="va">result</span>, type <span class="op">=</span> <span class="cn">NULL</span>, style <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">tableOmopSnapshot</span><span class="op">(</span></span>
+<span>  <span class="va">result</span>,</span>
+<span>  header <span class="op">=</span> <span class="st">"cdm_name"</span>,</span>
+<span>  hide <span class="op">=</span> <span class="st">"variable_level"</span>,</span>
+<span>  groupColumn <span class="op">=</span> <span class="st">"variable_name"</span>,</span>
+<span>  type <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  style <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -63,6 +70,20 @@
 <dl><dt id="arg-result">result<a class="anchor" aria-label="anchor" href="#arg-result"></a></dt>
 <dd><p>A summarised_result object (output of <code><a href="summariseOmopSnapshot.html">summariseOmopSnapshot()</a></code>
 ).</p></dd>
+
+
+<dt id="arg-header">header<a class="anchor" aria-label="anchor" href="#arg-header"></a></dt>
+<dd><p>A vector specifying the elements to include in the header.
+The order of elements matters, with the first being the topmost header.</p></dd>
+
+
+<dt id="arg-hide">hide<a class="anchor" aria-label="anchor" href="#arg-hide"></a></dt>
+<dd><p>Columns to drop from the output table.</p></dd>
+
+
+<dt id="arg-groupcolumn">groupColumn<a class="anchor" aria-label="anchor" href="#arg-groupcolumn"></a></dt>
+<dd><p>Columns to use as group labels, to see options use
+visOmopResults::tableColumns(result).</p></dd>
 
 
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
@@ -118,7 +139,7 @@ the selected table type.</p></li>
     </tr></thead><tbody class="gt_table_body" style="border-style: none; border-top-style: solid; border-top-width: 3px; border-top-color: #F4E9EB; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3;"><tr class="gt_group_heading_row" style="border-style: none;"><th colspan="2" class="gt_group_heading" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; font-size: 100%; text-transform: inherit; vertical-align: middle; text-align: left; background-color: #F4E9EB; color: #040001; font-weight: bold; border-left-width: 1px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 1px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 1px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #E6D208;" scope="colgroup" id="General" bgcolor="#F4E9EB" valign="middle" align="left">General</th>
     </tr><tr class="gt_row_group_first" style="border-style: none;"><td headers="General  Estimate" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; vertical-align: middle; overflow-x: hidden; text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;" align="left" bgcolor="#FFFFFF" valign="middle">Snapshot date</td>
 <td headers="General  [header_name]Database name
-[header_level]GiBleed" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; vertical-align: middle; overflow-x: hidden; text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;" align="right" bgcolor="#FFFFFF" valign="middle">2026-01-26</td></tr><tr style="border-style: none;"><td headers="General  Estimate" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; vertical-align: middle; overflow-x: hidden; text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;" align="left" bgcolor="#FFFFFF" valign="middle">Person count</td>
+[header_level]GiBleed" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; vertical-align: middle; overflow-x: hidden; text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;" align="right" bgcolor="#FFFFFF" valign="middle">2026-01-27</td></tr><tr style="border-style: none;"><td headers="General  Estimate" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; vertical-align: middle; overflow-x: hidden; text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;" align="left" bgcolor="#FFFFFF" valign="middle">Person count</td>
 <td headers="General  [header_name]Database name
 [header_level]GiBleed" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; vertical-align: middle; overflow-x: hidden; text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;" align="right" bgcolor="#FFFFFF" valign="middle">2,694</td></tr><tr style="border-style: none;"><td headers="General  Estimate" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; vertical-align: middle; overflow-x: hidden; text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;" align="left" bgcolor="#FFFFFF" valign="middle">Vocabulary version</td>
 <td headers="General  [header_name]Database name
