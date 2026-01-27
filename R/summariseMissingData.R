@@ -55,11 +55,12 @@ summariseMissingData <- function(cdm,
   # should i still check the year argument
   omopgenerics::assertChoice(interval, c("overall", "years", "quarters", "months"), length = 1)
   omopgenerics::assertChoice(omopTableName, choices = omopgenerics::omopTables(), unique = TRUE)
-  sample <- validateSample(sample = sample)
+  sample <- validateSample(sample = sample, cdm = cdm)
   dateRange <- validateStudyPeriod(cdm, dateRange)
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, multipleAgeGroup = FALSE, null = TRUE, ageGroupName = "age_group")
 
   cdm <- sampleCdm(cdm = cdm, tables = omopTableName, sample = sample)
+  set <- createSettings(result_type = "summarise_missing_data", study_period = dateRange, sample = sample)
 
   if ("person" %in% omopTableName) {
     if (!is.null(ageGroup)) cli::cli_warn("ageGroup stratification is not applied for person table")
@@ -107,9 +108,7 @@ summariseMissingData <- function(cdm,
     omopgenerics::uniteAdditional(cols = "time_interval") |>
     dplyr::mutate(variable_name = "Column name") |>
     dplyr::rename("variable_level" = "column_name") |>
-    omopgenerics::newSummarisedResult(settings = createSettings(
-      result_type = "summarise_missing_data", study_period = dateRange
-    ))
+    omopgenerics::newSummarisedResult(settings = set)
 }
 
 warningDataRequire <- function(cdm, table, res) {

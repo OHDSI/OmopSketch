@@ -4,11 +4,26 @@
 \alias{tableOmopSnapshot}
 \title{Create a visual table from a summarise_omop_snapshot result}
 \usage{
-tableOmopSnapshot(result, type = NULL, style = NULL)
+tableOmopSnapshot(
+  result,
+  header = "cdm_name",
+  hide = "variable_level",
+  groupColumn = "variable_name",
+  type = NULL,
+  style = NULL
+)
 }
 \arguments{
 \item{result}{A summarised_result object (output of \code{summariseOmopSnapshot()}
 ).}
+
+\item{header}{A vector specifying the elements to include in the header.
+The order of elements matters, with the first being the topmost header.}
+
+\item{hide}{Columns to drop from the output table.}
+
+\item{groupColumn}{Columns to use as group labels, to see options use
+visOmopResults::tableColumns(result).}
 
 \item{type}{Character string specifying the desired output table format. See
 \code{visOmopResults::tableType()} for supported table types. If \code{type = NULL},

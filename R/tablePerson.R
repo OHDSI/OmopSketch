@@ -21,6 +21,9 @@
 #' }
 #'
 tablePerson <- function(result,
+                        header = "cdm_name",
+                        hide = omopgenerics::settingsColumns(result),
+                        groupColumn = character(),
                         type = NULL,
                         style = NULL) {
   # check input
@@ -40,15 +43,7 @@ tablePerson <- function(result,
   }
 
   setting_cols <- omopgenerics::settingsColumns(result)
-  setting_cols <- setting_cols[!setting_cols %in% c("study_period_end", "study_period_start")]
-  header <- "cdm_name"
-  group <- character()
 
-  if (type != "reactable") {
-    header <- c(header, setting_cols)
-  } else {
-    group <- c(group, setting_cols)
-  }
   custom_order <- c("Number subjects", "Number subjects not in observation", "Sex", "Sex source", "Race", "Race source", "Ethnicity", "Ethnicity source", "Year of birth", "Month of birth", "Day of birth", "Location", "Provider", "Care site")
 
   result |>
@@ -66,9 +61,10 @@ tablePerson <- function(result,
         "Distinct values" = "<distinct_values>"
       ),
       header = header,
+      hide = hide,
       style = style,
       type = type,
-      groupColumn = group,
+      groupColumn = groupColumn,
       settingsColumn = setting_cols,
       .options = list(caption = "Summary of person table")
     )

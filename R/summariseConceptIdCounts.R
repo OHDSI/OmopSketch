@@ -62,12 +62,12 @@ summariseConceptIdCounts <- function(cdm,
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup = ageGroup)
   dateRange <- validateStudyPeriod(cdm = cdm, studyPeriod = dateRange)
 
-  sample <- validateSample(sample = sample)
+  sample <- validateSample(sample = sample, cdm = cdm)
 
   omopgenerics::assertLogical(inObservation, length = 1)
 
   # settings for the created results
-  set <- createSettings(result_type = "summarise_concept_id_counts", study_period = dateRange)
+  set <- createSettings(result_type = "summarise_concept_id_counts", study_period = dateRange, sample = sample)
   cdm <- sampleCdm(cdm = cdm, tables = omopTableName, sample = sample)
   # get strata
   strata <- omopgenerics::combineStrata(strataCols(sex = sex, ageGroup = ageGroup, interval = interval, inObservation = inObservation))

@@ -23,6 +23,9 @@
 #' }
 #'
 tableOmopSnapshot <- function(result,
+                              header = "cdm_name",
+                              hide = "variable_level",
+                              groupColumn = "variable_name",
                               type = NULL,
                               style = NULL) {
   # initial checks
@@ -43,26 +46,14 @@ tableOmopSnapshot <- function(result,
     warnEmpty("summarise_omop_snapshot")
     return(visOmopResults::emptyTable(type = type, style = style)) }
 
-  setting_cols <- omopgenerics::settingsColumns(result)
-  setting_cols <- setting_cols[!setting_cols %in% c("study_period_end", "study_period_start")]
-  header <- "cdm_name"
-  group <- "variable_name"
-  if (type != "reactable") {
-    header <- c(header, setting_cols)
-  } else {
-    group <- c(group, setting_cols)
-  }
-
-
-
-
   cdms <- result$cdm_name |> unique()
+  setting_cols <- omopgenerics::settingsColumns(result)
   result <- result |>
     formatColumn(c("variable_name", "estimate_name")) |>
     visOmopResults::visOmopTable(
       type = type,
       style = style,
-      hide = c("variable_level"),
+      hide = hide,
       estimateName = c("N" = "<Count>"),
       header = header,
       rename = c(
@@ -70,7 +61,7 @@ tableOmopSnapshot <- function(result,
         "Estimate" = "estimate_name",
         "Variable" = "variable_name"
       ),
-      groupColumn = group,
+      groupColumn = groupColumn,
       settingsColumn = setting_cols,
       .options = list(caption = paste0("Snapshot of the cdm ", paste(cdms, collapse = ", ")))
     )

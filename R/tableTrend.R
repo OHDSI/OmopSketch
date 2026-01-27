@@ -32,6 +32,9 @@
 #' }
 #'
 tableTrend <- function(result,
+                       header = "cdm_name",
+                       hide = "variable_level",
+                       groupColumn = c("type", "omop_table"),
                        type = NULL,
                        style = NULL) {
   # initial checks
@@ -58,17 +61,6 @@ tableTrend <- function(result,
   additionals <- omopgenerics::additionalColumns(result)
   strata <- omopgenerics::strataColumns(result)
   setting_cols <- omopgenerics::settingsColumns(result)
-  setting_cols <- setting_cols[!setting_cols %in% c("study_period_end", "study_period_start", "interval")]
-
-  header <- c("cdm_name")
-  groupColumn <- c("type", "omop_table")
-  if (type != "reactable") {
-    header <- c(header, setting_cols[setting_cols!= "type"])
-  } else {
-    groupColumn <- c(groupColumn, setting_cols)
-  }
-
-
 
   formatEstimates <- c(
     "N (%)" = "<count> (<percentage>%)",
@@ -89,7 +81,7 @@ tableTrend <- function(result,
       rename = rename_vec,
       type = type,
       style = style,
-      hide = "variable_level",
+      hide = hide,
       settingsColumn = setting_cols,
       columnOrder = c("variable_name", additionals, strata, "estimate_name"),
       .options = list(merge = "all_columns",

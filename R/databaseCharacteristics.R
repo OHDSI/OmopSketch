@@ -65,7 +65,7 @@ databaseCharacteristics <- function(cdm,
   dateRange <- validateStudyPeriod(cdm, dateRange)
   omopgenerics::assertChoice(interval, c("overall", "years", "quarters", "months"), length = 1)
   omopgenerics::assertLogical(conceptIdCounts, length = 1)
-  sample <- validateSample(sample)
+  sample <- validateSample(sample = sample, cdm = cdm)
   args_list <- list(...)
 
   empty_tables <- c()

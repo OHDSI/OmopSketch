@@ -4,12 +4,34 @@
 \alias{tablePerson}
 \title{Visualise the results of \code{summarisePerson()} into a table}
 \usage{
-tablePerson(result, type = NULL, style = NULL)
+tablePerson(
+  result,
+  header = "cdm_name",
+  hide = omopgenerics::settingsColumns(result),
+  groupColumn = character(),
+  type = NULL,
+  style = NULL
+)
 
-tablePerson(result, type = NULL, style = NULL)
+tablePerson(
+  result,
+  header = "cdm_name",
+  hide = omopgenerics::settingsColumns(result),
+  groupColumn = character(),
+  type = NULL,
+  style = NULL
+)
 }
 \arguments{
 \item{result}{A summarised_result object (output of \code{summarisePerson()}).}
+
+\item{header}{A vector specifying the elements to include in the header.
+The order of elements matters, with the first being the topmost header.}
+
+\item{hide}{Columns to drop from the output table.}
+
+\item{groupColumn}{Columns to use as group labels, to see options use
+visOmopResults::tableColumns(result).}
 
 \item{type}{Character string specifying the desired output table format. See
 \code{visOmopResults::tableType()} for supported table types. If \code{type = NULL},

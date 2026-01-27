@@ -26,6 +26,9 @@
 #' }
 #'
 tableMissingData <- function(result,
+                             header = "cdm_name",
+                             hide =  c("variable_name", omopgenerics::settingsColumns(result)),
+                             groupColumn = c("omop_table", omopgenerics::strataColumns(result)),
                              type = NULL,
                              style = NULL) {
   # initial checks
@@ -58,17 +61,8 @@ tableMissingData <- function(result,
     warnEmpty("summarise_missing_data")
     return(visOmopResults::emptyTable(type = type, style = style))
   }
-  header <- c("cdm_name")
-  groupColumn <- c("omop_table", omopgenerics::strataColumns(result))
 
   setting_cols <- omopgenerics::settingsColumns(result)
-  setting_cols <- setting_cols[!setting_cols %in% c("study_period_end", "study_period_start")]
-
-  if (type != "reactable") {
-    header <- c(header, setting_cols)
-  } else {
-    groupColumn <- c(groupColumn, setting_cols)
-  }
   tables <- result$group_level |> unique()
 
   result |>
@@ -83,7 +77,7 @@ tableMissingData <- function(result,
       header = header,
       rename = c("Database name" = "cdm_name", "Column name" = "variable_level"),
       groupColumn = groupColumn,
-      hide = c("variable_name"),
+      hide = hide,
       settingsColumn = setting_cols,
       .options = list(caption = paste0("Summary of missingness in ", paste(tables, collapse = ", "), ifelse(length(tables) > 1, " tables", " table")))
     ) |>

@@ -77,7 +77,7 @@ addTimeInterval <- function(x) {
 }
 
 
-createSettings <- function(result_type, result_id = 1L, study_period = NULL) {
+createSettings <- function(result_type, result_id = 1L, study_period = NULL, sample = NULL) {
   # Create the initial settings tibble
   settings <- dplyr::tibble(
     "result_id" = result_id,
@@ -92,6 +92,12 @@ createSettings <- function(result_type, result_id = 1L, study_period = NULL) {
       dplyr::mutate(
         "study_period_start" = as.character(study_period[1]),
         "study_period_end" = as.character(study_period[2])
+      )
+  }
+  if (!is.null(sample)) {
+    settings <- settings |>
+      dplyr::mutate(
+        "sample" = as.character(sample)
       )
   }
   # Return the settings tibble
@@ -112,27 +118,23 @@ createSettings <- function(result_type, result_id = 1L, study_period = NULL) {
 #'
 #' clinicalTables()
 #'
-clinicalTables <- function(){
- c("visit_occurrence", "visit_detail", "condition_occurrence",
-   "drug_exposure", "procedure_occurrence", "device_exposure", "measurement",
-   "observation","death", "note", "specimen", "payer_plan_period", "drug_era",
-   "dose_era", "condition_era")
+clinicalTables <- function() {
+  c(
+    "visit_occurrence", "visit_detail", "condition_occurrence",
+    "drug_exposure", "procedure_occurrence", "device_exposure", "measurement",
+    "observation", "death", "note", "specimen", "payer_plan_period", "drug_era",
+    "dose_era", "condition_era"
+  )
 }
 
 
-sampleCdm <- function(cdm, tables, sample, call = parent.frame()){
-
-  if(is.numeric(sample)){
-    if (sample >= omopgenerics::numberSubjects(cdm[["person"]])) {
-      cli::cli_inform("The {.field person} table has \u2264 {.val {sample}} subjects; skipping sampling of the CDM.", call = call)
-      return(cdm)
-    }
+sampleCdm <- function(cdm, tables, sample, call = parent.frame()) {
+  if (is.numeric(sample)) {
     ids <- cdm[["person"]] |>
       dplyr::select("person_id") |>
       dplyr::slice_sample(n = as.integer(sample)) |>
       dplyr::pull("person_id")
-
-  } else if(is.character(sample)) {
+  } else if (is.character(sample)) {
     if (!(sample %in% names(cdm))) {
       cli::cli_inform("The CDM doesn't contain the {.val {sample}} cohort; skipping sampling of the CDM.", call = call)
       return(cdm)
@@ -142,8 +144,10 @@ sampleCdm <- function(cdm, tables, sample, call = parent.frame()){
   } else {
     return(cdm)
   }
-  cdm <- omopgenerics::insertTable(cdm = cdm, name = "person_sample",
-                                   table = dplyr::tibble("person_id" = sort(unique(ids))))
+  cdm <- omopgenerics::insertTable(
+    cdm = cdm, name = "person_sample",
+    table = dplyr::tibble("person_id" = sort(unique(ids)))
+  )
 
   for (table in tables) {
     cdm[[table]] <- cdm[[table]] |>

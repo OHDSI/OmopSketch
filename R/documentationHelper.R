@@ -32,6 +32,14 @@ NULL
 #' (see`visOmopResults::setGlobalTableOptions()`) or a _brand.yml file
 #' (if found); otherwise, the default style is applied.
 #'
+#' @param header A vector specifying the elements to include in the header.
+#' The order of elements matters, with the first being the topmost header.
+#'
+#' @param hide Columns to drop from the output table.
+#'
+#' @param groupColumn Columns to use as group labels, to see options use
+#' visOmopResults::tableColumns(result).
+#'
 #' @name style-table
 #' @keywords internal
 NULL

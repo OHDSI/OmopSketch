@@ -4,11 +4,26 @@
 \alias{tableMissingData}
 \title{Create a visual table from a summariseMissingData() result}
 \usage{
-tableMissingData(result, type = NULL, style = NULL)
+tableMissingData(
+  result,
+  header = "cdm_name",
+  hide = c("variable_name", omopgenerics::settingsColumns(result)),
+  groupColumn = c("omop_table", omopgenerics::strataColumns(result)),
+  type = NULL,
+  style = NULL
+)
 }
 \arguments{
 \item{result}{A summarised_result object (output of
 \code{summariseMissingData()}).}
+
+\item{header}{A vector specifying the elements to include in the header.
+The order of elements matters, with the first being the topmost header.}
+
+\item{hide}{Columns to drop from the output table.}
+
+\item{groupColumn}{Columns to use as group labels, to see options use
+visOmopResults::tableColumns(result).}
 
 \item{type}{Character string specifying the desired output table format. See
 \code{visOmopResults::tableType()} for supported table types. If \code{type = NULL},

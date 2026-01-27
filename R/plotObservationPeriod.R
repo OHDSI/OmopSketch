@@ -72,7 +72,7 @@ plotObservationPeriod <- function(result,
 
   main_title <- paste0(
     stringr::str_to_sentence(variableName),
-    " (", stringr::str_to_sentence(plotType), ")"
+    " (", stringr::str_to_sentence(plotType), ") in observation_period "
   )
 
 
