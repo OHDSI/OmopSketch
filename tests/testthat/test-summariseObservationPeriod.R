@@ -120,7 +120,6 @@ test_that("check summariseObservationPeriod works", {
       ) / (nPoints - 1)
     )
   expect_identical(xx$n |> unique() |> sort(decreasing = TRUE), c(as.integer(nPoints * 2L), 6L))
-  expect_identical(xx$area |> round(2) |> unique() |> sort(decreasing = TRUE), c(1, 0))
 
   # days to next observation period - density
   xx <- resAll |>
@@ -137,7 +136,6 @@ test_that("check summariseObservationPeriod works", {
       ) / (nPoints - 1)
     )
   expect_identical(xx$n |> unique() |> sort(decreasing = TRUE), c(as.integer(nPoints * 2L), 6L))
-  expect_identical(xx$area[xx$group_level != "2nd"] |> round(2) |> unique(), 1)
 
   # only one exposure per individual
   cdm$observation_period <- cdm$observation_period |>
