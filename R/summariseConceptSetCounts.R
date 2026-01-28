@@ -72,9 +72,10 @@ summariseConceptSetCounts <- function(cdm,
   }
 
   # assert domains
+  conceptTable <- getConceptTable(cdm)
   cdm[[nm]] <- cdm[[nm]] |>
     dplyr::left_join(
-      cdm[["concept"]] |>
+      conceptTable |>
         dplyr::select(
           standard_concept_id = "concept_id",
           standard_concept_name = "concept_name",
@@ -141,7 +142,7 @@ summariseConceptSetCounts <- function(cdm,
     if (concept) {
       res <- res |>
         dplyr::left_join(
-          cdm[["concept"]] |>
+          conceptTable |>
             dplyr::select(
               source_concept_id = "concept_id",
               source_concept_name = "concept_name"

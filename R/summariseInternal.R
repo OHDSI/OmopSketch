@@ -137,18 +137,23 @@ addStratifications <- function(x, indexDate, sex, ageGroup, interval, intervalNa
     addSexAgeGroup(sex = sex, ageGroup = ageGroup, indexDate = indexDate)
 
   if (interval != "overall") {
+    # Use raw SQL for Azure Synapse compatibility - avoid VARCHAR(MAX) and 'text' type issues
+    # Get the actual column name from indexDate
+    dateCol <- indexDate
     if (interval == "years") {
-      q <- "as.character(clock::get_year(.data[[indexDate]]))"
+      x <- x |>
+        dplyr::mutate(!!intervalName := dplyr::sql(paste0("CAST(DATEPART(YEAR, \"", dateCol, "\") AS VARCHAR(4))")))
     } else if (interval == "months") {
-      q <- 'paste0(as.character(clock::get_year(.data[[indexDate]])), "_", as.character(clock::get_month(.data[[indexDate]])))'
+      x <- x |>
+        dplyr::mutate(!!intervalName := dplyr::sql(paste0(
+          "CONCAT(DATEPART(YEAR, \"", dateCol, "\"), '_', RIGHT('0' + CAST(DATEPART(MONTH, \"", dateCol, "\") AS VARCHAR(2)), 2))"
+        )))
     } else if (interval == "quarters") {
-      q <- 'paste0(as.character(clock::get_year(.data[[indexDate]])), "_Q", as.character(as.integer(floor((clock::get_month(.data[[indexDate]]) - 1) / 3) + 1)))'
+      x <- x |>
+        dplyr::mutate(!!intervalName := dplyr::sql(paste0(
+          "CONCAT(DATEPART(YEAR, \"", dateCol, "\"), '_Q', DATEPART(QUARTER, \"", dateCol, "\"))"
+        )))
     }
-    q <- q |>
-      rlang::set_names(intervalName) |>
-      rlang::parse_exprs()
-    x <- x |>
-      dplyr::mutate(!!!q)
   }
 
 
@@ -163,17 +168,25 @@ addSexAgeGroup <- function(x, sex, ageGroup, indexDate) {
   age <- !is.null(ageGroup)
 
   person <- omopgenerics::cdmReference(x)$person
-  q <- c(
-    sex = ".data$gender_concept_id",
-    birth_date = "as.Date(paste0(
-    as.character(as.integer(.data$year_of_birth)), '-',
-    as.character(as.integer(dplyr::coalesce(.data$month_of_birth, 1L))), '-',
-    as.character(as.integer(dplyr::coalesce(.data$day_of_birth, 1L)))))"
-  )[c(sex, age)] |>
-    rlang::parse_exprs()
-  person <- person |>
-    dplyr::mutate(!!!q) |>
-    dplyr::select(dplyr::any_of(c("person_id", "sex", "birth_date")))
+
+  # Build person table with sex and/or birth_date as needed
+  # Use database-specific date construction
+ cdm <- omopgenerics::cdmReference(x)
+  if (sex && age) {
+    person <- addBirthDate(person, cdm) |>
+      dplyr::mutate(sex = .data$gender_concept_id) |>
+      dplyr::select("person_id", "sex", "birth_date")
+  } else if (sex) {
+    person <- person |>
+      dplyr::mutate(sex = .data$gender_concept_id) |>
+      dplyr::select("person_id", "sex")
+  } else if (age) {
+    person <- addBirthDate(person, cdm) |>
+      dplyr::select("person_id", "birth_date")
+  } else {
+    person <- person |>
+      dplyr::select("person_id")
+  }
 
   x <- x |>
     dplyr::left_join(person, by = "person_id")

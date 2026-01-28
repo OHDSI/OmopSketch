@@ -174,6 +174,7 @@ validateStyle <- function(style, obj) {
 
 
 validateType <- function(type, call = parent.frame()) {
+
   if (is.null(type)) {
     type <- getOption(x = "visOmopResults.tableType", default = "gt")
   }
@@ -183,4 +184,144 @@ validateType <- function(type, call = parent.frame()) {
   omopgenerics::assertChoice(type, choices = choices, length = 1, call = call)
 
   return(type)
+}
+
+#' Get a Synapse-compatible concept table reference
+#'
+#' Azure Synapse cannot create temp tables with VARCHAR(MAX) columns in
+#' columnstore indexes. This helper casts the problematic columns to
+#' VARCHAR(255) for compatibility.
+#'
+#' @param cdm A CDM reference object
+#' @return A dplyr lazy table reference with casted columns
+#' @noRd
+getConceptTable <- function(cdm) {
+  con <- CDMConnector::cdmCon(cdm)
+  isSynapse <- isSynapseConnection(con)
+
+  if (isSynapse) {
+    # Cast VARCHAR(MAX) columns to VARCHAR(255) for Synapse compatibility
+    cdm[["concept"]] |>
+      dplyr::mutate(
+        concept_name = dplyr::sql("CAST(concept_name AS VARCHAR(255))"),
+        domain_id = dplyr::sql("CAST(domain_id AS VARCHAR(255))"),
+        vocabulary_id = dplyr::sql("CAST(vocabulary_id AS VARCHAR(255))"),
+        concept_class_id = dplyr::sql("CAST(concept_class_id AS VARCHAR(255))"),
+        standard_concept = dplyr::sql("CAST(standard_concept AS VARCHAR(20))"),
+        concept_code = dplyr::sql("CAST(concept_code AS VARCHAR(255))")
+      )
+  } else {
+    cdm[["concept"]]
+  }
+}
+
+#' Check if connection is to Azure Synapse or SQL Server
+#'
+#' @param con A DBI connection object
+#' @return Logical indicating if this is a Synapse/SQL Server connection that needs VARCHAR casting
+#' @noRd
+isSynapseConnection <- function(con) {
+  if (is.null(con)) return(FALSE)
+
+  # Check connection class for SQL Server/ODBC indicators
+  conClass <- class(con)
+  isMssql <- any(grepl("SQL Server|Microsoft|odbc", conClass, ignore.case = TRUE))
+
+  # For any MSSQL connection, use the safe casting approach by default
+  # This avoids VARCHAR(MAX) issues in columnstore indexes
+  if (isMssql) {
+    return(getOption("OmopSketch.useSynapseCompatibility", default = TRUE))
+  }
+
+  return(FALSE)
+}
+
+#' Add birth_date column to a person table
+#'
+#' Creates birth_date from year_of_birth, month_of_birth, day_of_birth in a
+#' cross-database compatible way.
+#'
+#' @param person A dplyr lazy table reference to the person table
+#' @param cdm The CDM reference (used to detect connection type)
+#' @return The person table with birth_date column added
+#' @noRd
+addBirthDate <- function(person, cdm) {
+  con <- CDMConnector::cdmCon(cdm)
+  isMssql <- isSynapseConnection(con)
+
+ if (isMssql) {
+    # SQL Server/Synapse: use DATEFROMPARTS
+    person |>
+      dplyr::mutate(
+        birth_date = dplyr::sql("DATEFROMPARTS(\"year_of_birth\", COALESCE(\"month_of_birth\", 1), COALESCE(\"day_of_birth\", 1))")
+      )
+  } else {
+    # Other databases (DuckDB, PostgreSQL, etc.): use make_date
+    person |>
+      dplyr::mutate(
+        birth_date = dplyr::sql("make_date(\"year_of_birth\", COALESCE(\"month_of_birth\", 1), COALESCE(\"day_of_birth\", 1))")
+      )
+  }
+}
+
+#' Add birthdate column to person table (with birth_datetime fallback)
+#'
+#' Creates birthdate from birth_datetime (if available) or year_of_birth,
+#' month_of_birth, day_of_birth in a cross-database compatible way.
+#'
+#' @param person A dplyr lazy table reference to the person table
+#' @param cdm The CDM reference (used to detect connection type)
+#' @return The person table with birthdate column added
+#' @noRd
+addBirthDateWithDatetime <- function(person, cdm) {
+  con <- CDMConnector::cdmCon(cdm)
+  isMssql <- isSynapseConnection(con)
+
+  if (!("birth_datetime" %in% colnames(person))) {
+    return(addBirthDate(person, cdm) |>
+             dplyr::rename(birthdate = "birth_date"))
+  }
+
+  if (isMssql) {
+    # SQL Server/Synapse: use DATEFROMPARTS
+    person |>
+      dplyr::mutate(
+        birthdate = dplyr::sql("CASE WHEN \"birth_datetime\" IS NOT NULL THEN CAST(\"birth_datetime\" AS DATE) ELSE DATEFROMPARTS(\"year_of_birth\", COALESCE(\"month_of_birth\", 1), COALESCE(\"day_of_birth\", 1)) END")
+      )
+  } else {
+    # Other databases: use make_date
+    person |>
+      dplyr::mutate(
+        birthdate = dplyr::sql("CASE WHEN \"birth_datetime\" IS NOT NULL THEN CAST(\"birth_datetime\" AS DATE) ELSE make_date(\"year_of_birth\", COALESCE(\"month_of_birth\", 1), COALESCE(\"day_of_birth\", 1)) END")
+      )
+  }
+}
+
+#' Truncate dates to first of month (database-specific)
+#'
+#' @param tbl A dplyr lazy table
+#' @param cdm The CDM reference
+#' @param start_col Name of the start date column
+#' @param end_col Name of the end date column
+#' @return Table with start_date and end_date truncated to first of month
+#' @noRd
+truncateDatesToMonth <- function(tbl, cdm, start_col, end_col) {
+  con <- CDMConnector::cdmCon(cdm)
+  isMssql <- isSynapseConnection(con)
+
+  if (isMssql) {
+    # SQL Server: use DATEFROMPARTS and DATEPART
+    start_sql <- paste0("DATEFROMPARTS(DATEPART(YEAR, \"", start_col, "\"), DATEPART(MONTH, \"", start_col, "\"), 1)")
+    end_sql <- paste0("CASE WHEN \"", end_col, "\" IS NULL THEN NULL ELSE DATEFROMPARTS(DATEPART(YEAR, \"", end_col, "\"), DATEPART(MONTH, \"", end_col, "\"), 1) END")
+  } else {
+    # Other databases: use make_date and extract
+    start_sql <- paste0("make_date(EXTRACT(YEAR FROM \"", start_col, "\")::INTEGER, EXTRACT(MONTH FROM \"", start_col, "\")::INTEGER, 1)")
+    end_sql <- paste0("CASE WHEN \"", end_col, "\" IS NULL THEN NULL ELSE make_date(EXTRACT(YEAR FROM \"", end_col, "\")::INTEGER, EXTRACT(MONTH FROM \"", end_col, "\")::INTEGER, 1) END")
+  }
+
+  tbl |>
+    dplyr::mutate(
+      start_date = dplyr::sql(start_sql),
+      end_date = dplyr::sql(end_sql)
+    )
 }

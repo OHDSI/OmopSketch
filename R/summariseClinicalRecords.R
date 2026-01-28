@@ -463,29 +463,9 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
       dplyr::mutate(
         end_before_start = dplyr::if_else(.data$end_date < .data$start_date, 1L, 0L)
       )
-    birth_expr <- rlang::parse_expr(
-      "as.Date(paste0(
-    as.character(as.integer(.data$year_of_birth)), '-',
-    as.character(as.integer(dplyr::coalesce(.data$month_of_birth, 1L))), '-',
-    as.character(as.integer(dplyr::coalesce(.data$day_of_birth, 1L)))
-  ))"
-    )
-
-
-    person_tbl <- if (!("birth_datetime" %in% colnames(cdm$person))) {
-      cdm$person |>
-        dplyr::mutate(birthdate = !!birth_expr) |>
-        dplyr::select("person_id", "birthdate")
-    } else {
-      cdm$person |>
-        dplyr::mutate(
-          birthdate = dplyr::case_when(
-            !is.na(.data$birth_datetime) ~ as.Date(.data$birth_datetime),
-            TRUE ~ !!birth_expr
-          )
-        ) |>
-        dplyr::select("person_id", "birthdate")
-    }
+    # Use database-specific date construction
+    person_tbl <- addBirthDateWithDatetime(cdm$person, cdm) |>
+      dplyr::select("person_id", "birthdate")
 
 
     x <- x |>
@@ -500,10 +480,11 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
   }
 
   if (conceptSummary) {
+    conceptTable <- getConceptTable(cdm)
     if ("standard" %in% colnames(x)) {
       x <- x |>
         dplyr::left_join(
-          cdm$concept |>
+          conceptTable |>
             dplyr::select(
               standard = "concept_id",
               "standard_concept",
@@ -522,7 +503,7 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
     if ("source" %in% colnames(x)) {
       x <- x |>
         dplyr::left_join(
-          cdm$concept |>
+          conceptTable |>
             dplyr::select(
               source = "concept_id",
               source_vocabulary = "vocabulary_id"
