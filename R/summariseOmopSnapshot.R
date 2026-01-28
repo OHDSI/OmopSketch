@@ -34,7 +34,7 @@ summariseOmopSnapshot <- function(cdm) {
   vocab_version <- cdm$vocabulary |>
     dplyr::filter(.data$vocabulary_id == "None") |>
     dplyr::pull("vocabulary_version")
-  if (length(vocab_version) == 0 | is.na(vocab_version)) {
+  if (length(vocab_version) == 0 || is.na(vocab_version)) {
     cli::cli_warn(c("!" = "vocabulary version is not recorded in the {.pkg vocabulary} table."))
     vocab_version <- cdm_source$vocabulary_version
   }
