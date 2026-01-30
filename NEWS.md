@@ -1,3 +1,20 @@
+# OmopSketch 1.0.1
+
+- Remove deprecated internal functions and add tests by @catalamarti in #525
+- Update deprecated function tests for specific DB by @catalamarti in #532
+- summarieClinicalRecords to work with all clinical tables by @cecicampanile in #533
+- update tables and test tables by @cecicampanile in #535
+- Improve tableConceptIdCounts.R by @cecicampanile in #538
+- dont test database characteristics with age group when cdm is local by @cecicampanile in #540
+- plot functions updated by @cecicampanile in #534
+- fix integer overflow in sql server by @cecicampanile in #542
+- attempt fix for bigint concept count by @edward-burn in #543
+- without grouping by @edward-burn in #548
+- Update tablePerson.R by @cecicampanile in #550
+- separate standard, non standard and 0 in summariseClinicalRecords by @cecicampanile in #547
+- Print big int by @cecicampanile in #553
+- hide, header and group arguments in tables by @cecicampanile in #551
+
 # OmopSketch 1.0.0
 
 - Characterise all mock datasets by @catalamarti #430
