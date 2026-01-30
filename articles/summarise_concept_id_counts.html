@@ -178,16 +178,16 @@ obtain both record and person counts.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 226 × 3</span></span></span>
 <span><span class="co">#&gt;    variable_name                                    estimate_name estimate_value</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> celecoxib                                        count_records 1844          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> celecoxib                                        count_subjec… 1844          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Acetaminophen 325 MG / Hydrocodone Bitartrate 7… count_records 312           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Acetaminophen 325 MG / Hydrocodone Bitartrate 7… count_subjec… 312           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Aspirin 81 MG Oral Tablet                        count_records 4380          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Aspirin 81 MG Oral Tablet                        count_subjec… 1927          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> hepatitis A vaccine, adult dosage                count_records 3211          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> hepatitis A vaccine, adult dosage                count_subjec… 1737          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Acetaminophen 325 MG Oral Tablet                 count_records 9365          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Acetaminophen 325 MG Oral Tablet                 count_subjec… 2580          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> pneumococcal conjugate vaccine, 13 valent        count_records 453           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> pneumococcal conjugate vaccine, 13 valent        count_subjec… 453           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Amoxicillin 250 MG / Clavulanate 125 MG Oral Ta… count_records 3851          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Amoxicillin 250 MG / Clavulanate 125 MG Oral Ta… count_subjec… 2021          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Prednisone 5 MG Oral Tablet                      count_records 161           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Prednisone 5 MG Oral Tablet                      count_subjec… 116           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Penicillin V Potassium 250 MG Oral Tablet        count_records 1719          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Penicillin V Potassium 250 MG Oral Tablet        count_subjec… 1272          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> {7 (Ethinyl Estradiol 0.035 MG / norgestimate 0… count_records 449           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> {7 (Ethinyl Estradiol 0.035 MG / norgestimate 0… count_subjec… 253           </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 216 more rows</span></span></span></code></pre></div>
 <p>Further stratification can be applied using the
 <code>interval</code>, <code>sex</code>, and <code>ageGroup</code>
@@ -208,9 +208,9 @@ stratification), “years”, “quarters”, or “months”.</p>
 <span><span class="co">#&gt; Columns: 5</span></span>
 <span><span class="co">#&gt; $ group_level      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "condition_occurrence"<span style="color: #949494;">, </span>"condition_occurrence"<span style="color: #949494;">, </span>"cond…</span></span>
 <span><span class="co">#&gt; $ strata_level     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"…</span></span>
-<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Sprain of wrist"<span style="color: #949494;">, </span>"Otitis media"<span style="color: #949494;">, </span>"Osteoarthritis"<span style="color: #949494;">, </span>…</span></span>
+<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Acute bronchitis"<span style="color: #949494;">, </span>"Laceration of hand"<span style="color: #949494;">, </span>"Fracture o…</span></span>
 <span><span class="co">#&gt; $ estimate_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_subjects"<span style="color: #949494;">, </span>"count_subjects"<span style="color: #949494;">, </span>"count_subjects"<span style="color: #949494;">,</span>…</span></span>
-<span><span class="co">#&gt; $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "78272 &amp;&amp;&amp; Sprain of wrist"<span style="color: #949494;">, </span>"372328 &amp;&amp;&amp; Otitis media…</span></span></code></pre></div>
+<span><span class="co">#&gt; $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "260139 &amp;&amp;&amp; Acute bronchitis"<span style="color: #949494;">, </span>"4113008 &amp;&amp;&amp; Laceratio…</span></span></code></pre></div>
 <p>We can also filter the clinical table to a specific time window by
 setting the dateRange argument.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -247,10 +247,10 @@ its <code>subject_id</code>s.</p>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span>, <span class="va">estimate_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rows: 65</span></span>
+<span><span class="co">#&gt; Rows: 63</span></span>
 <span><span class="co">#&gt; Columns: 3</span></span>
 <span><span class="co">#&gt; $ group_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "condition_occurrence"<span style="color: #949494;">, </span>"condition_occurrence"<span style="color: #949494;">, </span>"conditi…</span></span>
-<span><span class="co">#&gt; $ variable_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Angiodysplasia of stomach"<span style="color: #949494;">, </span>"Otitis media"<span style="color: #949494;">, </span>"Sprain of …</span></span>
+<span><span class="co">#&gt; $ variable_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Acute viral pharyngitis"<span style="color: #949494;">, </span>"Whiplash injury to neck"<span style="color: #949494;">, </span>"C…</span></span>
 <span><span class="co">#&gt; $ estimate_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"coun…</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="display-the-results">Display the results<a class="anchor" aria-label="anchor" href="#display-the-results"></a>
