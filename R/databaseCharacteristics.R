@@ -12,7 +12,7 @@
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' library(OmopSketch)
 #' library(omock)
 #' library(dplyr)

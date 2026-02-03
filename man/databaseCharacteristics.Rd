@@ -64,7 +64,7 @@ A \code{summarised_result} object with the results.
 Summarise Database Characteristics for OMOP CDM
 }
 \examples{
-\donttest{
+\dontrun{
 library(OmopSketch)
 library(omock)
 library(dplyr)
