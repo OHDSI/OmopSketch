@@ -119,7 +119,7 @@ load essential packages and create a mock cdm using the R package <a href="https
 <span></span>
 <span><span class="co"># Connect to mock database</span></span>
 <span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ohdsi.github.io/omock/reference/mockCdmFromDataset.html" class="external-link">mockCdmFromDataset</a></span><span class="op">(</span>datasetName <span class="op">=</span> <span class="st">"GiBleed"</span>, source <span class="op">=</span> <span class="st">"duckdb"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Reading <span style="color: #0000BB;">GiBleed</span> tables.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Loading bundled <span style="color: #0000BB;">GiBleed</span> tables from package data.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Adding <span style="color: #0000BB;">drug_strength</span> table.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Creating local <span style="color: #0000BB;">&lt;cdm_reference&gt;</span> object.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Inserting <span style="color: #0000BB;">&lt;cdm_reference&gt;</span> into <span style="color: #0000BB;">duckdb</span>.</span></span>
@@ -299,10 +299,10 @@ the table, such as:</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Number records    <span style="color: #BB0000;">NA</span>                             count         67707         </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Domain            Drug                           count         67707         </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Standard concept  Standard                       count         67707         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Source vocabulary CVX                            count         25710         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Source vocabulary NDC                            count         2694          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Source vocabulary RxNorm                         count         39268         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Source vocabulary No matching concept            count         35            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Source vocabulary No matching concept            count         35            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Source vocabulary CVX                            count         25710         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Source vocabulary NDC                            count         2694          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Source vocabulary RxNorm                         count         39268         </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Type concept id   Dispensed in Outpatient office count         25710         </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 27 more rows</span></span></span></code></pre></div>
 </div>
