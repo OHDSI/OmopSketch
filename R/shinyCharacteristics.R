@@ -52,7 +52,7 @@ shinyCharacteristics <- function(result,
   background <- validateBackground(background)
 
   if (is.null(theme)){
-    theme <- list.files(system.file("brand", package = "OmopSketch"), full.names = TRUE, pattern = "^scarlet\\.yml$")
+    theme <- system.file("brand", "scarlet.yml", package = "OmopSketch")
   }
 
   # check directory
