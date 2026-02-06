@@ -42,7 +42,7 @@ shinyCharacteristics <- function(result,
                                  background = TRUE,
                                  title = "Database characterisation",
                                  logo = "ohdsi",
-                                 theme = "scarlet") {
+                                 theme = NULL) {
   rlang::check_installed(pkg = "OmopViewer", version = "0.5.0") # change to 0.5.0 when released
 
   result <- omopgenerics::validateResultArgument(result)
@@ -50,6 +50,10 @@ shinyCharacteristics <- function(result,
   omopgenerics::assertCharacter(logo, length = 1, null = TRUE)
   omopgenerics::assertCharacter(theme, length = 1, null = TRUE)
   background <- validateBackground(background)
+
+  if (is.null(theme)){
+    theme <- system.file("brand", "scarlet.yml", package = "OmopSketch")
+  }
 
   # check directory
   correct <- function(x) {

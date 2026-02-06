@@ -104,12 +104,7 @@ plotPersonOpts <- function() {
     "Day of birth", "boxPlot"
   )
 }
-validateStyle <- function(style) {
-  if (identical(style, "scarlet")) {
-    style <- "scarlet"
-  }
-  return(style)
-}
+
 validateResult <- function(result,
                            resultType = NULL,
                            variableName = NULL,

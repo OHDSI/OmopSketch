@@ -11,7 +11,7 @@ shinyCharacteristics(
   background = TRUE,
   title = "Database characterisation",
   logo = "ohdsi",
-  theme = "scarlet"
+  theme = NULL
 )
 }
 \arguments{
