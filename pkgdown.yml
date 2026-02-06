@@ -3,13 +3,13 @@ pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   database_characteristics: database_characteristics.html
-  missing_data: missing_data.html
-  summarise_clinical_tables_records: summarise_clinical_tables_records.html
-  summarise_concept_id_counts: summarise_concept_id_counts.html
-  summarise_observation_period: summarise_observation_period.html
-  summarise_person: summarise_person.html
-  summarise_trend: summarise_trend.html
-last_built: 2026-02-06T13:19Z
+  articles/missing_data: missing_data.html
+  articles/summarise_clinical_tables_records: summarise_clinical_tables_records.html
+  articles/summarise_concept_id_counts: summarise_concept_id_counts.html
+  articles/summarise_observation_period: summarise_observation_period.html
+  articles/summarise_person: summarise_person.html
+  articles/summarise_trend: summarise_trend.html
+last_built: 2026-02-06T16:04Z
 urls:
   reference: https://OHDSI.github.io/OmopSketch/reference
   article: https://OHDSI.github.io/OmopSketch/articles
