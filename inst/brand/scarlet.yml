@@ -21,13 +21,12 @@ color:
   dark: gray_dark
 
 
+
 defaults:
   shiny:
     theme:
       preset: flatly
 
-  typography:
-    base: "Open Sans"
 
   bootstrap:
     defaults:
