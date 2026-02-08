@@ -130,6 +130,7 @@ summariseClinicalRecords <- function(cdm,
     }
     cli::cli_inform(c("i" = "Adding variables of interest to {.pkg {table}}."))
     start_date_name <- omopgenerics::omopColumns(table, field = "start_date")
+    if(!is.null(ageGroup) | isTRUE(sex)){
     omopTable <- omopTable |>
       addStratifications(
         indexDate = start_date_name,
@@ -139,6 +140,7 @@ summariseClinicalRecords <- function(cdm,
         intervalName = "",
         name = omopgenerics::uniqueTableName(prefix)
       )
+    }
     x <- omopTable |>
       addVariables(
         tableName = table,
@@ -431,68 +433,60 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
     type_concept = omopgenerics::omopColumns(table = tableName, field = "type_concept")
   )
 
+  if(newNames[["person_id"]] == newNames[["id"]]){
+    newNames <- newNames[names(newNames) != "id"]
+  }
+
   newNames <- newNames[!is.na(newNames)]
   cdm <- omopgenerics::cdmReference(x)
 
-  x <- x |>
-    dplyr::select(dplyr::all_of(newNames), dplyr::any_of(c("sex", "age_group"))) |>
-    dplyr::mutate(end_date = dplyr::coalesce(.data$end_date, .data$start_date))
-
   if (quality) {
-    # Add in_observation flag
-    obs_tbl <- cdm[["observation_period"]] |>
-      dplyr::select(
-        "person_id",
-        obs_start = "observation_period_start_date",
-        obs_end = "observation_period_end_date"
-      )
+    x <- x |>
+      PatientProfiles::addDateOfBirthQuery(dateOfBirthName = "birthdate")
 
+    # Add in_observation flag
     x <- x |>
       dplyr::left_join(
-        x |>
-          dplyr::inner_join(obs_tbl, by = "person_id") |>
-          dplyr::filter(.data$start_date >= .data$obs_start & .data$end_date <= .data$obs_end) |>
-          dplyr::mutate(in_observation = 1L) |>
-          dplyr::select("id", "person_id", "in_observation"),
-        by = c("person_id", "id")
-      ) |>
-      dplyr::mutate(in_observation = dplyr::coalesce(.data$in_observation, 0L))
-
-    # Add end_before_start flag
-    x <- x |>
-      dplyr::mutate(
-        end_before_start = dplyr::if_else(.data$end_date < .data$start_date, 1L, 0L)
+        cdm[["observation_period"]] |>
+          dplyr::select(
+            "person_id",
+            obs_start = "observation_period_start_date",
+            obs_end = "observation_period_end_date"
+          ),
+        by = dplyr::join_by(
+          person_id,
+          !!newNames[["start_date"]] >= obs_start,
+          !!newNames[["end_date"]] <= obs_end
+        )
       )
-    birth_expr <- rlang::parse_expr(
-      "as.Date(paste0(
-    as.character(as.integer(.data$year_of_birth)), '-',
-    as.character(as.integer(dplyr::coalesce(.data$month_of_birth, 1L))), '-',
-    as.character(as.integer(dplyr::coalesce(.data$day_of_birth, 1L)))
-  ))"
-    )
 
-
-    person_tbl <- if (!("birth_datetime" %in% colnames(cdm$person))) {
-      cdm$person |>
-        dplyr::mutate(birthdate = !!birth_expr) |>
-        dplyr::select("person_id", "birthdate")
-    } else {
-      cdm$person |>
-        dplyr::mutate(
-          birthdate = dplyr::case_when(
-            !is.na(.data$birth_datetime) ~ as.Date(.data$birth_datetime),
-            TRUE ~ !!birth_expr
-          )
-        ) |>
-        dplyr::select("person_id", "birthdate")
-    }
-
+   if(newNames[["start_date"]] == newNames[["end_date"]]){
+     x <- x |>
+       dplyr::mutate(in_observation = dplyr::if_else(!is.na(obs_start),
+                                                     1L,
+                                                     NA_integer_))
+   } else {
+     x <- x |>
+       dplyr::mutate(in_observation = dplyr::if_else(!is.na(obs_start),
+                                                     1L,
+                                                     NA_integer_),
+                     !!newNames[["end_date"]]:= dplyr::coalesce(.data[[newNames[["end_date"]]]],
+                                                                .data[[newNames[["start_date"]]]]))
+   }
+    x <- x |>
+      dplyr::select(c(dplyr::all_of(newNames),
+                      dplyr::any_of(c("sex", "age_group")),
+                      "in_observation",
+                      "birthdate"))
 
     x <- x |>
-      dplyr::left_join(person_tbl, by = "person_id") |>
       dplyr::mutate(
+        in_observation = dplyr::coalesce(.data$in_observation, 0L),
+        end_before_start = dplyr::if_else(.data[["end_date"]] <
+                                          .data[["start_date"]],
+                                          1L, 0L),
         start_before_birth = dplyr::if_else(
-          as.Date(.data$start_date) < .data$birthdate,
+          as.Date(.data[["start_date"]]) < .data$birthdate,
           1L,
           0L
         )
@@ -500,6 +494,12 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
   }
 
   if (conceptSummary) {
+    if(isFALSE(quality)){
+      x <- x |>
+        dplyr::select(dplyr::all_of(newNames), dplyr::any_of(c("sex", "age_group"))) |>
+        dplyr::mutate(end_date = dplyr::coalesce(.data$end_date, .data$start_date))
+    }
+
     if ("standard" %in% colnames(x)) {
       x <- x |>
         dplyr::left_join(
