@@ -74,7 +74,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Summarise clinical tables records</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/OHDSI/OmopSketch/blob/1.0.1/vignettes/articles/summarise_clinical_tables_records.Rmd" class="external-link"><code>vignettes/articles/summarise_clinical_tables_records.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/OHDSI/OmopSketch/blob/main/vignettes/articles/summarise_clinical_tables_records.Rmd" class="external-link"><code>vignettes/articles/summarise_clinical_tables_records.Rmd</code></a></small>
       <div class="d-none name"><code>summarise_clinical_tables_records.Rmd</code></div>
     </div>
 
@@ -250,12 +250,12 @@ the <code>person</code> table.</li>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Number records               count         65332         </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Subjects not in person table count         0             </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Subjects not in person table percentage    0.00          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> In observation               count         450           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> In observation               count         64882         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> In observation               count         9017          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> In observation               count         56315         </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Start date before birth date count         0             </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> End date before start date   count         0             </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> In observation               percentage    0.69          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> In observation               percentage    99.31         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> In observation               percentage    13.80         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> In observation               percentage    86.20         </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> Start date before birth date percentage    0.00          </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> End date before start date   percentage    0.00</span></span></code></pre></div>
 </div>
@@ -299,10 +299,10 @@ the table, such as:</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Number records    <span style="color: #BB0000;">NA</span>                             count         67707         </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Domain            Drug                           count         67707         </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Standard concept  Standard                       count         67707         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Source vocabulary No matching concept            count         35            </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Source vocabulary CVX                            count         25710         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Source vocabulary NDC                            count         2694          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Source vocabulary RxNorm                         count         39268         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Source vocabulary CVX                            count         25710         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Source vocabulary NDC                            count         2694          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Source vocabulary RxNorm                         count         39268         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Source vocabulary No matching concept            count         35            </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Type concept id   Dispensed in Outpatient office count         25710         </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 27 more rows</span></span></span></code></pre></div>
 </div>
@@ -491,23 +491,23 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising missing data in <span style="color: #0000BB;">condition_occurrence</span>.</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/tableClinicalRecords.html">tableClinicalRecords</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">summarisedResult</span>, type <span class="op">=</span> <span class="st">"gt"</span><span class="op">)</span></span></code></pre></div>
-<div id="kjeekpgwxp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#kjeekpgwxp table {
+<div id="eemauizdkn" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#eemauizdkn table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#kjeekpgwxp thead, #kjeekpgwxp tbody, #kjeekpgwxp tfoot, #kjeekpgwxp tr, #kjeekpgwxp td, #kjeekpgwxp th {
+#eemauizdkn thead, #eemauizdkn tbody, #eemauizdkn tfoot, #eemauizdkn tr, #eemauizdkn td, #eemauizdkn th {
   border-style: none;
 }
 
-#kjeekpgwxp p {
+#eemauizdkn p {
   margin: 0;
   padding: 0;
 }
 
-#kjeekpgwxp .gt_table {
+#eemauizdkn .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -533,12 +533,12 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-left-color: #F4E9EB;
 }
 
-#kjeekpgwxp .gt_caption {
+#eemauizdkn .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#kjeekpgwxp .gt_title {
+#eemauizdkn .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -550,7 +550,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-bottom-width: 0;
 }
 
-#kjeekpgwxp .gt_subtitle {
+#eemauizdkn .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -562,7 +562,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-top-width: 0;
 }
 
-#kjeekpgwxp .gt_heading {
+#eemauizdkn .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -574,13 +574,13 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-right-color: #D3D3D3;
 }
 
-#kjeekpgwxp .gt_bottom_border {
+#eemauizdkn .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#kjeekpgwxp .gt_col_headings {
+#eemauizdkn .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -595,7 +595,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-right-color: #D3D3D3;
 }
 
-#kjeekpgwxp .gt_col_heading {
+#eemauizdkn .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -615,7 +615,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   overflow-x: hidden;
 }
 
-#kjeekpgwxp .gt_column_spanner_outer {
+#eemauizdkn .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -627,15 +627,15 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   padding-right: 4px;
 }
 
-#kjeekpgwxp .gt_column_spanner_outer:first-child {
+#eemauizdkn .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#kjeekpgwxp .gt_column_spanner_outer:last-child {
+#eemauizdkn .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#kjeekpgwxp .gt_column_spanner {
+#eemauizdkn .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -647,11 +647,11 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   width: 100%;
 }
 
-#kjeekpgwxp .gt_spanner_row {
+#eemauizdkn .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#kjeekpgwxp .gt_group_heading {
+#eemauizdkn .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -677,7 +677,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   text-align: left;
 }
 
-#kjeekpgwxp .gt_empty_group_heading {
+#eemauizdkn .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -692,15 +692,15 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   vertical-align: middle;
 }
 
-#kjeekpgwxp .gt_from_md > :first-child {
+#eemauizdkn .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#kjeekpgwxp .gt_from_md > :last-child {
+#eemauizdkn .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#kjeekpgwxp .gt_row {
+#eemauizdkn .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -719,7 +719,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   overflow-x: hidden;
 }
 
-#kjeekpgwxp .gt_stub {
+#eemauizdkn .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -732,7 +732,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   padding-right: 5px;
 }
 
-#kjeekpgwxp .gt_stub_row_group {
+#eemauizdkn .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -746,15 +746,15 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   vertical-align: top;
 }
 
-#kjeekpgwxp .gt_row_group_first td {
+#eemauizdkn .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#kjeekpgwxp .gt_row_group_first th {
+#eemauizdkn .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#kjeekpgwxp .gt_summary_row {
+#eemauizdkn .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -764,16 +764,16 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   padding-right: 5px;
 }
 
-#kjeekpgwxp .gt_first_summary_row {
+#eemauizdkn .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#kjeekpgwxp .gt_first_summary_row.thick {
+#eemauizdkn .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#kjeekpgwxp .gt_last_summary_row {
+#eemauizdkn .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -783,7 +783,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-bottom-color: #D3D3D3;
 }
 
-#kjeekpgwxp .gt_grand_summary_row {
+#eemauizdkn .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -793,7 +793,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   padding-right: 5px;
 }
 
-#kjeekpgwxp .gt_first_grand_summary_row {
+#eemauizdkn .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -803,7 +803,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-top-color: #D3D3D3;
 }
 
-#kjeekpgwxp .gt_last_grand_summary_row_top {
+#eemauizdkn .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -813,11 +813,11 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-bottom-color: #D3D3D3;
 }
 
-#kjeekpgwxp .gt_striped {
+#eemauizdkn .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#kjeekpgwxp .gt_table_body {
+#eemauizdkn .gt_table_body {
   border-top-style: solid;
   border-top-width: 3px;
   border-top-color: #F4E9EB;
@@ -826,7 +826,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-bottom-color: #D3D3D3;
 }
 
-#kjeekpgwxp .gt_footnotes {
+#eemauizdkn .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -840,7 +840,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-right-color: #D3D3D3;
 }
 
-#kjeekpgwxp .gt_footnote {
+#eemauizdkn .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -849,7 +849,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   padding-right: 5px;
 }
 
-#kjeekpgwxp .gt_sourcenotes {
+#eemauizdkn .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -863,7 +863,7 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   border-right-color: #D3D3D3;
 }
 
-#kjeekpgwxp .gt_sourcenote {
+#eemauizdkn .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -871,72 +871,72 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
   padding-right: 5px;
 }
 
-#kjeekpgwxp .gt_left {
+#eemauizdkn .gt_left {
   text-align: left;
 }
 
-#kjeekpgwxp .gt_center {
+#eemauizdkn .gt_center {
   text-align: center;
 }
 
-#kjeekpgwxp .gt_right {
+#eemauizdkn .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#kjeekpgwxp .gt_font_normal {
+#eemauizdkn .gt_font_normal {
   font-weight: normal;
 }
 
-#kjeekpgwxp .gt_font_bold {
+#eemauizdkn .gt_font_bold {
   font-weight: bold;
 }
 
-#kjeekpgwxp .gt_font_italic {
+#eemauizdkn .gt_font_italic {
   font-style: italic;
 }
 
-#kjeekpgwxp .gt_super {
+#eemauizdkn .gt_super {
   font-size: 65%;
 }
 
-#kjeekpgwxp .gt_footnote_marks {
+#eemauizdkn .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#kjeekpgwxp .gt_asterisk {
+#eemauizdkn .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#kjeekpgwxp .gt_indent_1 {
+#eemauizdkn .gt_indent_1 {
   text-indent: 5px;
 }
 
-#kjeekpgwxp .gt_indent_2 {
+#eemauizdkn .gt_indent_2 {
   text-indent: 10px;
 }
 
-#kjeekpgwxp .gt_indent_3 {
+#eemauizdkn .gt_indent_3 {
   text-indent: 15px;
 }
 
-#kjeekpgwxp .gt_indent_4 {
+#eemauizdkn .gt_indent_4 {
   text-indent: 20px;
 }
 
-#kjeekpgwxp .gt_indent_5 {
+#eemauizdkn .gt_indent_5 {
   text-indent: 25px;
 }
 
-#kjeekpgwxp .katex-display {
+#eemauizdkn .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#kjeekpgwxp div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#eemauizdkn div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1007,14 +1007,14 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
 <td headers="condition_occurrence; overall  Variable level" class="gt_row gt_left" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;">No</td>
 <td headers="condition_occurrence; overall  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;">N (%)</td>
 <td headers="condition_occurrence; overall  [header_name]Database name
-[header_level]GiBleed" class="gt_row gt_right" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;">450 (0.69%)</td>
+[header_level]GiBleed" class="gt_row gt_right" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;">9,017 (13.80%)</td>
 </tr>
 <tr>
 <td headers="condition_occurrence; overall  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;"></td>
 <td headers="condition_occurrence; overall  Variable level" class="gt_row gt_left" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;">Yes</td>
 <td headers="condition_occurrence; overall  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;">N (%)</td>
 <td headers="condition_occurrence; overall  [header_name]Database name
-[header_level]GiBleed" class="gt_row gt_right" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;">64,882 (99.31%)</td>
+[header_level]GiBleed" class="gt_row gt_right" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;">56,315 (86.20%)</td>
 </tr>
 <tr>
 <td headers="condition_occurrence; overall  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;">Domain</td>
@@ -1290,14 +1290,14 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
 <td headers="condition_occurrence; Female  Variable level" class="gt_row gt_left" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;">No</td>
 <td headers="condition_occurrence; Female  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;">N (%)</td>
 <td headers="condition_occurrence; Female  [header_name]Database name
-[header_level]GiBleed" class="gt_row gt_right" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;">227 (0.67%)</td>
+[header_level]GiBleed" class="gt_row gt_right" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;">4,580 (13.57%)</td>
 </tr>
 <tr>
 <td headers="condition_occurrence; Female  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;"></td>
 <td headers="condition_occurrence; Female  Variable level" class="gt_row gt_left" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;">Yes</td>
 <td headers="condition_occurrence; Female  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;">N (%)</td>
 <td headers="condition_occurrence; Female  [header_name]Database name
-[header_level]GiBleed" class="gt_row gt_right" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;">33,517 (99.33%)</td>
+[header_level]GiBleed" class="gt_row gt_right" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;">29,164 (86.43%)</td>
 </tr>
 <tr>
 <td headers="condition_occurrence; Female  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;">Domain</td>
@@ -1559,14 +1559,14 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
 <td headers="condition_occurrence; Male  Variable level" class="gt_row gt_left" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;">No</td>
 <td headers="condition_occurrence; Male  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;">N (%)</td>
 <td headers="condition_occurrence; Male  [header_name]Database name
-[header_level]GiBleed" class="gt_row gt_right" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;">223 (0.71%)</td>
+[header_level]GiBleed" class="gt_row gt_right" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;">4,437 (14.05%)</td>
 </tr>
 <tr>
 <td headers="condition_occurrence; Male  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 1px; border-top-style: hidden; border-top-color: #000000; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;"></td>
 <td headers="condition_occurrence; Male  Variable level" class="gt_row gt_left" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;">Yes</td>
 <td headers="condition_occurrence; Male  Estimate name" class="gt_row gt_left" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;">N (%)</td>
 <td headers="condition_occurrence; Male  [header_name]Database name
-[header_level]GiBleed" class="gt_row gt_right" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;">31,365 (99.29%)</td>
+[header_level]GiBleed" class="gt_row gt_right" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;">27,151 (85.95%)</td>
 </tr>
 <tr>
 <td headers="condition_occurrence; Male  Variable name" class="gt_row gt_left" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;">Domain</td>
