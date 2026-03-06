@@ -79,6 +79,13 @@ test_that("summariseClinicalRecords() works", {
   expect_false("Concept class" %in% vo$variable_name)
   expect_true("Concept class" %in% d$variable_name)
 
+
+ cdm$condition_occurrence <- cdm$condition_occurrence |> dplyr::filter(person_id == 263)
+ expect_no_error(res <- summariseClinicalRecords(cdm, omopTableName = "condition_occurrence"))
+ expect_equal(res |> dplyr::filter(variable_name == "Number subjects", estimate_name == "count") |> dplyr::pull(.data$estimate_value) |> as.numeric(), 1L)
+ total <- cdm$person |> omopgenerics::numberSubjects()
+ expect_equal(res |> dplyr::filter(variable_name == "Number subjects", estimate_name == "percentage") |> dplyr::pull(.data$estimate_value) |> as.numeric(), 100*1/total)
+
   dropCreatedTables(cdm = cdm)
 })
 
@@ -449,7 +456,7 @@ test_that("argument missingData works", {
 
   expect_equal(x |> dplyr::filter(variable_name == "Column name"), y, ignore_attr = TRUE)
 
-  expect_no_error(x <- summariseClinicalRecords(cdm, "drug_exposure",sex = T, ageGroup = list(c(0,50), c(51, 100)), recordsPerPerson = NULL,quality = F, conceptSummary = F))
+  expect_no_error(x <- summariseClinicalRecords(cdm, "drug_exposure",sex = T, ageGroup = list(c(0,50), c(51, 100)), recordsPerPerson = NULL, quality = F, conceptSummary = F))
   y <- summariseMissingData(cdm, "drug_exposure", sex = T,  sample = NULL, ageGroup = list(c(0,50), c(51, 100)))
 
   expect_equal(x |> dplyr::filter(variable_name == "Column name") |> dplyr::arrange(.data$variable_level, .data$strata_name, .data$strata_level), y |> dplyr::arrange(.data$variable_level, .data$strata_name, .data$strata_level), ignore_attr = TRUE)
@@ -478,6 +485,7 @@ test_that("argument missingData works", {
 })
 test_that("works with all clinical tables", {
   skip_on_cran()
+  options(timeout = 1200)
   cdm <- omock::mockCdmFromDataset(datasetName = "synpuf-1k_5.3", source = "duckdb")
   expect_no_error(summariseClinicalRecords(cdm, omopTableName = "payer_plan_period"))
   expect_no_error(summariseClinicalRecords(cdm, omopTableName = "drug_era"))

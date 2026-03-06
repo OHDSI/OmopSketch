@@ -128,6 +128,13 @@ summariseClinicalRecords <- function(cdm,
     if (is.null(omopTable)) {
       return(dplyr::tibble())
     }
+
+    number_subjects_total <- omopTable |>
+      omopgenerics::numberSubjects() |>
+      as.numeric()
+    omopTable <- omopTable |>
+      dplyr::inner_join(cdm$person |> dplyr::select("person_id"), by = "person_id")
+
     cli::cli_inform(c("i" = "Adding variables of interest to {.pkg {table}}."))
     start_date_name <- omopgenerics::omopColumns(table, field = "start_date")
     if(!is.null(ageGroup) | isTRUE(sex)){
@@ -140,7 +147,11 @@ summariseClinicalRecords <- function(cdm,
         intervalName = "",
         name = omopgenerics::uniqueTableName(prefix)
       )
+
     }
+
+    n_person <- cdm$person |> omopgenerics::numberSubjects()
+
     x <- omopTable |>
       addVariables(
         tableName = table,
@@ -154,6 +165,12 @@ summariseClinicalRecords <- function(cdm,
       x = x, strata = strata, estimates = recordsPerPerson
     ) |>
       dplyr::select(!dplyr::starts_with("group_"))
+    result$recordPerPerson  <- dplyr::bind_rows(result$recordPerPerson,
+                                                result$recordPerPerson |>
+                                                  dplyr::filter(variable_name == "Number subjects") |>
+                                                  dplyr::mutate(estimate_value = as.character(100*as.numeric(.data$estimate_value)/.env$n_person),
+                                                                estimate_name = "percentage",
+                                                                estimate_type = "percentage"))
 
     variables <- variablesToSummarise(quality = quality, conceptSummary = conceptSummary)
 
@@ -165,13 +182,10 @@ summariseClinicalRecords <- function(cdm,
           dplyr::filter(.data$variable_name == "Number subjects" & .data$strata_level == "overall" & .data$estimate_name == "count") |>
           dplyr::pull(.data$estimate_value) |>
           as.numeric()
-        number_subjects_no_person <- x |>
-          dplyr::anti_join(cdm[["person"]], by = "person_id") |>
-          omopgenerics::numberSubjects() |>
-          as.numeric()
+        number_subjects_no_person <- number_subjects_total - number_subjects
         res$notInPerson <- dplyr::tibble(
           count = as.character(as.integer(number_subjects_no_person)),
-          percentage = sprintf("%.2f", 100 * number_subjects_no_person / number_subjects)
+          percentage = sprintf("%.2f", 100 * number_subjects_no_person / number_subjects_total)
         ) |>
           tidyr::pivot_longer(
             cols = dplyr::everything(),
@@ -188,7 +202,7 @@ summariseClinicalRecords <- function(cdm,
           )
 
         if (number_subjects_no_person > 0) {
-          cli::cli_warn(c("!" = "There {?is/are} {number_subjects_no_person} individual{?s} not included in the person table."))
+          cli::cli_warn(c("!" = "There {?is/are} {number_subjects_no_person} individual{?s} not included in the person table. They are removed from subsequent analyses"))
         }
 
         cli::cli_inform(c("i" = "Summarising records in observation in {.pkg {table}}."))
@@ -382,7 +396,7 @@ summariseRecordsPerPerson <- function(x, strata, estimates) {
       resultx <- res
     }
     resultx |>
-      dplyr::mutate(number_subjects = dplyr::if_else(.data$n == 0, 0L, 1L)) |>
+      dplyr::mutate(number_subjects = dplyr::if_else(.data$n == 0L, 0L, 1L)) |>
       dplyr::select(!"person_id") |>
       PatientProfiles::summariseResult(
         group = list(),
@@ -391,7 +405,7 @@ summariseRecordsPerPerson <- function(x, strata, estimates) {
         includeOverallStrata = FALSE,
         counts = FALSE,
         variables = list("number_subjects", "n"),
-        estimates = list(c("count", "percentage"), c(estimates, "sum"))
+        estimates = list(c("count"), c(estimates, "sum"))
       ) |>
       suppressMessages() |>
       dplyr::mutate(variable_name = dplyr::if_else(.data$variable_name == "number subjects", "Number subjects", .data$variable_name))
