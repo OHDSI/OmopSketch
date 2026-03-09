@@ -20,6 +20,14 @@ Medical Outcomes Partnership (OMOP) Common Data Model (CDM) instance to
 asses if it meets the necessary criteria to answer a specific clinical
 question and conduct a certain study.
 
+## Tested sources
+
+[![](https://github.com/OHDSI/OmopSketch/actions/workflows/test-local-omopgenerics.yaml/badge.svg?branch=main)](https://github.com/OHDSI/OmopSketch/actions/workflows/test-local-omopgenerics.yaml)
+[![](https://github.com/OHDSI/OmopSketch/actions/workflows/test-duckdb-CDMConnector.yaml/badge.svg?branch=main)](https://github.com/OHDSI/OmopSketch/actions/workflows/test-duckdb-CDMConnector.yaml)
+[![](https://github.com/OHDSI/OmopSketch/actions/workflows/test-postgres-CDMConnector.yaml/badge.svg?branch=main)](https://github.com/OHDSI/OmopSketch/actions/workflows/test-postgres-CDMConnector.yaml)
+[![](https://github.com/OHDSI/OmopSketch/actions/workflows/test-redshift-CDMConnector.yaml/badge.svg?branch=main)](https://github.com/OHDSI/OmopSketch/actions/workflows/test-redshift-CDMConnector.yaml)
+[![](https://github.com/OHDSI/OmopSketch/actions/workflows/test-sqlserver-CDMConnector.yaml/badge.svg?branch=main)](https://github.com/OHDSI/OmopSketch/actions/workflows/test-sqlserver-CDMConnector.yaml)
+
 ## Installation
 
 **OmopSketch** is available from CRAN:
@@ -59,7 +67,7 @@ through [omock](https://ohdsi.github.io/omock/):
 library(omock)
 
 cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
-#> ℹ Reading GiBleed tables.
+#> ℹ Loading bundled GiBleed tables from package data.
 #> ℹ Adding drug_strength table.
 #> ℹ Creating local <cdm_reference> object.
 #> ℹ Inserting <cdm_reference> into duckdb.
@@ -120,6 +128,8 @@ person table with `summarisePersonTable()`:
 result <- summarisePerson(cdm = cdm)
 
 tablePerson(result = result, type = "flextable")
+#> ! The following column type were changed:
+#> • variable_name: from integer to character
 ```
 
 <img src="man/figures/README-unnamed-chunk-8-1.png" width="70%" style="display: block; margin: auto;" />
