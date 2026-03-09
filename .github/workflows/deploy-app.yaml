@@ -1,10 +1,7 @@
 name: Generate and Deploy Shiny App
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+  workflow_dispatch:
 
 jobs:
   deploy:
