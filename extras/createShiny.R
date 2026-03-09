@@ -30,9 +30,9 @@ results <- purrr::map(databases, \(dbName) {
     duckFile <- tempfile(fileext = ".duckdb")
     drv <- duckdb::duckdb(dbdir = duckFile)
     src <- CDMConnector::dbSource(con = duckdb::dbConnect(drv = drv), writeSchema = "main")
-    cdm <- omock::mockCdmFromDataset(datasetName = dbName) |>
-      omopgenerics::insertCdmTo(to = src) |>
-      suppressMessages()
+    cdm <- omock::mockCdmFromDataset(datasetName = dbName)
+    attr(cdm, "cdm_name") <- dbName
+    cdm <- omopgenerics::insertCdmTo(cdm = cdm, to = src)
     cli::cli_inform(c(v = "{.cls cdm_reference} created for {.strong {dbName}}."))
 
     # characterise databas
