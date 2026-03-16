@@ -80,6 +80,11 @@
 <!-- badges: end -->
 <p>The goal of OmopSketch is to characterise and visualise an Observational Medical Outcomes Partnership (OMOP) Common Data Model (CDM) instance to asses if it meets the necessary criteria to answer a specific clinical question and conduct a certain study.</p>
 <div class="section level2">
+<h2 id="tested-sources">Tested sources<a class="anchor" aria-label="anchor" href="#tested-sources"></a>
+</h2>
+<p><a href="https://github.com/OHDSI/OmopSketch/actions/workflows/test-local-omopgenerics.yaml" class="external-link"><img src="https://github.com/OHDSI/OmopSketch/actions/workflows/test-local-omopgenerics.yaml/badge.svg?branch=main"></a> <a href="https://github.com/OHDSI/OmopSketch/actions/workflows/test-duckdb-CDMConnector.yaml" class="external-link"><img src="https://github.com/OHDSI/OmopSketch/actions/workflows/test-duckdb-CDMConnector.yaml/badge.svg?branch=main"></a> <a href="https://github.com/OHDSI/OmopSketch/actions/workflows/test-postgres-CDMConnector.yaml" class="external-link"><img src="https://github.com/OHDSI/OmopSketch/actions/workflows/test-postgres-CDMConnector.yaml/badge.svg?branch=main"></a> <a href="https://github.com/OHDSI/OmopSketch/actions/workflows/test-redshift-CDMConnector.yaml" class="external-link"><img src="https://github.com/OHDSI/OmopSketch/actions/workflows/test-redshift-CDMConnector.yaml/badge.svg?branch=main"></a> <a href="https://github.com/OHDSI/OmopSketch/actions/workflows/test-sqlserver-CDMConnector.yaml" class="external-link"><img src="https://github.com/OHDSI/OmopSketch/actions/workflows/test-sqlserver-CDMConnector.yaml/badge.svg?branch=main"></a></p>
+</div>
+<div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p><strong>OmopSketch</strong> is available from CRAN:</p>
@@ -104,7 +109,7 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ohdsi.github.io/omock/" class="external-link">omock</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ohdsi.github.io/omock/reference/mockCdmFromDataset.html" class="external-link">mockCdmFromDataset</a></span><span class="op">(</span>datasetName <span class="op">=</span> <span class="st">"GiBleed"</span>, source <span class="op">=</span> <span class="st">"duckdb"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; ℹ Reading GiBleed tables.</span></span>
+<span><span class="co">#&gt; ℹ Loading bundled GiBleed tables from package data.</span></span>
 <span><span class="co">#&gt; ℹ Adding drug_strength table.</span></span>
 <span><span class="co">#&gt; ℹ Creating local &lt;cdm_reference&gt; object.</span></span>
 <span><span class="co">#&gt; ℹ Inserting &lt;cdm_reference&gt; into duckdb.</span></span>
@@ -154,7 +159,9 @@
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/summarisePerson.html">summarisePerson</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="reference/tablePerson.html">tablePerson</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">result</span>, type <span class="op">=</span> <span class="st">"flextable"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="reference/tablePerson.html">tablePerson</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">result</span>, type <span class="op">=</span> <span class="st">"flextable"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; ! The following column type were changed:</span></span>
+<span><span class="co">#&gt; • variable_name: from integer to character</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-8-1.png" width="70%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">

@@ -208,9 +208,9 @@ stratification), “years”, “quarters”, or “months”.</p>
 <span><span class="co">#&gt; Columns: 5</span></span>
 <span><span class="co">#&gt; $ group_level      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "condition_occurrence"<span style="color: #949494;">, </span>"condition_occurrence"<span style="color: #949494;">, </span>"cond…</span></span>
 <span><span class="co">#&gt; $ strata_level     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"…</span></span>
-<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Acute bronchitis"<span style="color: #949494;">, </span>"Esophagitis"<span style="color: #949494;">, </span>"Polyp of colon"<span style="color: #949494;">, </span>…</span></span>
+<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Acute bronchitis"<span style="color: #949494;">, </span>"Laceration of hand"<span style="color: #949494;">, </span>"Fracture o…</span></span>
 <span><span class="co">#&gt; $ estimate_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_subjects"<span style="color: #949494;">, </span>"count_subjects"<span style="color: #949494;">, </span>"count_subjects"<span style="color: #949494;">,</span>…</span></span>
-<span><span class="co">#&gt; $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "260139 &amp;&amp;&amp; Acute bronchitis"<span style="color: #949494;">, </span>"30753 &amp;&amp;&amp; Esophagitis…</span></span></code></pre></div>
+<span><span class="co">#&gt; $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "260139 &amp;&amp;&amp; Acute bronchitis"<span style="color: #949494;">, </span>"4113008 &amp;&amp;&amp; Laceratio…</span></span></code></pre></div>
 <p>We can also filter the clinical table to a specific time window by
 setting the dateRange argument.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -247,10 +247,10 @@ its <code>subject_id</code>s.</p>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span>, <span class="va">estimate_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rows: 66</span></span>
+<span><span class="co">#&gt; Rows: 64</span></span>
 <span><span class="co">#&gt; Columns: 3</span></span>
 <span><span class="co">#&gt; $ group_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "condition_occurrence"<span style="color: #949494;">, </span>"condition_occurrence"<span style="color: #949494;">, </span>"conditi…</span></span>
-<span><span class="co">#&gt; $ variable_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Viral sinusitis"<span style="color: #949494;">, </span>"Chronic sinusitis"<span style="color: #949494;">, </span>"Osteoporosis"<span style="color: #949494;">, </span>…</span></span>
+<span><span class="co">#&gt; $ variable_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Osteoarthritis"<span style="color: #949494;">, </span>"Otitis media"<span style="color: #949494;">, </span>"Fracture of forearm"<span style="color: #949494;">,</span>…</span></span>
 <span><span class="co">#&gt; $ estimate_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"coun…</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="display-the-results">Display the results<a class="anchor" aria-label="anchor" href="#display-the-results"></a>
