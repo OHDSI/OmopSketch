@@ -57,6 +57,10 @@ test_that("summariseClinicalRecords() works", {
     dplyr::tally() |>
     dplyr::pull() == 0)
   expect_true(cs |>
+                dplyr::filter(variable_name %in% "Standard vocabulary") |>
+                dplyr::tally() |>
+                dplyr::pull() == 0)
+  expect_true(cs |>
     dplyr::filter(variable_name %in% "Source vocabulary") |>
     dplyr::tally() |>
     dplyr::pull() == 0)
