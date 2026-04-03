@@ -196,7 +196,8 @@ summariseNumeric2 <- function(x, variable, den) {
           dplyr::mutate(variable_level = dplyr::coalesce(.data$variable_level, "Missing")) |>
           dplyr::group_by(.data$variable_level) |>
           dplyr::summarise(count = as.integer(dplyr::n())) |>
-          dplyr::collect()
+          dplyr::collect() |>
+          dplyr::mutate(percentage = 100 * as.numeric(.data$count) / .env$den)
       )
   }
   return(res)
