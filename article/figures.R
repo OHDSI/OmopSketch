@@ -6,6 +6,7 @@ library(here)
 library(ggplot2)
 library(patchwork)
 library(dplyr)
+library(gt)
 
 results <- importSummarisedResult(path = here("article", "results"))
 
@@ -24,6 +25,15 @@ p4 <- results |>
   filter(variable_name == "Location" & !is.na(variable_level)) |>
   barPlot(x = "cdm_name", y = "percentage", colour = "variable_level", position = "stack") +
   labs(x = "", fill = "Region", colour = "Region")
+
+f1 <- p1 + p2 + p3 + p4 +
+  plot_layout(ncol = 4) +
+  plot_annotation(
+    tag_levels = "A",
+    tag_prefix  = "",
+    tag_suffix  = ""
+  ) &
+  theme(plot.tag = element_text(face = "bold", size = 14))
 
 f1 <- p1 + p2 + p3 + p4 +
   plot_layout(ncol = 4)
@@ -94,7 +104,7 @@ res <- res |>
   mutate(variable_name = if_else(variable_name == "Concept class", "Concept class*", variable_name)) |>
   select(!"keep")
 
-res |>
+t2 <- res |>
   visOmopTable(
     header = "cdm_name",
     groupColumn = "variable_name",
@@ -107,3 +117,4 @@ res |>
     style = OmopSketch:::validateStyle(style = NULL, obj = "table")
   )
 
+gtsave(t2, here("article", "results", "table2.docx"))
