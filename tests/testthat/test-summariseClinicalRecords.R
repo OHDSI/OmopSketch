@@ -588,11 +588,10 @@ test_that("individuals not in person", {
   expect_true(round(result$numberSubjectsPercentage) == round(100 * 2 / 3))
 
   # condition occurrence only 1 subject and it is not defined in person table
-  expect_no_error(result <- extractSummary(fun("condition_occurrence")))
+  expect_warning(result <- extractSummary(fun("condition_occurrence")))
   expect_true(result$notInPersonCount == 1)
   expect_true(round(result$notInPersonPercentage) == 100)
-  expect_true(result$numberSubjectsCount == 0)
-  expect_true(round(result$numberSubjectsPercentage) == 0)
+
 
   # measurement 5 subjects, 2 from person table 3 not defined in person
   expect_no_error(result <- extractSummary(fun("measurement")))

@@ -135,6 +135,7 @@ summariseClinicalRecords <- function(cdm,
     omopTable <- omopTable |>
       dplyr::inner_join(cdm$person |> dplyr::select("person_id"), by = "person_id")
 
+
     cli::cli_inform(c("i" = "Adding variables of interest to {.pkg {table}}."))
     start_date_name <- omopgenerics::omopColumns(table, field = "start_date")
     if(!is.null(ageGroup) | isTRUE(sex)){
@@ -181,7 +182,8 @@ summariseClinicalRecords <- function(cdm,
         number_subjects <- result$recordPerPerson |>
           dplyr::filter(.data$variable_name == "Number subjects" & .data$strata_level == "overall" & .data$estimate_name == "count") |>
           dplyr::pull(.data$estimate_value) |>
-          as.numeric()
+          as.numeric() |>
+          (\(x) if (length(x) == 0) 0L else x)()
         number_subjects_no_person <- number_subjects_total - number_subjects
         res$notInPerson <- dplyr::tibble(
           count = as.character(as.integer(number_subjects_no_person)),
@@ -202,7 +204,16 @@ summariseClinicalRecords <- function(cdm,
           )
 
         if (number_subjects_no_person > 0) {
-          cli::cli_warn(c("!" = "There {?is/are} {number_subjects_no_person} individual{?s} not included in the person table. They are removed from subsequent analyses"))
+          cli::cli_warn(c("!" = "In {table} there {?is/are} {number_subjects_no_person} individual{?s} not included in the person table. They are removed from subsequent analyses"))
+          if (number_subjects_no_person == number_subjects_total) {
+            cli::cli_warn(c("!" = "{table} doesn't include subjects in person table"))
+
+            fullResult <- res$notInPerson |>
+              omopgenerics::uniteAdditional() |>
+              omopgenerics::uniteStrata() |>
+              dplyr::mutate(omop_table = .env$table)
+            return(fullResult)
+          }
         }
 
         cli::cli_inform(c("i" = "Summarising records in observation in {.pkg {table}}."))
