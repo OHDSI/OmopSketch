@@ -59,13 +59,17 @@ tableClinicalRecords <- function(result,
   }
   setting_cols <- omopgenerics::settingsColumns(result)
 
-  custom_order <- c("Number records", "Number subjects", "Subjects not in person table", "Records per person", "Duration of records", "In observation", "Domain","Standard vocabulary", "Source vocabulary", "Standard concept", "Type concept id","Concept class", "Start date before birth date", "End date before start date", "Column name")
+  custom_order <- c("Number records", "Number subjects", "Subjects not in person table", "Records per person", "Duration of records", "In observation", "Domain","Standard vocabulary", "Source vocabulary", "Standard concept", "Type concept", "Concept class", "Start date before birth date", "End date before start date", "Column name")
 
   tables <- result$group_level |> unique()
   result |>
     formatColumn(c("variable_name", "variable_level")) |>
     dplyr::mutate(variable_name = factor(.data$variable_name, levels = custom_order)) |>
     dplyr::arrange(.data$variable_name, .data$variable_level) |>
+    dplyr::mutate(variable_level = dplyr::if_else(
+      variable_name == "Type concept",
+      paste0(.data$variable_level, " (", .data$additional_level, ")"),
+      .data$variable_level)) |>
     visOmopResults::visOmopTable(
       type = type,
       style = style,
