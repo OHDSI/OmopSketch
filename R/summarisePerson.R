@@ -81,6 +81,7 @@ summarisePerson <- function(cdm) {
 
   # summary location_id
   result[["Location"]] <- cdm$person |>
+    locationFromCareSite() |>
     summariseNumeric2(variable = "location_id", den = number_subjects)
 
   # summary provider_id
@@ -155,7 +156,7 @@ summariseNumeric1 <- function(x, variable) {
     dplyr::select(!c("cdm_name", "variable_name"))
 }
 summariseNumeric2 <- function(x, variable, den) {
-  x |>
+  res <- x |>
     dplyr::rename(variable_level = !!variable) |>
     dplyr::summarise(
       # The previous method `sum(as.numeric(is.na(...)))` generates a
@@ -174,6 +175,32 @@ summariseNumeric2 <- function(x, variable, den) {
       percentage_missing = 100 * as.numeric(.data$count_missing) / .env$den,
       percentage_0 = 100 * as.numeric(.data$count_0) / .env$den
     )
+  th <- getOption("OmopSketch.personLabels", 15) |>
+    as.numeric()
+  if (res$distinct_values < th & res$percentage_missing < 100) {
+    cdm <- omopgenerics::cdmReference(table = x)
+    tab <- stringr::str_replace(variable, "_id", "")
+    field <- switch (variable,
+      "location_id" = "location_source_value",
+      "care_site_id" = "care_site_name",
+      "provider_id" = "provider_name"
+    )
+    res <- res |>
+      dplyr::bind_rows(
+        x |>
+          dplyr::left_join(
+            cdm[[tab]] |>
+              dplyr::select(dplyr::all_of(c(variable, "variable_level" = field))),
+            by = variable
+          ) |>
+          dplyr::mutate(variable_level = dplyr::coalesce(.data$variable_level, "Missing")) |>
+          dplyr::group_by(.data$variable_level) |>
+          dplyr::summarise(count = as.integer(dplyr::n())) |>
+          dplyr::collect() |>
+          dplyr::mutate(percentage = 100 * as.numeric(.data$count) / .env$den)
+      )
+  }
+  return(res)
 }
 
 #' Visualise the results of `summarisePerson()` into a table
@@ -222,4 +249,34 @@ tablePerson <- function(result,
     type = type
   ) |>
     suppressWarnings()
+}
+locationFromCareSite <- function(person) {
+  cdm <- omopgenerics::cdmReference(table = person)
+  locationLabs <- person |>
+    dplyr::distinct(.data$location_id) |>
+    dplyr::pull() |>
+    purrr::keep(\(x) !is.na(x) & x != 0)
+  if (length(locationLabs) == 0) {
+    careSiteIdLabs <- person |>
+      dplyr::distinct(.data$care_site_id) |>
+      dplyr::pull() |>
+      purrr::keep(\(x) !is.na(x) & x != 0)
+    if (length(careSiteIdLabs) > 0) {
+      person <- person |>
+        dplyr::select(!"location_id") |>
+        dplyr::left_join(
+          cdm$care_site |>
+            dplyr::select("location_id", "care_site_id"),
+          by = "care_site_id"
+        )
+      locationLabs <- person |>
+        dplyr::distinct(.data$location_id) |>
+        dplyr::pull() |>
+        purrr::keep(\(x) !is.na(x) & x != 0)
+      if (length(locationLabs) > 0) {
+        cli::cli_inform(c("i" = "`location_id` was obtained from {.emph care_site_id} as the `location_id` column is empty in {.pkg person} table."))
+      }
+    }
+  }
+  return(person)
 }
