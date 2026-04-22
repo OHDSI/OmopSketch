@@ -30,7 +30,7 @@ test_that("summariseConceptIdCount works", {
     summariseConceptIdCounts(cdm, "procedure_occurrence", countBy = "record", interval = "months") |>
       omopgenerics::splitAdditional() |>
       dplyr::filter(.data$time_interval == "overall") |>
-      omopgenerics::uniteAdditional(cols = c("time_interval", "source_concept_id", "source_concept_name", "standard_vocabulary", "source_vocabulary")) |>
+      omopgenerics::uniteAdditional(cols = c("time_interval", "source_concept_id", "source_concept_name")) |>
       sortTibble(),
     ignore_attr = TRUE
   )
