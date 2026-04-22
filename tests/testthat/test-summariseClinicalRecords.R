@@ -79,6 +79,13 @@ test_that("summariseClinicalRecords() works", {
   expect_false("Concept class" %in% vo$variable_name)
   expect_true("Concept class" %in% d$variable_name)
 
+
+ cdm$condition_occurrence <- cdm$condition_occurrence |> dplyr::filter(person_id == 263)
+ expect_no_error(res <- summariseClinicalRecords(cdm, omopTableName = "condition_occurrence"))
+ expect_equal(res |> dplyr::filter(variable_name == "Number subjects", estimate_name == "count") |> dplyr::pull(.data$estimate_value) |> as.numeric(), 1L)
+ total <- cdm$person |> omopgenerics::numberSubjects()
+ expect_equal(res |> dplyr::filter(variable_name == "Number subjects", estimate_name == "percentage") |> dplyr::pull(.data$estimate_value) |> as.numeric(), 100*1/total)
+
   expect_false("Duration of records" %in% m$variable_name |> unique())
   expect_false("End date before start date" %in% m$variable_name |> unique())
   expect_true("Duration of records" %in% c$variable_name |> unique())
@@ -91,6 +98,7 @@ test_that("summariseClinicalRecords() works", {
                  dplyr::filter(variable_name == "Duration of records", estimate_name %in% c("median", "min", "max", "mean")) |>
                  dplyr::distinct(estimate_value) |>
                  dplyr::pull())
+
 
   dropCreatedTables(cdm = cdm)
 })
@@ -462,7 +470,7 @@ test_that("argument missingData works", {
 
   expect_equal(x |> dplyr::filter(variable_name == "Column name"), y, ignore_attr = TRUE)
 
-  expect_no_error(x <- summariseClinicalRecords(cdm, "drug_exposure",sex = T, ageGroup = list(c(0,50), c(51, 100)), recordsPerPerson = NULL,quality = F, conceptSummary = F))
+  expect_no_error(x <- summariseClinicalRecords(cdm, "drug_exposure",sex = T, ageGroup = list(c(0,50), c(51, 100)), recordsPerPerson = NULL, quality = F, conceptSummary = F))
   y <- summariseMissingData(cdm, "drug_exposure", sex = T,  sample = NULL, ageGroup = list(c(0,50), c(51, 100)))
 
   expect_equal(x |> dplyr::filter(variable_name == "Column name") |> dplyr::arrange(.data$variable_level, .data$strata_name, .data$strata_level), y |> dplyr::arrange(.data$variable_level, .data$strata_name, .data$strata_level), ignore_attr = TRUE)
@@ -489,12 +497,122 @@ test_that("argument missingData works", {
 
   dropCreatedTables(cdm = cdm)
 })
+
 test_that("works with all clinical tables", {
   skip_on_cran()
-  cdm <- omock::mockCdmFromDataset(datasetName = "synpuf-1k_5.3", source = "duckdb")
+  options(timeout = 1200)
+  cdm <- omock::mockCdmFromDataset(datasetName = "synpuf-1k_5.3") |>
+    copyCdm()
+
   expect_no_error(summariseClinicalRecords(cdm, omopTableName = "payer_plan_period"))
   expect_no_error(summariseClinicalRecords(cdm, omopTableName = "drug_era"))
   expect_no_error(summariseClinicalRecords(cdm, omopTableName = "condition_era"))
 
+  dropCreatedTables(cdm = cdm)
 })
 
+test_that("individuals not in person", {
+  skip_on_cran()
+
+  cdm <- omopgenerics::cdmFromTables(
+    tables = list(
+      person = dplyr::tibble(
+        person_id = 1:3L,
+        gender_concept_id = 0L,
+        year_of_birth = 2000L,
+        race_concept_id = 0L,
+        ethnicity_concept_id = 0L
+      ),
+      observation_period = dplyr::tibble(
+        observation_period_id = 1:3L,
+        person_id = 1:3L,
+        observation_period_start_date = as.Date("2020-01-01"),
+        observation_period_end_date = observation_period_start_date,
+        period_type_concept_id = 0L
+      ),
+      drug_exposure = dplyr::tibble(
+        drug_exposure_id = 1:2L,
+        drug_concept_id = 0L,
+        person_id = 1:2L,
+        drug_type_concept_id = 0L,
+        drug_source_concept_id = 0L,
+        drug_exposure_start_date = as.Date("2020-01-01"),
+        drug_exposure_end_date = as.Date("2020-01-01")
+      ),
+      condition_occurrence = dplyr::tibble(
+        person_id = 4L,
+        condition_occurrence_id = 1:4L,
+        condition_concept_id = 0L,
+        condition_type_concept_id = 0L,
+        condition_source_concept_id = 0L,
+        condition_start_date = as.Date("2020-01-01"),
+        condition_end_date = as.Date("2020-01-01")
+      ),
+      measurement = dplyr::tibble(
+        measurement_id = 1:5L,
+        measurement_concept_id = 0L,
+        measurement_type_concept_id = 0L,
+        person_id = c(1L, 3L, 5L, 7L, 8L),
+        measurement_source_concept_id = 0L,
+        measurement_date = as.Date("2020-01-01")
+      )
+    ),
+    cdmName = "mock"
+  ) |>
+    copyCdm()
+
+  fun <- function(table) {
+    summariseClinicalRecords(
+      cdm = cdm,
+      omopTableName = table,
+      conceptSummary = FALSE,
+      quality = TRUE
+    )
+  }
+  extractSummary <- function(x) {
+    list(
+      notInPersonCount = x |>
+        dplyr::filter(.data$variable_name == "Subjects not in person table") |>
+        dplyr::filter(.data$estimate_name == "count") |>
+        dplyr::pull("estimate_value") |>
+        as.numeric(),
+      notInPersonPercentage = x |>
+        dplyr::filter(.data$variable_name == "Subjects not in person table") |>
+        dplyr::filter(.data$estimate_name == "percentage") |>
+        dplyr::pull("estimate_value") |>
+        as.numeric(),
+      numberSubjectsCount = x |>
+        dplyr::filter(.data$variable_name == "Number subjects") |>
+        dplyr::filter(.data$estimate_name == "count") |>
+        dplyr::pull("estimate_value") |>
+        as.numeric(),
+      numberSubjectsPercentage = x |>
+        dplyr::filter(.data$variable_name == "Number subjects") |>
+        dplyr::filter(.data$estimate_name == "percentage") |>
+        dplyr::pull("estimate_value") |>
+        as.numeric()
+    )
+  }
+
+  # drug exposure 2 subjects both in person table
+  expect_no_error(result <- extractSummary(fun("drug_exposure")))
+  expect_true(result$notInPersonCount == 0)
+  expect_true(round(result$notInPersonPercentage) == 0)
+  expect_true(result$numberSubjectsCount == 2)
+  expect_true(round(result$numberSubjectsPercentage) == round(100 * 2 / 3))
+
+  # condition occurrence only 1 subject and it is not defined in person table
+  expect_warning(result <- extractSummary(fun("condition_occurrence")))
+  expect_true(result$notInPersonCount == 1)
+  expect_true(round(result$notInPersonPercentage) == 100)
+
+
+  # measurement 5 subjects, 2 from person table 3 not defined in person
+  expect_no_error(result <- extractSummary(fun("measurement")))
+  expect_true(result$notInPersonCount == 3)
+  expect_true(round(result$notInPersonPercentage) == 100 * 3 / 5)
+  expect_true(result$numberSubjectsCount == 2)
+  expect_true(round(result$numberSubjectsPercentage) == round(100 * 2 / 3))
+
+  dropCreatedTables(cdm = cdm)
+})
