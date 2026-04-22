@@ -269,12 +269,22 @@ summariseClinicalRecords <- function(cdm,
         if ("standard" %in% colnames(x)) {
           cli::cli_inform(c("i" = "Summarising standard concepts in {.pkg {table}}."))
           strataStandard <- lapply(strata, function(x) c(x, "standard"))
+          strataVocab <- lapply(strata, function(x) c(x, "standard_vocabulary"))
           res$standardConcept <- x |>
             summariseCountsInternal(strata = strataStandard, counts = "records") |>
             dplyr::mutate(
               estimate_name = "count",
               variable_name = "Standard concept",
               variable_level = .data$standard
+            ) |>
+            dplyr::bind_rows(
+              x |>
+                summariseCountsInternal(strata = strataVocab, counts = "records") |>
+                dplyr::mutate(
+                  estimate_name = "count",
+                  variable_name = "Standard vocabulary",
+                  variable_level = .data$standard_vocabulary
+                )
             )
         }
 
@@ -447,7 +457,7 @@ summariseRecordsPerPerson <- function(x, strata, estimates) {
 }
 variablesToSummarise <- function(quality, conceptSummary) {
   c(c(
-    "standard",
+    "standard", "standard_vocabulary",
     "source_vocabulary", "domain_id",
     "type_concept", "concept_class_id"
   )[conceptSummary], c("in_observation", "start_before_birth", "end_before_start")[quality])
@@ -543,7 +553,8 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
               standard = "concept_id",
               "standard_concept",
               "domain_id",
-              "concept_class_id"[tableName == "drug_exposure"]
+              "concept_class_id"[tableName == "drug_exposure"],
+              standard_vocabulary = "vocabulary_id"
             ),
           by = c("standard")
         ) |>
@@ -552,6 +563,9 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
           .data$standard_concept == "S" ~ "Standard",
           .data$standard_concept == "C" ~ "Classification",
           .default = "Source"
+        ),
+        standard_vocabulary = dplyr::coalesce(
+          .data$standard_vocabulary, "No matching concept"
         ))
     }
     if ("source" %in% colnames(x)) {
