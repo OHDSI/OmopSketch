@@ -53,7 +53,7 @@ tableTopConceptCounts <- function(result,
 
   strata_cols <- omopgenerics::strataColumns(result)
   additional_cols <- omopgenerics::additionalColumns(result)
-  additional_cols <- additional_cols[!grepl("source_concept", additional_cols)]
+  additional_cols <- additional_cols[!grepl("source_concept|vocabulary", additional_cols)]
   # subset to result_type of interest
   setting_cols <- omopgenerics::settingsColumns(result)
   setting_cols <- setting_cols[!setting_cols %in% c("study_period_end", "study_period_start")]
@@ -85,15 +85,15 @@ tableTopConceptCounts <- function(result,
     )
 
   # estimate name
-  estimateForm <- "Standard: %s (%s); Source: %s (%s); %i"
+  estimateForm <- "Standard: %s (%s - %s); Source: %s (%s - %s); %i"
   if (type == "gt") {
     estimateForm <- stringr::str_replace_all(estimateForm, ";", " <br>")
   }
 
   # format data
   colsGroup <- c(
-    "standard_concept_name", "standard_concept_id", "source_concept_name",
-    "source_concept_id", "count"
+    "standard_concept_name", "standard_concept_id", "standard_vocabulary", "source_concept_name",
+    "source_concept_id", "source_vocabulary", "count"
   )
   tables <- result$omop_table |> unique()
   result <- result |>
@@ -105,8 +105,8 @@ tableTopConceptCounts <- function(result,
     dplyr::mutate(
       estimate_value = sprintf(
         .env$estimateForm, .data$standard_concept_name,
-        .data$standard_concept_id, .data$source_concept_name,
-        .data$source_concept_id, .data$count
+        .data$standard_concept_id, .data$standard_vocabulary, .data$source_concept_name,
+        .data$source_concept_id, .data$source_vocabulary,  .data$count
       ),
       estimate_name = "counts",
       estimate_type = "character"
