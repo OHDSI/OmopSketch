@@ -1,5 +1,6 @@
 
 library(OmopSketch)
+pak::pkg_install("ohdsi/omock")
 
 # TRUE only for GitHub actions
 deleteMockData <- as.logical(Sys.getenv("GITHUB_ACTIONS", "FALSE"))
@@ -10,8 +11,7 @@ options(timeout = 600)
 
 # databases to characterise
 databases <- omock::availableMockDatasets()
-databases <- databases[!databases %in% c("empty_cdm", "synpuf-1k_5.3")]
-databases <- c("synpuf-1k_5.4", "GiBleed", "synthea-allergies-10k", "synthea-covid19-200k")
+databases <- databases[!grepl("empty", databases)]
 
 # create results
 results <- purrr::map(databases, \(dbName) {
@@ -30,9 +30,9 @@ results <- purrr::map(databases, \(dbName) {
     duckFile <- tempfile(fileext = ".duckdb")
     drv <- duckdb::duckdb(dbdir = duckFile)
     src <- CDMConnector::dbSource(con = duckdb::dbConnect(drv = drv), writeSchema = "main")
-    cdm <- omock::mockCdmFromDataset(datasetName = dbName) |>
-      omopgenerics::insertCdmTo(to = src) |>
-      suppressMessages()
+    cdm <- omock::mockCdmFromDataset(datasetName = dbName)
+    attr(cdm, "cdm_name") <- dbName
+    cdm <- omopgenerics::insertCdmTo(cdm = cdm, to = src)
     cli::cli_inform(c(v = "{.cls cdm_reference} created for {.strong {dbName}}."))
 
     # characterise databas

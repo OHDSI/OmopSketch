@@ -166,12 +166,17 @@ summariseClinicalRecords <- function(cdm,
       x = x, strata = strata, estimates = recordsPerPerson
     ) |>
       dplyr::select(!dplyr::starts_with("group_"))
+
     result$recordPerPerson  <- dplyr::bind_rows(result$recordPerPerson,
                                                 result$recordPerPerson |>
                                                   dplyr::filter(variable_name == "Number subjects") |>
                                                   dplyr::mutate(estimate_value = as.character(100*as.numeric(.data$estimate_value)/.env$n_person),
                                                                 estimate_name = "percentage",
                                                                 estimate_type = "percentage"))
+
+    result$duration <- summariseDuration(
+      x = x, tableName = table, strata = strata, estimates = recordsPerPerson) |>
+      dplyr::select(!dplyr::starts_with("group_"))
 
     variables <- variablesToSummarise(quality = quality, conceptSummary = conceptSummary)
 
@@ -238,6 +243,7 @@ summariseClinicalRecords <- function(cdm,
 
 
         cli::cli_inform(c("i" = "Summarising records with end date before start date in {.pkg {table}}."))
+        if(start_date_name != omopgenerics::omopColumns(table, field = "end_date")){
         res$ebs <- x |>
           dplyr::filter(.data$end_before_start == 1) |>
           summariseCountsInternal(strata = strata, counts = "records") |>
@@ -246,6 +252,7 @@ summariseClinicalRecords <- function(cdm,
             variable_name = "End date before start date",
             variable_level = NA_character_
           )
+        }
       }
       if (conceptSummary) {
         if ("domain_id" %in% colnames(x)) {
@@ -465,6 +472,10 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
   newNames <- newNames[!is.na(newNames)]
   cdm <- omopgenerics::cdmReference(x)
 
+  x <- x |>
+    dplyr::select(dplyr::all_of(newNames), dplyr::any_of(c("sex", "age_group"))) |>
+    dplyr::mutate(end_date = dplyr::coalesce(.data$end_date, .data$start_date))
+
   if (quality) {
     x <- x |>
       PatientProfiles::addDateOfBirthQuery(dateOfBirthName = "birthdate")
@@ -480,8 +491,8 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
           ),
         by = dplyr::join_by(
           person_id,
-          !!newNames[["start_date"]] >= obs_start,
-          !!newNames[["end_date"]] <= obs_end
+          start_date >= obs_start,
+          end_date <= obs_end
         )
       )
 
@@ -495,21 +506,20 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
        dplyr::mutate(in_observation = dplyr::if_else(!is.na(obs_start),
                                                      1L,
                                                      NA_integer_),
-                     !!newNames[["end_date"]]:= dplyr::coalesce(.data[[newNames[["end_date"]]]],
-                                                                .data[[newNames[["start_date"]]]]))
+                     end_date = dplyr::coalesce(.data[["end_date"]], .data[["start_date"]]),
+                     end_before_start = dplyr::if_else(.data[["end_date"]] <
+                                                         .data[["start_date"]],
+                                                       1L, 0L),)
    }
     x <- x |>
-      dplyr::select(c(dplyr::all_of(newNames),
-                      dplyr::any_of(c("sex", "age_group")),
+      dplyr::select(c(dplyr::all_of(newNames |> names()),
+                      dplyr::any_of(c("sex", "age_group", "end_before_start")),
                       "in_observation",
                       "birthdate"))
 
     x <- x |>
       dplyr::mutate(
         in_observation = dplyr::coalesce(.data$in_observation, 0L),
-        end_before_start = dplyr::if_else(.data[["end_date"]] <
-                                          .data[["start_date"]],
-                                          1L, 0L),
         start_before_birth = dplyr::if_else(
           as.Date(.data[["start_date"]]) < .data$birthdate,
           1L,
@@ -519,11 +529,11 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
   }
 
   if (conceptSummary) {
-    if(isFALSE(quality)){
-      x <- x |>
-        dplyr::select(dplyr::all_of(newNames), dplyr::any_of(c("sex", "age_group"))) |>
-        dplyr::mutate(end_date = dplyr::coalesce(.data$end_date, .data$start_date))
-    }
+    # if(isFALSE(quality)){
+    #   x <- x |>
+    #     dplyr::select(dplyr::all_of(newNames), dplyr::any_of(c("sex", "age_group"))) |>
+    #     dplyr::mutate(end_date = dplyr::coalesce(.data$end_date, .data$start_date))
+    # }
 
     if ("standard" %in% colnames(x)) {
       x <- x |>
@@ -559,7 +569,7 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
         ))
     }
   }
-  variables <- c("id", "person_id", "start_date", "sex", "age_group", variablesToSummarise(quality = quality, conceptSummary = conceptSummary))
+  variables <- c(newNames |> names(), "sex", "age_group", variablesToSummarise(quality = quality, conceptSummary = conceptSummary))
 
   x |>
     dplyr::select(dplyr::any_of(variables))
@@ -569,3 +579,36 @@ reduceDemicals <- function(x, n) {
   x[id] <- sprintf(paste0("%.", n, "f"), as.numeric(x[id]))
   return(x)
 }
+summariseDuration <- function(x, strata, estimates, tableName) {
+  start_date <- omopgenerics::omopColumns(table = tableName, field = "start_date")
+  end_date <- omopgenerics::omopColumns(table = tableName, field = "end_date")
+  if (start_date == end_date){
+    return(omopgenerics::emptySummarisedResult())
+  }
+  x |>
+    datediffDays(start = "start_date", end = "end_date", name = "duration") |>
+    PatientProfiles::summariseResult(
+      group = list(),
+      includeOverallGroup = FALSE,
+      strata = strata,
+      includeOverallStrata = FALSE,
+      counts = FALSE,
+      variables = "duration",
+      estimates = estimates
+    ) |>
+    dplyr::mutate(variable_name = "Duration of records")
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

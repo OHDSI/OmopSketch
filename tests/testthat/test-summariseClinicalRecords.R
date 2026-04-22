@@ -86,6 +86,20 @@ test_that("summariseClinicalRecords() works", {
  total <- cdm$person |> omopgenerics::numberSubjects()
  expect_equal(res |> dplyr::filter(variable_name == "Number subjects", estimate_name == "percentage") |> dplyr::pull(.data$estimate_value) |> as.numeric(), 100*1/total)
 
+  expect_false("Duration of records" %in% m$variable_name |> unique())
+  expect_false("End date before start date" %in% m$variable_name |> unique())
+  expect_true("Duration of records" %in% c$variable_name |> unique())
+
+  cdm$drug_exposure <- cdm$drug_exposure |> dplyr::mutate(drug_exposure_start_date = as.Date("2020-01-01"),
+                                     drug_exposure_end_date = as.Date("2020-01-03"))
+  d <- summariseClinicalRecords(cdm, omopTableName = "drug_exposure",missingData = F, conceptSummary = F, quality = F)
+  expect_equal(as.character(2L),
+               d |>
+                 dplyr::filter(variable_name == "Duration of records", estimate_name %in% c("median", "min", "max", "mean")) |>
+                 dplyr::distinct(estimate_value) |>
+                 dplyr::pull())
+
+
   dropCreatedTables(cdm = cdm)
 })
 
