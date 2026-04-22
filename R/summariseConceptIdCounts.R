@@ -71,9 +71,9 @@ summariseConceptIdCounts <- function(cdm,
   cdm <- sampleCdm(cdm = cdm, tables = omopTableName, sample = sample)
   # get strata
   strata <- omopgenerics::combineStrata(strataCols(sex = sex, ageGroup = ageGroup, interval = interval, inObservation = inObservation))
-  concepts <- c("concept_id", "concept_name", "source_concept_id", "source_concept_name")
+  concepts <- c("concept_id", "concept_name", "source_concept_id", "source_concept_name", "standard_vocabulary", "source_vocabulary")
   stratax <- c(list(concepts), purrr::map(strata, \(x) c(concepts, x)))
-  additional <- c("time_interval", "source_concept_id", "source_concept_name")
+  additional <- c("time_interval", "source_concept_id", "source_concept_name", "standard_vocabulary", "source_vocabulary")
   # how to count
   counts <- c("records", "person_id")[c("record", "person") %in% countBy]
 
@@ -115,19 +115,23 @@ summariseConceptIdCounts <- function(cdm,
       dplyr::mutate(source_concept_id = dplyr::coalesce(.data$source_concept_id, 0L)) |>
       dplyr::left_join(
         cdm$concept |>
-          dplyr::select("concept_id", "concept_name"),
+          dplyr::select("concept_id", "concept_name", standard_vocabulary = "vocabulary_id"),
         by = "concept_id"
       ) |>
       dplyr::left_join(
         cdm$concept |>
           dplyr::select(
             source_concept_id = "concept_id",
-            source_concept_name = "concept_name"
+            source_concept_name = "concept_name",
+            source_vocabulary = "vocabulary_id"
           ),
         by = "source_concept_id"
       ) |>
       dplyr::mutate(source_concept_name = dplyr::coalesce(.data$source_concept_name, "No matching concept"),
-                    concept_name = dplyr::coalesce(.data$concept_name, "No matching concept")) |>
+                    concept_name = dplyr::coalesce(.data$concept_name, "No matching concept"),
+                    standard_vocabulary = dplyr::coalesce(.data$standard_vocabulary, "No matching vocabulary"),
+                    source_vocabulary = dplyr::coalesce(.data$source_vocabulary, "No matching vocabulary")
+                    ) |>
       # add demographics and year
       addStratifications(
         indexDate = "start_date",
