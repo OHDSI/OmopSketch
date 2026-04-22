@@ -308,13 +308,17 @@ summariseClinicalRecords <- function(cdm,
             summariseCountsInternal(strata = strataType, counts = "records") |>
             dplyr::mutate(
               estimate_name = "count",
-              variable_name = "Type concept id",
-              type_concept = as.integer(.data$type_concept)
+              variable_name = "Type concept",
+              type_concept_id = as.integer(.data$type_concept)
             ) |>
             dplyr::left_join(conceptTypes, by = "type_concept") |>
             dplyr::mutate(type_name = dplyr::coalesce(
               .data$type_name, paste0("Unknown type concept: ", .data$type_concept)
-            )) |>
+            ),
+            type_concept_id = dplyr::coalesce(
+              .data$type_concept_id, 0L
+              )
+            ) |>
             dplyr::rename(variable_level = "type_name")
         }
         if ("concept_class_id" %in% colnames(x)) {
@@ -344,7 +348,7 @@ summariseClinicalRecords <- function(cdm,
         dplyr::bind_rows(
           res |>
             dplyr::filter(.data$variable_name != "Subjects not in person table") |>
-            dplyr::select("strata_name", "strata_level", "variable_name", "variable_level", "estimate_value") |>
+            #dplyr::select("strata_name", "strata_level", "variable_name", "variable_level", "estimate_value") |>
             dplyr::left_join(denominator, by = c("strata_name", "strata_level")) |>
             dplyr::mutate(
               estimate_value = sprintf("%.2f", 100 * as.numeric(.data$estimate_value) / as.numeric(.data$den)),
@@ -353,7 +357,7 @@ summariseClinicalRecords <- function(cdm,
             )
         ) |>
         dplyr::select(!"den") |>
-        omopgenerics::uniteAdditional()
+        omopgenerics::uniteAdditional(cols = intersect("type_concept_id", colnames(res)))
     }
 
     if (missingData) {
