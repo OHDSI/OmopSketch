@@ -54,12 +54,14 @@ plotPerson <- function(result,
     return(visOmopResults::emptyPlot(subtitle = mes, type = type, style = style))
   }
   pt <- opts$plot_type[opts$variable_name == variableName]
-
+  result <- result |> dplyr::filter(.data$variable_name == .env$variableName)
   if (pt == "barPlot") {
     if (all(is.na(result$variable_level))) {
       colour <- "variable_name"
+      legend_label <- character()
     } else {
       colour <- "variable_level"
+      legend_label <- variableName
     }
     if ("percentage" %in% unique(result$estimate_name)) {
       y <- "percentage"
@@ -83,8 +85,20 @@ plotPerson <- function(result,
       style = style,
       type = type
     )
+    legend_label <- "Database"
   }
 
+  if(inherits(p, "ggplot")) {
+    p <- p +
+      ggplot2::labs(colour = legend_label,
+                fill = legend_label)
+  } else if(inherits(p, "plotly")) {
+  p <- plotly::layout(
+    p,
+    legend = list(
+      title = list(text = legend_label)
+    )
+  ) }
   return(p)
 }
 
