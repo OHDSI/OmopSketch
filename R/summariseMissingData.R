@@ -114,7 +114,7 @@ summariseMissingData <- function(cdm,
 warningDataRequire <- function(res) {
   warning_columns <- res |>
     dplyr::filter(
-      isTRUE(.data$is_required),
+      .data$is_required,
       .data$estimate_name == "na_count",
       as.integer(.data$estimate_value) > 0
     ) |>
