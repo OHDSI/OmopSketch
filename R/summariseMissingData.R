@@ -167,7 +167,7 @@ summariseMissingDataFromTable <- function(omopTable, table, cdm, col, dateRange,
     dplyr::filter(
       .data$cdm_table_name == .env$table,
     ) |>
-    dplyr::select(column_name = .data$cdm_field_name, is_required), by = "column_name")
+    dplyr::select("column_name" = "cdm_field_name", "is_required"), by = "column_name")
 
   resultsOmopTable <- omopTable |>
     # add stratifications
