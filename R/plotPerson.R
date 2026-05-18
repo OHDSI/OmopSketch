@@ -66,7 +66,10 @@ plotPerson <- function(result,
     } else {
       y <- "count"
     }
-    p <- visOmopResults::barPlot(
+    result <- result |>
+      dplyr::filter(.data$estimate_name == .env$y)
+    if(nrow(result)>0){
+      p <- visOmopResults::barPlot(
       result = result,
       x = "cdm_name",
       y = y,
@@ -74,7 +77,13 @@ plotPerson <- function(result,
       style = style,
       type = type,
       colour = colour
-    )
+      )
+    } else {
+      mes <- paste0(
+       "Results don't contain any counts for ", variableName
+       )
+      return(visOmopResults::emptyPlot(subtitle = mes, type = type, style = style))
+      }
   } else {
     p <- visOmopResults::boxPlot(
       result = result,
@@ -99,6 +108,9 @@ plotPersonOpts <- function() {
     "Race source", "barPlot",
     "Ethnicity", "barPlot",
     "Ethnicity source", "barPlot",
+    "Location", "barPlot",
+    "Provider",  "barPlot",
+    "Care site", "barPlot",
     "Year of birth", "boxPlot",
     "Month of birth", "boxPlot",
     "Day of birth", "boxPlot"
