@@ -171,6 +171,13 @@ result <- summariseClinicalRecords(
 )
 #> ℹ Adding variables of interest to condition_occurrence.
 #> ℹ Summarising records per person in condition_occurrence.
+#> ℹ The following estimates will be calculated:
+#> • duration: mean, sd, median, q25, q75, min, max
+#> ! Table is collected to memory as not all requested estimates are supported on
+#>   the database side
+#> → Start summary of data, at 2026-05-18 17:00:59.656796
+#> 
+#> ✔ Summary finished, at 2026-05-18 17:00:59.686272
 #> ℹ Summarising subjects not in person table in condition_occurrence.
 #> ℹ Summarising records in observation in condition_occurrence.
 #> ℹ Summarising records with start before birth date in condition_occurrence.
@@ -182,6 +189,13 @@ result <- summariseClinicalRecords(
 #> ℹ Summarising missing data in condition_occurrence.
 #> ℹ Adding variables of interest to drug_exposure.
 #> ℹ Summarising records per person in drug_exposure.
+#> ℹ The following estimates will be calculated:
+#> • duration: mean, sd, median, q25, q75, min, max
+#> ! Table is collected to memory as not all requested estimates are supported on
+#>   the database side
+#> → Start summary of data, at 2026-05-18 17:01:01.310057
+#> 
+#> ✔ Summary finished, at 2026-05-18 17:01:01.334667
 #> ℹ Summarising subjects not in person table in drug_exposure.
 #> ℹ Summarising records in observation in drug_exposure.
 #> ℹ Summarising records with start before birth date in drug_exposure.
@@ -228,10 +242,10 @@ result <- summariseConceptIdCounts(
   omopTableName = "drug_exposure"
 )
 
-tableTopConceptCounts(result = result, type = "flextable")
+tableTopConceptCounts(result = result, type = "flextable", top = 3)
 ```
 
-<img src="man/figures/README-unnamed-chunk-13-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-14-1.png" width="70%" style="display: block; margin: auto;" />
 
 ### Characterise the cdm
 
