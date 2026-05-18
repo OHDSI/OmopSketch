@@ -105,21 +105,16 @@ summariseMissingData <- function(cdm,
     omopgenerics::uniteGroup(cols = "omop_table") |>
     omopgenerics::uniteStrata(cols = setdiff(unique(unlist(strata)), "interval")) |>
     addTimeInterval() |>
-    omopgenerics::uniteAdditional(cols = "time_interval") |>
+    omopgenerics::uniteAdditional(cols = c("time_interval", "is_required")) |>
     dplyr::mutate(variable_name = "Column name") |>
     dplyr::rename("variable_level" = "column_name") |>
     omopgenerics::newSummarisedResult(settings = set)
 }
 
-warningDataRequire <- function(cdm, table, res) {
-  required_cols <- omopgenerics::omopTableFields(omopgenerics::cdmVersion(cdm)) |>
-    dplyr::filter(
-      .data$cdm_table_name == .env$table, .data$is_required == TRUE
-    ) |>
-    dplyr::pull(.data$cdm_field_name)
+warningDataRequire <- function(res) {
   warning_columns <- res |>
     dplyr::filter(
-      .data$column_name %in% .env$required_cols,
+      isTRUE(.data$is_required),
       .data$estimate_name == "na_count",
       as.integer(.data$estimate_value) > 0
     ) |>
@@ -167,6 +162,13 @@ summariseMissingDataFromTable <- function(omopTable, table, cdm, col, dateRange,
     return(NULL)
   }
 
+  columns_tibble <- dplyr::tibble(column_name = col_table, order = seq_along(col_table)) |>
+    dplyr::left_join(omopgenerics::omopTableFields(omopgenerics::cdmVersion(cdm)) |>
+    dplyr::filter(
+      .data$cdm_table_name == .env$table,
+    ) |>
+    dplyr::select(column_name = .data$cdm_field_name, is_required), by = "column_name")
+
   resultsOmopTable <- omopTable |>
     # add stratifications
     addStratifications(
@@ -187,7 +189,7 @@ summariseMissingDataFromTable <- function(omopTable, table, cdm, col, dateRange,
     dplyr::mutate(omop_table = table) |>
     # order columns
     dplyr::inner_join(
-      dplyr::tibble(column_name = col_table, order = seq_along(col_table)),
+      columns_tibble,
       by = "column_name"
     ) |>
     dplyr::arrange(.data$order, .data$estimate_name) |>
@@ -196,7 +198,7 @@ summariseMissingDataFromTable <- function(omopTable, table, cdm, col, dateRange,
   # drop tables
   omopgenerics::dropSourceTable(cdm = cdm, name = dplyr::starts_with(prefix))
 
-  warningDataRequire(cdm = cdm, res = resultsOmopTable, table = table)
+  warningDataRequire(res = resultsOmopTable)
 
   return(resultsOmopTable)
 }
