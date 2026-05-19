@@ -1,4 +1,4 @@
-pandoc: 3.1.11
+pandoc: 3.8.3
 pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
@@ -9,7 +9,7 @@ articles:
   articles/summarise_observation_period: summarise_observation_period.html
   articles/summarise_person: summarise_person.html
   articles/summarise_trend: summarise_trend.html
-last_built: 2026-04-22T09:36Z
+last_built: 2026-05-19T13:43Z
 urls:
   reference: https://OHDSI.github.io/OmopSketch/reference
   article: https://OHDSI.github.io/OmopSketch/articles

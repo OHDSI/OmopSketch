@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Summarise concept id counts">
 </head>
@@ -178,16 +178,16 @@ obtain both record and person counts.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 226 × 3</span></span></span>
 <span><span class="co">#&gt;    variable_name                                    estimate_name estimate_value</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> poliovirus vaccine, inactivated                  count_records 7977          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> poliovirus vaccine, inactivated                  count_subjec… 2140          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Acetaminophen 21.7 MG/ML / Dextromethorphan Hyd… count_records 1993          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Acetaminophen 21.7 MG/ML / Dextromethorphan Hyd… count_subjec… 1393          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Alendronic acid 10 MG Oral Tablet                count_records 129           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Alendronic acid 10 MG Oral Tablet                count_subjec… 129           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> alteplase 100 MG Injection                       count_records 217           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> alteplase 100 MG Injection                       count_subjec… 199           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Naproxen sodium 220 MG Oral Tablet               count_records 1159          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Naproxen sodium 220 MG Oral Tablet               count_subjec… 947           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> zoster vaccine, live                             count_records 2125          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> zoster vaccine, live                             count_subjec… 1140          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Acetaminophen 160 MG Oral Tablet                 count_records 2158          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Acetaminophen 160 MG Oral Tablet                 count_subjec… 1428          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> hepatitis B vaccine, adult dosage                count_records 1916          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> hepatitis B vaccine, adult dosage                count_subjec… 1560          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Penicillin V Potassium 500 MG Oral Tablet        count_records 1087          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Penicillin V Potassium 500 MG Oral Tablet        count_subjec… 856           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> {7 (Inert Ingredients 1 MG Oral Tablet) / 21 (M… count_records 1056          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> {7 (Inert Ingredients 1 MG Oral Tablet) / 21 (M… count_subjec… 605           </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 216 more rows</span></span></span></code></pre></div>
 <p>Further stratification can be applied using the
 <code>interval</code>, <code>sex</code>, and <code>ageGroup</code>
@@ -208,7 +208,7 @@ stratification), “years”, “quarters”, or “months”.</p>
 <span><span class="co">#&gt; Columns: 5</span></span>
 <span><span class="co">#&gt; $ group_level      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "condition_occurrence"<span style="color: #949494;">, </span>"condition_occurrence"<span style="color: #949494;">, </span>"cond…</span></span>
 <span><span class="co">#&gt; $ strata_level     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"…</span></span>
-<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Acute bronchitis"<span style="color: #949494;">, </span>"Laceration of hand"<span style="color: #949494;">, </span>"Fracture o…</span></span>
+<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Acute bronchitis"<span style="color: #949494;">, </span>"Laceration of hand"<span style="color: #949494;">, </span>"Laceration…</span></span>
 <span><span class="co">#&gt; $ estimate_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_subjects"<span style="color: #949494;">, </span>"count_subjects"<span style="color: #949494;">, </span>"count_subjects"<span style="color: #949494;">,</span>…</span></span>
 <span><span class="co">#&gt; $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "260139 &amp;&amp;&amp; Acute bronchitis"<span style="color: #949494;">, </span>"4113008 &amp;&amp;&amp; Laceratio…</span></span></code></pre></div>
 <p>We can also filter the clinical table to a specific time window by
@@ -247,10 +247,10 @@ its <code>subject_id</code>s.</p>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span>, <span class="va">estimate_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rows: 68</span></span>
+<span><span class="co">#&gt; Rows: 59</span></span>
 <span><span class="co">#&gt; Columns: 3</span></span>
 <span><span class="co">#&gt; $ group_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "condition_occurrence"<span style="color: #949494;">, </span>"condition_occurrence"<span style="color: #949494;">, </span>"conditi…</span></span>
-<span><span class="co">#&gt; $ variable_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Sprain of ankle"<span style="color: #949494;">, </span>"Osteoarthritis"<span style="color: #949494;">, </span>"Streptococcal sore…</span></span>
+<span><span class="co">#&gt; $ variable_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Acute viral pharyngitis"<span style="color: #949494;">, </span>"Acute bacterial sinusitis"<span style="color: #949494;">, </span>…</span></span>
 <span><span class="co">#&gt; $ estimate_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"coun…</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="display-the-results">Display the results<a class="anchor" aria-label="anchor" href="#display-the-results"></a>
@@ -776,13 +776,13 @@ from other output formats, including <a href="https://davidgohel.github.io/flext
   <thead>
 <tr class="gt_col_headings gt_spanner_row">
 <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="2" colspan="1" style="background-color: #F4E9EB; color: #040001; font-size: 11; text-align: center; font-weight: bold; border-left-width: 1px; border-left-style: solid; border-left-color: #f4e9eb; border-right-width: 1px; border-right-style: solid; border-right-color: #f4e9eb; border-top-width: 1px; border-top-style: solid; border-top-color: #f4e9eb; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #f4e9eb;" scope="col" id="Top">Top</th>
-      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="1" style="background-color: #F4E9EB; color: #040001; font-size: 11; text-align: center; font-weight: bold; border-left-width: 1px; border-left-style: solid; border-left-color: #f4e9eb; border-right-width: 1px; border-right-style: solid; border-right-color: #f4e9eb; border-top-width: 1px; border-top-style: solid; border-top-color: #f4e9eb; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #f4e9eb;" scope="col" id="spanner-[header_name]Cdm name
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="1" style="background-color: #F4E9EB; color: #040001; font-size: 11; text-align: center; font-weight: bold; border-left-width: 1px; border-left-style: solid; border-left-color: #f4e9eb; border-right-width: 1px; border-right-style: solid; border-right-color: #f4e9eb; border-top-width: 1px; border-top-style: solid; border-top-color: #f4e9eb; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #f4e9eb;" scope="col" id="spanner-[header_name]Data source
 [header_level]GiBleed">
-        <div class="gt_column_spanner">Cdm name</div>
+        <div class="gt_column_spanner">Data source</div>
       </th>
     </tr>
 <tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="background-color: #F4E9EB; color: #040001; font-size: 11; text-align: center; font-weight: bold; border-left-width: 1px; border-left-style: solid; border-left-color: #f4e9eb; border-right-width: 1px; border-right-style: solid; border-right-color: #f4e9eb; border-top-width: 1px; border-top-style: solid; border-top-color: #f4e9eb; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #f4e9eb;" scope="col" id="[header_name]Cdm-name-[header_level]GiBleed">GiBleed</th>
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="background-color: #F4E9EB; color: #040001; font-size: 11; text-align: center; font-weight: bold; border-left-width: 1px; border-left-style: solid; border-left-color: #f4e9eb; border-right-width: 1px; border-right-style: solid; border-right-color: #f4e9eb; border-top-width: 1px; border-top-style: solid; border-top-color: #f4e9eb; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #f4e9eb;" scope="col" id="[header_name]Data-source-[header_level]GiBleed">GiBleed</th>
     </tr>
 </thead>
 <tbody class="gt_table_body">
@@ -791,52 +791,52 @@ from other output formats, including <a href="https://davidgohel.github.io/flext
     </tr>
 <tr class="gt_row_group_first">
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;"><span class="gt_from_md">1</span></td>
-<td headers="drug_exposure  [header_name]Cdm name
+<td headers="drug_exposure  [header_name]Data source
 [header_level]GiBleed" class="gt_row gt_left" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;"><span class="gt_from_md">Standard: Acetaminophen 325 MG Oral Tablet (1127433) <br> Source: Acetaminophen 325 MG Oral Tablet (1127433) <br> 9365</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;"><span class="gt_from_md">2</span></td>
-<td headers="drug_exposure  [header_name]Cdm name
+<td headers="drug_exposure  [header_name]Data source
 [header_level]GiBleed" class="gt_row gt_left" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;"><span class="gt_from_md">Standard: poliovirus vaccine, inactivated (40213160) <br> Source: poliovirus vaccine, inactivated (40213160) <br> 7977</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;"><span class="gt_from_md">3</span></td>
-<td headers="drug_exposure  [header_name]Cdm name
+<td headers="drug_exposure  [header_name]Data source
 [header_level]GiBleed" class="gt_row gt_left" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;"><span class="gt_from_md">Standard: tetanus and diphtheria toxoids, adsorbed, preservative free, for adult use (40213227) <br> Source: tetanus and diphtheria toxoids, adsorbed, preservative free, for adult use (40213227) <br> 7430</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;"><span class="gt_from_md">4</span></td>
-<td headers="drug_exposure  [header_name]Cdm name
+<td headers="drug_exposure  [header_name]Data source
 [header_level]GiBleed" class="gt_row gt_left" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;"><span class="gt_from_md">Standard: Aspirin 81 MG Oral Tablet (19059056) <br> Source: Aspirin 81 MG Oral Tablet (19059056) <br> 4380</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;"><span class="gt_from_md">5</span></td>
-<td headers="drug_exposure  [header_name]Cdm name
+<td headers="drug_exposure  [header_name]Data source
 [header_level]GiBleed" class="gt_row gt_left" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;"><span class="gt_from_md">Standard: Amoxicillin 250 MG / Clavulanate 125 MG Oral Tablet (1713671) <br> Source: Amoxicillin 250 MG / Clavulanate 125 MG Oral Tablet (1713671) <br> 3851</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;"><span class="gt_from_md">6</span></td>
-<td headers="drug_exposure  [header_name]Cdm name
+<td headers="drug_exposure  [header_name]Data source
 [header_level]GiBleed" class="gt_row gt_left" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;"><span class="gt_from_md">Standard: hepatitis A vaccine, adult dosage (40213296) <br> Source: hepatitis A vaccine, adult dosage (40213296) <br> 3211</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;"><span class="gt_from_md">7</span></td>
-<td headers="drug_exposure  [header_name]Cdm name
+<td headers="drug_exposure  [header_name]Data source
 [header_level]GiBleed" class="gt_row gt_left" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;"><span class="gt_from_md">Standard: Acetaminophen 160 MG Oral Tablet (1127078) <br> Source: Acetaminophen 160 MG Oral Tablet (1127078) <br> 2158</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;"><span class="gt_from_md">8</span></td>
-<td headers="drug_exposure  [header_name]Cdm name
+<td headers="drug_exposure  [header_name]Data source
 [header_level]GiBleed" class="gt_row gt_left" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;"><span class="gt_from_md">Standard: zoster vaccine, live (40213260) <br> Source: zoster vaccine, live (40213260) <br> 2125</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;"><span class="gt_from_md">9</span></td>
-<td headers="drug_exposure  [header_name]Cdm name
+<td headers="drug_exposure  [header_name]Data source
 [header_level]GiBleed" class="gt_row gt_left" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;"><span class="gt_from_md">Standard: Acetaminophen 21.7 MG/ML / Dextromethorphan Hydrobromide 1 MG/ML / doxylamine succinate 0.417 MG/ML Oral Solution (40229134) <br> Source: Acetaminophen 21.7 MG/ML / Dextromethorphan Hydrobromide 1 MG/ML / doxylamine succinate 0.417 MG/ML Oral Solution (40229134) <br> 1993</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;"><span class="gt_from_md">10</span></td>
-<td headers="drug_exposure  [header_name]Cdm name
+<td headers="drug_exposure  [header_name]Data source
 [header_level]GiBleed" class="gt_row gt_left" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;"><span class="gt_from_md">Standard: hepatitis B vaccine, adult dosage (40213306) <br> Source: hepatitis B vaccine, adult dosage (40213306) <br> 1916</span></td>
 </tr>
 </tbody>
@@ -1303,13 +1303,13 @@ this using the <code>top</code> argument:</p>
   <thead>
 <tr class="gt_col_headings gt_spanner_row">
 <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="2" colspan="1" style="background-color: #F4E9EB; color: #040001; font-size: 11; text-align: center; font-weight: bold; border-left-width: 1px; border-left-style: solid; border-left-color: #f4e9eb; border-right-width: 1px; border-right-style: solid; border-right-color: #f4e9eb; border-top-width: 1px; border-top-style: solid; border-top-color: #f4e9eb; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #f4e9eb;" scope="col" id="Top">Top</th>
-      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="1" style="background-color: #F4E9EB; color: #040001; font-size: 11; text-align: center; font-weight: bold; border-left-width: 1px; border-left-style: solid; border-left-color: #f4e9eb; border-right-width: 1px; border-right-style: solid; border-right-color: #f4e9eb; border-top-width: 1px; border-top-style: solid; border-top-color: #f4e9eb; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #f4e9eb;" scope="col" id="spanner-[header_name]Cdm name
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="1" style="background-color: #F4E9EB; color: #040001; font-size: 11; text-align: center; font-weight: bold; border-left-width: 1px; border-left-style: solid; border-left-color: #f4e9eb; border-right-width: 1px; border-right-style: solid; border-right-color: #f4e9eb; border-top-width: 1px; border-top-style: solid; border-top-color: #f4e9eb; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #f4e9eb;" scope="col" id="spanner-[header_name]Data source
 [header_level]GiBleed">
-        <div class="gt_column_spanner">Cdm name</div>
+        <div class="gt_column_spanner">Data source</div>
       </th>
     </tr>
 <tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="background-color: #F4E9EB; color: #040001; font-size: 11; text-align: center; font-weight: bold; border-left-width: 1px; border-left-style: solid; border-left-color: #f4e9eb; border-right-width: 1px; border-right-style: solid; border-right-color: #f4e9eb; border-top-width: 1px; border-top-style: solid; border-top-color: #f4e9eb; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #f4e9eb;" scope="col" id="[header_name]Cdm-name-[header_level]GiBleed">GiBleed</th>
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="background-color: #F4E9EB; color: #040001; font-size: 11; text-align: center; font-weight: bold; border-left-width: 1px; border-left-style: solid; border-left-color: #f4e9eb; border-right-width: 1px; border-right-style: solid; border-right-color: #f4e9eb; border-top-width: 1px; border-top-style: solid; border-top-color: #f4e9eb; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #f4e9eb;" scope="col" id="[header_name]Data-source-[header_level]GiBleed">GiBleed</th>
     </tr>
 </thead>
 <tbody class="gt_table_body">
@@ -1318,27 +1318,27 @@ this using the <code>top</code> argument:</p>
     </tr>
 <tr class="gt_row_group_first">
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;"><span class="gt_from_md">1</span></td>
-<td headers="drug_exposure  [header_name]Cdm name
+<td headers="drug_exposure  [header_name]Data source
 [header_level]GiBleed" class="gt_row gt_left" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;"><span class="gt_from_md">Standard: Acetaminophen 325 MG Oral Tablet (1127433) <br> Source: Acetaminophen 325 MG Oral Tablet (1127433) <br> 9365</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;"><span class="gt_from_md">2</span></td>
-<td headers="drug_exposure  [header_name]Cdm name
+<td headers="drug_exposure  [header_name]Data source
 [header_level]GiBleed" class="gt_row gt_left" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;"><span class="gt_from_md">Standard: poliovirus vaccine, inactivated (40213160) <br> Source: poliovirus vaccine, inactivated (40213160) <br> 7977</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;"><span class="gt_from_md">3</span></td>
-<td headers="drug_exposure  [header_name]Cdm name
+<td headers="drug_exposure  [header_name]Data source
 [header_level]GiBleed" class="gt_row gt_left" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;"><span class="gt_from_md">Standard: tetanus and diphtheria toxoids, adsorbed, preservative free, for adult use (40213227) <br> Source: tetanus and diphtheria toxoids, adsorbed, preservative free, for adult use (40213227) <br> 7430</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;"><span class="gt_from_md">4</span></td>
-<td headers="drug_exposure  [header_name]Cdm name
+<td headers="drug_exposure  [header_name]Data source
 [header_level]GiBleed" class="gt_row gt_left" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;"><span class="gt_from_md">Standard: Aspirin 81 MG Oral Tablet (19059056) <br> Source: Aspirin 81 MG Oral Tablet (19059056) <br> 4380</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;"><span class="gt_from_md">5</span></td>
-<td headers="drug_exposure  [header_name]Cdm name
+<td headers="drug_exposure  [header_name]Data source
 [header_level]GiBleed" class="gt_row gt_left" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;"><span class="gt_from_md">Standard: Amoxicillin 250 MG / Clavulanate 125 MG Oral Tablet (1713671) <br> Source: Amoxicillin 250 MG / Clavulanate 125 MG Oral Tablet (1713671) <br> 3851</span></td>
 </tr>
 </tbody>
@@ -1812,13 +1812,13 @@ argument:</p>
   <thead>
 <tr class="gt_col_headings gt_spanner_row">
 <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="2" colspan="1" style="background-color: #F4E9EB; color: #040001; font-size: 11; text-align: center; font-weight: bold; border-left-width: 1px; border-left-style: solid; border-left-color: #f4e9eb; border-right-width: 1px; border-right-style: solid; border-right-color: #f4e9eb; border-top-width: 1px; border-top-style: solid; border-top-color: #f4e9eb; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #f4e9eb;" scope="col" id="Top">Top</th>
-      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="1" style="background-color: #F4E9EB; color: #040001; font-size: 11; text-align: center; font-weight: bold; border-left-width: 1px; border-left-style: solid; border-left-color: #f4e9eb; border-right-width: 1px; border-right-style: solid; border-right-color: #f4e9eb; border-top-width: 1px; border-top-style: solid; border-top-color: #f4e9eb; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #f4e9eb;" scope="col" id="spanner-[header_name]Cdm name
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="1" style="background-color: #F4E9EB; color: #040001; font-size: 11; text-align: center; font-weight: bold; border-left-width: 1px; border-left-style: solid; border-left-color: #f4e9eb; border-right-width: 1px; border-right-style: solid; border-right-color: #f4e9eb; border-top-width: 1px; border-top-style: solid; border-top-color: #f4e9eb; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #f4e9eb;" scope="col" id="spanner-[header_name]Data source
 [header_level]GiBleed">
-        <div class="gt_column_spanner">Cdm name</div>
+        <div class="gt_column_spanner">Data source</div>
       </th>
     </tr>
 <tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="background-color: #F4E9EB; color: #040001; font-size: 11; text-align: center; font-weight: bold; border-left-width: 1px; border-left-style: solid; border-left-color: #f4e9eb; border-right-width: 1px; border-right-style: solid; border-right-color: #f4e9eb; border-top-width: 1px; border-top-style: solid; border-top-color: #f4e9eb; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #f4e9eb;" scope="col" id="[header_name]Cdm-name-[header_level]GiBleed">GiBleed</th>
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="background-color: #F4E9EB; color: #040001; font-size: 11; text-align: center; font-weight: bold; border-left-width: 1px; border-left-style: solid; border-left-color: #f4e9eb; border-right-width: 1px; border-right-style: solid; border-right-color: #f4e9eb; border-top-width: 1px; border-top-style: solid; border-top-color: #f4e9eb; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #f4e9eb;" scope="col" id="[header_name]Data-source-[header_level]GiBleed">GiBleed</th>
     </tr>
 </thead>
 <tbody class="gt_table_body">
@@ -1827,52 +1827,52 @@ argument:</p>
     </tr>
 <tr class="gt_row_group_first">
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;"><span class="gt_from_md">1</span></td>
-<td headers="drug_exposure  [header_name]Cdm name
+<td headers="drug_exposure  [header_name]Data source
 [header_level]GiBleed" class="gt_row gt_left" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;"><span class="gt_from_md">Standard: tetanus and diphtheria toxoids, adsorbed, preservative free, for adult use (40213227) <br> Source: tetanus and diphtheria toxoids, adsorbed, preservative free, for adult use (40213227) <br> 2660</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;"><span class="gt_from_md">2</span></td>
-<td headers="drug_exposure  [header_name]Cdm name
+<td headers="drug_exposure  [header_name]Data source
 [header_level]GiBleed" class="gt_row gt_left" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;"><span class="gt_from_md">Standard: Acetaminophen 325 MG Oral Tablet (1127433) <br> Source: Acetaminophen 325 MG Oral Tablet (1127433) <br> 2580</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;"><span class="gt_from_md">3</span></td>
-<td headers="drug_exposure  [header_name]Cdm name
+<td headers="drug_exposure  [header_name]Data source
 [header_level]GiBleed" class="gt_row gt_left" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;"><span class="gt_from_md">Standard: poliovirus vaccine, inactivated (40213160) <br> Source: poliovirus vaccine, inactivated (40213160) <br> 2140</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;"><span class="gt_from_md">4</span></td>
-<td headers="drug_exposure  [header_name]Cdm name
+<td headers="drug_exposure  [header_name]Data source
 [header_level]GiBleed" class="gt_row gt_left" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;"><span class="gt_from_md">Standard: Amoxicillin 250 MG / Clavulanate 125 MG Oral Tablet (1713671) <br> Source: Amoxicillin 250 MG / Clavulanate 125 MG Oral Tablet (1713671) <br> 2021</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;"><span class="gt_from_md">5</span></td>
-<td headers="drug_exposure  [header_name]Cdm name
+<td headers="drug_exposure  [header_name]Data source
 [header_level]GiBleed" class="gt_row gt_left" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;"><span class="gt_from_md">Standard: Aspirin 81 MG Oral Tablet (19059056) <br> Source: Aspirin 81 MG Oral Tablet (19059056) <br> 1927</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;"><span class="gt_from_md">6</span></td>
-<td headers="drug_exposure  [header_name]Cdm name
+<td headers="drug_exposure  [header_name]Data source
 [header_level]GiBleed" class="gt_row gt_left" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;"><span class="gt_from_md">Standard: celecoxib (1118084) <br> Source: celecoxib 200 MG Oral Capsule [Celebrex] (44923712) <br> 1844</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;"><span class="gt_from_md">7</span></td>
-<td headers="drug_exposure  [header_name]Cdm name
+<td headers="drug_exposure  [header_name]Data source
 [header_level]GiBleed" class="gt_row gt_left" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;"><span class="gt_from_md">Standard: hepatitis A vaccine, adult dosage (40213296) <br> Source: hepatitis A vaccine, adult dosage (40213296) <br> 1737</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;"><span class="gt_from_md">8</span></td>
-<td headers="drug_exposure  [header_name]Cdm name
+<td headers="drug_exposure  [header_name]Data source
 [header_level]GiBleed" class="gt_row gt_left" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;"><span class="gt_from_md">Standard: hepatitis B vaccine, adult dosage (40213306) <br> Source: hepatitis B vaccine, adult dosage (40213306) <br> 1560</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;"><span class="gt_from_md">9</span></td>
-<td headers="drug_exposure  [header_name]Cdm name
+<td headers="drug_exposure  [header_name]Data source
 [header_level]GiBleed" class="gt_row gt_left" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;"><span class="gt_from_md">Standard: Acetaminophen 160 MG Oral Tablet (1127078) <br> Source: Acetaminophen 160 MG Oral Tablet (1127078) <br> 1428</span></td>
 </tr>
 <tr>
 <td headers="drug_exposure  Top" class="gt_row gt_right" style="text-align: left; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208; background-color: #FFFFFF;"><span class="gt_from_md">10</span></td>
-<td headers="drug_exposure  [header_name]Cdm name
+<td headers="drug_exposure  [header_name]Data source
 [header_level]GiBleed" class="gt_row gt_left" style="text-align: right; background-color: #FFFFFF; border-left-width: 0.5px; border-left-style: solid; border-left-color: #E6D208; border-right-width: 0.5px; border-right-style: solid; border-right-color: #E6D208; border-top-width: 0.5px; border-top-style: solid; border-top-color: #E6D208; border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #E6D208;"><span class="gt_from_md">Standard: Acetaminophen 21.7 MG/ML / Dextromethorphan Hydrobromide 1 MG/ML / doxylamine succinate 0.417 MG/ML Oral Solution (40229134) <br> Source: Acetaminophen 21.7 MG/ML / Dextromethorphan Hydrobromide 1 MG/ML / doxylamine succinate 0.417 MG/ML Oral Solution (40229134) <br> 1393</span></td>
 </tr>
 </tbody>
