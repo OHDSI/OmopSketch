@@ -373,7 +373,7 @@ summariseClinicalRecords <- function(cdm,
         dplyr::mutate(variable_name = "Column name") |>
         dplyr::rename("variable_level" = "column_name") |>
         addTimeInterval() |>
-        omopgenerics::uniteAdditional(cols = "time_interval")
+        omopgenerics::uniteAdditional(cols = c("time_interval", "is_required"))
     }
 
     fullResult <- dplyr::bind_rows(result) |>

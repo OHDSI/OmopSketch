@@ -63,10 +63,23 @@ tableMissingData <- function(result,
   }
 
   setting_cols <- omopgenerics::settingsColumns(result)
+  additional_cols <- omopgenerics::additionalColumns(result)
   tables <- result$group_level |> unique()
 
   result |>
-    dplyr::arrange(.data$variable_level, .data$additional_level) |>
+    omopgenerics::splitAdditional() |>
+    dplyr::mutate(
+      variable_level = if (rlang::has_name(pick(dplyr::everything()), "is_required")) {
+        dplyr::if_else(.data$is_required == "TRUE",
+                       paste0(.data$variable_level, " (required)"),
+                       paste0(.data$variable_level, " (not required)"))
+      } else {
+        .data$variable_level
+      }
+    ) |>
+    omopgenerics::uniteAdditional(cols = additional_cols[additional_cols!="is_required"]) |>
+    dplyr::select(-dplyr::any_of("is_required")) |>
+    dplyr::arrange(.data$additional_level) |>
     visOmopResults::visOmopTable(
       type = type,
       style = style,
