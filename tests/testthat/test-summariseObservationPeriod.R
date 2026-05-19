@@ -226,6 +226,12 @@ test_that("check summariseObservationPeriod works", {
   expect_no_error(
     resAllD |>
       plotObservationPeriod(
+        variableName = "Duration in days", plotType = "cumulativeplot"
+      )
+  )
+  expect_no_error(
+    resAllD |>
+      plotObservationPeriod(
         variableName = "Duration in days", plotType = "densityplot"
       )
   )
@@ -259,6 +265,12 @@ test_that("check summariseObservationPeriod works", {
         variableName = "Records per person", plotType = "densityplot"
       )
   )
+  expect_no_error(
+    resAllD |>
+      plotObservationPeriod(
+        variableName = "Records per person", plotType = "cumulativeplot"
+      )
+  )
   expect_error(
     resAll |>
       plotObservationPeriod(
@@ -275,6 +287,12 @@ test_that("check summariseObservationPeriod works", {
     resAll |>
       plotObservationPeriod(
         variableName = "Days to next observation period", plotType = "boxplot"
+      )
+  )
+  expect_no_error(
+    resAllD |>
+      plotObservationPeriod(
+        variableName = "Days to next observation period", plotType = "cumulativeplot"
       )
   )
   expect_error(

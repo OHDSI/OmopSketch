@@ -22,8 +22,8 @@ plotObservationPeriod(
 "Records per person", "Duration in days" or
 "Days to next observation period".}
 
-\item{plotType}{The plot type, it can be: "barplot", "boxplot" or
-"densityplot".}
+\item{plotType}{The plot type, it can be: "barplot", "boxplot",
+"densityplot" or "cumulativeplot".}
 
 \item{facet}{Columns to face by. Formula format can be provided. See possible
 columns to face by with: \code{visOmopResults::tidyColumns()}.}
