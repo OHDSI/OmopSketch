@@ -9,7 +9,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "70%",
+  out.width = "90%",
   fig.align = "center"
 )
 ```
@@ -163,7 +163,8 @@ result <- summariseConceptIdCounts(
 )
 
 tableTopConceptCounts(result = result, type = "flextable", top = 3) |>
-  flextable::fontsize(size = 6, part = "all")
+  flextable::fontsize(size = 4, part = "all") |>
+  flextable::set_table_properties(layout = "autofit", width = 1)
 
 ```
 
