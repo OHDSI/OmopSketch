@@ -39,7 +39,7 @@ tableConceptIdCounts <- function(result,
   omopgenerics::assertChoice(display, c("overall", "standard", "source", "missing standard", "missing source"))
   strata_cols <- omopgenerics::strataColumns(result)
   additional_cols <- omopgenerics::additionalColumns(result)
-  additional_cols <- additional_cols[!grepl("source_concept", additional_cols)]
+  additional_cols <- additional_cols[!grepl("source_concept|vocabulary", additional_cols)]
   setting_cols <- omopgenerics::settingsColumns(result)
   setting_cols <- setting_cols[!setting_cols %in% c("study_period_end", "study_period_start")]
 
@@ -61,26 +61,26 @@ tableConceptIdCounts <- function(result,
   }
 
   if (display == "overall") {
-    cols_to_format <- c("standard_concept_name", "standard_concept_id", "source_concept_name", "source_concept_id")
+    cols_to_format <- c("standard_concept_name", "standard_concept_id", "source_concept_name", "source_concept_id", "standard_vocabulary", "source_vocabulary")
   } else if (display == "standard") {
-    cols_to_format <- c("standard_concept_name", "standard_concept_id")
+    cols_to_format <- c("standard_concept_name", "standard_concept_id", "standard_vocabulary")
     result <- result |>
-      dplyr::select(!dplyr::any_of(c("source_concept_id", "source_concept_name")))
+      dplyr::select(!dplyr::any_of(c("source_concept_id", "source_concept_name", "source_vocabulary")))
   } else if (display == "source") {
-    cols_to_format <- c("source_concept_name", "source_concept_id")
+    cols_to_format <- c("source_concept_name", "source_concept_id", "source_vocabulary")
     result <- result |>
-      dplyr::select(!dplyr::any_of(c("standard_concept_id", "standard_concept_name")))
+      dplyr::select(!dplyr::any_of(c("standard_concept_id", "standard_concept_name", "standard_vocabulary")))
   } else if (display == "missing standard") {
     result <- result |>
       dplyr::filter(as.integer(.data$standard_concept_id) == 0L) |>
-      dplyr::select(!dplyr::any_of(c("standard_concept_id", "standard_concept_name")))
-    cols_to_format <- c("source_concept_name", "source_concept_id")
+      dplyr::select(!dplyr::any_of(c("standard_concept_id", "standard_concept_name", "standard_vocabulary")))
+    cols_to_format <- c("source_concept_name", "source_concept_id", "source_vocabulary")
   } else if (display == "missing source") {
     result <- result |>
       dplyr::filter(as.integer(.data$source_concept_id) == 0L | is.na(.data$source_concept_id)) |>
-      dplyr::select(!dplyr::any_of(c("source_concept_id", "source_concept_name")))
+      dplyr::select(!dplyr::any_of(c("source_concept_id", "source_concept_name", "source_vocabulary")))
 
-    cols_to_format <- c("standard_concept_name", "standard_concept_id")
+    cols_to_format <- c("standard_concept_name", "standard_concept_id", "standard_vocabulary")
   }
 
   multiple_pairs <- result |>
@@ -137,6 +137,8 @@ tableConceptIdCounts <- function(result,
         "standard_concept_id",
         "source_concept_name",
         "source_concept_id",
+        "standard_vocabulary",
+        "source_vocabulary",
         "estimate_name",
         "estimate_value",
         strata_cols
@@ -153,7 +155,9 @@ tableConceptIdCounts <- function(result,
     "Sex" = "sex",
     "Age group" = "age_group",
     "In observation" = "in_observation",
-    "Time interval" = "time_interval"
+    "Time interval" = "time_interval",
+    "Source vocabulary" = "source_vocabulary",
+    "Standard vocabulary" = "standard_vocabulary"
   )
 
 
