@@ -6,8 +6,8 @@
 #' @param variableName The variable to plot it can be: "Number subjects",
 #' "Records per person", "Duration in days" or
 #' "Days to next observation period".
-#' @param plotType The plot type, it can be: "barplot", "boxplot" or
-#' "densityplot".
+#' @param plotType The plot type, it can be: "barplot", "boxplot",
+#' "densityplot" or "cumulativeplot".
 #' @inheritParams consistent-doc
 #' @inheritParams plot-doc
 #'
@@ -123,7 +123,44 @@ plotObservationPeriod <- function(result,
     ) +
       ggplot2::xlab(stringr::str_to_sentence(unique(result$variable_name))) +
       ggplot2::ylab("Density")
+  } else if(plotType == "cumulativeplot") {
+    res <- result |>
+      dplyr::filter(grepl("density", .data$estimate_name)) |>
+      omopgenerics::tidy() |>
+      dplyr::group_by(dplyr::across(
+        c("cdm_name",
+        "observation_period_ordinal",
+        "variable_name",
+        omopgenerics::strataColumns(result),
+        omopgenerics::additionalColumns(result)))
+      )|>
+      dplyr::mutate(
+        dx = .data$density_x - lag(.data$density_x),
+        area = .data$dx * (.data$density_y + lag(.data$density_y)) / 2,
+        area = dplyr::coalesce(.data$area, 0),
+        cumulative_density = cumsum(.data$area),
+        cumulative_density = .data$cumulative_density / max(.data$cumulative_density, na.rm = TRUE)
+      ) |>
+      dplyr::ungroup()
+
+
+    p <- visOmopResults::scatterPlot(
+      result = res,
+      x = "density_x",
+      y = "cumulative_density",
+      line = TRUE,
+      point = FALSE,
+      ribbon = FALSE,
+      facet = facet,
+      colour = colour,
+      group = optFacetColour,
+      style = style,
+      type = "ggplot"
+    ) +
+      ggplot2::xlab(stringr::str_to_sentence(unique(result$variable_name))) +
+      ggplot2::ylab("Cumulative Density")
   }
+
   p$data <- p$data |>
     dplyr::mutate(
       observation_period_order = dplyr::if_else(
@@ -156,10 +193,14 @@ availablePlotObservationPeriod <- function() {
     ~variable_name, ~plot_type, ~facet,
     "Number subjects", "barplot", "cdm_name+observation_period_ordinal",
     "Records per person", "densityplot", "cdm_name",
+    "Records per person", "cumulativeplot", "cdm_name",
     "Records per person", "boxplot", "cdm_name",
     "Duration in days", "densityplot", "cdm_name+observation_period_ordinal",
+    "Duration in days", "cumulativeplot", "cdm_name+observation_period_ordinal",
     "Duration in days", "boxplot", "cdm_name+observation_period_ordinal",
     "Days to next observation period", "densityplot", "cdm_name+observation_period_ordinal",
+    "Days to next observation period", "cumulativeplot", "cdm_name+observation_period_ordinal",
     "Days to next observation period", "boxplot", "cdm_name+observation_period_ordinal",
+
   )
 }
