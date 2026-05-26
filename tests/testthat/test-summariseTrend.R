@@ -430,6 +430,50 @@ test_that("check person-days output works", {
   dropCreatedTables(cdm = cdm)
 })
 
+test_that("check end date output works", {
+  skip_on_cran()
+  # Load mock database ----
+  cdm <- cdmEunomia()
+
+  # check value
+ expect_no_error(x <- summariseTrend(cdm, episode = "observation_period", interval = "years", output = c("record", "end date"), ageGroup = NULL, sex = FALSE) |>
+    dplyr::filter(variable_name == "End date", additional_level == "1990-01-01 to 1990-12-31", estimate_type == "integer") |>
+    dplyr::pull("estimate_value") |>
+    as.numeric())
+  y <- cdm$observation_period |>
+    dplyr::filter(observation_period_end_date >= as.Date("1990-01-01") & observation_period_end_date <= as.Date("1990-12-31")) |>
+    dplyr::tally() |>
+    dplyr::pull("n") |>
+    as.numeric()
+  expect_equal(x, y)
+
+
+  # Check percentage
+  den <- cdm$observation_period |>
+    dplyr::tally() |>
+    dplyr::pull("n") |>
+    as.numeric()
+  x <- summariseTrend(cdm, episode = "observation_period", interval = "years", output = c("record", "end date")) |>
+    dplyr::filter(variable_name == "End date", additional_level == "1994-01-01 to 1994-12-31", estimate_type == "percentage") |>
+    dplyr::pull("estimate_value")
+  y <- cdm$observation_period |>
+    dplyr::filter(observation_period_end_date >= as.Date("1994-01-01") & observation_period_end_date <= as.Date("1994-12-31")) |>
+    dplyr::tally() |>
+    dplyr::pull("n") |>
+    as.numeric() / den * 100
+  expect_equal(x, sprintf("%.2f", y))
+
+
+  expect_message(x <- summariseTrend(cdm, event = "observation_period", output = "end date"))
+  expect_equal(x, omopgenerics::emptySummarisedResult(), ignore_attr = TRUE)
+  expect_message(x <- summariseTrend(cdm, episode = "drug_exposure", output = "end date", interval = "overall"))
+
+  expect_equal(summariseTrend(cdm, event = "observation_period", output = c("record", "end date")), summariseTrend(cdm, event = "observation_period", output = c("record")))
+  expect_no_error(plotTrend(summariseTrend(cdm, episode = "observation_period", output = "end date", interval = "years")))
+
+  dropCreatedTables(cdm = cdm)
+})
+
 test_that("dateRange argument works", {
   skip_on_cran()
   # Load mock database ----

@@ -3,7 +3,7 @@
 #'
 #' @param result A summarised_result object (output of `summariseTrend()`).
 #' @param output The output to plot.  Accepted values are: `"record"`, `"person"`,
-#'  `"person-days"`, `"age"`, and `"sex"`.
+#'  `"person-days"`, `"age"`, `"sex"`, and `"end date"`.
 #'  If not specified, the function will default to:
 #'  - the only available output if there is just one in the results, or
 #'  - `"record"` if multiple outputs are present.
@@ -71,7 +71,7 @@ plotTrend <- function(result,
       output <- "record"
     }
   }
-  omopgenerics::assertChoice(output, choices = c("person-days", "record", "person", "age", "sex"), length = 1L)
+  omopgenerics::assertChoice(output, choices = c("person-days", "record", "person", "age", "sex", "end date"), length = 1L)
   style <- validateStyle(style = style, obj = "plot")
   omopgenerics::assertChoice(type, choices = visOmopResults::plotType(), length = 1, null = TRUE)
 
@@ -188,6 +188,8 @@ fromOutputToVariableName <- function(output) {
     return("Age")
   } else if (output == "sex") {
     return("Number of females")
+  } else if (output == "end date") {
+    return("End date")
   }
 }
 fromVariableNameToOutput <- function(variableName) {
@@ -206,6 +208,9 @@ fromVariableNameToOutput <- function(variableName) {
   }
   if ("Number of females" %in% variableName) {
     output <- c(output, "sex")
+  }
+  if ("End date" %in% variableName) {
+    output <- c(output, "end date")
   }
   return(output)
 }
