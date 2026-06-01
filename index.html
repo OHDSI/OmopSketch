@@ -150,7 +150,7 @@
 <code class="sourceCode R"><span><span class="va">snapshot</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/summariseOmopSnapshot.html">summariseOmopSnapshot</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/tableOmopSnapshot.html">tableOmopSnapshot</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">snapshot</span>, type <span class="op">=</span> <span class="st">"flextable"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-7-1.png" width="70%" style="display: block; margin: auto;"></p>
+<p><img src="reference/figures/README-unnamed-chunk-7-1.png" width="90%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="characterise-the-person-table">Characterise the person table<a class="anchor" aria-label="anchor" href="#characterise-the-person-table"></a>
@@ -162,7 +162,7 @@
 <span><span class="fu"><a href="reference/tablePerson.html">tablePerson</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">result</span>, type <span class="op">=</span> <span class="st">"flextable"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; ! The following column type were changed:</span></span>
 <span><span class="co">#&gt; • variable_name: from integer to character</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-8-1.png" width="70%" style="display: block; margin: auto;"></p>
+<p><img src="reference/figures/README-unnamed-chunk-8-1.png" width="90%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="characterise-the-observation-period">Characterise the observation period<a class="anchor" aria-label="anchor" href="#characterise-the-observation-period"></a>
@@ -173,11 +173,11 @@
 <span><span class="co">#&gt; Warning: ! There are 2649 individuals not included in the person table.</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/tableObservationPeriod.html">tableObservationPeriod</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">result</span>, type <span class="op">=</span> <span class="st">"flextable"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-9-1.png" width="70%" style="display: block; margin: auto;"></p>
+<p><img src="reference/figures/README-unnamed-chunk-9-1.png" width="90%" style="display: block; margin: auto;"></p>
 <p>Or if visualisation is preferred, you can easily build a histogram to explore how many participants have more than one observation period.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/plotObservationPeriod.html">plotObservationPeriod</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">result</span>, colour <span class="op">=</span> <span class="st">"observation_period_ordinal"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-10-1.png" width="70%" style="display: block; margin: auto;"></p>
+<p><img src="reference/figures/README-unnamed-chunk-10-1.png" width="90%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="characterise-the-clinical-tables">Characterise the clinical tables<a class="anchor" aria-label="anchor" href="#characterise-the-clinical-tables"></a>
@@ -190,6 +190,13 @@
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; ℹ Adding variables of interest to condition_occurrence.</span></span>
 <span><span class="co">#&gt; ℹ Summarising records per person in condition_occurrence.</span></span>
+<span><span class="co">#&gt; ℹ The following estimates will be calculated:</span></span>
+<span><span class="co">#&gt; • duration: mean, sd, median, q25, q75, min, max</span></span>
+<span><span class="co">#&gt; ! Table is collected to memory as not all requested estimates are supported on</span></span>
+<span><span class="co">#&gt;   the database side</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2026-05-19 12:05:03.168084</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ✔ Summary finished, at 2026-05-19 12:05:03.194409</span></span>
 <span><span class="co">#&gt; ℹ Summarising subjects not in person table in condition_occurrence.</span></span>
 <span><span class="co">#&gt; ℹ Summarising records in observation in condition_occurrence.</span></span>
 <span><span class="co">#&gt; ℹ Summarising records with start before birth date in condition_occurrence.</span></span>
@@ -201,6 +208,13 @@
 <span><span class="co">#&gt; ℹ Summarising missing data in condition_occurrence.</span></span>
 <span><span class="co">#&gt; ℹ Adding variables of interest to drug_exposure.</span></span>
 <span><span class="co">#&gt; ℹ Summarising records per person in drug_exposure.</span></span>
+<span><span class="co">#&gt; ℹ The following estimates will be calculated:</span></span>
+<span><span class="co">#&gt; • duration: mean, sd, median, q25, q75, min, max</span></span>
+<span><span class="co">#&gt; ! Table is collected to memory as not all requested estimates are supported on</span></span>
+<span><span class="co">#&gt;   the database side</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2026-05-19 12:05:04.884209</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ✔ Summary finished, at 2026-05-19 12:05:04.913731</span></span>
 <span><span class="co">#&gt; ℹ Summarising subjects not in person table in drug_exposure.</span></span>
 <span><span class="co">#&gt; ℹ Summarising records in observation in drug_exposure.</span></span>
 <span><span class="co">#&gt; ℹ Summarising records with start before birth date in drug_exposure.</span></span>
@@ -213,7 +227,7 @@
 <span><span class="co">#&gt; ℹ Summarising missing data in drug_exposure.</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/tableClinicalRecords.html">tableClinicalRecords</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">result</span>, type <span class="op">=</span> <span class="st">"flextable"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-11-1.png" width="70%" style="display: block; margin: auto;"></p>
+<p><img src="reference/figures/README-unnamed-chunk-11-1.png" width="90%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="explore-trends-over-time">Explore trends over time<a class="anchor" aria-label="anchor" href="#explore-trends-over-time"></a>
@@ -228,7 +242,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/plotTrend.html">plotTrend</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">result</span>, facet <span class="op">=</span> <span class="st">"omop_table"</span>, colour <span class="op">=</span> <span class="st">"cdm_name"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-12-1.png" width="70%" style="display: block; margin: auto;"></p>
+<p><img src="reference/figures/README-unnamed-chunk-12-1.png" width="90%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="characterise-the-concepts">Characterise the concepts<a class="anchor" aria-label="anchor" href="#characterise-the-concepts"></a>
@@ -241,8 +255,8 @@
 <span>  omopTableName <span class="op">=</span> <span class="st">"drug_exposure"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="reference/tableTopConceptCounts.html">tableTopConceptCounts</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">result</span>, type <span class="op">=</span> <span class="st">"flextable"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-13-1.png" width="70%" style="display: block; margin: auto;"></p>
+<span><span class="fu"><a href="reference/tableTopConceptCounts.html">tableTopConceptCounts</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">result</span>, type <span class="op">=</span> <span class="st">"flextable"</span>, top <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-14-1.png" width="90%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="characterise-the-cdm">Characterise the cdm<a class="anchor" aria-label="anchor" href="#characterise-the-cdm"></a>
