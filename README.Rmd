@@ -9,7 +9,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "70%",
+  out.width = "90%",
   fig.align = "center"
 )
 ```
@@ -26,11 +26,7 @@ The goal of OmopSketch is to characterise and visualise an Observational Medical
 
 ## Tested sources
 
-[![](https://github.com/OHDSI/OmopSketch/actions/workflows/test-local-omopgenerics.yaml/badge.svg?branch=main)](https://github.com/OHDSI/OmopSketch/actions/workflows/test-local-omopgenerics.yaml)
-[![](https://github.com/OHDSI/OmopSketch/actions/workflows/test-duckdb-CDMConnector.yaml/badge.svg?branch=main)](https://github.com/OHDSI/OmopSketch/actions/workflows/test-duckdb-CDMConnector.yaml)
-[![](https://github.com/OHDSI/OmopSketch/actions/workflows/test-postgres-CDMConnector.yaml/badge.svg?branch=main)](https://github.com/OHDSI/OmopSketch/actions/workflows/test-postgres-CDMConnector.yaml)
-[![](https://github.com/OHDSI/OmopSketch/actions/workflows/test-redshift-CDMConnector.yaml/badge.svg?branch=main)](https://github.com/OHDSI/OmopSketch/actions/workflows/test-redshift-CDMConnector.yaml)
-[![](https://github.com/OHDSI/OmopSketch/actions/workflows/test-sqlserver-CDMConnector.yaml/badge.svg?branch=main)](https://github.com/OHDSI/OmopSketch/actions/workflows/test-sqlserver-CDMConnector.yaml)
+[![](https://github.com/OHDSI/OmopSketch/actions/workflows/test-local-omopgenerics.yaml/badge.svg?branch=main)](https://github.com/OHDSI/OmopSketch/actions/workflows/test-local-omopgenerics.yaml) [![](https://github.com/OHDSI/OmopSketch/actions/workflows/test-duckdb-CDMConnector.yaml/badge.svg?branch=main)](https://github.com/OHDSI/OmopSketch/actions/workflows/test-duckdb-CDMConnector.yaml) [![](https://github.com/OHDSI/OmopSketch/actions/workflows/test-postgres-CDMConnector.yaml/badge.svg?branch=main)](https://github.com/OHDSI/OmopSketch/actions/workflows/test-postgres-CDMConnector.yaml) [![](https://github.com/OHDSI/OmopSketch/actions/workflows/test-redshift-CDMConnector.yaml/badge.svg?branch=main)](https://github.com/OHDSI/OmopSketch/actions/workflows/test-redshift-CDMConnector.yaml) [![](https://github.com/OHDSI/OmopSketch/actions/workflows/test-sqlserver-CDMConnector.yaml/badge.svg?branch=main)](https://github.com/OHDSI/OmopSketch/actions/workflows/test-sqlserver-CDMConnector.yaml)
 
 ## Installation
 
@@ -49,17 +45,17 @@ remotes::install_github("OHDSI/OmopSketch")
 
 ## Working with OMOP
 
-
 ```{r, echo=FALSE}
 visOmopResults::setGlobalPlotOptions(style = list.files(system.file("brand", package = "OmopSketch"), full.names = TRUE, pattern = "^readme\\.yml$"))
 visOmopResults::setGlobalTableOptions(style = list.files(system.file("brand", package = "OmopSketch"), full.names = TRUE, pattern = "^readme\\.yml$"))
 ```
+
 To be able to use this package you will need data mapped to the OMOP CDM.
 
 The first step to any analysis you will create what we call the `cdm_reference` object, which is a reference to the OMOP CDM tables. If you want to learn more about OMOP or the `cdm_reference` object you can take a look to:
 
-- [Tidy R programming with the OMOP Common Data Model](https://ohdsi.github.io/Tidy-R-programming-with-OMOP/)
-- [The book of OHDSI](https://ohdsi.github.io/TheBookOfOhdsi/)
+-   [Tidy R programming with the OMOP Common Data Model](https://ohdsi.github.io/Tidy-R-programming-with-OMOP/)
+-   [The book of OHDSI](https://ohdsi.github.io/TheBookOfOhdsi/)
 
 In general, you will create a cdm_reference object using the [CDMConnector](https://darwin-eu.github.io/CDMConnector/) package, in our case we will use the Eunomia *GiBleed* mock dataset available through [omock](https://ohdsi.github.io/omock/):
 
@@ -148,14 +144,27 @@ plotTrend(result = result, facet = "omop_table", colour = "cdm_name")
 
 OmopSketch also provides functions to explore the concepts in the dataset.
 
-```{r}
+```{r, eval=FALSE}
 
 result <- summariseConceptIdCounts(
   cdm = cdm, 
   omopTableName = "drug_exposure"
 )
 
-tableTopConceptCounts(result = result, type = "flextable")
+tableTopConceptCounts(result = result, type = "flextable", top = 3)
+
+```
+
+```{r, echo=FALSE}
+
+result <- summariseConceptIdCounts(
+  cdm = cdm, 
+  omopTableName = "drug_exposure"
+)
+
+tableTopConceptCounts(result = result, type = "flextable", top = 3) |>
+  flextable::fontsize(size = 4, part = "all") |>
+  flextable::set_table_properties(layout = "autofit", width = 1)
 
 ```
 

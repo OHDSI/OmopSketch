@@ -117,7 +117,7 @@ snapshot <- summariseOmopSnapshot(cdm = cdm)
 tableOmopSnapshot(result = snapshot, type = "flextable")
 ```
 
-<img src="man/figures/README-unnamed-chunk-7-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-7-1.png" width="90%" style="display: block; margin: auto;" />
 
 ### Characterise the person table
 
@@ -132,7 +132,7 @@ tablePerson(result = result, type = "flextable")
 #> • variable_name: from integer to character
 ```
 
-<img src="man/figures/README-unnamed-chunk-8-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-8-1.png" width="90%" style="display: block; margin: auto;" />
 
 ### Characterise the observation period
 
@@ -147,7 +147,7 @@ result <- summariseObservationPeriod(cdm = cdm)
 tableObservationPeriod(result = result, type = "flextable")
 ```
 
-<img src="man/figures/README-unnamed-chunk-9-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-9-1.png" width="90%" style="display: block; margin: auto;" />
 
 Or if visualisation is preferred, you can easily build a histogram to
 explore how many participants have more than one observation period.
@@ -156,7 +156,7 @@ explore how many participants have more than one observation period.
 plotObservationPeriod(result = result, colour = "observation_period_ordinal")
 ```
 
-<img src="man/figures/README-unnamed-chunk-10-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-10-1.png" width="90%" style="display: block; margin: auto;" />
 
 ### Characterise the clinical tables
 
@@ -171,6 +171,13 @@ result <- summariseClinicalRecords(
 )
 #> ℹ Adding variables of interest to condition_occurrence.
 #> ℹ Summarising records per person in condition_occurrence.
+#> ℹ The following estimates will be calculated:
+#> • duration: mean, sd, median, q25, q75, min, max
+#> ! Table is collected to memory as not all requested estimates are supported on
+#>   the database side
+#> → Start summary of data, at 2026-05-19 12:05:03.168084
+#> 
+#> ✔ Summary finished, at 2026-05-19 12:05:03.194409
 #> ℹ Summarising subjects not in person table in condition_occurrence.
 #> ℹ Summarising records in observation in condition_occurrence.
 #> ℹ Summarising records with start before birth date in condition_occurrence.
@@ -182,6 +189,13 @@ result <- summariseClinicalRecords(
 #> ℹ Summarising missing data in condition_occurrence.
 #> ℹ Adding variables of interest to drug_exposure.
 #> ℹ Summarising records per person in drug_exposure.
+#> ℹ The following estimates will be calculated:
+#> • duration: mean, sd, median, q25, q75, min, max
+#> ! Table is collected to memory as not all requested estimates are supported on
+#>   the database side
+#> → Start summary of data, at 2026-05-19 12:05:04.884209
+#> 
+#> ✔ Summary finished, at 2026-05-19 12:05:04.913731
 #> ℹ Summarising subjects not in person table in drug_exposure.
 #> ℹ Summarising records in observation in drug_exposure.
 #> ℹ Summarising records with start before birth date in drug_exposure.
@@ -196,7 +210,7 @@ result <- summariseClinicalRecords(
 tableClinicalRecords(result = result, type = "flextable")
 ```
 
-<img src="man/figures/README-unnamed-chunk-11-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-11-1.png" width="90%" style="display: block; margin: auto;" />
 
 ### Explore trends over time
 
@@ -214,7 +228,7 @@ result <- summariseTrend(
 plotTrend(result = result, facet = "omop_table", colour = "cdm_name")
 ```
 
-<img src="man/figures/README-unnamed-chunk-12-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-12-1.png" width="90%" style="display: block; margin: auto;" />
 
 ### Characterise the concepts
 
@@ -228,10 +242,10 @@ result <- summariseConceptIdCounts(
   omopTableName = "drug_exposure"
 )
 
-tableTopConceptCounts(result = result, type = "flextable")
+tableTopConceptCounts(result = result, type = "flextable", top = 3)
 ```
 
-<img src="man/figures/README-unnamed-chunk-13-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-14-1.png" width="90%" style="display: block; margin: auto;" />
 
 ### Characterise the cdm
 
