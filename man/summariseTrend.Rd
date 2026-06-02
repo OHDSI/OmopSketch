@@ -28,7 +28,7 @@ tables (uses start and end date).}
 
 \item{output}{A character vector indicating what to summarise.
 Options include \code{"record"} (default), \code{"person"}, \code{"person-days"}, \code{"age"},
-\code{"sex"}, \code{"end date"}
+\code{"sex"}.
 If included, the number of person-days and end dates are computed only for episode tables.}
 
 \item{interval}{Time interval to stratify by. It can either be "years",

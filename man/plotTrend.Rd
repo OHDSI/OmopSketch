@@ -17,7 +17,7 @@ plotTrend(
 \item{result}{A summarised_result object (output of \code{summariseTrend()}).}
 
 \item{output}{The output to plot.  Accepted values are: \code{"record"}, \code{"person"},
-\code{"person-days"}, \code{"age"}, \code{"sex"}, and \code{"end date"}.
+\code{"person-days"}, \code{"age"}, \code{"sex"}
 If not specified, the function will default to:
 \itemize{
 \item the only available output if there is just one in the results, or

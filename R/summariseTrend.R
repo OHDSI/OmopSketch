@@ -23,7 +23,7 @@
 #' tables (uses start and end date).
 #' @param output A character vector indicating what to summarise.
 #' Options include `"record"` (default), `"person"`, `"person-days"`, `"age"`,
-#' `"sex"`, `"end date"`
+#' `"sex"`.
 #' If included, the number of person-days and end dates are computed only for episode tables.
 #' @param inObservation Logical. If `TRUE`, the results are stratified to
 #' indicate whether each record occurs within an observation period.
@@ -72,7 +72,7 @@ summariseTrend <- function(cdm,
   ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "age_group")
   omopgenerics::assertLogical(sex, length = 1)
   dateRange <- validateStudyPeriod(cdm, dateRange)
-  omopgenerics::assertChoice(output, choices = c("person-days", "record", "person", "age", "sex", "end date"))
+  omopgenerics::assertChoice(output, choices = c("person-days", "record", "person", "age", "sex"))
   omopgenerics::assertLogical(inObservation, length = 1)
 
 
@@ -128,11 +128,6 @@ summariseEventTrend <- function(cdm, omopTableName, output, interval, sex, ageGr
 
     cli::cli_alert("The number of person-days is not computed for event tables")
     output <- output[output != "person-days"]
-  }
-  if ("end date" %in% output) {
-
-    cli::cli_alert("The number of end dates is not computed for event tables")
-    output <- output[output != "end date"]
   }
   if (rlang::is_empty(output)) {
     return(dplyr::tibble())
@@ -194,11 +189,7 @@ summariseEventTrend <- function(cdm, omopTableName, output, interval, sex, ageGr
 }
 
 summariseEpisodeTrend <- function(cdm, omopTableName, output, interval, sex, ageGroup, dateRange, inObservation) {
-  if ("end date" %in% output & interval == "overall") {
 
-    cli::cli_alert("The `end date` output is computed only for intervals other than `overall`. To get the overall number of end dates, choose `output = 'record'`.")
-    output <- output[output != "end date"]
-  }
   result <- purrr::map(omopTableName, \(table) {
     prefix <- omopgenerics::tmpPrefix()
 
@@ -207,7 +198,7 @@ summariseEpisodeTrend <- function(cdm, omopTableName, output, interval, sex, age
 
     omopTable <- dplyr::ungroup(cdm[[table]])
 
-    if ("end date" %in% output) {
+    if ("record" %in% output) {
       omopTable <- omopTable |>
         dplyr::mutate("end_date_original" = .data[[end_date_name]])
     }
@@ -219,7 +210,19 @@ summariseEpisodeTrend <- function(cdm, omopTableName, output, interval, sex, age
       return(dplyr::tibble())
     }
 
-    denominator <- getDenominator(omopTable = omopTable, output = output)
+    denominator <- getDenominator(omopTable = omopTable, output = output) |>
+      dplyr::mutate(
+        variable_name = dplyr::case_when(
+          variable_name == "Number of records" ~ list(c(
+            "Number of records",
+            "Number of records: start_date",
+            "Number of records: end_date"
+          )),
+          TRUE ~ purrr::map(variable_name, ~ .x)
+        )
+      ) |>
+      tidyr::unnest(variable_name)
+
 
     res <- list()
 
@@ -309,7 +312,7 @@ summariseEpisodeTrend <- function(cdm, omopTableName, output, interval, sex, age
           )
         )
 
-      if ("end date" %in% output) {
+      if ("record" %in% output) {
         x <- x |>
           dplyr::mutate(
             end_date_count = dplyr::if_else(
@@ -370,11 +373,24 @@ summariseTrendInternal <- function(x, output, strata) {
   res <- list()
 
   if ("record" %in% output) {
-    res$record <- summariseCountsInternal(x = x, strata = strata, counts = "records") |>
+    if ("time_interval" %in% strata) {
+      res$record_start <- summariseCountsInternal(x = x, strata = strata, counts = "records") |>
+        dplyr::mutate(
+          estimate_name = "count",
+          variable_name = "Number of records: start_date"
+        )
+      res$endDate <- x |>
+        summariseSumInternal(strata = strata, variable = "end_date_count") |>
+        dplyr::mutate(variable_name = "Number of records: end_date")
+    } else {
+
+          res$record_end <- summariseCountsInternal(x = x, strata = strata, counts = "records") |>
       dplyr::mutate(
         estimate_name = "count",
         variable_name = "Number of records"
       )
+    }
+
   }
   if ("person" %in% output) {
     res$person <- summariseCountsInternal(x = x, strata = strata, counts = "person_id") |>
@@ -408,11 +424,7 @@ summariseTrendInternal <- function(x, output, strata) {
       summariseSumInternal(strata = strata, variable = "person_days") |>
       dplyr::mutate(variable_name = "Person-days")
   }
-  if ("end date" %in% output & "time_interval" %in% colnames(x)) {
-    res$endDate <- x |>
-      summariseSumInternal(strata = strata, variable = "end_date_count") |>
-      dplyr::mutate(variable_name = "End date")
-  }
+
   if (rlang::is_empty(res)) {
     return(dplyr::tibble())
   }
@@ -525,18 +537,6 @@ getDenominator <- function(omopTable, output) {
       dplyr::bind_rows(dplyr::tibble(
         "denominator" = y,
         "variable_name" = "Person-days"
-      ))
-  }
-
-  if ("end date" %in% output) {
-    denominator <- denominator |>
-      dplyr::bind_rows(dplyr::tibble(
-        "denominator" = c(omopTable |>
-                            dplyr::ungroup() |>
-                            dplyr::summarise("n" =  dplyr::n()) |>
-                            dplyr::pull("n") |>
-                            as.numeric()),
-        "variable_name" = "End date"
       ))
   }
 

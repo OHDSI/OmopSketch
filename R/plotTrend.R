@@ -3,7 +3,7 @@
 #'
 #' @param result A summarised_result object (output of `summariseTrend()`).
 #' @param output The output to plot.  Accepted values are: `"record"`, `"person"`,
-#'  `"person-days"`, `"age"`, `"sex"`, and `"end date"`.
+#'  `"person-days"`, `"age"`, `"sex"`
 #'  If not specified, the function will default to:
 #'  - the only available output if there is just one in the results, or
 #'  - `"record"` if multiple outputs are present.
@@ -71,15 +71,19 @@ plotTrend <- function(result,
       output <- "record"
     }
   }
-  omopgenerics::assertChoice(output, choices = c("person-days", "record", "person", "age", "sex", "end date"), length = 1L)
+  omopgenerics::assertChoice(output, choices = c("person-days", "record", "person", "age", "sex"), length = 1L)
   style <- validateStyle(style = style, obj = "plot")
   omopgenerics::assertChoice(type, choices = visOmopResults::plotType(), length = 1, null = TRUE)
 
   # subset to results of interest
   variableName <- fromOutputToVariableName(output = output)
   result <- result |>
-    dplyr::filter(.data$variable_name == variableName) |>
+    dplyr::filter(grepl(variableName, .data$variable_name)) |>
     omopgenerics::addSettings(settingsColumn = "type")
+
+  if (dplyr::n_distinct(result$variable_name) > 1) {
+    facet <- unique(c(facet, "variable_name"))
+  }
 
   if (nrow(result) == 0) {
     return(visOmopResults::emptyPlot(subtitle = "No results found with for output {output}", style = style))
@@ -208,9 +212,6 @@ fromVariableNameToOutput <- function(variableName) {
   }
   if ("Number of females" %in% variableName) {
     output <- c(output, "sex")
-  }
-  if ("End date" %in% variableName) {
-    output <- c(output, "end date")
   }
   return(output)
 }
