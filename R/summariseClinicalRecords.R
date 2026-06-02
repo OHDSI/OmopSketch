@@ -348,7 +348,6 @@ summariseClinicalRecords <- function(cdm,
         dplyr::bind_rows(
           res |>
             dplyr::filter(.data$variable_name != "Subjects not in person table") |>
-            #dplyr::select("strata_name", "strata_level", "variable_name", "variable_level", "estimate_value") |>
             dplyr::left_join(denominator, by = c("strata_name", "strata_level")) |>
             dplyr::mutate(
               estimate_value = sprintf("%.2f", 100 * as.numeric(.data$estimate_value) / as.numeric(.data$den)),
