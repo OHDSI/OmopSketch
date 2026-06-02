@@ -45,6 +45,7 @@
 #'   cdm = cdm,
 #'   event = c("condition_occurrence", "drug_exposure"),
 #'   episode = "observation_period",
+#'   output = "person",
 #'   interval = "years",
 #'   ageGroup = list("<=20" = c(0, 20), ">20" = c(21, Inf)),
 #'   sex = TRUE,
@@ -213,15 +214,15 @@ summariseEpisodeTrend <- function(cdm, omopTableName, output, interval, sex, age
     denominator <- getDenominator(omopTable = omopTable, output = output) |>
       dplyr::mutate(
         variable_name = dplyr::case_when(
-          variable_name == "Number of records" ~ list(c(
+          .data$variable_name == "Number of records" ~ list(c(
             "Number of records",
             "Number of records: start_date",
             "Number of records: end_date"
           )),
-          TRUE ~ purrr::map(variable_name, ~ .x)
+          TRUE ~ purrr::map(.data$variable_name, ~ .x)
         )
       ) |>
-      tidyr::unnest(variable_name)
+      tidyr::unnest(.data$variable_name)
 
 
     res <- list()

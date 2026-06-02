@@ -80,6 +80,7 @@ result <- summariseTrend(
   cdm = cdm,
   event = c("condition_occurrence", "drug_exposure"),
   episode = "observation_period",
+  output = "person",
   interval = "years",
   ageGroup = list("<=20" = c(0, 20), ">20" = c(21, Inf)),
   sex = TRUE,
