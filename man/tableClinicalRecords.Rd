@@ -7,7 +7,8 @@
 tableClinicalRecords(
   result,
   header = "cdm_name",
-  hide = omopgenerics::settingsColumns(result),
+  hide = c(omopgenerics::settingsColumns(result),
+    omopgenerics::additionalColumns(result)),
   groupColumn = c("omop_table", omopgenerics::strataColumns(result)),
   type = NULL,
   style = NULL
