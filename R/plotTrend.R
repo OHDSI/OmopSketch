@@ -192,8 +192,6 @@ fromOutputToVariableName <- function(output) {
     return("Age")
   } else if (output == "sex") {
     return("Number of females")
-  } else if (output == "end date") {
-    return("End date")
   }
 }
 fromVariableNameToOutput <- function(variableName) {
