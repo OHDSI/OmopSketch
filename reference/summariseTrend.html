@@ -101,7 +101,7 @@ tables (uses start and end date).</p></dd>
 <dd><p>A character vector indicating what to summarise.
 Options include <code>"record"</code> (default), <code>"person"</code>, <code>"person-days"</code>, <code>"age"</code>,
 <code>"sex"</code>.
-If included, the number of person-days is computed only for episode tables.</p></dd>
+If included, the number of person-days and end dates are computed only for episode tables.</p></dd>
 
 
 <dt id="arg-interval">interval<a class="anchor" aria-label="anchor" href="#arg-interval"></a></dt>
@@ -163,6 +163,7 @@ period. Records are <strong>trimmed</strong> to the date range, and contribute t
 <span class="r-in"><span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span></span>
 <span class="r-in"><span>  event <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"condition_occurrence"</span>, <span class="st">"drug_exposure"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  episode <span class="op">=</span> <span class="st">"observation_period"</span>,</span></span>
+<span class="r-in"><span>  output <span class="op">=</span> <span class="st">"person"</span>,</span></span>
 <span class="r-in"><span>  interval <span class="op">=</span> <span class="st">"years"</span>,</span></span>
 <span class="r-in"><span>  ageGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"&lt;=20"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">20</span><span class="op">)</span>, <span class="st">"&gt;20"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">21</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  sex <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
