@@ -169,7 +169,7 @@ summariseClinicalRecords <- function(cdm,
 
     result$recordPerPerson  <- dplyr::bind_rows(result$recordPerPerson,
                                                 result$recordPerPerson |>
-                                                  dplyr::filter(variable_name == "Number subjects") |>
+                                                  dplyr::filter(.data$variable_name == "Number subjects") |>
                                                   dplyr::mutate(estimate_value = as.character(100*as.numeric(.data$estimate_value)/.env$n_person),
                                                                 estimate_name = "percentage",
                                                                 estimate_type = "percentage"))
@@ -511,12 +511,12 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
 
    if(newNames[["start_date"]] == newNames[["end_date"]]){
      x <- x |>
-       dplyr::mutate(in_observation = dplyr::if_else(!is.na(obs_start),
+       dplyr::mutate(in_observation = dplyr::if_else(!is.na(.data$obs_start),
                                                      1L,
                                                      NA_integer_))
    } else {
      x <- x |>
-       dplyr::mutate(in_observation = dplyr::if_else(!is.na(obs_start),
+       dplyr::mutate(in_observation = dplyr::if_else(!is.na(.data$obs_start),
                                                      1L,
                                                      NA_integer_),
                      end_date = dplyr::coalesce(.data[["end_date"]], .data[["start_date"]]),
