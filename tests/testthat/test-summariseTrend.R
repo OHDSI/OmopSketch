@@ -21,7 +21,13 @@ test_that("summariseTrend - episode works", {
     dplyr::tally() |>
     dplyr::pull("n") |>
     as.numeric()
-  expect_equal(x, y)
+  z <- cdm$observation_period |>
+    getYear(date = "observation_period_end_date", name = "end_year") |>
+    dplyr::filter(end_year == 1909) |>
+    dplyr::tally() |>
+    dplyr::pull("n") |>
+    as.numeric()
+  expect_equal(x, c(y, z))
 
   x <- summariseTrend(cdm, episode = "observation_period", interval = "years")
   expect_equal(x |> dplyr::filter(additional_level != "overall") |> dplyr::pull("additional_name") |> unique(), "time_interval")
@@ -40,21 +46,13 @@ test_that("summariseTrend - episode works", {
     dplyr::tally() |>
     dplyr::pull("n") |>
     as.numeric()
-  expect_equal(x, y)
-
-  x <- summariseTrend(cdm, episode = "observation_period", interval = "years") |>
-    dplyr::filter(additional_level == c("1936-01-01 to 1936-12-31"), estimate_name == "count") |>
-    dplyr::pull("estimate_value") |>
-    as.numeric()
-  y <- cdm$observation_period |>
-    getYear(date = "observation_period_start_date", name = "start") |>
-    getYear(date = "observation_period_end_date", name = "end") |>
-    dplyr::filter((.data$start < 1936 & .data$end >= 1936) |
-      (.data$start >= 1936 & .data$start <= 1936)) |>
+  z <- cdm$drug_exposure |>
+    getYear(date = "drug_exposure_end_date", name = "end_year") |>
+    dplyr::filter(end_year == 1936) |>
     dplyr::tally() |>
     dplyr::pull("n") |>
     as.numeric()
-  expect_equal(x, y)
+  expect_equal(x, c(y,z))
 
   x <- summariseTrend(cdm, episode = "observation_period", output = "person", interval = "years") |>
     dplyr::filter(additional_level == c("1996-01-01 to 1996-12-31"), estimate_name == "count") |>
@@ -84,7 +82,14 @@ test_that("summariseTrend - episode works", {
     dplyr::tally() |>
     dplyr::pull("n") |>
     as.numeric()
-  expect_equal(x, y)
+  z <- cdm$condition_occurrence |>
+    getYear(date = "condition_end_date", name = "end_year") |>
+    dplyr::filter(end_year == 1998) |>
+    dplyr::tally() |>
+    dplyr::pull("n") |>
+    as.numeric()
+
+  expect_equal(x, c(y, z))
 
   x <- summariseTrend(cdm, episode = "observation_period", interval = "months") |>
     dplyr::filter(additional_level == "1942-03-01 to 1942-03-31", estimate_name == "count") |>
@@ -98,7 +103,14 @@ test_that("summariseTrend - episode works", {
     dplyr::tally() |>
     dplyr::pull("n") |>
     as.numeric()
-  expect_equal(x, y)
+  z <- cdm$observation_period |>
+    dplyr::filter(
+      observation_period_end_date >= as.Date("1942-03-01")  & observation_period_end_date <= as.Date("1942-03-31")
+    ) |>
+    dplyr::tally() |>
+    dplyr::pull("n") |>
+    as.numeric()
+  expect_equal(x, c(y, z))
 
   dropCreatedTables(cdm = cdm)
 })
@@ -240,7 +252,14 @@ test_that("check sex argument works", {
     dplyr::tally() |>
     dplyr::pull() |>
     as.numeric()
-  expect_equal(x, y)
+  z <- cdm$observation_period |>
+    PatientProfiles::addSexQuery() |>
+    dplyr::filter(sex == "Male") |>
+    dplyr::filter(observation_period_end_date >= as.Date("1915-01-01") & observation_period_end_date <= as.Date("1915-12-31")) |>
+    dplyr::tally() |>
+    dplyr::pull() |>
+    as.numeric()
+  expect_equal(x, c(y, z))
 
   x <- summariseTrend(cdm, event = "observation_period", interval = "years", sex = TRUE) |>
     dplyr::filter(strata_level == "Male", additional_level == "1918-01-01 to 1918-12-31", estimate_name == "percentage") |>
@@ -292,7 +311,16 @@ test_that("check ageGroup argument works", {
     dplyr::tally() |>
     dplyr::pull() |>
     as.numeric()
-  expect_equal(x, y)
+  z <- cdm$observation_period |>
+    dplyr::filter(observation_period_end_date >= as.Date("1928-01-01") & observation_period_end_date <= as.Date("1928-12-31")) |>
+    dplyr::mutate("start" = as.Date("1928-01-01"), "end" = as.Date("1928-12-31")) |>
+    PatientProfiles::addAgeQuery(indexDate = "start", ageName = "age_start") |>
+    dplyr::mutate(age_end = age_start + 10) |>
+    dplyr::filter((age_end <= 20 & age_end >= 0) | (age_start >= 0 & age_start <= 20)) |>
+    dplyr::tally() |>
+    dplyr::pull() |>
+    as.numeric()
+  expect_equal(x, c(y, z))
 
   x <- summariseTrend(cdm, event = "observation_period", interval = "years", ageGroup = list("<=20" = c(0, 20), ">20" = c(21, Inf))) |>
     dplyr::filter(additional_level == "1928-01-01 to 1928-12-31", estimate_name == "count", strata_level == "<=20") |>

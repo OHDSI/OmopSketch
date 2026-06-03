@@ -3,7 +3,7 @@
 #'
 #' @param result A summarised_result object (output of `summariseTrend()`).
 #' @param output The output to plot.  Accepted values are: `"record"`, `"person"`,
-#'  `"person-days"`, `"age"`, and `"sex"`.
+#'  `"person-days"`, `"age"`, `"sex"`
 #'  If not specified, the function will default to:
 #'  - the only available output if there is just one in the results, or
 #'  - `"record"` if multiple outputs are present.
@@ -78,8 +78,12 @@ plotTrend <- function(result,
   # subset to results of interest
   variableName <- fromOutputToVariableName(output = output)
   result <- result |>
-    dplyr::filter(.data$variable_name == variableName) |>
+    dplyr::filter(grepl(variableName, .data$variable_name)) |>
     omopgenerics::addSettings(settingsColumn = "type")
+
+  if (dplyr::n_distinct(result$variable_name) > 1) {
+    facet <- unique(c(facet, "variable_name"))
+  }
 
   if (nrow(result) == 0) {
     return(visOmopResults::emptyPlot(subtitle = "No results found with for output {output}", style = style))

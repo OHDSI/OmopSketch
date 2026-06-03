@@ -29,7 +29,7 @@ tables (uses start and end date).}
 \item{output}{A character vector indicating what to summarise.
 Options include \code{"record"} (default), \code{"person"}, \code{"person-days"}, \code{"age"},
 \code{"sex"}.
-If included, the number of person-days is computed only for episode tables.}
+If included, the number of person-days and end dates are computed only for episode tables.}
 
 \item{interval}{Time interval to stratify by. It can either be "years",
 "quarters", "months" or "overall".}
@@ -80,6 +80,7 @@ result <- summariseTrend(
   cdm = cdm,
   event = c("condition_occurrence", "drug_exposure"),
   episode = "observation_period",
+  output = "person",
   interval = "years",
   ageGroup = list("<=20" = c(0, 20), ">20" = c(21, Inf)),
   sex = TRUE,

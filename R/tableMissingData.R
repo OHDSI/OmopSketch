@@ -69,7 +69,7 @@ tableMissingData <- function(result,
   result |>
     omopgenerics::splitAdditional() |>
     dplyr::mutate(
-      variable_level = if (rlang::has_name(pick(dplyr::everything()), "is_required")) {
+      variable_level = if (rlang::has_name(dplyr::pick(dplyr::everything()), "is_required")) {
         dplyr::if_else(.data$is_required == "TRUE",
                        paste0(.data$variable_level, " (required)"),
                        paste0(.data$variable_level, " (not required)"))
