@@ -42,7 +42,7 @@
     <li><h6 class="dropdown-header" data-toc-skip>Characterise tables</h6></li>
     <li><a class="dropdown-item" href="../articles/summarise_person.html">Summarise the person table</a></li>
     <li><a class="dropdown-item" href="../articles/summarise_observation_period.html">Summarise observation period</a></li>
-    <li><a class="dropdown-item" href="../articles/summarise_clinical_tables_records.html">Summarise clinical tables records</a></li>
+    <li><a class="dropdown-item" href="../articles/summarise_clinical_tables_records.html">Summarise clinical records</a></li>
     <li><a class="dropdown-item" href="../articles/summarise_trend.html">Summarise temporal trends in OMOP tables</a></li>
     <li><a class="dropdown-item" href="../articles/missing_data.html">Summarise missing data</a></li>
     <li><hr class="dropdown-divider"></li>
@@ -83,71 +83,45 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>In this vignette we will explore the <em>OmopSketch</em> functions
-designed to provide a concise overview of the OMOP
-<strong>person</strong> table. Specifically there are two small
-utilities that make this easy:</p>
+<p>This vignette walks through the <strong>OmopSketch</strong> functions
+designed to provide a concise overview of the OMOP <code>person</code>
+table. Two functions cover this workflow:</p>
 <ul>
 <li>
-<code><a href="../reference/summarisePerson.html">summarisePerson()</a></code>: computes a set of summary statistics
-and data-quality checks for the person table (total subjects, missing
-observation-period checks, sex/race/ethnicity distributions, birth-date
-components, and simple summaries for id-columns such as location_id,
-provider_id, and care_site_id).</li>
+<code><a href="../reference/summarisePerson.html">summarisePerson()</a></code>: computes summary statistics and
+data-quality checks for the <code>person</code> table, including total
+subject counts, observation-period coverage, sex/race/ethnicity
+distributions, birth-date components, and summaries of id-columns
+(<code>location_id</code>, <code>provider_id</code>,
+<code>care_site_id</code>).</li>
 <li>
-<code><a href="../reference/tablePerson.html">tablePerson()</a></code>: helps visualising the results in a
-formatted table.</li>
+<code><a href="../reference/tablePerson.html">tablePerson()</a></code>: renders the results as a formatted table
+(<code>gt</code>, <code>reactable</code>, or
+<code>datatable</code>).</li>
 </ul>
 <div class="section level3">
-<h3 id="create-a-mock-cdm">Create a mock cdm<a class="anchor" aria-label="anchor" href="#create-a-mock-cdm"></a>
+<h3 id="setup">Setup<a class="anchor" aria-label="anchor" href="#setup"></a>
 </h3>
-<p>Let’s load the required packages and create a mock CDM using the R
-package <a href="https://ohdsi.github.io/omock/" class="external-link">omock</a> so we can run
-the functions on a small example.</p>
+<p>Load the required packages and create a mock CDM using <a href="https://ohdsi.github.io/omock/" class="external-link">omock</a>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'dplyr'</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:stats':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     filter, lag</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://OHDSI.github.io/OmopSketch/">OmopSketch</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ohdsi.github.io/omock/" class="external-link">omock</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Connect to mock database</span></span>
-<span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ohdsi.github.io/omock/reference/mockCdmFromDataset.html" class="external-link">mockCdmFromDataset</a></span><span class="op">(</span>datasetName <span class="op">=</span> <span class="st">"GiBleed"</span>, source <span class="op">=</span> <span class="st">"duckdb"</span><span class="op">)</span> </span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Loading bundled <span style="color: #0000BB;">GiBleed</span> tables from package data.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Adding <span style="color: #0000BB;">drug_strength</span> table.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Creating local <span style="color: #0000BB;">&lt;cdm_reference&gt;</span> object.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Inserting <span style="color: #0000BB;">&lt;cdm_reference&gt;</span> into <span style="color: #0000BB;">duckdb</span>.</span></span>
-<span><span class="va">cdm</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;"># OMOP CDM reference (duckdb) of GiBleed</span> <span style="color: #00BBBB;">────────────────────────────────────</span></span></span>
-<span><span class="co">#&gt; • <span style="font-weight: bold;">omop tables:</span> care_site, cdm_source, concept, concept_ancestor, concept_class,</span></span>
-<span><span class="co">#&gt; concept_relationship, concept_synonym, condition_era, condition_occurrence,</span></span>
-<span><span class="co">#&gt; cost, death, device_exposure, domain, dose_era, drug_era, drug_exposure,</span></span>
-<span><span class="co">#&gt; drug_strength, fact_relationship, location, measurement, metadata, note,</span></span>
-<span><span class="co">#&gt; note_nlp, observation, observation_period, payer_plan_period, person,</span></span>
-<span><span class="co">#&gt; procedure_occurrence, provider, relationship, source_to_concept_map, specimen,</span></span>
-<span><span class="co">#&gt; visit_detail, visit_occurrence, vocabulary</span></span>
-<span><span class="co">#&gt; • <span style="font-weight: bold;">cohort tables:</span> -</span></span>
-<span><span class="co">#&gt; • <span style="font-weight: bold;">achilles tables:</span> -</span></span>
-<span><span class="co">#&gt; • <span style="font-weight: bold;">other tables:</span> -</span></span></code></pre></div>
+<span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ohdsi.github.io/omock/reference/mockCdmFromDataset.html" class="external-link">mockCdmFromDataset</a></span><span class="op">(</span>datasetName <span class="op">=</span> <span class="st">"GiBleed"</span>, source <span class="op">=</span> <span class="st">"duckdb"</span><span class="op">)</span></span>
+<span><span class="va">cdm</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
-<h2 id="summarise-person-table">Summarise person table<a class="anchor" aria-label="anchor" href="#summarise-person-table"></a>
+<h2 id="summarise-the-person-table">Summarise the person table<a class="anchor" aria-label="anchor" href="#summarise-the-person-table"></a>
 </h2>
-<p>Run summarisePerson() to compute basic summaries for the person
-table. The function will return a <a href="https://darwin-eu.github.io/omopgenerics/articles/summarised_result.html" class="external-link">summarised_result</a>.</p>
+<p>Call <code><a href="../reference/summarisePerson.html">summarisePerson()</a></code> to compute all summaries. It
+returns a <a href="https://darwin-eu.github.io/omopgenerics/articles/summarised_result.html" class="external-link"><code>summarised_result</code></a>
+object — a standardised tidy format used across the OMOP analytics
+ecosystem.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summarisePerson.html">summarisePerson</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">result</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">result</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 123</span></span>
 <span><span class="co">#&gt; Columns: 13</span></span>
 <span><span class="co">#&gt; $ result_id        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>1<span style="color: #949494;">,</span>…</span></span>
@@ -166,35 +140,145 @@ table. The function will return a <a href="https://darwin-eu.github.io/omopgener
 <div class="section level3">
 <h3 id="what-the-function-reports">What the function reports<a class="anchor" aria-label="anchor" href="#what-the-function-reports"></a>
 </h3>
-<p><code><a href="../reference/summarisePerson.html">summarisePerson()</a></code> builds a set of common summaries:</p>
+<p><code><a href="../reference/summarisePerson.html">summarisePerson()</a></code> covers the following summaries, each
+stored as a separate <code>variable_name</code> in the result:</p>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr class="header">
+<th>Variable</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>Number subjects</strong></td>
+<td>Total row count in <code>person</code>.</td>
+</tr>
+<tr class="even">
+<td><strong>Number subjects not in observation</strong></td>
+<td>Count and percentage of persons absent from
+<code>observation_period</code>. A warning is emitted when this is
+non-zero.</td>
+</tr>
+<tr class="odd">
+<td><strong>Sex</strong></td>
+<td>Count and percentage for <code>Female</code>, <code>Male</code>, and
+<code>None</code> (derived via
+<code><a href="https://darwin-eu.github.io/PatientProfiles/reference/addSexQuery.html" class="external-link">PatientProfiles::addSexQuery()</a></code>).</td>
+</tr>
+<tr class="even">
+<td><strong>Sex source</strong></td>
+<td>Distribution of raw <code>gender_source_value</code>.</td>
+</tr>
+<tr class="odd">
+<td><strong>Race</strong></td>
+<td>Distribution of <code>race_concept_id</code>, resolved to concept
+names.</td>
+</tr>
+<tr class="even">
+<td><strong>Race source</strong></td>
+<td>Distribution of raw <code>race_source_value</code>.</td>
+</tr>
+<tr class="odd">
+<td><strong>Ethnicity</strong></td>
+<td>Distribution of <code>ethnicity_concept_id</code>, resolved to
+concept names.</td>
+</tr>
+<tr class="even">
+<td><strong>Ethnicity source</strong></td>
+<td>Distribution of raw <code>ethnicity_source_value</code>.</td>
+</tr>
+<tr class="odd">
+<td><strong>Year of birth</strong></td>
+<td>Numeric summary: missingness, quantiles (Q05, Q25, median, Q75,
+Q95), min/max.</td>
+</tr>
+<tr class="even">
+<td><strong>Month of birth</strong></td>
+<td>Same numeric summary as year of birth.</td>
+</tr>
+<tr class="odd">
+<td><strong>Day of birth</strong></td>
+<td>Same numeric summary as year of birth.</td>
+</tr>
+<tr class="even">
+<td><strong>Location</strong></td>
+<td>Missing count, zero count, and distinct values for
+<code>location_id</code>. When <code>location_id</code> is empty, the
+function attempts to derive it from <code>care_site_id</code> and notes
+this in a message.</td>
+</tr>
+<tr class="odd">
+<td><strong>Provider</strong></td>
+<td>Missing count, zero count, distinct values, and (below threshold)
+individual <code>provider_name</code> labels.</td>
+</tr>
+<tr class="even">
+<td><strong>Care site</strong></td>
+<td>Missing count, zero count, distinct values, and (below threshold)
+individual <code>care_site_name</code> labels.</td>
+</tr>
+</tbody>
+</table>
+<div class="section level4">
+<h4 id="threshold">Threshold<a class="anchor" aria-label="anchor" href="#threshold"></a>
+</h4>
+<p>For <code>location_id</code>, <code>provider_id</code>, and
+<code>care_site_id</code>, <code><a href="../reference/summarisePerson.html">summarisePerson()</a></code> always reports
+three aggregate statistics: number missing, number of zeros, and number
+of distinct values. Whether it goes further and lists each value
+individually depends on a threshold.</p>
+<p>If the number of distinct values is <strong>below 15</strong> (the
+default), the function joins to the corresponding lookup table and
+appends one row per unique label — <code>location_source_value</code>,
+<code>provider_name</code>, or <code>care_site_name</code> — each with
+its own count and percentage. This gives you a readable breakdown rather
+than just a count of how many distinct ids exist.</p>
+<p>If the number of distinct values is <strong>at or above 15</strong>,
+only the aggregate stats are returned. Listing dozens or hundreds of
+individual sites would produce noise rather than insight.</p>
+<p>You can tune this cutoff for your database before calling
+<code><a href="../reference/summarisePerson.html">summarisePerson()</a></code>:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Raise the threshold to show individual labels for up to 50 distinct values</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>OmopSketch.personLabels <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span>
+<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summarisePerson.html">summarisePerson</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="estimate-types">Estimate types<a class="anchor" aria-label="anchor" href="#estimate-types"></a>
+</h4>
+<p>Depending on the variable, estimates include:</p>
 <ul>
-<li><p>Number subjects: total number of rows in person.</p></li>
-<li><p>Number subjects not in observation: number (and percentage) of
-persons that do not appear in <em>observation_period</em> (useful to
-detect missing observation periods). A warning is emitted if any are
-found.</p></li>
-<li><p>Sex: counts and percentages for the sex categories (Female, Male,
-Missing).</p></li>
-<li><p>A separate Sex source table shows the raw gender_source_value
-distribution.</p></li>
-<li><p>Race / Race source: distribution of race_concept_id and
-race_source_value</p></li>
-<li><p>Ethnicity / Ethnicity source: distribution of
-ethnicity_concept_id and ethnicity_source_value.</p></li>
-<li><p>Year / Month / Day of birth: numeric summaries (missingness,
-quantiles, min/max) of birth date components.</p></li>
-<li><p>Location, Provider, Care site: number of missing, zeros, distinct
-values.</p></li>
+<li>
+<code>count</code> / <code>percentage</code> — for categorical
+variables (sex, race, ethnicity).</li>
+<li>
+<code>count_missing</code> / <code>percentage_missing</code> —
+missingness for id-columns and birth-date fields.</li>
+<li>
+<code>count_0</code> / <code>percentage_0</code> — zero values for
+id-columns.</li>
+<li>
+<code>distinct_values</code> — number of unique non-null values for
+id-columns.</li>
+<li>
+<code>min</code>, <code>q05</code>, <code>q25</code>,
+<code>median</code>, <code>q75</code>, <code>q95</code>,
+<code>max</code> — quantile summaries for birth-date fields.</li>
 </ul>
 </div>
 </div>
+</div>
 <div class="section level2">
-<h2 id="tidy-the-summarised-object">Tidy the summarised object<a class="anchor" aria-label="anchor" href="#tidy-the-summarised-object"></a>
+<h2 id="visualise-the-results">Visualise the results<a class="anchor" aria-label="anchor" href="#visualise-the-results"></a>
 </h2>
-<p><code><a href="../reference/tablePerson.html">tablePerson()</a></code> will help you to tidy the previous results
-and create a formatted table of type <a href="https://gt.rstudio.com/" class="external-link">gt</a>, <a href="https://glin.github.io/reactable/" class="external-link">reactable</a> or <a href="https://rstudio.github.io/DT/" class="external-link">datatable</a>. By default it
-creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<p><code><a href="../reference/tablePerson.html">tablePerson()</a></code> formats the <code>summarised_result</code>
+into a publication-ready table. The <code>type</code> argument accepts
+<code>"gt"</code> (default), <code>"reactable"</code>, or
+<code>"datatable"</code>.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tablePerson.html">tablePerson</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">result</span>, type <span class="op">=</span> <span class="st">"gt"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> The following column type were changed:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> variable_name: from integer to character</span></span></code></pre></div>
@@ -1101,12 +1185,15 @@ creates a <a href="https://gt.rstudio.com/" class="external-link">gt</a> table.<
 </tbody>
 </table>
 </div>
+<p>The column headers are driven by the CDM name and the estimate
+combinations are rendered as human-readable labels
+(e.g. <code>N (%)</code>, <code>Median [Q25 - Q75]</code>,
+<code>Missing N (%)</code>).</p>
 </div>
 <div class="section level2">
-<h2 id="disconnect-from-cdm">Disconnect from CDM<a class="anchor" aria-label="anchor" href="#disconnect-from-cdm"></a>
+<h2 id="disconnect">Disconnect<a class="anchor" aria-label="anchor" href="#disconnect"></a>
 </h2>
-<p>Finally, disconnect from the mock CDM.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://darwin-eu.github.io/omopgenerics/reference/cdmDisconnect.html" class="external-link">cdmDisconnect</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
