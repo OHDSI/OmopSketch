@@ -13,73 +13,115 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-# Introduction
-
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 ```
-In this vignette we will explore the *OmopSketch* functions designed to provide a concise overview of the OMOP **person** table. Specifically there are two small utilities that make this easy:
 
-- `summarisePerson()`: computes a set of summary statistics and data-quality checks for the person table (total subjects, missing observation-period checks, sex/race/ethnicity distributions, birth-date components, and simple summaries for id-columns such as location_id, provider_id, and care_site_id).
--   `tablePerson()`: helps visualising the results in a formatted table.
+# Introduction
 
-## Create a mock cdm
+This vignette walks through the **OmopSketch** functions designed to provide a concise overview of the OMOP `person` table. Two functions cover this workflow:
 
-Let’s load the required packages and create a mock CDM using the R package [omock](https://ohdsi.github.io/omock/) so we can run the functions on a small example.
+- `summarisePerson()`: computes summary statistics and data-quality checks for the `person` table, including total subject counts, observation-period coverage, sex/race/ethnicity distributions, birth-date components, and summaries of id-columns (`location_id`, `provider_id`, `care_site_id`).
+- `tablePerson()`: renders the results as a formatted table (`gt`, `reactable`, or `datatable`).
 
-```{r, warning=FALSE}
+## Setup
+
+Load the required packages and create a mock CDM using [omock](https://ohdsi.github.io/omock/).
+
+```{r, warning=FALSE, message=FALSE}
 library(dplyr)
 library(OmopSketch)
 library(omock)
 
-# Connect to mock database
-cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb") 
+cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
 cdm
 ```
 
-# Summarise person table
-Run summarisePerson() to compute basic summaries for the person table. The function will return a [summarised_result](https://darwin-eu.github.io/omopgenerics/articles/summarised_result.html).
+# Summarise the person table
+
+Call `summarisePerson()` to compute all summaries. It returns a
+[`summarised_result`](https://darwin-eu.github.io/omopgenerics/articles/summarised_result.html)
+object — a standardised tidy format used across the OMOP analytics ecosystem.
 
 ```{r}
 result <- summarisePerson(cdm = cdm)
-
-result |> 
-  glimpse()
+result |> glimpse()
 ```
+
 ## What the function reports
 
-`summarisePerson()` builds a set of common summaries:
+`summarisePerson()` covers the following summaries, each stored as a separate
+`variable_name` in the result:
 
-- Number subjects: total number of rows in person.
+| Variable | Description |
+|---|---|
+| **Number subjects** | Total row count in `person`. |
+| **Number subjects not in observation** | Count and percentage of persons absent from `observation_period`. A warning is emitted when this is non-zero. |
+| **Sex** | Count and percentage for `Female`, `Male`, and `None` (derived via `PatientProfiles::addSexQuery()`). |
+| **Sex source** | Distribution of raw `gender_source_value`. |
+| **Race** | Distribution of `race_concept_id`, resolved to concept names. |
+| **Race source** | Distribution of raw `race_source_value`. |
+| **Ethnicity** | Distribution of `ethnicity_concept_id`, resolved to concept names. |
+| **Ethnicity source** | Distribution of raw `ethnicity_source_value`. |
+| **Year of birth** | Numeric summary: missingness, quantiles (Q05, Q25, median, Q75, Q95), min/max. |
+| **Month of birth** | Same numeric summary as year of birth. |
+| **Day of birth** | Same numeric summary as year of birth. |
+| **Location** | Missing count, zero count, and distinct values for `location_id`. When `location_id` is empty, the function attempts to derive it from `care_site_id` and notes this in a message.|
+| **Provider** | Missing count, zero count, distinct values, and (below threshold) individual `provider_name` labels. |
+| **Care site** | Missing count, zero count, distinct values, and (below threshold) individual `care_site_name` labels. |
 
-- Number subjects not in observation: number (and percentage) of persons that do not appear in *observation_period* (useful to detect missing observation periods). A warning is emitted if any are found.
+### Threshold
 
-- Sex: counts and percentages for the sex categories (Female, Male, Missing).
+For `location_id`, `provider_id`, and `care_site_id`, `summarisePerson()` always
+reports three aggregate statistics: number missing, number of zeros, and number
+of distinct values. Whether it goes further and lists each value individually
+depends on a threshold.
 
-- A separate Sex source table shows the raw gender_source_value distribution.
+If the number of distinct values is **below 15** (the default), the function
+joins to the corresponding lookup table and appends one row per unique label —
+`location_source_value`, `provider_name`, or `care_site_name` — each with its
+own count and percentage. This gives you a readable breakdown rather than just a
+count of how many distinct ids exist.
 
-- Race / Race source: distribution of race_concept_id and race_source_value
+If the number of distinct values is **at or above 15**, only the aggregate stats
+are returned. Listing dozens or hundreds of individual sites would produce noise
+rather than insight.
 
-- Ethnicity / Ethnicity source: distribution of ethnicity_concept_id  and ethnicity_source_value.
+You can tune this cutoff for your database before calling `summarisePerson()`:
 
-- Year / Month / Day of birth: numeric summaries (missingness, quantiles, min/max) of birth date components.
+```{r, eval=FALSE}
+# Raise the threshold to show individual labels for up to 50 distinct values
+options(OmopSketch.personLabels = 50)
+result <- summarisePerson(cdm = cdm)
+```
 
-- Location, Provider, Care site:  number of missing, zeros, distinct values.
+### Estimate types
 
-# Tidy the summarised object
+Depending on the variable, estimates include:
 
-`tablePerson()` will help you to tidy the previous results and create a formatted table of type [gt](https://gt.rstudio.com/), [reactable](https://glin.github.io/reactable/) or [datatable](https://rstudio.github.io/DT/). By default it creates a [gt](https://gt.rstudio.com/) table.
+- `count` / `percentage` — for categorical variables (sex, race, ethnicity).
+- `count_missing` / `percentage_missing` — missingness for id-columns and birth-date fields.
+- `count_0` / `percentage_0` — zero values for id-columns.
+- `distinct_values` — number of unique non-null values for id-columns.
+- `min`, `q05`, `q25`, `median`, `q75`, `q95`, `max` — quantile summaries for birth-date fields.
+
+# Visualise the results
+
+`tablePerson()` formats the `summarised_result` into a publication-ready table.
+The `type` argument accepts `"gt"` (default), `"reactable"`, or `"datatable"`.
 
 ```{r, warning=FALSE}
 tablePerson(result = result, type = "gt")
 ```
 
-# Disconnect from CDM
+The column headers are driven by the CDM name and the estimate combinations are
+rendered as human-readable labels (e.g. `N (%)`, `Median [Q25 - Q75]`,
+`Missing N (%)`).
 
-Finally, disconnect from the mock CDM.
+# Disconnect
 
 ```{r}
 cdmDisconnect(cdm = cdm)
