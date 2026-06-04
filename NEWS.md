@@ -1,4 +1,20 @@
-# OmopSketch 1.0.1.900
+# OmopSketch 1.2.0
+- speed up summariseClinicalRecords by @edward-burn in #562
+- include delphi by @catalamarti in #574
+- add badges in readme by @catalamarti in #575
+- Add record duration summary and end-date checks by @cecicampanile in #576
+- Add location and provider counts to summarisePerson if less than 15 labels by @catalamarti in #583
+- only subjects in person table used in analyses and fixed percentages … by @cecicampanile in #573
+- Include standard_vocabulary in summariseClinicalTable by @cecicampanile in #580
+- Update plotPerson with all variables by @cecicampanile in #595
+- add if column is required in the summariseMissingData by @cecicampanile in #594
+- Set legend labels in plotPerson by @cecicampanile in #591
+- cumulative plot if density results are available by @cecicampanile in #597
+- add standard and source vocabularies to summariseConceptIdCounts by @cecicampanile in #589
+- update readme by @cecicampanile in #596
+- include type concept id in summariseClinicalRecords by @cecicampanile in #590
+- Add 'end date' trends in summariseTrend by @cecicampanile in #598
+- update documentation by @cecicampanile in #599
 
 # OmopSketch 1.0.1
 
