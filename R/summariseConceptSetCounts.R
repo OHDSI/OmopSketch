@@ -41,6 +41,11 @@ summariseConceptSetCounts <- function(cdm,
   countBy[countBy == "person"] <- "person_id"
 
   prefix <- omopgenerics::tmpPrefix()
+  on.exit(
+    omopgenerics::dropSourceTable(
+      cdm = cdm, name = dplyr::starts_with(prefix)
+    )
+  )
 
   # settings
   set <- createSettings(

@@ -144,6 +144,11 @@ columnsToSummarise <- function(col, cols, table, version) {
 
 summariseMissingDataFromTable <- function(omopTable, table, cdm, col, dateRange, sex, ageGroup, interval, strata) {
   prefix <- omopgenerics::tmpPrefix()
+  on.exit(
+    omopgenerics::dropSourceTable(
+      cdm = cdm, name = dplyr::starts_with(prefix)
+    )
+  )
 
   # check if table is empty
 
