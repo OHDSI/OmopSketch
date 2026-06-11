@@ -86,6 +86,11 @@ summariseObservationPeriod <- function(cdm,
   omopgenerics::assertLogical(byOrdinal)
 
   tablePrefix <- omopgenerics::tmpPrefix()
+  on.exit(
+    omopgenerics::dropSourceTable(
+      cdm = cdm, name = dplyr::starts_with(tablePrefix)
+    )
+  )
 
   strata <- c(list(character()), omopgenerics::combineStrata(strataCols(sex = sex, ageGroup = ageGroup)))
 
