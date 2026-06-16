@@ -632,7 +632,7 @@ summariseDuration <- function(x, strata, estimates, tableName) {
     },
     error = function(e) {
       cli::cli_warn("It was not possible to compute duration analysis: {e$message}")
-      NULL
+      tibble::tibble()
     }
   )
 }

@@ -303,7 +303,7 @@ summariseMedianAge <- function(x, index_date, strata) {
     },
     error = function(e) {
       cli::cli_warn("It was not possible to compute the analysis for `age` output: {e$message}")
-      NULL
+      tibble::tibble()
     }
   )
 }
