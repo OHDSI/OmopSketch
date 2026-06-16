@@ -104,6 +104,11 @@ summariseClinicalRecords <- function(cdm,
 
   # prefix
   prefix <- omopgenerics::tmpPrefix()
+  on.exit(
+    omopgenerics::dropSourceTable(
+      cdm = cdm, name = dplyr::starts_with(prefix)
+    )
+  )
 
   # get strata
   strata <- c(
@@ -408,6 +413,11 @@ summariseRecordsPerPerson <- function(x, strata, estimates) {
 
   cdm <- omopgenerics::cdmReference(x)
   prefix <- omopgenerics::tmpPrefix()
+  on.exit(
+    omopgenerics::dropSourceTable(
+      cdm = cdm, name = dplyr::starts_with(prefix)
+    )
+  )
   nm <- omopgenerics::uniqueTableName(prefix = prefix)
 
   res <- x |>
@@ -602,18 +612,29 @@ summariseDuration <- function(x, strata, estimates, tableName) {
   if (start_date == end_date){
     return(omopgenerics::emptySummarisedResult())
   }
-  x |>
-    datediffDays(start = "start_date", end = "end_date", name = "duration") |>
-    PatientProfiles::summariseResult(
-      group = list(),
-      includeOverallGroup = FALSE,
-      strata = strata,
-      includeOverallStrata = FALSE,
-      counts = FALSE,
-      variables = "duration",
-      estimates = estimates
-    ) |>
-    dplyr::mutate(variable_name = "Duration of records")
+
+  str <- strata |> unlist() |> unique()
+  tryCatch(
+    {
+      x |>
+        datediffDays(start = "start_date", end = "end_date", name = "duration") |>
+        dplyr::select("duration", dplyr::any_of(.env$str)) |>
+        PatientProfiles::summariseResult(
+          group = list(),
+          includeOverallGroup = FALSE,
+          strata = strata,
+          includeOverallStrata = FALSE,
+          counts = FALSE,
+          variables = "duration",
+          estimates = estimates
+        ) |>
+        dplyr::mutate(variable_name = "Duration of records")
+    },
+    error = function(e) {
+      cli::cli_warn("It was not possible to compute duration analysis: {e$message}")
+      tibble::tibble()
+    }
+  )
 }
 
 

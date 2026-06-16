@@ -80,6 +80,7 @@ summariseTrend <- function(cdm,
   result <- list()
   set <- list()
   result_id <- 1L
+
   if (!is.null(event)) {
     result$event <- summariseEventTrend(cdm = cdm, omopTableName = event, output = output, sex = sex, ageGroup = ageGroup, interval = interval, dateRange = dateRange, inObservation = inObservation) |>
       dplyr::mutate(result_id = .env$result_id)
@@ -125,6 +126,11 @@ summariseTrend <- function(cdm,
 
 summariseEventTrend <- function(cdm, omopTableName, output, interval, sex, ageGroup, dateRange, inObservation) {
   prefix <- omopgenerics::tmpPrefix()
+  on.exit(
+    omopgenerics::dropSourceTable(
+      cdm = cdm, name = dplyr::starts_with(prefix)
+    )
+  )
   if ("person-days" %in% output) {
 
     cli::cli_alert("The number of person-days is not computed for event tables")
@@ -193,7 +199,11 @@ summariseEpisodeTrend <- function(cdm, omopTableName, output, interval, sex, age
 
   result <- purrr::map(omopTableName, \(table) {
     prefix <- omopgenerics::tmpPrefix()
-
+    on.exit(
+      omopgenerics::dropSourceTable(
+        cdm = cdm, name = dplyr::starts_with(prefix)
+      )
+    )
     start_date_name <- omopgenerics::omopColumns(table = table, field = "start_date")
     end_date_name <- omopgenerics::omopColumns(table = table, field = "end_date")
 
@@ -222,7 +232,7 @@ summariseEpisodeTrend <- function(cdm, omopTableName, output, interval, sex, age
           TRUE ~ purrr::map(.data$variable_name, ~ .x)
         )
       ) |>
-      tidyr::unnest(.data$variable_name)
+      tidyr::unnest("variable_name")
 
 
     res <- list()
@@ -245,7 +255,6 @@ summariseEpisodeTrend <- function(cdm, omopTableName, output, interval, sex, age
       interval = "overall",
       inObservation = if (table == "observation_period") FALSE else inObservation
     )))
-
     res$timeOverall <- summariseTrendInternal(x = x, output = output, strata = strata)
 
     if (interval != "overall") {

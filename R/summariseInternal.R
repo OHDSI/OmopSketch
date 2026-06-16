@@ -280,20 +280,32 @@ summariseSumInternal <- function(x, strata, variable) {
 summariseMedianAge <- function(x, index_date, strata) {
   x <- x |>
     PatientProfiles::addAgeQuery(indexDate = index_date)
-
-  purrr::map(strata, \(stratak) {
-    x |>
-      dplyr::select("age", dplyr::all_of(stratak)) |>
-      dplyr::collect() |>
-      dplyr::group_by(dplyr::across(dplyr::all_of(stratak))) |>
-      dplyr::summarise("estimate_value" = stats::median(.data$age))
-  }) |>
-    dplyr::bind_rows() |>
-    dplyr::mutate(
-      estimate_name = "median",
-      estimate_type = "numeric",
-      estimate_value = sprintf("%i", as.integer(.data$estimate_value))
-    )
+  stratax <- lapply(strata, \(x) x[x != "time_interval"])
+  str <- strata |>
+    unlist() |>
+    unique()
+  tryCatch(
+    {
+      x |>
+        dplyr::select("age", dplyr::all_of(str)) |>
+        PatientProfiles::summariseResult(
+          group = str[str=="time_interval"],
+          includeOverallGroup = FALSE,
+          strata = stratax,
+          includeOverallStrata = TRUE,
+          counts = FALSE,
+          variables = "age",
+          estimates = "median"
+        ) |>
+        omopgenerics::splitStrata(fill = NA_character_) |>
+        omopgenerics::splitGroup(fill = NA_character_) |>
+        dplyr::select("estimate_name", "estimate_type", "estimate_value", dplyr::all_of(str))
+    },
+    error = function(e) {
+      cli::cli_warn("It was not possible to compute the analysis for `age` output: {e$message}")
+      tibble::tibble()
+    }
+  )
 }
 
 addInObservation <- function(x, inObservation, cdm, episode, name) {
@@ -311,7 +323,7 @@ addInObservation <- function(x, inObservation, cdm, episode, name) {
           (
             is.na(.data$end_date) |
               (.data$end_date >= .data$observation_period_start_date &
-                 .data$end_date <= .data$observation_period_end_date)
+                .data$end_date <= .data$observation_period_end_date)
           ),
         "TRUE",
         "FALSE"
@@ -329,8 +341,8 @@ addInObservation <- function(x, inObservation, cdm, episode, name) {
 }
 
 
-printInteger <- function(x){
-  if(inherits(x, "integer64")){
+printInteger <- function(x) {
+  if (inherits(x, "integer64")) {
     as.character(round(x, digits = 0))
   } else {
     sprintf("%.0f", x)

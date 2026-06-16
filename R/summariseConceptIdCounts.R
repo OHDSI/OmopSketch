@@ -95,6 +95,11 @@ summariseConceptIdCounts <- function(cdm,
     }
 
     prefix <- omopgenerics::tmpPrefix()
+    on.exit(
+      omopgenerics::dropSourceTable(
+        cdm = cdm, name = dplyr::starts_with(prefix)
+      )
+    )
 
     # restrict study period
     omopTable <- omopTable |>

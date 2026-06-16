@@ -78,6 +78,7 @@ Imports:
     purrr,
     rlang,
     stringr,
+    tibble,
     tidyr
 Depends: 
     R (>= 4.1)

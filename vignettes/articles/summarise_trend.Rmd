@@ -22,12 +22,11 @@ knitr::opts_chunk$set(
 )
 ```
 
-In this vignette, we will explore the *OmopSketch* function `summariseTrend()`, which summarises temporal trends from OMOP CDM tables.
-This function allows you to visualise how key measures (such as number of records, number of persons, person-days, age, or sex distribution) change over time.
+In this vignette, we will explore the *OmopSketch* function `summariseTrend()`, which summarises temporal trends from OMOP CDM tables. This function allows you to visualise how key measures (such as number of records, number of persons, person-days, age, or sex distribution) change over time.
 
 ## Create a mock cdm
 
-Let's start by loading essential packages and creating a mock CDM using the R package [omock](https://ohdsi.github.io/omock/)
+Let's start by loading essential packages and creating a mock CDM using the R package [omock](https://ohdsi.github.io/omock/).
 
 ```{r, warning=FALSE}
 library(omock)
@@ -42,14 +41,14 @@ cdm
 
 # Summarise temporal trends
 
-Let’s use `summariseTrend()` to get an overview of the content of the table over time.
-In this example, we’ll summarise yearly trends for *condition_occurrence* and *drug_exposure* tables, and also include *observation_period* as an episode table.
+Let's use `summariseTrend()` to get an overview of table content over time. In this example, we summarise yearly trends for the event tables `condition_occurrence` and `drug_exposure`, and include `observation_period` as an episode table.
+
 ```{r}
 summarisedResult <- summariseTrend(
   cdm = cdm,
   event = c("condition_occurrence", "drug_exposure"),
   episode = "observation_period",
-  interval = "years",
+  interval = "years"
 )
 
 summarisedResult |>
@@ -58,13 +57,11 @@ summarisedResult |>
 
 Notice that the output is in the [summarised result](https://darwin-eu.github.io/omopgenerics/articles/summarised_result.html) format.
 
-## What are Event and Episode tables?
+## What are event and episode tables?
 
-- **Event** tables capture occurrences that happen at a single point in time (for example, a diagnosis, a prescription, or a measurement).
-For these tables, each record is linked to a time interval based only on its **start date**.
+- **Event** tables capture records that are assigned to a single point in time for trend summaries (for example, a diagnosis, drug exposure start, or measurement). Event records are included when their start date falls within the study period, and each record contributes to the interval containing its start date.
 
-- **Episode** describe periods that span over time (for example, observation periods or treatment eras).
-Each record contributes to every time interval between its start and end dates, reflecting its entire duration within the study period.
+- **Episode** tables describe periods that span time (for example, observation periods or eras). Episode records are included when their start or end date overlaps the study period. They are trimmed to the study period and can contribute to every interval they overlap.
 
 You can check whether a table was treated as an event or an episode table in the settings of the summarised result:
 
@@ -79,26 +76,57 @@ summarisedResult |>
 You can choose what to summarise using the `output` argument.
 Options include:
 
-- "record": Number of records (default value)
+- `"record"`: number of records (default value).
 
-- "person": Number of distinct persons
+- `"person"`: number of distinct subjects.
 
-- "person-days": Number of person-days (episode tables only)
+- `"person-days"`: number of person-days (episode tables only).
 
-- "age": Median age at start date of each interval
+- `"age"`: median age.
 
-- "sex": Number of females
+- `"sex"`: number of females.
 
-### Records and subjects per year
+### Records 
 
-For each time interval the results will include the number of records and number of individuals observed during that period.
-In addition to absolute counts, the function also reports the percentage of records and individuals within each interval relative to the total counts in the entire table.
+For each time interval, the results include the number of records during that period. In addition to absolute counts, the function reports the percentage of records in each interval relative to the total number of records in the table after any date restriction.
 
 ```{r}
 summarisedResult <- summariseTrend(
   cdm = cdm,
   event = "condition_occurrence",
-  output = c("record", "person"),
+  output = "record",
+  interval = "years"
+)
+
+summarisedResult |>
+  select(group_level, variable_name, additional_level, estimate_name, estimate_value)
+```
+For episode tables with `output = "record"` and a time interval such as `"years"`, record counts are split into two measures: `Number of records: start_date` counts episodes that start in each interval, and `Number of records: end_date` counts episodes that end in each interval. The overall result still uses `Number of records` for the total number of episode records.
+
+For example, using `observation_period` as an episode table:
+
+```{r}
+summarisedResult <- summariseTrend(
+  cdm = cdm,
+  episode = "observation_period",
+  output = "record",
+  interval = "years"
+)
+
+summarisedResult |>
+  filter(grepl("Number of records", variable_name)) |>
+  select(variable_name, additional_level, estimate_name, estimate_value)
+```
+
+### Subjects
+
+For each time interval, `output = "person"` returns the number of distinct subjects with records during that period. The percentage estimate uses the number of subjects in the `person` table as the denominator.
+
+```{r}
+summarisedResult <- summariseTrend(
+  cdm = cdm,
+  event = "condition_occurrence",
+  output = "person",
   interval = "years"
 )
 
@@ -108,7 +136,7 @@ summarisedResult |>
 
 ### Person-days
 
-When an episode table is specified, you can include "person-days" in the output to summarise total follow-up time across intervals. The results will show both the number of person-days in each interval and the percentage of person-days relative to the total accumulated across the entire table.
+When an episode table is specified, you can include `"person-days"` in the output to summarise total follow-up time across intervals. The results include both the number of person-days in each interval and the percentage relative to the total person-days in the episode table after any date restriction.
 
 ```{r}
 summarisedResult <- summariseTrend(
@@ -122,7 +150,7 @@ summarisedResult |>
   select(group_level, variable_name, additional_level, estimate_name, estimate_value)
 ```
 
-Note: The function will automatically skip "person-days" for event tables. 
+The function automatically skips `"person-days"` for event tables.
 
 ```{r}
 summarisedResult <- summariseTrend(
@@ -136,8 +164,7 @@ summarisedResult
 
 ### Age
 
-When "age" is included in the output argument, the function reports the median age of individuals for each time interval.
-For every record, age is calculated either at the start of the time interval or at the record’s start date, whichever comes first. This allows you to examine how the age distribution of individuals evolves over time for a given event or episode table.
+When `"age"` is included in the `output` argument, the function reports the median age of subjects. For event tables, age is calculated at the record start date. For episode tables summarised by interval, age is calculated at the later of the episode start date and the interval start date.
 
 ```{r}
 summarisedResult <- summariseTrend(
@@ -151,10 +178,9 @@ summarisedResult |>
   select(variable_name, additional_level, estimate_name, estimate_value)
 ```
 
-### Sex output
+### Sex
 
-When "sex" is included in the output argument, the function counts the number of females in each time interval.
-It also provides the percentage of females relative to the total number of individuals in the entire table. This output is particularly useful for exploring changes in the sex distribution of records over time.
+When `"sex"` is included in the `output` argument, the function counts the number of female subjects in each time interval. It also provides the percentage of females relative to subjects with a recorded male or female sex in the table after any date restriction.
 
 
 ```{r}
@@ -170,10 +196,10 @@ summarisedResult |>
 
 ## Intervals
 
-The argument `interval`` controls the temporal granularity of the results.
-Possible values are "overall" (default, no stratification by time), "years", "quarters", and "months".
+The `interval` argument controls the temporal granularity of the results. Possible values are `"overall"` (default, no stratification by time), `"years"`, `"quarters"`, and `"months"`.
 
 For example, to see quarterly trends:
+
 ```{r}
 summarisedResult <- summariseTrend(
   cdm = cdm,
@@ -188,7 +214,7 @@ summarisedResult |>
 
 ## Stratify by age and sex
 
-You can use the arguments `ageGroup` and `sex` to stratify the results.
+You can use the `ageGroup` and `sex` arguments to stratify the results. Age groups are assigned using the record start date for event tables and the relevant episode start date or interval start date for episode tables.
 
 ```{r}
 summarisedResult <- summariseTrend(
@@ -204,13 +230,11 @@ summarisedResult |>
   select(variable_name, strata_level, estimate_name, estimate_value)
 ```
 
-By default, the output includes the "overall" group as well as combined strata (e.g., Female and >=35).
-Note that for `output = "sex"`, sex stratification is not applied because a single estimate summarising the female population is returned.
+By default, the output includes the "overall" group as well as combined strata (for example, `Female` and `>=35`). For `output = "sex"`, sex stratification is not applied because a single estimate summarising the female population is returned.
 
 ## In-observation stratification
 
-When `inObservation = TRUE`, the results will indicate whether each record occurred within the subject’s observation period.
-This can be useful for identifying data quality issues or assessing completeness.
+When `inObservation = TRUE`, the results are stratified by whether each record occurred within the subject's observation period. For episode records, both the start and end date must fall within an observation period to be labelled as in observation. This can be useful for identifying data quality issues or assessing completeness.
 
 ```{r}
 summarisedResult <- summariseTrend(
@@ -227,7 +251,7 @@ summarisedResult |>
 
 ## Date Range
 
-You can restrict the study period using the `dateRange` argument.
+You can restrict the study period using the `dateRange` argument. Event records are kept when their start date is within the date range. Episode records are kept when they overlap the date range and are trimmed to the requested period.
 
 ```{r}
 summarisedResult <- summariseTrend(
@@ -243,13 +267,13 @@ summarisedResult |>
 
 # Tidy the summarised object with tableTrend
 
-`tableTrend()` helps you convert a summarised result into a nicely formatted table for reporting or inspection (for example [gt](https://gt.rstudio.com/) (default), [flextable](https://www.rdocumentation.org/packages/flextable), [reactable](https://glin.github.io/reactable/), or [DT::datatable](https://rstudio.github.io/DT/)). It formats time intervals, strata and estimate columns so the results are easy to read and export.
+`tableTrend()` helps you convert a summarised result into a formatted table for reporting or inspection. The table type can be set with the `type` argument; supported formats are provided by `visOmopResults::tableType()`. If `type = NULL`, global table options are used when available; otherwise, a [gt](https://gt.rstudio.com/) table is created by default.
 
 ```{r}
 result <- summariseTrend(
   cdm = cdm,
   event = "condition_occurrence",
-  episode = "drug_exposure",
+  episode = "observation_period",
   output = "age",
   interval = "years"
 )
@@ -258,7 +282,7 @@ tableTrend(result = result)
 
 # Visualise trends with plotTrend
 
-`plotTrend()` builds a ggplot2 visualisation from a summarised result. 
+`plotTrend()` builds a ggplot2 visualisation from a `summariseTrend()` result.
 ```{r}
 result <- summariseTrend(
   cdm = cdm,
@@ -276,8 +300,7 @@ plotTrend(
 )
 ```
 
-When the result includes several outputs (for example, records, persons, or person-days), the function defaults to plotting the number of records.
-You can override this by setting the output argument to the measure you want to visualise.
+When the result includes several outputs (for example, records, subjects, or person-days), select the measure to visualise with the `output` argument.
 
 ```{r}
 result <- summariseTrend(cdm,
@@ -292,7 +315,7 @@ plotTrend(
 )
 ```
 
-You can also specify facet (formula or column) and colour. Valid column names are the tidied result columns (see visOmopResults::tidyColumns())
+You can also specify faceting with a formula or column name, and colour using one of the tidied result columns.
 
 ```{r}
 result <- summariseTrend(cdm,
