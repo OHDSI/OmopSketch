@@ -513,9 +513,9 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
             obs_end = "observation_period_end_date"
           ),
         by = dplyr::join_by(
-          person_id,
-          start_date >= obs_start,
-          end_date <= obs_end
+          "person_id",
+          "start_date" >= "obs_start",
+          "end_date" <= "obs_end"
         )
       )
 

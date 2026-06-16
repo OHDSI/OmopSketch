@@ -1,4 +1,4 @@
-# OmopSketch 1.2.0
+# OmopSketch 1.1.0
 - speed up summariseClinicalRecords by @edward-burn in #562
 - include delphi by @catalamarti in #574
 - add badges in readme by @catalamarti in #575
@@ -15,6 +15,7 @@
 - include type concept id in summariseClinicalRecords by @cecicampanile in #590
 - Add 'end date' trends in summariseTrend by @cecicampanile in #598
 - update documentation by @cecicampanile in #599
+- drop temp tables if error occurs by @cecicampanile in #601
 
 # OmopSketch 1.0.1
 
