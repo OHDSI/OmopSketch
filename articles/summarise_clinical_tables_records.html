@@ -74,7 +74,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Summarise clinical records</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/OHDSI/OmopSketch/blob/main/vignettes/articles/summarise_clinical_tables_records.Rmd" class="external-link"><code>vignettes/articles/summarise_clinical_tables_records.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/OHDSI/OmopSketch/blob/v1.1.0/vignettes/articles/summarise_clinical_tables_records.Rmd" class="external-link"><code>vignettes/articles/summarise_clinical_tables_records.Rmd</code></a></small>
       <div class="d-none name"><code>summarise_clinical_tables_records.Rmd</code></div>
     </div>
 
@@ -156,9 +156,9 @@ clinical table in the CDM, <code>condition_occurrence</code>.</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> duration: mean, sd, median, q25, q75, min, max</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Table is collected to memory as not all requested estimates are supported on</span></span>
 <span><span class="co">#&gt;   the database side</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2026-06-17 09:49:13.625907</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2026-06-17 10:02:19.662668</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2026-06-17 09:49:13.704347</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2026-06-17 10:02:19.736468</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising subjects not in person table in <span style="color: #0000BB;">condition_occurrence</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records in observation in <span style="color: #0000BB;">condition_occurrence</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records with start before birth date in <span style="color: #0000BB;">condition_occurrence</span>.</span></span>
@@ -208,9 +208,9 @@ person.</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> duration: mean, sd, q05, q95</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Table is collected to memory as not all requested estimates are supported on</span></span>
 <span><span class="co">#&gt;   the database side</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2026-06-17 09:49:18.215189</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2026-06-17 10:02:23.892337</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2026-06-17 09:49:18.286541</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2026-06-17 10:02:23.958979</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising subjects not in person table in <span style="color: #0000BB;">condition_occurrence</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records in observation in <span style="color: #0000BB;">condition_occurrence</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records with start before birth date in <span style="color: #0000BB;">condition_occurrence</span>.</span></span>
@@ -319,18 +319,18 @@ vocabulary associated with the records.</li>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">variable_name</span>, <span class="va">variable_level</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span><span class="op">)</span> </span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 41 × 4</span></span></span>
-<span><span class="co">#&gt;    variable_name       variable_level estimate_name estimate_value</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Number subjects     <span style="color: #BB0000;">NA</span>             count         2694          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Number records      <span style="color: #BB0000;">NA</span>             count         67707         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Number subjects     <span style="color: #BB0000;">NA</span>             percentage    100           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Domain              Drug           count         67707         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Standard concept    Standard       count         67707         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Standard vocabulary CVX            count         25710         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Standard vocabulary RxNorm         count         41997         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Source vocabulary   CVX            count         25710         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Source vocabulary   NDC            count         2694          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Source vocabulary   RxNorm         count         39268         </span></span>
+<span><span class="co">#&gt;    variable_name       variable_level      estimate_name estimate_value</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Number subjects     <span style="color: #BB0000;">NA</span>                  count         2694          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Number records      <span style="color: #BB0000;">NA</span>                  count         67707         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Number subjects     <span style="color: #BB0000;">NA</span>                  percentage    100           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Domain              Drug                count         67707         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Standard concept    Standard            count         67707         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Standard vocabulary CVX                 count         25710         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Standard vocabulary RxNorm              count         41997         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Source vocabulary   No matching concept count         35            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Source vocabulary   CVX                 count         25710         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Source vocabulary   NDC                 count         2694          </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 31 more rows</span></span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -394,9 +394,9 @@ age groups using the clinical record start date.</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> duration: mean, sd, q05, q95</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Table is collected to memory as not all requested estimates are supported on</span></span>
 <span><span class="co">#&gt;   the database side</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2026-06-17 09:49:33.544217</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2026-06-17 10:02:38.357908</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2026-06-17 09:49:33.85754</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2026-06-17 10:02:38.668715</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising subjects not in person table in <span style="color: #0000BB;">condition_occurrence</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records in observation in <span style="color: #0000BB;">condition_occurrence</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records with start before birth date in <span style="color: #0000BB;">condition_occurrence</span>.</span></span>
@@ -441,16 +441,16 @@ same time:</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person in <span style="color: #0000BB;">visit_occurrence</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be calculated:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> duration: mean, sd</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2026-06-17 09:49:42.159547</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2026-06-17 10:02:46.554472</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2026-06-17 09:49:42.333388</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2026-06-17 10:02:46.71803</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Adding variables of interest to <span style="color: #0000BB;">drug_exposure</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records per person in <span style="color: #0000BB;">drug_exposure</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be calculated:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> duration: mean, sd</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2026-06-17 09:49:44.130675</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2026-06-17 10:02:48.383765</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2026-06-17 09:49:44.302677</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2026-06-17 10:02:48.541129</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span><span class="op">)</span></span>
@@ -490,9 +490,9 @@ setting the <code>dateRange</code> argument.</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> duration: mean, sd, median, q25, q75, min, max</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Table is collected to memory as not all requested estimates are supported on</span></span>
 <span><span class="co">#&gt;   the database side</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2026-06-17 09:49:47.191567</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2026-06-17 10:02:51.224114</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2026-06-17 09:49:47.259353</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2026-06-17 10:02:51.28771</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising subjects not in person table in <span style="color: #0000BB;">drug_exposure</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records in observation in <span style="color: #0000BB;">drug_exposure</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records with start before birth date in <span style="color: #0000BB;">drug_exposure</span>.</span></span>
@@ -543,9 +543,9 @@ global table options are used when available; otherwise, a <a href="https://gt.r
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> duration: mean, sd, q05, q95</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Table is collected to memory as not all requested estimates are supported on</span></span>
 <span><span class="co">#&gt;   the database side</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2026-06-17 09:49:53.063549</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2026-06-17 10:02:56.733915</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2026-06-17 09:49:53.213332</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2026-06-17 10:02:56.873296</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising subjects not in person table in <span style="color: #0000BB;">condition_occurrence</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records in observation in <span style="color: #0000BB;">condition_occurrence</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Summarising records with start before birth date in <span style="color: #0000BB;">condition_occurrence</span>.</span></span>
