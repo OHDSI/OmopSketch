@@ -112,9 +112,10 @@ summariseConceptSetCounts <- function(cdm,
       source_concept_id = omopgenerics::omopColumns(table = table, field = "source_concept")
     )
     omopTable <- dplyr::ungroup(cdm[[table]])
-
     # restrict study period
-    omopTable <- restrictStudyPeriod(omopTable, dateRange)
+    omopTable <- restrictStudyPeriod(omopTable, dateRange) |>
+      dplyr::select(!!columns)
+
     if (is.null(omopTable)) {
       return(NULL)
     }
@@ -133,7 +134,6 @@ summariseConceptSetCounts <- function(cdm,
       dplyr::filter(
         .data$index_date >= .data$obs_start & .data$index_date <= .data$obs_end
       ) |>
-      dplyr::select(!!columns) |>
       dplyr::inner_join(
         cdm[[nm]] |>
           dplyr::filter(.data$domain_id == .env$x) |>
