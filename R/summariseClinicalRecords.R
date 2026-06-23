@@ -157,7 +157,6 @@ summariseClinicalRecords <- function(cdm,
     }
 
     n_person <- cdm$person |> omopgenerics::numberSubjects()
-
     x <- omopTable |>
       addVariables(
         tableName = table,
@@ -314,17 +313,10 @@ summariseClinicalRecords <- function(cdm,
             dplyr::mutate(
               estimate_name = "count",
               variable_name = "Type concept",
-              type_concept_id = as.integer(.data$type_concept)
-            ) |>
-            dplyr::left_join(conceptTypes, by = "type_concept") |>
-            dplyr::mutate(type_name = dplyr::coalesce(
-              .data$type_name, paste0("Unknown type concept: ", .data$type_concept)
-            ),
-            type_concept_id = dplyr::coalesce(
-              .data$type_concept_id, 0L
-              )
-            ) |>
-            dplyr::rename(variable_level = "type_name")
+              variable_level = stringr::str_trim(stringr::str_extract(.data$type_concept, "^[^&]+")),
+              type_concept_id = stringr::str_trim(stringr::str_extract(.data$type_concept, "(?<=&).+"))
+            )
+
         }
         if ("concept_class_id" %in% colnames(x)) {
           cli::cli_inform(c("i" = "Summarising concept class in {.pkg {table}}."))
@@ -485,7 +477,7 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
     end_date = omopgenerics::omopColumns(table = tableName, field = "end_date"),
     standard = omopgenerics::omopColumns(table = tableName, field = "standard_concept"),
     source = omopgenerics::omopColumns(table = tableName, field = "source_concept"),
-    type_concept = omopgenerics::omopColumns(table = tableName, field = "type_concept")
+    type_concept_id = omopgenerics::omopColumns(table = tableName, field = "type_concept")
   )
 
   if(newNames[["person_id"]] == newNames[["id"]]){
@@ -581,6 +573,7 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
           .data$standard_vocabulary, "No matching concept"
         ))
     }
+
     if ("source" %in% colnames(x)) {
       x <- x |>
         dplyr::left_join(
@@ -594,6 +587,26 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
         dplyr::mutate(source_vocabulary = dplyr::coalesce(
           .data$source_vocabulary, "No matching concept"
         ))
+    }
+      if ("type_concept_id" %in% colnames(x)) {
+        x <- x |>
+          dplyr::left_join(
+            cdm$concept |>
+              dplyr::select(
+                type_concept_id = "concept_id",
+                type_name = "concept_name"
+              ),
+            by = "type_concept_id"
+          ) |>
+          dplyr::mutate(type_name = dplyr::coalesce(
+            .data$type_name, "Unknown type concept"),
+          type_concept_id = dplyr::coalesce(
+            .data$type_concept_id, 0L
+          ),
+          type_concept = paste0(.data$type_name, "&", .data$type_concept_id)
+
+          )
+
     }
   }
   variables <- c(newNames |> names(), "sex", "age_group", variablesToSummarise(quality = quality, conceptSummary = conceptSummary))
