@@ -590,6 +590,10 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
     }
       if ("type_concept_id" %in% colnames(x)) {
         x <- x |>
+          dplyr::mutate(
+            type_concept_id = dplyr::coalesce(
+              .data$type_concept_id, 0L
+            )) |>
           dplyr::left_join(
             cdm$concept |>
               dplyr::select(
@@ -600,9 +604,6 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
           ) |>
           dplyr::mutate(type_name = dplyr::coalesce(
             .data$type_name, "Unknown type concept"),
-          type_concept_id = dplyr::coalesce(
-            .data$type_concept_id, 0L
-          ),
           type_concept = paste0(.data$type_name, "&", .data$type_concept_id)
 
           )
