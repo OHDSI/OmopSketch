@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">OmopSketch</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.900</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -213,9 +213,9 @@ intervals are assigned using the clinical record start date.</p>
 <span><span class="co">#&gt; Columns: 5</span></span>
 <span><span class="co">#&gt; $ group_level      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "condition_occurrence"<span style="color: #949494;">, </span>"condition_occurrence"<span style="color: #949494;">, </span>"cond…</span></span>
 <span><span class="co">#&gt; $ strata_level     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"…</span></span>
-<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Facial laceration"<span style="color: #949494;">, </span>"Acute viral pharyngitis"<span style="color: #949494;">, </span>"Otit…</span></span>
+<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Otitis media"<span style="color: #949494;">, </span>"Acute viral pharyngitis"<span style="color: #949494;">, </span>"Acute bac…</span></span>
 <span><span class="co">#&gt; $ estimate_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_subjects"<span style="color: #949494;">, </span>"count_subjects"<span style="color: #949494;">, </span>"count_subjects"<span style="color: #949494;">,</span>…</span></span>
-<span><span class="co">#&gt; $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "4156265 &amp;&amp;&amp; Facial laceration &amp;&amp;&amp; SNOMED &amp;&amp;&amp; SNOMED"…</span></span></code></pre></div>
+<span><span class="co">#&gt; $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "372328 &amp;&amp;&amp; Otitis media &amp;&amp;&amp; SNOMED &amp;&amp;&amp; SNOMED"<span style="color: #949494;">, </span>"411…</span></span></code></pre></div>
 <p>When <code>inObservation = TRUE</code>, results are stratified by
 whether each record occurred within the subject’s observation
 period.</p>
@@ -230,11 +230,11 @@ period.</p>
 <span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 167</span></span>
 <span><span class="co">#&gt; Columns: 5</span></span>
-<span><span class="co">#&gt; $ variable_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Fracture subluxation of wrist"<span style="color: #949494;">, </span>"Viral sinusitis"<span style="color: #949494;">, </span>"Ac…</span></span>
+<span><span class="co">#&gt; $ variable_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Streptococcal sore throat"<span style="color: #949494;">, </span>"Chronic sinusitis"<span style="color: #949494;">, </span>"Lace…</span></span>
 <span><span class="co">#&gt; $ strata_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>…</span></span>
 <span><span class="co">#&gt; $ strata_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>…</span></span>
 <span><span class="co">#&gt; $ estimate_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"cou…</span></span>
-<span><span class="co">#&gt; $ estimate_value <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "493"<span style="color: #949494;">, </span>"17268"<span style="color: #949494;">, </span>"8184"<span style="color: #949494;">, </span>"79"<span style="color: #949494;">, </span>"138"<span style="color: #949494;">, </span>"802"<span style="color: #949494;">, </span>"253"<span style="color: #949494;">, </span>"191…</span></span></code></pre></div>
+<span><span class="co">#&gt; $ estimate_value <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "2656"<span style="color: #949494;">, </span>"825"<span style="color: #949494;">, </span>"500"<span style="color: #949494;">, </span>"80"<span style="color: #949494;">, </span>"229"<span style="color: #949494;">, </span>"492"<span style="color: #949494;">, </span>"31"<span style="color: #949494;">, </span>"1001"<span style="color: #949494;">,</span>…</span></span></code></pre></div>
 <p>We can also filter the clinical table to a specific time window by
 setting the <code>dateRange</code> argument. Only records with a start
 date inside the date range are included.</p>
@@ -252,7 +252,7 @@ date inside the date range are included.</p>
 <span><span class="co">#&gt; $ result_id          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1</span></span>
 <span><span class="co">#&gt; $ result_type        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "summarise_concept_id_counts"</span></span>
 <span><span class="co">#&gt; $ package_name       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "OmopSketch"</span></span>
-<span><span class="co">#&gt; $ package_version    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "1.1.0"</span></span>
+<span><span class="co">#&gt; $ package_version    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "1.1.0.900"</span></span>
 <span><span class="co">#&gt; $ group              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "omop_table"</span></span>
 <span><span class="co">#&gt; $ strata             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> ""</span></span>
 <span><span class="co">#&gt; $ additional         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "source_concept_id &amp;&amp;&amp; source_concept_name &amp;&amp;&amp; stan…</span></span>
@@ -272,10 +272,10 @@ provide the name of a cohort table in the CDM to restrict counts to its
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span>, <span class="va">estimate_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rows: 63</span></span>
+<span><span class="co">#&gt; Rows: 60</span></span>
 <span><span class="co">#&gt; Columns: 3</span></span>
 <span><span class="co">#&gt; $ group_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "condition_occurrence"<span style="color: #949494;">, </span>"condition_occurrence"<span style="color: #949494;">, </span>"conditi…</span></span>
-<span><span class="co">#&gt; $ variable_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Child attention deficit disorder"<span style="color: #949494;">, </span>"Whiplash injury to …</span></span>
+<span><span class="co">#&gt; $ variable_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Viral sinusitis"<span style="color: #949494;">, </span>"Osteoarthritis"<span style="color: #949494;">, </span>"Polyp of colon"<span style="color: #949494;">, </span>"…</span></span>
 <span><span class="co">#&gt; $ estimate_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"coun…</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="display-the-results">Display the results<a class="anchor" aria-label="anchor" href="#display-the-results"></a>
