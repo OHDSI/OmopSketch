@@ -10,11 +10,4 @@ domainsTibble <- dplyr::tribble(
   "observation", "observation"
 )
 
-conceptTypes <- read.csv(here::here("data-raw", "conceptTypes.csv")) |>
-  dplyr::as_tibble() |>
-  dplyr::mutate(
-    type_concept = as.integer(.data$type_concept),
-    type_name = as.character(.data$type_name)
-  )
-
-usethis::use_data(domainsTibble, conceptTypes, overwrite = TRUE, internal = TRUE)
+usethis::use_data(domainsTibble, overwrite = TRUE, internal = TRUE)
