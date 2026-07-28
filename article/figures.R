@@ -20,10 +20,7 @@ p2 <- plotPerson(result = results, variableName = "Year of birth") +
 p3 <- plotPerson(result = results, variableName = "Race") +
   labs(x = "", fill = "Ethnicity", colour = "Ethnicity")
 # TODO
-p4 <- results |>
-  filterSettings(result_type == "summarise_person") |>
-  filter(variable_name == "Location" & !is.na(variable_level)) |>
-  barPlot(x = "cdm_name", y = "percentage", colour = "variable_level", position = "stack") +
+p4 <- plotPerson(result = results, variableName = "Location") +
   labs(x = "", fill = "Region", colour = "Region")
 
 f1 <- p1 + p2 + p3 + p4 +
@@ -42,35 +39,23 @@ ggsave(here("article", "results", "figure1.png"), f1, width = 15, height = 4)
 
 ## Figure 2 ----
 
-resultDuration <- results |>
-  filterSettings(result_type == "summarise_observation_period") |>
-  filter(variable_name == "Duration in days") |>
-  filter(estimate_name %in% c("density_x", "density_y")) |>
-  tidy() |>
-  select("age_group", "sex", "variable_level", "density_x", "density_y")
-gaps <- resultDuration |>
-  group_by(age_group, sex) |>
-  summarise(gap = nth(density_x, 2) - first(density_x ), .groups = "drop")
-resultDuration <- resultDuration |>
-  left_join(gaps, by = c("age_group", "sex")) |>
-  group_by(age_group, sex) |>
-  arrange(density_x) |>
-  mutate(
-    sex = factor(sex, levels = c("overall", "Female", "Male")),
-    density_y = 100 * (1 - cumsum(density_y * gap)),
-    density_x = density_x / 365.25
-  )
+p <- plotObservationPeriod(results, variableName = "Duration in days", facet = "sex", colour = "age_group", plotType = "cumulativeplot")
+p$data$density_x <- p$data$density_x / 365.25
 
-f2 <- ggplot(data = resultDuration, mapping = aes(x = density_x, y = density_y, colour = age_group)) +
-  geom_line() +
-  facet_wrap(. ~ sex) +
-  labs(y = "Percenatge", x = "Observation period duration in years", colour = "Age group")
+p <- p +
+  ggplot2::xlab("Duration in years") +
+  ggplot2::labs(title = "Duration in years (Cumulativeplot)\nin observation_period by Age group and Sex")
 
+p
 ggsave(here("article", "results", "figure2.png"), f2, width = 6, height = 4.5, dpi = 600)
 
 ## Figure 3 ----
 f3 <- plotTrend(results, colour = "omop_table", facet = NULL)
-
+f3 <- f3 +
+  ggplot2::scale_x_discrete(labels = function(x) substr(x, 1, 4)) +
+  ggplot2::xlab("Year") +
+  ggplot2::labs(title = "Yearly trend of median age")+
+  ggplot2::guides(colour = ggplot2::guide_legend(nrow = 2))
 ggsave(here("article", "results", "figure3.png"), f3, width = 6, height = 4.5, dpi = 600)
 
 ## Table 2 ----
@@ -108,7 +93,7 @@ t2 <- res |>
   visOmopTable(
     header = "cdm_name",
     groupColumn = "variable_name",
-    hide = c("omop_table"),
+    hide = c("omop_table", "is_required", "type_concept_id"),
     estimateName = c(
       `N (%)` = "<count> (<percentage>%)",
       N = "<count>", `Mean (SD)` = "<mean> (<sd>)", `Median [Q25 - Q75]` = "<median> [<q25> - <q75>]",
