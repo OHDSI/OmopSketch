@@ -39,14 +39,14 @@ ggsave(here("article", "results", "figure1.png"), f1, width = 15, height = 4)
 
 ## Figure 2 ----
 
-p <- plotObservationPeriod(results, variableName = "Duration in days", facet = "sex", colour = "age_group", plotType = "cumulativeplot")
-p$data$density_x <- p$data$density_x / 365.25
+f2 <- plotObservationPeriod(results, variableName = "Duration in days", facet = "sex", colour = "age_group", plotType = "cumulativeplot")
+f2$data$density_x <- f2$data$density_x / 365.25
 
-p <- p +
+f2 <- f2 +
   ggplot2::xlab("Duration in years") +
   ggplot2::labs(title = "Duration in years (Cumulativeplot)\nin observation_period by Age group and Sex")
 
-p
+
 ggsave(here("article", "results", "figure2.png"), f2, width = 6, height = 4.5, dpi = 600)
 
 ## Figure 3 ----
