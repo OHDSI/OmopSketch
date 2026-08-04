@@ -840,3 +840,22 @@ test_that("argument inObservation works", {
 
   dropCreatedTables(cdm = cdm)
 })
+
+test_that("check years below 1000 works", {
+  skip_on_cran()
+  # Load mock database ----
+  cdm <- cdmEunomia()
+  cdm$condition_occurrence <- cdm$condition_occurrence |>
+    dplyr::mutate(
+      condition_start_date = dplyr::case_when(
+        dplyr::row_number() %% 3 == 0 ~ as.Date("999-03-15"),
+        dplyr::row_number() %% 3 == 1 ~ as.Date("950-07-01"),
+        .default = condition_start_date
+      )
+    )
+  expect_no_error(x <- summariseTrend(cdm, event = "condition_occurrence", interval = "years"))
+  ti <- x |> omopgenerics::splitAll() |> dplyr::distinct(.data$time_interval) |> dplyr::pull()
+  expect_true("950-01-01 to 950-12-31" %in% ti)
+  dropCreatedTables(cdm = cdm)
+})
+
