@@ -129,6 +129,14 @@ essential packages and create a mock CDM using the R package <a href="https://oh
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Adding <span style="color: #0000BB;">drug_strength</span> table.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Creating local <span style="color: #0000BB;">&lt;cdm_reference&gt;</span> object.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Inserting <span style="color: #0000BB;">&lt;cdm_reference&gt;</span> into <span style="color: #0000BB;">duckdb</span>.</span></span>
+<span><span class="co">#&gt; duckdb keeps downloaded extensions and secrets in a temporary directory:</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> /tmp/RtmpdADtMP/duckdb</span></span>
+<span><span class="co">#&gt; This is removed when the R session ends.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> Extensions are re-downloaded each session.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> Secrets are lost.</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Run duckdb(shared_home = TRUE) (or create ~/.duckdb) to keep them (suitable for most users).</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Run duckdb(shared_home = FALSE) to accept the temporary directory (and silence this message).</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> See ?duckdb_storage for details and alternatives.</span></span>
 <span></span>
 <span><span class="va">cdm</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -160,12 +168,12 @@ vocabulary.</p>
 <span><span class="co">#&gt; Rows: 113</span></span>
 <span><span class="co">#&gt; Columns: 7</span></span>
 <span><span class="co">#&gt; $ group_level      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "drug_exposure"<span style="color: #949494;">, </span>"drug_exposure"<span style="color: #949494;">, </span>"drug_exposure"<span style="color: #949494;">, </span>"d…</span></span>
-<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Aspirin 81 MG Oral Tablet"<span style="color: #949494;">, </span>"hepatitis A vaccine, ad…</span></span>
-<span><span class="co">#&gt; $ variable_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "19059056"<span style="color: #949494;">, </span>"40213296"<span style="color: #949494;">, </span>"40213227"<span style="color: #949494;">, </span>"40173590"<span style="color: #949494;">, </span>"1912…</span></span>
+<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "pneumococcal conjugate vaccine, 13 valent"<span style="color: #949494;">, </span>"zoster …</span></span>
+<span><span class="co">#&gt; $ variable_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "40213198"<span style="color: #949494;">, </span>"40213260"<span style="color: #949494;">, </span>"40162522"<span style="color: #949494;">, </span>"1127078"<span style="color: #949494;">, </span>"11274…</span></span>
 <span><span class="co">#&gt; $ estimate_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"c…</span></span>
-<span><span class="co">#&gt; $ estimate_value   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "4380"<span style="color: #949494;">, </span>"3211"<span style="color: #949494;">, </span>"7430"<span style="color: #949494;">, </span>"129"<span style="color: #949494;">, </span>"1056"<span style="color: #949494;">, </span>"1719"<span style="color: #949494;">, </span>"306"<span style="color: #949494;">,</span>…</span></span>
+<span><span class="co">#&gt; $ estimate_value   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "453"<span style="color: #949494;">, </span>"2125"<span style="color: #949494;">, </span>"312"<span style="color: #949494;">, </span>"2158"<span style="color: #949494;">, </span>"9365"<span style="color: #949494;">, </span>"1993"<span style="color: #949494;">, </span>"1087"<span style="color: #949494;">,</span>…</span></span>
 <span><span class="co">#&gt; $ additional_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "source_concept_id &amp;&amp;&amp; source_concept_name &amp;&amp;&amp; standa…</span></span>
-<span><span class="co">#&gt; $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "19059056 &amp;&amp;&amp; Aspirin 81 MG Oral Tablet &amp;&amp;&amp; RxNorm &amp;&amp;…</span></span></code></pre></div>
+<span><span class="co">#&gt; $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "40213198 &amp;&amp;&amp; pneumococcal conjugate vaccine, 13 vale…</span></span></code></pre></div>
 <p>By default, the function returns the number of records
 (<code>estimate_name == "count_records"</code>) for each standard
 concept ID. To count distinct subjects instead, set
@@ -230,11 +238,11 @@ period.</p>
 <span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 167</span></span>
 <span><span class="co">#&gt; Columns: 5</span></span>
-<span><span class="co">#&gt; $ variable_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Streptococcal sore throat"<span style="color: #949494;">, </span>"Chronic sinusitis"<span style="color: #949494;">, </span>"Lace…</span></span>
+<span><span class="co">#&gt; $ variable_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Acute viral pharyngitis"<span style="color: #949494;">, </span>"Gastrointestinal hemorrhage…</span></span>
 <span><span class="co">#&gt; $ strata_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>…</span></span>
 <span><span class="co">#&gt; $ strata_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>…</span></span>
 <span><span class="co">#&gt; $ estimate_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"cou…</span></span>
-<span><span class="co">#&gt; $ estimate_value <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "2656"<span style="color: #949494;">, </span>"825"<span style="color: #949494;">, </span>"500"<span style="color: #949494;">, </span>"80"<span style="color: #949494;">, </span>"229"<span style="color: #949494;">, </span>"492"<span style="color: #949494;">, </span>"31"<span style="color: #949494;">, </span>"1001"<span style="color: #949494;">,</span>…</span></span></code></pre></div>
+<span><span class="co">#&gt; $ estimate_value <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "10217"<span style="color: #949494;">, </span>"479"<span style="color: #949494;">, </span>"1013"<span style="color: #949494;">, </span>"3605"<span style="color: #949494;">, </span>"939"<span style="color: #949494;">, </span>"497"<span style="color: #949494;">, </span>"413"<span style="color: #949494;">, </span>"1…</span></span></code></pre></div>
 <p>We can also filter the clinical table to a specific time window by
 setting the <code>dateRange</code> argument. Only records with a start
 date inside the date range are included.</p>
@@ -272,10 +280,10 @@ provide the name of a cohort table in the CDM to restrict counts to its
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span>, <span class="va">estimate_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rows: 60</span></span>
+<span><span class="co">#&gt; Rows: 57</span></span>
 <span><span class="co">#&gt; Columns: 3</span></span>
 <span><span class="co">#&gt; $ group_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "condition_occurrence"<span style="color: #949494;">, </span>"condition_occurrence"<span style="color: #949494;">, </span>"conditi…</span></span>
-<span><span class="co">#&gt; $ variable_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Viral sinusitis"<span style="color: #949494;">, </span>"Osteoarthritis"<span style="color: #949494;">, </span>"Polyp of colon"<span style="color: #949494;">, </span>"…</span></span>
+<span><span class="co">#&gt; $ variable_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Acute bronchitis"<span style="color: #949494;">, </span>"Acute viral pharyngitis"<span style="color: #949494;">, </span>"Injury o…</span></span>
 <span><span class="co">#&gt; $ estimate_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"coun…</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="display-the-results">Display the results<a class="anchor" aria-label="anchor" href="#display-the-results"></a>
@@ -1925,7 +1933,7 @@ argument:</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>
