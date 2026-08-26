@@ -240,8 +240,8 @@ trimStudyPeriod <- function(omopTable, dateRange) {
 
     omopTable <- omopTable |>
       dplyr::mutate(
-        !!start_date_col := dplyr::if_else(.data[[start_date_col]] < .env$start_date, .env$start_date, .data[[start_date_col]]),
-        !!end_date_col := dplyr::if_else(.data[[end_date_col]] > .env$end_date, .env$end_date, .data[[end_date_col]])
+        !!start_date_col := as.Date(dplyr::if_else(.data[[start_date_col]] < .env$start_date, .env$start_date, .data[[start_date_col]])),
+        !!end_date_col := as.Date(dplyr::if_else(.data[[end_date_col]] > .env$end_date, .env$end_date, .data[[end_date_col]]))
       ) |>
       dplyr::filter(.data[[start_date_col]] <= .data[[end_date_col]])
   }
