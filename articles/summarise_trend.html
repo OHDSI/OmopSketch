@@ -74,7 +74,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Summarise temporal trends in OMOP tables</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/OHDSI/OmopSketch/blob/main/vignettes/articles/summarise_trend.Rmd" class="external-link"><code>vignettes/articles/summarise_trend.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/OHDSI/OmopSketch/blob/1.1.1/vignettes/articles/summarise_trend.Rmd" class="external-link"><code>vignettes/articles/summarise_trend.Rmd</code></a></small>
       <div class="d-none name"><code>summarise_trend.Rmd</code></div>
     </div>
 
@@ -113,7 +113,7 @@ using the R package <a href="https://ohdsi.github.io/omock/" class="external-lin
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Creating local <span style="color: #0000BB;">&lt;cdm_reference&gt;</span> object.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Inserting <span style="color: #0000BB;">&lt;cdm_reference&gt;</span> into <span style="color: #0000BB;">duckdb</span>.</span></span>
 <span><span class="co">#&gt; duckdb keeps downloaded extensions and secrets in a temporary directory:</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> /tmp/RtmpSClTsS/duckdb</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> /tmp/RtmpsmqAPo/duckdb</span></span>
 <span><span class="co">#&gt; This is removed when the R session ends.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> Extensions are re-downloaded each session.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> Secrets are lost.</span></span>
@@ -389,9 +389,9 @@ start date and the interval start date.</p>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be calculated:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> age: median</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2026-08-27 15:27:45.67201</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2026-08-27 15:42:45.422476</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2026-08-27 15:27:46.445756</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2026-08-27 15:42:46.354099</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">variable_name</span>, <span class="va">additional_level</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span><span class="op">)</span></span>
@@ -494,13 +494,15 @@ start date for episode tables.</p>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be calculated:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> age: median</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2026-08-27 15:27:49.915826</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2026-08-27 15:42:50.498433</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">■■■■■■■■■■■■                    </span>3/8 group-strata combinations @ 2026-08-27 15:2…</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">■■■■■■■■■■■■                    </span>3/8 group-strata combinations @ 2026-08-27 15:4…</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ </span>8/8 group-strata combinations @ 2026-08-27 15:2…</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■     </span>7/8 group-strata combinations @ 2026-08-27 15:4…</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2026-08-27 15:27:53.743739</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ </span>8/8 group-strata combinations @ 2026-08-27 15:4…</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2026-08-27 15:42:55.096721</span></span>
 <span></span>
 <span><span class="va">summarisedResult</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">variable_name</span>, <span class="va">strata_level</span>, <span class="va">estimate_name</span>, <span class="va">estimate_value</span><span class="op">)</span></span>
@@ -604,19 +606,19 @@ global table options are used when available; otherwise, a <a href="https://gt.r
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be calculated:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> age: median</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2026-08-27 15:27:56.052435</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2026-08-27 15:42:57.616321</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2026-08-27 15:27:56.789041</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2026-08-27 15:42:58.471282</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be calculated:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> age: median</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2026-08-27 15:27:57.51077</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2026-08-27 15:42:59.328245</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2026-08-27 15:27:57.703652</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2026-08-27 15:42:59.555779</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The following estimates will be calculated:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> age: median</span></span>
-<span><span class="co">#&gt; → Start summary of data, at 2026-08-27 15:28:03.517875</span></span>
+<span><span class="co">#&gt; → Start summary of data, at 2026-08-27 15:43:05.161483</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2026-08-27 15:28:04.066655</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Summary finished, at 2026-08-27 15:43:05.882655</span></span>
 <span><span class="fu"><a href="../reference/tableTrend.html">tableTrend</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">result</span><span class="op">)</span></span></code></pre></div>
 <div id="xolsgghllh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#xolsgghllh table {
