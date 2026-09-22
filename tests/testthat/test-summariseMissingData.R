@@ -60,7 +60,7 @@ test_that("summariseMissingData() works", {
 
 test_that("dateRange argument works", {
   skip_on_cran()
-  skip_if(simpleTest, "GitHub simplified tests")
+  skipIfSimplifiedRun()
 
   # Load mock database ----
   cdm <- cdmEunomia()
@@ -87,7 +87,7 @@ test_that("dateRange argument works", {
 
 test_that("tableMissingData() works", {
   skip_on_cran()
-  skip_if(simpleTest, "GitHub simplified tests")
+  skipIfSimplifiedRun()
 
   # Load mock database ----
   cdm <- cdmEunomia()
@@ -108,7 +108,7 @@ test_that("tableMissingData() works", {
 
 test_that("col not present in table", {
   skip_on_cran()
-  skip_if(simpleTest, "GitHub simplified tests")
+  skipIfSimplifiedRun()
 
   # Load mock database
   cdm <- omopgenerics::cdmFromTables(
@@ -147,7 +147,7 @@ test_that("col not present in table", {
 
 test_that("no tables created", {
   skip_on_cran()
-  skip_if(simpleTest, "GitHub simplified tests")
+  skipIfSimplifiedRun()
 
   # Load mock database ----
   cdm <- cdmEunomia()
@@ -177,7 +177,7 @@ test_that("no tables created", {
 
 test_that("interval argument works", {
   skip_on_cran()
-  skip_if(simpleTest, "GitHub simplified tests")
+  skipIfSimplifiedRun()
 
   # Load mock database
   cdm <- cdmEunomia()
@@ -294,7 +294,7 @@ test_that("interval argument works", {
 
 test_that("zero count argument works", {
   skip_on_cran()
-  skip_if(simpleTest, "GitHub simplified tests")
+  skipIfSimplifiedRun()
 
   # Load mock database
   cdm <- cdmEunomia()
@@ -316,7 +316,7 @@ test_that("zero count argument works", {
 
 test_that("sample argument works", {
   skip_on_cran()
-  skip_if(simpleTest, "GitHub simplified tests")
+  skipIfSimplifiedRun()
 
   # Load mock database
   cdm <- cdmEunomia()

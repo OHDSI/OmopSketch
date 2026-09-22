@@ -109,7 +109,7 @@ test_that("summariseClinicalRecords() works", {
 
 test_that("summariseClinicalRecords() sex and ageGroup argument work", {
   skip_on_cran()
-  skip_if(simpleTest, "GitHub simplified tests")
+  skipIfSimplifiedRun()
   # Load mock database ----
   cdm <- cdmEunomia()
 
@@ -221,7 +221,7 @@ test_that("summariseClinicalRecords() sex and ageGroup argument work", {
 
 test_that("dateRange argument works", {
   skip_on_cran()
-  skip_if(simpleTest, "GitHub simplified tests")
+  skipIfSimplifiedRun()
 
   # Load mock database ----
   cdm <- cdmEunomia()
@@ -248,7 +248,7 @@ test_that("dateRange argument works", {
 
 test_that("tableClinicalRecords() works", {
   skip_on_cran()
-  skip_if(simpleTest, "GitHub simplified tests")
+  skipIfSimplifiedRun()
   # Load mock database ----
   cdm <- cdmEunomia()
 
@@ -269,7 +269,7 @@ test_that("tableClinicalRecords() works", {
 
 test_that("no tables created", {
   skip_on_cran()
-  skip_if(simpleTest, "GitHub simplified tests")
+  skipIfSimplifiedRun()
   # Load mock database ----
   cdm <- cdmEunomia()
 
@@ -296,7 +296,7 @@ test_that("no tables created", {
 
 test_that("record outside observaton period", {
   skip_on_cran()
-  skip_if(simpleTest, "GitHub simplified tests")
+  skipIfSimplifiedRun()
 
   drug_exposure <- dplyr::tibble(
     drug_exposure_id = c(1, 2, 3),
@@ -355,7 +355,7 @@ test_that("record outside observaton period", {
 
 test_that("argument quality works", {
   skip_on_cran()
-  skip_if(simpleTest, "GitHub simplified tests")
+  skipIfSimplifiedRun()
 
   cdm <- cdmEunomia()
   ids <- cdm$drug_exposure |>
@@ -473,7 +473,7 @@ test_that("argument quality works", {
 
 test_that("argument missingData works", {
   skip_on_cran()
-  skip_if(simpleTest, "GitHub simplified tests")
+  skipIfSimplifiedRun()
 
   cdm <- cdmEunomia()
 
@@ -513,7 +513,7 @@ test_that("argument missingData works", {
 
 test_that("works with all clinical tables", {
   skip_on_cran()
-  skip_if(simpleTest, "GitHub simplified tests")
+  skipIfSimplifiedRun()
 
   options(timeout = 1200)
   cdm <- omock::mockCdmFromDataset(datasetName = "synpuf-1k_5.3") |>
@@ -528,7 +528,7 @@ test_that("works with all clinical tables", {
 
 test_that("individuals not in person", {
   skip_on_cran()
-  skip_if(simpleTest, "GitHub simplified tests")
+  skipIfSimplifiedRun()
 
   cdm <- omopgenerics::cdmFromTables(
     tables = list(

@@ -211,7 +211,7 @@ test_that("summariseTrend - event works", {
 
 test_that("check sex argument works", {
   skip_on_cran()
-  skip_if(simpleTest, "GitHub simplified tests")
+  skipIfSimplifiedRun()
 
   # Load mock database ----
   cdm <- cdmEunomia()
@@ -294,7 +294,7 @@ test_that("check sex argument works", {
 
 test_that("check ageGroup argument works", {
   skip_on_cran()
-  skip_if(simpleTest, "GitHub simplified tests")
+  skipIfSimplifiedRun()
 
   # Load mock database ----
   cdm <- cdmEunomia()
@@ -380,7 +380,7 @@ test_that("check ageGroup argument works", {
 
 test_that("check person-days output works", {
   skip_on_cran()
-  skip_if(simpleTest, "GitHub simplified tests")
+  skipIfSimplifiedRun()
 
   # Load mock database ----
   cdm <- cdmEunomia()
@@ -466,7 +466,7 @@ test_that("check person-days output works", {
 
 test_that("dateRange argument works", {
   skip_on_cran()
-  skip_if(simpleTest, "GitHub simplified tests")
+  skipIfSimplifiedRun()
 
   # Load mock database ----
   cdm <- cdmEunomia()
@@ -541,7 +541,7 @@ test_that("dateRange argument works", {
 
 test_that("age and sex output work", {
   skip_on_cran()
-  skip_if(simpleTest, "GitHub simplified tests")
+  skipIfSimplifiedRun()
 
   # Load mock database ----
   cdm <- cdmEunomia()
@@ -707,7 +707,7 @@ test_that("age and sex output work", {
 
 test_that("overall time interval work", {
   skip_on_cran()
-  skip_if(simpleTest, "GitHub simplified tests")
+  skipIfSimplifiedRun()
 
   # Load mock database ----
   cdm <- cdmEunomia()
@@ -757,7 +757,7 @@ test_that("overall time interval work", {
 
 test_that("tableTrend() works", {
   skip_on_cran()
-  skip_if(simpleTest, "GitHub simplified tests")
+  skipIfSimplifiedRun()
 
   # Load mock database ----
   cdm <- cdmEunomia()
@@ -788,7 +788,7 @@ test_that("tableTrend() works", {
 
 test_that("plotTrend() works", {
   skip_on_cran()
-  skip_if(simpleTest, "GitHub simplified tests")
+  skipIfSimplifiedRun()
 
   # Load mock database ----
   cdm <- cdmEunomia()
@@ -811,7 +811,7 @@ test_that("plotTrend() works", {
 
 test_that("argument inObservation works", {
   skip_on_cran()
-  skip_if(simpleTest, "GitHub simplified tests")
+  skipIfSimplifiedRun()
 
   # Load mock database ----
   cdm <- cdmEunomia()
@@ -861,7 +861,7 @@ test_that("argument inObservation works", {
 
 test_that("check years below 1000 works", {
   skip_on_cran()
-  skip_if(simpleTest, "GitHub simplified tests")
+  skipIfSimplifiedRun()
 
   # Load mock database ----
   cdm <- cdmEunomia()

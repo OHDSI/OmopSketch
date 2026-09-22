@@ -1,6 +1,6 @@
 test_that("databaseCharacteristics works", {
   skip_on_cran()
-  skip_if(simpleTest, "GitHub simplified tests")
+  skipIfSimplifiedRun()
   cdm <- cdmEunomia()
 
   expect_no_error(databaseCharacteristics(cdm) |> suppressWarnings())
@@ -52,7 +52,7 @@ test_that("shinyCharacteristics works", {
 })
 
 test_that("sample works", {
-  skip_if(simpleTest, "GitHub simplified tests")
+  skipIfSimplifiedRun()
 
   cdm <- cdmEunomia()
   expect_no_error(x <- databaseCharacteristics(cdm = cdm, sample = 20L, conceptIdCounts = TRUE))

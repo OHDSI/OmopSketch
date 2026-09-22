@@ -1,7 +1,11 @@
 
 dbToTest <- Sys.getenv("DB_TO_TEST", "duckdb-CDMConnector")
-simpleTest <- Sys.getenv("SIMPLIFIED_TEST", "FALSE") |>
-  as.logical()
+
+skipIfSimplifiedRun <- function() {
+  simpleTest <- Sys.getenv("SIMPLIFIED_TEST", "FALSE") |>
+    as.logical()
+  skip_if(simpleTest, "GitHub simplified tests")
+}
 
 # prepare eunomia and save it in temp directory
 cdmLocal <- omock::mockCdmFromDataset(datasetName = "GiBleed", source = "local")
