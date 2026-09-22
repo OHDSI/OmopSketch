@@ -1,5 +1,6 @@
 test_that("summariseTrend - episode works", {
   skip_on_cran()
+  skip_if(dbToTest == "redshift-CDMConnector")
   # Load mock database ----
   cdm <- cdmEunomia()
 
@@ -117,6 +118,7 @@ test_that("summariseTrend - episode works", {
 
 test_that("summariseTrend - event works", {
   skip_on_cran()
+  skip_if(dbToTest == "redshift-CDMConnector")
   # Load mock database ----
   cdm <- cdmEunomia()
 
