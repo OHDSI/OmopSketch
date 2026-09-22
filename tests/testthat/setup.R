@@ -1,16 +1,61 @@
 
 dbToTest <- Sys.getenv("DB_TO_TEST", "duckdb-CDMConnector")
+simpleTest <- tolower(Sys.getenv("SIMPLIFIED_TEST", "FALSE")) %in% c("true", "t", "1")
+simplifiedTestMessage <- "GitHub simplified tests"
+
+skipIfSimplifiedRun <- function() {
+  skip_if(simpleTest, simplifiedTestMessage)
+}
 
 # prepare eunomia and save it in temp directory
-cdmLocal <- omock::mockCdmFromDataset(datasetName = "GiBleed")
+cdmLocal <- omock::mockCdmFromDataset(datasetName = "GiBleed", source = "local")
 tabs <- c(
   "observation_period", "visit_occurrence", "visit_detail", "specimen",
   "note", "condition_occurrence", "drug_exposure", "procedure_occurrence",
   "device_exposure", "measurement", "observation", "death"
 )
-personIds <- cdmLocal$person |>
+allPersonIds <- cdmLocal$person |>
   dplyr::distinct(.data$person_id) |>
   dplyr::pull()
+personIds <- if (simpleTest) {
+  # Keep the remote simplified runs small while retaining representative years
+  # used by the trend tests and the ID used by the clinical-record tests.
+  selectIds <- function(tab, years, n = 20L) {
+    start <- omopgenerics::omopColumns(table = tab, field = "start_date")
+    end <- omopgenerics::omopColumns(table = tab, field = "end_date")
+    dplyr::bind_rows(lapply(years, function(year) {
+      cdmLocal[[tab]] |>
+        dplyr::filter(
+          .data[[start]] <= as.Date(paste0(year, "-12-31")),
+          is.na(.data[[end]]) | .data[[end]] >= as.Date(paste0(year, "-01-01"))
+        ) |>
+        dplyr::distinct(.data$person_id) |>
+        dplyr::slice_head(n = n)
+    })) |>
+      dplyr::pull(.data$person_id) |>
+      unique()
+  }
+  representativeIds <- c(
+    selectIds("observation_period", c(1909, 1915, 1918, 1928, 1940, 1942,
+                                       1950, 1963, 1964, 1970, 1996, 2012,
+                                       2018, 2019)),
+    selectIds("visit_occurrence", 1923),
+    selectIds("drug_exposure", c(1936, 1981:1988, 2012)),
+    selectIds("condition_occurrence", c(1961, 1998, 2012))
+  )
+  unique(c(utils::head(allPersonIds, 100), representativeIds, 263L)) |>
+    intersect(allPersonIds)
+} else {
+  allPersonIds
+}
+cdmLocal$person <- cdmLocal$person |>
+  dplyr::filter(.data$person_id %in% .env$personIds)
+for (tab in names(cdmLocal)) {
+  if ("person_id" %in% colnames(cdmLocal[[tab]])) {
+    cdmLocal[[tab]] <- cdmLocal[[tab]] |>
+      dplyr::filter(.data$person_id %in% .env$personIds)
+  }
+}
 for (tab in tabs) {
   start <- omopgenerics::omopColumns(table = tab, field = "start_date")
   id <- omopgenerics::omopColumns(table = tab, field = "unique_id")
@@ -86,19 +131,31 @@ connection <- function() {
       password = Sys.getenv("CDM5_POSTGRESQL_PASSWORD")
     )
   } else if (dbToTest == "snowflake-CDMConnector") {
+    connectionString <- Sys.getenv("CDM_SNOWFLAKE_CONNECTION_STRING")
+    getParameter <- function(parameter) {
+      value <- stringr::str_match(
+        connectionString,
+        paste0("(?i)(?:\\?|&)", parameter, "=([^&#]+)")
+      )[, 2]
+      ifelse(is.na(value), "", value)
+    }
+    server <- stringr::str_match(connectionString, "(?i)://([^/?]+)")[, 2]
+    database <- getParameter("db")
+    warehouse <- getParameter("warehouse")
     con <- odbc::dbConnect(
       odbc::odbc(),
-      SERVER = stringr::str_extract(Sys.getenv("CDM_SNOWFLAKE_CONNECTION_STRING"), "(?<=//)[^?]+(?=\\?)"),
+      SERVER = server,
       UID = Sys.getenv("CDM_SNOWFLAKE_USER"),
       PWD = Sys.getenv("CDM_SNOWFLAKE_PASSWORD"),
-      DATABASE = "ATLAS",
-      WAREHOUSE = stringr::str_extract(Sys.getenv("CDM_SNOWFLAKE_CONNECTION_STRING"), "(?i)(?<=\\bwarehouse=)[^&?#]+"),
+      DATABASE = database,
+      WAREHOUSE = warehouse,
       Driver = "SnowflakeDSIIDriver"
     )
   }
   con
 }
 schema <- function(pref = NULL) {
+  requestedPrefix <- pref
   if (is.null(pref)) {
     pref <- paste0("os_", paste0(sample(letters, 3), collapse = ""), "_")
   }

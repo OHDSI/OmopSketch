@@ -10,6 +10,7 @@ jobs:
     uses: ./.github/workflows/test-template.yaml
     with:
       DB_TO_TEST: postgres-CDMConnector
+      SIMPLIFIED_TEST: TRUE
     secrets:
       CDM5_POSTGRESQL_PASSWORD: ${{ secrets.CDM5_POSTGRESQL_PASSWORD }}
       CDM5_POSTGRESQL_SERVER: ${{ secrets.CDM5_POSTGRESQL_SERVER }}
