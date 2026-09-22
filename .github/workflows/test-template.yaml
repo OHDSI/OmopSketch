@@ -72,28 +72,25 @@ jobs:
         run: |
           set -euo pipefail
           sudo apt-get update
-          sudo apt-get install -y unixodbc unixodbc-dev ca-certificates curl
+          sudo apt-get install -y ca-certificates curl unixodbc unixodbc-dev odbcinst
 
-          # Pin a specific driver version to avoid "latest" 404s
+          # Pin a specific driver version so the CI environment is reproducible.
           VER=3.11.0
-          curl -fSLo snowflake-odbc.deb \
-            "https://sfc-repo.snowflakecomputing.com/odbc/linux/${VER}/snowflake-odbc-${VER}.x86_64.deb" \
-          && sudo dpkg -i snowflake-odbc.deb || sudo apt-get -f install -y
-
-          # If the .deb path ever breaks, fall back to TGZ + setup script
-          if ! odbcinst -q -d | grep -qi 'Snowflake'; then
-            curl -fSLo snowflake-odbc.tgz \
-              "https://sfc-repo.snowflakecomputing.com/odbc/linux/latest/snowflake_linux_x8664_odbc-${VER}.tgz"
-            tar xzf snowflake-odbc.tgz
-            sudo ./snowflake_odbc/unixodbc_setup.sh   # registers driver with unixODBC
+          curl --fail --silent --show-error --location \
+            --output snowflake-odbc.deb \
+            "https://sfc-repo.snowflakecomputing.com/odbc/linux/${VER}/snowflake-odbc-${VER}.x86_64.deb"
+          if ! sudo dpkg --install snowflake-odbc.deb; then
+            sudo apt-get install --fix-broken --yes
           fi
 
-          echo "::group::Drivers"
-          odbcinst -q -d || true
-          echo "::endgroup::"
+          echo "Registered ODBC drivers:"
+          odbcinst -q -d
+          if ! odbcinst -q -d | grep -q 'SnowflakeDSIIDriver'; then
+            echo "SnowflakeDSIIDriver was not registered"
+            exit 1
+          fi
 
-          # Show where the library lives (usually this path after .deb install)
-          find /usr/lib -name 'libSnowflake.so' -print || true
+          find /usr/lib /usr/lib64 -name 'libSnowflake.so' -print 2>/dev/null || true
 
       - uses: r-lib/actions/setup-pandoc@v2
 
