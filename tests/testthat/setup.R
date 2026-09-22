@@ -1,8 +1,10 @@
 
 dbToTest <- Sys.getenv("DB_TO_TEST", "duckdb-CDMConnector")
+simpleTest <- Sys.getenv("SIMPLIFIED_TEST", "FALSE") |>
+  as.logical()
 
 # prepare eunomia and save it in temp directory
-cdmLocal <- omock::mockCdmFromDataset(datasetName = "GiBleed")
+cdmLocal <- omock::mockCdmFromDataset(datasetName = "GiBleed", source = "local")
 tabs <- c(
   "observation_period", "visit_occurrence", "visit_detail", "specimen",
   "note", "condition_occurrence", "drug_exposure", "procedure_occurrence",

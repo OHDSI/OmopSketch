@@ -14,3 +14,4 @@ jobs:
     uses: ./.github/workflows/test-template.yaml
     with:
       DB_TO_TEST: local-omopgenerics
+      SIMPLIFIED_TEST: FALSE

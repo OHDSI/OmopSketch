@@ -1,5 +1,6 @@
 test_that("summariseMissingData() works", {
   skip_on_cran()
+
   # Load mock database ----
   cdm <- cdmEunomia()
 
@@ -59,6 +60,8 @@ test_that("summariseMissingData() works", {
 
 test_that("dateRange argument works", {
   skip_on_cran()
+  skip_if(simpleTest, "GitHub simplified tests")
+
   # Load mock database ----
   cdm <- cdmEunomia()
 
@@ -84,6 +87,8 @@ test_that("dateRange argument works", {
 
 test_that("tableMissingData() works", {
   skip_on_cran()
+  skip_if(simpleTest, "GitHub simplified tests")
+
   # Load mock database ----
   cdm <- cdmEunomia()
 
@@ -103,7 +108,8 @@ test_that("tableMissingData() works", {
 
 test_that("col not present in table", {
   skip_on_cran()
-  # Load mock database ----
+  skip_if(simpleTest, "GitHub simplified tests")
+
   # Load mock database
   cdm <- omopgenerics::cdmFromTables(
     tables = list(
@@ -141,6 +147,8 @@ test_that("col not present in table", {
 
 test_that("no tables created", {
   skip_on_cran()
+  skip_if(simpleTest, "GitHub simplified tests")
+
   # Load mock database ----
   cdm <- cdmEunomia()
 
@@ -169,7 +177,9 @@ test_that("no tables created", {
 
 test_that("interval argument works", {
   skip_on_cran()
-  # Load mock database ----
+  skip_if(simpleTest, "GitHub simplified tests")
+
+  # Load mock database
   cdm <- cdmEunomia()
   expect_no_error(y <- summariseMissingData(
     cdm = cdm,
@@ -284,7 +294,9 @@ test_that("interval argument works", {
 
 test_that("zero count argument works", {
   skip_on_cran()
-  # Load mock database ----
+  skip_if(simpleTest, "GitHub simplified tests")
+
+  # Load mock database
   cdm <- cdmEunomia()
   cdm$person <- cdm$person |>
     dplyr::mutate(person_id = dplyr::if_else(.data$person_id == 6, 0, .data$person_id))
@@ -304,7 +316,9 @@ test_that("zero count argument works", {
 
 test_that("sample argument works", {
   skip_on_cran()
-  # Load mock database ----
+  skip_if(simpleTest, "GitHub simplified tests")
+
+  # Load mock database
   cdm <- cdmEunomia()
 
   n_person <- cdm$person |> dplyr::tally() |> dplyr::pull("n") |> as.numeric()

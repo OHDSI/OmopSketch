@@ -6,6 +6,9 @@ on:
       DB_TO_TEST:
         required: true
         type: string
+      SIMPLIFIED_TEST:
+        required: true
+        type: string
     secrets:
       CDM5_SQL_SERVER_PASSWORD:
         required: false
@@ -38,6 +41,7 @@ jobs:
 
     env:
       DB_TO_TEST: ${{ inputs.DB_TO_TEST }}
+      SIMPLIFIED_TEST: ${{ inputs.SIMPLIFIED_TEST }}
       CDM_SNOWFLAKE_CONNECTION_STRING: ${{ secrets.CDM_SNOWFLAKE_CONNECTION_STRING }}
       CDM_SNOWFLAKE_PASSWORD: ${{ secrets.CDM_SNOWFLAKE_PASSWORD }}
       CDM_SNOWFLAKE_USER: ${{ secrets.CDM_SNOWFLAKE_USER }}
