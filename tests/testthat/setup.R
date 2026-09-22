@@ -43,7 +43,7 @@ personIds <- if (simpleTest) {
     selectIds("drug_exposure", c(1936, 1981:1988, 2012)),
     selectIds("condition_occurrence", c(1961, 1998, 2012))
   )
-  unique(c(head(allPersonIds, 100), representativeIds, 263L)) |>
+  unique(c(utils::head(allPersonIds, 100), representativeIds, 263L)) |>
     intersect(allPersonIds)
 } else {
   allPersonIds
