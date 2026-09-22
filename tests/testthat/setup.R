@@ -131,26 +131,31 @@ connection <- function() {
       password = Sys.getenv("CDM5_POSTGRESQL_PASSWORD")
     )
   } else if (dbToTest == "snowflake-CDMConnector") {
-    server <- Sys.getenv("CDM_SNOWFLAKE_SERVER")
-    if (!nzchar(server)) {
-      server <- stringr::str_extract(
-        Sys.getenv("CDM_SNOWFLAKE_CONNECTION_STRING"),
-        "(?<=//)[^/?]+"
-      )
+    connectionString <- Sys.getenv("CDM_SNOWFLAKE_CONNECTION_STRING")
+    getParameter <- function(parameter) {
+      value <- stringr::str_match(
+        connectionString,
+        paste0("(?i)(?:\\?|&)", parameter, "=([^&#]+)")
+      )[, 2]
+      ifelse(is.na(value), "", value)
     }
+    server <- stringr::str_match(connectionString, "(?i)://([^/?]+)")[, 2]
+    database <- getParameter("db")
+    warehouse <- getParameter("warehouse")
     con <- odbc::dbConnect(
       odbc::odbc(),
       SERVER = server,
       UID = Sys.getenv("CDM_SNOWFLAKE_USER"),
       PWD = Sys.getenv("CDM_SNOWFLAKE_PASSWORD"),
-      DATABASE = "ATLAS",
-      WAREHOUSE = stringr::str_extract(Sys.getenv("CDM_SNOWFLAKE_CONNECTION_STRING"), "(?i)(?<=\\bwarehouse=)[^&?#]+"),
+      DATABASE = database,
+      WAREHOUSE = warehouse,
       Driver = "SnowflakeDSIIDriver"
     )
   }
   con
 }
 schema <- function(pref = NULL) {
+  requestedPrefix <- pref
   if (is.null(pref)) {
     pref <- paste0("os_", paste0(sample(letters, 3), collapse = ""), "_")
   }
@@ -163,8 +168,7 @@ schema <- function(pref = NULL) {
   } else if (dbToTest == "postgres-CDMConnector") {
     sch <- c(schema = "public", prefix = pref)
   } else if (dbToTest == "snowflake-CDMConnector") {
-    snowflakeSchema <- Sys.getenv("CDM_SNOWFLAKE_OHDSI_SCHEMA")
-    sch <- c(catalog = "ATLAS", schema = snowflakeSchema, prefix = pref)
+    sch <- c(catalog = "ATLAS", schema = "RESULTS", prefix = pref)
   }
   sch
 }
