@@ -1,4 +1,3 @@
-
 library(omopgenerics)
 library(OmopSketch)
 library(visOmopResults)
@@ -7,25 +6,32 @@ library(ggplot2)
 library(patchwork)
 library(dplyr)
 library(gt)
+library(paletteer)
 
 results <- importSummarisedResult(path = here("article", "results"))
 
 ## Figure 1 ----
 
+
+pal <- paletteer_d("ggsci::springfield_simpsons")
+
 p1 <- plotPerson(result = results, variableName = "Sex") +
-  labs(x = "", fill = "Sex", colour = "Sex")
+  labs(x = "", fill = "Sex", colour = "Sex") +
+  scale_color_manual(values = pal) +
+  scale_fill_manual(values = pal)
 p2 <- plotPerson(result = results, variableName = "Year of birth") +
   labs(x = "", y = "Year of birth") +
-  theme(legend.position = "none")
+  theme(legend.position = "none") +
+  scale_color_manual(values = "#370335") +
+  scale_fill_manual(values = "#370335")
 p3 <- plotPerson(result = results, variableName = "Race") +
-  labs(x = "", fill = "Ethnicity", colour = "Ethnicity")
-# TODO
-p4 <- results |>
-  filterSettings(result_type == "summarise_person") |>
-  filter(variable_name == "Location" & !is.na(variable_level)) |>
-  barPlot(x = "cdm_name", y = "percentage", colour = "variable_level", position = "stack") +
-  labs(x = "", fill = "Region", colour = "Region")
-
+  labs(x = "", fill = "Ethnicity", colour = "Ethnicity") +
+  scale_color_manual(values = pal) +
+  scale_fill_manual(values = pal)
+p4 <- plotPerson(result = results, variableName = "Location") +
+  labs(x = "", fill = "Region", colour = "Region") +
+  scale_color_manual(values = pal) +
+  scale_fill_manual(values = pal)
 f1 <- p1 + p2 + p3 + p4 +
   plot_layout(ncol = 4) +
   plot_annotation(
@@ -41,36 +47,35 @@ f1 <- p1 + p2 + p3 + p4 +
 ggsave(here("article", "results", "figure1.png"), f1, width = 15, height = 4)
 
 ## Figure 2 ----
+pal <- paletteer_d("ggsci::default_nejm")
+f2 <- plotObservationPeriod(results |> filterStrata(sex == "overall"), variableName = "Duration in days", colour = "age_group", plotType = "cumulativeplot")
+f2$data$density_x <- f2$data$density_x / 365.25
 
-resultDuration <- results |>
-  filterSettings(result_type == "summarise_observation_period") |>
-  filter(variable_name == "Duration in days") |>
-  filter(estimate_name %in% c("density_x", "density_y")) |>
-  tidy() |>
-  select("age_group", "sex", "variable_level", "density_x", "density_y")
-gaps <- resultDuration |>
-  group_by(age_group, sex) |>
-  summarise(gap = nth(density_x, 2) - first(density_x ), .groups = "drop")
-resultDuration <- resultDuration |>
-  left_join(gaps, by = c("age_group", "sex")) |>
-  group_by(age_group, sex) |>
-  arrange(density_x) |>
-  mutate(
-    sex = factor(sex, levels = c("overall", "Female", "Male")),
-    density_y = 100 * (1 - cumsum(density_y * gap)),
-    density_x = density_x / 365.25
-  )
+f2 <- f2 +
+  scale_color_manual(values = pal) +
+  scale_fill_manual(values = pal) +
+  ggplot2::xlab("Duration in years") +
+  ggplot2::labs(title = "Duration in years (Cumulativeplot)\nin observation_period by Age group")
 
-f2 <- ggplot(data = resultDuration, mapping = aes(x = density_x, y = density_y, colour = age_group)) +
-  geom_line() +
-  facet_wrap(. ~ sex) +
-  labs(y = "Percenatge", x = "Observation period duration in years", colour = "Age group")
 
 ggsave(here("article", "results", "figure2.png"), f2, width = 6, height = 4.5, dpi = 600)
 
 ## Figure 3 ----
-f3 <- plotTrend(results, colour = "omop_table", facet = NULL)
+f3 <- plotTrend(results |> filterGroup(omop_table != "observation_period"), colour = "omop_table", facet = NULL)
+f3 <- f3 +
+  ggplot2::scale_x_discrete(labels = function(x) substr(x, 1, 4)) +
+  ggplot2::labs(
+    title = "Yearly trend of median age",
+    x = "Year",
+    colour = "OMOP CDM table",
+    fill = "OMOP CDM table"
+  ) +
 
+  ggplot2::guides(colour = ggplot2::guide_legend(nrow = 1)) +
+  ggplot2::coord_cartesian(ylim = c(50, 65)) +
+
+  scale_color_manual(values = pal) +
+  scale_fill_manual(values = pal)
 ggsave(here("article", "results", "figure3.png"), f3, width = 6, height = 4.5, dpi = 600)
 
 ## Table 2 ----
@@ -108,11 +113,11 @@ t2 <- res |>
   visOmopTable(
     header = "cdm_name",
     groupColumn = "variable_name",
-    hide = c("omop_table"),
+    hide = c("omop_table", "is_required", "type_concept_id"),
     estimateName = c(
       `N (%)` = "<count> (<percentage>%)",
       N = "<count>", `Mean (SD)` = "<mean> (<sd>)", `Median [Q25 - Q75]` = "<median> [<q25> - <q75>]",
-                     `Range [min to max]` = "[<min> to <max>]", `N missing data (%)` = "<na_count> (<na_percentage>%)"
+      `Range [min to max]` = "[<min> to <max>]", `N missing data (%)` = "<na_count> (<na_percentage>%)"
     ),
     style = OmopSketch:::validateStyle(style = NULL, obj = "table")
   )
