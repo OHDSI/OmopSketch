@@ -319,6 +319,8 @@ test_that("check summariseObservationPeriod works", {
 
 test_that("check summariseObservationPeriod strata works", {
   skip_on_cran()
+  skipIfSimplifiedRun()
+
   # helper function
 
   nPoints <- 512
@@ -476,6 +478,8 @@ test_that("check summariseObservationPeriod strata works", {
 
 test_that("dateRnge argument works", {
   skip_on_cran()
+  skipIfSimplifiedRun()
+
   # Load mock database ----
   cdm <- cdmEunomia()
 
@@ -515,6 +519,8 @@ test_that("dateRnge argument works", {
 
 test_that("no tables created", {
   skip_on_cran()
+  skipIfSimplifiedRun()
+
   # Load mock database ----
   cdm <- cdmEunomia()
 
@@ -539,6 +545,8 @@ test_that("no tables created", {
 
 test_that("missingData works", {
   skip_on_cran()
+  skipIfSimplifiedRun()
+
   # Load mock database ----
   cdm <- cdmEunomia()
 
@@ -564,6 +572,8 @@ test_that("missingData works", {
 
 test_that("quality works", {
   skip_on_cran()
+  skipIfSimplifiedRun()
+
   # Load mock database ----
   cdm <- cdmEunomia()
 

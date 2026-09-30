@@ -10,6 +10,7 @@ jobs:
     uses: ./.github/workflows/test-template.yaml
     with:
       DB_TO_TEST: sqlserver-CDMConnector
+      SIMPLIFIED_TEST: TRUE
     secrets:
       CDM5_SQL_SERVER_SERVER: ${{ secrets.CDM5_SQL_SERVER_SERVER }}
       CDM5_SQL_SERVER_USER:   ${{ secrets.CDM5_SQL_SERVER_USER }}

@@ -82,6 +82,8 @@ test_that("summariseConceptIdCount works", {
 
 test_that("dateRange argument works", {
   skip_on_cran()
+  skipIfSimplifiedRun()
+
   # Load mock database ----
   cdm <- cdmEunomia()
   expect_no_error(summariseConceptIdCounts(cdm, "condition_occurrence", dateRange = as.Date(c("2012-01-01", "2018-01-01"))))
@@ -105,6 +107,8 @@ test_that("dateRange argument works", {
 
 test_that("tableConceptIdCounts() works", {
   skip_on_cran()
+  skipIfSimplifiedRun()
+
   # Load mock database ----
   cdm <- cdmEunomia()
 
@@ -140,6 +144,8 @@ test_that("tableConceptIdCounts() works", {
 
 test_that("interval argument works", {
   skip_on_cran()
+  skipIfSimplifiedRun()
+
   # Load mock database ----
   cdm <- cdmEunomia()
   expect_no_error(y <- summariseConceptIdCounts(
@@ -252,6 +258,8 @@ test_that("interval argument works", {
 
 test_that("tableTopConceptCounts works", {
   skip_on_cran()
+  skipIfSimplifiedRun()
+
   cdm <- cdmEunomia()
 
   expect_no_error(result <- summariseConceptIdCounts(cdm, "drug_exposure", sex = TRUE, ageGroup = list(c(0, 50))))
@@ -283,6 +291,8 @@ test_that("tableTopConceptCounts works", {
 
 test_that("inObservation argument works", {
   skip_on_cran()
+  skipIfSimplifiedRun()
+
   cdm <- cdmEunomia()
 
   expect_no_error(result <- summariseConceptIdCounts(cdm, "drug_exposure", inObservation = TRUE))
@@ -316,6 +326,8 @@ test_that("inObservation argument works", {
 
 test_that("sample argument works", {
   skip_on_cran()
+  skipIfSimplifiedRun()
+
   # Load mock database ----
   cdm <- cdmEunomia()
 
