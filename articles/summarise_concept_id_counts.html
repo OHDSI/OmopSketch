@@ -87,7 +87,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Summarise concept id counts</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/OHDSI/OmopSketch/blob/1.1.1/vignettes/articles/summarise_concept_id_counts.Rmd" class="external-link"><code>vignettes/articles/summarise_concept_id_counts.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/OHDSI/OmopSketch/blob/main/vignettes/articles/summarise_concept_id_counts.Rmd" class="external-link"><code>vignettes/articles/summarise_concept_id_counts.Rmd</code></a></small>
       <div class="d-none name"><code>summarise_concept_id_counts.Rmd</code></div>
     </div>
 
@@ -130,7 +130,7 @@ essential packages and create a mock CDM using the R package <a href="https://oh
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Creating local <span style="color: #0000BB;">&lt;cdm_reference&gt;</span> object.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Inserting <span style="color: #0000BB;">&lt;cdm_reference&gt;</span> into <span style="color: #0000BB;">duckdb</span>.</span></span>
 <span><span class="co">#&gt; duckdb keeps downloaded extensions and secrets in a temporary directory:</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> /tmp/RtmpbSsmW7/duckdb</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> /tmp/RtmpZSgVRh/duckdb</span></span>
 <span><span class="co">#&gt; This is removed when the R session ends.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> Extensions are re-downloaded each session.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> Secrets are lost.</span></span>
@@ -189,16 +189,16 @@ counts, use <code>countBy = c("record", "person")</code>.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 226 × 3</span></span></span>
 <span><span class="co">#&gt;    variable_name                                    estimate_name estimate_value</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Aspirin 81 MG Oral Tablet                        count_records 4380          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Aspirin 81 MG Oral Tablet                        count_subjec… 1927          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> hepatitis A vaccine, adult dosage                count_records 3211          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> hepatitis A vaccine, adult dosage                count_subjec… 1737          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> tetanus and diphtheria toxoids, adsorbed, prese… count_records 7430          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> tetanus and diphtheria toxoids, adsorbed, prese… count_subjec… 2660          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Alendronic acid 10 MG Oral Tablet                count_records 129           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Alendronic acid 10 MG Oral Tablet                count_subjec… 129           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> {7 (Inert Ingredients 1 MG Oral Tablet) / 21 (M… count_records 1056          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> {7 (Inert Ingredients 1 MG Oral Tablet) / 21 (M… count_subjec… 605           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> hepatitis B vaccine, adult dosage                count_records 1916          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> hepatitis B vaccine, adult dosage                count_subjec… 1560          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Amoxicillin 250 MG / Clavulanate 125 MG Oral Ta… count_records 3851          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Amoxicillin 250 MG / Clavulanate 125 MG Oral Ta… count_subjec… 2021          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Phenazopyridine hydrochloride 100 MG Oral Tablet count_records 810           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Phenazopyridine hydrochloride 100 MG Oral Tablet count_subjec… 630           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Prednisone 5 MG Oral Tablet                      count_records 161           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Prednisone 5 MG Oral Tablet                      count_subjec… 116           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> {7 (Ethinyl Estradiol 0.035 MG / norgestimate 0… count_records 449           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> {7 (Ethinyl Estradiol 0.035 MG / norgestimate 0… count_subjec… 253           </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 216 more rows</span></span></span></code></pre></div>
 <p>Further stratification can be applied using the
 <code>interval</code>, <code>sex</code>, and <code>ageGroup</code>
@@ -221,9 +221,9 @@ intervals are assigned using the clinical record start date.</p>
 <span><span class="co">#&gt; Columns: 5</span></span>
 <span><span class="co">#&gt; $ group_level      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "condition_occurrence"<span style="color: #949494;">, </span>"condition_occurrence"<span style="color: #949494;">, </span>"cond…</span></span>
 <span><span class="co">#&gt; $ strata_level     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"<span style="color: #949494;">, </span>"overall"…</span></span>
-<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Acute bronchitis"<span style="color: #949494;">, </span>"Viral sinusitis"<span style="color: #949494;">, </span>"Fracture of r…</span></span>
+<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Chronic sinusitis"<span style="color: #949494;">, </span>"Sinusitis"<span style="color: #949494;">, </span>"Streptococcal sore…</span></span>
 <span><span class="co">#&gt; $ estimate_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_subjects"<span style="color: #949494;">, </span>"count_subjects"<span style="color: #949494;">, </span>"count_subjects"<span style="color: #949494;">,</span>…</span></span>
-<span><span class="co">#&gt; $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "260139 &amp;&amp;&amp; Acute bronchitis &amp;&amp;&amp; SNOMED &amp;&amp;&amp; SNOMED"<span style="color: #949494;">, </span>…</span></span></code></pre></div>
+<span><span class="co">#&gt; $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "257012 &amp;&amp;&amp; Chronic sinusitis &amp;&amp;&amp; SNOMED &amp;&amp;&amp; SNOMED"<span style="color: #949494;">,</span>…</span></span></code></pre></div>
 <p>When <code>inObservation = TRUE</code>, results are stratified by
 whether each record occurred within the subject’s observation
 period.</p>
@@ -280,10 +280,10 @@ provide the name of a cohort table in the CDM to restrict counts to its
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group_level</span>, <span class="va">variable_name</span>, <span class="va">estimate_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rows: 66</span></span>
+<span><span class="co">#&gt; Rows: 63</span></span>
 <span><span class="co">#&gt; Columns: 3</span></span>
 <span><span class="co">#&gt; $ group_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "condition_occurrence"<span style="color: #949494;">, </span>"condition_occurrence"<span style="color: #949494;">, </span>"conditi…</span></span>
-<span><span class="co">#&gt; $ variable_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Diverticular disease"<span style="color: #949494;">, </span>"Escherichia coli urinary tract …</span></span>
+<span><span class="co">#&gt; $ variable_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Gastrointestinal hemorrhage"<span style="color: #949494;">, </span>"Sprain of wrist"<span style="color: #949494;">, </span>"Otiti…</span></span>
 <span><span class="co">#&gt; $ estimate_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"count_records"<span style="color: #949494;">, </span>"coun…</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="display-the-results">Display the results<a class="anchor" aria-label="anchor" href="#display-the-results"></a>
