@@ -57,13 +57,12 @@ tableOmopSnapshot <- function(result,
       estimateName = c("N" = "<Count>"),
       header = header,
       rename = c(
-        "Database name" = "cdm_name",
         "Estimate" = "estimate_name",
         "Variable" = "variable_name"
       ),
       groupColumn = groupColumn,
       settingsColumn = setting_cols,
-      .options = list(caption = paste0("Snapshot of the cdm ", paste(cdms, collapse = ", ")))
+      .options = list(caption = paste0("Snapshot of the data source ", paste(cdms, collapse = ", ")))
     )
 
   return(result)

@@ -254,7 +254,7 @@ summariseObservationPeriod <- function(cdm,
                                                         dateRange = NULL,
                                                         interval = "overall") |>
       dplyr::mutate(
-        variable_name = "Column name",
+        variable_name = "Missing data",
         variable_level = .data$column_name
       ) |>
       dplyr::select(!c("omop_table", "column_name"))
