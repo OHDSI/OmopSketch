@@ -1,3 +1,4 @@
+
 color:
   palette:
     black: "#040001"
@@ -20,13 +21,10 @@ color:
   light: light_yellow
   dark: gray_dark
 
-
-
 defaults:
   shiny:
     theme:
       preset: flatly
-
 
   bootstrap:
     defaults:
@@ -43,6 +41,36 @@ defaults:
       axis_color: "#252525"
       border_color: "#595959"
       legend_position: "right"
+
+      discrete_colour:
+        - "#7A1125"
+        - "#147D86"
+        - "#B08A00"
+        - "#496FA1"
+        - "#8D5F91"
+        - "#52775C"
+
+      discrete_fill:
+        - "#A63C50"
+        - "#2B9199"
+        - "#C5A135"
+        - "#6E8FBA"
+        - "#A985B0"
+        - "#75977C"
+
+      continuous_colour:
+        - "#7A1125"
+        - "#9F3A3F"
+        - "#BA7055"
+        - "#D0A044"
+        - "#E6D208"
+
+      continuous_fill:
+        - "#A63C50"
+        - "#BD6D69"
+        - "#CF9980"
+        - "#DCC078"
+        - "#E6D208"
 
     table:
       border_color: gold
@@ -99,4 +127,3 @@ defaults:
       body:
         border_width: 0.5
         border_color: gold
-
