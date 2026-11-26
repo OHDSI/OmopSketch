@@ -67,7 +67,6 @@ tableTrend <- function(result,
     "Median" = "<median>"
   )
   rename_vec <- c(
-    "Database name" = "cdm_name",
     "OMOP table" = "omop_table"
   )
   variables <- result$variable_name |> unique()

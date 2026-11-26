@@ -47,7 +47,7 @@ tablePerson <- function(result,
   custom_order <- c("Number subjects", "Number subjects not in observation", "Sex", "Sex source", "Race", "Race source", "Ethnicity", "Ethnicity source", "Year of birth", "Month of birth", "Day of birth", "Location", "Provider", "Care site")
 
   result |>
-    dplyr::mutate(variable_name = factor(.data$variable_name, levels = custom_order)) |>
+    dplyr::mutate(variable_name = factor(.data$variable_name, levels = c(custom_order, sort(setdiff(unique(.data$variable_name), custom_order))))) |>
     dplyr::arrange(.data$variable_name, .data$variable_level, .data$estimate_name) |>
     visOmopResults::visOmopTable(
       estimateName = c(

@@ -184,7 +184,11 @@ summariseObservationPeriod <- function(cdm,
     ) |>
     dplyr::left_join(conceptTypes, by = c("period_type_concept_id" = "type_concept")) |>
     dplyr::mutate(type_name = dplyr::coalesce(
-      .data$type_name, paste0("Unknown type concept: ", .data$period_type_concept_id)
+      .data$type_name,
+      paste0(
+        "Unknown type concept: ",
+        as.character(.data$period_type_concept_id)
+      )
     )) |>
     dplyr::rename(variable_level = "type_name") |>
     dplyr::select(!"period_type_concept_id")
@@ -250,7 +254,7 @@ summariseObservationPeriod <- function(cdm,
                                                         dateRange = NULL,
                                                         interval = "overall") |>
       dplyr::mutate(
-        variable_name = "Column name",
+        variable_name = "Missing data",
         variable_level = .data$column_name
       ) |>
       dplyr::select(!c("omop_table", "column_name"))

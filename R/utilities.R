@@ -49,15 +49,21 @@ addTimeInterval <- function(x) {
   x |>
     dplyr::mutate(
       type = dplyr::case_when(
-        nchar(.data$interval) == 4 ~ "years",
-        substr(.data$interval, 6, 6) == "Q" ~ "quarters",
-        substr(.data$interval, 5, 5) == "_" ~ "months",
+        grepl("^\\d+$", .data$interval)          ~ "years",
+        grepl("^\\d+_Q\\d+$", .data$interval)     ~ "quarters",
+        grepl("^\\d+_\\d+$", .data$interval)      ~ "months",
         .default = "overall"
       ),
       start = dplyr::case_when(
-        .data$type == "years" ~ paste0(.data$interval, "-01-01"),
-        .data$type == "quarters" ~ paste0(substr(.data$interval, 1, 4), "-", sprintf("%02i", as.integer(as.numeric(substr(.data$interval, 7, 7)) * 3 - 2)), "-01"),
-        .data$type == "months" ~ paste0(substr(.data$interval, 1, 4), "-", sprintf("%02i", as.integer(substr(.data$interval, 6, 7))), "-01"),
+        .data$type == "years" ~ paste0(sub("^(\\d+)$", "\\1", .data$interval), "-01-01"),
+        .data$type == "quarters" ~ paste0(
+          sub("^(\\d+)_Q\\d+$", "\\1", .data$interval), "-",
+          sprintf("%02i", as.integer(sub("^\\d+_Q(\\d+)$", "\\1", .data$interval)) * 3 - 2), "-01"
+        ),
+        .data$type == "months" ~ paste0(
+          sub("^(\\d+)_\\d+$", "\\1", .data$interval), "-",
+          sprintf("%02i", as.integer(sub("^\\d+_(\\d+)$", "\\1", .data$interval))), "-01"
+        ),
         .data$type == "overall" ~ NA_character_
       ) |>
         suppressWarnings(),
@@ -68,7 +74,8 @@ addTimeInterval <- function(x) {
         .data$type == "overall" ~ as.Date(NA)
       ) |>
         clock::add_days(-1) |>
-        format("%Y-%m-%d"),
+        format("%Y-%m-%d") |>
+        sub("^0+", "", x = _),
       time_interval = dplyr::if_else(
         .data$type == "overall", NA_character_, paste(.data$start, "to", .data$end)
       )

@@ -1,77 +1,83 @@
-# OmopSketch 1.1.0.900
+# OmopSketch 1.1.1
+
+-   get concept types from cdm\$concept by @cecicampanile in #604
+-   handle years that are not 4 digits by @cecicampanile in #608
+-   update trimStudyPeriod() by @KimLopezGuell in #611
+
 # OmopSketch 1.1.0
-- speed up summariseClinicalRecords by @edward-burn in #562
-- include delphi by @catalamarti in #574
-- add badges in readme by @catalamarti in #575
-- Add record duration summary and end-date checks by @cecicampanile in #576
-- Add location and provider counts to summarisePerson if less than 15 labels by @catalamarti in #583
-- only subjects in person table used in analyses and fixed percentages … by @cecicampanile in #573
-- Include standard_vocabulary in summariseClinicalTable by @cecicampanile in #580
-- Update plotPerson with all variables by @cecicampanile in #595
-- add if column is required in the summariseMissingData by @cecicampanile in #594
-- Set legend labels in plotPerson by @cecicampanile in #591
-- cumulative plot if density results are available by @cecicampanile in #597
-- add standard and source vocabularies to summariseConceptIdCounts by @cecicampanile in #589
-- update readme by @cecicampanile in #596
-- include type concept id in summariseClinicalRecords by @cecicampanile in #590
-- Add 'end date' trends in summariseTrend by @cecicampanile in #598
-- update documentation by @cecicampanile in #599
-- drop temp tables if error occurs by @cecicampanile in #601
+
+-   speed up summariseClinicalRecords by @edward-burn in #562
+-   include delphi by @catalamarti in #574
+-   add badges in readme by @catalamarti in #575
+-   Add record duration summary and end-date checks by @cecicampanile in #576
+-   Add location and provider counts to summarisePerson if less than 15 labels by @catalamarti in #583
+-   only subjects in person table used in analyses and fixed percentages … by @cecicampanile in #573
+-   Include standard_vocabulary in summariseClinicalTable by @cecicampanile in #580
+-   Update plotPerson with all variables by @cecicampanile in #595
+-   add if column is required in the summariseMissingData by @cecicampanile in #594
+-   Set legend labels in plotPerson by @cecicampanile in #591
+-   cumulative plot if density results are available by @cecicampanile in #597
+-   add standard and source vocabularies to summariseConceptIdCounts by @cecicampanile in #589
+-   update readme by @cecicampanile in #596
+-   include type concept id in summariseClinicalRecords by @cecicampanile in #590
+-   Add 'end date' trends in summariseTrend by @cecicampanile in #598
+-   update documentation by @cecicampanile in #599
+-   drop temp tables if error occurs by @cecicampanile in #601
 
 # OmopSketch 1.0.1
 
-- Remove deprecated internal functions and add tests by @catalamarti in #525
-- Update deprecated function tests for specific DB by @catalamarti in #532
-- summarieClinicalRecords to work with all clinical tables by @cecicampanile in #533
-- update tables and test tables by @cecicampanile in #535
-- Improve tableConceptIdCounts.R by @cecicampanile in #538
-- dont test database characteristics with age group when cdm is local by @cecicampanile in #540
-- plot functions updated by @cecicampanile in #534
-- fix integer overflow in sql server by @cecicampanile in #542
-- attempt fix for bigint concept count by @edward-burn in #543
-- without grouping by @edward-burn in #548
-- Update tablePerson.R by @cecicampanile in #550
-- separate standard, non standard and 0 in summariseClinicalRecords by @cecicampanile in #547
-- Print big int by @cecicampanile in #553
-- hide, header and group arguments in tables by @cecicampanile in #551
+-   Remove deprecated internal functions and add tests by @catalamarti in #525
+-   Update deprecated function tests for specific DB by @catalamarti in #532
+-   summarieClinicalRecords to work with all clinical tables by @cecicampanile in #533
+-   update tables and test tables by @cecicampanile in #535
+-   Improve tableConceptIdCounts.R by @cecicampanile in #538
+-   dont test database characteristics with age group when cdm is local by @cecicampanile in #540
+-   plot functions updated by @cecicampanile in #534
+-   fix integer overflow in sql server by @cecicampanile in #542
+-   attempt fix for bigint concept count by @edward-burn in #543
+-   without grouping by @edward-burn in #548
+-   Update tablePerson.R by @cecicampanile in #550
+-   separate standard, non standard and 0 in summariseClinicalRecords by @cecicampanile in #547
+-   Print big int by @cecicampanile in #553
+-   hide, header and group arguments in tables by @cecicampanile in #551
 
 # OmopSketch 1.0.0
 
-- Characterise all mock datasets by @catalamarti #430
-- background in shiny by @cecicampanile #431
-- shiny name shiny -> OmopSketchShiny by @catalamarti #432
-- fix plot of characterisation of population in shiny by @cecicampanile #437
-- new function: summariseTrend by @cecicampanile #433
-- add cdm_source in summariseOmopSnapshot by @catalamarti #438
-- new function: summarisePerson by @catalamarti #440
-- summariseObservationPeriod 1.0.0 by @cecicampanile #446
-- summariseClinicalRecords 1.0 by @cecicampanile #443
-- missingness in shiny characteristics by @cecicampanile #450
-- sql translations by @catalamarti #449
-- style argument in table and plot functions by @cecicampanile #451
-- Fix: Ensure database compatibility for boolean aggregations in summariseNumeric2 by @merqurio #457
-- Fix documentation for plotObservationPeriod by @cecicampanile #460
-- tableObservationPeriod when byOrder = FALSE by @cecicampanile #459
-- summariseObservationPeriod minor fix by @cecicampanile #463
-- check for person id not in person table in summariseClinicalRecords by @cecicampanile #461
-- fix some test failures by @cecicampanile #469
-- In observation argument by @cecicampanile #470
-- update shinyCharacteristics #454
-- sample to work on the person level by @cecicampanile #458
-- tableConceptIdCounts update by @cecicampanile #476
-- captions in tables by @cecicampanile #477
-- summarisePerson in databaseCharacteristics and shinyCharacteristics by @cecicampanile #478
-- Reduce imports by @catalamarti #503
-- Remove :: from vignettes, readme and examples by @catalamarti #502
-- Use default of style and type = NULL by @catalamarti #498
-- Tidy vignettes by @catalamarti i#508
-- Tidy documentation by @catalamarti #510
-- refine readme by @catalamarti #505
-- scarlet brand in shiny by @cecicampanile #513
-- Test multiple dbms by @catalamarti #514
-- add logo to shiny by @catalamarti #516
-- reduce size of tables before collecting in summariseTrend by @cecicampanile #518
-  
+-   Characterise all mock datasets by @catalamarti #430
+-   background in shiny by @cecicampanile #431
+-   shiny name shiny -\> OmopSketchShiny by @catalamarti #432
+-   fix plot of characterisation of population in shiny by @cecicampanile #437
+-   new function: summariseTrend by @cecicampanile #433
+-   add cdm_source in summariseOmopSnapshot by @catalamarti #438
+-   new function: summarisePerson by @catalamarti #440
+-   summariseObservationPeriod 1.0.0 by @cecicampanile #446
+-   summariseClinicalRecords 1.0 by @cecicampanile #443
+-   missingness in shiny characteristics by @cecicampanile #450
+-   sql translations by @catalamarti #449
+-   style argument in table and plot functions by @cecicampanile #451
+-   Fix: Ensure database compatibility for boolean aggregations in summariseNumeric2 by @merqurio #457
+-   Fix documentation for plotObservationPeriod by @cecicampanile #460
+-   tableObservationPeriod when byOrder = FALSE by @cecicampanile #459
+-   summariseObservationPeriod minor fix by @cecicampanile #463
+-   check for person id not in person table in summariseClinicalRecords by @cecicampanile #461
+-   fix some test failures by @cecicampanile #469
+-   In observation argument by @cecicampanile #470
+-   update shinyCharacteristics #454
+-   sample to work on the person level by @cecicampanile #458
+-   tableConceptIdCounts update by @cecicampanile #476
+-   captions in tables by @cecicampanile #477
+-   summarisePerson in databaseCharacteristics and shinyCharacteristics by @cecicampanile #478
+-   Reduce imports by @catalamarti #503
+-   Remove :: from vignettes, readme and examples by @catalamarti #502
+-   Use default of style and type = NULL by @catalamarti #498
+-   Tidy vignettes by @catalamarti i#508
+-   Tidy documentation by @catalamarti #510
+-   refine readme by @catalamarti #505
+-   scarlet brand in shiny by @cecicampanile #513
+-   Test multiple dbms by @catalamarti #514
+-   add logo to shiny by @catalamarti #516
+-   reduce size of tables before collecting in summariseTrend by @cecicampanile #518
+
 # OmopSketch 0.5.1
 
 -   removed overall results when plotting trends by @cecicampanile #418

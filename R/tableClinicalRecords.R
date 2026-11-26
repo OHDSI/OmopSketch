@@ -64,7 +64,7 @@ tableClinicalRecords <- function(result,
   tables <- result$group_level |> unique()
   result |>
     formatColumn(c("variable_name", "variable_level")) |>
-    dplyr::mutate(variable_name = factor(.data$variable_name, levels = custom_order)) |>
+    dplyr::mutate(variable_name = factor(.data$variable_name, levels = c(custom_order, setdiff(unique(.data$variable_name), custom_order)))) |>
     dplyr::arrange(.data$variable_name, .data$variable_level) |>
     dplyr::mutate(variable_level = dplyr::if_else(
       .data$variable_name == "Type concept",
@@ -83,7 +83,6 @@ tableClinicalRecords <- function(result,
         "N zeros (%)" = "<zero_count> (<zero_percentage>%)"
       ),
       header = header,
-      rename = c("Database name" = "cdm_name"),
       settingsColumn = setting_cols,
       groupColumn = groupColumn,
       hide = hide,

@@ -604,7 +604,11 @@ addVariables <- function(x, tableName, quality, conceptSummary) {
           ) |>
           dplyr::mutate(type_name = dplyr::coalesce(
             .data$type_name, "Unknown type concept"),
-          type_concept = paste0(.data$type_name, "&", .data$type_concept_id)
+          type_concept = paste0(
+            .data$type_name,
+            "&",
+            as.character(.data$type_concept_id)
+          )
 
           )
 
@@ -650,7 +654,6 @@ summariseDuration <- function(x, strata, estimates, tableName) {
     }
   )
 }
-
 
 
 

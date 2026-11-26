@@ -1,5 +1,6 @@
 test_that("summariseTrend - episode works", {
   skip_on_cran()
+  skip_if(dbToTest == "redshift-CDMConnector")
   # Load mock database ----
   cdm <- cdmEunomia()
 
@@ -117,6 +118,7 @@ test_that("summariseTrend - episode works", {
 
 test_that("summariseTrend - event works", {
   skip_on_cran()
+  skip_if(dbToTest == "redshift-CDMConnector")
   # Load mock database ----
   cdm <- cdmEunomia()
 
@@ -211,6 +213,8 @@ test_that("summariseTrend - event works", {
 
 test_that("check sex argument works", {
   skip_on_cran()
+  skipIfSimplifiedRun()
+
   # Load mock database ----
   cdm <- cdmEunomia()
 
@@ -292,6 +296,8 @@ test_that("check sex argument works", {
 
 test_that("check ageGroup argument works", {
   skip_on_cran()
+  skipIfSimplifiedRun()
+
   # Load mock database ----
   cdm <- cdmEunomia()
 
@@ -376,6 +382,8 @@ test_that("check ageGroup argument works", {
 
 test_that("check person-days output works", {
   skip_on_cran()
+  skipIfSimplifiedRun()
+
   # Load mock database ----
   cdm <- cdmEunomia()
 
@@ -460,6 +468,8 @@ test_that("check person-days output works", {
 
 test_that("dateRange argument works", {
   skip_on_cran()
+  skipIfSimplifiedRun()
+
   # Load mock database ----
   cdm <- cdmEunomia()
 
@@ -533,6 +543,8 @@ test_that("dateRange argument works", {
 
 test_that("age and sex output work", {
   skip_on_cran()
+  skipIfSimplifiedRun()
+
   # Load mock database ----
   cdm <- cdmEunomia()
 
@@ -697,6 +709,8 @@ test_that("age and sex output work", {
 
 test_that("overall time interval work", {
   skip_on_cran()
+  skipIfSimplifiedRun()
+
   # Load mock database ----
   cdm <- cdmEunomia()
 
@@ -745,6 +759,8 @@ test_that("overall time interval work", {
 
 test_that("tableTrend() works", {
   skip_on_cran()
+  skipIfSimplifiedRun()
+
   # Load mock database ----
   cdm <- cdmEunomia()
 
@@ -774,6 +790,8 @@ test_that("tableTrend() works", {
 
 test_that("plotTrend() works", {
   skip_on_cran()
+  skipIfSimplifiedRun()
+
   # Load mock database ----
   cdm <- cdmEunomia()
 
@@ -795,6 +813,8 @@ test_that("plotTrend() works", {
 
 test_that("argument inObservation works", {
   skip_on_cran()
+  skipIfSimplifiedRun()
+
   # Load mock database ----
   cdm <- cdmEunomia()
 
@@ -838,5 +858,25 @@ test_that("argument inObservation works", {
 
   expect_equal(result |> dplyr::filter(.data$estimate_name != "percentage") |> dplyr::arrange(dplyr::across(dplyr::everything())), resultInObs |> dplyr::filter(.data$estimate_name != "percentage") |> dplyr::arrange(dplyr::across(dplyr::everything())), ignore_attr = TRUE)
 
+  dropCreatedTables(cdm = cdm)
+})
+
+test_that("check years below 1000 works", {
+  skip_on_cran()
+  skipIfSimplifiedRun()
+
+  # Load mock database ----
+  cdm <- cdmEunomia()
+  cdm$condition_occurrence <- cdm$condition_occurrence |>
+    dplyr::mutate(
+      condition_start_date = dplyr::case_when(
+        dplyr::row_number() %% 3 == 0 ~ as.Date("999-03-15"),
+        dplyr::row_number() %% 3 == 1 ~ as.Date("950-07-01"),
+        .default = condition_start_date
+      )
+    )
+  expect_no_error(x <- summariseTrend(cdm, event = "condition_occurrence", interval = "years"))
+  ti <- x |> omopgenerics::splitAll() |> dplyr::distinct(.data$time_interval) |> dplyr::pull()
+  expect_true("950-01-01 to 950-12-31" %in% ti)
   dropCreatedTables(cdm = cdm)
 })
