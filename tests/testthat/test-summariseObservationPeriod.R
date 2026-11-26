@@ -560,12 +560,13 @@ test_that("missingData works", {
 
   y <- summariseMissingData(cdm, "observation_period")
 
-  expect_equal(x |> dplyr::filter(variable_name == "Column name") |> dplyr::select(!c("group_name", "group_level")), y |> dplyr::select(!c("group_name", "group_level")), ignore_attr = TRUE)
+  expect_equal(x |> dplyr::filter(variable_name == "Missing data") |> dplyr::select(!c("variable_name", "group_name", "group_level")), y |> dplyr::select(!c("variable_name", "group_name", "group_level")), ignore_attr = TRUE)
 
   expect_no_error(x <- summariseObservationPeriod(cdm, sex = T, ageGroup = list(c(0, 50), c(51, 100)), quality = F))
   y <- summariseMissingData(cdm, "observation_period", sex = T, ageGroup = list(c(0, 50), c(51, 100)))
 
-  expect_equal(x |> dplyr::filter(variable_name == "Column name") |> dplyr::arrange(.data$variable_level, .data$strata_name, .data$strata_level) |> dplyr::select(!c("group_name", "group_level")), y |> dplyr::arrange(.data$variable_level, .data$strata_name, .data$strata_level) |> dplyr::select(!c("group_name", "group_level")), ignore_attr = TRUE)
+  expect_equal(x |> dplyr::filter(variable_name == "Missing data") |> dplyr::arrange(.data$variable_level, .data$strata_name, .data$strata_level) |> dplyr::select(!c("variable_name", "group_name", "group_level")),
+               y |> dplyr::arrange(.data$variable_level, .data$strata_name, .data$strata_level) |> dplyr::select(!c("variable_name", "group_name", "group_level")), ignore_attr = TRUE)
 
   dropCreatedTables(cdm = cdm)
 })

@@ -88,7 +88,7 @@ tableMissingData <- function(result,
         "N zeros (%)" = "<zero_count> (<zero_percentage>%)"
       ),
       header = header,
-      rename = c("Database name" = "cdm_name", "Column name" = "variable_level"),
+      rename = c("Column name" = "variable_level"),
       groupColumn = groupColumn,
       hide = hide,
       settingsColumn = setting_cols,

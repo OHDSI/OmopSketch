@@ -44,12 +44,12 @@ tableObservationPeriod <- function(result,
   hide <- c(hide, "observation_period_ordinal"[!byOrdinal])
 
 
-  custom_order <- c("Number records", "Number subjects", "Subjects not in person table", "Records per person", "Duration in days", "Days to next observation period", "Type concept id", "Start date before birth date", "End date before start date", "Column name")
+  custom_order <- c("Number records", "Number subjects", "Subjects not in person table", "Records per person", "Duration in days", "Days to next observation period", "Type concept id", "Start date before birth date", "End date before start date", "Missing data")
 
   result |>
     dplyr::filter(!grepl("density", .data$estimate_name)) |>
     formatColumn(c("variable_name", "variable_level")) |>
-    dplyr::mutate(variable_name = factor(.data$variable_name, levels = custom_order)) |>
+    dplyr::mutate(variable_name = factor(.data$variable_name,levels = c(custom_order, setdiff(unique(.data$variable_name), custom_order)))) |>
     dplyr::arrange(.data$variable_name, .data$variable_level) |>
     # Arrange by observation period ordinal
     dplyr::mutate(order = dplyr::coalesce(as.numeric(stringr::str_extract(.data$group_level, "\\d+")), 0)) |>
