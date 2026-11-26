@@ -132,11 +132,13 @@ plotObservationPeriod <- function(result,
         "observation_period_ordinal",
         "variable_name",
         omopgenerics::strataColumns(result),
-        omopgenerics::additionalColumns(result)))
+        omopgenerics::additionalColumns(result)
+        )
+        )
       )|>
       dplyr::mutate(
-        dx = .data$density_x - stats::lag(.data$density_x),
-        area = .data$dx * (.data$density_y + stats::lag(.data$density_y)) / 2,
+        dx = .data$density_x - dplyr::lag(.data$density_x),
+        area = .data$dx * (.data$density_y + dplyr::lag(.data$density_y)) / 2,
         area = dplyr::coalesce(.data$area, 0),
         cumulative_density = cumsum(.data$area),
         cumulative_density = .data$cumulative_density / max(.data$cumulative_density, na.rm = TRUE)
