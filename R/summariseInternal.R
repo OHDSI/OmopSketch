@@ -313,31 +313,45 @@ addInObservation <- function(x, inObservation, cdm, episode, name) {
     return(x)
   }
 
+  x <- x |>
+    dplyr::left_join(
+      cdm[["observation_period"]] |>
+        dplyr::select(
+          "person_id",
+          "obs_start" = "observation_period_start_date",
+          "obs_end" = "observation_period_end_date"
+        ),
+      by = dplyr::join_by(
+        "person_id",
+        "start_date" >= "obs_start",
+        "start_date" <= "obs_end"
+      )
+    )
+
   if (episode) {
     x <- x |>
-      dplyr::left_join(cdm[["observation_period"]] |> dplyr::select("person_id", "observation_period_start_date", "observation_period_end_date"), by = "person_id") |>
       dplyr::mutate("in_observation" = dplyr::if_else(
-        !is.na(.data$observation_period_start_date) &
-          .data$start_date >= .data$observation_period_start_date &
-          .data$start_date <= .data$observation_period_end_date &
+        !is.na(.data$obs_start) &
           (
             is.na(.data$end_date) |
-              (.data$end_date >= .data$observation_period_start_date &
-                .data$end_date <= .data$observation_period_end_date)
+              (.data$end_date >= .data$obs_start &
+                .data$end_date <= .data$obs_end)
           ),
         "TRUE",
         "FALSE"
-      )) |>
-      dplyr::select(-"observation_period_start_date", -"observation_period_end_date") |>
-      dplyr::compute(name = name)
+      ))
   } else {
     x <- x |>
-      dplyr::left_join(cdm[["observation_period"]] |> dplyr::select("person_id", "observation_period_start_date", "observation_period_end_date"), by = "person_id") |>
-      dplyr::mutate("in_observation" = dplyr::if_else(!is.na(.data$observation_period_start_date) & .data$start_date >= .data$observation_period_start_date & .data$start_date <= .data$observation_period_end_date, "TRUE", "FALSE")) |>
-      dplyr::select(-"observation_period_start_date", -"observation_period_end_date") |>
-      dplyr::compute(name = name)
+      dplyr::mutate("in_observation" = dplyr::if_else(
+        !is.na(.data$obs_start),
+        "TRUE",
+        "FALSE"
+      ))
   }
-  return(x)
+
+  x |>
+    dplyr::select(-"obs_start", -"obs_end") |>
+    dplyr::compute(name = name)
 }
 
 

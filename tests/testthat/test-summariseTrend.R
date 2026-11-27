@@ -880,3 +880,94 @@ test_that("check years below 1000 works", {
   expect_true("950-01-01 to 950-12-31" %in% ti)
   dropCreatedTables(cdm = cdm)
 })
+
+test_that("inObservation = TRUE does not duplicate records across multiple observation periods", {
+  skip_on_cran()
+
+  cdm <- omopgenerics::cdmFromTables(
+    tables = list(
+      person = dplyr::tibble(
+        person_id = 1L,
+        gender_concept_id = 8532L,
+        year_of_birth = 1990L,
+        month_of_birth = 1L,
+        day_of_birth = 1L,
+        race_concept_id = 0L,
+        ethnicity_concept_id = 0L
+      ),
+      observation_period = dplyr::tibble(
+        observation_period_id = 1:2,
+        person_id = c(1L, 1L),
+        observation_period_start_date = as.Date(c("2010-01-01", "2015-01-01")),
+        observation_period_end_date = as.Date(c("2012-12-31", "2017-12-31")),
+        period_type_concept_id = c(32817L, 32817L)
+      ),
+      condition_occurrence = dplyr::tibble(
+        condition_occurrence_id = 1:3,
+        person_id = c(1L, 1L, 1L),
+        condition_concept_id = c(100L, 100L, 100L),
+        condition_start_date = as.Date(c("2016-06-01", "2014-06-01", "2017-12-28")),
+        condition_end_date = as.Date(c("2016-06-10", "2014-06-10", "2018-01-05")),
+        condition_type_concept_id = c(32817L, 32817L, 32817L),
+        condition_source_concept_id = c(0L, 0L, 0L)
+      ),
+      concept = dplyr::tibble(
+        concept_id = c(100L, 32817L),
+        concept_name = c("Test Cond", "EHR"),
+        domain_id = c("Condition", "Type Concept"),
+        vocabulary_id = c("SNOMED", "Type Concept"),
+        concept_class_id = c("Clinical Finding", "Type Concept"),
+        standard_concept = c("S", "S"),
+        concept_code = c("1", "2"),
+        valid_start_date = as.Date(c("1970-01-01", "1970-01-01")),
+        valid_end_date = as.Date(c("2099-12-31", "2099-12-31")),
+        invalid_reason = c(NA_character_, NA_character_)
+      )
+    ),
+    cdmName = "test_multi_op"
+  ) |>
+    copyCdm()
+
+  res_event <- summariseTrend(
+    cdm,
+    event = "condition_occurrence",
+    output = "record",
+    inObservation = TRUE
+  )
+  ev_counts <- res_event |>
+    dplyr::filter(.data$estimate_name == "count") |>
+    dplyr::arrange(.data$strata_level)
+  expect_equal(ev_counts$strata_level, c("FALSE", "TRUE", "overall"))
+  expect_equal(as.integer(ev_counts$estimate_value), c(1L, 2L, 3L))
+  ev_pct <- res_event |>
+    dplyr::filter(.data$estimate_name == "percentage", .data$strata_level == "overall") |>
+    dplyr::pull("estimate_value")
+  expect_equal(ev_pct, "100.00")
+
+  res_episode <- summariseTrend(
+    cdm,
+    episode = "condition_occurrence",
+    output = c("record", "person-days"),
+    inObservation = TRUE
+  )
+  ep_counts <- res_episode |>
+    dplyr::filter(
+      .data$variable_name == "Number of records",
+      .data$estimate_name == "count"
+    ) |>
+    dplyr::arrange(.data$strata_level)
+  expect_equal(ep_counts$strata_level, c("FALSE", "TRUE", "overall"))
+  expect_equal(as.integer(ep_counts$estimate_value), c(2L, 1L, 3L))
+
+  res_cc <- summariseConceptIdCounts(
+    cdm,
+    omopTableName = "condition_occurrence",
+    countBy = "record",
+    inObservation = TRUE
+  ) |>
+    dplyr::arrange(.data$strata_level)
+  expect_equal(res_cc$strata_level, c("FALSE", "TRUE", "overall"))
+  expect_equal(as.integer(res_cc$estimate_value), c(1L, 2L, 3L))
+
+  dropCreatedTables(cdm = cdm)
+})
